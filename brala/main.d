@@ -4,12 +4,22 @@ module brala.main;
 private {
     import derelict.sdl.sdl;
     import glamour.gl;
+    
+    import std.conv : to, ConvException;
+    
+    debug {
+        import std.stdio;
+    }
+    
+    import brala.engine : BraLaEngine;
+    import brala.game : BraLaGame;
 }
 
 static this() {
     DerelictSDL.load();
     DerelictGL.load();
 }
+
 
 void init_sdl(int width, int height) {
     if(SDL_Init(SDL_INIT_VIDEO)) {
@@ -29,9 +39,38 @@ void init_sdl(int width, int height) {
 }
 
 void init_opengl() {
-    DerelictGL.loadModernVersions(GLVersion.GL30);
     DerelictGL.loadExtendedVersions(); 
+    DerelictGL.loadModernVersions(GLVersion.GL30);
 }
 
-void main() {
+int main(string[] args) {
+    int width = 1024;
+    int height = 800;
+    
+    if(args.length == 3) {
+        try {
+            width = to!(int)(args[1]);
+        } catch(ConvException) {
+            throw new Exception("width is not a number.");
+        }
+        
+        try {
+            height = to!(int)(args[2]);
+        } catch(ConvException) {
+            throw new Exception("height is not a number.");
+        }
+    }
+    
+    debug writefln("init: %dx%d", width, height);
+    init_sdl(width, height);
+    scope(exit) SDL_Quit();
+    
+    init_opengl();
+    debug writefln("OpenGL: %d", DerelictGL.maxVersion());
+    
+    auto engine = new BraLaEngine(width, height, DerelictGL.maxVersion());
+    auto game = new BraLaGame(engine);
+    game.start();
+    
+    return 0;
 }
