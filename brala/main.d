@@ -2,7 +2,7 @@ module brala.main;
 
 
 private {
-    import derelict.sdl.sdl;
+    import derelict.glfw3.glfw3;
     import glamour.gl;
     
     import std.conv : to, ConvException;
@@ -13,37 +13,39 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
+    import brala.input : input_handler, GLFWInputHandler;
 }
 
 static this() {
-    DerelictSDL.load();
-    DerelictGL.load();
+    DerelictGLFW3.load();
+    DerelictGL3.load();
+
+    if(!glfwInit()) {
+        throw new Exception("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
+    }
 }
 
-
-void init_sdl(int width, int height) {
-    if(SDL_Init(SDL_INIT_VIDEO)) {
-       throw new Exception("failed to init. SDL-Window");
-    } 
-
-    SDL_WM_SetCaption("BraLa - Minecraft on a higher level", "BraLa");
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16); 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); 
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0); 
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    //SDL_SetVideoMode(1000, 800, 32, SDL_OPENGL | SDL_RESIZABLE);
-    SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
-    
-    // SDL settings
-    SDL_ShowCursor(0);
+void open_glfw_win(int width, int height) {    
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4); 
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1); 
+    glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   
+    GLFWwindow win = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
+    if(!win) {
+        throw new Exception("Failed to create window: " ~ to!string(glfwErrorString(glfwGetError())));
+    }
+   
+   glfwSwapInterval(0); // change this to 1?
 }
 
-void init_opengl() {
-    DerelictGL.loadExtendedVersions(); 
-    DerelictGL.loadModernVersions(GLVersion.GL30);
+GLVersion init_opengl() {
+    return DerelictGL3.reload();
 }
 
 int main(string[] args) {
+    scope(exit) glfwTerminate();
+    
     int width = 1024;
     int height = 800;
     
@@ -60,15 +62,16 @@ int main(string[] args) {
             throw new Exception("height is not a number.");
         }
     }
+    // important set the input_handler after initializing glfw and glfw window initialation.
+    input_handler = new GLFWInputHandler();
     
     debug writefln("init: %dx%d", width, height);
-    init_sdl(width, height);
-    scope(exit) SDL_Quit();
+    open_glfw_win(width, height);
     
-    init_opengl();
-    debug writefln("OpenGL: %d", DerelictGL.maxVersion());
+    GLVersion glv = init_opengl();
+    debug writefln("OpenGL: %d", glv);
     
-    auto engine = new BraLaEngine(width, height, DerelictGL.maxVersion());
+    auto engine = new BraLaEngine(width, height, glv);
     auto game = new BraLaGame(engine);
     game.start();
     

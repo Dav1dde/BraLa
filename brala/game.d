@@ -1,18 +1,22 @@
 module brala.game;
 
 private {
-    import derelict.sdl.sdl;
+    import derelict.glfw3.glfw3;
+    import glamour.gl;
     
     import brala.engine : BraLaEngine;
+    import brala.input : input_handler, GLFWInputHandler;
     
     import std.stdio;
 }
 
+
 class BraLaGame {
-    BraLaEngine engine;
+    BraLaEngine engine;    
     
     this(BraLaEngine engine_) {
         engine = engine_;
+        input_handler.ai = new GLFWInputHandler();
     }
     
     void start() {
@@ -21,30 +25,15 @@ class BraLaGame {
     
     
     bool poll(float delta_t) {
-        bool close = handle_sdl_events(delta_t);
         display();
         
-        return close;
+        return input_handler.ai.quit;
         
     }
     
     void display() {
-    }
-
-    bool handle_sdl_events(float delta_t) {
-        SDL_Event event;
-        
-        while(SDL_PollEvent(&event)) {
-            switch(event.type) {
-                case SDL_KEYDOWN:
-                    switch(event.key.keysym.sym) {
-                        case SDLK_ESCAPE: return true;
-                        default: break;
-                    }
-                default: break;
-            }
-        }
-        
-        return false;
+        glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+        glClearDepth(1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 }

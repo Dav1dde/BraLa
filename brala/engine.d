@@ -2,7 +2,7 @@ module brala.engine;
 
 private {
     import glamour.gl;
-    import derelict.sdl.sdl;
+    import derelict.glfw3.glfw3;
     
     import gl3n.linalg;
     
@@ -15,17 +15,25 @@ class BraLaEngine {
     
     GLVersion opengl_version;
     
+    @property vec2i viewport() {
+        return _viewport;
+    }
+    
     this(int width, int height, GLVersion glv) {
         _viewport = vec2i(width, height);
+        
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glEnable(GL_CULL_FACE);
     }
     
     void mainloop(bool delegate(float) callback) {
         uint frames;
-        uint timer = SDL_GetTicks();
+        uint timer = 0; // TODO: get a timer.
         
         bool stop = false;
         while(!stop) {
-            uint ticks = SDL_GetTicks();
+            uint ticks = 0;
             uint delta_ticks = ticks - timer;
             
             stop = callback(delta_ticks);
@@ -33,6 +41,7 @@ class BraLaEngine {
             timer = ticks;
             frames++;
             
+            glfwSwapBuffers();
         }
     }
 
