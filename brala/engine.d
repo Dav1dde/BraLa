@@ -14,7 +14,7 @@ private {
 
 class BraLaEngine {
     private vec2i _viewport;
-    private FPSCounter _fpsc;
+    /+private+/ FPSCounter _fpsc;
     
     GLVersion opengl_version;
     
@@ -63,7 +63,7 @@ class BraLaEngine {
         }
         
         TickDuration ts = _fpsc.stop();
-        debug writefln("Mainloop ran %d seconds", ts.to!("seconds", uint));
+        debug writefln("Mainloop ran %f seconds", ts.to!("seconds", float));
     }
 
 }

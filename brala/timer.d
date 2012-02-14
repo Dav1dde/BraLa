@@ -28,11 +28,11 @@ struct Timer {
     }
     alias pause resume;
     
-    TickDuration stop() {
+    TickDuration stop() {       
+        TickDuration t = get_time();
+        
         _started = false;
         _paused = false;
-        
-        TickDuration t = stime;
         stime = TickDuration(0);
         
         return t;
@@ -69,6 +69,6 @@ struct FPSCounter {
     @disable void resume();
     
     @property float fps() {
-        return frames/(timer.get_time().to!("msecs", float)/1000.0f);
+        return frames/(timer.get_time().to!("seconds", float));
     }
 }

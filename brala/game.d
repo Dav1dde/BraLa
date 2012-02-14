@@ -39,7 +39,6 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     override void on_key_down(int key) {
-        writefln("%s", key);
         if(key == GLFW_KEY_ESCAPE) {
             quit = true;
         }
