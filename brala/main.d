@@ -38,6 +38,8 @@ GLFWwindow open_glfw_win(int width, int height) {
         throw new Exception("Failed to create window: " ~ to!string(glfwErrorString(glfwGetError())));
     }
     
+    glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    
     glfwSwapInterval(0); // change this to 1?
     
     return _window;
@@ -66,9 +68,6 @@ int main(string[] args) {
             throw new Exception("height is not a number.");
         }
     }
-    // important set any input_handler after initializing
-    // glfw and before glfw window initialation.
-//     input_handler = new BaseGLFWInputHandler();
     
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);

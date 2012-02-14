@@ -11,9 +11,22 @@ private {
     }
 }
 
+AInputHandler cast_userptr(void* window) {
+    void* user_ptr = glfwGetWindowUserPointer(window);
+    AInputHandler ai = cast(AInputHandler)user_ptr;
+    
+    if(ai is null) {
+        throw new Exception("dang, glfwGetWindowUserPointer did return garbage? cast to AInputHandler failed");
+    }
+    
+    return ai;
+}
+    
+
 extern(C) {
     void key_callback(void* window, int key, int state) {
-        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        AInputHandler ai = cast_userptr(window);
+    
         if(state == GLFW_PRESS) {
             ai.on_key_down(key);
         } else {
@@ -22,12 +35,14 @@ extern(C) {
     }
 
     void char_callback(void* window, int c) {
-        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        AInputHandler ai = cast_userptr(window);
+        
         ai.on_char(cast(dchar)c);
     }
 
     void mouse_button_callback(void* window, int button, int state) {
-        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        AInputHandler ai = cast_userptr(window);
+    
         if(state == GLFW_PRESS) {
             ai.on_mouse_button_down(button);
         } else {
@@ -36,12 +51,14 @@ extern(C) {
     }
 
     void mouse_pos_callback(void* window, int x, int y) {
-        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        AInputHandler ai = cast_userptr(window);
+        
         ai.on_mouse_pos(x, y);
     }
 
     void scroll_callback(void* window, int xoffset, int yoffset) {
-        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        AInputHandler ai = cast_userptr(window);
+    
         ai.on_scroll(xoffset, yoffset);
     }
 }
