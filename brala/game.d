@@ -5,18 +5,19 @@ private {
     import glamour.gl;
     
     import brala.engine : BraLaEngine;
-    import brala.input : input_handler, BralaInputHandler;
+    import brala.input : BralaInputHandler;
     
     import std.stdio;
 }
 
 
 class BraLaGame {
-    BraLaEngine engine;    
+    BraLaEngine engine;
+    BralaInputHandler input;
     
-    this(BraLaEngine engine_) {
-        engine = engine_;
-        input_handler.ai = new BralaInputHandler();
+    this(BraLaEngine engine, void* window) {
+        this.engine = engine;
+        input = new BralaInputHandler(window);
     }
     
     void start() {
@@ -27,7 +28,7 @@ class BraLaGame {
     bool poll(float delta_t) {
         display();
         
-        return input_handler.ai.quit;
+        return false;
         
     }
     

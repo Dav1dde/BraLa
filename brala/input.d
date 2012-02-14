@@ -11,59 +11,76 @@ private {
     }
 }
 
-extern(C) struct CBHandle {
-    AInputHandler ai;
-    alias ai this;
-    
-    void key_callback(void* window, int key, int state) { ai.key_callback(window, key, state); }
-    void char_callback(void* window, dchar c) { ai.char_callback(window, c); }
-    void mouse_button_callback(void* window, int button, int state) { ai.mouse_button_callback(window, button, state); }
-    void mouse_pos_callback(void* window, int x, int y) { ai.mouse_pos_callback(window, x, y); }
-    void scroll_callback(void* window, int xoffset, int yoffset) { ai.scroll_callback(window, xoffset, yoffset); }
-    
-    void opAssign(AInputHandler a) {
-        ai = a;
+extern(C) {
+    void key_callback(void* window, int key, int state) {
+        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        if(state == GLFW_PRESS) {
+            ai.on_key_down(key);
+        } else {
+            ai.on_key_up(key);
+        }
+    }
+
+    void char_callback(void* window, int c) {
+        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        ai.on_char(cast(dchar)c);
+    }
+
+    void mouse_button_callback(void* window, int button, int state) {
+        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        if(state == GLFW_PRESS) {
+            ai.on_mouse_button_down(button);
+        } else {
+            ai.on_mouse_button_up(button);
+        }
+    }
+
+    void mouse_pos_callback(void* window, int x, int y) {
+        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        ai.on_mouse_pos(x, y);
+    }
+
+    void scroll_callback(void* window, int xoffset, int yoffset) {
+        AInputHandler ai = cast(AInputHandler)(glfwGetWindowUserPointer(window));
+        ai.on_scroll(xoffset, yoffset);
     }
 }
-
-CBHandle input_handler;
 
 abstract class AInputHandler {
     bool quit;
     
-    void key_callback(void* window, int key, int state) {}
-    void char_callback(void* window, dchar c) {}
-    void mouse_button_callback(void* window, int button, int state) {}
-    void mouse_pos_callback(void* window, int x, int y) {}
-    void scroll_callback(void* window, int xoffset, int yoffset) {}
+    void on_key_down(int key) {}
+    void on_key_up(int key) {}
+    void on_char(dchar c) {}
+    void on_mouse_button_down(int button) {}
+    void on_mouse_button_up(int button) {}
+    void on_mouse_pos(int x, int y) {}
+    void on_scroll(int xoffset, int yoffset) {}
     
     // used for generating sdl callbacks?
     void poll() {}
 }
 
-extern(C) {
-    void keycb(void* window, int key, int state) { input_handler.key_callback(window, key, state); }
-    void charcb(void* window, int c) { input_handler.char_callback(window, cast(dchar)c); }
-    void mousebtncb(void* window, int button, int state) { input_handler.mouse_button_callback(window, button, state); }
-    void mouseposcb(void* window, int x, int y) { input_handler.mouse_pos_callback(window, x, y); }
-    void scrollcb(void* window, int xoffset, int yoffset) { input_handler.scroll_callback(window, xoffset, yoffset); }
-}
-
-class BaseGLFWInputHandler : AInputHandler {    
-    this() {
-        glfwSetKeyCallback(&keycb);
-        glfwSetCharCallback(&charcb);
-        glfwSetMouseButtonCallback(&mousebtncb);
-        glfwSetMousePosCallback(&mouseposcb);
-        glfwSetScrollCallback(&scrollcb);
+class BaseGLFWInputHandler : AInputHandler {
+    void* window;
+    
+    this(void* window) {
+        this.window = window;
+        
+        glfwSetWindowUserPointer(window, cast(void *)this);
+        
+        glfwSetKeyCallback(&key_callback);
+        glfwSetCharCallback(&char_callback);
+        glfwSetMouseButtonCallback(&mouse_button_callback);
+        glfwSetMousePosCallback(&mouse_pos_callback);
+        glfwSetScrollCallback(&scroll_callback);
     }
 }
 
 class BralaInputHandler : BaseGLFWInputHandler {
-    override void key_callback(void* window, int key, int state) {
-        switch(key) {
-            case GLFW_KEY_ESCAPE: quit = true;
-            default: break;
-        }
+    this(void* window) {
+        super(window);
     }
+    
+    override void on_key_down(int key) {writefln("%d", key);}
 }

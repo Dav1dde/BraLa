@@ -13,7 +13,6 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
-    import brala.input : input_handler, BaseGLFWInputHandler;
 }
 
 static this() {
@@ -27,7 +26,7 @@ static this() {
 
 GLFWwindow _window;
 
-void open_glfw_win(int width, int height) {    
+GLFWwindow open_glfw_win(int width, int height) {    
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4); 
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1); 
     glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -38,8 +37,10 @@ void open_glfw_win(int width, int height) {
     if(!_window) {
         throw new Exception("Failed to create window: " ~ to!string(glfwErrorString(glfwGetError())));
     }
-       
+    
     glfwSwapInterval(0); // change this to 1?
+    
+    return _window;
 }
 
 GLVersion init_opengl() {
@@ -67,16 +68,16 @@ int main(string[] args) {
     }
     // important set any input_handler after initializing
     // glfw and before glfw window initialation.
-    input_handler = new BaseGLFWInputHandler();
+//     input_handler = new BaseGLFWInputHandler();
     
     debug writefln("init: %dx%d", width, height);
-    open_glfw_win(width, height);
+    GLFWwindow win = open_glfw_win(width, height);
     
     GLVersion glv = init_opengl();
     debug writefln("OpenGL: %d", glv);
     
     auto engine = new BraLaEngine(width, height, glv);
-    auto game = new BraLaGame(engine);
+    auto game = new BraLaGame(engine, win);
     game.start();
     
     return 0;
