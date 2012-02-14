@@ -1,4 +1,4 @@
-module brala.input;
+module brala.event;
 
 
 private {
@@ -11,61 +11,59 @@ private {
     }
 }
 
-AInputHandler cast_userptr(void* window) {
+AEventHandler cast_userptr(void* window) {
     void* user_ptr = glfwGetWindowUserPointer(window);
-    AInputHandler ai = cast(AInputHandler)user_ptr;
+    AEventHandler ae = cast(AEventHandler)user_ptr;
     
-    if(ai is null) {
-        throw new Exception("dang, glfwGetWindowUserPointer did return garbage? cast to AInputHandler failed");
+    if(ae is null) {
+        throw new Exception("dang, glfwGetWindowUserPointer did return garbage? cast to AEventHandler failed");
     }
     
-    return ai;
+    return ae;
 }
     
 
 extern(C) {
     void key_callback(void* window, int key, int state) {
-        AInputHandler ai = cast_userptr(window);
+        AEventHandler ae = cast_userptr(window);
     
         if(state == GLFW_PRESS) {
-            ai.on_key_down(key);
+            ae.on_key_down(key);
         } else {
-            ai.on_key_up(key);
+            ae.on_key_up(key);
         }
     }
 
     void char_callback(void* window, int c) {
-        AInputHandler ai = cast_userptr(window);
+        AEventHandler ae = cast_userptr(window);
         
-        ai.on_char(cast(dchar)c);
+        ae.on_char(cast(dchar)c);
     }
 
     void mouse_button_callback(void* window, int button, int state) {
-        AInputHandler ai = cast_userptr(window);
+        AEventHandler ae = cast_userptr(window);
     
         if(state == GLFW_PRESS) {
-            ai.on_mouse_button_down(button);
+            ae.on_mouse_button_down(button);
         } else {
-            ai.on_mouse_button_up(button);
+            ae.on_mouse_button_up(button);
         }
     }
 
     void mouse_pos_callback(void* window, int x, int y) {
-        AInputHandler ai = cast_userptr(window);
+        AEventHandler ae = cast_userptr(window);
         
-        ai.on_mouse_pos(x, y);
+        ae.on_mouse_pos(x, y);
     }
 
     void scroll_callback(void* window, int xoffset, int yoffset) {
-        AInputHandler ai = cast_userptr(window);
+        AEventHandler ae = cast_userptr(window);
     
-        ai.on_scroll(xoffset, yoffset);
+        ae.on_scroll(xoffset, yoffset);
     }
 }
 
-abstract class AInputHandler {
-    bool quit;
-    
+abstract class AEventHandler {
     void on_key_down(int key) {}
     void on_key_up(int key) {}
     void on_char(dchar c) {}
@@ -78,7 +76,7 @@ abstract class AInputHandler {
     void poll() {}
 }
 
-class BaseGLFWInputHandler : AInputHandler {
+class BaseGLFWEventHandler : AEventHandler {
     void* window;
     
     this(void* window) {
@@ -94,7 +92,7 @@ class BaseGLFWInputHandler : AInputHandler {
     }
 }
 
-class BralaInputHandler : BaseGLFWInputHandler {
+class BralaEventHandler : BaseGLFWEventHandler {
     this(void* window) {
         super(window);
     }

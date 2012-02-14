@@ -5,7 +5,7 @@ private {
     import glamour.gl;
     
     import brala.engine : BraLaEngine;
-    import brala.input : BralaInputHandler;
+    import brala.event : BralaEventHandler;
     
     import std.stdio;
 }
@@ -13,11 +13,11 @@ private {
 
 class BraLaGame {
     BraLaEngine engine;
-    BralaInputHandler input;
+    BralaEventHandler input;
     
     this(BraLaEngine engine, void* window) {
         this.engine = engine;
-        input = new BralaInputHandler(window);
+        input = new BralaEventHandler(window);
     }
     
     void start() {
