@@ -4,11 +4,8 @@ module brala.event;
 private {
     import derelict.glfw3.glfw3;
     import std.conv : to;
-    import std.utf;
     
-    debug {
-        import std.stdio : writefln;
-    }
+    debug import std.stdio : writefln;
 }
 
 AEventHandler cast_userptr(void* window) {

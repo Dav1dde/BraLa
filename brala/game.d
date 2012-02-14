@@ -1,13 +1,12 @@
 module brala.game;
 
 private {
-    import derelict.glfw3.glfw3;
     import glamour.gl;
     
     import brala.engine : BraLaEngine;
     import brala.event : BralaEventHandler;
     
-    import std.stdio;
+    debug import std.stdio;
 }
 
 

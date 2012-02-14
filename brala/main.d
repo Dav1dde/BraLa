@@ -2,18 +2,16 @@ module brala.main;
 
 
 private {
-    import derelict.glfw3.glfw3;
     import glamour.gl;
+    import derelict.glfw3.glfw3;
     
     import std.conv : to, ConvException;
-    
-    debug {
-        import std.stdio;
-    }
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.event : register_glfw_error_callback;
+    
+    debug import std.stdio : writefln;
 }
 
 static this() {
@@ -46,7 +44,11 @@ GLFWwindow open_glfw_win(int width, int height) {
 }
 
 void glfw_error_cb(int errno, string error) {
-    debug writefln("GLFW ERROR(%d): %s", errno, error);
+    static int last_errno = -1;
+    if(last_errno != errno) {
+        debug writefln("GLFW ERROR(%d): %s", errno, error);
+        last_errno = errno;
+    }
 }
 
 GLVersion init_opengl() {
