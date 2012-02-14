@@ -13,6 +13,7 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
+    import brala.event : register_glfw_error_callback;
 }
 
 static this() {
@@ -44,6 +45,10 @@ GLFWwindow open_glfw_win(int width, int height) {
     return _window;
 }
 
+void glfw_error_cb(int errno, string error) {
+    debug writefln("GLFW ERROR(%d): %s", errno, error);
+}
+
 GLVersion init_opengl() {
     return DerelictGL3.reload();
 }
@@ -67,6 +72,8 @@ int main(string[] args) {
             throw new Exception("height is not a number.");
         }
     }
+    
+    register_glfw_error_callback(&glfw_error_cb);
     
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);

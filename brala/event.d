@@ -21,9 +21,48 @@ AEventHandler cast_userptr(void* window) {
     
     return ae;
 }
+
+void function(int, string) glfw_error_callback;
+
+void register_glfw_error_callback(void function(int, string) cb) {
+    glfw_error_callback = cb;
     
+    glfwSetErrorCallback(&error_callback);
+}
 
 extern(C) {
+    // window events //
+    void window_resize_callback(void* window, int width, int height) {
+        AEventHandler ae = cast_userptr(window);
+        
+        ae.on_window_resize(width, height);
+    }
+    
+    int window_close_callback(void* window) {
+        AEventHandler ae = cast_userptr(window);
+        
+        return cast(int)ae.on_window_close();
+    }
+    
+    void window_refresh_callback(void* window) {
+        AEventHandler ae = cast_userptr(window);
+        
+        ae.on_window_refresh();
+    }
+    
+    void window_focus_callback(void* window, int focused) {
+        AEventHandler ae = cast_userptr(window);
+        
+        ae.on_window_focus(focused == GLFW_PRESS);
+    }
+    
+    void window_iconify_callback(void* window, int iconified) {
+        AEventHandler ae = cast_userptr(window);
+        
+        ae.on_window_iconify(iconified == GLFW_PRESS); // TODO: test this
+    }
+    
+    // user input //
     void key_callback(void* window, int key, int state) {
         AEventHandler ae = cast_userptr(window);
     
@@ -61,9 +100,22 @@ extern(C) {
     
         ae.on_scroll(xoffset, yoffset);
     }
+    
+    // misc //
+    void error_callback(int errno, const(char)* error) {
+        glfw_error_callback(errno, to!string(error));
+    }
 }
 
 abstract class AEventHandler {
+    // window
+    void on_window_resize(int width, int height) {}
+    bool on_window_close() { return true; }
+    void on_window_refresh() {}
+    void on_window_focus(bool focused) {}
+    void on_window_iconify(bool iconified) {}
+    
+    // input
     void on_key_down(int key) {}
     void on_key_up(int key) {}
     void on_char(dchar c) {}
@@ -84,6 +136,12 @@ class BaseGLFWEventHandler : AEventHandler {
         
         glfwSetWindowUserPointer(window, cast(void *)this);
         
+        glfwSetWindowSizeCallback(&window_resize_callback);
+        glfwSetWindowCloseCallback(&window_close_callback);
+        glfwSetWindowRefreshCallback(&window_refresh_callback);
+        glfwSetWindowFocusCallback(&window_focus_callback);
+        glfwSetWindowIconifyCallback(&window_iconify_callback);
+        
         glfwSetKeyCallback(&key_callback);
         glfwSetCharCallback(&char_callback);
         glfwSetMouseButtonCallback(&mouse_button_callback);
@@ -98,4 +156,5 @@ class BralaEventHandler : BaseGLFWEventHandler {
     }
     
     override void on_key_down(int key) {writefln("%d", key);}
+    override void on_mouse_pos(int x, int y) {writefln("%dx%d", x, y);}
 }
