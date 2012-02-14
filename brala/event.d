@@ -13,7 +13,8 @@ AEventHandler cast_userptr(void* window) {
     AEventHandler ae = cast(AEventHandler)user_ptr;
     
     if(ae is null) {
-        throw new Exception("dang, glfwGetWindowUserPointer did return garbage? cast to AEventHandler failed");
+        throw new Exception("dang unable to get the EventHandler class from the user-pointer, "
+                            "did glfwGetWindowUserPointer return garbage?");
     }
     
     return ae;
@@ -145,13 +146,4 @@ class BaseGLFWEventHandler : AEventHandler {
         glfwSetMousePosCallback(&mouse_pos_callback);
         glfwSetScrollCallback(&scroll_callback);
     }
-}
-
-class BralaEventHandler : BaseGLFWEventHandler {
-    this(void* window) {
-        super(window);
-    }
-    
-    override void on_key_down(int key) {writefln("%d", key);}
-    override void on_mouse_pos(int x, int y) {writefln("%dx%d", x, y);}
 }
