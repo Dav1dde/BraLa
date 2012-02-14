@@ -1,14 +1,13 @@
 module brala.timer;
 
-private {
-    import std.datetime : Clock;
-    import core.time : TickDuration;
-}
+private import std.datetime : Clock;
+public import core.time : TickDuration;
+
 
 struct Timer {
-    private TickDuration stime = 0;
-    private bool _paused = false;
-    private bool _started = false;
+    private TickDuration stime;
+    package bool _paused = false;
+    package bool _started = false;
        
     @property bool paused() {
         return _paused;
@@ -29,11 +28,21 @@ struct Timer {
     }
     alias pause resume;
     
+    TickDuration stop() {
+        _started = false;
+        _paused = false;
+        
+        TickDuration t = stime;
+        stime = TickDuration(0);
+        
+        return t;
+    }
+    
     TickDuration get_time() {
         if(_started) {
             if(_paused) {
                 return stime;
-            else {
+            } else {
                 return Clock.currSystemTick() - stime;
             }
         } else {
@@ -41,4 +50,25 @@ struct Timer {
         }
     }
     
+}
+
+struct FPSCounter {
+    Timer timer;
+    alias timer this;
+    
+    uint frames = 0;
+    
+    void update() {
+        if(!_started) {
+            start();
+        }
+        frames++;
+    }
+    
+    @disable void pause();
+    @disable void resume();
+    
+    @property float fps() {
+        return frames/(timer.get_time().to!("msecs", float)/1000.0f);
+    }
 }

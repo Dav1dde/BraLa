@@ -6,17 +6,24 @@ private {
     
     import gl3n.linalg;
     
-    import std.stdio : writefln;
+    import brala.timer;
+    
+    debug import std.stdio : writefln;
 }
 
 
 class BraLaEngine {
     private vec2i _viewport;
+    private FPSCounter _fpsc;
     
     GLVersion opengl_version;
     
     @property vec2i viewport() {
         return _viewport;
+    }
+    
+    @property float fps() {
+        return _fpsc.fps;
     }
     
     this(int width, int height, GLVersion glv) {
@@ -27,23 +34,36 @@ class BraLaEngine {
         glEnable(GL_CULL_FACE);
     }
     
-    void mainloop(bool delegate(float) callback) {
-        uint frames;
-        uint timer = 0; // TODO: get a timer.
-        
+    void mainloop(bool delegate(uint) callback) {        
         bool stop = false;
+        _fpsc.start();
+        
+        TickDuration last;
+        debug TickDuration lastfps = TickDuration(0);
+        
         while(!stop) {
-            uint ticks = 0;
-            uint delta_ticks = ticks - timer;
+            uint delta_ticks = (_fpsc.get_time() - last).to!("msecs", uint);
             
             stop = callback(delta_ticks);
                         
-            timer = ticks;
-            frames++;
-            
+            _fpsc.update();
+                       
             glfwSwapBuffers();
             glfwPollEvents();
+        
+            debug {
+                TickDuration t = _fpsc.get_time();
+                if((t-lastfps).to!("seconds", float) > 1) {
+                    writefln("%s", _fpsc.fps);
+                    lastfps = t;
+                }
+            }
+            
+            last = _fpsc.get_time();
         }
+        
+        TickDuration ts = _fpsc.stop();
+        debug writefln("Mainloop ran %d seconds", ts.to!("seconds", uint));
     }
 
 }

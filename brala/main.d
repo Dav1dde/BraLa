@@ -27,10 +27,9 @@ static this() {
 GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {    
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 4); 
+    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3); 
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1); 
     glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
     
     _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);

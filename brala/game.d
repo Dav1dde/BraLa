@@ -25,7 +25,7 @@ class BraLaGame {
     }
     
     
-    bool poll(float delta_t) {
+    bool poll(uint delta_t) {
         display();
         
         return false;
