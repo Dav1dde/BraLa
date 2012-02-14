@@ -42,6 +42,7 @@ class BraLaEngine {
             frames++;
             
             glfwSwapBuffers();
+            glfwPollEvents();
         }
     }
 

@@ -5,7 +5,7 @@ private {
     import glamour.gl;
     
     import brala.engine : BraLaEngine;
-    import brala.input : input_handler, GLFWInputHandler;
+    import brala.input : input_handler, BralaInputHandler;
     
     import std.stdio;
 }
@@ -16,7 +16,7 @@ class BraLaGame {
     
     this(BraLaEngine engine_) {
         engine = engine_;
-        input_handler.ai = new GLFWInputHandler();
+        input_handler.ai = new BralaInputHandler();
     }
     
     void start() {
