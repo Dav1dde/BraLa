@@ -5,6 +5,7 @@ private {
     import std.path : baseName, stripExtension, extension;
     import core.thread : Thread;
     import core.time : dur;
+    import std.algorithm : remove, countUntil;
     
     import glamour.shader : Shader;
     import glamour.texture : Texture2D;
@@ -26,7 +27,7 @@ void load_texture(RessourceManager rsmg, string id, string filename) {
 
 class RessourceManager {
     private TaskPool task_pool;
-    private __gshared uint open_tasks;
+    private __gshared string[] open_tasks;
     
     Shader[string] shaders;
     Texture2D[string] textures;
@@ -43,7 +44,7 @@ class RessourceManager {
     auto add_image(string id, string filename, void delegate() cb = null) {
         auto t = task!load_image(this, id, filename);
         task_pool.put(t);
-        open_tasks++;
+        open_tasks ~= id;
         
         return t;      
     }
@@ -51,7 +52,7 @@ class RessourceManager {
     auto add_shader(string id, string filename, void delegate() cb = null) {
         auto t = task!load_shader(this, id, filename);
         task_pool.put(t);
-        open_tasks++;
+        open_tasks ~= id;
         
         return t;
     }
@@ -59,29 +60,38 @@ class RessourceManager {
     auto add_texture(string id, string filename, void delegate() cb = null) {
         auto t = task!load_texture(this, id, filename);
         task_pool.put(t); 
-        open_tasks++;
+        open_tasks ~= id;
         
         return t; 
     }
     
     void wait() {
-        while(open_tasks > 0) {
+        while(open_tasks.length > 0) {
             Thread.sleep(dur!("msecs")(100));
         }
     }
     
     private void done_loading(Image res, string id) {
         images[id] = res;
-        open_tasks--;
+        sizediff_t cu = open_tasks.countUntil(id);
+        if(cu >= 0) {
+            open_tasks.remove(cu);
+        }
     }
     
     private void done_loading(Shader res, string id) {
         shaders[id] = res;
-        open_tasks--;
+        sizediff_t cu = open_tasks.countUntil(id);
+        if(cu >= 0) {
+            open_tasks.remove(cu);
+        }
     }
     
     private void done_loading(Texture2D res, string id) {
         textures[id] = res;
-        open_tasks--;
+        sizediff_t cu = open_tasks.countUntil(id);
+        if(cu >= 0) {
+            open_tasks.remove(cu);
+        }
     }
 }
