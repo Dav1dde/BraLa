@@ -2,6 +2,8 @@ module brala.engine;
 
 private {
     import glamour.gl;
+    import glamour.shader;
+    
     import derelict.glfw3.glfw3;
     
     import gl3n.linalg;
@@ -53,8 +55,8 @@ class BraLaEngine {
         
             debug {
                 TickDuration t = _fpsc.get_time();
-                if((t-lastfps).to!("seconds", float) > 1) {
-                    writefln("%s", _fpsc.fps);
+                if((t-lastfps).to!("seconds", float) > 0.5) {
+                    writefln("%s", (t-last).to!("msecs", float));
                     lastfps = t;
                 }
             }
