@@ -78,7 +78,7 @@ class RessourceManager {
         
         sizediff_t cu = open_tasks.countUntil(id);
         if(cu >= 0) {
-            open_tasks.remove!(SwapStrategy.unstable)(cu);
+            open_tasks = open_tasks.remove!(SwapStrategy.unstable)(cu);
         }
     }
 }
