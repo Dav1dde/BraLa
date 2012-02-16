@@ -5,7 +5,7 @@ private {
     import std.path : baseName, stripExtension, extension;
     import core.thread : Thread;
     import core.time : dur;
-    import std.algorithm : remove, countUntil;
+    import std.algorithm : SwapStrategy, remove, countUntil;
     
     import glamour.shader : Shader;
     import glamour.texture : Texture2D;
@@ -71,27 +71,14 @@ class RessourceManager {
         }
     }
     
-    private void done_loading(Image res, string id) {
-        images[id] = res;
+    private void done_loading(T)(T res, string id) if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+        static if(is(T : Image)) images[id] = res;
+        else static if(is(T : Shader)) shaders[id] = res;
+        else static if(is(T : Texture2D)) textures[id] = res;
+        
         sizediff_t cu = open_tasks.countUntil(id);
         if(cu >= 0) {
-            open_tasks.remove(cu);
-        }
-    }
-    
-    private void done_loading(Shader res, string id) {
-        shaders[id] = res;
-        sizediff_t cu = open_tasks.countUntil(id);
-        if(cu >= 0) {
-            open_tasks.remove(cu);
-        }
-    }
-    
-    private void done_loading(Texture2D res, string id) {
-        textures[id] = res;
-        sizediff_t cu = open_tasks.countUntil(id);
-        if(cu >= 0) {
-            open_tasks.remove(cu);
+            open_tasks.remove!(SwapStrategy.unstable)(cu);
         }
     }
 }
