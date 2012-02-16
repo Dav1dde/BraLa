@@ -13,6 +13,16 @@ private {
     import brala.types : Image;
 }
 
+private RessourceManager _resmgr;
+private bool _initialized = false;
+@property RessourceManager resmgr() {
+    if(!_initialized) {
+        _resmgr = new RessourceManager();
+    }
+    
+    return _resmgr;
+}
+
 void load_image(RessourceManager rsmg, string id, string filename) {
     rsmg.done_loading(Image.from_file(filename), id);
 }
