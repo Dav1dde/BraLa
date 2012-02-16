@@ -4,6 +4,7 @@ module brala.main;
 private {
     import glamour.gl;
     import derelict.glfw3.glfw3;
+    import derelict.devil.il;
     
     import std.conv : to, ConvException;
     
@@ -17,10 +18,13 @@ private {
 static this() {
     DerelictGLFW3.load();
     DerelictGL3.load();
+    DerelictIL.load();
 
     if(!glfwInit()) {
         throw new Exception("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
     }
+    
+    ilInit();
 }
 
 GLFWwindow _window;
