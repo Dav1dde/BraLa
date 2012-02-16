@@ -37,7 +37,7 @@ void load_texture(RessourceManager rsmg, string id, string filename) {
 
 class RessourceManager {
     private TaskPool task_pool;
-    private __gshared string[] open_tasks;
+    private __gshared void delegate()[string] open_tasks;
     
     Shader[string] shaders;
     Texture2D[string] textures;
@@ -54,7 +54,7 @@ class RessourceManager {
     auto add_image(string id, string filename, void delegate() cb = null) {
         auto t = task!load_image(this, id, filename);
         task_pool.put(t);
-        open_tasks ~= id;
+        open_tasks[id] = cb;
         
         return t;      
     }
@@ -62,7 +62,7 @@ class RessourceManager {
     auto add_shader(string id, string filename, void delegate() cb = null) {
         auto t = task!load_shader(this, id, filename);
         task_pool.put(t);
-        open_tasks ~= id;
+        open_tasks[id] = cb;
         
         return t;
     }
@@ -70,7 +70,7 @@ class RessourceManager {
     auto add_texture(string id, string filename, void delegate() cb = null) {
         auto t = task!load_texture(this, id, filename);
         task_pool.put(t); 
-        open_tasks ~= id;
+        open_tasks[id] = cb;
         
         return t; 
     }
@@ -86,9 +86,13 @@ class RessourceManager {
         else static if(is(T : Shader)) shaders[id] = res;
         else static if(is(T : Texture2D)) textures[id] = res;
         
-        sizediff_t cu = open_tasks.countUntil(id);
-        if(cu >= 0) {
-            open_tasks = open_tasks.remove!(SwapStrategy.unstable)(cu);
+        if(id in open_tasks) {
+            auto cb = open_tasks[id]; // calls the callback passed to add_*
+            if(cb !is null) {
+                cb();
+            }
+            
+            open_tasks.remove(id);
         }
     }
 }
