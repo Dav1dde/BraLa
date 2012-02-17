@@ -14,14 +14,14 @@ private {
 }
 
 
-@property RessourceManager resmgr() {
+@property ResourceManager resmgr() {
     static bool initialized = false;
-    __gshared static RessourceManager _resmgr;
+    __gshared static ResourceManager _resmgr;
     
     if(!initialized) {
         synchronized {
             if(!_resmgr) {
-                _resmgr = new RessourceManager();
+                _resmgr = new ResourceManager();
             }
         }
         
@@ -31,15 +31,15 @@ private {
     return _resmgr;
 }
 
-void load_image(RessourceManager rsmg, string id, string filename) {
+void load_image(ResourceManager rsmg, string id, string filename) {
     rsmg.done_loading!Image(Image.from_file(filename), id);
 }
 
-void load_shader(RessourceManager rsmg, string id, string filename) {
+void load_shader(ResourceManager rsmg, string id, string filename) {
     rsmg.done_loading(Shader(filename), id);
 }
 
-void load_texture(RessourceManager rsmg, string id, string filename) {
+void load_texture(ResourceManager rsmg, string id, string filename) {
     rsmg.done_loading(Texture2D.from_image(filename), id);
 }
 
@@ -83,7 +83,7 @@ private struct CBS {
     }
 }
 
-class RessourceManager {
+class ResourceManager {
     private Object _lock;
     private TaskPool task_pool;
     private CBS[string] open_tasks;
