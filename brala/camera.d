@@ -8,13 +8,15 @@ private {
 }
 
 
+// Refering to https://github.com/mitsuhiko/webgl-meincraft/blob/master/src/camera.coffee
 struct Camera {
     BraLaEngine engine;    
     vec3 position = vec3(0.0f, 0.0f, 0.0f);
-    vec3d rotation = vec3d(0.0f, 0.0f, 0.0f);
+    vec3 forward = vec3(0.0f, 0.0f, -1.0f);
     float fov = 45.0f;
     float near = 1.0f;
     float far = 400.0f;
+    vec3 up = vec3(0.0f, 1.0f, 0.0f);
     
     this(BraLaEngine engine) {
         this.engine = engine;
@@ -27,45 +29,37 @@ struct Camera {
         this.near = near;
         this.far = far;
     }
+     
+    void look_at(vec3 pos) {
+        forward = (pos - position).normalized;
+    }
     
-    Camera rotatex(double alpha) {
-        rotation.x = rotation.x + alpha;
+    Camera rotatex(float angle) { // degrees
+        mat4 rotmat = quat.axis_rotation(up, radians(-angle)).to_matrix!(4,4);
+        forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
+        return this;
+    }
+
+    Camera rotatey(float angle) { // degrees
+        vec3 vcross = cross(up, forward);
+        mat4 rotmat = quat.axis_rotation(vcross, radians(angle)).to_matrix!(4,4);
+        forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
         return this;
     }
     
-    Camera rotatey(double alpha) {
-        rotation.y = clamp(rotation.y + alpha, cradians!(-70.0f), cradians!(70.0f));
+    Camera move_forward(float delta) {
+        position = position + forward*delta;
         return this;
     }
     
-    Camera rotatez(double alpha) {
-        rotation.z = rotation.z + alpha;
+    Camera move_backward(float delta) {
+        position = position - forward*delta;
         return this;
     }
     
-    Camera set_pos(float x, float y, float z) {
-        position += vec3(x, y, z);
-        return this;
-    }
-    
-    Camera set_pos(vec3 p) {
-        position += p;
-        return this;
-    }
-    
-    Camera move(float x, float y, float z) {
-        position += vec3(x, y, z);
-        return this;
-    }
-    Camera move(vec3 p) {
-        position += p;
-        return this;
-    }
-    
-    @property camera() {
-        return mat4.identity.translate(-position.x, -position.y, -position.z)
-                            .rotatex(rotation.x)
-                            .rotatey(rotation.y);
+    @property mat4 camera() {
+        vec3 target = position + forward;
+        return mat4.look_at(position, target, up);
     }
     
     void apply() {
