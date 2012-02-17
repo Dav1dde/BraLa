@@ -17,19 +17,27 @@ private {
 class BraLaEngine {
     private vec2i _viewport;
     /+private+/ FPSCounter _fpsc;
-    
-    GLVersion opengl_version;
-    
-    mat4 model;
-    mat4 view;
-    mat4 proj;
-    
+
     @property vec2i viewport() {
         return _viewport;
     }
     
     @property float fps() {
         return _fpsc.fps;
+    }
+        
+    GLVersion opengl_version;
+    
+    mat4 model;
+    mat4 view;
+    mat4 proj;
+
+    @property mat4 mvp() {
+        return proj * view * model;
+    }
+    
+    @property mat4 mv() {
+        return view * model;
     }
     
     this(int width, int height, GLVersion glv) {
