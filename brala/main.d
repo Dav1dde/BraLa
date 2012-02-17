@@ -7,6 +7,7 @@ private {
     import derelict.devil.il;
     
     import std.conv : to, ConvException;
+    import std.typecons : Tuple;
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -27,17 +28,24 @@ static this() {
     ilInit();
 }
 
+alias Tuple!(int, "major", int, "minor") OGLVT;
+immutable OGLVT[5] oglvt = [OGLVT(4, 2), OGLVT(4, 1), OGLVT(4, 0), OGLVT(3, 3), OGLVT(3, 2)];
+
+
 GLFWwindow _window;
 
-GLFWwindow open_glfw_win(int width, int height) {    
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3); 
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1); 
-    glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
-    
-    _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
-    if(!_window) {
-        throw new Exception("Failed to create window: " ~ to!string(glfwErrorString(glfwGetError())));
+GLFWwindow open_glfw_win(int width, int height) {
+    foreach(v; oglvt) {
+        debug writefln("Trying OpenGL version: %s.%s", v.major, v.minor);
+        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, v.major);
+        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, v.minor);
+        glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+        
+        _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
+        if(_window) {
+            break;
+        }
     }
     
     debug {} else { glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED); }
@@ -78,8 +86,11 @@ int main(string[] args) {
             throw new Exception("height is not a number.");
         }
     }
-
+    
     register_glfw_error_callback(&glfw_error_cb);
+    
+    DerelictGL3.load();
+    debug writefln("GL_VERSION: %s", to!string(glGetString(GL_VERSION)));
     
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);
