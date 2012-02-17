@@ -24,7 +24,7 @@ private bool _initialized = false;
 }
 
 void load_image(RessourceManager rsmg, string id, string filename) {
-    rsmg.done_loading(Image.from_file(filename), id);
+    rsmg.done_loading!Image(Image.from_file(filename), id);
 }
 
 void load_shader(RessourceManager rsmg, string id, string filename) {
@@ -35,42 +35,86 @@ void load_texture(RessourceManager rsmg, string id, string filename) {
     rsmg.done_loading(Texture2D.from_image(filename), id);
 }
 
+private struct CBS {
+    union {
+        void delegate(Image) imgcb;
+        void delegate(Shader) sdrcb;
+        void delegate(Texture2D) texcb;
+    }
+    ushort t;
+    
+    void opCall(T)(T arg) {
+        static if(is(T : Image)) {
+            auto cb = imgcb;
+        } else static if(is(T : Shader)) {
+            auto cb = sdrcb;
+        } else static if(is(T : Texture2D)) {
+            auto cb = texcb;
+        } else {
+            static assert(false, "Unknown argument type, no matching callback");
+        }
+        
+        if(cb !is null) {
+            cb(arg);
+        }
+    }
+    
+    static CBS from_cb(T)(T cb) {
+        CBS ret;
+        
+        static if(is(T : void delegate(Image))) {
+            ret.imgcb = cb; ret.t = 0;
+        } else static if(is(T : void delegate(Shader))) {
+            ret.sdrcb = cb; ret.t = 1;
+        } else static if(is(T : void delegate(Texture2D))) {
+            ret.texcb = cb; ret.t = 2;
+        } else {
+            static assert(false, "Unknown callback-type.");
+        }
+        
+        return ret;
+    }
+}
+
 class RessourceManager {
+    private Object _lock;
     private TaskPool task_pool;
-    private __gshared void delegate()[string] open_tasks;
+    private CBS[string] open_tasks;
     
     Shader[string] shaders;
     Texture2D[string] textures;
     Image[string] images;
         
     this(bool new_taskpool = true) {
+        _lock = new Object();
+        
         if(new_taskpool) {
             task_pool = new TaskPool();
         } else {
             task_pool = taskPool;
         }
-    }
-          
-    auto add_image(string id, string filename, void delegate() cb = null) {
+    } 
+  
+    auto add_image(string id, string filename, void delegate(Image) cb = null) {
         auto t = task!load_image(this, id, filename);
         task_pool.put(t);
-        open_tasks[id] = cb;
+        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
         
         return t;      
     }
     
-    auto add_shader(string id, string filename, void delegate() cb = null) {
+    auto add_shader(string id, string filename, void delegate(Shader) cb = null) {
         auto t = task!load_shader(this, id, filename);
         task_pool.put(t);
-        open_tasks[id] = cb;
+        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
         
         return t;
     }
     
-    auto add_texture(string id, string filename, void delegate() cb = null) {
+    auto add_texture(string id, string filename, void delegate(Texture2D) cb = null) {
         auto t = task!load_texture(this, id, filename);
         task_pool.put(t); 
-        open_tasks[id] = cb;
+        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
         
         return t; 
     }
@@ -81,20 +125,19 @@ class RessourceManager {
         }
     }
     
-    private synchronized void done_loading(T)(T res, string id) if(is(T : Image) ||
-                                                                   is(T : Shader) ||
-                                                                   is(T : Texture2D)) {
-        static if(is(T : Image)) images[id] = res;
-        else static if(is(T : Shader)) shaders[id] = res;
-        else static if(is(T : Texture2D)) textures[id] = res;
+    private void done_loading(T)(T res, string id) if(is(T : Image) ||
+                                                      is(T : Shader) ||
+                                                      is(T : Texture2D)){
+        synchronized (_lock) { 
+            static if(is(T : Image)) images[id] = res;
+            else static if(is(T : Shader)) shaders[id] = res;
+            else static if(is(T : Texture2D)) textures[id] = res;
         
-        if(id in open_tasks) {
-            auto cb = open_tasks[id]; // calls the callback passed to add_*
-            if(cb !is null) {
-                cb();
+            if(id in open_tasks) {
+                open_tasks[id](res);
+                
+                open_tasks.remove(id);
             }
-            
-            open_tasks.remove(id);
         }
     }
 }
