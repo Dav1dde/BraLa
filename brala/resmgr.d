@@ -13,11 +13,19 @@ private {
     import brala.types : Image;
 }
 
-private RessourceManager _resmgr;
-private bool _initialized = false;
+
 @property RessourceManager resmgr() {
-    if(!_initialized) {
-        _resmgr = new RessourceManager();
+    static bool initialized = false;
+    __gshared static RessourceManager _resmgr;
+    
+    if(!initialized) {
+        synchronized {
+            if(!_resmgr) {
+                _resmgr = new RessourceManager();
+            }
+        }
+        
+        initialized = true;
     }
     
     return _resmgr;
