@@ -95,30 +95,18 @@ class RessourceManager {
         }
     } 
   
-    auto add_image(string id, string filename, void delegate(Image) cb = null) {
-        auto t = task!load_image(this, id, filename);
+    private auto add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
+        auto t = task!taskfun(this, id, filename);
         task_pool.put(t);
         synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
         
         return t;      
     }
     
-    auto add_shader(string id, string filename, void delegate(Shader) cb = null) {
-        auto t = task!load_shader(this, id, filename);
-        task_pool.put(t);
-        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
-        
-        return t;
-    }
-    
-    auto add_texture(string id, string filename, void delegate(Texture2D) cb = null) {
-        auto t = task!load_texture(this, id, filename);
-        task_pool.put(t); 
-        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
-        
-        return t; 
-    }
-    
+    alias add!(load_image, Image) add_image;
+    alias add!(load_shader, Shader) add_shader;
+    alias add!(load_texture, Texture2D) add_texture;
+      
     void wait() {
         while(open_tasks.length > 0) {
             Thread.sleep(dur!("msecs")(100));
