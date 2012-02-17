@@ -20,6 +20,10 @@ class BraLaEngine {
     
     GLVersion opengl_version;
     
+    mat4 model;
+    mat4 view;
+    mat4 proj;
+    
     @property vec2i viewport() {
         return _viewport;
     }

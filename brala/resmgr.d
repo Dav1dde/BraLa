@@ -81,7 +81,9 @@ class RessourceManager {
         }
     }
     
-    private void done_loading(T)(T res, string id) if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+    private synchronized void done_loading(T)(T res, string id) if(is(T : Image) ||
+                                                                   is(T : Shader) ||
+                                                                   is(T : Texture2D)) {
         static if(is(T : Image)) images[id] = res;
         else static if(is(T : Shader)) shaders[id] = res;
         else static if(is(T : Texture2D)) textures[id] = res;
