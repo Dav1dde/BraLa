@@ -48,6 +48,10 @@ GLFWwindow open_glfw_win(int width, int height) {
         }
     }
     
+    if(!_window) {
+        throw new Exception("I am sorry man, you need at least OpenGL 3.2.");
+    }
+    
     debug {} else { glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED); }
        
     glfwSwapInterval(0); // change this to 1?
