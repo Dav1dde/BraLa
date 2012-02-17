@@ -18,7 +18,7 @@ class BraLaGame : BaseGLFWEventHandler {
     
     this(BraLaEngine engine, void* window) {
         super(window);
-        
+
         this.engine = engine;
     }
     
