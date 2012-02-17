@@ -49,7 +49,6 @@ private struct CBS {
         void delegate(Shader) sdrcb;
         void delegate(Texture2D) texcb;
     }
-    ushort t;
     
     void opCall(T)(T arg) {
         static if(is(T : Image)) {
@@ -71,11 +70,11 @@ private struct CBS {
         CBS ret;
         
         static if(is(T : void delegate(Image))) {
-            ret.imgcb = cb; ret.t = 0;
+            ret.imgcb = cb;
         } else static if(is(T : void delegate(Shader))) {
-            ret.sdrcb = cb; ret.t = 1;
+            ret.sdrcb = cb;
         } else static if(is(T : void delegate(Texture2D))) {
-            ret.texcb = cb; ret.t = 2;
+            ret.texcb = cb;
         } else {
             static assert(false, "Unknown callback-type.");
         }
