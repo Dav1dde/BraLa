@@ -14,6 +14,8 @@ interface ICamera {
     void rotatey(float angle);
     void move_forward(float delta);
     void move_backward(float delta);
+    void strafe_left(float delta);
+    void strafe_right(float delta);    
     mat4 camera();
     void apply();
 }
@@ -56,12 +58,22 @@ class FreeCamera : ICamera {
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
     }
     
-    void move_forward(float delta) {
+    void move_forward(float delta) { // W
         position = position + forward*delta;
     }
     
-    void move_backward(float delta) {
+    void move_backward(float delta) { // S
         position = position - forward*delta;
+    }
+    
+    void strafe_left(float delta) { // A
+        vec3 vcross = cross(up, forward).normalized;
+        position = position + (vcross*delta);
+    }
+    
+    void strafe_right(float delta) { // D
+        vec3 vcross = cross(up, forward).normalized;
+        position = position - (vcross*delta);
     }
     
     @property mat4 camera() {
