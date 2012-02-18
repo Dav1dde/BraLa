@@ -6,7 +6,7 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
-    import brala.camera : Camera;
+    import brala.camera : ICamera, FreeCamera;
     
     debug import std.stdio;
 }
@@ -15,7 +15,7 @@ private {
 class BraLaGame : BaseGLFWEventHandler {
     BraLaEngine engine;
     
-    Camera cam;
+    ICamera cam;
     
     bool quit = false;
     
@@ -23,7 +23,7 @@ class BraLaGame : BaseGLFWEventHandler {
         super(window);
 
         this.engine = engine;
-        cam = Camera(engine);
+        cam = new FreeCamera(engine);
     }
     
     void start() {

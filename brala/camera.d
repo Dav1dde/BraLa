@@ -8,8 +8,19 @@ private {
 }
 
 
+interface ICamera {
+    void look_at(vec3 pos);
+    void rotatex(float angle);
+    void rotatey(float angle);
+    void move_forward(float delta);
+    void move_backward(float delta);
+    mat4 camera();
+    void apply();
+}
+
+
 // Refering to https://github.com/mitsuhiko/webgl-meincraft/blob/master/src/camera.coffee
-struct Camera {
+class FreeCamera : ICamera {
     BraLaEngine engine;    
     vec3 position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, -1.0f);
@@ -34,27 +45,23 @@ struct Camera {
         forward = (pos - position).normalized;
     }
     
-    Camera rotatex(float angle) { // degrees
+    void rotatex(float angle) { // degrees
         mat4 rotmat = quat.axis_rotation(up, radians(-angle)).to_matrix!(4,4);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
-        return this;
     }
 
-    Camera rotatey(float angle) { // degrees
+    void rotatey(float angle) { // degrees
         vec3 vcross = cross(up, forward);
         mat4 rotmat = quat.axis_rotation(vcross, radians(angle)).to_matrix!(4,4);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
-        return this;
     }
     
-    Camera move_forward(float delta) {
+    void move_forward(float delta) {
         position = position + forward*delta;
-        return this;
     }
     
-    Camera move_backward(float delta) {
+    void move_backward(float delta) {
         position = position - forward*delta;
-        return this;
     }
     
     @property mat4 camera() {
