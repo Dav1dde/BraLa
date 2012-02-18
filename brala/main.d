@@ -44,6 +44,7 @@ GLFWwindow open_glfw_win(int width, int height) {
         
         _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
         if(_window) {
+            debug writefln("Success, created OpenGL %s.%s context", v.major, v.minor);
             break;
         }
     }
@@ -93,14 +94,12 @@ int main(string[] args) {
     
     register_glfw_error_callback(&glfw_error_cb);
     
-    DerelictGL3.load();
-    debug writefln("GL_VERSION: %s", to!string(glGetString(GL_VERSION)));
-    
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);
     
     GLVersion glv = init_opengl();
-    debug writefln("OpenGL: %d", glv);
+    debug writefln("Supported OpenGL version: %s\n"
+                   "Loaded OpenGL: %d", to!string(glGetString(GL_VERSION)), glv);
     
     auto engine = new BraLaEngine(width, height, glv);
     auto game = new BraLaGame(engine, win);
