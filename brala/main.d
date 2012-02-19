@@ -99,7 +99,7 @@ int main(string[] args) {
     
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
-                   "Loaded OpenGL: %d", to!string(glGetString(GL_VERSION)), glv);
+                   "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
     
     auto engine = new BraLaEngine(width, height, glv);
     auto game = new BraLaGame(engine, win);

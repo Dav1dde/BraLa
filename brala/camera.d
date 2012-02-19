@@ -48,13 +48,13 @@ class FreeCamera : ICamera {
     }
     
     void rotatex(float angle) { // degrees
-        mat4 rotmat = quat.axis_rotation(up, radians(-angle)).to_matrix!(4,4);
+        mat4 rotmat = mat4.rotation(radians(-angle), up);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
     }
 
     void rotatey(float angle) { // degrees
         vec3 vcross = cross(up, forward);
-        mat4 rotmat = quat.axis_rotation(vcross, radians(angle)).to_matrix!(4,4);
+        mat4 rotmat = mat4.rotation(radians(-angle), up);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
     }
     
