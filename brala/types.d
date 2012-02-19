@@ -3,6 +3,7 @@ module brala.types;
 private {
     import derelict.devil.il;
     import std.string : toStringz, format;
+    import std.traits : ReturnType, isCallable;
 }
 
 struct Image {
@@ -46,4 +47,63 @@ struct Image {
         
         return Image(id);
     }
+}
+
+struct DefaultAA(value_type, key_type, alias default__) {
+    private value_type[key_type] _store;
+    alias _store this;
+    alias default__ default_;
+    
+    static if(isCallable!default_) {
+        static assert(is(ReturnType!(default_) : value_type), "callable returntype doesn't match value_type");
+    }
+
+    private value_type _get_default() {
+        static if(isCallable!default_) {
+            return default_();
+        } else {
+            return default_;
+        }
+    }
+    
+    value_type opIndex(key_type index) {
+        if(index in _store) {
+            return _store[index];
+        } else {
+            return _get_default();
+        }
+    }
+     
+    void opIndexAssign(value_type value, key_type index) {
+        _store[index] = value;
+    }
+       
+    void opIndexOpAssign(string op)(value_type r, key_type index) {
+        if(index !in _store) {
+            _store[index] = _get_default();
+        }
+        mixin("_store[index]" ~ op ~"= r;");
+    }
+}
+
+unittest {
+    DefaultAA!(int, string, 12) myaa;
+    assert(myaa["baz"] == 12);
+    assert(myaa["foo"] == 12);
+    myaa["baz"] = -12;
+    assert(myaa["baz"] == -12);
+    assert(myaa["foo"] == 12);
+    myaa["baz"] += 12;
+    assert(myaa["baz"] == 0);
+    myaa["foo"] -= 12;
+    assert(myaa["foo"] == 0);
+    myaa["lulz"] -= 12;
+    assert(myaa["lulz"] == 0);
+    
+    int dg() { return 1; }
+        
+    DefaultAA!(int, string, dg) mydgaa;
+    assert(mydgaa["foo"] == 1);
+    mydgaa["lulz"] -= 1;
+    assert(mydgaa["lulz"] == 0);
 }

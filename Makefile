@@ -8,7 +8,7 @@ export ROOT_SOURCE_DIR  = brala/
 DCFLAGS_IMPORT      = -Ibrala/ `pkg-config --libs --cflags gl3n glamour`
 DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictIL $(LINKERFLAG)-lDerelictUtil
 
-ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -debug -g -gc
+ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -debug -unittest -g -gc
 
 include command.make
 

@@ -7,6 +7,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;
+    import brala.types : DefaultAA;
     
     debug import std.stdio;
 }
@@ -16,6 +17,8 @@ class BraLaGame : BaseGLFWEventHandler {
     BraLaEngine engine;
     
     ICamera cam;
+    
+    DefaultAA!(bool, int, false) key_map;
     
     bool quit = false;
     
@@ -33,7 +36,7 @@ class BraLaGame : BaseGLFWEventHandler {
     bool poll(uint delta_t) {
         display();
         
-        return quit;
+        return quit || key_map[GLFW_KEY_ESCAPE];
     }
     
     void display() {
@@ -43,9 +46,11 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     override void on_key_down(int key) {
-        if(key == GLFW_KEY_ESCAPE) {
-            quit = true;
-        }
+        key_map[key] = true;
+    }
+    
+    override void on_key_up(int key) {
+        key_map[key] = false;
     }
     
     override bool on_window_close() {
