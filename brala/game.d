@@ -18,7 +18,7 @@ class BraLaGame : BaseGLFWEventHandler {
     
     ICamera cam;
     
-    DefaultAA!(bool, int, false) key_map;
+    DefaultAA!(bool, int, false) keymap;
     
     bool quit = false;
     
@@ -36,7 +36,7 @@ class BraLaGame : BaseGLFWEventHandler {
     bool poll(uint delta_t) {
         display();
         
-        return quit || key_map[GLFW_KEY_ESCAPE];
+        return quit || keymap[GLFW_KEY_ESCAPE];
     }
     
     void display() {
@@ -46,11 +46,11 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     override void on_key_down(int key) {
-        key_map[key] = true;
+        keymap[key] = true;
     }
     
     override void on_key_up(int key) {
-        key_map[key] = false;
+        keymap[key] = false;
     }
     
     override bool on_window_close() {

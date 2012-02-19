@@ -66,23 +66,24 @@ struct DefaultAA(value_type, key_type, alias default__) {
         }
     }
     
-    value_type opIndex(key_type index) {
-        if(index in _store) {
-            return _store[index];
-        } else {
-            return _get_default();
+    value_type opIndex(key_type key) {
+        if(key !in _store) {
+            _store[key] = _get_default();
         }
+        
+        return _store[key];
     }
      
-    void opIndexAssign(value_type value, key_type index) {
-        _store[index] = value;
+    void opIndexAssign(value_type value, key_type key) {
+        _store[key] = value;
     }
        
-    void opIndexOpAssign(string op)(value_type r, key_type index) {
-        if(index !in _store) {
-            _store[index] = _get_default();
+    void opIndexOpAssign(string op)(value_type rhs, key_type key) {
+        if(key !in _store) {
+            _store[key] = _get_default();
         }
-        mixin("_store[index]" ~ op ~"= r;");
+        
+        mixin("_store[key]" ~ op ~"= rhs;");
     }
 }
 
