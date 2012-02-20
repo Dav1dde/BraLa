@@ -8,6 +8,7 @@ private {
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;
     import brala.types : DefaultAA;
+    import brala.config;
     
     debug import std.stdio;
 }
@@ -34,6 +35,12 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     bool poll(uint delta_t) {
+        if(keymap[MOVE_FORWARD])  cam.move_forward(delta_t);
+        if(keymap[MOVE_BACKWARD]) cam.move_backward(delta_t);
+        if(keymap[STRAFE_LEFT])  cam.strafe_left(delta_t);
+        if(keymap[STRAFE_RIGHT]) cam.strafe_right(delta_t);
+        cam.apply();
+        
         display();
         
         return quit || keymap[GLFW_KEY_ESCAPE];
