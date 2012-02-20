@@ -15,7 +15,7 @@ private {
 
 
 class BraLaEngine {
-    private vec2i _viewport;
+    private vec2i _viewport = vec2i(0, 0);
     /+private+/ FPSCounter _fpsc;
 
     @property vec2i viewport() {

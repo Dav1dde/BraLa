@@ -20,7 +20,7 @@ AEventHandler cast_userptr(void* window) {
     return ae;
 }
 
-void function(int, string) glfw_error_callback;
+private void function(int, string) glfw_error_callback;
 
 void register_glfw_error_callback(void function(int, string) cb) {
     glfw_error_callback = cb;

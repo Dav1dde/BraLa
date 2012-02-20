@@ -54,7 +54,7 @@ GLFWwindow open_glfw_win(int width, int height) {
     }
     
     debug {} else { glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED); }
-       
+    
     glfwSwapInterval(0); // change this to 1?
     
     return _window;
