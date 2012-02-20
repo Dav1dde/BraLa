@@ -5,6 +5,8 @@ private {
     import derelict.glfw3.glfw3;
     import std.conv : to;
     
+    import brala.exception : FatalException;
+    
     debug import std.stdio : writefln;
 }
 
@@ -13,8 +15,8 @@ AEventHandler cast_userptr(void* window) {
     AEventHandler ae = cast(AEventHandler)user_ptr;
     
     if(ae is null) {
-        throw new Exception("dang unable to get the EventHandler class from the user-pointer, "
-                            "did glfwGetWindowUserPointer return garbage?");
+        throw new FatalException("dang unable to get the EventHandler class from the user-pointer, "
+                                 "did glfwGetWindowUserPointer return garbage?");
     }
     
     return ae;

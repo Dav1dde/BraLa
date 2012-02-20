@@ -4,6 +4,8 @@ private {
     import derelict.devil.il;
     import std.string : toStringz, format;
     import std.traits : ReturnType, isCallable;
+    
+    import brala.exception : ImageException;
 }
 
 struct Image {
@@ -40,7 +42,7 @@ struct Image {
         ilBindImage(id);
        
         if(!ilLoadImage(toStringz(filename.dup))) {
-            throw new Exception(format("loading the image \"%s\" failed!", filename));
+            throw new ImageException(format("loading the image \"%s\" failed!", filename));
         }
 
         ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
