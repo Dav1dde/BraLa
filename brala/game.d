@@ -74,7 +74,7 @@ class BraLaGame : BaseGLFWEventHandler {
             mouse_offset.x = x - last_x;
             mouse_offset.y = y - last_y;
             
-            // this will create a GLFE_ERROR 458761 / "The specified window is not active"
+            // this will create a GLFW_ERROR 458761 / "The specified window is not active"
             // for the first callback, just ignore it.
             glfwSetMousePos(window, engine.viewport.x / 2, engine.viewport.y / 2);
         }

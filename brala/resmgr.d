@@ -2,15 +2,19 @@ module brala.resmgr;
 
 private {
     import std.parallelism : task, taskPool, TaskPool;
-    import std.path : baseName, stripExtension, extension;
+    import std.path : extension;
+    import std.file : exists;
     import core.thread : Thread;
     import core.time : dur;
     import std.algorithm : SwapStrategy, remove, countUntil;
+    import std.typecons : Tuple;
+    import std.string : toLower;
     
     import glamour.shader : Shader;
     import glamour.texture : Texture2D;
     
     import brala.types : Image;
+    import brala.exception : ResmgrException;
 }
 
 
@@ -83,6 +87,10 @@ private struct CBS {
     }
 }
 
+enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE2D_TYPE }
+
+alias Tuple!(string, "id", string, "filename", int, "type") Resource;
+
 class ResourceManager {
     private Object _lock;
     private TaskPool task_pool;
@@ -102,21 +110,75 @@ class ResourceManager {
         }
     } 
   
-    private auto add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
+    private auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
+        if(!exists(filename)) {
+            throw new ResmgrException("Can not load file \"" ~ filename ~ "\", it does not exist!");
+        }
+        
+        string idt = id ~ T.stringof; 
+        if((is(T : Image) && id in images) ||
+           (is(T : Shader) && id in shaders) ||
+           (is(T : Texture2D) && id in textures) ||
+           idt in open_tasks) {
+            throw new ResmgrException("ID: \"" ~ id ~ "\" is already used.");
+        }
+        
         auto t = task!taskfun(this, id, filename);
         task_pool.put(t);
-        synchronized (_lock) open_tasks[id] = CBS.from_cb(cb);
+        synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
         
         return t;      
     }
     
-    alias add!(load_image, Image) add_image;
-    alias add!(load_shader, Shader) add_shader;
-    alias add!(load_texture, Texture2D) add_texture;
-      
+    alias _add!(load_image, Image) add_image;
+    alias _add!(load_shader, Shader) add_shader;
+    alias _add!(load_texture, Texture2D) add_texture;
+    
+    void add_many(const Resource[] resources) {
+        foreach(res; resources) {
+            int type = res.type == AUTO_TYPE ? guess_type(res.filename) : res.type;
+            switch(type) {
+                case IMAGE_TYPE: add_image(res.id, res.filename); break;
+                case SHADER_TYPE: add_shader(res.id, res.filename); break;
+                case TEXTURE2D_TYPE: add_texture(res.id, res.filename); break;
+                default: throw new ResmgrException("unknown resource-type");
+            }
+        }
+    }
+    
+    void add_many(const Resource[] resources...) {
+        add_many(resources);
+    }
+    
     void wait() {
         while(open_tasks.length > 0) {
             Thread.sleep(dur!("msecs")(100));
+        }
+    }
+    
+    T get(T)(string id) if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+        static if(is(T : Image)) {
+            return images[id];
+        } else static if(is(T : Shader)) {
+            return shaders[id];
+        } else static if(is(T : Texture2D)) {
+            return textures[id];
+        }
+    }
+    
+    static int guess_type(string filename) {
+        string ext = extension(filename).toLower();
+        
+        switch(ext) {
+            case ".png": return IMAGE_TYPE;
+            case ".jpg": return IMAGE_TYPE;
+            case ".jpeg": return IMAGE_TYPE;
+            case ".tga": return IMAGE_TYPE;
+            case ".shader": return SHADER_TYPE;
+            case ".glsl": return SHADER_TYPE;
+            case ".texture": return TEXTURE2D_TYPE;
+            case ".texture2d": return TEXTURE2D_TYPE;
+            default: throw new ResmgrException("unable to guess resource-type");
         }
     }
     
@@ -127,11 +189,12 @@ class ResourceManager {
             static if(is(T : Image)) images[id] = res;
             else static if(is(T : Shader)) shaders[id] = res;
             else static if(is(T : Texture2D)) textures[id] = res;
-        
-            if(id in open_tasks) {
-                open_tasks[id](res);
+            
+            string idt = id ~ T.stringof;
+            if(CBS* t = idt in open_tasks) {
+                (*t)(res);
                 
-                open_tasks.remove(id);
+                open_tasks.remove(idt);
             }
         }
     }

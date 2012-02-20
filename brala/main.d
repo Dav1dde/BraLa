@@ -11,7 +11,9 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
+    import brala.resmgr : resmgr;
     import brala.event : register_glfw_error_callback;
+    import brala.config : load_default_resources;
     
     debug import std.stdio : writefln;
 }
@@ -102,6 +104,7 @@ int main(string[] args) {
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
     
     auto engine = new BraLaEngine(width, height, glv);
+    load_default_resources(resmgr);
     auto game = new BraLaGame(engine, win);
     game.start();
     
