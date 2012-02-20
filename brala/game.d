@@ -10,6 +10,7 @@ private {
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;
     import brala.types : DefaultAA;
+    import brala.util : clear;
     import brala.config;
     
     debug import std.stdio;
@@ -54,9 +55,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void display() {
-        glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-        glClearDepth(1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        clear();
     }
     
     override void on_key_down(int key) {
@@ -75,6 +74,8 @@ class BraLaGame : BaseGLFWEventHandler {
             mouse_offset.x = x - last_x;
             mouse_offset.y = y - last_y;
             
+            // this will create a GLFE_ERROR 458761 / "The specified window is not active"
+            // for the first callback, just ignore it.
             glfwSetMousePos(window, engine.viewport.x / 2, engine.viewport.y / 2);
         }
                 
