@@ -15,6 +15,8 @@ private {
     
     import brala.types : Image;
     import brala.exception : ResmgrException;
+    
+    debug import std.stdio : writefln;
 }
 
 
@@ -111,6 +113,8 @@ class ResourceManager {
     } 
   
     private auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
+        debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
+        
         if(!exists(filename)) {
             throw new ResmgrException("Can not load file \"" ~ filename ~ "\", it does not exist!");
         }
@@ -123,11 +127,15 @@ class ResourceManager {
             throw new ResmgrException("ID: \"" ~ id ~ "\" is already used.");
         }
         
-        auto t = task!taskfun(this, id, filename);
-        task_pool.put(t);
-        synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
-        
-        return t;      
+        static if(is(T : Image) || is(T : Texture2D)) {
+            taskfun(this, id, filename); // I am sorry dave, devil isn't thread-safe
+            return null;
+        } else {
+            auto t = task!taskfun(this, id, filename);
+            task_pool.put(t);
+            synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
+            return t;
+        }
     }
     
     alias _add!(load_image, Image) add_image;
@@ -185,6 +193,8 @@ class ResourceManager {
     private void done_loading(T)(T res, string id) if(is(T : Image) ||
                                                       is(T : Shader) ||
                                                       is(T : Texture2D)){
+        debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
+                                                          
         synchronized (_lock) { 
             static if(is(T : Image)) images[id] = res;
             else static if(is(T : Shader)) shaders[id] = res;

@@ -8,6 +8,8 @@ private {
     import brala.exception : ImageException;
 }
 
+
+// DevIL is not thread-safe :/
 struct Image {
     ILuint id;
     ILubyte* data;

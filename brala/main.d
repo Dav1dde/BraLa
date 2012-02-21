@@ -106,6 +106,7 @@ int main(string[] args) {
     
     auto engine = new BraLaEngine(width, height, glv);
     load_default_resources(resmgr);
+    resmgr.wait();
     auto game = new BraLaGame(engine, win);
     game.start();
     
