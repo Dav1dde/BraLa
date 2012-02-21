@@ -1,9 +1,8 @@
-export PROJECT_NAME     = BraLaS
+export PROJECT_NAME     = BraLa
 export AUTHOR           = David Herberth
 export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
 export LICENSE          = 
-export ROOT_SOURCE_DIR  = brala/
 
 DCFLAGS_IMPORT      = -Ibrala/ `pkg-config --libs --cflags gl3n glamour`
 DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictIL $(LINKERFLAG)-lDerelictUtil
@@ -12,20 +11,33 @@ ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -debug -unittest -g -gc
 
 include command.make
 
-SOURCES             = $(getSource) 
-OBJECTS             = $(patsubst %.d,$(BUILD_PATH)$(PATH_SEP)%.o,    $(SOURCES))
+OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c
+DSOURCES             = $(call getSource,brala,d) $(call getSource,src$(PATH_SEP)d,d) 
+DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
+
+CSOURCES             = $(call getSource,src$(PATH_SEP)c,c) 
+COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%.o,   $(CSOURCES))
+
+
 
 all: brala
 
 .PHONY: clean
 
-brala: $(OBJECTS)
-	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(OBJECTS) $(OUTPUT)bralad
-	
+brala: buildDir $(COBJECTS) $(DOBJECTS)
+	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(COBJECTS) $(DOBJECTS) $(OUTPUT)bralad
+
 # create object files
-$(BUILD_PATH)$(PATH_SEP)%.o : %.d
+$(DBUILD_PATH)$(PATH_SEP)%.o : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
-	
+
+$(CBUILD_PATH)$(PATH_SEP)%.o : %.c
+	gcc -c $< -o $@
+
+buildDir: $(OBJDIRS)
+
+$(OBJDIRS) :
+	$(MKDIR) $@
+
 clean:
 	$(RM) build/
-	$(RM) *.o

@@ -6,11 +6,11 @@ ifdef SystemRoot
     message         = @(echo $1)
     SHELL           = cmd.exe
     Filter          = %/linux/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
-    getSource       =$(shell dir $(ROOT_SOURCE_DIR) /s /b)
+    getSource       =$(shell dir $1 /s /b)
 else
     SHELL           = sh
     PATH_SEP        =/
-    getSource       =$(shell find $(ROOT_SOURCE_DIR) -name "*.d")
+    getSource       =$(shell find $1 -name "*.$2")
     ifeq ($(shell uname), Linux)
         OS              = "Linux"
         STATIC_LIB_EXT  = .a
@@ -242,7 +242,8 @@ DLIB_PATH           = ./lib
 IMPORT_PATH         = ./import
 DOC_PATH            = ./doc
 DDOC_PATH           = ./ddoc
-BUILD_PATH          = ./build
+DBUILD_PATH         = ./build
+CBUILD_PATH         = ./build
 
 LIBNAME             = lib$(PROJECT_NAME)-$(COMPILER)$(STATIC_LIB_EXT)
 SONAME              = lib$(PROJECT_NAME)-$(COMPILER)$(DYNAMIC_LIB_EXT)
@@ -258,7 +259,8 @@ export AR
 export ARCH
 export ARFLAGS
 export BIN_DIR
-export BUILD_PATH
+export DBUILD_PATH
+export CBUILD_PATH
 export CC
 export COMPILER
 export CP
