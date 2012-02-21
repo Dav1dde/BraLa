@@ -1,55 +1,105 @@
 module brala.types;
 
 private {
-    import derelict.devil.il;
+    version(stb) {
+        import stb_image : stbi_load, stbi_image_free;
+        import glamour.gl : GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE;
+    } else {
+        import derelict.devil.il;
+    }
     import std.string : toStringz, format;
     import std.traits : ReturnType, isCallable;
     
     import brala.exception : ImageException;
 }
 
-
-// DevIL is not thread-safe :/
-struct Image {
-    ILuint id;
-    ILubyte* data;
-    ILint width;
-    ILint height;
-    ILenum dest_format;
-    ILenum dest_type;
-    
-    this(ILuint id_) {
-        id = id_;
-    
-        data = ilGetData();
-        width = ilGetInteger(IL_IMAGE_WIDTH);
-        height = ilGetInteger(IL_IMAGE_HEIGHT);
+version(stb) {
+    // stb is threadsafe :)
+    struct Image {
+        ubyte* data;
+        int width;
+        int height;
         
-        dest_format = ilGetInteger(IL_IMAGE_FORMAT);
-        dest_type = ilGetInteger(IL_IMAGE_TYPE);
-    }
-    
-    this(ILuint id_, ILubyte* d, ILint w, ILint h, ILenum df, ILenum dt) {
-        data = d;
-        id = id_;
-        width = w;
-        height = h;
-        dest_format = df;
-        dest_type = dt;
-    }
-    
-    static Image from_file(string filename) {
-        ILuint id;
-        ilGenImages(1, &id);
-        ilBindImage(id);
-       
-        if(!ilLoadImage(toStringz(filename.dup))) {
-            throw new ImageException(format("loading the image \"%s\" failed!", filename));
+        int dest_format;
+        int dest_type;
+        
+        this(ubyte* d, int w, int h, int df, int dt) {
+            data = d;
+            width = w;
+            height = h;
+            dest_format = df;
+            dest_type = dt;
         }
-
-        ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
         
-        return Image(id);
+        static Image from_file(string filename) {
+            int x;
+            int y;
+            int comp;
+            ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
+
+            if(data is null) {
+                throw new ImageException("Unable to load image: " ~ filename);
+            }
+            
+            scope(exit) stbi_image_free(data);
+            scope(failure) stbi_image_free(data);
+            
+            ubyte d[] = new ubyte[x*y];
+            d = data[0..x*y];          
+            
+            uint image_format;
+            switch(comp) {
+                case 3: image_format = GL_RGB; break;
+                case 4: image_format = GL_RGBA; break;
+                default: throw new ImageException("Unknown/Unsupported stbi image format");
+            }
+
+            return Image(d.ptr, x, y, image_format, GL_UNSIGNED_BYTE);
+        }
+    }
+} else {
+    // DevIL is not thread-safe :/
+    struct Image {
+        ILuint id;
+        ILubyte* data;
+        ILint width;
+        ILint height;
+        ILenum dest_format;
+        ILenum dest_type;
+        
+        this(ILuint id_) {
+            id = id_;
+        
+            data = ilGetData();
+            width = ilGetInteger(IL_IMAGE_WIDTH);
+            height = ilGetInteger(IL_IMAGE_HEIGHT);
+            
+            dest_format = ilGetInteger(IL_IMAGE_FORMAT);
+            dest_type = ilGetInteger(IL_IMAGE_TYPE);
+        }
+        
+        this(ILuint id_, ILubyte* d, ILint w, ILint h, ILenum df, ILenum dt) {
+            data = d;
+            id = id_;
+            width = w;
+            height = h;
+            dest_format = df;
+            dest_type = dt;
+        }
+        
+        static Image from_file(string filename) {
+            ILuint id;
+            ilGenImages(1, &id);
+            ilBindImage(id);
+           
+            if(!ilLoadImage(toStringz(filename.dup))) {
+                throw new ImageException(format("loading the image \"%s\" failed!", filename));
+            }
+
+            ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+            
+            return Image(id);
+        }
     }
 }
 

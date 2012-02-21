@@ -10,6 +10,7 @@ private {
     import std.typecons : Tuple;
     import std.string : toLower;
     
+    import glamour.gl : GL_UNSIGNED_BYTE;
     import glamour.shader : Shader;
     import glamour.texture : Texture2D;
     
@@ -19,6 +20,12 @@ private {
     debug import std.stdio : writefln;
 }
 
+version(none) {
+    private __gshared Object _texlock;
+    static this() {
+        _texlock = new Object();
+    }
+}
 
 @property ResourceManager resmgr() {
     static bool initialized = false;
@@ -47,6 +54,14 @@ void load_shader(ResourceManager rsmg, string id, string filename) {
 
 void load_texture(ResourceManager rsmg, string id, string filename) {
     rsmg.done_loading(Texture2D.from_image(filename), id);
+}
+
+private template is_loadable(T) {
+    static if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+        enum is_loadable = true;
+    } else {
+        enum is_loadable = false;
+    }
 }
 
 private struct CBS {
@@ -127,13 +142,13 @@ class ResourceManager {
             throw new ResmgrException("ID: \"" ~ id ~ "\" is already used.");
         }
         
-        static if(is(T : Image) || is(T : Texture2D)) {
-            taskfun(this, id, filename); // I am sorry dave, devil isn't thread-safe
+        synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
+        static if(is(T : Texture2D)) { // no multithreaded texture-loading, yet
+            taskfun(this, id, filename); 
             return null;
         } else {
             auto t = task!taskfun(this, id, filename);
             task_pool.put(t);
-            synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
             return t;
         }
     }
@@ -141,6 +156,16 @@ class ResourceManager {
     alias _add!(load_image, Image) add_image;
     alias _add!(load_shader, Shader) add_shader;
     alias _add!(load_texture, Texture2D) add_texture;
+    
+    auto add(T)(string id, string filename, void delegate(T) cb = null) if(is_loadable!T) {
+        static if(is(T : Image)) {
+            return add_image(id, filename, cb);
+        } else static if(is(T : Shader)) {
+            return add_shader(id, filename, cb);
+        } else {
+            return add_texture(id, filename, cb);
+        }
+    }
     
     void add_many(const Resource[] resources) {
         foreach(res; resources) {
@@ -164,7 +189,7 @@ class ResourceManager {
         }
     }
     
-    T get(T)(string id) if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+    T get(T)(string id) if(is_loadable!T) {
         static if(is(T : Image)) {
             return images[id];
         } else static if(is(T : Shader)) {
@@ -190,9 +215,7 @@ class ResourceManager {
         }
     }
     
-    private void done_loading(T)(T res, string id) if(is(T : Image) ||
-                                                      is(T : Shader) ||
-                                                      is(T : Texture2D)){
+    private void done_loading(T)(T res, string id) if(is_loadable!T){
         debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
                                                           
         synchronized (_lock) { 

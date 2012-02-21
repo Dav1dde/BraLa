@@ -13,6 +13,7 @@ enum {
     STRAFE_RIGHT = GLFW_KEY_D,
 }
 
+// put texture files to the end, since there is no multithreaded texture-loading yet
 immutable Resource[] resources = [];
 
 void load_default_resources(ResourceManager rsmg = null) {
