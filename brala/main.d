@@ -105,8 +105,7 @@ int main(string[] args) {
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
     
     auto engine = new BraLaEngine(width, height, glv);
-    load_default_resources(resmgr);
-    resmgr.wait();
+    load_default_resources(resmgr); // I like! ~15mb in 837ms
     auto game = new BraLaGame(engine, win);
     game.start();
     

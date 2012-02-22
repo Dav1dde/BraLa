@@ -1,12 +1,11 @@
 module brala.resmgr;
 
 private {
-    import std.parallelism : task, taskPool, TaskPool;
+    import std.parallelism : task, Task, taskPool, TaskPool;
     import std.path : extension;
     import std.file : exists;
     import core.thread : Thread;
     import core.time : dur;
-    import std.algorithm : SwapStrategy, remove, countUntil;
     import std.typecons : Tuple;
     import std.string : toLower;
     
@@ -44,16 +43,22 @@ version(none) {
     return _resmgr;
 }
 
-void load_image(ResourceManager rsmg, string id, string filename) {
-    rsmg.done_loading!Image(Image.from_file(filename), id);
+Image load_image(ResourceManager rsmg, string id, string filename) {
+    Image img = Image.from_file(filename);
+    rsmg.done_loading!Image(img, id);
+    return img;
 }
 
-void load_shader(ResourceManager rsmg, string id, string filename) {
-    rsmg.done_loading(Shader(filename), id);
+Shader load_shader(ResourceManager rsmg, string id, string filename) {
+    Shader sdr = Shader(filename);
+    rsmg.done_loading(sdr, id);
+    return sdr;
 }
 
-void load_texture(ResourceManager rsmg, string id, string filename) {
-    rsmg.done_loading(Texture2D.from_image(filename), id);
+Texture2D load_texture(ResourceManager rsmg, string id, string filename) {
+    Texture2D tex = Texture2D.from_image(filename);
+    rsmg.done_loading(tex, id);
+    return tex;
 }
 
 private template is_loadable(T) {
@@ -143,7 +148,8 @@ class ResourceManager {
         }
         
         synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
-        static if(is(T : Texture2D)) { // no multithreaded texture-loading, yet
+        // use add_many_wait for multithreaded texture loading, shaders to come.
+        static if(is(T : Texture2D) || is(T : Shader)) {
             taskfun(this, id, filename); 
             return null;
         } else {
@@ -179,8 +185,35 @@ class ResourceManager {
         }
     }
     
-    void add_many(const Resource[] resources...) {
-        add_many(resources);
+    // Use this when you would call, after feeding the resmgr, anyways .wait()
+    // it will load the texture-images seperatly and then upload them to opengl
+    // as texture.
+    void add_many_wait(const Resource[] resources) {
+        alias Tuple!(Task!(load_image, typeof(this), string, string)*, "task", Resource, "res") TTT;
+        TTT[] textasks;
+        
+        foreach(res; resources) {
+            int type = res.type == AUTO_TYPE ? guess_type(res.filename) : res.type;
+            
+            switch(type) {
+                case IMAGE_TYPE: add_image(res.id, res.filename); break;
+                case SHADER_TYPE: add_shader(res.id, res.filename); break;
+                case TEXTURE2D_TYPE: textasks ~= TTT(add_image(res.id, res.filename), res); break;
+                default: throw new ResmgrException("unknown resource-type");
+            }
+        }           
+    
+        foreach(textask; textasks) {
+            Image img = textask.task.workForce();
+            
+            // we are still in the mainthread, so let's upload this sh*t to the gpu
+            // but we still need to synchronize!
+            synchronized(_lock) images.remove(textask.res.id);
+            textures[textask.res.id] = Texture2D(img.data, img.dest_format, img.width,
+                                                 img.height, img.dest_format, img.dest_type);
+        }
+        
+        wait();
     }
     
     void wait() {
