@@ -50,7 +50,7 @@ Image load_image(ResourceManager rsmg, string id, string filename) {
 }
 
 Shader load_shader(ResourceManager rsmg, string id, string filename) {
-    Shader sdr = Shader(filename);
+    Shader sdr = new Shader(filename);
     rsmg.done_loading(sdr, id);
     return sdr;
 }
@@ -209,8 +209,10 @@ class ResourceManager {
             // we are still in the mainthread, so let's upload this sh*t to the gpu
             // but we still need to synchronize!
             synchronized(_lock) images.remove(textask.res.id);
-            textures[textask.res.id] = Texture2D(img.data, img.dest_format, img.width,
-                                                 img.height, img.dest_format, img.dest_type);
+            auto tex = new Texture2D(img.dest_format, img.width,
+                                     img.height, img.dest_format, img.dest_type);
+            tex.set_data(img.data);
+            textures[textask.res.id] = tex;
         }
         
         wait();

@@ -31,13 +31,25 @@ class BraLaEngine {
     mat4 model;
     mat4 view;
     mat4 proj;
-
+    
     @property mat4 mvp() {
         return proj * view * model;
     }
     
     @property mat4 mv() {
         return view * model;
+    }
+    
+    private Shader _current = null;
+    
+    @property Shader current() {
+        return _current;
+    }
+    
+    @property void current(Shader shader) {
+        _current.unbind();
+        _current = shader;
+        _current.bind();
     }
     
     this(int width, int height, GLVersion glv) {
@@ -78,6 +90,23 @@ class BraLaEngine {
         
         TickDuration ts = _fpsc.stop();
         debug writefln("Mainloop ran %f seconds", ts.to!("seconds", float));
+    }
+    
+    void use(Shader shader) {
+        current = shader;
+    }
+    
+    void flush_uniforms() {
+        flush_uniforms(_current, true);
+    }
+    
+    void flush_uniforms(Shader shader, bool bound = false) {
+        if(!bound) shader.bind();
+        
+        shader.uniform("viewport", viewport);
+        shader.uniform("model", model);
+        shader.uniform("view", view);
+        shader.uniform("proj", proj);
     }
 
 }
