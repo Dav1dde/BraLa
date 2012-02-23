@@ -26,7 +26,7 @@ class BraLaEngine {
         return _fpsc.fps;
     }
         
-    GLVersion opengl_version;
+    immutable GLVersion opengl_version;
     
     mat4 model;
     mat4 view;
@@ -53,6 +53,7 @@ class BraLaEngine {
     }
     
     this(int width, int height, GLVersion glv) {
+        opengl_version = glv;
         _viewport = vec2i(width, height);
         
         glEnable(GL_DEPTH_TEST);
