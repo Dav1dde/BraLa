@@ -10,17 +10,13 @@ private {
     debug import std.stdio : writefln;
 }
 
-AEventHandler cast_userptr(void* window) {
-    void* user_ptr = glfwGetWindowUserPointer(window);
-    AEventHandler ae = cast(AEventHandler)user_ptr;
-    
-    if(ae is null) {
-        throw new FatalException("dang unable to get the EventHandler class from the user-pointer, "
-                                 "did glfwGetWindowUserPointer return garbage?");
+AEventHandler cast_userptr(void* window)
+    body {
+        void* user_ptr = glfwGetWindowUserPointer(window);
+        return cast(AEventHandler)user_ptr;
     }
-    
-    return ae;
-}
+    out(result) { assert(result !is null, "glfwGetWindowUserPointer returned null"); }
+
 
 private void function(int, string) glfw_error_callback;
 

@@ -16,7 +16,7 @@ private {
     import brala.config : load_default_resources;
     import brala.exception : InitException;
     
-    debug import std.stdio : writefln;
+    import std.stdio : writefln;
 }
 
 static this() {
@@ -66,7 +66,7 @@ GLFWwindow open_glfw_win(int width, int height) {
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {
-        debug writefln("GLFW ERROR(%d): %s", errno, error);
+        writefln("GLFW ERROR(%d): %s", errno, error);
         last_errno = errno;
     }
 }
@@ -95,7 +95,7 @@ int main(string[] args) {
         }
     }
     
-    register_glfw_error_callback(&glfw_error_cb);
+    debug register_glfw_error_callback(&glfw_error_cb);
     
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);
