@@ -226,3 +226,60 @@ class EntityAction : IPacket {
 }
 
 public alias server.PickupSpawn PickupSpawn;
+
+class WindowClick : IPacket {
+    final @property ubyte id() { return 0x66; }
+    
+    byte window_id;
+    short slot;
+    bool right_click;
+    short action_number;
+    bool shift;
+    byte[] clicked_item;
+    
+    this(byte window_id, short slot, bool right_click, short action_number, bool shift, byte[] clicked_item) {
+        this.window_id = window_id;
+        this.slot = slot;
+        this.right_click = right_click;
+        this.action_number = action_number;
+        this.shift = shift;
+        this.clicked_item = clicked_item;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, slot, right_click, action_number, shift, clicked_item);
+    }
+}
+
+public alias server.Transaction Transaction;
+public alias server.CreativeInventoryAction CreativeInventoryAction;
+
+class EnchantItem : IPacket {
+    final @property ubyte id() { return 0x6C; }
+    
+    byte window_id;
+    byte enchantment;
+    
+    this(byte window_id, byte enchantment) {
+        this.window_id = window_id;
+        this.enchantment = enchantment;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, enchantment);
+    }
+}
+
+public alias server.UpdateSign UpdateSign;
+public alias server.PluginMessage PluginMessage;
+
+class ServerListPing : IPacket {
+    final @property ubyte id() { return 0xFE; }
+    
+    
+    this() {}
+    
+    void send(Stream s) {
+        write(s, id);
+    }
+}

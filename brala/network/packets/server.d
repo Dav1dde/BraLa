@@ -347,7 +347,7 @@ class AddObject : IPacket {
     void send(Stream s) {
         if(thrower_eid == 0) {
             write(s, id, eid, type, x, y, z);
-        else {
+        } else {
             write(s, id, eid, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
         }
     }
@@ -467,7 +467,7 @@ class Entity : IPacket {
     int eid;
 
     this(int eid) {
-        this.eid;
+        this.eid = eid;
     }
     
     void send(Stream s) {
@@ -670,14 +670,14 @@ class PreChunk : IPacket {
     int z;
     bool mode;
     
-    this(int x, int y, bool mode) {
+    this(int x, int z, bool mode) {
         this.x = x;
-        this.y = y;
+        this.z = z;
         this.mode = mode;
     }
     
     void send(Stream s) {
-        write(s, id, x, y, mode);
+        write(s, id, x, z, mode);
     }
 }
 
@@ -693,7 +693,7 @@ class MapChunk : IPacket {
     int compressed_size;
     ubyte[] compressed_data;
     
-    this(int x, int y, int z, byte size_x, byte size_y, byte size_z, int compressed_size, ubyte[] compressed_data) {
+    this(int x, short y, int z, byte size_x, byte size_y, byte size_z, int compressed_size, ubyte[] compressed_data) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -839,3 +839,259 @@ class NewInvalidState : IPacket {
     }
 }
 
+class ThunderBolt : IPacket {
+    final @property ubyte id() { return 0x47; }
+    
+    int eid;
+    bool unknown = true;
+    int x;
+    int y;
+    int z;
+    
+    this(int eid, int x, int y, int z) {
+        this.eid = eid;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, unknown, x, y, z);
+    }
+}
+
+class OpenWindow : IPacket {
+    final @property ubyte id() { return 0x64; }
+    
+    byte window_id;
+    byte inventory_type;
+    string window_title;
+    byte slots;
+    
+    this(byte window_id, byte inventory_type, string window_title, byte slots) {
+        this.window_id = window_id;
+        this.inventory_type = inventory_type;
+        this.window_title = window_title;
+        this.slots = slots;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, inventory_type, window_title, slots);
+    }
+}
+
+class CloseWindow : IPacket {
+    final @property ubyte id() { return 0x65; }
+    
+    byte window_id;
+    
+    this(byte window_id) {
+        this.window_id = window_id;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id);
+    }
+}
+
+class SetSlot : IPacket {
+    final @property ubyte id() { return 0x67; }
+    
+    byte window_id;
+    short slot;
+    byte[] slot_data;
+    
+    this(byte window_id, short slot, byte[] slot_data) {
+        this.window_id = window_id;
+        this.slot = slot;
+        this.slot_data = slot_data;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, slot, slot_data);
+    }
+}
+
+class WindowItems : IPacket {
+    final @property ubyte id() { return 0x68; }
+    
+    byte window_id;
+    short count;
+    byte[] slot_data;
+    
+    this(byte window_id, short count, byte[] slot_data) {
+        this.window_id = window_id;
+        this.count = count;
+        this.slot_data = slot_data;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, count, slot_data);
+    }
+}
+
+class UpdateWindowProperty : IPacket {
+    final @property ubyte id() { return 0x69; }
+    
+    byte window_id;
+    short property;
+    short value;
+    
+    this(byte window_id, short property, short value) {
+        this.window_id = window_id;
+        this.property = property;
+        this.value = value;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, property, value);
+    }
+}
+
+class Transaction : IPacket {
+    final @property ubyte id() { return 0x6A; }
+    
+    byte window_id;
+    short action_number;
+    bool accepted;
+    
+    this(byte window_id, short action_number, bool accepted) {
+        this.window_id = window_id;
+        this.action_number = action_number;
+        this.accepted = accepted;
+    }
+    
+    void send(Stream s) {
+        write(s, id, window_id, action_number, accepted);
+    }
+}
+
+class CreativeInventoryAction : IPacket {
+    final @property ubyte id() { return 0x6B; }
+    
+    short slot;
+    byte[] clicked_item;
+    
+    this(short slot, byte[] clicked_item) {
+        this.slot = slot;
+        this.clicked_item = clicked_item;
+    }
+    
+    void send(Stream s) {
+        write(s, id, slot, clicked_item);
+    }
+}
+
+class UpdateSign : IPacket {
+    final @property ubyte id() { return 0x82; }
+    
+    int x;
+    short y;
+    int z;
+    string text1;
+    string text2;
+    string text3;
+    string text4;
+    
+    this(int x, short y, int z, string text1, string text2, string text3, string text4) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.text1 = text1;
+        this.text2 = text2;
+        this.text3 = text3;
+        this.text4 = text4;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, text1, text2, text3, text4);
+    }
+}
+
+class ItemData : IPacket {
+    final @property ubyte id() { return 0x83; }
+    
+    short item_type;
+    short item_id;
+    ubyte text_length;
+    byte[] text;
+    
+    this(short item_type, short item_id, ubyte text_length, byte[] text) {
+        this.item_type = item_type;
+        this.item_id = item_id;
+        this.text_length = text_length;
+        this.text = text;
+    }
+    
+    void send(Stream s) {
+        write(s, id, item_type, item_id, text_length, text);
+    }
+}
+
+class IncrementStatistic : IPacket {
+    final @property ubyte id() { return 0xC8; }
+    
+    int statistic_id;
+    byte amount;
+    
+    this(int statistic_id, byte amount) {
+        this.statistic_id = statistic_id;
+        this.amount = amount;
+    }
+    
+    void send(Stream s) {
+        write(s, id, statistic_id, amount);
+    }
+}
+
+class PlayerListItem : IPacket {
+    final @property ubyte id() { return 0xC9; }
+    
+    string username;
+    bool online;
+    short ping;
+    
+    this(string username, bool online, short ping) {
+        this.username = username;
+        this.online = online;
+        this.ping = ping;
+    }
+    
+    void send(Stream s) {
+        write(s, id, username, online, ping);
+    }
+}
+
+class PluginMessage : IPacket {
+    final @property ubyte id() { return 0xFA; }
+    
+    string channel;
+    short length;
+    byte[] data;
+    
+    this(string channel, short length, byte[] data) {
+        this.channel = channel;
+        this.length = length;
+        this.data = data;
+    }
+    
+    void send(Stream s) {
+        write(s, id, channel, length, data);
+    }
+}
+
+class Disconnect : IPacket {
+    final @property ubyte id() { return 0xFF; }
+    
+    string reason;
+    
+    this(string reason) {
+        this.reason = reason;
+    }
+    
+    void send(Stream s) {
+        write(s, id, reason);
+    }
+}
+
+alias Disconnect Kick;
