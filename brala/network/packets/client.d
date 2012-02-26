@@ -84,3 +84,70 @@ class Player : IPacket {
         write(s, id, on_ground);
     }
 }
+
+class PlayerPosition : IPacket {
+    final @property ubyte id() { return 0x0B; }
+    
+    double x;
+    double y;
+    double stance;
+    double z;
+    bool on_ground;
+    
+    this(double x, double y, double stance, double z, bool on_ground) {
+        this.x = x;
+        this.y = y;
+        this.stance = stance;
+        this.z = z;
+        this.on_ground = on_ground;    
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, stance, z, on_ground);
+    }
+}
+
+class PlayerLook : IPacket {
+    final @property ubyte id() { return 0x0C; }
+    
+    float yaw;
+    float pitch;
+    bool on_ground;
+    
+    this(float yaw, float pitch, bool on_ground) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.on_ground = on_ground;
+    }
+    
+    void send(Stream s) {
+        write(s, id, yaw, pitch, on_ground);
+    }
+}
+
+class PlayerPositionLook : IPacket {
+    final @property ubyte id() { return 0x0D; }
+    
+    double x;
+    double y;
+    double stance;
+    double z;
+    float yaw;
+    float pitch;
+    bool on_ground;
+    
+    this(double x, double y, double stance, double z, float yaw, float pitch, bool on_ground) {
+        this.x = x;
+        this.y = y;
+        this.stance = stance;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.on_ground = on_ground;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, stance, z, yaw, pitch, on_ground);
+    }
+}
+

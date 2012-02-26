@@ -174,3 +174,29 @@ class Respawn : IPacket {
         write(s, id, dimension, difficulty, mode, world_height, seed, level_type);
     }
 }
+
+class PlayerPositionLook : IPacket {
+    final @property ubyte id() { return 0x0D; }
+    
+    double x;
+    double stance; // different in the client packet
+    double y;
+    double z;
+    float yaw;
+    float pitch;
+    bool on_ground;
+    
+    this(double x, double stance, double y, double z, float yaw, float pitch, bool on_ground) {
+        this.x = x;
+        this.stance = stance;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.on_ground = on_ground;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, stance, y, z, yaw, pitch, on_ground);
+    }
+}
