@@ -226,15 +226,3 @@ class EntityAction : IPacket {
 }
 
 public alias server.PickupSpawn PickupSpawn;
-
-class  : IPacket {
-    final @property ubyte id() { return 0x13; }
-    
-
-    this() {
-    }
-    
-    void send(Stream s) {
-        write(s, id, 
-    }
-}

@@ -446,3 +446,396 @@ class EntityVelocity : IPacket {
         write(s, id, eid, velocity_x, velocity_y, velocity_z);
     }
 }
+
+class DestroyEntity : IPacket {
+    final @property ubyte id() { return 0x1D; }
+    
+    int eid;
+
+    this(int eid) {
+        this.eid = eid;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid);
+    }
+}
+
+class Entity : IPacket {
+    final @property ubyte id() { return 0x1E; }
+        
+    int eid;
+
+    this(int eid) {
+        this.eid;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid);
+    }
+}
+
+class EntityRelativeMove : IPacket {
+    final @property ubyte id() { return 0x1F; }
+    
+    int eid;
+    byte delta_x;
+    byte delta_y;
+    byte delta_z;
+    
+    this(int eid, byte delta_x, byte delta_y, byte delta_z) {
+        this.eid = eid;
+        this.delta_x = delta_x;
+        this.delta_y = delta_y;
+        this.delta_z = delta_z;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, delta_x, delta_y, delta_z);
+    }
+}
+
+class EntityLook : IPacket {
+    final @property ubyte id() { return 0x20; }
+    
+    int eid;
+    byte yaw;
+    byte pitch;
+    
+    this(int eid, byte yaw, byte pitch) {
+        this.eid = eid;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, yaw, pitch);
+    }
+}
+
+class EntityLookRelativeMove : IPacket {
+    final @property ubyte id() { return 0x21; }
+    
+    int eid;
+    byte delta_x;
+    byte delta_y;
+    byte delta_z;
+    byte yaw;
+    byte pitch;
+    
+    this(int eid, byte delta_x, byte delta_y, byte delta_z, byte yaw, byte pitch) {
+        this.eid = eid;
+        this.delta_x = delta_x;
+        this.delta_y = delta_y;
+        this.delta_z = delta_z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, delta_x, delta_y, delta_z, yaw, pitch);
+    }
+}
+
+class EntityTeleport : IPacket {
+    final @property ubyte id() { return 0x22; }
+    
+    int eid;
+    int x;
+    int y;
+    int z;
+    byte yaw;
+    byte pitch;
+    
+    this(int eid, int x, int y, int z, byte yaw, byte pitch) {
+        this.eid = eid;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, x, y, z, yaw, pitch);
+    }
+}
+
+class EntityStatus : IPacket {
+    final @property ubyte id() { return 0x26; }
+    
+    int eid;
+    byte status;
+    
+    this(int eid, byte status) {
+        this.eid = eid;
+        this.status = status;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, status);
+    }
+}
+
+class AttachEntity : IPacket {
+    final @property ubyte id() { return 0x27; }
+    
+    int eid; // entity ID = player
+    int vid; // vehicle ID
+    
+    this(int eid, int vid) {
+        this.eid = eid;
+        this.vid = vid;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, vid);
+    }
+}
+
+class EntityMetadata : IPacket {
+    final @property ubyte id() { return 0x28; }
+    
+    int eid;
+    byte[] metadata;
+    
+    this(int eid, byte[] metadata) {
+        this.eid = eid;
+        this.metadata = metadata;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, metadata);
+    }
+}
+
+class EntityEffect : IPacket {
+    final @property ubyte id() { return 0x29; }
+    
+    int eid;
+    byte effect_id;
+    byte amplifier;
+    short duration;
+    
+    this(int eid, byte effect_id, byte amplifier, short duration) {
+        this.eid = eid;
+        this.effect_id = effect_id;
+        this.amplifier = amplifier;
+        this.duration = duration;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, effect_id, amplifier, duration);
+    }
+}
+
+class RemoveEntityEffect : IPacket {
+    final @property ubyte id() { return 0x2A; }
+    
+    int eid;
+    int effect_id;
+    
+    this(int eid, int effect_id) {
+        this.eid = eid;
+        this.effect_id = effect_id;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, effect_id);
+    }
+}
+
+class Experience : IPacket {
+    final @property ubyte id() { return 0x2B; }
+    
+    float experience_bar;
+    short level;
+    short total_experience;
+    
+    this(float experience_bar, short level, short total_experience) {
+        this.experience_bar = experience_bar;
+        this.level = level;
+        this.total_experience = total_experience;
+    }
+    
+    void send(Stream s) {
+        write(s, id, experience_bar, level, total_experience);
+    }
+}
+
+class PreChunk : IPacket {
+    final @property ubyte id() { return 0x32; }
+    
+    int x;
+    int z;
+    bool mode;
+    
+    this(int x, int y, bool mode) {
+        this.x = x;
+        this.y = y;
+        this.mode = mode;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, mode);
+    }
+}
+
+class MapChunk : IPacket {
+    final @property ubyte id() { return 0x33; }
+    
+    int x;
+    short y;
+    int z;
+    byte size_x;
+    byte size_y;
+    byte size_z;
+    int compressed_size;
+    ubyte[] compressed_data;
+    
+    this(int x, int y, int z, byte size_x, byte size_y, byte size_z, int compressed_size, ubyte[] compressed_data) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.size_x = size_x;
+        this.size_y = size_y;
+        this.size_z = size_z;
+        this.compressed_size = compressed_size;
+        this.compressed_data = compressed_data;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, size_x, size_y, size_z, compressed_size, compressed_data);
+    }
+}
+
+class MultiBlockChange : IPacket {
+    final @property ubyte id() { return 0x34; }
+    
+    int x;
+    int z;
+    short array_size;
+    short[] coordinates;
+    byte[] types;
+    byte[] metadata;    
+    
+    this(int x, int z, short array_size, short[] coordinates, byte[] types, byte[] metadata) {
+        this.x = x;
+        this.z = z;
+        this.array_size = array_size;
+        this.coordinates = coordinates;
+        this.types = types;
+        this.metadata = metadata;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, z, array_size, coordinates, types, metadata);
+    }
+}
+
+class BlockChange : IPacket {
+    final @property ubyte id() { return 0x35; }
+    
+    int x;
+    byte y;
+    int z;
+    byte type;
+    byte metadata;
+    
+    this(int x, byte y, int z, byte type, byte metadata) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.type = type;
+        this.metadata = metadata;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, type, metadata);
+    }
+}
+
+class BlockAction : IPacket {
+    final @property ubyte id() { return 0x36; }
+    
+    int x;
+    short y;
+    int z;
+    byte byte1;
+    byte byte2;
+    
+    this(int x, short y, int z, byte byte1, byte byte2) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.byte1 = byte1;
+        this.byte2 = byte2;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, byte1, byte2);
+    }
+}
+
+class Explosion : IPacket {
+    final @property ubyte id() { return 0x3C; }
+    
+    double x;
+    double y;
+    double z;
+    float radius;
+    int record_count;
+    byte[] records;
+    
+    this(double x, double y, double z, float radius, int record_count, byte[] records) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.radius = radius;
+        this.record_count = record_count;
+        this.records = records;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, radius, record_count, records);
+    }
+}
+
+class SoundParticleEffect : IPacket {
+    final @property ubyte id() { return 0x3D; }
+    
+    int effect_id;
+    int x;
+    byte y;
+    int z;
+    int data;
+    
+    this(int effect_id, int x, byte y, int z, int data) {
+        this.effect_id = effect_id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.data = data;
+    }
+    
+    void send(Stream s) {
+        write(s, id, effect_id, x, y, z, data);
+    }
+}
+
+class NewInvalidState : IPacket {
+    final @property ubyte id() { return 0x46; }
+    
+    byte reason;
+    byte gamemode;
+    
+    this(byte reason, byte gamemode) {
+        this.reason = reason;
+        this.gamemode = gamemode;
+    }
+    
+    void send(Stream s) {
+        write(s, id, reason, gamemode);
+    }
+}
+
