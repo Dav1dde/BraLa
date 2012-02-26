@@ -3,9 +3,10 @@ module brala.network.packets.server;
 
 private {
     import std.stream : Stream;
+    import std.typetuple : TypeTuple, staticMap;
     
     import brala.network.packets.types : IPacket;
-    import brala.network.packets.util : write, NULL_BYTE, NULL_UBYTE;
+    import brala.network.packets.util : write, NULL_BYTE, NULL_UBYTE, Packet;
 }
 
 class KeepAlive : IPacket {

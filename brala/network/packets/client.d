@@ -276,7 +276,6 @@ public alias server.PluginMessage PluginMessage;
 class ServerListPing : IPacket {
     final @property ubyte id() { return 0xFE; }
     
-    
     this() {}
     
     void send(Stream s) {
