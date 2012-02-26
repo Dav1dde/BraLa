@@ -200,3 +200,101 @@ class PlayerPositionLook : IPacket {
         write(s, id, x, stance, y, z, yaw, pitch, on_ground);
     }
 }
+
+class UseBed : IPacket {
+    final @property ubyte id() { return 0x11; }
+    
+    int eid;
+    bool in_bed;
+    int x;
+    byte y;
+    int z;
+    
+    this(int eid, bool in_bed, int x, byte y, int z) {
+        this.eid = eid;
+        this.in_bed = in_bed;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, in_bed, x, y, z);
+    }
+}
+
+class Animation : IPacket {
+    final @property ubyte id() { return 0x12; }
+    
+    int eid;
+    byte animation;
+    
+    this(int eid, byte animation) {
+        this.eid = eid;
+        this.animation = animation;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, animation);
+    }
+}
+
+class NamedEntitySpawn : IPacket {
+    final @property ubyte id() { return 0x14; }
+    
+    int eid;
+    string username;
+    int x;
+    int y;
+    int z;
+    byte rotation;
+    byte pitch;
+    short current_item;    
+    
+    this(int eid, string username, int x, int y, int z, byte rotation, byte pitch, short current_item) {
+        this.eid = eid;
+        this.username = username;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.rotation = rotation;
+        this.pitch = pitch;
+        this.current_item = current_item;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, username, x, y, z, rotation, pitch, current_item);
+    }
+}
+
+class PickupSpawn : IPacket {
+    final @property ubyte id() { return 0x15; }
+    
+    int eid;
+    short item_id;
+    byte count;
+    short damage;
+    int x;
+    int y;
+    int z;
+    byte rotation;
+    byte pitch;
+    byte roll;
+    
+    this(int eid, short item_id, byte count, short damage, int x, int y, int z, byte rotation, byte pitch, byte roll) {
+        this.eid = eid;
+        this.item_id = item_id;
+        this.count = count;
+        this.damage = damage;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.rotation = rotation;
+        this.pitch = pitch;
+        this.roll = roll;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, item_id, count, damage, x, y, z, rotation, pitch, roll);
+    }
+}

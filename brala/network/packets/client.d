@@ -151,3 +151,78 @@ class PlayerPositionLook : IPacket {
     }
 }
 
+class PlayerDigging : IPacket {
+    final @property ubyte id() { return 0x0E; }
+    
+    byte status;
+    int x;
+    int y;
+    int z;
+    byte face;
+    
+    this(byte status, int x, int y, int z, byte face) {
+        this.status = status;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.face = face;
+    }
+    
+    void send(Stream s) {
+        write(s, id, status, x, y, z, face);
+    }
+}
+
+class PlayerBlockPlacement : IPacket {
+    final @property ubyte id() { return 0x0F; }
+    
+    int x;
+    byte y; // I lol'd (sometimes y is a byte and sometimes an int)
+    int z;
+    byte direction;
+    byte[] slot;
+    
+    this(int x, byte y, int z, byte direction, byte[] slot) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.direction = direction;
+        this.slot = slot;
+    }
+    
+    void send(Stream s) {
+        write(s, id, x, y, z, direction, slot);
+    }
+}
+
+class HoldingChange : IPacket {
+    final @property ubyte id() { return 0x10; }
+    
+    short slot_id;
+    
+    this(short slot_id) {
+        this.slot_id = slot_id;
+    }
+    
+    void send(Stream s) {
+        write(s, id, slot_id);
+    }
+}
+
+class EntityAction : IPacket {
+    final @property ubyte id() { return 0x13; }
+    
+    int eid;
+    byte action_id;
+    
+    this(int eid, byte action_id) {
+        this.eid = eid;
+        this.action_id = action_id;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, action_id);
+    }
+}
+
+public alias server.PickupSpawn PickupSpawn;
