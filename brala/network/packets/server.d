@@ -298,3 +298,151 @@ class PickupSpawn : IPacket {
         write(s, id, eid, item_id, count, damage, x, y, z, rotation, pitch, roll);
     }
 }
+
+class CollectItem : IPacket {
+    final @property ubyte id() { return 0x16; }
+    
+    int collected_eid;
+    int collector_eid;
+
+    this(int collected_eid, int collector_eid) {
+        this.collected_eid = collected_eid;
+        this.collector_eid = collector_eid;
+    }
+    
+    void send(Stream s) {
+        write(s, id, collected_eid, collector_eid);
+    }
+}
+
+class AddObject : IPacket {
+    final @property ubyte id() { return 0x17; }
+    
+    int eid;
+    byte type;
+    int x;
+    int y;
+    int z;
+    int thrower_eid = 0;
+    short speed_x;
+    short speed_y;
+    short speed_z;
+
+    this(int eid, byte type, int x, int y, int z) {
+        this.eid = eid;
+        this.type = type;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
+    this(int eid, byte type, int x, int y, int z, int thrower_eid, short speed_x, short speed_y, short speed_z) {
+        this(eid, type, x, y, z);
+        this.thrower_eid = thrower_eid;
+        this.speed_x = speed_x;
+        this.speed_y = speed_y;
+        this.speed_z = speed_z;
+    }
+    
+    void send(Stream s) {
+        if(thrower_eid == 0) {
+            write(s, id, eid, type, x, y, z);
+        else {
+            write(s, id, eid, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
+        }
+    }
+}
+
+class MobSpawn : IPacket {
+    final @property ubyte id() { return 0x18; }
+    
+    int eid;
+    byte type;
+    int x;
+    int y;
+    int z;
+    byte yaw;
+    byte pitch;
+    byte[] metadata;
+
+    this(int eid, byte type, int x, int y, int z, byte yaw, byte pitch, byte[] metadata) {
+        this.eid = eid;
+        this.type = type;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.metadata = metadata;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, type, x, y, z, yaw, pitch, metadata);
+    }
+}
+
+class Painting : IPacket {
+    final @property ubyte id() { return 0x19; }
+    
+    int eid;
+    string title;
+    int x;
+    int y;
+    int z;
+    int direction;
+
+    this(int eid, string title, int x, int y, int z, int direction) {
+        this.eid = eid;
+        this.title = title;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.direction = direction;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, title, x, y, z, direction);
+    }
+}
+
+class ExperienceOrb : IPacket {
+    final @property ubyte id() { return 0x1A; }
+    
+    int eid;
+    int x;
+    int y;
+    int z;
+    short count;
+
+    this(int eid, int x, int y, int z, short count) {
+        this.eid = eid;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.count = count;        
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, x, y, z, count);
+    }
+}
+
+class EntityVelocity : IPacket {
+    final @property ubyte id() { return 0x1C; }
+    
+    int eid;
+    short velocity_x;
+    short velocity_y;
+    short velocity_z;
+
+    this(int eid, short velocity_x, short velocity_y, short velocity_z) {
+        this.eid = eid;
+        this.velocity_x = velocity_x;
+        this.velocity_y = velocity_y;
+        this.velocity_z = velocity_z;
+    }
+    
+    void send(Stream s) {
+        write(s, id, eid, velocity_x, velocity_y, velocity_z);
+    }
+}
