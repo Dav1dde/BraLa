@@ -33,3 +33,9 @@ class FatalException : BraLaException {
         super(msg);
     }
 }
+
+class ConnectionException : BraLaException {
+    this(string msg) {
+        super(msg);
+    }
+}
