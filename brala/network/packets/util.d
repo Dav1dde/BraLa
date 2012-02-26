@@ -19,6 +19,11 @@ private void write_impl(T : const(char)[])(Stream s, T data) {
     s.write(data);
 }
 
-private void write_impl(T)(Stream s, T data) if(!is(T : const(char)[])) {
+private void write_impl(T : bool)(Stream s, T data) {
+    s.write(cast(byte)data);
+}
+
+private void write_impl(T)(Stream s, T data) if(!is(T : const(char)[]) ||
+                                                !is(T : bool)) {
     s.write(data);
 }
