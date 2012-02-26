@@ -5,6 +5,6 @@ private {
 }
 
 
-mixin template ClientProtocol {
+mixin template ClientProtocol() {
     
 }
