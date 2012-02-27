@@ -4,7 +4,7 @@ private {
     import std.stream : Stream;
     
     import brala.network.packets.types : IPacket;
-    import brala.network.packets.util : write, NULL_BYTE, NULL_UBYTE;
+    import brala.network.packets.util;
     import server = brala.network.packets.server;
 }
 
@@ -14,7 +14,7 @@ class KeepAlive : IPacket {
     this() {}
     
     void send(Stream s) {
-        write(s, id, 0); // the client may send packets with id 0
+        write(s, id, 0); // the client may only send packets with id 0
     }
 }
 
@@ -35,250 +35,66 @@ class Login : IPacket {
 }
 
 class Handshake : IPacket {
-    final @property ubyte id() { return 0x02; }
-    
-    string username;
-    
-    this(string username) {
-        this.username = username;
-    }
-    
-    void send(Stream s) {
-        write(s, id, username);
-    }
+    mixin Packet!(0x02, string, "username");
 }
 
 public alias server.ChatMessage ChatMessage;
 public alias server.EntityEquipment EntityEquipment;
 
 class UseEntity : IPacket {
-    final @property ubyte id() { return 0x07; }
-    
-    int user;
-    int target;
-    bool left_click;
-    
-    this(int user, int target, bool left_click) {
-        this.user = user;
-        this.target = target;
-        this.left_click = left_click;
-    }
-    
-    void send(Stream s) {
-        write(s, id, user, target, left_click);
-    }
+    mixin Packet!(0x07, int, "user", int, "target", bool, "left_click");
 }
 
 public alias server.Respawn Respawn;
 
 class Player : IPacket {
-    final @property ubyte id() { return 0x0A; }
-    
-    bool on_ground;
-    
-    this(bool on_ground) {
-        this.on_ground = on_ground;
-    }
-    
-    void send(Stream s) {
-        write(s, id, on_ground);
-    }
+    mixin Packet!(0x0A, bool, "on_ground");
 }
 
 class PlayerPosition : IPacket {
-    final @property ubyte id() { return 0x0B; }
-    
-    double x;
-    double y;
-    double stance;
-    double z;
-    bool on_ground;
-    
-    this(double x, double y, double stance, double z, bool on_ground) {
-        this.x = x;
-        this.y = y;
-        this.stance = stance;
-        this.z = z;
-        this.on_ground = on_ground;    
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, stance, z, on_ground);
-    }
+    mixin Packet!(0x0B, double, "x", double, "y", double, "stance", double, "z", bool, "on_ground");
 }
 
 class PlayerLook : IPacket {
-    final @property ubyte id() { return 0x0C; }
-    
-    float yaw;
-    float pitch;
-    bool on_ground;
-    
-    this(float yaw, float pitch, bool on_ground) {
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.on_ground = on_ground;
-    }
-    
-    void send(Stream s) {
-        write(s, id, yaw, pitch, on_ground);
-    }
+    mixin Packet!(0x0C, float, "yaw", float, "pitch", bool, "on_ground");
 }
 
 class PlayerPositionLook : IPacket {
-    final @property ubyte id() { return 0x0D; }
-    
-    double x;
-    double y;
-    double stance;
-    double z;
-    float yaw;
-    float pitch;
-    bool on_ground;
-    
-    this(double x, double y, double stance, double z, float yaw, float pitch, bool on_ground) {
-        this.x = x;
-        this.y = y;
-        this.stance = stance;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.on_ground = on_ground;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, stance, z, yaw, pitch, on_ground);
-    }
+    mixin Packet!(0x0D, double, "x", double, "y", double, "stance", double, "z", float, "yaw", float, "pitch", bool, "on_ground");
 }
 
 class PlayerDigging : IPacket {
-    final @property ubyte id() { return 0x0E; }
-    
-    byte status;
-    int x;
-    int y;
-    int z;
-    byte face;
-    
-    this(byte status, int x, int y, int z, byte face) {
-        this.status = status;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.face = face;
-    }
-    
-    void send(Stream s) {
-        write(s, id, status, x, y, z, face);
-    }
+    mixin Packet!(0x0E, byte, "status", int, "x", int, "y", int, "z", byte, "face");
 }
 
 class PlayerBlockPlacement : IPacket {
-    final @property ubyte id() { return 0x0F; }
-    
-    int x;
-    byte y; // I lol'd (sometimes y is a byte and sometimes an int)
-    int z;
-    byte direction;
-    byte[] slot;
-    
-    this(int x, byte y, int z, byte direction, byte[] slot) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.direction = direction;
-        this.slot = slot;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, direction, slot);
-    }
+    mixin Packet!(0x0F, int, "x", byte, "y", int, "z", byte, "direction", byte[], "slot");
 }
 
 class HoldingChange : IPacket {
-    final @property ubyte id() { return 0x10; }
-    
-    short slot_id;
-    
-    this(short slot_id) {
-        this.slot_id = slot_id;
-    }
-    
-    void send(Stream s) {
-        write(s, id, slot_id);
-    }
+    mixin Packet!(0x10, short, "slot_id");
 }
 
 class EntityAction : IPacket {
-    final @property ubyte id() { return 0x13; }
-    
-    int eid;
-    byte action_id;
-    
-    this(int eid, byte action_id) {
-        this.eid = eid;
-        this.action_id = action_id;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, action_id);
-    }
+    mixin Packet!(0x13, int, "entity_id", byte, "action_id");
 }
 
 public alias server.PickupSpawn PickupSpawn;
 
 class WindowClick : IPacket {
-    final @property ubyte id() { return 0x66; }
-    
-    byte window_id;
-    short slot;
-    bool right_click;
-    short action_number;
-    bool shift;
-    byte[] clicked_item;
-    
-    this(byte window_id, short slot, bool right_click, short action_number, bool shift, byte[] clicked_item) {
-        this.window_id = window_id;
-        this.slot = slot;
-        this.right_click = right_click;
-        this.action_number = action_number;
-        this.shift = shift;
-        this.clicked_item = clicked_item;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, slot, right_click, action_number, shift, clicked_item);
-    }
+    mixin Packet!(0x66, byte, "window_id", short, "slot", bool, "right_click", short, "action_number", bool, "shift", byte[], "clicked_item");
 }
 
 public alias server.Transaction Transaction;
 public alias server.CreativeInventoryAction CreativeInventoryAction;
 
 class EnchantItem : IPacket {
-    final @property ubyte id() { return 0x6C; }
-    
-    byte window_id;
-    byte enchantment;
-    
-    this(byte window_id, byte enchantment) {
-        this.window_id = window_id;
-        this.enchantment = enchantment;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, enchantment);
-    }
+    mixin Packet!(0x6C, byte, "window_id", byte, "enchantment");
 }
 
 public alias server.UpdateSign UpdateSign;
 public alias server.PluginMessage PluginMessage;
 
 class ServerListPing : IPacket {
-    final @property ubyte id() { return 0xFE; }
-    
-    this() {}
-    
-    void send(Stream s) {
-        write(s, id);
-    }
+    mixin Packet!(0xFE);
 }

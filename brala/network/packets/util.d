@@ -1,19 +1,24 @@
 module brala.network.packets.util;
 
 private {
-    import std.stream : Stream;
     import std.traits : isArray;
-    import std.typetuple : TypeTuple, staticMap;
-    import std.metastrings : Format;
 }
 
+public {
+    import std.metastrings : Format;
+    import std.typetuple : TypeTuple, staticMap;
+    import std.stream : Stream;
+}
+    
 
 immutable byte NULL_BYTE = 0;
 immutable ubyte NULL_UBYTE = 0;
 
 
 template staticJoin(string delimiter, T...) {
-    static if(T.length == 1) {
+    static if(T.length == 0) {
+        enum staticJoin = "";
+    } else static if(T.length == 1) {
         enum staticJoin = T[0];
     } else {
         enum staticJoin = T[0] ~ delimiter ~ staticJoin!(delimiter, T[1..$]);
@@ -55,7 +60,7 @@ mixin template Packet(ubyte id_, Vars...) {
         return Format!("%s;
                        
                        this(%s) {
-                           %s;
+                           %s
                        }
                        
                        void send(Stream s) {
