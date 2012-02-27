@@ -3,323 +3,78 @@ module brala.network.packets.server;
 
 private {
     import std.stream : Stream;
-    import std.typetuple : TypeTuple, staticMap;
     
     import brala.network.packets.types : IPacket;
-    import brala.network.packets.util : write, NULL_BYTE, NULL_UBYTE, Packet;
+    import brala.network.packets.util;
 }
 
 class KeepAlive : IPacket {
-    final @property ubyte id() { return 0x00; }
-    
-    int kid;
-    
-    this(int id) {
-        kid = id;
-    }
-    
-    void send(Stream s) {
-        write(s, id, kid);
-    }
+    mixin Packet!(0x00, int, "keepalive_id");
 }
-
 
 class Login : IPacket {
-    final @property ubyte id() { return 0x01; }
-    
-    int eid;
-    long seed;
-    string level_type;
-    int mode;
-    byte dimension;
-    byte difficulty;
-    ubyte world_height;
-    ubyte max_players;
-
-    this(int eid, long seed, string level_type, int mode,
-         byte dimension, byte difficulty, ubyte world_height, ubyte max_players) {
-        this.eid = eid;
-        this.seed = seed;
-        this.level_type = level_type;
-        this.mode = mode;
-        this.dimension = dimension;
-        this.difficulty = difficulty;
-        this.world_height = world_height;
-        this.max_players = max_players;
-    }
-       
-    void send(Stream s) {
-        write(s, id, eid, "",  seed, level_type, mode, dimension, difficulty, world_height, max_players);
-    }
+    mixin Packet!(0x01, int, "entity_id", string, "unused", long, "seed", string, "level_type", int, "mode",
+                        byte, "dimension", byte, "difficulty", ubyte, "world_height", ubyte, "max_players");
 }
 
-
 class Handshake : IPacket {
-    final @property ubyte id() { return 0x02; }
-    
-    string connection_hash;
-    
-    this(string connection_hash) {
-        this.connection_hash = connection_hash;
-    }
-    
-    void send(Stream s) {
-        write(s, id, connection_hash);
-    }
+    mixin Packet!(0x02, string, "connection_hash");
 }
 
 class ChatMessage : IPacket {
-    final @property ubyte id() { return 0x03; }
-    
-    string message;
-    
-    this(string message) {
-        this.message = message;
-    }
-    
-    void send(Stream s) {
-        write(s, id, message);
-    }
+    mixin Packet!(0x03, string, "message");
 }
 
 class TimeUpdate : IPacket {
-    final @property ubyte id() { return 0x04; }
-    
-    long time;
-    
-    this(long time) {
-        this.time = time;
-    }
-    
-    void send(Stream s) {
-        write(s, id, time);
-    }
+    mixin Packet!(0x04, long, "time");
 }
 
 class EntityEquipment : IPacket {
-    final @property ubyte id() { return 0x05; }
-    
-    int eid;
-    short slot;
-    short item_id;
-    short damage;
-    
-    this(int eid, short slot, short item_id, short damage) {
-        this.eid = eid;
-        this.slot = slot;
-        this.item_id = item_id;
-        this.damage = damage;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, slot, item_id, damage);
-    }
+    mixin Packet!(0x05, int, "entity_id", int, "slot", short, "item_id", short, "damage");
 }
 
 class SpawnPosition : IPacket {
-    final @property ubyte id() { return 0x06; }
-    
-    int x;
-    int y;
-    int z;
-    
-    this(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z);
-    }
+    mixin Packet!(0x06, int, "x", int, "y", int, "z");
 }
 
 class UpdateHealth : IPacket {
-    final @property ubyte id() { return 0x08; }
-    
-    short health;
-    short food;
-    float food_saturation;
-    
-    this(short health, short food, float food_saturation) {
-        this.health = health;
-        this.food = food;
-        this.food_saturation = food_saturation;
-    }
-    
-    void send(Stream s) {
-        write(s, id, health, food, food_saturation);
-    }
+    mixin Packet!(0x08, short, "health", short, "food", float, "food_saturation");
 }
 
 class Respawn : IPacket {
-    final @property ubyte id() { return 0x09; }
-    
-    byte dimension;
-    byte difficulty;
-    byte mode;
-    short world_height;
-    long seed;
-    string level_type;
-    
-    this(byte dimension, byte difficulty, byte mode, short world_height, long seed, string level_type) {
-        this.dimension = dimension;
-        this.difficulty = difficulty;
-        this.mode = mode;
-        this.world_height = world_height;
-        this.seed = seed;
-        this.level_type = level_type;
-    }
-    
-    void send(Stream s) {
-        write(s, id, dimension, difficulty, mode, world_height, seed, level_type);
-    }
+    mixin Packet!(0x09, byte, "dimension", byte, "difficulty", byte, "mode", short, "world_height", long, "seed", string, "level_type");
 }
 
 class PlayerPositionLook : IPacket {
-    final @property ubyte id() { return 0x0D; }
-    
-    double x;
-    double stance; // different in the client packet
-    double y;
-    double z;
-    float yaw;
-    float pitch;
-    bool on_ground;
-    
-    this(double x, double stance, double y, double z, float yaw, float pitch, bool on_ground) {
-        this.x = x;
-        this.stance = stance;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.on_ground = on_ground;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, stance, y, z, yaw, pitch, on_ground);
-    }
+    mixin Packet!(0x0D, double, "x", double, "stance", double, "y", double, "z", float, "yaw", float, "pitch", bool, "on_ground");
 }
 
 class UseBed : IPacket {
-    final @property ubyte id() { return 0x11; }
-    
-    int eid;
-    bool in_bed;
-    int x;
-    byte y;
-    int z;
-    
-    this(int eid, bool in_bed, int x, byte y, int z) {
-        this.eid = eid;
-        this.in_bed = in_bed;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, in_bed, x, y, z);
-    }
+    mixin Packet!(0x11, int, "entity_id", bool, "in_bed", int, "x", byte, "y", int, "z");
 }
 
 class Animation : IPacket {
-    final @property ubyte id() { return 0x12; }
-    
-    int eid;
-    byte animation;
-    
-    this(int eid, byte animation) {
-        this.eid = eid;
-        this.animation = animation;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, animation);
-    }
+    mixin Packet!(0x12, int, "entity_id", byte, "animation");
 }
 
 class NamedEntitySpawn : IPacket {
-    final @property ubyte id() { return 0x14; }
-    
-    int eid;
-    string username;
-    int x;
-    int y;
-    int z;
-    byte rotation;
-    byte pitch;
-    short current_item;    
-    
-    this(int eid, string username, int x, int y, int z, byte rotation, byte pitch, short current_item) {
-        this.eid = eid;
-        this.username = username;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.rotation = rotation;
-        this.pitch = pitch;
-        this.current_item = current_item;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, username, x, y, z, rotation, pitch, current_item);
-    }
+    mixin Packet!(0x14, int, "entity_id", string, "username", int, "x", int, "y", int, "z",
+                        byte, "rotation", byte, "pitch", short, "current_item");
 }
 
 class PickupSpawn : IPacket {
-    final @property ubyte id() { return 0x15; }
-    
-    int eid;
-    short item_id;
-    byte count;
-    short damage;
-    int x;
-    int y;
-    int z;
-    byte rotation;
-    byte pitch;
-    byte roll;
-    
-    this(int eid, short item_id, byte count, short damage, int x, int y, int z, byte rotation, byte pitch, byte roll) {
-        this.eid = eid;
-        this.item_id = item_id;
-        this.count = count;
-        this.damage = damage;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.rotation = rotation;
-        this.pitch = pitch;
-        this.roll = roll;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, item_id, count, damage, x, y, z, rotation, pitch, roll);
-    }
+    mixin Packet!(0x15, int, "entity_id", short, "item_id", byte, "count", short, "damage",
+                        int, "x", int, "y", int, "z", byte, "rotation", byte, "pitch", byte, "roll");
 }
 
 class CollectItem : IPacket {
-    final @property ubyte id() { return 0x16; }
-    
-    int collected_eid;
-    int collector_eid;
-
-    this(int collected_eid, int collector_eid) {
-        this.collected_eid = collected_eid;
-        this.collector_eid = collector_eid;
-    }
-    
-    void send(Stream s) {
-        write(s, id, collected_eid, collector_eid);
-    }
+    mixin Packet!(0x16, int, "collected_eid", int, "collector_eid");
 }
 
 class AddObject : IPacket {
     final @property ubyte id() { return 0x17; }
     
-    int eid;
+    int entity_id;
     byte type;
     int x;
     int y;
@@ -329,16 +84,16 @@ class AddObject : IPacket {
     short speed_y;
     short speed_z;
 
-    this(int eid, byte type, int x, int y, int z) {
-        this.eid = eid;
+    this(int entity_id, byte type, int x, int y, int z) {
+        this.entity_id = entity_id;
         this.type = type;
         this.x = x;
         this.y = y;
         this.z = z;
     }
     
-    this(int eid, byte type, int x, int y, int z, int thrower_eid, short speed_x, short speed_y, short speed_z) {
-        this(eid, type, x, y, z);
+    this(int entity_id, byte type, int x, int y, int z, int thrower_eid, short speed_x, short speed_y, short speed_z) {
+        this(entity_id, type, x, y, z);
         this.thrower_eid = thrower_eid;
         this.speed_x = speed_x;
         this.speed_y = speed_y;
@@ -347,752 +102,165 @@ class AddObject : IPacket {
     
     void send(Stream s) {
         if(thrower_eid == 0) {
-            write(s, id, eid, type, x, y, z);
+            write(s, id, entity_id, type, x, y, z);
         } else {
-            write(s, id, eid, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
+            write(s, id, entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
         }
     }
 }
 
 class MobSpawn : IPacket {
-    final @property ubyte id() { return 0x18; }
-    
-    int eid;
-    byte type;
-    int x;
-    int y;
-    int z;
-    byte yaw;
-    byte pitch;
-    byte[] metadata;
-
-    this(int eid, byte type, int x, int y, int z, byte yaw, byte pitch, byte[] metadata) {
-        this.eid = eid;
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.metadata = metadata;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, type, x, y, z, yaw, pitch, metadata);
-    }
+    mixin Packet!(0x18, int, "entity_id", byte, "type", byte, "x", byte, "y", byte, "z",
+                        byte, "yaw", byte, "pitch", byte[], "metadata");
 }
 
 class Painting : IPacket {
-    final @property ubyte id() { return 0x19; }
-    
-    int eid;
-    string title;
-    int x;
-    int y;
-    int z;
-    int direction;
-
-    this(int eid, string title, int x, int y, int z, int direction) {
-        this.eid = eid;
-        this.title = title;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.direction = direction;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, title, x, y, z, direction);
-    }
+    mixin Packet!(0x19, int, "entity_id", string, "title", int, "x", int, "y", int, "z", int, "direction");
 }
 
 class ExperienceOrb : IPacket {
-    final @property ubyte id() { return 0x1A; }
-    
-    int eid;
-    int x;
-    int y;
-    int z;
-    short count;
-
-    this(int eid, int x, int y, int z, short count) {
-        this.eid = eid;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.count = count;        
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, x, y, z, count);
-    }
+    mixin Packet!(0x1A, int, "entity_id", int, "x", int, "y", int, "z", short, "count");
 }
 
 class EntityVelocity : IPacket {
-    final @property ubyte id() { return 0x1C; }
-    
-    int eid;
-    short velocity_x;
-    short velocity_y;
-    short velocity_z;
-
-    this(int eid, short velocity_x, short velocity_y, short velocity_z) {
-        this.eid = eid;
-        this.velocity_x = velocity_x;
-        this.velocity_y = velocity_y;
-        this.velocity_z = velocity_z;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, velocity_x, velocity_y, velocity_z);
-    }
+    mixin Packet!(0x1C, int, "entity_id", short, "velocity_x", short, "velocity_y", short, "velocity_z");
 }
 
 class DestroyEntity : IPacket {
-    final @property ubyte id() { return 0x1D; }
-    
-    int eid;
-
-    this(int eid) {
-        this.eid = eid;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid);
-    }
+    mixin Packet!(0x1D, int, "entity_id");
 }
 
 class Entity : IPacket {
-    final @property ubyte id() { return 0x1E; }
-        
-    int eid;
-
-    this(int eid) {
-        this.eid = eid;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid);
-    }
+    mixin Packet!(0x1E, int, "entity_id");
 }
 
 class EntityRelativeMove : IPacket {
-    final @property ubyte id() { return 0x1F; }
-    
-    int eid;
-    byte delta_x;
-    byte delta_y;
-    byte delta_z;
-    
-    this(int eid, byte delta_x, byte delta_y, byte delta_z) {
-        this.eid = eid;
-        this.delta_x = delta_x;
-        this.delta_y = delta_y;
-        this.delta_z = delta_z;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, delta_x, delta_y, delta_z);
-    }
+    mixin Packet!(0x1F, int, "entity_id", byte, "delta_x", byte, "delta_y", byte, "delta_z");
 }
 
 class EntityLook : IPacket {
-    final @property ubyte id() { return 0x20; }
-    
-    int eid;
-    byte yaw;
-    byte pitch;
-    
-    this(int eid, byte yaw, byte pitch) {
-        this.eid = eid;
-        this.yaw = yaw;
-        this.pitch = pitch;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, yaw, pitch);
-    }
+    mixin Packet!(0x20, int, "entity_id", byte, "yaw", byte, "pitch");
 }
 
 class EntityLookRelativeMove : IPacket {
-    final @property ubyte id() { return 0x21; }
-    
-    int eid;
-    byte delta_x;
-    byte delta_y;
-    byte delta_z;
-    byte yaw;
-    byte pitch;
-    
-    this(int eid, byte delta_x, byte delta_y, byte delta_z, byte yaw, byte pitch) {
-        this.eid = eid;
-        this.delta_x = delta_x;
-        this.delta_y = delta_y;
-        this.delta_z = delta_z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, delta_x, delta_y, delta_z, yaw, pitch);
-    }
+    mixin Packet!(0x21, int, "entity_id", byte, "delta_x", byte, "delta_y", byte, "delta_z", byte, "yaw", byte, "pitch");
 }
 
 class EntityTeleport : IPacket {
-    final @property ubyte id() { return 0x22; }
-    
-    int eid;
-    int x;
-    int y;
-    int z;
-    byte yaw;
-    byte pitch;
-    
-    this(int eid, int x, int y, int z, byte yaw, byte pitch) {
-        this.eid = eid;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.yaw = yaw;
-        this.pitch = pitch;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, x, y, z, yaw, pitch);
-    }
+    mixin Packet!(0x22, int, "entity_id", int, "x", int, "y", int, "z", byte, "yaw", byte, "pitch");
 }
 
 class EntityStatus : IPacket {
-    final @property ubyte id() { return 0x26; }
-    
-    int eid;
-    byte status;
-    
-    this(int eid, byte status) {
-        this.eid = eid;
-        this.status = status;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, status);
-    }
+    mixin Packet!(0x26, int, "entity_id", byte, "status");
 }
 
 class AttachEntity : IPacket {
-    final @property ubyte id() { return 0x27; }
-    
-    int eid; // entity ID = player
-    int vid; // vehicle ID
-    
-    this(int eid, int vid) {
-        this.eid = eid;
-        this.vid = vid;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, vid);
-    }
+    mixin Packet!(0x27, int, "entity_id", int, "vehicle_id");
 }
 
 class EntityMetadata : IPacket {
-    final @property ubyte id() { return 0x28; }
-    
-    int eid;
-    byte[] metadata;
-    
-    this(int eid, byte[] metadata) {
-        this.eid = eid;
-        this.metadata = metadata;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, metadata);
-    }
+    mixin Packet!(0x28, int, "entity_id", byte[], "metadata");
 }
 
 class EntityEffect : IPacket {
-    final @property ubyte id() { return 0x29; }
-    
-    int eid;
-    byte effect_id;
-    byte amplifier;
-    short duration;
-    
-    this(int eid, byte effect_id, byte amplifier, short duration) {
-        this.eid = eid;
-        this.effect_id = effect_id;
-        this.amplifier = amplifier;
-        this.duration = duration;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, effect_id, amplifier, duration);
-    }
+    mixin Packet!(0x29, int, "entity_id", byte, "effect_id", byte, "amplifier", short, "duration");
 }
 
 class RemoveEntityEffect : IPacket {
-    final @property ubyte id() { return 0x2A; }
-    
-    int eid;
-    int effect_id;
-    
-    this(int eid, int effect_id) {
-        this.eid = eid;
-        this.effect_id = effect_id;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, effect_id);
-    }
+    mixin Packet!(0x2A, int, "entity_id", int, "effect_id");
 }
 
 class Experience : IPacket {
-    final @property ubyte id() { return 0x2B; }
-    
-    float experience_bar;
-    short level;
-    short total_experience;
-    
-    this(float experience_bar, short level, short total_experience) {
-        this.experience_bar = experience_bar;
-        this.level = level;
-        this.total_experience = total_experience;
-    }
-    
-    void send(Stream s) {
-        write(s, id, experience_bar, level, total_experience);
-    }
+    mixin Packet!(0x2B, float, "experience_bar", short, "level", short, "total_experience");
 }
 
 class PreChunk : IPacket {
-    final @property ubyte id() { return 0x32; }
-    
-    int x;
-    int z;
-    bool mode;
-    
-    this(int x, int z, bool mode) {
-        this.x = x;
-        this.z = z;
-        this.mode = mode;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, z, mode);
-    }
+    mixin Packet!(0x32, int, "x", int, "z", bool, "mode");
 }
 
 class MapChunk : IPacket {
-    final @property ubyte id() { return 0x33; }
-    
-    int x;
-    short y;
-    int z;
-    byte size_x;
-    byte size_y;
-    byte size_z;
-    int compressed_size;
-    ubyte[] compressed_data;
-    
-    this(int x, short y, int z, byte size_x, byte size_y, byte size_z, int compressed_size, ubyte[] compressed_data) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.size_x = size_x;
-        this.size_y = size_y;
-        this.size_z = size_z;
-        this.compressed_size = compressed_size;
-        this.compressed_data = compressed_data;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, size_x, size_y, size_z, compressed_size, compressed_data);
-    }
+    mixin Packet!(0x33, int, "x", short, "y", int, "z", byte, "size_x", byte, "size_y", byte, "size_z",
+                        byte, "compressed_size", ubyte[], "compressed_data");
 }
 
 class MultiBlockChange : IPacket {
-    final @property ubyte id() { return 0x34; }
-    
-    int x;
-    int z;
-    short array_size;
-    short[] coordinates;
-    byte[] types;
-    byte[] metadata;    
-    
-    this(int x, int z, short array_size, short[] coordinates, byte[] types, byte[] metadata) {
-        this.x = x;
-        this.z = z;
-        this.array_size = array_size;
-        this.coordinates = coordinates;
-        this.types = types;
-        this.metadata = metadata;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, z, array_size, coordinates, types, metadata);
-    }
+    mixin Packet!(0x34, int, "x", int, "z", short, "array_size", short[], "coordinates", byte[], "types", byte[], "metadata");
 }
 
 class BlockChange : IPacket {
-    final @property ubyte id() { return 0x35; }
-    
-    int x;
-    byte y;
-    int z;
-    byte type;
-    byte metadata;
-    
-    this(int x, byte y, int z, byte type, byte metadata) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.type = type;
-        this.metadata = metadata;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, type, metadata);
-    }
+    mixin Packet!(0x35, int, "x", byte, "y", int, "z", byte, "type", byte, "metadata");
 }
 
 class BlockAction : IPacket {
-    final @property ubyte id() { return 0x36; }
-    
-    int x;
-    short y;
-    int z;
-    byte byte1;
-    byte byte2;
-    
-    this(int x, short y, int z, byte byte1, byte byte2) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.byte1 = byte1;
-        this.byte2 = byte2;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, byte1, byte2);
-    }
+    mixin Packet!(0x36, int, "x", short, "y", int, "z", byte, "byte1", byte, "byte2");
 }
 
 class Explosion : IPacket {
-    final @property ubyte id() { return 0x3C; }
-    
-    double x;
-    double y;
-    double z;
-    float radius;
-    int record_count;
-    byte[] records;
-    
-    this(double x, double y, double z, float radius, int record_count, byte[] records) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.radius = radius;
-        this.record_count = record_count;
-        this.records = records;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, radius, record_count, records);
-    }
+    mixin Packet!(0x3C, double, "x", double, "y", double, "z", float, "radius", int, "record_count", byte[], "records");
 }
 
 class SoundParticleEffect : IPacket {
-    final @property ubyte id() { return 0x3D; }
-    
-    int effect_id;
-    int x;
-    byte y;
-    int z;
-    int data;
-    
-    this(int effect_id, int x, byte y, int z, int data) {
-        this.effect_id = effect_id;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.data = data;
-    }
-    
-    void send(Stream s) {
-        write(s, id, effect_id, x, y, z, data);
-    }
+    mixin Packet!(0x3D, int, "effect_id", int, "x", byte, "y", int, "z", int, "data");
 }
 
 class NewInvalidState : IPacket {
-    final @property ubyte id() { return 0x46; }
-    
-    byte reason;
-    byte gamemode;
-    
-    this(byte reason, byte gamemode) {
-        this.reason = reason;
-        this.gamemode = gamemode;
-    }
-    
-    void send(Stream s) {
-        write(s, id, reason, gamemode);
-    }
+    mixin Packet!(0x46, byte, "reason", byte, "gamemode");
 }
 
 class ThunderBolt : IPacket {
-    final @property ubyte id() { return 0x47; }
-    
-    int eid;
-    bool unknown = true;
-    int x;
-    int y;
-    int z;
-    
-    this(int eid, int x, int y, int z) {
-        this.eid = eid;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    
-    void send(Stream s) {
-        write(s, id, eid, unknown, x, y, z);
-    }
+    mixin Packet!(0x47, int, "entity_id", bool, "unknown", int, "x", int, "y", int, "z");
 }
 
 class OpenWindow : IPacket {
-    final @property ubyte id() { return 0x64; }
-    
-    byte window_id;
-    byte inventory_type;
-    string window_title;
-    byte slots;
-    
-    this(byte window_id, byte inventory_type, string window_title, byte slots) {
-        this.window_id = window_id;
-        this.inventory_type = inventory_type;
-        this.window_title = window_title;
-        this.slots = slots;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, inventory_type, window_title, slots);
-    }
+    mixin Packet!(0x64, byte, "window_id", byte, "inventory_type", string, "window_title", byte, "slots");
 }
 
 class CloseWindow : IPacket {
-    final @property ubyte id() { return 0x65; }
-    
-    byte window_id;
-    
-    this(byte window_id) {
-        this.window_id = window_id;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id);
-    }
+    mixin Packet!(0x65, byte, "window_id");
 }
 
 class SetSlot : IPacket {
-    final @property ubyte id() { return 0x67; }
-    
-    byte window_id;
-    short slot;
-    byte[] slot_data;
-    
-    this(byte window_id, short slot, byte[] slot_data) {
-        this.window_id = window_id;
-        this.slot = slot;
-        this.slot_data = slot_data;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, slot, slot_data);
-    }
+    mixin Packet!(0x67, byte, "window_id", short, "slot", byte[], "slot_data");
 }
 
 class WindowItems : IPacket {
-    final @property ubyte id() { return 0x68; }
-    
-    byte window_id;
-    short count;
-    byte[] slot_data;
-    
-    this(byte window_id, short count, byte[] slot_data) {
-        this.window_id = window_id;
-        this.count = count;
-        this.slot_data = slot_data;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, count, slot_data);
-    }
+    mixin Packet!(0x68, byte, "window_id", short, "count", byte[], "slot_data");
 }
 
 class UpdateWindowProperty : IPacket {
-    final @property ubyte id() { return 0x69; }
-    
-    byte window_id;
-    short property;
-    short value;
-    
-    this(byte window_id, short property, short value) {
-        this.window_id = window_id;
-        this.property = property;
-        this.value = value;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, property, value);
-    }
+    mixin Packet!(0x69, byte, "window_id", short, "property", short, "value");
 }
 
 class Transaction : IPacket {
-    final @property ubyte id() { return 0x6A; }
-    
-    byte window_id;
-    short action_number;
-    bool accepted;
-    
-    this(byte window_id, short action_number, bool accepted) {
-        this.window_id = window_id;
-        this.action_number = action_number;
-        this.accepted = accepted;
-    }
-    
-    void send(Stream s) {
-        write(s, id, window_id, action_number, accepted);
-    }
+    mixin Packet!(0x6A, byte, "window_id", short, "action_number", bool, "accepted");
 }
 
 class CreativeInventoryAction : IPacket {
-    final @property ubyte id() { return 0x6B; }
-    
-    short slot;
-    byte[] clicked_item;
-    
-    this(short slot, byte[] clicked_item) {
-        this.slot = slot;
-        this.clicked_item = clicked_item;
-    }
-    
-    void send(Stream s) {
-        write(s, id, slot, clicked_item);
-    }
+    mixin Packet!(0x6B, short, "slot", byte[], "clicked_item");
 }
 
 class UpdateSign : IPacket {
-    final @property ubyte id() { return 0x82; }
-    
-    int x;
-    short y;
-    int z;
-    string text1;
-    string text2;
-    string text3;
-    string text4;
-    
-    this(int x, short y, int z, string text1, string text2, string text3, string text4) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.text1 = text1;
-        this.text2 = text2;
-        this.text3 = text3;
-        this.text4 = text4;
-    }
-    
-    void send(Stream s) {
-        write(s, id, x, y, z, text1, text2, text3, text4);
-    }
+    mixin Packet!(0x82, int, "x", short, "y", int, "z", string, "text1", string, "text2", string, "text3", string, "text4");
 }
 
 class ItemData : IPacket {
-    final @property ubyte id() { return 0x83; }
-    
-    short item_type;
-    short item_id;
-    ubyte text_length;
-    byte[] text;
-    
-    this(short item_type, short item_id, ubyte text_length, byte[] text) {
-        this.item_type = item_type;
-        this.item_id = item_id;
-        this.text_length = text_length;
-        this.text = text;
-    }
-    
-    void send(Stream s) {
-        write(s, id, item_type, item_id, text_length, text);
-    }
+    mixin Packet!(0x83, short, "item_type", short, "item_id", ubyte, "text_length", byte[], "text");
 }
 
 class IncrementStatistic : IPacket {
-    final @property ubyte id() { return 0xC8; }
-    
-    int statistic_id;
-    byte amount;
-    
-    this(int statistic_id, byte amount) {
-        this.statistic_id = statistic_id;
-        this.amount = amount;
-    }
-    
-    void send(Stream s) {
-        write(s, id, statistic_id, amount);
-    }
+    mixin Packet!(0xC8, int, "statistic_id", byte, "amount");
 }
 
 class PlayerListItem : IPacket {
-    final @property ubyte id() { return 0xC9; }
-    
-    string username;
-    bool online;
-    short ping;
-    
-    this(string username, bool online, short ping) {
-        this.username = username;
-        this.online = online;
-        this.ping = ping;
-    }
-    
-    void send(Stream s) {
-        write(s, id, username, online, ping);
-    }
+    mixin Packet!(0xC9, string, "username", bool, "online", short, "ping");
 }
 
 class PluginMessage : IPacket {
-    final @property ubyte id() { return 0xFA; }
-    
-    string channel;
-    short length;
-    byte[] data;
-    
-    this(string channel, short length, byte[] data) {
-        this.channel = channel;
-        this.length = length;
-        this.data = data;
-    }
-    
-    void send(Stream s) {
-        write(s, id, channel, length, data);
-    }
+    mixin Packet!(0xFA, string, "channel", short, "length", byte[], "data");
 }
 
 class Disconnect : IPacket {
-    final @property ubyte id() { return 0xFF; }
-    
-    string reason;
-    
-    this(string reason) {
-        this.reason = reason;
-    }
-    
-    void send(Stream s) {
-        write(s, id, reason);
-    }
+    mixin Packet!(0xFF, string, "reason");
 }
 
 alias Disconnect Kick;
