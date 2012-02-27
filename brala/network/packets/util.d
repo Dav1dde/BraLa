@@ -4,6 +4,7 @@ private {
     import std.stream : Stream;
     import std.traits : isArray;
     import std.typetuple : TypeTuple, staticMap;
+    import std.metastrings : Format;
 }
 
 
@@ -11,9 +12,15 @@ immutable byte NULL_BYTE = 0;
 immutable ubyte NULL_UBYTE = 0;
 
 
-mixin template Packet(ubyte id_, Vars...) {
-    final @property ubyte id() { return id_; }
-    
+template staticJoin(string delimiter, T...) {
+    static if(T.length == 1) {
+        enum staticJoin = T[0];
+    } else {
+        enum staticJoin = T[0] ~ delimiter ~ staticJoin!(delimiter, T[1..$]);
+    }
+}
+
+mixin template Packet(ubyte id_, Vars...) {    
     static assert(Vars.length % 2 == 0);
     
     private template parse_vars(Vars...) {
@@ -32,34 +39,37 @@ mixin template Packet(ubyte id_, Vars...) {
         alias s name;
     }
     
-    private template extract_type(alias spec) { alias spec.Type extractType; }
+    private template extract_type(alias spec) { alias spec.Type extract_type; }
+    private template extract_name(alias spec) { alias spec.name extract_name; }
+    private template extract_decl(alias spec) { enum extract_decl = spec.Type.stringof ~ " " ~ spec.name; }
+    private template extract_ctorbody(alias spec) { enum extract_ctorbody = "this." ~ spec.name ~ " = " ~ spec.name ~ ";"; }
     
     private alias parse_vars!Vars pv;
-        
+    alias staticMap!(extract_type, pv) Types;
+    
     private static string inject_data() {
-        string types = "";
-        string ctor_d = "this(";
-        string ctor_b = "";
-        string send_func = "void send(Stream s) { write(s, id, ";
-        foreach(fs; pv) {
-            enum s = fs.Type.stringof ~ " " ~ fs.name;
-            types ~= s ~ ";";
-            
-            ctor_d ~= s ~ ",";
-            ctor_b ~= "this." ~ fs.name ~ " = " ~ fs.name ~ ";";
-            
-            send_func ~= fs.name ~ ",";
-        }
-        ctor_d ~= ") {";
-        ctor_b ~= "}";
-        send_func ~= "); }";
+        alias staticMap!(extract_decl, pv) decl;
+        alias staticMap!(extract_name, pv) names;
+        alias staticJoin!("\n", staticMap!(extract_ctorbody, pv)) ctor_body;
         
-        return types ~ ctor_d ~ ctor_b ~ send_func;
+        return Format!("%s;
+                       
+                       this(%s) {
+                           %s;
+                       }
+                       
+                       void send(Stream s) {
+                           write(s, id, %s);
+                       }", staticJoin!(";\n", decl),
+                           staticJoin!(", ", decl),
+                           ctor_body,
+                           staticJoin!(", ", names));
     }
     
-    mixin(inject_data());
+    /// actual packet-code
+    final @property ubyte id() { return id_; }
     
-    alias staticMap!(extract_type, pv) Types;
+    mixin(inject_data());
 }
 
 void write(Args...)(Stream s, Args data) {
