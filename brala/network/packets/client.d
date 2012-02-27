@@ -16,6 +16,11 @@ class KeepAlive : IPacket {
     void send(Stream s) {
         write(s, id, 0); // the client may only send packets with id 0
     }
+    
+    static KeepAlive recv(Stream s) {
+        read!(byte)(s);
+        return new KeepAlive();
+    }
 }
 
 class Login : IPacket {
@@ -31,6 +36,10 @@ class Login : IPacket {
     
     void send(Stream s) {
         write(s, id, protocol_version, username, 0L, "", 0, NULL_BYTE, NULL_BYTE, NULL_UBYTE, NULL_UBYTE);
+    }
+    
+    static Login recv(Stream s) {
+        return new Login(read!(int, string)(s).field);
     }
 }
 

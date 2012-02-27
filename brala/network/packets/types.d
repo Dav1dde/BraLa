@@ -6,5 +6,6 @@ private {
 
 interface IPacket {
     @property ubyte id();
-    void send(Stream s);    
+    void send(Stream s);
+    static typeof(this) recv(Stream s);
 }

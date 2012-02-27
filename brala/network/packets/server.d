@@ -8,6 +8,8 @@ private {
     import brala.network.packets.util;
 }
 
+pragma(msg, "Compiling packets, be patient ...");
+
 class KeepAlive : IPacket {
     mixin Packet!(0x00, int, "keepalive_id");
 }
@@ -106,6 +108,10 @@ class AddObject : IPacket {
         } else {
             write(s, id, entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
         }
+    }
+    
+    static AddObject recv(Stream s) {
+        return new AddObject(read!(int, byte, int, int, int, int, short, short, short)(s).field);
     }
 }
 
