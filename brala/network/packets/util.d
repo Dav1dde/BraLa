@@ -99,6 +99,14 @@ mixin template Packet(ubyte id_, Vars...) {
             enum tostring = "\"\"";
         }
         
+        static if(pv.length == 0) {
+            enum newargs = "";
+        } else static if(pv.length == 1) {
+            enum newargs = "read!Types(s)";
+        } else {
+            enum newargs = "read!Types(s).field";
+        }
+        
         alias staticJoin!(";\n", decl) tdecl;
         alias staticJoin!(", ", decl) cdecl;
         alias staticJoin!(", ", names) snames;
@@ -114,7 +122,7 @@ mixin template Packet(ubyte id_, Vars...) {
                 }
                        
                 static typeof(this) recv(Stream s) {
-                    return new typeof(this)(read!Types(s).field);
+                    return new typeof(this)(`~newargs~`);
                 }
                 
                 string toString() {

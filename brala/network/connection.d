@@ -9,7 +9,7 @@ private {
     import std.string : format;
     
     import brala.exception : ConnectionException, ServerException;
-    import brala.network.util : FixedEndianStream;
+    import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     
@@ -61,29 +61,37 @@ class Connection {
         auto handshake = new c.Handshake(username);
         handshake.send(endianstream);
         
-        ubyte repl;
-        endianstream.read(repl);
-        if(repl != 0x02) throw new ServerException("Server didn't respond with a handshake");
-        
+        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake");
         auto repl_handshake = s.Handshake.recv(endianstream);
-        if(repl_handshake.connection_hash != "-") throw new ServerException("unsupported connection hash");
+        if(repl_handshake.connection_hash != "-") throw new ServerException("Unsupported connection hash");
+        debug writefln("%s", repl_handshake);
         
         auto login = new c.Login(23, username);
         login.send(endianstream);
         
-        endianstream.read(repl);
-        writefln("%s", repl);
-                
+        if(read!ubyte(endianstream) != s.Login.id) throw new ServerException("Expected login-packet");
         auto repl_login = s.Login.recv(endianstream);
-        writefln("%s", repl_login);
+        debug writefln("%s", repl_login);
     }
     
     void poll() {
+        ubyte packet = read!ubyte(endianstream);
+        debug writefln("Packet: %d", packet);
+        
+        switch(packet) {
+            foreach(b; TupleRange!(0x00, 0xff)) { // let's assume the server just seends valid packets ...
+                case b: on_packet!b();
+            }
+            default: throw new ServerException("invalid packet");
+        }
     }
     
     void run() {
         while(true) {
             poll();
         }
+    }
+    
+    void on_packet(ubyte id)() {
     }
 }

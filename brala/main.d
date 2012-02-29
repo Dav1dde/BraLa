@@ -113,6 +113,7 @@ int main(string[] args) {
     
     auto con = new Connection("test123");
     con.connect("localhost", 25565);
+    con.run();
     
     return 0;
 }
