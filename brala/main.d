@@ -104,10 +104,15 @@ int main(string[] args) {
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
 
-    auto engine = new BraLaEngine(width, height, glv);
-    load_default_resources(resmgr); // I like! ~15mb in 837ms
-    auto game = new BraLaGame(engine, win);
-    game.start();
+    //auto engine = new BraLaEngine(width, height, glv);
+    //load_default_resources(resmgr); // I like! ~15mb in 837ms
+    //auto game = new BraLaGame(engine, win);
+    //game.start();
+    
+    import brala.network.connection;
+    
+    auto con = new Connection("test123");
+    con.connect("localhost", 25565);
     
     return 0;
 }

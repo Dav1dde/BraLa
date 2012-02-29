@@ -3,9 +3,13 @@ module brala.network.packets.util;
 private {
     import std.traits : isArray;
     import std.typecons : Tuple;
+    import std.utf : toUTF16, toUTF8;
+    
+    debug import std.stdio : writefln;
 }
 
 public {
+    import std.metastrings : toStringNow;
     import std.typetuple : TypeTuple, staticMap;
     import std.stream : Stream;
 }
@@ -22,6 +26,38 @@ template staticJoin(string delimiter, T...) {
         enum staticJoin = T[0];
     } else {
         enum staticJoin = T[0] ~ delimiter ~ staticJoin!(delimiter, T[1..$]);
+    }
+}
+
+version(none) {
+    mixin template get_packets_mixin() {
+        private template get_packets(alias T) {
+            alias get_packets_impl!(__traits(allMembers, T)) get_packets;
+        }
+
+        private template get_packets_impl(T...) {
+            static if(T.length == 0) {
+                alias TypeTuple!() get_packets_impl;
+            } else static if(__traits(compiles, mixin(T[0]).id)) {
+                alias TypeTuple!(TypeTuple!(T[0], mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
+            } else {
+                alias TypeTuple!(get_packets_impl!(T[1..$])) get_packets_impl;
+            }
+        }
+    }
+
+    template make_case(alias T) { pragma(msg, typeof(T).stringof); enum make_case = "case " ~ toStringNow!(T[1]) ~ ": return mixin("~ T[0] ~").recv(s);"; }
+
+    template make_parser(T...) {
+        string make_parser() {
+            alias staticJoin!("\n", staticMap!(make_case, T)) cases;
+            
+            return "IPacket parse_packet(ubyte id, Stream s) {
+                        switch(id) {
+                            "~cases~"
+                        }
+                    }";
+        }
     }
 }
 
@@ -77,7 +113,7 @@ mixin template Packet(ubyte id_, Vars...) {
     }
     
     /// actual packet-code
-    final @property ubyte id() { return id_; }
+    static @property ubyte id() { return id_; }
     
     mixin(inject_data());
 }
@@ -94,7 +130,7 @@ private void write_impl(T : bool)(Stream s, T data) {
 
 private void write_impl(T : string)(Stream s, T data) {
     s.write(cast(ushort)data.length);
-    s.write(data);
+    s.writeStringW(toUTF16(data));
 }
 
 private void write_impl(T)(Stream s, T data) if(isArray!T && !is(T : string)) {
@@ -121,18 +157,16 @@ Tuple!(Types) read(Types...)(Stream s) {
 private bool read_impl(T)(Stream s) if(is(T : bool)) {
     byte ret;
     s.read(ret);
-    return ret == 1;
+    return ret > 0;
 }
 
 private string read_impl(T)(Stream s) if(is(T : string)) {
-    ushort len;
-    s.read(len);
+    ushort length;
+    s.read(length);
     
-    char[] ret;
-    ret.length = len;
-    s.readExact(&ret, len);
-    
-    return ret.idup;
+    wchar[] ret_utf16 = s.readStringW(length);
+      
+    return toUTF8(ret_utf16);
 }
 
 

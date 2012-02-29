@@ -2,6 +2,7 @@ module brala.network.packets.client;
 
 private {
     import std.stream : Stream;
+    import std.typetuple : TypeTuple;
     
     import brala.network.packets.types : IPacket;
     import brala.network.packets.util;
@@ -9,7 +10,7 @@ private {
 }
 
 class KeepAlive : IPacket {
-    final @property ubyte id() { return 0x00; }
+    static @property ubyte id() { return 0x00; }
     
     this() {}
     
@@ -24,7 +25,7 @@ class KeepAlive : IPacket {
 }
 
 class Login : IPacket {
-    final @property ubyte id() { return 0x01; }
+    static @property ubyte id() { return 0x01; }
     
     int protocol_version;
     string username;

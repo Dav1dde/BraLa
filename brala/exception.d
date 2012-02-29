@@ -39,3 +39,9 @@ class ConnectionException : BraLaException {
         super(msg);
     }
 }
+
+class ServerException : ConnectionException {
+    this(string msg) {
+        super(msg);
+    }
+}
