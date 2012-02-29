@@ -22,6 +22,10 @@ class KeepAlive : IPacket {
         read!(byte)(s);
         return new KeepAlive();
     }
+    
+    string toString() {
+        return .stringof[7..$] ~ ".KeepAlive()";
+    }
 }
 
 class Login : IPacket {
@@ -41,6 +45,11 @@ class Login : IPacket {
     
     static Login recv(Stream s) {
         return new Login(read!(int, string)(s).field);
+    }
+    
+    string toString() {
+        return .stringof[7..$] ~ `.Login(int protocol_version : "` ~ to!string(protocol_version) ~
+                                                        `", string username : "` ~ to!string(username) ~ `")`;
     }
 }
 

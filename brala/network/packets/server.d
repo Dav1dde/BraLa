@@ -3,6 +3,7 @@ module brala.network.packets.server;
 
 private {
     import std.stream : Stream;
+    import std.string : format;
     
     import brala.network.packets.types : IPacket;
     import brala.network.packets.util;
@@ -112,6 +113,14 @@ class AddObject : IPacket {
     
     static AddObject recv(Stream s) {
         return new AddObject(read!(int, byte, int, int, int, int, short, short, short)(s).field);
+    }
+    
+    string toString() {
+        return .stringof[7..$] ~ format(`.AddObject(int entity_id : "%d", byte type : "%s", int x : "%d", int y : "%d", int z : "%d" ,`
+                                        `int thrower_eid : "%d", short speed_x : "%d", short speed_y : "%d", short speed_z : "%d"`,
+                                        to!string(entity_id), to!string(type), to!string(x), to!string(y), to!string(z),
+                                        to!string(thrower_eid), to!string(speed_x), to!string(speed_y), to!string(speed_z));
+                                        
     }
 }
 

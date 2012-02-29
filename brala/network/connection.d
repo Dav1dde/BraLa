@@ -66,7 +66,6 @@ class Connection {
         if(repl != 0x02) throw new ServerException("Server didn't respond with a handshake");
         
         auto repl_handshake = s.Handshake.recv(endianstream);
-        writefln("%s", repl_handshake.connection_hash);
         if(repl_handshake.connection_hash != "-") throw new ServerException("unsupported connection hash");
         
         auto login = new c.Login(23, username);
@@ -76,7 +75,7 @@ class Connection {
         writefln("%s", repl);
                 
         auto repl_login = s.Login.recv(endianstream);
-        writefln("%s - %s", repl_login.entity_id, repl_login.world_height);
+        writefln("%s", repl_login);
     }
     
     void poll() {

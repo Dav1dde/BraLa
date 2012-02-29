@@ -8,4 +8,5 @@ interface IPacket {
     static @property ubyte id();
     void send(Stream s);
     static typeof(this) recv(Stream s);
+    string toString();
 }
