@@ -25,6 +25,16 @@ class Connection {
 
     immutable string username;
     
+    // sent with servers login packet
+    int entity_id;
+    long map_seed;
+    string level_type;
+    int server_mode;
+    byte dimension;
+    byte difficulty;
+    ubyte max_players;
+    
+    
     this(string username) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
@@ -48,7 +58,6 @@ class Connection {
     void connect(Address to) {
         socket.connect(to);
         _connected = true;
-        login();
     }
     
     void connect(const(char)[] host, ushort port) {
@@ -56,42 +65,75 @@ class Connection {
         
         connect(to[0]);
     }
-    
+        
     void login() {
         auto handshake = new c.Handshake(username);
         handshake.send(endianstream);
         
-        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake");
+        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake.");
         auto repl_handshake = s.Handshake.recv(endianstream);
-        if(repl_handshake.connection_hash != "-") throw new ServerException("Unsupported connection hash");
+        if(repl_handshake.connection_hash != "-") throw new ServerException("Unsupported connection hash.");
         debug writefln("%s", repl_handshake);
         
         auto login = new c.Login(23, username);
         login.send(endianstream);
         
-        if(read!ubyte(endianstream) != s.Login.id) throw new ServerException("Expected login-packet");
+        if(read!ubyte(endianstream) != s.Login.id) throw new ServerException("Expected login-packet.");
         auto repl_login = s.Login.recv(endianstream);
         debug writefln("%s", repl_login);
+        
+        entity_id = repl_login.entity_id;
+        map_seed = repl_login.seed;
+        level_type = repl_login.level_type;
+        server_mode = repl_login.mode;
+        dimension = repl_login.dimension;
+        difficulty = repl_login.difficulty;
+        max_players = repl_login.max_players;
     }
     
     void poll() {
         ubyte packet = read!ubyte(endianstream);
-        debug writefln("Packet: %d", packet);
+//         debug writefln("Packet: %d", packet);
         
         switch(packet) {
             foreach(b; TupleRange!(0x00, 0xff)) { // let's assume the server just seends valid packets ...
-                case b: on_packet!b();
+                case b: return on_packet!b();
             }
-            default: throw new ServerException("invalid packet");
+            default: throw new ServerException(format("Invalid packet: %s.", packet));
         }
     }
     
+
     void run() {
-        while(true) {
+        while(_connected) {
             poll();
         }
     }
     
+    void on_packet(ubyte id : 0x00)() {
+        auto ka = s.KeepAlive.recv(endianstream);
+        (new c.KeepAlive(ka.keepalive_id)).send(endianstream);
+    }
+    
+    void on_packet(ubyte id : 0x04)() {
+        debug writefln("%s", s.TimeUpdate.recv(endianstream));
+    }
+    
+    void on_packet(ubyte id : 0x06)() {
+        debug writefln("%s", s.SpawnPosition.recv(endianstream));
+    }
+    
+    void on_packet(ubyte id : 0x18)() {
+        debug writefln("%s", s.MobSpawn.recv(endianstream));
+    }
+    
+    void on_packet(ubyte id : 0xff)() {
+        debug writefln("%s", s.Disconnect.recv(endianstream));
+        socket.close();
+        _connected = false;
+    }
+    
     void on_packet(ubyte id)() {
+        throw new ServerException(format("Unhandled packet with id: 0x%02x", id));
     }
 }

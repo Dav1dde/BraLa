@@ -9,24 +9,8 @@ private {
     import server = brala.network.packets.server;
 }
 
-class KeepAlive : IPacket {
-    static @property ubyte id() { return 0x00; }
-    
-    this() {}
-    
-    void send(Stream s) {
-        write(s, id, 0); // the client may only send packets with id 0
-    }
-    
-    static KeepAlive recv(Stream s) {
-        read!(byte)(s);
-        return new KeepAlive();
-    }
-    
-    string toString() {
-        return .stringof[7..$] ~ ".KeepAlive()";
-    }
-}
+
+alias server.KeepAlive KeepAlive;
 
 class Login : IPacket {
     static @property ubyte id() { return 0x01; }
