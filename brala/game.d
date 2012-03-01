@@ -8,6 +8,7 @@ private {
     
     import brala.network.connection : Connection;
     import brala.network.packets.types : IPacket;
+    import brala.network.packets.server : get_packets;
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;
@@ -36,6 +37,7 @@ class BraLaGame : BaseGLFWEventHandler {
         super(window); // call this at the end or have a life with segfaults!
     }
     
+    // rendering
     void start() {
         engine.mainloop(&poll);
     }
@@ -60,6 +62,21 @@ class BraLaGame : BaseGLFWEventHandler {
         clear();
     }
     
+    // Server/Connection
+    void dispatch_packets(IPacket packet) {
+        switch(packet.id) {
+            foreach(p; get_packets!()) {
+                case p.id: p.cls cpacket = cast(p.cls)packet;
+                           return on_packet(cpacket);
+            }
+        }
+    }
+    
+    void on_packet(T)(T packet) {
+        debug writefln("Unhandled packet: %s", packet);
+    }
+    
+    // UI-Events
     override void on_key_down(int key) {
         keymap[key] = true;
     }

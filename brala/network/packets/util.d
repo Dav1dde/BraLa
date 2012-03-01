@@ -4,8 +4,8 @@ private {
 }
 
 public {
-    import std.metastrings : toStringNow; 
-    import std.typetuple : TypeTuple, staticMap;
+    import std.typetuple : TypeTuple, staticMap, staticIndexOf, NoDuplicates;
+    import std.metastrings : toStringNow;
     import std.stream : Stream;
     import std.conv : to;
     
@@ -27,21 +27,37 @@ template staticJoin(string delimiter, T...) {
     }
 }
 
-mixin template get_packets_mixin() {
-    private template get_packets(alias T) {
-        alias get_packets_impl!(__traits(allMembers, T)) get_packets;
+mixin template get_packets_mixin(alias Module) {
+    template get_packets() {
+        alias NoDuplicates!(get_packets_impl!(__traits(allMembers, Module))) get_packets;
     }
-
+        
     private template get_packets_impl(T...) {
         static if(T.length == 0) {
             alias TypeTuple!() get_packets_impl;
         } else static if(__traits(compiles, mixin(T[0]).id)) {
-            alias TypeTuple!(TypeTuple!(T[0], mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
+            alias TypeTuple!(PacketTuple!(mixin(T[0]), mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
         } else {
-            alias TypeTuple!(get_packets_impl!(T[1..$])) get_packets_impl;
+            alias get_packets_impl!(T[1..$]) get_packets_impl;
+        }
+    }
+    
+    template PacketTuple(T, ubyte b) {
+        alias T cls;
+        alias b id;
+    }
+    
+    auto parse_packet(ubyte id)(Stream s) {
+        alias staticIndexOf!(id, staticMap!(extract_id, get_packets!())) id_index;
+        static if(id_index < 0) {
+            static assert(false, "Invalid packet with id: " ~ toStringNow!id);
+        } else {
+            return get_packets!()[id_index].cls.recv(s);
         }
     }
 }
+
+private template extract_id(alias P) { alias P.id extract_id; }
 
 mixin template Packet(ubyte id_, Vars...) {    
     static assert(Vars.length % 2 == 0);
@@ -114,7 +130,7 @@ mixin template Packet(ubyte id_, Vars...) {
     }
 
     /// actual packet-code
-    static @property ubyte id() { return id_; }
+    const ubyte id = id_;
     
     mixin(inject_data());
 }

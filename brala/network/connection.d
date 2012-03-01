@@ -24,6 +24,8 @@ class Connection {
     private EndianStream endianstream;
     private bool _connected;
     
+    void delegate(IPacket) callback;
+    
     immutable string username;
     
     // sent with servers login packet
@@ -93,14 +95,16 @@ class Connection {
     }
     
     void poll() {
-        ubyte packet = read!ubyte(endianstream);
-//         debug writefln("Packet: %d", packet);
+        ubyte packet_id = read!ubyte(endianstream);
         
-        switch(packet) {
-            foreach(p; s.packets) { // p[0] = class-name, p[1] = id
-                case p[1]: return on_packet!(p[1])();
+        assert(callback !is null);
+        switch(packet_id) {
+            foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
+                case p.id: p.cls packet = s.parse_packet!(p.id)(endianstream);
+                           static if(__traits(compiles, on_packet(packet))) on_packet(packet);
+                           return callback(packet);
             }
-            default: throw new ServerException(format("Invalid packet: %s.", packet));
+            default: throw new ServerException(format("Invalid packet: 0x%02x.", packet_id));
         }
     }
     
@@ -111,30 +115,15 @@ class Connection {
         }
     }
     
-    void on_packet(ubyte id : 0x00)() {
-        auto ka = s.KeepAlive.recv(endianstream);
-        (new c.KeepAlive(ka.keepalive_id)).send(endianstream);
+    private void on_packet(T : s.KeepAlive)(T packet) {
+        (new c.KeepAlive(packet.keepalive_id)).send(endianstream);
     }
     
-    void on_packet(ubyte id : 0x04)() {
-        debug writefln("%s", s.TimeUpdate.recv(endianstream));
-    }
-    
-    void on_packet(ubyte id : 0x06)() {
-        debug writefln("%s", s.SpawnPosition.recv(endianstream));
-    }
-    
-//     void on_packet(ubyte id : 0x18)() {
-//         debug writefln("%s", s.MobSpawn.recv(endianstream));
-//     }
-    
-    void on_packet(ubyte id : 0xff)() {
-        debug writefln("%s", s.Disconnect.recv(endianstream));
+    private void on_packet(T : s.Disconnect)(T packet) {
+        debug writefln("%s", packet);
         socket.close();
         _connected = false;
     }
     
-    void on_packet(ubyte id)() {
-        throw new ServerException(format("Unhandled packet with id: 0x%02x", id));
-    }
+//     void on_packet(T)(T packet) {}
 }

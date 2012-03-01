@@ -110,9 +110,14 @@ int main(string[] args) {
     //game.start();
     
     import brala.network.connection;
-    import brala.network.packets.server;
-
+//     import brala.network.packets.types;
+    
+    void foo(IPacket packet) {
+        writefln("%s", packet);
+    }
+    
     auto con = new Connection("test123");
+    con.callback = &foo;
     con.connect("localhost", 25565);
     con.login();
     con.run();

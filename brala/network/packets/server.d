@@ -10,10 +10,8 @@ private {
 }
 
 
-mixin get_packets_mixin;
-alias get_packets!(brala.network.packets.server) packets;
+mixin get_packets_mixin!(brala.network.packets.server);
 
-pragma(msg, "Compiling packets, be patient ...");
 
 class KeepAlive : IPacket {
     mixin Packet!(0x00, int, "keepalive_id");
@@ -79,7 +77,7 @@ class CollectItem : IPacket {
 }
 
 class AddObject : IPacket {
-    final @property ubyte id() { return 0x17; }
+    const ubyte id = 0x17;
     
     int entity_id;
     byte type;

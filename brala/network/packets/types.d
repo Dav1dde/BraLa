@@ -4,8 +4,8 @@ private {
     import std.stream : Stream;
 }
 
-interface IPacket {
-    static @property ubyte id();
+abstract class IPacket {
+    const ubyte id;
     void send(Stream s);
     static typeof(this) recv(Stream s);
     string toString();
