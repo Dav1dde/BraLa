@@ -5,7 +5,7 @@ private {
     import std.stream : Stream;
     import std.string : format;
     
-    import brala.network.packets.types : IPacket, EntityMetadataS;
+    import brala.network.packets.types : IPacket, EntityMetadataS, Slot;
     import brala.network.packets.util;
 }
 
@@ -237,11 +237,11 @@ class CloseWindow : IPacket {
 }
 
 class SetSlot : IPacket {
-    mixin Packet!(0x67, byte, "window_id", short, "slot", byte[], "slot_data");
+    mixin Packet!(0x67, byte, "window_id", short, "slot", Slot, "slot_data");
 }
 
 class WindowItems : IPacket {
-    mixin Packet!(0x68, byte, "window_id", short, "count", byte[], "slot_data");
+    mixin Packet!(0x68, byte, "window_id", short, "count", Slot, "slot_data");
 }
 
 class UpdateWindowProperty : IPacket {
