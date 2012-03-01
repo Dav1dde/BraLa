@@ -5,7 +5,7 @@ private {
     import std.stream : Stream;
     import std.string : format;
     
-    import brala.network.packets.types : IPacket;
+    import brala.network.packets.types : IPacket, EntityMetadataS;
     import brala.network.packets.util;
 }
 
@@ -127,8 +127,8 @@ class AddObject : IPacket {
 }
 
 class MobSpawn : IPacket {
-    mixin Packet!(0x18, int, "entity_id", byte, "type", byte, "x", byte, "y", byte, "z",
-                        byte, "yaw", byte, "pitch", byte[], "metadata");
+    mixin Packet!(0x18, int, "entity_id", byte, "type", int, "x", int, "y", int, "z",
+                        byte, "yaw", byte, "pitch", EntityMetadataS, "metadata");
 }
 
 class Painting : IPacket {
@@ -176,7 +176,7 @@ class AttachEntity : IPacket {
 }
 
 class EntityMetadata : IPacket {
-    mixin Packet!(0x28, int, "entity_id", byte[], "metadata");
+    mixin Packet!(0x28, int, "entity_id", EntityMetadataS, "metadata");
 }
 
 class EntityEffect : IPacket {
