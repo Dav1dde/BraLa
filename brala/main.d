@@ -115,7 +115,7 @@ int main(string[] args) {
     void foo(IPacket packet) {
         writefln("%s", packet);
     }
-    
+    import nbt.nbt;
     auto con = new Connection("test123");
     con.callback = &foo;
     con.connect("localhost", 25565);

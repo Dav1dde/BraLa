@@ -11,7 +11,7 @@ ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -unittes
 
 include command.make
 
-OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c
+OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
 
@@ -32,7 +32,7 @@ $(DBUILD_PATH)$(PATH_SEP)%.o : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(CBUILD_PATH)$(PATH_SEP)%.o : %.c
-	gcc -c $< -o $@
+	gcc -c -std=c99 -lz $< -o $@
 
 buildDir: $(OBJDIRS)
 
