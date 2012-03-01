@@ -110,11 +110,11 @@ int main(string[] args) {
     //game.start();
     
     import brala.network.connection;
-    
+    import brala.network.packets.server;
+
     auto con = new Connection("test123");
     con.connect("localhost", 25565);
     con.login();
-    con.server_list_ping();
     con.run();
     
     return 0;

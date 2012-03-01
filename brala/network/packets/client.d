@@ -10,6 +10,10 @@ private {
 }
 
 
+mixin get_packets_mixin;
+alias get_packets!(brala.network.packets.client) packets;
+
+
 alias server.KeepAlive KeepAlive;
 
 class Login : IPacket {

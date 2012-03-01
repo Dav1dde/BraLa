@@ -4,6 +4,7 @@ private {
 }
 
 public {
+    import std.metastrings : toStringNow; 
     import std.typetuple : TypeTuple, staticMap;
     import std.stream : Stream;
     import std.conv : to;
@@ -26,36 +27,18 @@ template staticJoin(string delimiter, T...) {
     }
 }
 
-version(none) {
-    public import std.metastrings : toStringNow; 
-    
-    mixin template get_packets_mixin() {
-        private template get_packets(alias T) {
-            alias get_packets_impl!(__traits(allMembers, T)) get_packets;
-        }
-
-        private template get_packets_impl(T...) {
-            static if(T.length == 0) {
-                alias TypeTuple!() get_packets_impl;
-            } else static if(__traits(compiles, mixin(T[0]).id)) {
-                alias TypeTuple!(TypeTuple!(T[0], mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
-            } else {
-                alias TypeTuple!(get_packets_impl!(T[1..$])) get_packets_impl;
-            }
-        }
+mixin template get_packets_mixin() {
+    private template get_packets(alias T) {
+        alias get_packets_impl!(__traits(allMembers, T)) get_packets;
     }
 
-    template make_case(alias T) { enum make_case = "case " ~ toStringNow!(T[1]) ~ ": return mixin("~ T[0] ~").recv(s);"; }
-
-    template make_parser(T...) {
-        string make_parser() {
-            alias staticJoin!("\n", staticMap!(make_case, T)) cases;
-            
-            return "IPacket parse_packet(ubyte id, Stream s) {
-                        switch(id) {
-                            "~cases~"
-                        }
-                    }";
+    private template get_packets_impl(T...) {
+        static if(T.length == 0) {
+            alias TypeTuple!() get_packets_impl;
+        } else static if(__traits(compiles, mixin(T[0]).id)) {
+            alias TypeTuple!(TypeTuple!(T[0], mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
+        } else {
+            alias TypeTuple!(get_packets_impl!(T[1..$])) get_packets_impl;
         }
     }
 }

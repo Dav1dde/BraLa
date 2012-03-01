@@ -6,6 +6,8 @@ private {
     
     import gl3n.linalg : vec2i;
     
+    import brala.network.connection : Connection;
+    import brala.network.packets.types : IPacket;
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;

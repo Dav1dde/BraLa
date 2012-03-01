@@ -9,6 +9,10 @@ private {
     import brala.network.packets.util;
 }
 
+
+mixin get_packets_mixin;
+alias get_packets!(brala.network.packets.server) packets;
+
 pragma(msg, "Compiling packets, be patient ...");
 
 class KeepAlive : IPacket {

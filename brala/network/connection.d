@@ -10,6 +10,7 @@ private {
     
     import brala.exception : ConnectionException, ServerException;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
+    import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     
@@ -22,7 +23,7 @@ class Connection {
     private SocketStream socketstream;
     private EndianStream endianstream;
     private bool _connected;
-
+    
     immutable string username;
     
     // sent with servers login packet
@@ -96,8 +97,8 @@ class Connection {
 //         debug writefln("Packet: %d", packet);
         
         switch(packet) {
-            foreach(b; TupleRange!(0x00, 0xff)) { // let's assume the server just seends valid packets ...
-                case b: return on_packet!b();
+            foreach(p; s.packets) { // p[0] = class-name, p[1] = id
+                case p[1]: return on_packet!(p[1])();
             }
             default: throw new ServerException(format("Invalid packet: %s.", packet));
         }
@@ -123,9 +124,9 @@ class Connection {
         debug writefln("%s", s.SpawnPosition.recv(endianstream));
     }
     
-    void on_packet(ubyte id : 0x18)() {
-        debug writefln("%s", s.MobSpawn.recv(endianstream));
-    }
+//     void on_packet(ubyte id : 0x18)() {
+//         debug writefln("%s", s.MobSpawn.recv(endianstream));
+//     }
     
     void on_packet(ubyte id : 0xff)() {
         debug writefln("%s", s.Disconnect.recv(endianstream));
