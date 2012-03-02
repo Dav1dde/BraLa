@@ -4,7 +4,7 @@ private {
     import nbt.nbt;
     
     import std.stream : Stream;
-    import std.algorithm : countUntil;
+    import std.algorithm : canFind;
 
     import brala.network.util : read;
     import brala.exception : ServerException;
@@ -75,11 +75,12 @@ struct Slot {
             0x132, 0x133, 0x134, 0x135, // iron
             0x136, 0x137, 0x138, 0x139, // diamond 
             0x13A, 0x13B, 0x13C, 0x13D  // gold
-            ].countUntil(block)) {
+            ].canFind(block)) {
             short len = read!short(s);
-            
+            byte[] buf;
+                        
             if(len != -1) {
-                ubyte[] buf = new ubyte[len];
+                buf = new byte[len];
                 s.readExact(buf.ptr, len);
             }
         }

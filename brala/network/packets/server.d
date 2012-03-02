@@ -241,7 +241,7 @@ class SetSlot : IPacket {
 }
 
 class WindowItems : IPacket {
-    mixin Packet!(0x68, byte, "window_id", short, "count", Slot, "slot_data");
+    mixin Packet!(0x68, byte, "window_id", Slot[], "slots");
 }
 
 class UpdateWindowProperty : IPacket {
