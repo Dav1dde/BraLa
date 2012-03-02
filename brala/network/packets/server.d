@@ -18,8 +18,8 @@ class KeepAlive : IPacket {
 }
 
 class Login : IPacket {
-    mixin Packet!(0x01, int, "entity_id", string, "unused", long, "seed", string, "level_type", int, "mode",
-                        byte, "dimension", byte, "difficulty", ubyte, "world_height", ubyte, "max_players");
+    mixin Packet!(0x01, int, "entity_id", string, "unused", string, "level_type", int, "mode",
+                        int, "dimension", byte, "difficulty", byte, "world_height", ubyte, "max_players");
 }
 
 class Handshake : IPacket {
@@ -47,7 +47,7 @@ class UpdateHealth : IPacket {
 }
 
 class Respawn : IPacket {
-    mixin Packet!(0x09, byte, "dimension", byte, "difficulty", byte, "mode", short, "world_height", long, "seed", string, "level_type");
+    mixin Packet!(0x09, int, "dimension", byte, "difficulty", byte, "mode", short, "world_height", string, "level_type");
 }
 
 class PlayerPositionLook : IPacket {
@@ -128,7 +128,7 @@ class AddObject : IPacket {
 
 class MobSpawn : IPacket {
     mixin Packet!(0x18, int, "entity_id", byte, "type", int, "x", int, "y", int, "z",
-                        byte, "yaw", byte, "pitch", EntityMetadataS, "metadata");
+                        byte, "yaw", byte, "pitch", byte, "head_yaw", EntityMetadataS, "metadata");
 }
 
 class Painting : IPacket {
@@ -167,6 +167,10 @@ class EntityTeleport : IPacket {
     mixin Packet!(0x22, int, "entity_id", int, "x", int, "y", int, "z", byte, "yaw", byte, "pitch");
 }
 
+class EntityHeadLook : IPacket {
+    mixin Packet!(0x23, int, "entity_id", byte, "head_yaw");
+}
+    
 class EntityStatus : IPacket {
     mixin Packet!(0x26, int, "entity_id", byte, "status");
 }
@@ -196,12 +200,12 @@ class PreChunk : IPacket {
 }
 
 class MapChunk : IPacket {
-    mixin Packet!(0x33, int, "x", short, "y", int, "z", byte, "size_x", byte, "size_y", byte, "size_z",
-                        byte, "compressed_size", ubyte[], "compressed_data");
+    mixin Packet!(0x33, int, "x", int, "z", bool, "contiguous", short, "primary_bitmap", byte, "add_bitmap",
+                        int, "compressed_size", int, "unused", ubyte[], "compressed_data");
 }
 
 class MultiBlockChange : IPacket {
-    mixin Packet!(0x34, int, "x", int, "z", short, "array_size", short[], "coordinates", byte[], "types", byte[], "metadata");
+    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", int, "data_size", byte[], "data");
 }
 
 class BlockChange : IPacket {
@@ -262,6 +266,10 @@ class UpdateSign : IPacket {
 
 class ItemData : IPacket {
     mixin Packet!(0x83, short, "item_type", short, "item_id", ubyte, "text_length", byte[], "text");
+}
+
+class UpdateTileEntity : IPacket {
+    mixin Packet!(0x84, int, "x", short, "y", int, "z", byte, "action", int, "custom1", int, "custom2", int, "custom3");
 }
 
 class IncrementStatistic : IPacket {

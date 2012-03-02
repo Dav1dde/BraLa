@@ -76,7 +76,7 @@ struct Slot {
             0x136, 0x137, 0x138, 0x139, // diamond 
             0x13A, 0x13B, 0x13C, 0x13D  // gold
             ].canFind(block)) {
-            short len = read!short(s);
+            int len = read!short(s);
             byte[] buf;
                         
             if(len != -1) {

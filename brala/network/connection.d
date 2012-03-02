@@ -7,7 +7,8 @@ private {
     import std.stream : EndianStream, BOM;
     import std.system : Endian;
     import std.string : format;
-    
+    import std.array : join;
+        
     import brala.exception : ConnectionException, ServerException;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import brala.network.packets.types : IPacket;
@@ -23,6 +24,7 @@ class Connection {
     private SocketStream socketstream;
     private EndianStream endianstream;
     private bool _connected;
+    private Address connected_to;
     
     void delegate(IPacket) callback;
     
@@ -30,10 +32,9 @@ class Connection {
     
     // sent with servers login packet
     int entity_id;
-    long map_seed;
     string level_type;
     int server_mode;
-    byte dimension;
+    int dimension;
     byte difficulty;
     ubyte max_players;
     
@@ -61,6 +62,7 @@ class Connection {
     void connect(Address to) {
         socket.connect(to);
         _connected = true;
+        connected_to = to;
     }
     
     void connect(const(char)[] host, ushort port) {
@@ -70,7 +72,7 @@ class Connection {
     }
         
     void login() {
-        auto handshake = new c.Handshake(username);
+        auto handshake = new c.Handshake(join([username, connected_to.toHostNameString(), connected_to.toPortString()], ";"));
         handshake.send(endianstream);
         
         if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake.");
@@ -78,7 +80,7 @@ class Connection {
         if(repl_handshake.connection_hash != "-") throw new ServerException("Unsupported connection hash.");
         debug writefln("%s", repl_handshake);
         
-        auto login = new c.Login(23, username);
+        auto login = new c.Login(28, username);
         login.send(endianstream);
         
         if(read!ubyte(endianstream) != s.Login.id) throw new ServerException("Expected login-packet.");
@@ -86,7 +88,6 @@ class Connection {
         debug writefln("%s", repl_login);
         
         entity_id = repl_login.entity_id;
-        map_seed = repl_login.seed;
         level_type = repl_login.level_type;
         server_mode = repl_login.mode;
         dimension = repl_login.dimension;
