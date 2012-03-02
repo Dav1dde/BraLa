@@ -96,7 +96,7 @@ class Connection {
             session.keep_alive();
         }
         
-        auto login = new c.Login(28, session.username);
+        auto login = new c.Login(28, username);
         login.send(endianstream);
         
         ubyte packet_id = read!ubyte(endianstream);
