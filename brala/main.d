@@ -81,15 +81,15 @@ int main(string[] args) {
     int width = 1024;
     int height = 800;
     
-    if(args.length == 3) {
+    if(args.length == 5) {
         try {
-            width = to!(int)(args[1]);
+            width = to!(int)(args[3]);
         } catch(ConvException) {
             throw new InitException("width is not a number.");
         }
         
         try {
-            height = to!(int)(args[2]);
+            height = to!(int)(args[4]);
         } catch(ConvException) {
             throw new InitException("height is not a number.");
         }
@@ -115,8 +115,9 @@ int main(string[] args) {
     void foo(IPacket packet) {
         writefln("%s", packet);
     }
+    
     import nbt.nbt;
-    auto con = new Connection("test123");
+    auto con = new Connection(args[1], args[2]);
     con.callback = &foo;
     con.connect("localhost", 25565);
     con.login();

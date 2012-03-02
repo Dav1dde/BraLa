@@ -45,3 +45,9 @@ class ServerException : ConnectionException {
         super(msg);
     }
 }
+
+class SessionException : BraLaException {
+    this(string msg) {
+        super(msg);
+    }
+}

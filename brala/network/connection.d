@@ -10,6 +10,7 @@ private {
     import std.array : join;
         
     import brala.exception : ConnectionException, ServerException;
+    import brala.network.session : Session;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
@@ -26,9 +27,12 @@ class Connection {
     private bool _connected;
     private Address connected_to;
     
+    package Session session;
+    
     void delegate(IPacket) callback;
     
     immutable string username;
+    immutable string password;
     
     // sent with servers login packet
     int entity_id;
@@ -39,22 +43,25 @@ class Connection {
     ubyte max_players;
     
     
-    this(string username) {
+    this(string username, string password) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new FixedEndianStream(socketstream, Endian.bigEndian);
         
+        session = new Session();
+        
         this.username = username;
+        this.password = password;
     }
     
-    this(string username, Address to) {
-        this(username);
+    this(string username, string password, Address to) {
+        this(username, password);
         
         connect(to);
     }
     
-    this(string username, const(char)[] host, ushort port) {
-        this(username);
+    this(string username, string password, const(char)[] host, ushort port) {
+        this(username, password);
         
         connect(host, port);
     }
@@ -77,14 +84,31 @@ class Connection {
         
         if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake.");
         auto repl_handshake = s.Handshake.recv(endianstream);
-        if(repl_handshake.connection_hash != "-") throw new ServerException("Unsupported connection hash.");
         debug writefln("%s", repl_handshake);
+        if(repl_handshake.connection_hash != "-") {
+            // currently not working, session login etc. works,
+            // but server kicks with "Protocol Error"
+            if(!session.logged_in) {
+                session.login(username, password);
+            }
+            
+            session.join(repl_handshake.connection_hash);
+            session.keep_alive();
+        }
         
-        auto login = new c.Login(28, username);
+        auto login = new c.Login(28, session.username);
         login.send(endianstream);
         
-        if(read!ubyte(endianstream) != s.Login.id) throw new ServerException("Expected login-packet.");
-        auto repl_login = s.Login.recv(endianstream);
+        ubyte packet_id = read!ubyte(endianstream);
+        s.Login repl_login;
+        if(packet_id == s.Login.id) {
+            repl_login = s.Login.recv(endianstream);
+        } else if(packet_id == s.Disconnect.id) {
+            throw new ServerException("Disconnect, " ~ s.Disconnect.recv(endianstream).reason);
+        } else {
+            throw new ServerException("Expected login or disconnect packet.");
+        }
+        
         debug writefln("%s", repl_login);
         
         entity_id = repl_login.entity_id;
