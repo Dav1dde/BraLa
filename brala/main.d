@@ -119,7 +119,7 @@ int main(string[] args) {
     import nbt.nbt;
     auto con = new Connection(args[1], args[2]);
     con.callback = &foo;
-    con.connect("127.0.0.1", 25565);
+    con.connect("localhost", 25565);
     con.login();
     con.run();
     

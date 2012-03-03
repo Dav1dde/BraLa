@@ -35,7 +35,7 @@ class TimeUpdate : IPacket {
 }
 
 class EntityEquipment : IPacket {
-    mixin Packet!(0x05, int, "entity_id", int, "slot", short, "item_id", short, "damage");
+    mixin Packet!(0x05, int, "entity_id", short, "slot", short, "item_id", short, "damage");
 }
 
 class SpawnPosition : IPacket {

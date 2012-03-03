@@ -144,10 +144,6 @@ class Connection {
         (new c.KeepAlive(packet.keepalive_id)).send(endianstream);
     }
     
-    private void on_packet(T : s.SpawnPosition)(T packet) {
-        (new c.PlayerPosition(28.0, 64.0f, 1.0, 240.0, true)).send(endianstream);
-    }
-    
     private void on_packet(T : s.Disconnect)(T packet) {
         socket.close();
         _connected = false;
