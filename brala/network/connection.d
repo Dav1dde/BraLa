@@ -93,7 +93,7 @@ class Connection {
             }
             writefln(repl_handshake.connection_hash);
             session.join(repl_handshake.connection_hash);
-            session.keep_alive();
+//             session.keep_alive();
         }
         
         auto login = new c.Login(28, username);
@@ -121,7 +121,7 @@ class Connection {
     
     void poll() {
         ubyte packet_id = read!ubyte(endianstream);
-        
+        writefln("%d", packet_id);
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
