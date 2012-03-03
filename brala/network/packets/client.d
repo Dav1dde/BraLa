@@ -3,6 +3,7 @@ module brala.network.packets.client;
 private {
     import std.stream : Stream;
     
+    import brala.network.packets.types : Slot;
     import brala.network.packets.types : IPacket;
     import brala.network.packets.util;
     import server = brala.network.packets.server;
