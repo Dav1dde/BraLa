@@ -120,8 +120,7 @@ class AddObject : IPacket {
     string toString() {
         return .stringof[7..$] ~ format(`.AddObject(int entity_id : "%d", byte type : "%s", int x : "%d", int y : "%d", int z : "%d" ,`
                                         `int thrower_eid : "%d", short speed_x : "%d", short speed_y : "%d", short speed_z : "%d"`,
-                                        to!string(entity_id), to!string(type), to!string(x), to!string(y), to!string(z),
-                                        to!string(thrower_eid), to!string(speed_x), to!string(speed_y), to!string(speed_z));
+                                        entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
                                         
     }
 }

@@ -1,7 +1,7 @@
 module brala.network.session;
 
 private {
-    import std.net.curl : get, post, HTTP;
+    import std.net.curl : get, post;
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;

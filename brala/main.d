@@ -95,25 +95,25 @@ int main(string[] args) {
         }
     }
     
-//     debug register_glfw_error_callback(&glfw_error_cb);
-//     
-//     debug writefln("init: %dx%d", width, height);
-//     GLFWwindow win = open_glfw_win(width, height);
-//     
-//     GLVersion glv = init_opengl();
-//     debug writefln("Supported OpenGL version: %s\n"
-//                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
+    debug register_glfw_error_callback(&glfw_error_cb);
+    
+    debug writefln("init: %dx%d", width, height);
+    GLFWwindow win = open_glfw_win(width, height);
+    
+    GLVersion glv = init_opengl();
+    debug writefln("Supported OpenGL version: %s\n"
+                   "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
 
-    //auto engine = new BraLaEngine(width, height, glv);
-    //load_default_resources(resmgr); // I like! ~15mb in 837ms
-    //auto game = new BraLaGame(engine, win);
-    //game.start();
+    auto engine = new BraLaEngine(width, height, glv);
+    load_default_resources(resmgr); // I like! ~15mb in 837ms
+    auto game = new BraLaGame(engine, win);
+//     game.start();
     
     import brala.network.connection;
 //     import brala.network.packets.types;
     
     void foo(IPacket packet) {
-//         writefln("%s", packet);
+        writefln("%s", packet);
     }
     
     import nbt.nbt;
