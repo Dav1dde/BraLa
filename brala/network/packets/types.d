@@ -5,6 +5,7 @@ private {
     
     import std.stream : Stream;
     import std.algorithm : canFind;
+    import std.string : format;
 
     import brala.network.util : read;
     import brala.exception : ServerException;
@@ -48,16 +49,19 @@ struct EntityMetadataS {
 }
 
 struct Slot {
-    static Slot recv(Stream s) { // TODO: store the data
+    short block;
+    byte item_count = 0;
+    short metadata = 0;
+    byte[] nbt_data;
+    
+    static Slot recv(Stream s) {
         Slot ret;
         
-        short block = read!short(s);
-        byte item_count = 0;
-        short metadata = 0;
+        ret.block = read!short(s);
         
-        if(block == -1) {
-            item_count = read!byte(s);
-            metadata = read!short(s);
+        if(ret.block != -1) {
+            ret.item_count = read!byte(s);
+            ret.metadata = read!short(s);
         }
         
         if([0x103, 0x105, 0x15a, 0x167, // Flint&Steel, bow, fishing rod, shears
@@ -75,16 +79,20 @@ struct Slot {
             0x132, 0x133, 0x134, 0x135, // iron
             0x136, 0x137, 0x138, 0x139, // diamond 
             0x13A, 0x13B, 0x13C, 0x13D  // gold
-            ].canFind(block)) {
+            ].canFind(ret.block)) {
             int len = read!short(s);
-            byte[] buf;
                         
             if(len != -1) {
-                buf = new byte[len];
-                s.readExact(buf.ptr, len);
+                ret.nbt_data = new byte[len];
+                s.readExact(ret.nbt_data.ptr, len); // TODO: this could me still big endian
             }
         }
         
         return ret;
+    }
+    
+    string toString() {
+        return format(`Slot(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
+                       block, item_count, metadata, nbt_data);
     }
 }

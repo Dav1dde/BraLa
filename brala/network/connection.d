@@ -91,7 +91,7 @@ class Connection {
             if(!session.logged_in) {
                 session.login(username, password);
             }
-            
+            writefln(repl_handshake.connection_hash);
             session.join(repl_handshake.connection_hash);
             session.keep_alive();
         }
@@ -126,7 +126,7 @@ class Connection {
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
                 case p.id: p.cls packet = s.parse_packet!(p.id)(endianstream);
-                           static if(__traits(compiles, on_packet(packet))) on_packet(packet);
+                           static if(__traits(compiles, on_packet!(p.cls)))  on_packet(packet);
                            return callback(packet);
             }
             default: throw new ServerException(format("Invalid packet: 0x%02x.", packet_id));
@@ -144,8 +144,11 @@ class Connection {
         (new c.KeepAlive(packet.keepalive_id)).send(endianstream);
     }
     
+    private void on_packet(T : s.SpawnPosition)(T packet) {
+        (new c.PlayerPosition(28.0, 64.0f, 1.0, 240.0, true)).send(endianstream);
+    }
+    
     private void on_packet(T : s.Disconnect)(T packet) {
-        debug writefln("%s", packet);
         socket.close();
         _connected = false;
     }

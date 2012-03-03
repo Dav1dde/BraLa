@@ -95,14 +95,14 @@ int main(string[] args) {
         }
     }
     
-    debug register_glfw_error_callback(&glfw_error_cb);
-    
-    debug writefln("init: %dx%d", width, height);
-    GLFWwindow win = open_glfw_win(width, height);
-    
-    GLVersion glv = init_opengl();
-    debug writefln("Supported OpenGL version: %s\n"
-                   "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
+//     debug register_glfw_error_callback(&glfw_error_cb);
+//     
+//     debug writefln("init: %dx%d", width, height);
+//     GLFWwindow win = open_glfw_win(width, height);
+//     
+//     GLVersion glv = init_opengl();
+//     debug writefln("Supported OpenGL version: %s\n"
+//                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
 
     //auto engine = new BraLaEngine(width, height, glv);
     //load_default_resources(resmgr); // I like! ~15mb in 837ms
@@ -119,7 +119,7 @@ int main(string[] args) {
     import nbt.nbt;
     auto con = new Connection(args[1], args[2]);
     con.callback = &foo;
-    con.connect("localhost", 25565);
+    con.connect("127.0.0.1", 25565);
     con.login();
     con.run();
     
