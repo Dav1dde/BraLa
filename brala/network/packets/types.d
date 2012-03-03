@@ -4,10 +4,15 @@ private {
     import nbt.nbt;
     
     import std.stream : Stream;
+    import std.typetuple : TypeTuple, staticIndexOf, staticMap;
+    import std.typecons : Tuple;
+    import std.metastrings : toStringNow;
     import std.algorithm : canFind;
     import std.string : format;
+    import std.array : join;
     import std.conv : to;
 
+    import brala.network.packets.util : staticJoin;
     import brala.network.util : read;
     import brala.exception : ServerException;
 }
@@ -19,8 +24,57 @@ abstract class IPacket {
     string toString();
 }
 
-struct EntityMetadataS {
-    ubyte[] metadata;
+
+alias Tuple!(short, "id", byte, "count", short, "damage") Tup5;
+alias Tuple!(int, int, int) Tup6;
+
+struct Metadata {
+    private template Pair(T, int n) {
+        alias T type;
+        alias n name;
+    }
+    
+    private template extract_type(alias T) { alias T.type extract_type; } 
+    private template extract_name(alias T) { alias T.name extract_name; }
+    private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ toStringNow!(T.name) ~ ";"; }
+    
+    alias TypeTuple!(Pair!(byte, 0), Pair!(short, 1), Pair!(int, 2), Pair!(float, 3),
+                     Pair!(string, 4), Pair!(Tup5, 5), Pair!(Tup6, 6)) members;
+    
+    private static string make_union() {
+        alias staticJoin!("\n", staticMap!(make_decl, members)) s;
+        return "union {" ~ s ~ "}";
+    }
+    
+    byte type;
+    
+    mixin(make_union());
+    
+    auto get(T)() {
+        alias staticIndexOf!(T, staticMap!(extract_type, members)) type_index;
+        static if(type_index < 0) {
+            static assert(false);
+        } else {
+            return mixin("_" ~ toStringNow!(members[type_index].name));
+        }
+    }
+    
+    string toString() {
+        assert(type >= 0 && type <= 6);
+        
+        string s;
+        switch(type) {
+            foreach(m; members) {
+                case m.name: s = to!string(mixin("_" ~ toStringNow!(m.name)));
+            }
+        }
+        
+        return s;
+    }
+}
+
+struct EntityMetadataS {   
+    Metadata[byte] metadata;
     
     static EntityMetadataS recv(Stream s) { // TODO: store the data
         EntityMetadataS ret;
@@ -28,24 +82,37 @@ struct EntityMetadataS {
         ubyte x = read!ubyte(s);
     
         while(x != 127) {
-            byte index = x & 0x1f;
-            byte ty = x >> 5;
+            Metadata m;
             
-            switch(ty) {
-                case 0: read!byte(s); break;
-                case 1: read!short(s); break;
-                case 2: read!int(s); break;
-                case 3: read!float(s); break;
-                case 4: read!string(s); break;
-                case 5: read!(short, byte, short)(s); break;
-                case 6: read!(int, int, int)(s); break;
+            byte index = x & 0x1f;
+            m.type = x >> 5;
+
+            switch(m.type) {
+                case 0: m._0 = read!byte(s); break;
+                case 1: m._1 = read!short(s); break;
+                case 2: m._2 = read!int(s); break;
+                case 3: m._3 = read!float(s); break;
+                case 4: m._4 = read!string(s); break;
+                case 5: m._5 = read!(short, byte, short)(s); break;
+                case 6: m._6 = read!(int, int, int)(s); break;
                 default: throw new ServerException("Invalid type in entity metadata.");
             }
+            
+            ret.metadata[index] = m;
             
             x = read!ubyte(s);
         }
         
         return ret;
+    }
+    
+    string toString() {
+        string[] s;
+        foreach(byte key, Metadata value; metadata) {
+            s ~= format("%d : %s", key, value.toString());
+        }
+        
+        return format("EntityMetadataS(%s)", s.join(", "));
     }
 }
 
