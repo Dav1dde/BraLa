@@ -3,7 +3,7 @@ module brala.network.connection;
 
 private {
     import core.thread : Thread;    
-    import std.socket : TcpSocket, Address, getAddress;
+    import std.socket : SocketException, TcpSocket, Address, getAddress;
     import std.socketstream : SocketStream;
     import std.stream : EndianStream, BOM;
     import std.system : Endian;
@@ -22,11 +22,15 @@ private {
 
 
 class Connection {
-    private TcpSocket socket;
-    private SocketStream socketstream;
-    private EndianStream endianstream;
+    TcpSocket socket;
+    SocketStream socketstream;
+    EndianStream endianstream;
     private bool _connected;
     private Address connected_to;
+    private bool _logged_in;
+    
+    @property connected() { return _connected; }
+    @property logged_in() { return _logged_in; }
     
     package Session session;
     
@@ -61,7 +65,7 @@ class Connection {
         connect(to);
     }
     
-    this(string username, string password, const(char)[] host, ushort port) {
+    this(string username, string password, string host, ushort port) {
         this(username, password);
         
         connect(host, port);
@@ -73,7 +77,7 @@ class Connection {
         connected_to = to;
     }
     
-    void connect(const(char)[] host, ushort port) {
+    void connect(string host, ushort port) {
         Address[] to = getAddress(host, port);
         
         connect(to[0]);
@@ -118,9 +122,19 @@ class Connection {
         dimension = repl_login.dimension;
         difficulty = repl_login.difficulty;
         max_players = repl_login.max_players;
+        
+        _logged_in = true;
     }
     
     void poll() {
+        try {
+            _poll();
+        } catch(SocketException) {
+            _connected = false;
+        }
+    }
+    
+    void _poll() {
         ubyte packet_id = read!ubyte(endianstream);
         
         assert(callback !is null);
@@ -158,7 +172,7 @@ class ThreadedConnection : Connection {
     
     this(string username, string password) { super(username, password); }
     this(string username, string password, Address to) { super(username, password, to); }
-    this(string username, string password, const(char)[] host, ushort port) { super(username, password, host, port); }
+    this(string username, string password, string host, ushort port) { super(username, password, host, port); }
     
     void run() {
         if(_thread is null) {

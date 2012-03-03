@@ -82,15 +82,15 @@ int main(string[] args) {
     int width = 1024;
     int height = 800;
     
-    if(args.length == 6) {
+    if(args.length == 7) {
         try {
-            width = to!(int)(args[4]);
+            width = to!(int)(args[5]);
         } catch(ConvException) {
             throw new InitException("width is not a number.");
         }
         
         try {
-            height = to!(int)(args[5]);
+            height = to!(int)(args[6]);
         } catch(ConvException) {
             throw new InitException("height is not a number.");
         }
@@ -107,8 +107,8 @@ int main(string[] args) {
 
     auto engine = new BraLaEngine(width, height, glv);
     load_default_resources(resmgr); // I like! ~15mb in 837ms
-    auto game = new BraLaGame(engine, win);
-    game.start();
+    auto game = new BraLaGame(engine, win, args[1], args[2]);
+    game.start(args[3], to!ushort(args[4]));
     
     return 0;
 }

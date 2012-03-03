@@ -4,9 +4,11 @@ private {
     import glamour.gl;
     import derelict.glfw3.glfw3;
     
-    import gl3n.linalg : vec2i;
+    import std.socket : Address;
     
-    import brala.network.connection : Connection;
+    import gl3n.linalg : vec2i;
+        
+    import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import brala.network.packets.server : get_packets;
     import brala.engine : BraLaEngine;
@@ -22,6 +24,7 @@ private {
 
 class BraLaGame : BaseGLFWEventHandler {
     BraLaEngine engine;
+    ThreadedConnection connection;
     
     ICamera cam;
     
@@ -30,8 +33,10 @@ class BraLaGame : BaseGLFWEventHandler {
     
     bool quit = false;
     
-    this(BraLaEngine engine, void* window) {
+    this(BraLaEngine engine, void* window, string username, string password) {
         this.engine = engine;
+        connection = new ThreadedConnection(username, password);
+        connection.callback = &dispatch_packets;
         cam = new FreeCamera(engine);
 
         super(window); // call this at the end or have a life with segfaults!
@@ -39,7 +44,23 @@ class BraLaGame : BaseGLFWEventHandler {
     
     // rendering
     void start() {
+        assert(connection.connected);
+        if(!connection.logged_in) {
+            login();
+        }
+        connection.run();
+        
         engine.mainloop(&poll);
+    }
+    
+    void start(Address to) {
+        connect(to);
+        start();
+    }
+    
+    void start(string host, ushort port) {
+        connect(host, port);
+        start();
     }
     
     bool poll(uint delta_t) {
@@ -55,7 +76,7 @@ class BraLaGame : BaseGLFWEventHandler {
         
         display();
         
-        return quit || keymap[GLFW_KEY_ESCAPE];
+        return quit || keymap[GLFW_KEY_ESCAPE] || !connection.connected;
     }
     
     void display() {
@@ -63,11 +84,23 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     // Server/Connection
+    void connect(Address to) {
+        connection.connect(to);
+    }
+    
+    void connect(string host, ushort port) {
+        connection.connect(host, port);
+    }
+    
+    void login() { // this is blocking
+        connection.login();
+    }
+    
     void dispatch_packets(IPacket packet) {
         switch(packet.id) {
             foreach(p; get_packets!()) {
                 case p.id: p.cls cpacket = cast(p.cls)packet;
-                           return on_packet(cpacket);
+                           return on_packet!(p.cls)(cpacket);
             }
         }
     }
