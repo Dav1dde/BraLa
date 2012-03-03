@@ -73,7 +73,7 @@ class PlayerDigging : IPacket {
 }
 
 class PlayerBlockPlacement : IPacket {
-    mixin Packet!(0x0F, int, "x", byte, "y", int, "z", byte, "direction", byte[], "slot");
+    mixin Packet!(0x0F, int, "x", byte, "y", int, "z", byte, "direction", Slot, "slot");
 }
 
 class HoldingChange : IPacket {
@@ -87,7 +87,7 @@ class EntityAction : IPacket {
 public alias server.PickupSpawn PickupSpawn;
 
 class WindowClick : IPacket {
-    mixin Packet!(0x66, byte, "window_id", short, "slot", bool, "right_click", short, "action_number", bool, "shift", byte[], "clicked_item");
+    mixin Packet!(0x66, byte, "window_id", short, "slot", bool, "right_click", short, "action_number", bool, "shift", Slot, "clicked_item");
 }
 
 public alias server.Transaction Transaction;
