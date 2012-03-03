@@ -6,6 +6,7 @@ private {
     import std.stream : Stream;
     import std.algorithm : canFind;
     import std.string : format;
+    import std.conv : to;
 
     import brala.network.util : read;
     import brala.exception : ServerException;
@@ -54,6 +55,17 @@ struct Slot {
     short metadata = 0;
     byte[] nbt_data;
     
+    private size_t _slot;
+    private bool has_array_position;
+    @property void array_position(size_t n) {
+        if(!has_array_position) {
+            _slot = n;
+            has_array_position = true;
+        }
+    }
+    @property size_t slot() { return _slot; }
+    
+    
     static Slot recv(Stream s) {
         Slot ret;
         
@@ -92,7 +104,9 @@ struct Slot {
     }
     
     string toString() {
-        return format(`Slot(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
-                       block, item_count, metadata, nbt_data);
+        string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
+        
+        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
+                       s, block, item_count, metadata, nbt_data);
     }
 }
