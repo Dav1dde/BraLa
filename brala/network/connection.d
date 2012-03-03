@@ -2,6 +2,7 @@ module brala.network.connection;
 
 
 private {
+    import core.thread : Thread;    
     import std.socket : TcpSocket, Address, getAddress;
     import std.socketstream : SocketStream;
     import std.stream : EndianStream, BOM;
@@ -150,4 +151,21 @@ class Connection {
     }
     
 //     void on_packet(T)(T packet) {}
+}
+
+class ThreadedConnection : Connection {
+    private Thread _thread = null;
+    
+    this(string username, string password) { super(username, password); }
+    this(string username, string password, Address to) { super(username, password, to); }
+    this(string username, string password, const(char)[] host, ushort port) { super(username, password, host, port); }
+    
+    void run() {
+        if(_thread is null) {
+            _thread = new Thread(&(super.run));
+            _thread.isDaemon = true;
+        }
+        
+        _thread.start();
+    }
 }

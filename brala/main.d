@@ -14,6 +14,7 @@ private {
     import brala.resmgr : resmgr;
     import brala.event : register_glfw_error_callback;
     import brala.config : load_default_resources;
+    import brala.network.packets.types : IPacket;
     import brala.exception : InitException;
     
     import std.stdio : writefln;
@@ -107,21 +108,7 @@ int main(string[] args) {
     auto engine = new BraLaEngine(width, height, glv);
     load_default_resources(resmgr); // I like! ~15mb in 837ms
     auto game = new BraLaGame(engine, win);
-//     game.start();
-    
-    import brala.network.connection;
-//     import brala.network.packets.types;
-    
-    void foo(IPacket packet) {
-        writefln("%s", packet);
-    }
-    
-    import nbt.nbt;
-    auto con = new Connection(args[1], args[2]);
-    con.callback = &foo;
-    con.connect(args[3], 25565);
-    con.login();
-    con.run();
+    game.start();
     
     return 0;
 }
