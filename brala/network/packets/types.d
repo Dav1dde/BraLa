@@ -76,7 +76,7 @@ struct Metadata {
 struct EntityMetadataS {   
     Metadata[byte] metadata;
     
-    static EntityMetadataS recv(Stream s) { // TODO: store the data
+    static EntityMetadataS recv(Stream s) {
         EntityMetadataS ret;
         
         ubyte x = read!ubyte(s);
@@ -176,4 +176,10 @@ struct Slot {
         return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
                        s, block, item_count, metadata, nbt_data);
     }
+}
+
+struct Array(T, S) {
+    alias T LenType;
+    S[] arr;
+    alias arr this;
 }

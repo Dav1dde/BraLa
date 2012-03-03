@@ -5,7 +5,7 @@ private {
     import std.stream : Stream;
     import std.string : format;
     
-    import brala.network.packets.types : IPacket, EntityMetadataS, Slot;
+    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array;
     import brala.network.packets.util;
 }
 
@@ -205,7 +205,7 @@ class MapChunk : IPacket {
 }
 
 class MultiBlockChange : IPacket {
-    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", int, "data_size", byte[], "data");
+    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", Array!(int, byte), "data");
 }
 
 class BlockChange : IPacket {
@@ -217,7 +217,7 @@ class BlockAction : IPacket {
 }
 
 class Explosion : IPacket {
-    mixin Packet!(0x3C, double, "x", double, "y", double, "z", float, "radius", int, "record_count", byte[], "records");
+    mixin Packet!(0x3C, double, "x", double, "y", double, "z", float, "radius", Array!(int, byte), "records");
 }
 
 class SoundParticleEffect : IPacket {
@@ -245,7 +245,7 @@ class SetSlot : IPacket {
 }
 
 class WindowItems : IPacket {
-    mixin Packet!(0x68, byte, "window_id", Slot[], "slots");
+    mixin Packet!(0x68, byte, "window_id", Array!(short, Slot), "slots");
 }
 
 class UpdateWindowProperty : IPacket {
@@ -257,7 +257,7 @@ class Transaction : IPacket {
 }
 
 class CreativeInventoryAction : IPacket {
-    mixin Packet!(0x6B, short, "slot", byte[], "clicked_item");
+    mixin Packet!(0x6B, short, "slot", Slot, "clicked_item");
 }
 
 class UpdateSign : IPacket {
@@ -265,7 +265,7 @@ class UpdateSign : IPacket {
 }
 
 class ItemData : IPacket {
-    mixin Packet!(0x83, short, "item_type", short, "item_id", ubyte, "text_length", byte[], "text");
+    mixin Packet!(0x83, short, "item_type", short, "item_id", Array!(ubyte, byte), "text");
 }
 
 class UpdateTileEntity : IPacket {
@@ -281,7 +281,7 @@ class PlayerListItem : IPacket {
 }
 
 class PluginMessage : IPacket {
-    mixin Packet!(0xFA, string, "channel", short, "length", byte[], "data");
+    mixin Packet!(0xFA, string, "channel", Array!(short, byte), "data");
 }
 
 class Disconnect : IPacket {
