@@ -10,7 +10,8 @@ private {
         
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
-    import brala.network.packets.server : get_packets;
+    import s = brala.network.packets.server;
+    import c = brala.network.packets.client;
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
     import brala.camera : ICamera, FreeCamera;
@@ -64,7 +65,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     bool poll(uint delta_t) {
-        if(!connection.connected) {
+        if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
         }
         
@@ -102,16 +103,20 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void dispatch_packets(ubyte id, void* packet) {
         switch(id) {
-            foreach(p; get_packets!()) {
+            foreach(p; s.get_packets!()) {
                 case p.id: p.cls cpacket = cast(p.cls)packet;
                            return on_packet!(p.cls)(cpacket);
             }
         }
     }
     
-    void on_packet(T)(T packet) {
-//         debug writefln("Unhandled packet: %s", packet);
+    void on_packet(T : s.Disconnect)(T packet) {
+        debug writefln("%s", packet);
+        quit = true;
     }
+    
+    void on_packet(T)(T packet) {}
+//         debug writefln("Unhandled packet: %s", packet);
     
     // UI-Events
     override void on_key_down(int key) {

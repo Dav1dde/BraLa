@@ -25,9 +25,10 @@ class Connection {
     TcpSocket socket;
     SocketStream socketstream;
     EndianStream endianstream;
-    private bool _connected;
+    private bool _connected = false;
     private Address connected_to;
-    private bool _logged_in;
+    private bool _logged_in = false;
+    bool errored = false;
     
     @property connected() { return _connected; }
     @property logged_in() { return _logged_in; }
@@ -131,6 +132,7 @@ class Connection {
             _poll();
         } catch(Exception e) {
             _connected = false;
+            errored = true;
             throw e;
         }
     }
