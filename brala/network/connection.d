@@ -129,9 +129,9 @@ class Connection {
     void poll() {
         try {
             _poll();
-        } catch(SocketException s) {
+        } catch(Exception e) {
             _connected = false;
-            throw s;
+            throw e;
         }
     }
     
@@ -164,12 +164,12 @@ class Connection {
         socket.close();
         _connected = false;
     }
-    
-//     void on_packet(T)(T packet) {}
 }
 
 class ThreadedConnection : Connection {
     private Thread _thread = null;
+    @property Thread thread() { return _thread; }
+    
     
     this(string username, string password) { super(username, password); }
     this(string username, string password, Address to) { super(username, password, to); }

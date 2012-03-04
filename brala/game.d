@@ -64,6 +64,10 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     bool poll(uint delta_t) {
+        if(!connection.connected) {
+            connection.thread.join(); // let's rethrow the exception for now!
+        }
+        
         if(keymap[MOVE_FORWARD])  cam.move_forward(delta_t);
         if(keymap[MOVE_BACKWARD]) cam.move_backward(delta_t);
         if(keymap[STRAFE_LEFT])  cam.strafe_left(delta_t);
@@ -76,7 +80,7 @@ class BraLaGame : BaseGLFWEventHandler {
         
         display();
         
-        return quit || keymap[GLFW_KEY_ESCAPE] || !connection.connected;
+        return quit || keymap[GLFW_KEY_ESCAPE];
     }
     
     void display() {
@@ -106,7 +110,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_packet(T)(T packet) {
-        debug writefln("Unhandled packet: %s", packet);
+//         debug writefln("Unhandled packet: %s", packet);
     }
     
     // UI-Events
