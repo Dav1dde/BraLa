@@ -34,7 +34,7 @@ class Connection {
     
     package Session session;
     
-    void delegate(IPacket) callback;
+    void delegate(ubyte, void*) callback;
     
     immutable string username;
     immutable string password;
@@ -129,8 +129,9 @@ class Connection {
     void poll() {
         try {
             _poll();
-        } catch(SocketException) {
+        } catch(SocketException s) {
             _connected = false;
+            throw s;
         }
     }
     
@@ -142,7 +143,7 @@ class Connection {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
                 case p.id: p.cls packet = s.parse_packet!(p.id)(endianstream);
                            static if(__traits(compiles, on_packet!(p.cls)))  on_packet(packet);
-                           return callback(packet);
+                           return callback(p.id, cast(void*)packet);
             }
             default: throw new ServerException(format("Invalid packet: 0x%02x.", packet_id));
         }

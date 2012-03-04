@@ -96,8 +96,8 @@ class BraLaGame : BaseGLFWEventHandler {
         connection.login();
     }
     
-    void dispatch_packets(IPacket packet) {
-        switch(packet.id) {
+    void dispatch_packets(ubyte id, void* packet) {
+        switch(id) {
             foreach(p; get_packets!()) {
                 case p.id: p.cls cpacket = cast(p.cls)packet;
                            return on_packet!(p.cls)(cpacket);
