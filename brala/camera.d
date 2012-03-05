@@ -9,7 +9,9 @@ private {
 
 
 interface ICamera {
-    void look_at(vec3 pos);
+    @property vec3 position();
+    @property void position(vec3 position);
+    void look_at(vec3 position);
     void rotatex(float angle);
     void rotatey(float angle);
     void move_forward(float delta);
@@ -24,28 +26,31 @@ interface ICamera {
 // Refering to https://github.com/mitsuhiko/webgl-meincraft/blob/master/src/camera.coffee
 class FreeCamera : ICamera {
     BraLaEngine engine;    
-    vec3 position = vec3(0.0f, 0.0f, 0.0f);
+    vec3 _position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, -1.0f);
     float fov = 45.0f;
     float near = 1.0f;
     float far = 400.0f;
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     
+    @property vec3 position() { return _position; }
+    @property void position(vec3 position) { _position = position; }
+    
     this() {}
     
     this(vec3 position) {
-        this.position = position;
+        _position = position;
     }
     
     this(vec3 position, float fov, float near, float far) {
-        this.position = position;
+        this._position = position;
         this.fov = fov;
         this.near = near;
         this.far = far;
     }
      
-    void look_at(vec3 pos) {
-        forward = (pos - position).normalized;
+    void look_at(vec3 position) {
+        forward = (position - _position).normalized;
     }
     
     void rotatex(float angle) { // degrees
@@ -60,26 +65,26 @@ class FreeCamera : ICamera {
     }
     
     void move_forward(float delta) { // W
-        position = position + forward*delta;
+        _position = _position + forward*delta;
     }
     
     void move_backward(float delta) { // S
-        position = position - forward*delta;
+        _position = _position - forward*delta;
     }
     
     void strafe_left(float delta) { // A
         vec3 vcross = cross(up, forward).normalized;
-        position = position + (vcross*delta);
+        _position = _position + (vcross*delta);
     }
     
     void strafe_right(float delta) { // D
         vec3 vcross = cross(up, forward).normalized;
-        position = position - (vcross*delta);
+        _position = _position - (vcross*delta);
     }
     
     @property mat4 camera() {
-        vec3 target = position + forward;
-        return mat4.look_at(position, target, up);
+        vec3 target = _position + forward;
+        return mat4.look_at(_position, target, up);
     }
     
     void apply(BraLaEngine engine) {

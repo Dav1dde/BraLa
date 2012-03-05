@@ -5,6 +5,7 @@ private {
     import derelict.glfw3.glfw3;
     
     import std.socket : Address;
+    import std.conv : to;
     
     import gl3n.linalg : vec2i, vec3;
         
@@ -121,18 +122,23 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void on_packet(T : s.SpawnPosition)(T packet) {
         debug writefln("%s", packet);
-        
-        character.position = vec3(packet.x, packet.y, packet.z);
     }
     
+    void on_packet(T : s.PlayerPositionLook)(T packet) {
+        debug writefln("%s", packet);
+        
+        character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
+        character.set_rotation(packet.yaw, packet.pitch);
+    }
+
     void on_packet(T : s.Disconnect)(T packet) {
         debug writefln("%s", packet);
         quit = true;
     }
     
-    void on_packet(T)(T packet) {}
+    void on_packet(T)(T packet) {
 //         debug writefln("Unhandled packet: %s", packet);
-    
+    }
     // UI-Events
     override void on_key_down(int key) {
         keymap[key] = true;
