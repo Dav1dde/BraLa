@@ -4,11 +4,13 @@ private import std.datetime : Clock;
 public import core.time : TickDuration;
 
 
-struct Timer {
+class Timer {
     private TickDuration stime;
     package bool _paused = false;
     package bool _started = false;
-       
+    
+    this() {}
+    
     @property bool paused() {
         return _paused;
     }
@@ -23,7 +25,7 @@ struct Timer {
     }
     
     void pause() {
-        _paused = !paused;
+        _paused = !_paused;
         stime = Clock.currSystemTick() - stime;
     }
     alias pause resume;
@@ -52,23 +54,21 @@ struct Timer {
     
 }
 
-struct FPSCounter {
-    Timer timer;
-    alias timer this;
-    
+class FPSCounter : Timer {
     uint frames = 0;
     
+    this() {}
+    
     void update() {
-        if(!_started) {
-            start();
+        if(!_paused) {
+            if(!_started) {
+                start();
+            }
+            frames++;
         }
-        frames++;
     }
     
-    @disable void pause();
-    @disable void resume();
-    
     @property float fps() {
-        return frames/(timer.get_time().to!("seconds", float));
+        return frames/(get_time().to!("seconds", float));
     }
 }
