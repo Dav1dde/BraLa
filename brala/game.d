@@ -12,9 +12,9 @@ private {
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
+    import brala.character : Character;
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
-    import brala.camera : ICamera, FreeCamera;
     import brala.types : DefaultAA;
     import brala.util : clear;
     import brala.config;
@@ -27,7 +27,7 @@ class BraLaGame : BaseGLFWEventHandler {
     BraLaEngine engine;
     ThreadedConnection connection;
     
-    ICamera cam;
+    Character character;
     
     DefaultAA!(bool, int, false) keymap;
     vec2i mouse_offset = vec2i(0, 0);
@@ -36,9 +36,9 @@ class BraLaGame : BaseGLFWEventHandler {
     
     this(BraLaEngine engine, void* window, string username, string password) {
         this.engine = engine;
+        this.character = new Character();
         connection = new ThreadedConnection(username, password);
         connection.callback = &dispatch_packets;
-        cam = new FreeCamera(engine);
 
         super(window); // call this at the end or have a life with segfaults!
     }
@@ -69,15 +69,15 @@ class BraLaGame : BaseGLFWEventHandler {
             connection.thread.join(); // let's rethrow the exception for now!
         }
         
-        if(keymap[MOVE_FORWARD])  cam.move_forward(delta_t);
-        if(keymap[MOVE_BACKWARD]) cam.move_backward(delta_t);
-        if(keymap[STRAFE_LEFT])  cam.strafe_left(delta_t);
-        if(keymap[STRAFE_RIGHT]) cam.strafe_right(delta_t);
-        if(mouse_offset.x > 0)      cam.rotatex(delta_t);
-        else if(mouse_offset.x < 0) cam.rotatex(-delta_t);
-        if(mouse_offset.y > 0)      cam.rotatey(delta_t);
-        else if(mouse_offset.y < 0) cam.rotatey(-delta_t);
-        cam.apply();
+        if(keymap[MOVE_FORWARD])  character.move_forward(delta_t);
+        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t);
+        if(keymap[STRAFE_LEFT])  character.strafe_left(delta_t);
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t);
+        if(mouse_offset.x > 0)      character.rotatex(delta_t);
+        else if(mouse_offset.x < 0) character.rotatex(-delta_t);
+        if(mouse_offset.y > 0)      character.rotatey(delta_t);
+        else if(mouse_offset.y < 0) character.rotatey(-delta_t);
+        character.apply(engine);
         
         display();
         

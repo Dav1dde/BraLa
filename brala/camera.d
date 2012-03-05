@@ -17,7 +17,7 @@ interface ICamera {
     void strafe_left(float delta);
     void strafe_right(float delta);    
     mat4 camera();
-    void apply();
+    void apply(BraLaEngine engine);
 }
 
 
@@ -31,12 +31,13 @@ class FreeCamera : ICamera {
     float far = 400.0f;
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     
-    this(BraLaEngine engine) {
-        this.engine = engine;
+    this() {}
+    
+    this(vec3 position) {
+        this.position = position;
     }
     
-    this(BraLaEngine engine, vec3 position, float fov, float near, float far) {
-        this.engine = engine;
+    this(vec3 position, float fov, float near, float far) {
         this.position = position;
         this.fov = fov;
         this.near = near;
@@ -81,7 +82,7 @@ class FreeCamera : ICamera {
         return mat4.look_at(position, target, up);
     }
     
-    void apply() {
+    void apply(BraLaEngine engine) {
         engine.proj = mat4.perspective(engine.viewport.x, engine.viewport.y, fov, near, far);
         engine.view = camera;
     }
