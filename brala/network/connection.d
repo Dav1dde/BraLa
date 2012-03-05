@@ -40,15 +40,6 @@ class Connection {
     immutable string username;
     immutable string password;
     
-    // sent with servers login packet
-    int entity_id;
-    string level_type;
-    int server_mode;
-    int dimension;
-    byte difficulty;
-    ubyte max_players;
-    
-    
     this(string username, string password) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
@@ -85,12 +76,16 @@ class Connection {
     }
         
     void login() {
+        assert(callback !is null);
+        
         auto handshake = new c.Handshake(join([username, connected_to.toHostNameString(), connected_to.toPortString()], ";"));
         handshake.send(endianstream);
         
         if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake.");
+        
         auto repl_handshake = s.Handshake.recv(endianstream);
-        debug writefln("%s", repl_handshake);
+        callback(repl_handshake.id, cast(void*)repl_handshake);
+        
         if(repl_handshake.connection_hash != "-") {
             // currently not working, session login etc. works,
             // but server kicks with "Protocol Error"
@@ -114,15 +109,8 @@ class Connection {
         } else {
             throw new ServerException("Expected login or disconnect packet.");
         }
-        
-        debug writefln("%s", repl_login);
-        
-        entity_id = repl_login.entity_id;
-        level_type = repl_login.level_type;
-        server_mode = repl_login.mode;
-        dimension = repl_login.dimension;
-        difficulty = repl_login.difficulty;
-        max_players = repl_login.max_players;
+
+        callback(repl_login.id, cast(void*)repl_login);
         
         _logged_in = true;
     }
@@ -139,7 +127,7 @@ class Connection {
     
     void _poll() {
         ubyte packet_id = read!ubyte(endianstream);
-        
+
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id

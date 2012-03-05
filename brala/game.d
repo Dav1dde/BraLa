@@ -6,7 +6,7 @@ private {
     
     import std.socket : Address;
     
-    import gl3n.linalg : vec2i;
+    import gl3n.linalg : vec2i, vec3;
         
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
@@ -36,7 +36,6 @@ class BraLaGame : BaseGLFWEventHandler {
     
     this(BraLaEngine engine, void* window, string username, string password) {
         this.engine = engine;
-        this.character = new Character();
         connection = new ThreadedConnection(username, password);
         connection.callback = &dispatch_packets;
 
@@ -108,6 +107,22 @@ class BraLaGame : BaseGLFWEventHandler {
                            return on_packet!(p.cls)(cpacket);
             }
         }
+    }
+    
+    void on_packet(T : s.Handshake)(T packet) {
+        debug writefln("%s", packet);
+    }
+    
+    void on_packet(T : s.Login)(T packet) {
+        debug writefln("%s", packet);
+        
+        character = new Character(packet.entity_id);
+    }
+    
+    void on_packet(T : s.SpawnPosition)(T packet) {
+        debug writefln("%s", packet);
+        
+        character.position = vec3(packet.x, packet.y, packet.z);
     }
     
     void on_packet(T : s.Disconnect)(T packet) {
