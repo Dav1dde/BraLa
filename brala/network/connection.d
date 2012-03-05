@@ -74,7 +74,11 @@ class Connection {
         
         connect(to[0]);
     }
-        
+    
+    void send(T : IPacket)(T packet) {
+        packet.send(endianstream);
+    }
+    
     void login() {
         assert(callback !is null);
         

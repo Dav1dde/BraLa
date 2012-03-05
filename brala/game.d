@@ -129,6 +129,9 @@ class BraLaGame : BaseGLFWEventHandler {
         
         character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
         character.set_rotation(packet.yaw, packet.pitch);
+        
+        auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
+        connection.send(repl);
     }
 
     void on_packet(T : s.Disconnect)(T packet) {

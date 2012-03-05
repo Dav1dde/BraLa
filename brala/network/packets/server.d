@@ -199,7 +199,7 @@ class PreChunk : IPacket {
 }
 
 class MapChunk : IPacket {
-    mixin Packet!(0x33, int, "x", int, "z", bool, "contiguous", short, "primary_bitmap", byte, "add_bitmap",
+    mixin Packet!(0x33, int, "x", int, "z", bool, "contiguous", ushort, "primary_bitmap", ushort, "add_bitmap",
                         int, "compressed_size", int, "unused", ubyte[], "compressed_data");
 }
 
