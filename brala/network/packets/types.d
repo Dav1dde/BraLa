@@ -11,8 +11,10 @@ private {
     import std.string : format;
     import std.array : join;
     import std.conv : to;
-
-    import brala.network.packets.util : staticJoin;
+    import std.zlib : uncompress;
+    
+    import brala.dine.chunk : Chunk, Block;
+    import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read;
     import brala.exception : ServerException;
 }
@@ -163,7 +165,7 @@ struct Slot {
                         
             if(len != -1) {
                 ret.nbt_data = new byte[len];
-                s.readExact(ret.nbt_data.ptr, len); // TODO: this could me still big endian
+                s.readExact(ret.nbt_data.ptr, len); // TODO: this could be still big endian
             }
         }
         
@@ -183,3 +185,80 @@ struct Array(T, S) {
     S[] arr;
     alias arr this;
 }
+
+
+struct ChunkS {
+    int x;
+    int z;
+    bool contiguous;
+    ushort primary_bitmask;
+    ushort add_bitmask;
+    Chunk chunk;
+    ubyte[] biome_data;
+    
+    static ChunkS recv(Stream s) { // TODO: store data
+        ChunkS ret;
+        
+        ret.x = read!int(s);
+        ret.z = read!int(s);
+        ret.contiguous = read!bool(s);
+        ret.primary_bitmask = read!ushort(s);
+        ret.add_bitmask = read!ushort(s);
+        
+        int len = read!int(s);
+        read!int(s); // unused data
+        
+        ubyte[] compressed_data = new ubyte[len];
+        s.readExact(compressed_data.ptr, len);
+        ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
+        
+        Chunk chunk = new Chunk(ret.x, ret.z);
+        chunk.fill_chunk_with_nothing();
+        
+        size_t offset = 0;
+        foreach(i; 0..16) {
+            if(ret.primary_bitmask & 1 << i) {
+                ubyte[] temp = unc_data[offset..offset+4096];
+                
+                foreach(j, block_id; temp) {
+                    auto coords = coords_from_j(j, i);
+                    
+                    chunk.blocks[chunk.flat(coords.field)].id = block_id;
+                }
+                
+                offset += 4096;
+            }
+        }
+        
+        foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {;
+            foreach(i; 0..16) {
+                if(ret.primary_bitmask & 1 << i) { 
+                    ubyte[] temp = unc_data[offset..offset+2048];
+                    
+                    for(size_t j = 0; j < temp.length; j++) {
+                        ubyte dj = temp[j];
+                        auto coords_m1 = coords_from_j(j, i);
+                        auto coords_m2 = coords_from_j(++j, i);
+                        
+                        mixin("chunk.blocks[chunk.flat(coords_m1.field)]." ~ f ~ " = dj & 0x0F;");
+                        mixin("chunk.blocks[chunk.flat(coords_m2.field)]." ~ f ~ " = dj >> 4;");
+                    }
+                    
+                    offset += 2048;
+                }
+            }
+        }
+        
+        ret.chunk = chunk;
+        
+        // skip add => last 256 bytes = biome_data
+        if(ret.contiguous) {
+            ret.biome_data = unc_data[$-256..$];
+        }
+        
+        return ret;
+    }
+    
+//     string toString() { return ""; } 
+}
+

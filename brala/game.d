@@ -142,6 +142,7 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T)(T packet) {
 //         debug writefln("Unhandled packet: %s", packet);
     }
+    
     // UI-Events
     override void on_key_down(int key) {
         keymap[key] = true;

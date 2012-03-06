@@ -5,6 +5,7 @@ private {
 
 public {
     import std.typetuple : TypeTuple, staticMap, staticIndexOf, NoDuplicates;
+    import std.typecons : Tuple;
     import std.metastrings : toStringNow;
     import std.stream : Stream;
     import std.conv : to;
@@ -133,4 +134,12 @@ mixin template Packet(ubyte id_, Vars...) {
     const ubyte id = id_;
     
     mixin(inject_data());
+}
+
+alias Tuple!(uint, "x", uint, "y", uint, "z") Point3D;
+
+Point3D coords_from_j(uint j, uint y) {
+    return Point3D((j & 0xF0) >> 4,
+                    y*16 + (j & 0x0F),
+                    j >> 8);    
 }
