@@ -4,8 +4,11 @@ private {
     import std.c.string : memset;
     import std.bitmanip : bitfields;
     import std.string : format;
+    import std.typecons : Tuple, tuple;
+    
+    import gl3n.linalg : vec3i;
 
-    import brala.dine.util : calloc, malloc, free;
+    import brala.dine.util : calloc, malloc, free, log2_ub;
 }
 
 
@@ -19,10 +22,17 @@ struct Block {
 }
 
 class Chunk {
+    // width, height, depth must be a power of two
     const uint width = 16;
     const uint height = 256;
     const uint depth = 16;
-    const uint block_count = 16*256*16;
+    
+    const uint log2width = log2_ub(width);
+    const uint log2height = log2_ub(height);
+    const uint log2depth = log2_ub(depth);
+    const uint log2heightdepth = log2_ub(height*depth);
+    
+    const uint block_count = width*height*depth;
     const uint data_size = block_count*Block.sizeof;
     
     static Block* empty_blocks;
@@ -84,7 +94,23 @@ class Chunk {
         return format("Chunk(x : %d, z : %d)", x, z);
     }
     
-    static size_t flat(int x, int y, int z) {
-        return y + z*(height-1) + x*(height-1)*(width-1);
+    static uint to_flat(vec3i inp) {
+        return to_flat(inp.x, inp.y, inp.z);
     }
+    
+    static uint to_flat(uint x, uint y, uint z)
+        in { assert(x <= width && y <= height && z <= depth); }
+        out (result) { assert(result <= block_count); }
+        body {
+            return y + z*height + x*height*depth;
+        }
+    
+    static vec3i from_flat(uint flat)
+        in { assert(flat <= block_count); }
+        out (result) { assert(result.vector[0] <= width && result.vector[1] <= height && result.vector[2] <= depth); }
+        body {
+            return vec3i(flat >> log2heightdepth, // x: flat / (height*depth)
+                         flat & (height-1), // y: flat % height
+                         (flat >> log2height) & (depth-1)); // z: (flat / height) % depth
+        }
 }

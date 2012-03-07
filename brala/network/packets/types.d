@@ -223,7 +223,7 @@ struct ChunkS { // TODO: implement send
                 foreach(j, block_id; temp) {
                     auto coords = coords_from_j(j, i);
                     
-                    chunk.blocks[chunk.flat(coords.field)].id = block_id;
+                    chunk.blocks[chunk.to_flat(coords.field)].id = block_id;
                 }
                 
                 offset += 4096;
@@ -241,8 +241,8 @@ struct ChunkS { // TODO: implement send
                         auto coords_m2 = coords_from_j(++j, i);
                         
                         // NOTE: the data is maybe extracted in the wrong order, still big endian ...
-                        mixin("chunk.blocks[chunk.flat(coords_m1.field)]." ~ f ~ " = dj & 0x0F;");
-                        mixin("chunk.blocks[chunk.flat(coords_m2.field)]." ~ f ~ " = dj >> 4;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m1.field)]." ~ f ~ " = dj & 0x0F;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m2.field)]." ~ f ~ " = dj >> 4;");
                     }
                     
                     offset += 2048;
