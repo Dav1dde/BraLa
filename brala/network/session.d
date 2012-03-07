@@ -7,7 +7,7 @@ private {
     import std.conv : to;
 
     import brala.network.util : urlencode;    
-    import brala.exception : SessionException;
+    import brala.exception : SessionError;
     
     debug import std.stdio : writefln;
 }
@@ -43,7 +43,7 @@ class Session {
             this.cusername = s[2];
             this.session_id = s[3];
         } else {
-            throw new SessionException(`Unable to login as user "` ~ username ~ `".`);
+            throw new SessionError(`Unable to login as user "` ~ username ~ `".`);
         }
      
         _logged_in = true;
@@ -55,7 +55,7 @@ class Session {
         debug writefln(`(SESSION) Server returned: "%s"`, res);
         
         if(res != "OK") {
-            throw new SessionException(res.idup);
+            throw new SessionError(res.idup);
         }
     }
     

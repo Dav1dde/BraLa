@@ -15,7 +15,7 @@ private {
     import brala.event : register_glfw_error_callback;
     import brala.config : load_default_resources;
     import brala.network.packets.types : IPacket;
-    import brala.exception : InitException;
+    import brala.exception : InitError;
     
     import std.stdio : writefln;
 }
@@ -26,7 +26,7 @@ static this() {
     DerelictIL.load();
 
     if(!glfwInit()) {
-        throw new InitException("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
+        throw new InitError("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
     }
     
     ilInit();
@@ -54,7 +54,7 @@ GLFWwindow open_glfw_win(int width, int height) {
     }
     
     if(!_window) {
-        throw new InitException("I am sorry man, you need at least OpenGL 3.2.");
+        throw new InitError("I am sorry man, you need at least OpenGL 3.2.");
     }
     
     debug {} else { glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED); }
@@ -86,13 +86,13 @@ int main(string[] args) {
         try {
             width = to!(int)(args[5]);
         } catch(ConvException) {
-            throw new InitException("width is not a number.");
+            throw new InitError("Width is not a number.");
         }
         
         try {
             height = to!(int)(args[6]);
         } catch(ConvException) {
-            throw new InitException("height is not a number.");
+            throw new InitError("Height is not a number.");
         }
     }
     

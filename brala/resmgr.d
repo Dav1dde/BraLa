@@ -14,7 +14,7 @@ private {
     import glamour.texture : Texture2D;
     
     import brala.types : Image;
-    import brala.exception : ResmgrException;
+    import brala.exception : ResmgrError;
     
     debug import std.stdio : writefln;
 }
@@ -136,7 +136,7 @@ class ResourceManager {
         debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
         
         if(!exists(filename)) {
-            throw new ResmgrException("Can not load file \"" ~ filename ~ "\", it does not exist!");
+            throw new ResmgrError("Can not load file \"" ~ filename ~ "\", it does not exist!");
         }
         
         string idt = id ~ T.stringof; 
@@ -144,7 +144,7 @@ class ResourceManager {
            (is(T : Shader) && id in shaders) ||
            (is(T : Texture2D) && id in textures) ||
            idt in open_tasks) {
-            throw new ResmgrException("ID: \"" ~ id ~ "\" is already used.");
+            throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
         }
         
         synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
@@ -180,7 +180,7 @@ class ResourceManager {
                 case IMAGE_TYPE: add_image(res.id, res.filename); break;
                 case SHADER_TYPE: add_shader(res.id, res.filename); break;
                 case TEXTURE2D_TYPE: add_texture(res.id, res.filename); break;
-                default: throw new ResmgrException("unknown resource-type");
+                default: throw new ResmgrError("Unknown resource-type.");
             }
         }
     }
@@ -199,7 +199,7 @@ class ResourceManager {
                 case IMAGE_TYPE: add_image(res.id, res.filename); break;
                 case SHADER_TYPE: add_shader(res.id, res.filename); break;
                 case TEXTURE2D_TYPE: textasks ~= TTT(add_image(res.id, res.filename), res); break;
-                default: throw new ResmgrException("unknown resource-type");
+                default: throw new ResmgrError("Unknown resource-type.");
             }
         }           
     
@@ -246,7 +246,7 @@ class ResourceManager {
             case ".glsl": return SHADER_TYPE;
             case ".texture": return TEXTURE2D_TYPE;
             case ".texture2d": return TEXTURE2D_TYPE;
-            default: throw new ResmgrException("unable to guess resource-type");
+            default: throw new ResmgrError("Unable to guess resource-type.");
         }
     }
     

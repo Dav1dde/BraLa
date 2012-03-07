@@ -10,37 +10,37 @@ class BraLaException : Exception {
     }
 }
 
-class ResmgrException : BraLaException {
+class ResmgrError : BraLaException {
     this(string msg) {
         super(msg);
     }
 }
 
-class ImageException : BraLaException {
+class ImageError : BraLaException {
     this(string msg) {
         super(msg);
     }
 }
 
-class InitException : BraLaException {
+class InitError : BraLaException {
     this(string msg) {
         super(msg);
     }
 }
 
-class ConnectionException : BraLaException {
+class ConnectionError : BraLaException {
     this(string msg) {
         super(msg);
     }
 }
 
-class ServerException : ConnectionException {
+class ServerError : ConnectionError {
     this(string msg) {
         super(msg);
     }
 }
 
-class SessionException : BraLaException {
+class SessionError : BraLaException {
     this(string msg) {
         super(msg);
     }
@@ -52,7 +52,7 @@ class FatalException : Exception {
     }
 }
 
-class AllocationException : FatalException {
+class AllocationError : FatalException {
     this(string msg) {
         super(msg);
     }

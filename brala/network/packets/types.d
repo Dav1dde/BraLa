@@ -16,7 +16,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read;
-    import brala.exception : ServerException;
+    import brala.exception : ServerError;
 }
 
 abstract class IPacket {
@@ -97,7 +97,7 @@ struct EntityMetadataS {
                 case 4: m._4 = read!string(s); break;
                 case 5: m._5 = read!(short, byte, short)(s); break;
                 case 6: m._6 = read!(int, int, int)(s); break;
-                default: throw new ServerException("Invalid type in entity metadata.");
+                default: throw new ServerError("Invalid type in entity metadata.");
             }
             
             ret.metadata[index] = m;

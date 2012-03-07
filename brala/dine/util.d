@@ -4,14 +4,14 @@ private {
     import clib = std.c.stdlib;
     import std.string : format;
 
-    import brala.exception : AllocationException;
+    import brala.exception : AllocationError;
 }
 
 void* malloc(size_t size) {
     void* ptr = clib.malloc(size);
     
     if(ptr is null) {
-        throw new AllocationException(format("Unable to allocate memory with malloc(%d) (out of memory?).", size));
+        throw new AllocationError(format("Unable to allocate memory with malloc(%d) (out of memory?).", size));
     }
     
     return ptr;
@@ -21,7 +21,7 @@ void* calloc(size_t num, size_t size) {
     void* ptr = clib.calloc(num, size);
     
     if(ptr is null) {
-        throw new AllocationException(format("Unable to allocate memory with calloc(%d, %d) (out of memory?).", num, size));
+        throw new AllocationError(format("Unable to allocate memory with calloc(%d, %d) (out of memory?).", num, size));
     }
     
     return ptr;

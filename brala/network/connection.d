@@ -10,7 +10,7 @@ private {
     import std.string : format;
     import std.array : join;
         
-    import brala.exception : ConnectionException, ServerException;
+    import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import brala.network.packets.types : IPacket;
@@ -85,7 +85,7 @@ class Connection {
         auto handshake = new c.Handshake(join([username, connected_to.toHostNameString(), connected_to.toPortString()], ";"));
         handshake.send(endianstream);
         
-        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerException("Server didn't respond with a handshake.");
+        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerError("Server didn't respond with a handshake.");
         
         auto repl_handshake = s.Handshake.recv(endianstream);
         callback(repl_handshake.id, cast(void*)repl_handshake);
@@ -109,9 +109,9 @@ class Connection {
         if(packet_id == s.Login.id) {
             repl_login = s.Login.recv(endianstream);
         } else if(packet_id == s.Disconnect.id) {
-            throw new ServerException("Disconnect, " ~ s.Disconnect.recv(endianstream).reason);
+            throw new ServerError("Disconnect, " ~ s.Disconnect.recv(endianstream).reason);
         } else {
-            throw new ServerException("Expected login or disconnect packet.");
+            throw new ServerError("Expected login or disconnect packet.");
         }
 
         callback(repl_login.id, cast(void*)repl_login);
@@ -139,7 +139,7 @@ class Connection {
                            static if(__traits(compiles, on_packet!(p.cls)))  on_packet(packet);
                            return callback(p.id, cast(void*)packet);
             }
-            default: throw new ServerException(format("Invalid packet: 0x%02x.", packet_id));
+            default: throw new ServerError(format("Invalid packet: 0x%02x.", packet_id));
         }
     }
     

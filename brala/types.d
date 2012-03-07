@@ -10,7 +10,7 @@ private {
     import std.string : toStringz, format;
     import std.traits : ReturnType, isCallable;
     
-    import brala.exception : ImageException;
+    import brala.exception : ImageError;
 }
 
 version(stb) {
@@ -38,7 +38,7 @@ version(stb) {
             ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
 
             if(data is null) {
-                throw new ImageException("Unable to load image: " ~ filename);
+                throw new ImageError("Unable to load image: " ~ filename);
             }
             
             scope(exit) stbi_image_free(data);
@@ -51,7 +51,7 @@ version(stb) {
             switch(comp) {
                 case 3: image_format = GL_RGB; break;
                 case 4: image_format = GL_RGBA; break;
-                default: throw new ImageException("Unknown/Unsupported stbi image format");
+                default: throw new ImageError("Unknown/Unsupported stbi image format");
             }
 
             return Image(d.ptr, x, y, image_format, GL_UNSIGNED_BYTE);
