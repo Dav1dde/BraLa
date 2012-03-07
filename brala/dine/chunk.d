@@ -1,10 +1,11 @@
 module brala.dine.chunk;
 
 private {
-    import std.c.stdlib : malloc, calloc, free;
     import std.c.string : memset;
     import std.bitmanip : bitfields;
     import std.string : format;
+
+    import brala.dine.util : calloc, malloc, free;
 }
 
 
@@ -17,7 +18,6 @@ struct Block {
                      ubyte, "", 4));  // padding
 }
 
-// TODO: replace malloc with a custom malloc version, which checks the return-value of malloc
 class Chunk {
     const uint width = 16;
     const uint height = 256;

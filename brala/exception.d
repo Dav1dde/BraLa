@@ -28,12 +28,6 @@ class InitException : BraLaException {
     }
 }
 
-class FatalException : BraLaException {
-    this(string msg) {
-        super(msg);
-    }
-}
-
 class ConnectionException : BraLaException {
     this(string msg) {
         super(msg);
@@ -47,6 +41,18 @@ class ServerException : ConnectionException {
 }
 
 class SessionException : BraLaException {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+class FatalException : Exception {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+class AllocationException : FatalException {
     this(string msg) {
         super(msg);
     }
