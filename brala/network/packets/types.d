@@ -165,7 +165,7 @@ struct Slot {
                         
             if(len != -1) {
                 ret.nbt_data = new byte[len];
-                s.readExact(ret.nbt_data.ptr, len); // TODO: this could be still big endian
+                s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
             }
         }
         
@@ -187,7 +187,7 @@ struct Array(T, S) {
 }
 
 
-struct ChunkS {
+struct ChunkS { // TODO: implement send
     int x;
     int z;
     bool contiguous;
@@ -196,7 +196,7 @@ struct ChunkS {
     Chunk chunk;
     ubyte[] biome_data;
     
-    static ChunkS recv(Stream s) { // TODO: store data
+    static ChunkS recv(Stream s) {
         ChunkS ret;
         
         ret.x = read!int(s);
@@ -230,7 +230,7 @@ struct ChunkS {
             }
         }
         
-        foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {;
+        foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {
             foreach(i; 0..16) {
                 if(ret.primary_bitmask & 1 << i) { 
                     ubyte[] temp = unc_data[offset..offset+2048];
@@ -259,6 +259,10 @@ struct ChunkS {
         return ret;
     }
     
-//     string toString() { return ""; } 
+    string toString() {
+        return format(`ChunkS(int x : "%d", int z : "%d", bool contiguous : "%s", ushort primary_bitmask : "%016b", `
+                             `ushort add_bitmask : "%016b", Chunk chunk : "%s", ubyte[] biome_data : "%s"`,
+                              x, z, contiguous, primary_bitmask, add_bitmask, chunk, biome_data[0..1]);
+    } 
 }
 
