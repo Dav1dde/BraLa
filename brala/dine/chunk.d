@@ -4,7 +4,6 @@ private {
     import std.c.string : memset;
     import std.bitmanip : bitfields;
     import std.string : format;
-    import std.typecons : Tuple, tuple;
     
     import gl3n.linalg : vec3i;
 
@@ -48,6 +47,8 @@ class Chunk {
     immutable int x;
     immutable int z;
     
+    bool dirty;
+    
     bool empty;
     Block* blocks;
     
@@ -60,6 +61,7 @@ class Chunk {
     this(int x, int z) {
         blocks = empty_blocks;
         empty = true;
+        dirty = false;
         
         this.x = x;
         this.z = z;
@@ -75,12 +77,16 @@ class Chunk {
         free_chunk();
         
         this.blocks = blocks;
-        this.empty = false;
+        empty = false;
+        dirty = true;
     }
     
     void fill_chunk_with_nothing() {
+        free_chunk();
+        
         blocks = cast(Block*)calloc(block_count, Block.sizeof);
         empty = false;
+        dirty = true;
     }
     
     void empty_chunk() {
@@ -88,6 +94,32 @@ class Chunk {
         blocks = empty_blocks;
         empty = true;
     }
+    
+    int opApply(int delegate(ref Block) dg)
+        in { assert(!empty); }
+        body {
+            int result;
+            
+            foreach(b; 0..block_count) {
+                result = dg(blocks[b]);
+                if(result) break;
+            }
+            
+            return result;
+        }
+    
+    int opApply(int delegate(uint, ref Block) dg)
+        in { assert(!empty); }
+        body {
+            int result;
+            
+            foreach(b; 0..block_count) {
+                result = dg(b, blocks[b]);
+                if(result) break;
+            }
+            
+            return result;
+        }
     
     string toString() {
         return format("Chunk(x : %d, z : %d)", x, z);
