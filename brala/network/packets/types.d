@@ -194,7 +194,7 @@ struct ChunkS { // TODO: implement send
     ushort primary_bitmask;
     ushort add_bitmask;
     Chunk chunk;
-    ubyte[] biome_data;
+    alias chunk this;
     
     static ChunkS recv(Stream s) {
         ChunkS ret;
@@ -212,7 +212,7 @@ struct ChunkS { // TODO: implement send
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
         
-        Chunk chunk = new Chunk(ret.x, ret.z);
+        Chunk chunk = new Chunk();
         chunk.fill_chunk_with_nothing();
         
         size_t offset = 0;
@@ -250,20 +250,20 @@ struct ChunkS { // TODO: implement send
             }
         }
         
-        ret.chunk = chunk;
-        
         // skip add => last 256 bytes = biome_data
         if(ret.contiguous) {
-            ret.biome_data = unc_data[$-256..$];
+            chunk.biome_data = unc_data[$-256..$];
         }
+        
+        ret.chunk = chunk;
         
         return ret;
     }
     
     string toString() {
         return format(`ChunkS(int x : "%d", int z : "%d", bool contiguous : "%s", ushort primary_bitmask : "%016b", `
-                             `ushort add_bitmask : "%016b", Chunk chunk : "%s", ubyte[] biome_data : "%s"`,
-                              x, z, contiguous, primary_bitmask, add_bitmask, chunk, biome_data[0..1]);
+                             `ushort add_bitmask : "%016b", Chunk chunk : "%s")`,
+                              x, z, contiguous, primary_bitmask, add_bitmask, chunk);
     } 
 }
 

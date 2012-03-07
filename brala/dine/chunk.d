@@ -3,7 +3,6 @@ module brala.dine.chunk;
 private {
     import std.c.string : memset;
     import std.bitmanip : bitfields;
-    import std.string : format;
     
     import gl3n.linalg : vec3i;
 
@@ -44,13 +43,11 @@ class Chunk {
         free(empty_blocks);
     }
     
-    immutable int x;
-    immutable int z;
-    
     bool dirty;
     
     bool empty;
     Block* blocks;
+    ubyte[] biome_data;
     
     protected void free_chunk() {
         if(!empty) {
@@ -58,13 +55,10 @@ class Chunk {
         }
     }
     
-    this(int x, int z) {
+    this() {
         blocks = empty_blocks;
         empty = true;
         dirty = false;
-        
-        this.x = x;
-        this.z = z;
     }
     
     ~this() {
@@ -120,11 +114,7 @@ class Chunk {
             
             return result;
         }
-    
-    string toString() {
-        return format("Chunk(x : %d, z : %d)", x, z);
-    }
-    
+            
     static uint to_flat(vec3i inp) {
         return to_flat(inp.x, inp.y, inp.z);
     }

@@ -149,8 +149,8 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_packet(T : s.MapChunk)(T packet) {
-        debug writefln("adding chunk: %s", packet.chunk);
-        _current_world.add_chunk(packet.chunk.chunk, vec2i(packet.chunk.x, packet.chunk.z));
+        debug writefln("adding chunk: %s", packet);
+        _current_world.add_chunk(packet.chunk, vec2i(packet.chunk.x, packet.chunk.z));
     }
     
     void on_packet(T : s.PlayerPositionLook)(T packet) {
