@@ -79,8 +79,7 @@ class Chunk {
     }
     
     void fill_chunk_with_nothing() {
-        blocks = cast(Block*)malloc(data_size);
-        memset(blocks, 0, data_size);
+        blocks = cast(Block*)calloc(block_count, Block.sizeof);
         empty = false;
     }
     
