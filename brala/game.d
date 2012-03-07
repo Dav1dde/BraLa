@@ -7,12 +7,14 @@ private {
     import std.socket : Address;
     import std.conv : to;
     
-    import gl3n.linalg : vec2i, vec3;
+    import gl3n.linalg : vec2i, vec3i, vec3;
         
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
+    import brala.dine.world : World;
+    import brala.dine.chunk : Chunk;
     import brala.character : Character;
     import brala.engine : BraLaEngine;
     import brala.event : BaseGLFWEventHandler;
@@ -29,6 +31,9 @@ class BraLaGame : BaseGLFWEventHandler {
     ThreadedConnection connection;
     
     Character character;
+    World[int] worlds;
+    protected World _current_world;    
+    @property current_world() { return _current_world; }
     
     DefaultAA!(bool, int, false) keymap;
     vec2i mouse_offset = vec2i(0, 0);
@@ -117,6 +122,17 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.Login)(T packet) {
         debug writefln("%s", packet);
         
+        if(_current_world !is null) {
+            _current_world.remove_all_chunks();
+        }
+        
+        if(World* w = packet.dimension in worlds) {
+            _current_world = *w;
+        } else {
+            _current_world = new World();
+            worlds[packet.dimension] = _current_world;
+        }
+        
         character = new Character(packet.entity_id);
     }
     
@@ -126,6 +142,15 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void on_packet(T : s.SpawnPosition)(T packet) {
         debug writefln("%s", packet);
+        
+        if(_current_world !is null) {
+            _current_world.spawn = vec3i(packet.x, packet.y, packet.z);
+        }
+    }
+    
+    void on_packet(T : s.MapChunk)(T packet) {
+        debug writefln("adding chunk: %s", packet.chunk);
+        _current_world.add_chunk(packet.chunk.chunk, vec2i(packet.chunk.x, packet.chunk.z));
     }
     
     void on_packet(T : s.PlayerPositionLook)(T packet) {
