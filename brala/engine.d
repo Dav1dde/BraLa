@@ -15,7 +15,7 @@ private {
 
 
 class BraLaEngine {
-    private vec2i _viewport = vec2i(0, 0);
+    protected vec2i _viewport = vec2i(0, 0);
     Timer timer;
 
     @property vec2i viewport() {
@@ -36,7 +36,7 @@ class BraLaEngine {
         return view * model;
     }
     
-    private Shader _current = null;
+    protected Shader _current = null;
     
     @property Shader current() {
         return _current;

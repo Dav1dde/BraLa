@@ -25,9 +25,9 @@ class Connection {
     TcpSocket socket;
     SocketStream socketstream;
     EndianStream endianstream;
-    private bool _connected = false;
-    private Address connected_to;
-    private bool _logged_in = false;
+    protected bool _connected = false;
+    protected Address connected_to;
+    protected bool _logged_in = false;
     bool errored = false;
     
     @property connected() { return _connected; }
@@ -150,18 +150,18 @@ class Connection {
         }
     }
     
-    private void on_packet(T : s.KeepAlive)(T packet) {
+    protected void on_packet(T : s.KeepAlive)(T packet) {
         (new c.KeepAlive(packet.keepalive_id)).send(endianstream);
     }
     
-    private void on_packet(T : s.Disconnect)(T packet) {
+    protected void on_packet(T : s.Disconnect)(T packet) {
         socket.close();
         _connected = false;
     }
 }
 
 class ThreadedConnection : Connection {
-    private Thread _thread = null;
+    protected Thread _thread = null;
     @property Thread thread() { return _thread; }
     
     

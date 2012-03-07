@@ -41,7 +41,7 @@ class Chunk {
     bool empty;
     Block* blocks;
     
-    private void free_chunk() {
+    protected void free_chunk() {
         if(!empty) {
             free(blocks);
         }

@@ -114,9 +114,9 @@ enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE2D_TYPE }
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
 class ResourceManager {
-    private Object _lock;
-    private TaskPool task_pool;
-    private CBS[string] open_tasks;
+    protected Object _lock;
+    protected TaskPool task_pool;
+    protected CBS[string] open_tasks;
     
     Shader[string] shaders;
     Texture2D[string] textures;
@@ -132,7 +132,7 @@ class ResourceManager {
         }
     } 
   
-    private auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
+    protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
         debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
         
         if(!exists(filename)) {
@@ -250,7 +250,7 @@ class ResourceManager {
         }
     }
     
-    private void done_loading(T)(T res, string id) if(is_loadable!T){
+    protected void done_loading(T)(T res, string id) if(is_loadable!T){
         debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
                                                           
         synchronized (_lock) { 

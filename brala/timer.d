@@ -5,9 +5,9 @@ public import core.time : TickDuration;
 
 
 class Timer {
-    private TickDuration stime;
-    package bool _paused = false;
-    package bool _started = false;
+    protected TickDuration stime;
+    protected bool _paused = false;
+    protected bool _started = false;
     
     this() {}
     
