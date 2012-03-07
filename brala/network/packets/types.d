@@ -240,6 +240,7 @@ struct ChunkS { // TODO: implement send
                         auto coords_m1 = coords_from_j(j, i);
                         auto coords_m2 = coords_from_j(++j, i);
                         
+                        // NOTE: the data is maybe extracted in the wrong order, still big endian ...
                         mixin("chunk.blocks[chunk.flat(coords_m1.field)]." ~ f ~ " = dj & 0x0F;");
                         mixin("chunk.blocks[chunk.flat(coords_m2.field)]." ~ f ~ " = dj >> 4;");
                     }

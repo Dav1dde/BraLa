@@ -120,6 +120,10 @@ class BraLaGame : BaseGLFWEventHandler {
         character = new Character(packet.entity_id);
     }
     
+    void on_packet(T : s.ChatMessage)(T packet) {
+        debug writefln("%s", packet);
+    }
+    
     void on_packet(T : s.SpawnPosition)(T packet) {
         debug writefln("%s", packet);
     }
