@@ -25,6 +25,8 @@ struct Block {
     }
 }
 
+// NOTE to prgrammer, ctor will maybe called from a seperate thread
+// => dont do opengl stuff in the ctor
 class Chunk {
     // width, height, depth must be a power of two
     const uint width = 16;
@@ -55,7 +57,15 @@ class Chunk {
     Block* blocks;
     ubyte[] biome_data;
     
-    Buffer vbo;
+    protected Buffer _vbo;
+    @property Buffer vbo() {
+        if(_vbo is null) {
+            _vbo = new Buffer();
+        }
+        
+        return _vbo;
+    }
+    @property void vbo(Buffer b) { _vbo = b; }
     
     protected void free_chunk() {
         if(!empty) {
@@ -65,7 +75,6 @@ class Chunk {
     
     this() {
         blocks = empty_blocks;
-        vbo = new Buffer();
         empty = true;
         dirty = false;
     }
