@@ -46,6 +46,12 @@ class SessionError : BraLaException {
     }
 }
 
+class WorldError : BraLaException {
+    this(string msg) {
+        super(msg);
+    }
+}
+
 class FatalException : Exception {
     this(string msg) {
         super(msg);

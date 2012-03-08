@@ -17,6 +17,10 @@ struct Block {
                      ubyte, "block_light", 4,
                      ubyte, "sky_light", 4,
                      ubyte, "", 4));  // padding
+                     
+    const bool opEquals(ref Block other) {
+        return other.id == id && other.metadata == metadata;
+    }
 }
 
 class Chunk {
@@ -87,9 +91,36 @@ class Chunk {
         free(blocks);
         blocks = empty_blocks;
         empty = true;
+        dirty = true;
     }
     
-    int opApply(int delegate(ref Block) dg)
+    Block opIndex(size_t flat)
+    in { assert(!empty); assert(flat < block_count); }
+    body {
+        return blocks[flat];        
+    }
+    
+    Block opIndex(vec3i position)
+        in { assert(!empty); }
+        body {
+            return blocks[to_flat(position)];
+        }
+    
+    void opIndexAssign(Block value, size_t flat)
+        in { assert(!empty); assert(flat < block_count); }
+        body {
+            blocks[flat] = value;
+            dirty = true;
+        }
+        
+    void opIndexAssign(Block value, vec3i position)
+        in { assert(!empty); }
+        body {
+            blocks[to_flat(position)] = value;
+            dirty = true;
+        }
+    
+    int opApply(int delegate(const ref Block) dg)
         in { assert(!empty); }
         body {
             int result;
@@ -102,7 +133,7 @@ class Chunk {
             return result;
         }
     
-    int opApply(int delegate(uint, ref Block) dg)
+    int opApply(int delegate(uint, const ref Block) dg)
         in { assert(!empty); }
         body {
             int result;
@@ -121,13 +152,13 @@ class Chunk {
     
     static uint to_flat(uint x, uint y, uint z)
         in { assert(x <= width && y <= height && z <= depth); }
-        out (result) { assert(result <= block_count); }
+        out (result) { assert(result < block_count); }
         body {
             return y + z*height + x*height*depth;
         }
     
     static vec3i from_flat(uint flat)
-        in { assert(flat <= block_count); }
+        in { assert(flat < block_count); }
         out (result) { assert(result.vector[0] <= width && result.vector[1] <= height && result.vector[2] <= depth); }
         body {
             return vec3i(flat >> log2heightdepth, // x: flat / (height*depth)
