@@ -1,6 +1,8 @@
 module brala.dine.chunk;
 
 private {
+    import glamour.vbo : Buffer;
+    
     import std.c.string : memset;
     import std.bitmanip : bitfields;
     
@@ -53,6 +55,8 @@ class Chunk {
     Block* blocks;
     ubyte[] biome_data;
     
+    Buffer vbo;
+    
     protected void free_chunk() {
         if(!empty) {
             free(blocks);
@@ -61,6 +65,7 @@ class Chunk {
     
     this() {
         blocks = empty_blocks;
+        vbo = new Buffer();
         empty = true;
         dirty = false;
     }
