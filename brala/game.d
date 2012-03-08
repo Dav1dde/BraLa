@@ -86,7 +86,12 @@ class BraLaGame : BaseGLFWEventHandler {
         
         display();
         
-        return quit || keymap[GLFW_KEY_ESCAPE];
+        if(quit || keymap[GLFW_KEY_ESCAPE]) {
+            disconnect("Goodboy from BraLa.");
+            return true;
+        } else {
+            return false;
+        }
     }
     
     void display() {
@@ -100,6 +105,12 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void connect(string host, ushort port) {
         connection.connect(host, port);
+    }
+    
+    void disconnect(string message = "") {
+        if(connection.connected) {
+            connection.send((new c.Disconnect(message)));
+        }
     }
     
     void login() { // this is blocking

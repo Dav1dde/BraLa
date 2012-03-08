@@ -104,3 +104,5 @@ public alias server.PluginMessage PluginMessage;
 class ServerListPing : IPacket {
     mixin Packet!(0xFE);
 }
+
+public alias server.Disconnect Disconnect;
