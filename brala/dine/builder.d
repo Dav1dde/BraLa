@@ -63,8 +63,17 @@ struct BlockBuilder {
         
         foreach(i; 0..s.positions.length) { s.positions[i] *= factor; }
         
-        block_data ~= raw_vectors(to_triangles(s.positions));
-        block_data ~= s.normal.vector;
-        block_data ~= raw_vectors(s.texcoords);
+        float[6] rp = raw_vectors(to_triangles(s.positions));
+        float[6] rt = raw_vectors(to_triangles(s.texcoords));
+        
+        // triangle 1
+        block_data ~= rp[0..3];
+        foreach(_; 0..3) block_data ~= s.normal.vector;
+        block_data ~= rt[0..3];
+        
+        // triangle 2
+        block_data ~= rp[3..$];
+        foreach(_; 0..3) block_data ~= s.normal.vector;
+        block_data ~= rt[3..$];
     }
 }

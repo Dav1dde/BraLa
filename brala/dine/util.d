@@ -55,7 +55,7 @@ uint log2_ub(uint v) { // unrolled bitwise log2
     return r + (v >> 1);
 }
 
-vec3[6] to_triangles(vec3[4] quad) {
+T[6] to_triangles(T)(T[4] quad) if(is_vector!T) {
     return [quad[0], quad[1], quad[2],
             quad[0], quad[2], quad[3]];
 }

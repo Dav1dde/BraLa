@@ -36,16 +36,16 @@ class BraLaEngine {
         return view * model;
     }
     
-    protected Shader _current = null;
+    protected Shader _current_shader = null;
     
-    @property Shader current() {
-        return _current;
+    @property Shader current_shader() {
+        return _current_shader;
     }
     
-    @property void current(Shader shader) {
-        _current.unbind();
-        _current = shader;
-        _current.bind();
+    @property void current_shader(Shader shader) {
+        _current_shader.unbind();
+        _current_shader = shader;
+        _current_shader.bind();
     }
     
     this(int width, int height, GLVersion glv) {
@@ -90,11 +90,11 @@ class BraLaEngine {
     }
     
     void use(Shader shader) {
-        current = shader;
+        current_shader = shader;
     }
     
     void flush_uniforms() {
-        flush_uniforms(_current, true);
+        flush_uniforms(_current_shader, true);
     }
     
     void flush_uniforms(Shader shader, bool bound = false) {

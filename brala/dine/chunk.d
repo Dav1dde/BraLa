@@ -1,6 +1,7 @@
 module brala.dine.chunk;
 
 private {
+    import glamour.gl : GLuint, GLenum, GL_FLOAT;
     import glamour.vbo : Buffer;
     
     import std.c.string : memset;
@@ -10,6 +11,7 @@ private {
 
     import brala.dine.builder : Side, BlockBuilder;
     import brala.dine.util : calloc, malloc, free, log2_ub;
+    import brala.engine : BraLaEngine;
 }
 
 
@@ -63,6 +65,8 @@ class Chunk {
     ubyte[] biome_data;
     
     Buffer vbo;
+    GLenum vbo_type;
+    GLenum vbo_vcount;
     
     protected void free_chunk() {
         if(!empty) {
@@ -120,13 +124,15 @@ class Chunk {
         }
     
     // rendering
+    
+    // fills the vbo with the chunk content
     void tesselate() {
         if(vbo is null) {
             vbo = new Buffer();
         }
         
         if(dirty) {
-            void[] data;
+            float[] data;
             
             foreach(x; 0..width)
             foreach(y; 0..height)
@@ -140,10 +146,30 @@ class Chunk {
                 if(get_block(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
                 if(get_block(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
                 
-                data ~= cast(void[])bb.block_data;
+                data ~= bb.block_data;
             }
+            
+            vbo_type = GL_FLOAT;
+            vbo_vcount = data.length / 8; // 8 = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v
+            
+            vbo.set_data(data, GL_FLOAT);
         }
     }
+    
+    void bind(BraLaEngine engine)
+        in { assert(vbo !is null); }
+        body {
+            GLuint position = engine.current_shader.get_attrib_location("position");
+            GLuint normal = engine.current_shader.get_attrib_location("normal");
+            GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
+            
+            // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v
+            uint stride = (3+3+2)*float.sizeof;
+            
+            vbo.bind(position, 3, 0, stride);
+            vbo.bind(normal, 3, 3*float.sizeof, stride);
+            vbo.bind(texcoord, 2, (3+3)*float.sizeof, stride);
+        }
     
     // operator overloading
     Block opIndex(size_t flat)
