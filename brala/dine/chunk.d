@@ -8,6 +8,7 @@ private {
     
     import gl3n.linalg : vec3i;
 
+    import brala.dine.builder : Side, BlockBuilder;
     import brala.dine.util : calloc, malloc, free, log2_ub;
 }
 
@@ -20,8 +21,12 @@ struct Block {
                      ubyte, "sky_light", 4,
                      ubyte, "", 4));  // padding
                      
-    const bool opEquals(ref Block other) {
+    const bool opEquals(const ref Block other) {
         return other.id == id && other.metadata == metadata;
+    }
+    
+    const bool opEquals(const int id) {
+        return id == this.id;
     }
 }
 
@@ -57,15 +62,7 @@ class Chunk {
     Block* blocks;
     ubyte[] biome_data;
     
-    protected Buffer _vbo;
-    @property Buffer vbo() {
-        if(_vbo is null) {
-            _vbo = new Buffer();
-        }
-        
-        return _vbo;
-    }
-    @property void vbo(Buffer b) { _vbo = b; }
+    Buffer vbo;
     
     protected void free_chunk() {
         if(!empty) {
@@ -108,10 +105,51 @@ class Chunk {
         dirty = true;
     }
     
+    Block get_block(vec3i position) {
+        return get_block(to_flat(position));
+    }
+    
+    Block get_block(uint x, uint y, uint z) {
+        return get_block(to_flat(x, y, z));
+    }
+    
+    Block get_block(uint flat)
+        in { assert(!empty); assert(flat < block_count); }
+        body {
+            return blocks[flat];
+        }
+    
+    // rendering
+    void tesselate() {
+        if(vbo is null) {
+            vbo = new Buffer();
+        }
+        
+        if(dirty) {
+            void[] data;
+            
+            foreach(x; 0..width)
+            foreach(y; 0..height)
+            foreach(z; 0..depth) {
+                BlockBuilder bb;
+                
+                if(get_block(x+1, y, z) == 0) { bb.add_side(Side.RIGHT, x, y, z); }
+                if(get_block(x-1, y, z) == 0) { bb.add_side(Side.LEFT, x, y, z); }
+                if(get_block(x, y+1, z) == 0) { bb.add_side(Side.TOP, x, y, z); }
+                if(get_block(x, y-1, z) == 0) { bb.add_side(Side.BOTTOM, x, y, z); }
+                if(get_block(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
+                if(get_block(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
+                
+                data ~= cast(void[])bb.block_data;
+            }
+        }
+    }
+    
+    // operator overloading
     Block opIndex(size_t flat)
     in { assert(!empty); assert(flat < block_count); }
     body {
-        return blocks[flat];        
+        return blocks[flat];
     }
     
     Block opIndex(vec3i position)
@@ -159,7 +197,8 @@ class Chunk {
             
             return result;
         }
-            
+         
+    // static stuff
     static uint to_flat(vec3i inp) {
         return to_flat(inp.x, inp.y, inp.z);
     }

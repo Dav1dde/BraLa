@@ -4,6 +4,9 @@ private {
     import clib = std.c.stdlib;
     import std.string : format;
 
+    import gl3n.linalg : vec3;
+    import gl3n.util : is_vector;
+    
     import brala.exception : AllocationError;
 }
 
@@ -50,4 +53,17 @@ uint log2_ub(uint v) { // unrolled bitwise log2
     }
     
     return r + (v >> 1);
+}
+
+vec3[6] to_triangles(vec3[4] quad) {
+    return [quad[0], quad[1], quad[2],
+            quad[0], quad[2], quad[3]];
+}
+
+T.vt[] raw_vectors(T)(T[] vecs) if(is_vector!T) {
+    T.vt[] ret;
+    foreach(vec; vecs) {
+        ret ~= vec.vector;
+    }
+    return ret;
 }
