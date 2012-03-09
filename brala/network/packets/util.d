@@ -9,7 +9,9 @@ public {
     import std.metastrings : toStringNow;
     import std.stream : Stream;
     import std.conv : to;
-    
+
+    import gl3n.linalg : vec3i;
+        
     import brala.network.util : read, write;
 }
     
@@ -136,10 +138,9 @@ mixin template Packet(ubyte id_, Vars...) {
     mixin(inject_data());
 }
 
-alias Tuple!(uint, "x", uint, "y", uint, "z") Point3D;
-
-Point3D coords_from_j(uint j, uint y) {
-    return Point3D((j & 0xF0) >> 4,
-                    y*16 + (j & 0x0F),
-                    j >> 8);    
+vec3i coords_from_j(uint j, uint y) {
+//     return Point3D((j & 0xF0) >> 4,
+//                     y*16 + (j & 0x0F),
+//                     j >> 8);
+    return vec3i(j & 0x0F, y*16 + (j >> 8), (j & 0xF0) >> 4);
 }

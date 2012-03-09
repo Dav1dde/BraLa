@@ -13,6 +13,8 @@ private {
     import std.conv : to;
     import std.zlib : uncompress;
     
+    import gl3n.linalg : vec3i;
+    
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read;
@@ -211,7 +213,7 @@ struct ChunkS { // TODO: implement send
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
-        
+
         Chunk chunk = new Chunk();
         chunk.fill_chunk_with_nothing();
         
@@ -221,9 +223,9 @@ struct ChunkS { // TODO: implement send
                 ubyte[] temp = unc_data[offset..offset+4096];
                 
                 foreach(j, block_id; temp) {
-                    auto coords = coords_from_j(j, i);
-                    
-                    chunk.blocks[chunk.to_flat(coords.field)].id = block_id;
+                    vec3i coords = coords_from_j(j, i);
+
+                    chunk.blocks[chunk.to_flat(coords)].id = block_id;
                 }
                 
                 offset += 4096;
@@ -237,12 +239,12 @@ struct ChunkS { // TODO: implement send
                     
                     for(size_t j = 0; j < temp.length; j++) {
                         ubyte dj = temp[j];
-                        auto coords_m1 = coords_from_j(j, i);
-                        auto coords_m2 = coords_from_j(++j, i);
+                        vec3i coords_m1 = coords_from_j(j, i);
+                        vec3i coords_m2 = coords_from_j(++j, i);
                         
                         // NOTE: the data is maybe extracted in the wrong order, still big endian ...
-                        mixin("chunk.blocks[chunk.to_flat(coords_m1.field)]." ~ f ~ " = dj & 0x0F;");
-                        mixin("chunk.blocks[chunk.to_flat(coords_m2.field)]." ~ f ~ " = dj >> 4;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
                     }
                     
                     offset += 2048;
