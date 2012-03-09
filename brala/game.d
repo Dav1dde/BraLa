@@ -110,6 +110,7 @@ class BraLaGame : BaseGLFWEventHandler {
     void disconnect(string message = "") {
         if(connection.connected) {
             connection.send((new c.Disconnect(message)));
+            connection.disconnect();
         }
     }
     

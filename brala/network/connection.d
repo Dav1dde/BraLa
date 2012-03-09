@@ -3,7 +3,7 @@ module brala.network.connection;
 
 private {
     import core.thread : Thread;    
-    import std.socket : SocketException, TcpSocket, Address, getAddress;
+    import std.socket : SocketException, SocketShutdown, TcpSocket, Address, getAddress;
     import std.socketstream : SocketStream;
     import std.stream : EndianStream, BOM;
     import std.system : Endian;
@@ -73,6 +73,13 @@ class Connection {
         Address[] to = getAddress(host, port);
         
         connect(to[0]);
+    }
+    
+    void disconnect() {
+        socket.shutdown(SocketShutdown.BOTH);
+        socket.close();
+        _connected = false;
+        _logged_in = false;
     }
     
     void send(T : IPacket)(T packet) {
