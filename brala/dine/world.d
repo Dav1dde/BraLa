@@ -123,9 +123,9 @@ class World {
             chunk.tesselate(false);
             chunk.bind(engine);
             
-            engine.model = mat4.translation(chunkc.x, 0, chunkc.y);
-            
-//             glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
+            engine.model = mat4.translation(chunkc.x*width, 0, chunkc.y*depth);
+
+            glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
         }
     }
 }

@@ -14,7 +14,7 @@ enum {
 }
 
 // put texture files to the end, since there is no multithreaded texture-loading yet
-immutable Resource[] resources = [];
+immutable Resource[] resources = [Resource("test_input", "./res/shader/test_input.shader", SHADER_TYPE)];
 
 void load_default_resources(ResourceManager rsmg = null) {
     if(rsmg is null) {

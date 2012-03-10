@@ -68,22 +68,22 @@ class BraLaGame : BaseGLFWEventHandler {
         connect(host, port);
         start();
     }
-    
-    bool poll(uint delta_t) {
+
+    bool poll(float delta_t) {
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
         }
         
-        if(keymap[MOVE_FORWARD])  character.move_forward(delta_t);
-        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t);
-        if(keymap[STRAFE_LEFT])  character.strafe_left(delta_t);
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t);
-        if(mouse_offset.x > 0)      character.rotatex(delta_t);
-        else if(mouse_offset.x < 0) character.rotatex(-delta_t);
-        if(mouse_offset.y > 0)      character.rotatey(delta_t);
-        else if(mouse_offset.y < 0) character.rotatey(-delta_t);
+        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 15);
+        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15);
+        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15);
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15);
+        if(mouse_offset.x > 0)      character.rotatex( delta_t * 0.5);
+        else if(mouse_offset.x < 0) character.rotatex(-delta_t * 0.5);
+        if(mouse_offset.y > 0)      character.rotatey( delta_t * 0.5);
+        else if(mouse_offset.y < 0) character.rotatey(-delta_t * 0.5);
         character.apply(engine);
-        
+                
         display();
         
         if(quit || keymap[GLFW_KEY_ESCAPE]) {
@@ -98,6 +98,7 @@ class BraLaGame : BaseGLFWEventHandler {
         clear();
         
         if(_current_world !is null) {
+            engine.use_shader("test_input");
             _current_world.draw(engine);
         }
     }

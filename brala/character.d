@@ -7,6 +7,7 @@ private {
     import brala.camera : ICamera, FreeCamera;
 }
 
+
 class Character { // the one you're playing
     static const vec3 YAW_0_DIRECTION = vec3(0.0f, 0.0f, 1.0f);
 

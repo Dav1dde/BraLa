@@ -8,7 +8,8 @@ private {
     
     import gl3n.linalg;
     
-    import brala.timer;
+    import brala.timer : Timer, TickDuration;
+    import brala.resmgr : ResourceManager;
     
     debug import std.stdio : writefln;
 }
@@ -17,6 +18,7 @@ private {
 class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
     Timer timer;
+    ResourceManager resmgr;
 
     @property vec2i viewport() {
         return _viewport;
@@ -43,13 +45,14 @@ class BraLaEngine {
     }
     
     @property void current_shader(Shader shader) {
-        _current_shader.unbind();
+        if(_current_shader !is null) _current_shader.unbind();
         _current_shader = shader;
         _current_shader.bind();
     }
     
     this(int width, int height, GLVersion glv) {
         timer = new Timer();
+        resmgr = new ResourceManager(true);
         
         opengl_version = glv;
         _viewport = vec2i(width, height);
@@ -59,7 +62,7 @@ class BraLaEngine {
         glEnable(GL_CULL_FACE);
     }
     
-    void mainloop(bool delegate(uint) callback) {        
+    void mainloop(bool delegate(float) callback) {        
         bool stop = false;
         timer.start();
         
@@ -67,7 +70,7 @@ class BraLaEngine {
         debug TickDuration lastfps = TickDuration(0);
         
         while(!stop) {
-            uint delta_ticks = (timer.get_time() - last).to!("msecs", uint);
+            float delta_ticks = (timer.get_time() - last).to!("msecs", float);
             
             stop = callback(delta_ticks);
 
@@ -89,8 +92,12 @@ class BraLaEngine {
         debug writefln("Mainloop ran %f seconds", ts.to!("seconds", float));
     }
     
-    void use(Shader shader) {
+    void use_shader(Shader shader) {
         current_shader = shader;
+    }
+    
+    void use_shader(string id) {
+        current_shader = resmgr.get!Shader(id);
     }
     
     void flush_uniforms() {

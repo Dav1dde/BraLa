@@ -114,13 +114,13 @@ enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE2D_TYPE }
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
 class ResourceManager {
-    protected Object _lock;
+    protected __gshared Object _lock;
     protected TaskPool task_pool;
-    protected CBS[string] open_tasks;
+    protected __gshared CBS[string] open_tasks;
     
-    Shader[string] shaders;
-    Texture2D[string] textures;
-    Image[string] images;
+    __gshared Shader[string] shaders;
+    __gshared Texture2D[string] textures;
+    __gshared Image[string] images;
         
     this(bool new_taskpool = true) {
         _lock = new Object();
