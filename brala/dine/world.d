@@ -1,10 +1,13 @@
 module brala.dine.world;
 
 private {
-    import gl3n.linalg : vec2i, vec3i;
+    import glamour.gl : glDrawArrays, GL_TRIANGLES;
+    
+    import gl3n.linalg : vec2i, vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
     import brala.exception : WorldError;
+    import brala.engine : BraLaEngine;
     
     debug import std.stdio : writefln;
 }
@@ -112,6 +115,17 @@ class World {
     void mark_chunk_dirty(vec2i chunkc) {
         if(Chunk* c = chunkc in chunks) {
             c.dirty = true;
+        }
+    }
+    
+    void draw(BraLaEngine engine) {
+        foreach(chunkc, chunk; chunks) {
+            chunk.tesselate(false);
+            chunk.bind(engine);
+            
+            engine.model = mat4.translation(chunkc.x, 0, chunkc.y);
+            
+//             glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
         }
     }
 }

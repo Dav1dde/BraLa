@@ -123,15 +123,27 @@ class Chunk {
             return blocks[flat];
         }
     
+    Block get_block_safe(vec3i position) {
+        return get_block_safe(position.x, position.y, position.z);
+    }
+    
+    Block get_block_safe(int x, int y, int z) {
+        if(x < width && y < height && z < depth) {
+            return get_block(to_flat(x, y, z));
+        } else {
+            return Block(0, 0);
+        }
+    }
+    
     // rendering
     
     // fills the vbo with the chunk content
-    void tesselate() {
+    void tesselate(bool force = false) {
         if(vbo is null) {
             vbo = new Buffer();
         }
         
-        if(dirty) {
+        if(dirty && !force) {
             float[] data;
             
             foreach(x; 0..width)
@@ -139,12 +151,12 @@ class Chunk {
             foreach(z; 0..depth) {
                 BlockBuilder bb;
                 
-                if(get_block(x+1, y, z) == 0) { bb.add_side(Side.RIGHT, x, y, z); }
-                if(get_block(x-1, y, z) == 0) { bb.add_side(Side.LEFT, x, y, z); }
-                if(get_block(x, y+1, z) == 0) { bb.add_side(Side.TOP, x, y, z); }
-                if(get_block(x, y-1, z) == 0) { bb.add_side(Side.BOTTOM, x, y, z); }
-                if(get_block(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
-                if(get_block(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
+                if(get_block_safe(x+1, y, z) == 0) { bb.add_side(Side.RIGHT, x, y, z); }
+                if(get_block_safe(x-1, y, z) == 0) { bb.add_side(Side.LEFT, x, y, z); }
+                if(get_block_safe(x, y+1, z) == 0) { bb.add_side(Side.TOP, x, y, z); }
+                if(get_block_safe(x, y-1, z) == 0) { bb.add_side(Side.BOTTOM, x, y, z); }
+                if(get_block_safe(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
+                if(get_block_safe(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
                 
                 data ~= bb.block_data;
             }
@@ -153,11 +165,13 @@ class Chunk {
             vbo_vcount = data.length / 8; // 8 = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v
             
             vbo.set_data(data, GL_FLOAT);
+            
+            dirty = false;
         }
     }
     
     void bind(BraLaEngine engine)
-        in { assert(vbo !is null); }
+        in { assert(vbo !is null); assert(engine.current_shader !is null, "no current shader"); }
         body {
             GLuint position = engine.current_shader.get_attrib_location("position");
             GLuint normal = engine.current_shader.get_attrib_location("normal");
@@ -230,7 +244,7 @@ class Chunk {
     }
     
     static uint to_flat(uint x, uint y, uint z)
-        in { assert(x <= width && y <= height && z <= depth); }
+        in { assert(x < width && y < height && z < depth); }
         out (result) { assert(result < block_count); }
         body {
             return y + z*height + x*height*depth;
@@ -238,7 +252,7 @@ class Chunk {
     
     static vec3i from_flat(uint flat)
         in { assert(flat < block_count); }
-        out (result) { assert(result.vector[0] <= width && result.vector[1] <= height && result.vector[2] <= depth); }
+        out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth); }
         body {
             return vec3i(flat >> log2heightdepth, // x: flat / (height*depth)
                          flat & (height-1), // y: flat % height

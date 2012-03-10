@@ -96,6 +96,10 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void display() {
         clear();
+        
+        if(_current_world !is null) {
+            _current_world.draw(engine);
+        }
     }
     
     // Server/Connection
