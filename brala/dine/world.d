@@ -3,7 +3,7 @@ module brala.dine.world;
 private {
     import glamour.gl : glDrawArrays, GL_TRIANGLES;
     
-    import gl3n.linalg : vec2i, vec3i, mat4;
+    import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
     import brala.exception : WorldError;
@@ -20,7 +20,7 @@ class World {
     const int min_height = 0;
     const int max_height = height;    
     
-    Chunk[vec2i] chunks;
+    Chunk[vec3i] chunks;
     vec3i spawn;
     
     this() {}
@@ -37,7 +37,7 @@ class World {
     // you should also lose all other references to this chunk
     //
     // old chunk will be cleared
-    void add_chunk(Chunk chunk, vec2i chunkc) {
+    void add_chunk(Chunk chunk, vec3i chunkc) {
         if(Chunk* c = chunkc in chunks) {
             c.empty_chunk();
         } 
@@ -46,7 +46,7 @@ class World {
         mark_surrounding_chunks_dirty(chunkc);
     }
     
-    void remove_chunk(vec2i chunkc) {
+    void remove_chunk(vec3i chunkc) {
         chunks[chunkc].empty_chunk();
         chunks.remove(chunkc);
     }
@@ -58,25 +58,25 @@ class World {
         }
     }
     
-    Chunk get_chunk(int x, int z) {
-        return get_chunk(vec2i(x, z));
+    Chunk get_chunk(int x, int y, int z) {
+        return get_chunk(vec3i(x, y, z));
     }
     
-    Chunk get_chunk(vec2i chunkc) {
+    Chunk get_chunk(vec3i chunkc) {
         return chunks[chunkc];
     }
     
     void set_block(vec3i position, Block block)
         in { assert(position.y >= min_height && position.y <= max_height); }
         body {
-            vec2i chunkc = vec2i(position.x / width, position.z / depth);
+            vec3i chunkc = vec3i(position.x / width, position.y / height, position.z / depth);
             Chunk chunk = get_chunk(chunkc);
             
             if(chunk is null) {
                 throw new WorldError("No chunk available for position " ~ position.toString());
             }
             
-            vec3i block_position = vec3i(position.x % width, position.y, position.z % depth);
+            vec3i block_position = vec3i(position.x % width, position.y % height, position.z % depth);
             uint flat = chunk.to_flat(block_position);
             
             if(chunk[flat] != block) {
@@ -88,31 +88,33 @@ class World {
     Block get_block(vec3i position)
         in { assert(position.y >= min_height && position.y <= max_height); }
         body {
-            Chunk chunk = get_chunk(position.x / width, position.z / depth);
+            Chunk chunk = get_chunk(position.x / width, position.y / height, position.z / depth);
             
             if(chunk is null) {
                 throw new WorldError("No chunk available for position " ~ position.toString());
             }
             
-            return chunk[chunk.to_flat(position.x % width, position.y, position.z % depth)];
+            return chunk[chunk.to_flat(position.x % width, position.y % height, position.z % depth)];
         }
     
-    void mark_surrounding_chunks_dirty(int x, int z) {
-        return mark_surrounding_chunks_dirty(vec2i(x, z));
+    void mark_surrounding_chunks_dirty(int x, int y, int z) {
+        return mark_surrounding_chunks_dirty(vec3i(x, y, z));
     }
     
-    void mark_surrounding_chunks_dirty(vec2i chunkc) {
-        mark_chunk_dirty(chunkc.x+1, chunkc.y);
-        mark_chunk_dirty(chunkc.x-1, chunkc.y);
-        mark_chunk_dirty(chunkc.x, chunkc.y+1);
-        mark_chunk_dirty(chunkc.x, chunkc.y-1);
+    void mark_surrounding_chunks_dirty(vec3i chunkc) {
+        mark_chunk_dirty(chunkc.x+1, chunkc.y, chunkc.z);
+        mark_chunk_dirty(chunkc.x-1, chunkc.y, chunkc.z);
+        mark_chunk_dirty(chunkc.x, chunkc.y+1, chunkc.z);
+        mark_chunk_dirty(chunkc.x, chunkc.y-1, chunkc.z);
+        mark_chunk_dirty(chunkc.x, chunkc.y, chunkc.z+1);
+        mark_chunk_dirty(chunkc.x, chunkc.y, chunkc.z-1);
     }
     
-    void mark_chunk_dirty(int x, int z) {
-        return mark_chunk_dirty(vec2i(x, z));
+    void mark_chunk_dirty(int x, int y, int z) {
+        return mark_chunk_dirty(vec3i(x, y, z));
     }
     
-    void mark_chunk_dirty(vec2i chunkc) {
+    void mark_chunk_dirty(vec3i chunkc) {
         if(Chunk* c = chunkc in chunks) {
             c.dirty = true;
         }
@@ -120,10 +122,10 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {
-            chunk.tesselate(true);
+            chunk.tesselate(false);
             chunk.bind(engine);
             
-            engine.model = mat4.translation(chunkc.x*width, 0, chunkc.y*depth);
+            engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
             glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
         }
