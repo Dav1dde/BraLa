@@ -10,7 +10,7 @@ private {
     import gl3n.linalg : vec3i;
 
     import brala.dine.builder : Side, BlockBuilder;
-    import brala.dine.util : calloc, malloc, free, log2_ub;
+    import brala.dine.util : calloc, malloc, realloc, free, log2_ub;
     import brala.engine : BraLaEngine;
 }
 
@@ -143,9 +143,12 @@ class Chunk {
             vbo = new Buffer();
         }
         
-        if(dirty && !force) {
-            float[] data;
+        if(dirty || force) {
+            size_t buffer_size = width*height*depth*48*float.sizeof;
+            size_t buffer_interval = width*width*depth*48*float.sizeof;
+            float* data = cast(float*)malloc(buffer_size);
             
+            size_t length = 0;
             foreach(x; 0..width)
             foreach(y; 0..height)
             foreach(z; 0..depth) {
@@ -158,13 +161,21 @@ class Chunk {
                 if(get_block_safe(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
                 if(get_block_safe(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
                 
-                data ~= bb.block_data;
+                if(bb.block_data.length*float.sizeof + length*float.sizeof > buffer_size) {
+                    buffer_size += buffer_interval;
+                    data = cast(float*)realloc(data, buffer_size);
+                }
+                
+                data[length .. length+bb.block_data.length] = bb.block_data;
+                
+                length += bb.block_data.length;
             }
             
             vbo_type = GL_FLOAT;
-            vbo_vcount = data.length / 8; // 8 = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v
+            vbo_vcount = length / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
+            vbo.set_data(data[0 .. length], GL_FLOAT);
             
-            vbo.set_data(data, GL_FLOAT);
+            free(data);
             
             dirty = false;
         }

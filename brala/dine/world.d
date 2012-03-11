@@ -120,7 +120,7 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {
-            chunk.tesselate(false);
+            chunk.tesselate(true);
             chunk.bind(engine);
             
             engine.model = mat4.translation(chunkc.x*width, 0, chunkc.y*depth);

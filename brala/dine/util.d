@@ -30,6 +30,16 @@ void* calloc(size_t num, size_t size) {
     return ptr;
 }
 
+void* realloc(void* ptr, size_t size) {
+    void* ret_ptr = clib.realloc(ptr, size);
+    
+    if(ptr is null) {
+        throw new AllocationError(format("Unable to reallocate memory (realloc(ptr, %d)) (out of memory?).", size));
+    }
+    
+    return ret_ptr;
+}
+
 alias clib.free free;
 
 uint log2_ub(uint v) { // unrolled bitwise log2
@@ -55,7 +65,7 @@ uint log2_ub(uint v) { // unrolled bitwise log2
     return r + (v >> 1);
 }
 
-T[6] to_triangles(T)(T[4] quad) if(is_vector!T) {
+T[6] to_triangles(T)(T[4] quad) {
     return [quad[0], quad[1], quad[2],
             quad[0], quad[2], quad[3]];
 }
