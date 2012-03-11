@@ -6,6 +6,7 @@ private {
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
+    import brala.dine.util : malloc, free;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
     
@@ -14,6 +15,17 @@ private {
 
 
 class World {
+    static float* tessellate_buffer;
+    static size_t tessellate_buffer_length;
+    
+    static this() {
+        tessellate_buffer_length = width*height*depth*48;
+        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
+    }
+    
+    static ~this() {
+    }
+    
     const uint width = 16;
     const uint height = 256;
     const uint depth = 16;
@@ -122,7 +134,7 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {
-            chunk.tesselate(false);
+            chunk.tessellate(tessellate_buffer, tessellate_buffer_length, false);
             chunk.bind(engine);
             
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);

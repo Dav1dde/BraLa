@@ -137,45 +137,121 @@ class Chunk {
     
     // rendering
     
-    // fills the vbo with the chunk content
-    void tesselate(bool force = false) {
+    // fills the vbo with the chunk content    
+    // credits to florian boesch - http://codeflow.org/
+    void tessellate(float* v, ref size_t length, bool force = false){
         if(vbo is null) {
             vbo = new Buffer();
         }
         
         if(dirty || force) {
-            size_t buffer_size = width*height*depth*48*float.sizeof;
-            size_t buffer_interval = width*width*depth*48*float.sizeof;
-            float* data = cast(float*)malloc(buffer_size);
+            int zstep = width*height;
+            int index;
+            int w = 0;
             
-            size_t length = 0;
-            foreach(x; 0..width)
-            foreach(y; 0..height)
-            foreach(z; 0..depth) {
-                BlockBuilder bb;
+            float near;
+            float far;
+            float bottom;
+            float top;
+            float left;
+            float right;
+            
+            Block value;
+            Block right_block;
+            Block top_block;
+            Block front_block;
+
+            for(int z=0; z<depth-1; z++){
+                near = cast(float)z/cast(float)depth;
+                far = cast(float)(z+1)/cast(float)depth;
                 
-                if(get_block_safe(x+1, y, z) == 0) { bb.add_side(Side.RIGHT, x, y, z); }
-                if(get_block_safe(x-1, y, z) == 0) { bb.add_side(Side.LEFT, x, y, z); }
-                if(get_block_safe(x, y+1, z) == 0) { bb.add_side(Side.TOP, x, y, z); }
-                if(get_block_safe(x, y-1, z) == 0) { bb.add_side(Side.BOTTOM, x, y, z); }
-                if(get_block_safe(x, y, z+1) == 0) { bb.add_side(Side.FRONT, x, y, z); }
-                if(get_block_safe(x, y, z-1) == 0) { bb.add_side(Side.BACK, x, y, z); }
-                
-                if(bb.block_data.length*float.sizeof + length*float.sizeof > buffer_size) {
-                    buffer_size += buffer_interval;
-                    data = cast(float*)realloc(data, buffer_size);
+                for(int y=0; y<height-1; y++){
+                    bottom = cast(float)y/cast(float)height;
+                    top = cast(float)(y+1)/cast(float)height;
+                    value = blocks[y*width+z*zstep];
+                    
+                    if(w+289 > length) { // 289 = 48*6+1
+                        length += 289+(depth-z)*width*height*48;
+                        v = cast(float*)realloc(v, length*float.sizeof);
+                    }
+                    
+                    for(int x=0; x<width-1; x++){
+                        left = cast(float)x/cast(float)width;
+                        right = cast(float)(x+1)/cast(float)width;
+
+                        index = x+y*width+z*zstep;
+                        right_block = blocks[index+1];
+                        top_block = blocks[index+width];
+                        front_block = blocks[index+zstep];
+                            
+                        if(value == 0) {
+                            if(right_block != 0) {
+                                /// pos_X,    pos_Y,         pos_Z,       normal_X,  normal_Y, normal_Z, tex_u,    tex_v 
+                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                            }
+                            if(top_block != 0) {
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                            }
+                            if(front_block != 0) {
+                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                            }
+                        } else {
+                            if(right_block == 0) {
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                            }
+                            if(top_block == 0) {
+                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                            }
+                            if(front_block == 0) {
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                
+                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                            }
+
+                        }
+                        
+                        value = right_block;
+                    }
                 }
-                
-                data[length .. length+bb.block_data.length] = bb.block_data;
-                
-                length += bb.block_data.length;
             }
             
             vbo_type = GL_FLOAT;
-            vbo_vcount = length / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
-            vbo.set_data(data[0 .. length], GL_FLOAT);
-            
-            free(data);
+            vbo_vcount = w / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
+            vbo.set_data(v[0..w], GL_FLOAT);
             
             dirty = false;
         }

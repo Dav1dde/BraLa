@@ -80,7 +80,7 @@ class BraLaEngine {
             debug {
                 TickDuration t = timer.get_time();
                 if((t-lastfps).to!("seconds", float) > 0.5) {
-                    writefln("%s", (t-last).to!("msecs", float));
+                    writefln("Frame-Time: %s ms", (t-last).to!("msecs", float));
                     lastfps = t;
                 }
             }
