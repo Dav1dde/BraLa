@@ -2,7 +2,7 @@ export PROJECT_NAME     = BraLa
 export AUTHOR           = David Herberth
 export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
-export LICENSE          = 
+export LICENSE          = GPLv3
 
 DCFLAGS_IMPORT      = -Ibrala/ -L-lcurl -L-lssl `pkg-config --libs --cflags gl3n glamour` -Isrc/d/
 DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictIL $(LINKERFLAG)-lDerelictUtil
