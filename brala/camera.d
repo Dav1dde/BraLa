@@ -60,7 +60,7 @@ class FreeCamera : ICamera {
 
     void rotatey(float angle) { // degrees
         vec3 vcross = cross(up, forward);
-        mat4 rotmat = mat4.rotation(radians(-angle), up);
+        mat4 rotmat = mat4.rotation(radians(-angle), vcross);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
     }
     
