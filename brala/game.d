@@ -79,10 +79,11 @@ class BraLaGame : BaseGLFWEventHandler {
         if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15);
         if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15);
         if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15);
-        if(mouse_offset.x > 0)      character.rotatex( delta_t * 75);
-        else if(mouse_offset.x < 0) character.rotatex(-delta_t * 75);
-        if(mouse_offset.y > 0)      character.rotatey( delta_t * 75);
-        else if(mouse_offset.y < 0) character.rotatey(-delta_t * 75);
+        if(mouse_offset.x != 0) character.rotatex(delta_t * mouse_offset.x * 175);
+        if(mouse_offset.y != 0) character.rotatey(delta_t * mouse_offset.y * 175);
+        mouse_offset.x = 0;
+        mouse_offset.y = 0;
+        
         character.apply(engine);
 
         display();
@@ -203,17 +204,8 @@ class BraLaGame : BaseGLFWEventHandler {
         static int last_x = 0;
         static int last_y = 0;
         
-        if((x != engine.viewport.x / 2) || (y != engine.viewport.y / 2)) {
-            mouse_offset.x = x - last_x;
-            mouse_offset.y = y - last_y;
-            
-            // this will create a GLFW_ERROR 458761 / "The specified window is not active"
-            // for the first callback, just ignore it.
-//             glfwSetMousePos(window, engine.viewport.x / 2, engine.viewport.y / 2);
-        } else {
-            mouse_offset.x = 0;
-            mouse_offset.y = 0;
-        }
+        mouse_offset.x = x - last_x;
+        mouse_offset.y = y - last_y;
                 
         last_x = x;
         last_y = y;
