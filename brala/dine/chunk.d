@@ -162,12 +162,16 @@ class Chunk {
             Block front_block;
 
             for(int z=0; z<depth-1; z++){
-                near = cast(float)z/cast(float)depth;
-                far = cast(float)(z+1)/cast(float)depth;
+//                 near = cast(float)z/cast(float)depth;
+//                 far = cast(float)(z+1)/cast(float)depth;
+                near = cast(float)z;
+                far = cast(float)(z+1);
                 
                 for(int y=0; y<height-1; y++){
-                    bottom = cast(float)y/cast(float)height;
-                    top = cast(float)(y+1)/cast(float)height;
+//                     bottom = cast(float)y/cast(float)height;
+//                     top = cast(float)(y+1)/cast(float)height;
+                    bottom = cast(float)y;
+                    top = cast(float)(y+1);
                     value = blocks[y*width+z*zstep];
                     
                     if(w+289 > length) { // 289 = 48*6+1
@@ -176,14 +180,16 @@ class Chunk {
                     }
                     
                     for(int x=0; x<width-1; x++){
-                        left = cast(float)x/cast(float)width;
-                        right = cast(float)(x+1)/cast(float)width;
-
+//                         left = cast(float)x/cast(float)width;
+//                         right = cast(float)(x+1)/cast(float)width;
+                        left = cast(float)x;
+                        right = cast(float)(x+1);
+                        
                         index = x+y*width+z*zstep;
                         right_block = blocks[index+1];
                         top_block = blocks[index+width];
                         front_block = blocks[index+zstep];
-                            
+                        
                         if(value == 0) {
                             if(right_block != 0) {
                                 /// pos_X,    pos_Y,         pos_Z,       normal_X,  normal_Y, normal_Z, tex_u,    tex_v 
@@ -251,6 +257,7 @@ class Chunk {
             
             vbo_type = GL_FLOAT;
             vbo_vcount = w / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
+
             vbo.set_data(v[0..w], GL_FLOAT);
             
             dirty = false;

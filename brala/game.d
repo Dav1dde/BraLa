@@ -8,6 +8,7 @@ private {
     import std.conv : to;
     
     import gl3n.linalg : vec2i, vec3i, vec3;
+    import gl3n.math : almost_equal;
         
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
@@ -78,12 +79,12 @@ class BraLaGame : BaseGLFWEventHandler {
         if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15);
         if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15);
         if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15);
-        if(mouse_offset.x > 0)      character.rotatex( delta_t * 0.5);
-        else if(mouse_offset.x < 0) character.rotatex(-delta_t * 0.5);
-        if(mouse_offset.y > 0)      character.rotatey( delta_t * 0.5);
-        else if(mouse_offset.y < 0) character.rotatey(-delta_t * 0.5);
+        if(mouse_offset.x > 0)      character.rotatex( delta_t * 15);
+        else if(mouse_offset.x < 0) character.rotatex(-delta_t * 15);
+        if(mouse_offset.y > 0)      character.rotatey( delta_t * 15);
+        else if(mouse_offset.y < 0) character.rotatey(-delta_t * 15);
         character.apply(engine);
-                
+
         display();
         
         if(quit || keymap[GLFW_KEY_ESCAPE]) {
@@ -96,7 +97,7 @@ class BraLaGame : BaseGLFWEventHandler {
     
     void display() {
         clear();
-        
+
         if(_current_world !is null) {
             engine.use_shader("test_input");
             _current_world.draw(engine);
@@ -175,7 +176,7 @@ class BraLaGame : BaseGLFWEventHandler {
         
         character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
         character.set_rotation(packet.yaw, packet.pitch);
-        
+                
         auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
         connection.send(repl);
     }
@@ -202,13 +203,16 @@ class BraLaGame : BaseGLFWEventHandler {
         static int last_x = 0;
         static int last_y = 0;
         
-        if((x != engine.viewport.x /2) || (y != engine.viewport.y)) {
+        if((x != engine.viewport.x / 2) || (y != engine.viewport.y / 2)) {
             mouse_offset.x = x - last_x;
             mouse_offset.y = y - last_y;
             
             // this will create a GLFW_ERROR 458761 / "The specified window is not active"
             // for the first callback, just ignore it.
             glfwSetMousePos(window, engine.viewport.x / 2, engine.viewport.y / 2);
+        } else {
+            mouse_offset.x = 0;
+            mouse_offset.y = 0;
         }
                 
         last_x = x;

@@ -138,7 +138,8 @@ class World {
             chunk.bind(engine);
             
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
-
+            engine.flush_uniforms();
+            
             glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
         }
     }

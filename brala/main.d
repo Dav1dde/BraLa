@@ -7,7 +7,6 @@ private {
     import derelict.devil.il;
     
     import std.conv : to, ConvException;
-    import std.typecons : Tuple;
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -32,29 +31,15 @@ static this() {
     ilInit();
 }
 
-alias Tuple!(int, "major", int, "minor") OGLVT;
-immutable OGLVT[5] oglvt = [OGLVT(4, 2), OGLVT(4, 1), OGLVT(4, 0), OGLVT(3, 3), OGLVT(3, 2)];
-
-
 GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {
-    foreach(v; oglvt) {
-        debug writefln("Trying OpenGL version: %s.%s", v.major, v.minor);
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, v.major);
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, v.minor);
-        glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
-        
-        _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
-        if(_window) {
-            debug writefln("Success, created OpenGL %s.%s context", v.major, v.minor);
-            break;
-        }
-    }
+    glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+    
+    _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
     
     if(!_window) {
-        throw new InitError("I am sorry man, you need at least OpenGL 3.2.");
+        throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
     }
     
     debug {} else { glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED); }
