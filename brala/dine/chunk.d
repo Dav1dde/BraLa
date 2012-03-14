@@ -43,7 +43,7 @@ class Chunk {
     const uint log2width = log2_ub(width);
     const uint log2height = log2_ub(height);
     const uint log2depth = log2_ub(depth);
-    const uint log2heightdepth = log2_ub(height*depth);
+    const uint log2heightwidth = log2_ub(height*width);
     
     const uint block_count = width*height*depth;
     const uint data_size = block_count*Block.sizeof;
@@ -162,26 +162,15 @@ class Chunk {
             Block front_block;
 
             for(int z=0; z<depth-1; z++){
-//                 near = cast(float)z/cast(float)depth;
-//                 far = cast(float)(z+1)/cast(float)depth;
                 near = cast(float)z;
                 far = cast(float)(z+1);
                 
                 for(int y=0; y<height-1; y++){
-//                     bottom = cast(float)y/cast(float)height;
-//                     top = cast(float)(y+1)/cast(float)height;
                     bottom = cast(float)y;
                     top = cast(float)(y+1);
                     value = blocks[y*width+z*zstep];
                     
-                    if(w+289 > length) { // 289 = 48*6+1
-                        length += 289+(depth-z)*width*height*48;
-                        v = cast(float*)realloc(v, length*float.sizeof);
-                    }
-                    
                     for(int x=0; x<width-1; x++){
-//                         left = cast(float)x/cast(float)width;
-//                         right = cast(float)(x+1)/cast(float)width;
                         left = cast(float)x;
                         right = cast(float)(x+1);
                         
@@ -341,15 +330,15 @@ class Chunk {
         in { assert(x < width && y < height && z < depth); }
         out (result) { assert(result < block_count); }
         body {
-            return y + z*height + x*height*depth;
+            return x + y*width + z*width*height;
         }
     
     static vec3i from_flat(uint flat)
         in { assert(flat < block_count); }
         out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth); }
         body {
-            return vec3i(flat >> log2heightdepth, // x: flat / (height*depth)
-                         flat & (height-1), // y: flat % height
-                         (flat >> log2height) & (depth-1)); // z: (flat / height) % depth
+            return vec3i(flat & (width-1), // x: flat % width
+                         (flat >> log2width) & (height-1), // y: (flat / width) % height
+                         flat >> log2heightwidth); // z: flat / (height*width)
         }
 }

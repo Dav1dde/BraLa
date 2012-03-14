@@ -36,6 +36,22 @@ fragment:
 
     out vec4 color_out;
 
+    vec3 light_pos = vec3(100, 100, 100);
+    float light_attenuation = 1.0;
+    vec4 light_intensity = vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 ambient_intensity = vec4(0.30, 0.30, 0.30, 1.0);
+
     void main() {
-        color_out = vec4(v_normal, 1.0);
+        vec3 color = vec3(0.5, 0.5, 0.5);
+        
+        vec3 light_vec = light_pos - v_position;
+        vec3 light_normal = normalize(light_vec);
+        
+        float light_distance = length(light_vec);
+        float lambert = clamp(dot(light_normal, v_normal), 0.0, 1.0); // cos: 0-1
+        
+        float diffuse = lambert/sqrt(1.0 + light_attenuation * light_distance);
+        //float diffuse = lambert/pow(light_distance, 2);
+        
+        color_out = (vec4(color, 1.0) * vec4(vec3(diffuse), 1.0) * lambert) + (vec4(color, 1.0) * ambient_intensity);
     }
