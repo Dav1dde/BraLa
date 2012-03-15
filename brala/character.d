@@ -1,10 +1,13 @@
 module brala.character;
 
 private {
-    import gl3n.linalg : vec3, quat;
+    import gl3n.linalg : vec3, dot, cross, quat;
+    import gl3n.math : asin;
     
     import brala.engine : BraLaEngine;
     import brala.camera : ICamera, FreeCamera;
+    import brala.network.connection : Connection;
+    import c = brala.network.packets.client;
 }
 
 
@@ -59,5 +62,13 @@ class Character { // the one you're playing
     
     void apply(BraLaEngine engine) {
         cam.apply(engine);
+    }
+    
+    void send_packet(Connection connection) {
+        quat rotation = cam.get_rotation(YAW_0_DIRECTION);
+        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.5, position.z, // TODO: proper stance
+                                               rotation.yaw, rotation.pitch, true); // TODO: verify bool
+        
+        connection.send(packet);
     }
 }

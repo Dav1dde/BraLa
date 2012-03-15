@@ -1,6 +1,8 @@
 module brala.camera;
 
 private {
+    import std.conv : to;
+    
     import gl3n.linalg;
     import gl3n.math;
     
@@ -11,6 +13,7 @@ private {
 interface ICamera {
     @property vec3 position();
     @property void position(vec3 position);
+    quat get_rotation(vec3 comparison);
     void look_at(vec3 position);
     void rotatex(float angle);
     void rotatey(float angle);
@@ -62,6 +65,12 @@ class FreeCamera : ICamera {
         vec3 vcross = cross(up, forward);
         mat4 rotmat = mat4.rotation(radians(-angle), vcross);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
+    }
+    
+    quat get_rotation(vec3 comparison) {
+        vec3 axis = cross(forward, comparison).normalized;
+        float angle = to!float(asin(dot(forward, comparison)));
+        return quat(angle, axis);
     }
     
     void move_forward(float delta) { // W

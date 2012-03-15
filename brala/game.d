@@ -6,6 +6,7 @@ private {
     
     import std.socket : Address;
     import std.conv : to;
+    import core.time : TickDuration;
     
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal;
@@ -40,6 +41,8 @@ class BraLaGame : BaseGLFWEventHandler {
     vec2i mouse_offset = vec2i(0, 0);
     
     bool quit = false;
+    protected bool moved = false;
+    protected TickDuration last_notchian_tick;
     
     this(BraLaEngine engine, void* window, string username, string password) {
         this.engine = engine;
@@ -75,18 +78,14 @@ class BraLaGame : BaseGLFWEventHandler {
             connection.thread.join(); // let's rethrow the exception for now!
         }
         
-        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 15);
-        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15);
-        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15);
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15);
-        if(mouse_offset.x != 0) character.rotatex(delta_t * mouse_offset.x * 175);
-        if(mouse_offset.y != 0) character.rotatey(delta_t * mouse_offset.y * 175);
-        mouse_offset.x = 0;
-        mouse_offset.y = 0;
+        moved = move(delta_t) || moved;
         
-        character.apply(engine);
-
         display();
+        
+        if((last_notchian_tick - engine.timer.get_time()).to!("msecs", float) <= 50) {
+            on_notchian_tick();
+            last_notchian_tick = engine.timer.get_time();
+        }
         
         if(quit || keymap[GLFW_KEY_ESCAPE]) {
             disconnect("Goodboy from BraLa.");
@@ -96,12 +95,36 @@ class BraLaGame : BaseGLFWEventHandler {
         }
     }
     
+    bool move(float delta_t) {
+        bool moved = false;
+        
+        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 15); moved = true;
+        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15); moved = true;
+        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15); moved = true;
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15); moved = true;
+        if(mouse_offset.x != 0) character.rotatex(delta_t * mouse_offset.x * 175); moved = true;
+        if(mouse_offset.y != 0) character.rotatey(delta_t * mouse_offset.y * 175); moved = true;
+        mouse_offset.x = 0;
+        mouse_offset.y = 0;
+        
+        if(moved) character.apply(engine);
+        
+        return moved;
+    }
+    
     void display() {
         clear();
 
         if(_current_world !is null) {
             engine.use_shader("test_input");
             _current_world.draw(engine);
+        }
+    }
+    
+    void on_notchian_tick() {
+        if(moved && connection.connected) {
+            character.send_packet(connection);
+            moved = false;
         }
     }
     
@@ -125,6 +148,7 @@ class BraLaGame : BaseGLFWEventHandler {
         connection.login();
     }
     
+    // network events
     void dispatch_packets(ubyte id, void* packet) {
         switch(id) {
             foreach(p; s.get_packets!()) {
