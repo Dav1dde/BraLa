@@ -18,7 +18,7 @@ private {
     import brala.dine.chunk : Chunk;
     import brala.character : Character;
     import brala.engine : BraLaEngine;
-    import brala.event : BaseGLFWEventHandler;
+    import brala.input : BaseGLFWEventHandler;
     import brala.types : DefaultAA;
     import brala.util : clear;
     import brala.config;

@@ -11,7 +11,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.resmgr : resmgr;
-    import brala.event : register_glfw_error_callback;
+    import brala.input : register_glfw_error_callback;
     import brala.config : load_default_resources;
     import brala.network.packets.types : IPacket;
     import brala.exception : InitError;
