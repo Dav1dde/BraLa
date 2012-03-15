@@ -9,8 +9,6 @@ private {
     import brala.dine.util : malloc, free;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
-    
-    debug import std.stdio : writefln;
 }
 
 
@@ -19,7 +17,7 @@ class World {
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*48;
+        tessellate_buffer_length = width*height*depth*12; // this value is the result of testing!
         tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
     }
     

@@ -139,7 +139,7 @@ class Chunk {
     
     // fills the vbo with the chunk content    
     // credits to florian boesch - http://codeflow.org/
-    void tessellate(float* v, ref size_t length, bool force = false){
+    void tessellate(ref float* v, ref size_t length, bool force = false){
         if(vbo is null) {
             vbo = new Buffer();
         }
@@ -169,6 +169,11 @@ class Chunk {
                     bottom = cast(float)y;
                     top = cast(float)(y+1);
                     value = blocks[y*width+z*zstep];
+                    
+                    if(w+1024 > length) {
+                        length = length + (depth-z)*width*height;
+                        v = cast(float*)realloc(v, length*float.sizeof);
+                    }
                     
                     for(int x=0; x<width-1; x++){
                         left = cast(float)x;
