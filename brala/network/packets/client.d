@@ -72,7 +72,7 @@ class PlayerPositionLook : IPacket {
 }
 
 class PlayerDigging : IPacket {
-    mixin Packet!(0x0E, byte, "status", int, "x", int, "y", int, "z", byte, "face");
+    mixin Packet!(0x0E, byte, "status", int, "x", byte, "y", int, "z", byte, "face");
 }
 
 class PlayerBlockPlacement : IPacket {
