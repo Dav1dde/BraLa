@@ -9,7 +9,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.camera : ICamera, BraLaCamera;
     import brala.network.connection : Connection;
-    import c = brala.network.packets.client;import std.stdio;
+    import c = brala.network.packets.client;
 }
 
 

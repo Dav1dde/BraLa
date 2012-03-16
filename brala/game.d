@@ -37,7 +37,7 @@ class BraLaGame : BaseGLFWEventHandler {
     
     Character character;
     protected World _current_world;    
-    @property current_world() { synchronized(_world_lock) return _current_world; }
+    @property current_world() { return _current_world; }
     
     DefaultAA!(bool, int, false) keymap;
     vec2i mouse_offset = vec2i(0, 0);
@@ -86,7 +86,7 @@ class BraLaGame : BaseGLFWEventHandler {
         
         display();
         
-        if((last_notchian_tick - engine.timer.get_time()).to!("msecs", float) <= 50) {
+        if((engine.timer.get_time() - last_notchian_tick).to!("msecs", int) >= 50) {
             on_notchian_tick();
             last_notchian_tick = engine.timer.get_time();
         }
@@ -102,10 +102,10 @@ class BraLaGame : BaseGLFWEventHandler {
     bool move(float delta_t) {
         bool moved = false;
         
-        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 15); moved = true;
-        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 15); moved = true;
-        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 15); moved = true;
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 15); moved = true;
+        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 55); moved = true;
+        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 55); moved = true;
+        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 55); moved = true;
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 55); moved = true;
         if(mouse_offset.x != 0) character.rotatex(delta_t * mouse_offset.x * 175); moved = true;
         if(mouse_offset.y != 0) character.rotatey(delta_t * mouse_offset.y * 175); moved = true;
         mouse_offset.x = 0;
@@ -119,9 +119,9 @@ class BraLaGame : BaseGLFWEventHandler {
     void display() {
         clear();
 
-        if(current_world !is null) {
+        if(_current_world !is null) {
             engine.use_shader("test_input");
-            current_world.draw(engine);
+            synchronized(_world_lock) current_world.draw(engine);
         }
     }
     
@@ -169,11 +169,13 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.Login)(T packet) {
         debug writefln("%s", packet);
         
-        if(current_world !is null) {
-            current_world.remove_all_chunks();
+        synchronized(_world_lock) {
+            if(_current_world !is null) {
+                _current_world.remove_all_chunks();
+            }
+            
+            _current_world = new World();
         }
-        
-        _current_world = new World();
         
         character = new Character(packet.entity_id);
     }
@@ -185,20 +187,22 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.SpawnPosition)(T packet) {
         debug writefln("%s", packet);
         
-        if(current_world !is null) {
-            current_world.spawn = vec3i(packet.x, packet.y, packet.z);
+        synchronized(_world_lock) {
+            if(_current_world !is null) {
+                _current_world.spawn = vec3i(packet.x, packet.y, packet.z);
+            }
         }
     }
     
     void on_packet(T : s.PreChunk)(T packet) {
         debug writefln("%s", packet);
         
-        current_world.remove_chunk(vec3i(packet.x, 0, packet.z));
+        synchronized(_world_lock) _current_world.remove_chunk(vec3i(packet.x, 0, packet.z));
     }
     
     void on_packet(T : s.MapChunk)(T packet) {
         debug writefln("adding chunk: %s", packet);
-        current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
+        synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
     }
     
     void on_packet(T : s.PlayerPositionLook)(T packet)
