@@ -27,7 +27,7 @@ interface ICamera {
 
 
 // Refering to https://github.com/mitsuhiko/webgl-meincraft/blob/master/src/camera.coffee
-class FreeCamera : ICamera {
+class BraLaCamera : ICamera {
     BraLaEngine engine;    
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, -1.0f);

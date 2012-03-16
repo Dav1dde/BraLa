@@ -7,7 +7,7 @@ private {
     import gl3n.math : asin, degrees;
     
     import brala.engine : BraLaEngine;
-    import brala.camera : ICamera, FreeCamera;
+    import brala.camera : ICamera, BraLaCamera;
     import brala.network.connection : Connection;
     import c = brala.network.packets.client;
 }
@@ -24,7 +24,7 @@ class Character { // the one you're playing
     bool activated;
     
     this(int entity_id) {
-        cam = new FreeCamera();
+        cam = new BraLaCamera();
         this.entity_id = entity_id;
     }
     
