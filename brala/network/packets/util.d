@@ -14,7 +14,7 @@ public {
         
     import brala.network.util : read, write;
 }
-    
+
 
 immutable byte NULL_BYTE = 0;
 immutable ubyte NULL_UBYTE = 0;

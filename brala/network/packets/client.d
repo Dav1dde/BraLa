@@ -27,7 +27,7 @@ class Login : IPacket {
     }
     
     void send(Stream s) {
-        write(s, id, protocol_version, username, 0L, "", 0, NULL_BYTE, NULL_BYTE, NULL_UBYTE, NULL_UBYTE);
+        write(s, id, protocol_version, username, "", 0, 0, NULL_BYTE, NULL_UBYTE, NULL_UBYTE);
     }
     
     static Login recv(Stream s) {

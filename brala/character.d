@@ -1,6 +1,8 @@
 module brala.character;
 
 private {
+    import std.conv : to;
+    
     import gl3n.linalg : vec3, dot, cross, quat;
     import gl3n.math : asin;
     
@@ -19,6 +21,7 @@ class Character { // the one you're playing
     @property void position(vec3 position) { cam.position = position; }
     
     int entity_id;
+    bool activated;
     
     this(int entity_id) {
         cam = new FreeCamera();
@@ -66,8 +69,8 @@ class Character { // the one you're playing
     
     void send_packet(Connection connection) {
         quat rotation = cam.get_rotation(YAW_0_DIRECTION);
-        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.5, position.z, // TODO: proper stance
-                                               rotation.yaw, rotation.pitch, true); // TODO: verify bool
+        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 1.1, position.z, // TODO: proper stance
+                                               to!float(rotation.yaw), to!float(rotation.pitch), true); // TODO: verify bool
         
         connection.send(packet);
     }

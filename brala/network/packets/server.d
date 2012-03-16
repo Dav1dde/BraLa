@@ -19,7 +19,7 @@ class KeepAlive : IPacket {
 
 class Login : IPacket {
     mixin Packet!(0x01, int, "entity_id", string, "unused", string, "level_type", int, "mode",
-                        int, "dimension", byte, "difficulty", byte, "world_height", ubyte, "max_players");
+                        int, "dimension", byte, "difficulty", ubyte, "world_height", ubyte, "max_players");
 }
 
 class Handshake : IPacket {

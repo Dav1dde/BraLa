@@ -122,7 +122,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_notchian_tick() {
-        if(moved && connection.connected) {
+        if(moved && connection.logged_in && character.activated) {
             character.send_packet(connection);
             moved = false;
         }
@@ -138,7 +138,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void disconnect(string message = "") {
-        if(connection.connected) {
+        if(connection.logged_in) {
             connection.send((new c.Disconnect(message)));
             connection.disconnect();
         }
@@ -199,6 +199,7 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.PlayerPositionLook)(T packet) {
         debug writefln("%s", packet);
         
+        character.activated = true;
         character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
         character.set_rotation(packet.yaw, packet.pitch);
                 
