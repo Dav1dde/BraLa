@@ -57,8 +57,10 @@ class World {
     }
     
     void remove_chunk(vec3i chunkc) {
-        chunks[chunkc].empty_chunk();
-        chunks.remove(chunkc);
+        if(Chunk* chunk = chunkc in chunks) { 
+            chunk.empty_chunk();
+            chunks.remove(chunkc);
+        }
     }
     
     void remove_all_chunks() {

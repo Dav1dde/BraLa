@@ -6,10 +6,11 @@ private {
     
     import std.socket : Address;
     import std.conv : to;
+    import std.math : isNaN;
     import core.time : TickDuration;
     
     import gl3n.linalg : vec2i, vec3i, vec3;
-    import gl3n.math : almost_equal;
+    import gl3n.math : almost_equal, radians;
         
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
@@ -29,13 +30,14 @@ private {
 
 
 class BraLaGame : BaseGLFWEventHandler {
+    protected Object _world_lock;
+    
     BraLaEngine engine;
     ThreadedConnection connection;
     
     Character character;
-    World[int] worlds;
     protected World _current_world;    
-    @property current_world() { return _current_world; }
+    @property current_world() { synchronized(_world_lock) return _current_world; }
     
     DefaultAA!(bool, int, false) keymap;
     vec2i mouse_offset = vec2i(0, 0);
@@ -45,6 +47,8 @@ class BraLaGame : BaseGLFWEventHandler {
     protected TickDuration last_notchian_tick;
     
     this(BraLaEngine engine, void* window, string username, string password) {
+        _world_lock = new Object();
+        
         this.engine = engine;
         connection = new ThreadedConnection(username, password);
         connection.callback = &dispatch_packets;
@@ -115,9 +119,9 @@ class BraLaGame : BaseGLFWEventHandler {
     void display() {
         clear();
 
-        if(_current_world !is null) {
+        if(current_world !is null) {
             engine.use_shader("test_input");
-            _current_world.draw(engine);
+            current_world.draw(engine);
         }
     }
     
@@ -165,16 +169,11 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.Login)(T packet) {
         debug writefln("%s", packet);
         
-        if(_current_world !is null) {
-            _current_world.remove_all_chunks();
+        if(current_world !is null) {
+            current_world.remove_all_chunks();
         }
         
-        if(World* w = packet.dimension in worlds) {
-            _current_world = *w;
-        } else {
-            _current_world = new World();
-            worlds[packet.dimension] = _current_world;
-        }
+        _current_world = new World();
         
         character = new Character(packet.entity_id);
     }
@@ -186,34 +185,53 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.SpawnPosition)(T packet) {
         debug writefln("%s", packet);
         
-        if(_current_world !is null) {
-            _current_world.spawn = vec3i(packet.x, packet.y, packet.z);
+        if(current_world !is null) {
+            current_world.spawn = vec3i(packet.x, packet.y, packet.z);
         }
+    }
+    
+    void on_packet(T : s.PreChunk)(T packet) {
+        debug writefln("%s", packet);
+        
+        current_world.remove_chunk(vec3i(packet.x, 0, packet.z));
     }
     
     void on_packet(T : s.MapChunk)(T packet) {
         debug writefln("adding chunk: %s", packet);
-        _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
+        current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
     }
     
-    void on_packet(T : s.PlayerPositionLook)(T packet) {
-        debug writefln("%s", packet);
-        
-        character.activated = true;
-        character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
-        character.set_rotation(packet.yaw, packet.pitch);
-                
-        auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
-        connection.send(repl);
-    }
+    void on_packet(T : s.PlayerPositionLook)(T packet)
+        in { assert(!isNaN(packet.x) && !isNaN(packet.y) && !isNaN(packet.z)); }
+        body {
+            debug writefln("%s", packet);
+            
+            packet.yaw = isNaN(packet.yaw) ? 0:radians(packet.yaw);
+            packet.pitch = isNaN(packet.pitch) ? 0:radians(packet.pitch);
+            
+            character.activated = true;
+            character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
+            character.set_rotation(packet.yaw, packet.pitch);
+                    
+            auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
+            connection.send(repl);
+        }
 
     void on_packet(T : s.Disconnect)(T packet) {
         debug writefln("%s", packet);
         quit = true;
     }
     
+    void on_packet(T : s.EntityRelativeMove)(T packet) {}
+    void on_packet(T : s.EntityVelocity)(T packet) {}
+    void on_packet(T : s.EntityHeadLook)(T packet) {}
+    void on_packet(T : s.EntityLook)(T packet) {}
+    void on_packet(T : s.EntityLookRelativeMove)(T packet) {}
+    void on_packet(T : s.MobSpawn)(T packet) {}
+    void on_packet(T : s.EntityMetadata)(T packet) {}
+    
     void on_packet(T)(T packet) {
-//         debug writefln("Unhandled packet: %s", packet);
+        debug writefln("Unhandled packet: %s", packet);
     }
     
     // UI-Events

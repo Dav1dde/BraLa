@@ -4,7 +4,7 @@ private {
     import std.conv : to;
     
     import gl3n.linalg : vec3, dot, cross, quat;
-    import gl3n.math : asin;
+    import gl3n.math : asin, degrees;
     
     import brala.engine : BraLaEngine;
     import brala.camera : ICamera, FreeCamera;
@@ -69,8 +69,8 @@ class Character { // the one you're playing
     
     void send_packet(Connection connection) {
         quat rotation = cam.get_rotation(YAW_0_DIRECTION);
-        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 1.1, position.z, // TODO: proper stance
-                                               to!float(rotation.yaw), to!float(rotation.pitch), true); // TODO: verify bool
+        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.15, position.z, // TODO: proper stance
+                                               degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
         
         connection.send(packet);
     }
