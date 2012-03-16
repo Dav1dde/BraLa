@@ -222,16 +222,8 @@ class BraLaGame : BaseGLFWEventHandler {
         quit = true;
     }
     
-    void on_packet(T : s.EntityRelativeMove)(T packet) {}
-    void on_packet(T : s.EntityVelocity)(T packet) {}
-    void on_packet(T : s.EntityHeadLook)(T packet) {}
-    void on_packet(T : s.EntityLook)(T packet) {}
-    void on_packet(T : s.EntityLookRelativeMove)(T packet) {}
-    void on_packet(T : s.MobSpawn)(T packet) {}
-    void on_packet(T : s.EntityMetadata)(T packet) {}
-    
     void on_packet(T)(T packet) {
-        debug writefln("Unhandled packet: %s", packet);
+//         debug writefln("Unhandled packet: %s", packet);
     }
     
     // UI-Events

@@ -75,11 +75,5 @@ class Character { // the one you're playing
                                                degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
        
         connection.send(packet);
-/+        
-        auto packet1 = new c.PlayerPosition(position.x, position.y, position.y + 0.15, position.z, false);
-        connection.send(packet1);
-        auto packet2 = new c.PlayerLook(degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), false);
-        connection.send(packet2);
-        writefln("%s\n%s", packet1, packet2);+/
     }
 }
