@@ -32,7 +32,7 @@ class Login : IPacket {
     
     static Login recv(Stream s) {
         auto ret = new Login(read!(int, string)(s).field);
-        read!(string, int, int, byte, ubyte, ubyte);        
+        read!(string, int, int, byte, ubyte, ubyte)(s);        
         return ret;
     }
     
