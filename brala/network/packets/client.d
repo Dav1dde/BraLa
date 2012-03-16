@@ -31,7 +31,9 @@ class Login : IPacket {
     }
     
     static Login recv(Stream s) {
-        return new Login(read!(int, string)(s).field);
+        auto ret = new Login(read!(int, string)(s).field);
+        read!(string, int, int, byte, ubyte, ubyte);        
+        return ret;
     }
     
     string toString() {
