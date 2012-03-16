@@ -9,7 +9,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.camera : ICamera, BraLaCamera;
     import brala.network.connection : Connection;
-    import c = brala.network.packets.client;
+    import c = brala.network.packets.client;import std.stdio;
 }
 
 
@@ -73,7 +73,13 @@ class Character { // the one you're playing
         quat rotation = cam.get_rotation(YAW_0_DIRECTION);
         auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.15, position.z, // TODO: proper stance
                                                degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
-        
+       
         connection.send(packet);
+/+        
+        auto packet1 = new c.PlayerPosition(position.x, position.y, position.y + 0.15, position.z, false);
+        connection.send(packet1);
+        auto packet2 = new c.PlayerLook(degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), false);
+        connection.send(packet2);
+        writefln("%s\n%s", packet1, packet2);+/
     }
 }

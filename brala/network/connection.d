@@ -12,6 +12,7 @@ private {
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
+    import brala.network.queue : PacketQueue;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
@@ -25,6 +26,7 @@ class Connection {
     TcpSocket socket;
     SocketStream socketstream;
     EndianStream endianstream;
+    protected PacketQueue queue;
     protected bool _connected = false;
     protected Address connected_to;
     protected bool _logged_in = false;
@@ -44,6 +46,7 @@ class Connection {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new FixedEndianStream(socketstream, Endian.bigEndian);
+        queue = new PacketQueue();
         
         session = new Session();
         
@@ -83,7 +86,7 @@ class Connection {
     }
     
     void send(T : IPacket)(T packet) {
-        packet.send(endianstream);
+        queue.add(packet);
     }
     
     void login() {
@@ -139,6 +142,10 @@ class Connection {
     void _poll() {
         ubyte packet_id = read!ubyte(endianstream);
 
+        foreach(packet; queue) {
+            packet.send(endianstream);
+        }
+        
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
