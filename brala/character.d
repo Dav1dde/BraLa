@@ -41,10 +41,12 @@ class Character { // the one you're playing
         cam.rotatey(angle);
     }
     
-    void set_rotation(float yaw, float pitch, float roll = 0) {
-        quat rotation = quat.euler_rotation(yaw, pitch, 0);
-        vec3 forward = vec3(rotation.to_matrix!(3, 3) * YAW_0_DIRECTION).normalized;
-        look_at(cam.position + forward);
+    quat get_rotation() {
+        return cam.get_rotation(YAW_0_DIRECTION);
+    }
+    
+    void set_rotation(float yaw, float pitch) {
+        cam.set_rotation(YAW_0_DIRECTION, yaw, pitch, 0);
     }
     
     void move_forward(float delta) { // W

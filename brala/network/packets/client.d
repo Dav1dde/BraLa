@@ -36,7 +36,7 @@ class Login : IPacket {
     
     string toString() {
         return .stringof[7..$] ~ `.Login(int protocol_version : "` ~ to!string(protocol_version) ~
-                                                        `", string username : "` ~ to!string(username) ~ `")`;
+                                       `", string username : "` ~ to!string(username) ~ `")`;
     }
 }
 

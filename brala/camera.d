@@ -13,10 +13,11 @@ private {
 interface ICamera {
     @property vec3 position();
     @property void position(vec3 position);
-    quat get_rotation(vec3 comparison);
     void look_at(vec3 position);
     void rotatex(float angle);
     void rotatey(float angle);
+    quat get_rotation(vec3 comparison);
+    void set_rotation(vec3 forward, float yaw, float pitch, float roll);
     void move_forward(float delta);
     void move_backward(float delta);
     void strafe_left(float delta);
@@ -30,7 +31,7 @@ interface ICamera {
 class BraLaCamera : ICamera {
     BraLaEngine engine;    
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
-    vec3 forward = vec3(0.0f, 0.0f, -1.0f);
+    vec3 forward = vec3(0.0f, 0.0f, 1.0f);
     float fov = 65.0f;
     float near = 1.0f;
     float far = 400.0f;
@@ -71,6 +72,12 @@ class BraLaCamera : ICamera {
         vec3 axis = cross(forward, comparison).normalized;
         float angle = to!float(asin(dot(forward, comparison)));
         return quat(angle, axis);
+    }
+    
+    void set_rotation(vec3 forward, float yaw, float pitch, float roll) {
+        quat rotation = quat.euler_rotation(yaw, pitch, 0);
+        forward = vec3(rotation.to_matrix!(3, 3) * forward).normalized;
+        look_at(position + forward);
     }
     
     void move_forward(float delta) { // W
