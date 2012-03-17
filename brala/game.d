@@ -199,7 +199,14 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.PreChunk)(T packet) {
         debug writefln("%s", packet);
         
-        synchronized(_world_lock) _current_world.remove_chunk(vec3i(packet.x, 0, packet.z));
+        if(!packet.mode) {
+            vec3i chunkc = vec3i(packet.x, 0, packet.z);
+            synchronized(_world_lock) {
+                if(chunkc in _current_world.chunks) {
+                    _current_world.remove_chunk(chunkc);
+                }
+            }
+        }
     }
     
     void on_packet(T : s.MapChunk)(T packet) {

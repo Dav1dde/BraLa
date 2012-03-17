@@ -56,12 +56,12 @@ class World {
         mark_surrounding_chunks_dirty(chunkc);
     }
     
-    void remove_chunk(vec3i chunkc) {
-        if(Chunk* chunk = chunkc in chunks) { 
-            chunk.empty_chunk();
+    void remove_chunk(vec3i chunkc)
+        in { assert(chunkc in chunks); }
+        body {
+            chunks[chunkc].empty_chunk();
             chunks.remove(chunkc);
         }
-    }
     
     void remove_all_chunks() {
         foreach(key, chunk; chunks) {
