@@ -12,11 +12,11 @@ private {
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
-    import brala.network.queue : PacketQueue;
     import brala.network.util : FixedEndianStream, TupleRange, read, write;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
+    import brala.utils.queue : PacketQueue;
     
     debug import std.stdio : writefln;
 }
@@ -106,7 +106,7 @@ class Connection {
             if(!session.logged_in) {
                 session.login(username, password);
             }
-            writefln(repl_handshake.connection_hash);
+            debug writefln(repl_handshake.connection_hash);
             session.join(repl_handshake.connection_hash);
 //             session.keep_alive();
         }

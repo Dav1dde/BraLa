@@ -22,6 +22,7 @@ private {
     import brala.exception : ServerError;
 }
 
+
 abstract class IPacket {
     const ubyte id;
     void send(Stream s);
@@ -214,7 +215,9 @@ struct ChunkS { // TODO: implement send
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
-                
+        
+        GC.free(compressed_data);
+        
         Chunk chunk = new Chunk();
         chunk.fill_chunk_with_nothing();
         

@@ -22,6 +22,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.input : BaseGLFWEventHandler;
     import brala.types : DefaultAA;
+    import brala.utils.queue : Queue;
     import brala.util : clear;
     import brala.config;
     
@@ -34,6 +35,8 @@ class BraLaGame : BaseGLFWEventHandler {
     
     BraLaEngine engine;
     ThreadedConnection connection;
+    
+    protected Queue!vec3i chunk_removal_queue;
     
     Character character;
     protected World _current_world;    
@@ -48,7 +51,8 @@ class BraLaGame : BaseGLFWEventHandler {
     
     this(BraLaEngine engine, void* window, string username, string password) {
         _world_lock = new Object();
-        
+        chunk_removal_queue = new Queue!vec3i();
+
         this.engine = engine;
         connection = new ThreadedConnection(username, password);
         connection.callback = &dispatch_packets;
@@ -80,6 +84,15 @@ class BraLaGame : BaseGLFWEventHandler {
     bool poll(float delta_t) {
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
+        }
+
+        foreach(chunkc; chunk_removal_queue) {
+            synchronized(_world_lock) {
+                if(Chunk* chunk = chunkc in _current_world.chunks) {
+                    if(chunk.vbo.buffer != 0) chunk.vbo.remove();
+                    _current_world.remove_chunk(chunkc);
+                }
+            }
         }
         
         moved = move(delta_t) || moved;
@@ -199,13 +212,8 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.PreChunk)(T packet) {
         debug writefln("%s", packet);
         
-        if(!packet.mode) {
-            vec3i chunkc = vec3i(packet.x, 0, packet.z);
-            synchronized(_world_lock) {
-                if(chunkc in _current_world.chunks) {
-                    _current_world.remove_chunk(chunkc);
-                }
-            }
+        if(packet.mode == false) {
+            chunk_removal_queue.add(vec3i(packet.x, 0, packet.z));
         }
     }
     

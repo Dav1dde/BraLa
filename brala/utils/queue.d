@@ -1,4 +1,4 @@
-module brala.network.queue;
+module brala.utils.queue;
 
 private {
     import std.array : empty, front, back, popFront, popBack;
@@ -6,49 +6,49 @@ private {
     import brala.network.packets.types : IPacket;
 }
 
-class PacketQueue {
+class Queue(type) {
     protected Object _lock;
     
-    IPacket[] packets;
+    type[] data;
     
     this() {
         _lock = new Object();
     }
     
-    void add(IPacket packet) {
-        synchronized(_lock) packets ~= packet;
+    void add(type d) {
+        synchronized(_lock) data ~= d;
     }
     
     bool empty() {
-        return packets.empty;
+        return data.empty;
     }
     
-    IPacket pop_front() {
-        IPacket p;
+    type pop_front() {
+        type p;
         
         synchronized(_lock) {
-            p = packets.front;
-            packets.popFront();
+            p = data.front;
+            data.popFront();
         }
         
         return p;
     }
     
-    IPacket pop_back() {
-        IPacket p;
+    type pop_back() {
+        type p;
         
         synchronized(_lock) {
-            p = packets.back;
-            packets.popBack();
+            p = data.back;
+            data.popBack();
         }
         
         return p;
     }
     
-    int opApply(int delegate(IPacket packet) dg) {
+    int opApply(int delegate(type d) dg) {
         int result;
 
-        while(!packets.empty) {
+        while(!data.empty) {
             result = dg(pop_front());
             if(result) break;
         }
@@ -56,3 +56,5 @@ class PacketQueue {
         return result;
     }
 }
+
+alias Queue!(IPacket) PacketQueue;
