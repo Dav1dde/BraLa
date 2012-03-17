@@ -119,9 +119,11 @@ class BraLaGame : BaseGLFWEventHandler {
     void display() {
         clear();
 
-        if(_current_world !is null) {
-            engine.use_shader("test_input");
-            synchronized(_world_lock) current_world.draw(engine);
+        synchronized(_world_lock) {
+            if(_current_world !is null) {
+                engine.use_shader("test_input");
+                current_world.draw(engine);
+            }
         }
     }
     
@@ -201,8 +203,10 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_packet(T : s.MapChunk)(T packet) {
-        debug writefln("adding chunk: %s", packet);
-        synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
+        if(packet.chunk.primary_bitmask != 0) {
+            debug writefln("adding chunk: %s", packet);
+            synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
+        }
     }
     
     void on_packet(T : s.PlayerPositionLook)(T packet)
