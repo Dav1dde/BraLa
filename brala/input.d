@@ -1,4 +1,4 @@
-module brala.event;
+module brala.input;
 
 
 private {
