@@ -81,7 +81,7 @@ float[] simple_block(Side side, MCTextureSlice texture_slice) {
 
 private alias MCTextureSlice t;
 
-enum BLOCK_VERTICES_LEFT = [
+enum float[][] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
     simple_block(Side.LEFT, t(3, 1)), // grass
@@ -212,7 +212,7 @@ enum BLOCK_VERTICES_LEFT = [
     []
 ];
 
-enum BLOCK_VERTICES_RIGHT = [
+enum float[][] BLOCK_VERTICES_RIGHT = [
     [], // air
     simple_block(Side.RIGHT, t(1, 1)), // stone
     simple_block(Side.RIGHT, t(3, 1)), // grass
@@ -343,7 +343,7 @@ enum BLOCK_VERTICES_RIGHT = [
     []
 ];
 
-enum BLOCK_VERTICES_NEAR = [
+enum float[][] BLOCK_VERTICES_NEAR = [
     [], // air
     simple_block(Side.NEAR, t(1, 1)), // stone
     simple_block(Side.NEAR, t(3, 1)), // grass
@@ -474,7 +474,7 @@ enum BLOCK_VERTICES_NEAR = [
     []
 ];
 
-enum BLOCK_VERTICES_FAR = [
+enum float[][] BLOCK_VERTICES_FAR = [
     [], // air
     simple_block(Side.FAR, t(1, 1)), // stone
     simple_block(Side.FAR, t(3, 1)), // grass
@@ -605,7 +605,7 @@ enum BLOCK_VERTICES_FAR = [
     []
 ];
 
-enum BLOCK_VERTICES_TOP = [
+enum float[][] BLOCK_VERTICES_TOP = [
     [], // air
     simple_block(Side.TOP, t(1, 1)), // stone
     simple_block(Side.TOP, t(2, 1)), // grass
@@ -736,7 +736,7 @@ enum BLOCK_VERTICES_TOP = [
     []
 ];
 
-enum BLOCK_VERTICES_BOTTOM = [
+enum float[][] BLOCK_VERTICES_BOTTOM = [
     [], // air
     simple_block(Side.BOTTOM, t(1, 1)), // stone
     simple_block(Side.BOTTOM, t(0, 1)), // grass

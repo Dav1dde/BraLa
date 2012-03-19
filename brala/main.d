@@ -3,6 +3,7 @@ module brala.main;
 
 private {
     import glamour.gl;
+    import glamour.sampler : Sampler;
     import derelict.glfw3.glfw3;
     import derelict.devil.il;
     
@@ -61,6 +62,21 @@ GLVersion init_opengl() {
     return DerelictGL3.reload();
 }
 
+BraLaEngine init_engine(int width, int height, GLVersion glv) {
+    auto engine = new BraLaEngine(width, height, glv);
+    load_default_resources(engine.resmgr); // I like! ~15mb in 837ms
+
+    Sampler terrain_sampler = new Sampler();
+    terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+    terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+    terrain_sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    
+    engine.set_sampler("terrain", terrain_sampler);
+
+    return engine;
+}
+
 int main(string[] args) {
     scope(exit) glfwTerminate();
     
@@ -90,8 +106,7 @@ int main(string[] args) {
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
 
-    auto engine = new BraLaEngine(width, height, glv);
-    load_default_resources(engine.resmgr); // I like! ~15mb in 837ms
+    auto engine = init_engine(width, height, glv);
     
     auto game = new BraLaGame(engine, win, args[1], args[2]);
     game.start(args[3], to!ushort(args[4]));

@@ -2,7 +2,9 @@ module brala.engine;
 
 private {
     import glamour.gl;
-    import glamour.shader;
+    import glamour.shader : Shader;
+    import glamour.texture : ITexture, Texture2D;
+    import glamour.sampler : Sampler;
     
     import derelict.glfw3.glfw3;
     
@@ -39,15 +41,26 @@ class BraLaEngine {
     }
     
     protected Shader _current_shader = null;
+    protected ITexture _current_texture = null;
+    protected Sampler _current_sampler = null;
+    Sampler[ITexture] samplers;
     
-    @property Shader current_shader() {
-        return _current_shader;
-    }
-    
+    @property Shader current_shader() { return _current_shader; }
     @property void current_shader(Shader shader) {
         if(_current_shader !is null) _current_shader.unbind();
         _current_shader = shader;
         _current_shader.bind();
+    }
+
+    @property ITexture current_texture() { return _current_texture; }
+    @property void current_texture(ITexture texture) {
+        if(_current_texture !is null) _current_texture.unbind();
+        _current_texture = texture;
+        _current_texture.bind();
+        if(Sampler* sampler = _current_texture in samplers) {
+            _current_sampler = *sampler;
+            _current_sampler.bind(_current_texture);
+        }
     }
     
     this(int width, int height, GLVersion glv) {
@@ -113,4 +126,19 @@ class BraLaEngine {
         shader.uniform("proj", proj);
     }
 
+    void use_texture(ITexture texture) {
+        current_texture = texture;
+    }
+
+    void use_texture(string id) {
+        current_texture = resmgr.get!Texture2D(id);
+    }
+
+    void set_sampler(ITexture tex, Sampler s) {
+        samplers[tex] = s;
+    }
+    
+    void set_sampler(string tex_id, Sampler s) {
+        samplers[resmgr.get!Texture2D(tex_id)] = s;
+    }
 }

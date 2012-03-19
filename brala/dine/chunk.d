@@ -4,12 +4,14 @@ private {
     import glamour.gl : GLuint, GLenum, GL_FLOAT;
     import glamour.vbo : Buffer;
     
-    import std.c.string : memset;
+    import std.c.string : memcpy;
     import std.bitmanip : bitfields;
     
     import gl3n.linalg : vec3i;
 
-    import brala.dine.util : calloc, malloc, realloc, free, log2_ub;
+    import brala.dine.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
+                                 BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
+    import brala.dine.util : calloc, malloc, realloc, free, log2_ub, apply_offset;
     import brala.engine : BraLaEngine;
 }
 
@@ -154,6 +156,10 @@ class Chunk {
             float top;
             float left;
             float right;
+
+            float x_offset;
+            float y_offset;
+            float z_offset;
             
             Block value;
             Block right_block;
@@ -163,10 +169,12 @@ class Chunk {
             for(int z=0; z<depth-1; z++){
                 near = cast(float)z;
                 far = cast(float)(z+1);
+                z_offset = z+0.5f;
                 
                 for(int y=0; y<height-1; y++){
                     bottom = cast(float)y;
                     top = cast(float)(y+1);
+                    y_offset = y+0.5f;
                     value = blocks[y*width+z*zstep];
                     
                     if(w+1024 > length) {
@@ -177,70 +185,34 @@ class Chunk {
                     for(int x=0; x<width-1; x++){
                         left = cast(float)x;
                         right = cast(float)(x+1);
+                        x_offset = x+0.5f;
                         
                         index = x+y*width+z*zstep;
                         right_block = blocks[index+1];
                         top_block = blocks[index+width];
                         front_block = blocks[index+zstep];
-                        
+
+                        // TODO: change offset according to the block-position
                         if(value == 0) {
-                            if(right_block != 0) {
-                                /// pos_X,    pos_Y,         pos_Z,       normal_X,  normal_Y, normal_Z, tex_u,    tex_v 
-                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                            if(right_block.id != 0) {
+                                mixin(apply_offset!"BLOCK_VERTICES_LEFT[right_block.id]");
                             }
-                            if(top_block != 0) {
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0; v[w++]=0;
+                            if(top_block.id != 0) {
+                                mixin(apply_offset!"BLOCK_VERTICES_BOTTOM[top_block.id]");
                             }
-                            if(front_block != 0) {
-                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=-1; v[w++]=0; v[w++]=0;
+                            if(front_block.id != 0) {
+                                mixin(apply_offset!"BLOCK_VERTICES_FAR[front_block.id]");
                             }
                         } else {
                             if(right_block == 0) {
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0; v[w++]=0;
+                                mixin(apply_offset!"BLOCK_VERTICES_RIGHT[front_block.id]");
                             }
                             if(top_block == 0) {
-                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=near; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0; v[w++]=0;
+                                mixin(apply_offset!"BLOCK_VERTICES_TOP[front_block.id]");
                             }
                             if(front_block == 0) {
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
-                                
-                                v[w++]=right; v[w++]=top;    v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
-                                v[w++]=left;  v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
-                                v[w++]=right; v[w++]=bottom; v[w++]=far;  v[w++]=0; v[w++]=0; v[w++]=1; v[w++]=0; v[w++]=0;
+                                mixin(apply_offset!"BLOCK_VERTICES_NEAR[front_block.id]");
                             }
-
                         }
                         
                         value = right_block;

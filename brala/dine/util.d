@@ -95,3 +95,18 @@ T.vt[] raw_vectors(T)(T[] vecs) if(is_vector!T) {
     }
     return ret;
 }
+
+// this is made for tessellate function
+template apply_offset(string data) {
+    enum apply_offset = 
+           "size_t data_length = " ~ data ~ ".length;" ~
+           "float* data_ptr = " ~ data ~ ".ptr;" ~
+           "memcpy(v+w, data_ptr, data_length*float.sizeof);" ~
+       q{
+            for(; w < w+data_length; w = w+5) {
+                v[w++] += x_offset;
+                v[w++] += y_offset;
+                v[w++] += z_offset;
+            }
+        };
+}
