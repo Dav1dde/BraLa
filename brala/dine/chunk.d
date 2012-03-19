@@ -9,7 +9,6 @@ private {
     
     import gl3n.linalg : vec3i;
 
-    import brala.dine.builder : Side, BlockBuilder;
     import brala.dine.util : calloc, malloc, realloc, free, log2_ub;
     import brala.engine : BraLaEngine;
 }
