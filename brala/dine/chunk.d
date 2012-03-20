@@ -151,16 +151,12 @@ class Chunk {
             int index;
             int w = 0;
             
-            float near;
-            float far;
-            float bottom;
-            float top;
-            float left;
-            float right;
-
             float x_offset;
+            float x_offset_r;
             float y_offset;
+            float y_offset_t;
             float z_offset;
+            float z_offset_n;
             
             Block value;
             Block right_block;
@@ -168,14 +164,12 @@ class Chunk {
             Block front_block;
 
             for(int z=0; z<depth-1; z++){
-                near = cast(float)z;
-                far = cast(float)(z+1);
                 z_offset = z+0.5f;
+                z_offset_n = z+1.5f;
                 
                 for(int y=0; y<height-1; y++){
-                    bottom = cast(float)y;
-                    top = cast(float)(y+1);
                     y_offset = y+0.5f;
+                    y_offset_t = y+1.5f;
                     value = blocks[y*width+z*zstep];
                     
                     if(w+1024 > length) {
@@ -184,9 +178,8 @@ class Chunk {
                     }
                     
                     for(int x=0; x<width-1; x++){
-                        left = cast(float)x;
-                        right = cast(float)(x+1);
                         x_offset = x+0.5f;
+                        x_offset_r = x+1.5f;
                         
                         index = x+y*width+z*zstep;
                         right_block = blocks[index+1];
@@ -201,7 +194,7 @@ class Chunk {
                                 v[w..(w+(vertices.length))] = vertices;
                                 size_t rw = w;
                                 for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
+                                    v[w++] += x_offset_r;
                                     v[w++] += y_offset;
                                     v[w++] += z_offset;
                                 }
@@ -212,7 +205,7 @@ class Chunk {
                                 size_t rw = w;
                                 for(; w < (rw+vertices.length); w += 5) {
                                     v[w++] += x_offset;
-                                    v[w++] += y_offset;
+                                    v[w++] += y_offset_t;
                                     v[w++] += z_offset;
                                 }
                             }
@@ -223,7 +216,7 @@ class Chunk {
                                 for(; w < (rw+vertices.length); w += 5) {
                                     v[w++] += x_offset;
                                     v[w++] += y_offset;
-                                    v[w++] += z_offset;
+                                    v[w++] += z_offset_n;
                                 }
                             }
                         } else {
