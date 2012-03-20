@@ -873,6 +873,10 @@ version(update_vertices) {
         import std.string;
 
         string f = "brala/dine/vertices.txt";
+        if(isFile(f)) {
+            remove(f);
+        }
+        
         write(f, format("enum float[][] BLOCK_VERTICES_LEFT = %s;\n\n", BLOCK_VERTICES_LEFT));
         append(f, format("enum float[][] BLOCK_VERTICES_RIGHT = %s;\n\n", BLOCK_VERTICES_RIGHT));
         append(f, format("enum float[][] BLOCK_VERTICES_NEAR = %s;\n\n", BLOCK_VERTICES_NEAR));
