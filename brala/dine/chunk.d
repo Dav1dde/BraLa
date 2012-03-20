@@ -11,8 +11,9 @@ private {
 
     import brala.dine.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                  BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
-    import brala.dine.util : calloc, malloc, realloc, free, log2_ub, apply_offset;
+    import brala.dine.util : calloc, malloc, realloc, free, log2_ub;
     import brala.engine : BraLaEngine;
+    import brala.utils.ctfe : TupleRange;
 }
 
 
@@ -192,28 +193,69 @@ class Chunk {
                         top_block = blocks[index+width];
                         front_block = blocks[index+zstep];
 
-                        // TODO: CTFE magic for commonly used blocks (if(dirt) …) to reduce the array lookups
                         // TODO: maybe dont use a "template vertices" for easy blocks, which only consist of 2 triangles per side
                         // TODO: change offset according to the block-position
                         if(value == 0) {
                             if(right_block.id != 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_LEFT[right_block.id]");
+                                float[] vertices = BLOCK_VERTICES_LEFT[right_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                             if(top_block.id != 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_BOTTOM[top_block.id]");
+                                float[] vertices = BLOCK_VERTICES_BOTTOM[top_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                             if(front_block.id != 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_FAR[front_block.id]");
+                                float[] vertices = BLOCK_VERTICES_FAR[front_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                         } else {
                             if(right_block == 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_RIGHT[front_block.id]");
+                                float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                             if(top_block == 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_TOP[front_block.id]");
+                                float[] vertices = BLOCK_VERTICES_TOP[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                             if(front_block == 0) {
-                                mixin(apply_offset!"BLOCK_VERTICES_NEAR[front_block.id]");
+                                float[] vertices = BLOCK_VERTICES_NEAR[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                         }
                         

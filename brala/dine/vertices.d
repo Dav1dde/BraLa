@@ -210,6 +210,7 @@ version(update_vertices) {
         [], // padding to 128 blocks
         [],
         [],
+        [],
         []
     ];
 
@@ -339,6 +340,7 @@ version(update_vertices) {
         simple_block(Side.RIGHT, t(3, 14)), // redstone lamp
         simple_block(Side.RIGHT, t(4, 14)), // redstone lamp on
         [], // padding to 128 blocks
+        [],
         [],
         [],
         []
@@ -472,6 +474,7 @@ version(update_vertices) {
         [], // padding to 128 blocks
         [],
         [],
+        [],
         []
     ];
 
@@ -601,6 +604,7 @@ version(update_vertices) {
         simple_block(Side.FAR, t(3, 14)), // redstone lamp
         simple_block(Side.FAR, t(4, 14)), // redstone lamp on
         [], // padding to 128 blocks
+        [],
         [],
         [],
         []
@@ -734,6 +738,7 @@ version(update_vertices) {
         [], // padding to 128 blocks
         [],
         [],
+        [],
         []
     ];
 
@@ -865,6 +870,7 @@ version(update_vertices) {
         [], // padding to 128 blocks
         [],
         [],
+        [],
         []
     ];
 
@@ -877,12 +883,12 @@ version(update_vertices) {
             remove(f);
         }
         
-        write(f, format("enum float[][] BLOCK_VERTICES_LEFT = %s;\n\n", BLOCK_VERTICES_LEFT));
-        append(f, format("enum float[][] BLOCK_VERTICES_RIGHT = %s;\n\n", BLOCK_VERTICES_RIGHT));
-        append(f, format("enum float[][] BLOCK_VERTICES_NEAR = %s;\n\n", BLOCK_VERTICES_NEAR));
-        append(f, format("enum float[][] BLOCK_VERTICES_FAR = %s;\n\n", BLOCK_VERTICES_FAR));
-        append(f, format("enum float[][] BLOCK_VERTICES_TOP = %s;\n\n", BLOCK_VERTICES_TOP));
-        append(f, format("enum float[][] BLOCK_VERTICES_BOTTOM = %s;\n\n", BLOCK_VERTICES_BOTTOM));
+        write(f, format("float[][] BLOCK_VERTICES_LEFT = %s;\n\n", BLOCK_VERTICES_LEFT));
+        append(f, format("float[][] BLOCK_VERTICES_RIGHT = %s;\n\n", BLOCK_VERTICES_RIGHT));
+        append(f, format("float[][] BLOCK_VERTICES_NEAR = %s;\n\n", BLOCK_VERTICES_NEAR));
+        append(f, format("float[][] BLOCK_VERTICES_FAR = %s;\n\n", BLOCK_VERTICES_FAR));
+        append(f, format("float[][] BLOCK_VERTICES_TOP = %s;\n\n", BLOCK_VERTICES_TOP));
+        append(f, format("float[][] BLOCK_VERTICES_BOTTOM = %s;\n\n", BLOCK_VERTICES_BOTTOM));
     }
 } else {
     mixin(import("vertices.txt"));

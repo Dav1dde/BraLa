@@ -12,7 +12,7 @@ private {
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
-    import brala.network.util : FixedEndianStream, TupleRange, read, write;
+    import brala.network.util : FixedEndianStream, read, write;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;

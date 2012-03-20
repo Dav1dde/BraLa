@@ -11,7 +11,8 @@ public {
     import std.conv : to;
 
     import gl3n.linalg : vec3i;
-        
+
+    import brala.utils.ctfe : staticJoin;    
     import brala.network.util : read, write;
 }
 
@@ -19,16 +20,6 @@ public {
 immutable byte NULL_BYTE = 0;
 immutable ubyte NULL_UBYTE = 0;
 
-
-template staticJoin(string delimiter, T...) {
-    static if(T.length == 0) {
-        enum staticJoin = "";
-    } else static if(T.length == 1) {
-        enum staticJoin = T[0];
-    } else {
-        enum staticJoin = T[0] ~ delimiter ~ staticJoin!(delimiter, T[1..$]);
-    }
-}
 
 mixin template get_packets_mixin(alias Module) {
     template get_packets() {

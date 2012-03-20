@@ -70,7 +70,7 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
     terrain_sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     
     engine.set_sampler("terrain", terrain_sampler);
 
@@ -105,7 +105,7 @@ int main(string[] args) {
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
-
+                   
     auto engine = init_engine(width, height, glv);
     
     auto game = new BraLaGame(engine, win, args[1], args[2]);
