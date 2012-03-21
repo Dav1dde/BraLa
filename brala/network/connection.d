@@ -113,20 +113,6 @@ class Connection {
         
         auto login = new c.Login(28, username);
         login.send(endianstream);
-        
-        ubyte packet_id = read!ubyte(endianstream);
-        s.Login repl_login;
-        if(packet_id == s.Login.id) {
-            repl_login = s.Login.recv(endianstream);
-        } else if(packet_id == s.Disconnect.id) {
-            throw new ServerError("Disconnect, " ~ s.Disconnect.recv(endianstream).reason);
-        } else {
-            throw new ServerError("Expected login or disconnect packet.");
-        }
-
-        callback(repl_login.id, cast(void*)repl_login);
-        
-        _logged_in = true;
     }
     
     void poll() {
@@ -166,6 +152,10 @@ class Connection {
     
     protected void on_packet(T : s.KeepAlive)(T packet) {
         (new c.KeepAlive(packet.keepalive_id)).send(endianstream);
+    }
+
+    protected void on_packet(T : s.Login)(T packet) {
+        _logged_in = true;
     }
     
     protected void on_packet(T : s.Disconnect)(T packet) {

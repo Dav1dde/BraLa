@@ -57,6 +57,8 @@ class BraLaGame : BaseGLFWEventHandler {
         connection = new ThreadedConnection(username, password);
         connection.callback = &dispatch_packets;
 
+        character = new Character(0);
+
         super(window); // call this at the end or have a life with segfaults!
     }
     
@@ -89,7 +91,7 @@ class BraLaGame : BaseGLFWEventHandler {
         foreach(chunkc; chunk_removal_queue) {
             synchronized(_world_lock) {
                 if(Chunk* chunk = chunkc in _current_world.chunks) {
-                    if(chunk.vbo.buffer != 0) chunk.vbo.remove();
+                    if(chunk.vbo !is null && chunk.vbo.buffer != 0) chunk.vbo.remove();
                     _current_world.remove_chunk(chunkc);
                 }
             }
