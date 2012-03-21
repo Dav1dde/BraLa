@@ -24,5 +24,5 @@ void load_default_resources(ResourceManager rsmg = null) {
     }
     
     // Yeah wait for it, still maybe the faster way, if you load many resources
-    resmgr.add_many_wait(resources);
+    resmgr.add_many(resources);
 }

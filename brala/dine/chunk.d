@@ -186,6 +186,8 @@ class Chunk {
                         top_block = blocks[index+width];
                         front_block = blocks[index+zstep];
 
+                        // TODO: use primary bitmask
+                        // TODO: octree?
                         // TODO: maybe dont use a "template vertices" for easy blocks, which only consist of 2 triangles per side
                         // TODO: change offset according to the block-position
                         if(value == 0) {

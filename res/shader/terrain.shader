@@ -7,7 +7,7 @@ vertex:
 
     smooth out vec3 v_position;
     smooth out vec3 v_normal;
-    smooth out vec2 v_texcoord;
+    varying out vec2 v_texcoord;
 
     uniform mat4 model;
     uniform mat4 view;
