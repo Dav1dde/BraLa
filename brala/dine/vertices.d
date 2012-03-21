@@ -49,13 +49,13 @@ immutable CubeSideData[6] CUBE_VERTICES = [
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]], // left
        [-1.0f, 0.0f, 0.0f] },
 
-    { [[0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f], [0.5f, -0.5f, 0.5f]], // right
+    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f]], // right
        [1.0f, 0.0f, 0.0f] },
 
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // front
        [0.0f, 0.0f, 1.0f] },
 
-    { [[-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, -0.5f, -0.5f]], // back
+    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // back
        [0.0f, 0.0f, -1.0f] },
 
     { [[-0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, -0.5f]], // top
@@ -84,12 +84,6 @@ private alias MCTextureSlice t;
 float[][] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
-//     [-0.5,-0.5,-0.5,-1,0,0, 0.0625, 0.0625,
-//      -0.5,-0.5,0.5,-1,0,0,  0.125,  0.0625,
-//      -0.5,0.5,0.5,-1,0,0,   0.0625, 0,
-//      -0.5,-0.5,-0.5,-1,0,0, 0.0625, 0.0625,
-//      -0.5,0.5,0.5,-1,0,0,   0.0625, 0,
-//      -0.5,0.5,-0.5,-1,0,0,  0.125,  0],
     simple_block(Side.LEFT, t(3, 1)), // grass
     simple_block(Side.LEFT, t(2, 1)), // dirt
     simple_block(Side.LEFT, t(0, 2)), // cobble
@@ -105,7 +99,7 @@ float[][] BLOCK_VERTICES_LEFT = [
     simple_block(Side.LEFT, t(0, 3)), // gold ore
     simple_block(Side.LEFT, t(1, 3)), // iron ore
     simple_block(Side.LEFT, t(2, 3)), // coal ore
-    simple_block(Side.LEFT, t(2, 2)), // wood
+    simple_block(Side.LEFT, t(4, 2)), // wood
     simple_block(Side.LEFT, t(4, 4)), // leave
     simple_block(Side.LEFT, t(0, 4)), // sponge
     simple_block(Side.LEFT, t(1, 4)), // glass
@@ -237,7 +231,7 @@ float[][] BLOCK_VERTICES_RIGHT = [
     simple_block(Side.RIGHT, t(0, 3)), // gold ore
     simple_block(Side.RIGHT, t(1, 3)), // iron ore
     simple_block(Side.RIGHT, t(2, 3)), // coal ore
-    simple_block(Side.RIGHT, t(2, 2)), // wood
+    simple_block(Side.RIGHT, t(4, 2)), // wood
     simple_block(Side.RIGHT, t(4, 4)), // leave
     simple_block(Side.RIGHT, t(0, 4)), // sponge
     simple_block(Side.RIGHT, t(1, 4)), // glass
@@ -369,7 +363,7 @@ float[][] BLOCK_VERTICES_NEAR = [
     simple_block(Side.NEAR, t(0, 3)), // gold ore
     simple_block(Side.NEAR, t(1, 3)), // iron ore
     simple_block(Side.NEAR, t(2, 3)), // coal ore
-    simple_block(Side.NEAR, t(2, 2)), // wood
+    simple_block(Side.NEAR, t(4, 2)), // wood
     simple_block(Side.NEAR, t(4, 4)), // leave
     simple_block(Side.NEAR, t(0, 4)), // sponge
     simple_block(Side.NEAR, t(1, 4)), // glass
@@ -501,7 +495,7 @@ float[][] BLOCK_VERTICES_FAR = [
     simple_block(Side.FAR, t(0, 3)), // gold ore
     simple_block(Side.FAR, t(1, 3)), // iron ore
     simple_block(Side.FAR, t(2, 3)), // coal ore
-    simple_block(Side.FAR, t(2, 2)), // wood
+    simple_block(Side.FAR, t(4, 2)), // wood
     simple_block(Side.FAR, t(4, 4)), // leave
     simple_block(Side.FAR, t(0, 4)), // sponge
     simple_block(Side.FAR, t(1, 4)), // glass
@@ -618,7 +612,7 @@ float[][] BLOCK_VERTICES_FAR = [
 float[][] BLOCK_VERTICES_TOP = [
     [], // air
     simple_block(Side.TOP, t(1, 1)), // stone
-    simple_block(Side.TOP, t(2, 1)), // grass
+    simple_block(Side.TOP, t(0, 1)), // grass
     simple_block(Side.TOP, t(2, 1)), // dirt
     simple_block(Side.TOP, t(0, 2)), // cobble
     simple_block(Side.TOP, t(4, 1)), // wooden plank
@@ -633,7 +627,7 @@ float[][] BLOCK_VERTICES_TOP = [
     simple_block(Side.TOP, t(0, 3)), // gold ore
     simple_block(Side.TOP, t(1, 3)), // iron ore
     simple_block(Side.TOP, t(2, 3)), // coal ore
-    simple_block(Side.TOP, t(2, 2)), // wood
+    simple_block(Side.TOP, t(5, 2)), // wood
     simple_block(Side.TOP, t(4, 4)), // leave
     simple_block(Side.TOP, t(0, 4)), // sponge
     simple_block(Side.TOP, t(1, 4)), // glass
@@ -765,7 +759,7 @@ float[][] BLOCK_VERTICES_BOTTOM = [
     simple_block(Side.BOTTOM, t(0, 3)), // gold ore
     simple_block(Side.BOTTOM, t(1, 3)), // iron ore
     simple_block(Side.BOTTOM, t(2, 3)), // coal ore
-    simple_block(Side.BOTTOM, t(2, 2)), // wood
+    simple_block(Side.BOTTOM, t(5, 2)), // wood
     simple_block(Side.BOTTOM, t(4, 4)), // leave
     simple_block(Side.BOTTOM, t(0, 4)), // sponge
     simple_block(Side.BOTTOM, t(1, 4)), // glass
