@@ -10,7 +10,7 @@ private {
     import std.string : toStringz, format;
     import std.traits : ReturnType, isCallable;
     
-    import brala.exception : ImageError;import std.stdio;
+    import brala.exception : ImageError;
 }
 
 version(stb) {

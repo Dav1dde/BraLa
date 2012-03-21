@@ -203,7 +203,7 @@ class ResourceManager {
         }           
     
         foreach(textask; textasks) {
-            Image img = textask.task.yieldForce();
+            Image img = textask.task.workForce();
 
             auto tex = new Texture2D(img.dest_format, img.width, // bugged?
                                      img.height, img.dest_format, img.dest_type);
