@@ -34,21 +34,23 @@ struct Block {
     }
 }
 
+private const Block AIR_BLOCK = Block(0);
+
 // NOTE to prgrammer, ctor will maybe called from a seperate thread
 // => dont do opengl stuff in the ctor
 class Chunk {
     // width, height, depth must be a power of two
-    const uint width = 16;
-    const uint height = 256;
-    const uint depth = 16;
+    const int width = 16;
+    const int height = 256;
+    const int depth = 16;
     
-    const uint log2width = log2_ub(width);
-    const uint log2height = log2_ub(height);
-    const uint log2depth = log2_ub(depth);
-    const uint log2heightwidth = log2_ub(height*width);
+    const int log2width = log2_ub(width);
+    const int log2height = log2_ub(height);
+    const int log2depth = log2_ub(depth);
+    const int log2heightwidth = log2_ub(height*width);
     
-    const uint block_count = width*height*depth;
-    const uint data_size = block_count*Block.sizeof;
+    const int block_count = width*height*depth;
+    const int data_size = block_count*Block.sizeof;
     
     static Block* empty_blocks;
     
@@ -136,60 +138,117 @@ class Chunk {
             return Block(0, 0);
         }
     }
+
+    Block blockss(int i) {
+        if(i < 0) return Block(0, 0);
+        if(i > block_count) return Block(0, 0);
+        return blocks[i];
+    }
     
     // rendering
     
     // fills the vbo with the chunk content    
-    // credits to florian boesch - http://codeflow.org/
+    // credits to Florian Boesch - http://codeflow.org/
     void tessellate(ref float* v, ref size_t length, bool force = false){
         if(vbo is null) {
             vbo = new Buffer();
         }
-        
+
         if(dirty || force) {
             int zstep = width*height;
             int index;
             int w = 0;
-            
+
             float x_offset;
             float x_offset_r;
             float y_offset;
             float y_offset_t;
             float z_offset;
             float z_offset_n;
-            
+
             Block value;
             Block right_block;
             Block top_block;
             Block front_block;
 
-            for(int z=0; z<depth-1; z++){
+            foreach(z; -1..depth) {
                 z_offset = z+0.5f;
                 z_offset_n = z+1.5f;
-                
-                for(int y=0; y<height-1; y++){
+
+                foreach(y; -1..height-1) {
                     y_offset = y+0.5f;
                     y_offset_t = y+1.5f;
-                    value = blocks[y*width+z*zstep];
-                    
+
+                    value = AIR_BLOCK;
+
                     if(w+1024 > length) {
                         length = length + (depth-z)*width*height;
                         v = cast(float*)realloc(v, length*float.sizeof);
                     }
-                    
-                    for(int x=0; x<width-1; x++){
+
+                    foreach(x; -1..width) {
                         x_offset = x+0.5f;
                         x_offset_r = x+1.5f;
                         
                         index = x+y*width+z*zstep;
-                        right_block = blocks[index+1];
-                        top_block = blocks[index+width];
-                        front_block = blocks[index+zstep];
 
+                        if(z == -1) {
+                            right_block = AIR_BLOCK;
+                            top_block = AIR_BLOCK;
+
+                            if(y >= 0 && y < height-1 && x >= 0 && x < width-1) {
+                                front_block = blocks[index+zstep];
+                            } else {
+                                front_block = AIR_BLOCK;
+                            }
+                        } else if(z == depth-1) {
+                            if(x < width-1) {
+                                right_block = blocks[index+1];
+                            } else {
+                                right_block = AIR_BLOCK;
+                            }
+
+                            if(x >= 0) {
+                                top_block = blocks[index+width];
+                            } else {
+                                top_block = AIR_BLOCK;
+                            }
+                            
+                            front_block = AIR_BLOCK;
+                        } else {
+                            if(y == height-1) {
+                                right_block = AIR_BLOCK;
+                                top_block = AIR_BLOCK;
+                                front_block = AIR_BLOCK;
+                            } else if(y == -1) {
+                                right_block = AIR_BLOCK;
+                                front_block = AIR_BLOCK;
+
+                                if(x >= 0 || x < width-1 || z >= 0 || z < depth-1) {
+                                    top_block = blocks[index+width];
+                                } else {
+                                    top_block = AIR_BLOCK;
+                                }
+                            } else {
+                                if(x == -1) {
+                                    right_block = blocks[index+1];
+                                    top_block = AIR_BLOCK;
+                                    front_block = AIR_BLOCK;
+                                } else if(x == width-1) {
+                                    right_block = AIR_BLOCK;
+                                    top_block = blocks[index+width];
+                                    front_block = blocks[index+zstep];
+                                } else {
+                                    right_block = blocks[index+1];
+                                    top_block = blocks[index+width];
+                                    front_block = blocks[index+zstep];
+                                }
+                            }
+                        }
+                        
                         // TODO: use primary bitmask
                         // TODO: octree?
                         // TODO: maybe dont use a "template vertices" for easy blocks, which only consist of 2 triangles per side
-                        // TODO: change offset according to the block-position
                         if(value == 0) {
                             if(right_block.id != 0) {
                                 float[] vertices = BLOCK_VERTICES_LEFT[right_block.id];
@@ -253,17 +312,16 @@ class Chunk {
                                 }
                             }
                         }
-                        
+
                         value = right_block;
                     }
                 }
             }
-            
+
             vbo_type = GL_FLOAT;
             vbo_vcount = w / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
-
             vbo.set_data(v[0..w], GL_FLOAT);
-            
+
             dirty = false;
         }
     }

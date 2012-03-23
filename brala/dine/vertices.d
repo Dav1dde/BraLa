@@ -138,7 +138,7 @@ float[][] BLOCK_VERTICES_LEFT = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.LEFT, t(4, 4)), // diamond ore
+    simple_block(Side.LEFT, t(2, 4)), // diamond ore
     simple_block(Side.LEFT, t(8, 2)), // diamond block
     simple_block(Side.LEFT, t(12, 4)), // crafting table
     [], // wheat
@@ -270,7 +270,7 @@ float[][] BLOCK_VERTICES_RIGHT = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.RIGHT, t(4, 4)), // diamond ore
+    simple_block(Side.RIGHT, t(2, 4)), // diamond ore
     simple_block(Side.RIGHT, t(8, 2)), // diamond block
     simple_block(Side.RIGHT, t(12, 4)), // crafting table
     [], // wheat
@@ -402,7 +402,7 @@ float[][] BLOCK_VERTICES_NEAR = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.NEAR, t(4, 4)), // diamond ore
+    simple_block(Side.NEAR, t(2, 4)), // diamond ore
     simple_block(Side.NEAR, t(8, 2)), // diamond block
     simple_block(Side.NEAR, t(12, 4)), // crafting table
     [], // wheat
@@ -534,7 +534,7 @@ float[][] BLOCK_VERTICES_FAR = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.FAR, t(4, 4)), // diamond ore
+    simple_block(Side.FAR, t(2, 4)), // diamond ore
     simple_block(Side.FAR, t(8, 2)), // diamond block
     simple_block(Side.FAR, t(12, 4)), // crafting table
     [], // wheat
@@ -666,7 +666,7 @@ float[][] BLOCK_VERTICES_TOP = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.TOP, t(4, 4)), // diamond ore
+    simple_block(Side.TOP, t(2, 4)), // diamond ore
     simple_block(Side.TOP, t(8, 2)), // diamond block
     simple_block(Side.TOP, t(4, 1)), // crafting table
     [], // wheat
@@ -798,7 +798,7 @@ float[][] BLOCK_VERTICES_BOTTOM = [
     [], // wooden stair
     [], // chest
     [], // redstone wire
-    simple_block(Side.BOTTOM, t(4, 4)), // diamond ore
+    simple_block(Side.BOTTOM, t(2, 4)), // diamond ore
     simple_block(Side.BOTTOM, t(8, 2)), // diamond block
     simple_block(Side.BOTTOM, t(4, 1)), // crafting table
     [], // wheat

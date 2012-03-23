@@ -24,9 +24,9 @@ class World {
     static ~this() {
     }
     
-    const uint width = 16;
-    const uint height = 256;
-    const uint depth = 16;
+    const int width = 16;
+    const int height = 256;
+    const int depth = 16;
     const int min_height = 0;
     const int max_height = height;    
     
