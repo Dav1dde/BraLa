@@ -278,6 +278,10 @@ class PlayerListItem : IPacket {
     mixin Packet!(0xC9, string, "username", bool, "online", short, "ping");
 }
 
+class PlayerAbilities : IPacket {
+    mixin Packet!(0xCA, bool, "is_invunerable", bool, "is_flying", bool, "can_fly", bool, "can_instant_destroy");
+}
+
 class PluginMessage : IPacket {
     mixin Packet!(0xFA, string, "channel", Array!(short, byte), "data");
 }

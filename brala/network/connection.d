@@ -41,8 +41,10 @@ class Connection {
     
     immutable string username;
     immutable string password;
+
+    immutable int protocol_version;
     
-    this(string username, string password) {
+    this(string username, string password, int protocol_version = 29) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new FixedEndianStream(socketstream, Endian.bigEndian);
@@ -52,6 +54,7 @@ class Connection {
         
         this.username = username;
         this.password = password;
+        this.protocol_version = protocol_version;
     }
     
     this(string username, string password, Address to) {
@@ -111,7 +114,7 @@ class Connection {
 //             session.keep_alive();
         }
         
-        auto login = new c.Login(28, username);
+        auto login = new c.Login(protocol_version, username);
         login.send(endianstream);
     }
     

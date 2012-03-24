@@ -101,6 +101,7 @@ class EnchantItem : IPacket {
 }
 
 public alias server.UpdateSign UpdateSign;
+public alias server.PlayerAbilities PlayerAbilities;
 public alias server.PluginMessage PluginMessage;
 
 class ServerListPing : IPacket {
