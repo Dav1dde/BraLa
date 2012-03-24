@@ -36,6 +36,15 @@ struct Block {
 
 private const Block AIR_BLOCK = Block(0);
 
+private struct NeighbourChunks {
+    Chunk* left;
+    Chunk* right;
+    Chunk* near;
+    Chunk* far;
+    Chunk* top;
+    Chunk* bottom;
+}
+
 // NOTE to prgrammer, ctor will maybe called from a seperate thread
 // => dont do opengl stuff in the ctor
 class Chunk {
@@ -63,6 +72,8 @@ class Chunk {
     }
     
     bool dirty;
+
+    NeighbourChunks neighbour_chunks;
     
     bool empty;
     Block* blocks;

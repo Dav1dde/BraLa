@@ -54,6 +54,7 @@ class World {
         
         chunks[chunkc] = chunk;
         mark_surrounding_chunks_dirty(chunkc);
+        update_neighbours(chunk, chunkc);
     }
     
     void remove_chunk(vec3i chunkc)
@@ -61,6 +62,9 @@ class World {
         body {
             chunks[chunkc].empty_chunk();
             chunks.remove(chunkc);
+
+            mark_surrounding_chunks_dirty(chunkc);
+            update_neighbours(chunkc);
         }
     
     void remove_all_chunks() {
@@ -108,7 +112,37 @@ class World {
             
             return chunk[chunk.to_flat(position.x % width, position.y % height, position.z % depth)];
         }
-    
+
+    void update_neighbours(vec3i chunkc) {
+        Chunk* c = chunkc in chunks;
+        update_neighbours(*c, chunkc);
+    }
+        
+    void update_neighbours(Chunk chunk, vec3i chunkc) {
+        Chunk* c_left = vec3i(chunkc.x-1, chunkc.yz) in chunks;
+        Chunk* c_right = vec3i(chunkc.x+1, chunkc.yz) in chunks;
+        Chunk* c_near = vec3i(chunkc.xy, chunkc.z+1) in chunks;
+        Chunk* c_far = vec3i(chunkc.xy, chunkc.z-1) in chunks;
+        Chunk* c_top = vec3i(chunkc.x, chunkc.y+1, chunkc.z) in chunks;
+        Chunk* c_bottom = vec3i(chunkc.x, chunkc.y-1, chunkc.z) in chunks;
+
+        if(chunk is null) {
+            if(c_left !is null)     c_left.neighbour_chunks.right = &chunk;
+            if(c_right !is null)   c_right.neighbour_chunks.left = &chunk;
+            if(c_near !is null)     c_near.neighbour_chunks.far = &chunk;
+            if(c_far !is null)       c_far.neighbour_chunks.near = &chunk;
+            if(c_top !is null)       c_top.neighbour_chunks.bottom = &chunk;
+            if(c_bottom !is null) c_bottom.neighbour_chunks.top = &chunk;
+        } else {
+            chunk.neighbour_chunks.left = c_left;
+            chunk.neighbour_chunks.right = c_right;
+            chunk.neighbour_chunks.near = c_near;
+            chunk.neighbour_chunks.far = c_far;
+            chunk.neighbour_chunks.top = c_top;
+            chunk.neighbour_chunks.bottom = c_bottom;
+        }
+    }
+
     void mark_surrounding_chunks_dirty(int x, int y, int z) {
         return mark_surrounding_chunks_dirty(vec3i(x, y, z));
     }
