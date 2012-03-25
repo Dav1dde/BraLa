@@ -3,7 +3,6 @@ module brala.network.packets.types;
 private {
     import nbt.nbt;
     
-    import core.memory : GC;
     import std.stream : Stream;
     import std.typetuple : TypeTuple, staticIndexOf, staticMap;
     import std.typecons : Tuple;
@@ -216,8 +215,6 @@ struct ChunkS { // TODO: implement send
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
         
-        GC.free(compressed_data);
-        
         Chunk chunk = new Chunk();
         chunk.fill_chunk_with_nothing();
         
@@ -260,8 +257,6 @@ struct ChunkS { // TODO: implement send
         if(ret.contiguous) {
             chunk.biome_data = unc_data[$-256..$];
         }
-        
-        GC.free(unc_data);
         
         ret.chunk = chunk;
         

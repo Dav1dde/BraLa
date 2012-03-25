@@ -295,7 +295,7 @@ class Chunk {
                                     v[w++] += z_offset_n;
                                 }
                             }
-                        } else if(true) {
+                        } else if(x >= 0) {
                             if(right_block == 0) {
                                 float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
                                 v[w..(w+(vertices.length))] = vertices;
