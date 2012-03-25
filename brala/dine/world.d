@@ -54,7 +54,7 @@ class World {
         
         chunks[chunkc] = chunk;
         mark_surrounding_chunks_dirty(chunkc);
-        update_neighbours(chunk, chunkc);
+        update_neighbours(&chunk, chunkc);
     }
     
     void remove_chunk(vec3i chunkc)
@@ -115,10 +115,10 @@ class World {
 
     void update_neighbours(vec3i chunkc) {
         Chunk* c = chunkc in chunks;
-        update_neighbours(*c, chunkc);
+        update_neighbours(c, chunkc);
     }
         
-    void update_neighbours(Chunk chunk, vec3i chunkc) {
+    void update_neighbours(Chunk* chunk, vec3i chunkc) {
         Chunk* c_left = vec3i(chunkc.x-1, chunkc.yz) in chunks;
         Chunk* c_right = vec3i(chunkc.x+1, chunkc.yz) in chunks;
         Chunk* c_near = vec3i(chunkc.xy, chunkc.z+1) in chunks;
@@ -127,12 +127,12 @@ class World {
         Chunk* c_bottom = vec3i(chunkc.x, chunkc.y-1, chunkc.z) in chunks;
 
         if(chunk is null) {
-            if(c_left !is null)     c_left.neighbour_chunks.right = &chunk;
-            if(c_right !is null)   c_right.neighbour_chunks.left = &chunk;
-            if(c_near !is null)     c_near.neighbour_chunks.far = &chunk;
-            if(c_far !is null)       c_far.neighbour_chunks.near = &chunk;
-            if(c_top !is null)       c_top.neighbour_chunks.bottom = &chunk;
-            if(c_bottom !is null) c_bottom.neighbour_chunks.top = &chunk;
+            if(c_left !is null)     c_left.neighbour_chunks.right = chunk;
+            if(c_right !is null)   c_right.neighbour_chunks.left = chunk;
+            if(c_near !is null)     c_near.neighbour_chunks.far = chunk;
+            if(c_far !is null)       c_far.neighbour_chunks.near = chunk;
+            if(c_top !is null)       c_top.neighbour_chunks.bottom = chunk;
+            if(c_bottom !is null) c_bottom.neighbour_chunks.top = chunk;
         } else {
             chunk.neighbour_chunks.left = c_left;
             chunk.neighbour_chunks.right = c_right;

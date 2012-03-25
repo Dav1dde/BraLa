@@ -186,11 +186,15 @@ class Chunk {
                 z_offset = z+0.5f;
                 z_offset_n = z+1.5f;
 
-                foreach(y; -1..height-1) {
+                foreach(y; -1..height) {
                     y_offset = y+0.5f;
                     y_offset_t = y+1.5f;
 
-                    value = AIR_BLOCK;
+                    if(z == -1 || z == depth-1 || y == -1 || y == height-1 || neighbour_chunks.left is null) {
+                        value = AIR_BLOCK;
+                    } else {
+                        value = neighbour_chunks.left.blocks[(width-1)+y*width+z*zstep];
+                    }
 
                     if(w+1024 > length) {
                         length = length + (depth-z)*width*height;
@@ -200,14 +204,14 @@ class Chunk {
                     foreach(x; -1..width) {
                         x_offset = x+0.5f;
                         x_offset_r = x+1.5f;
-                        
+
                         index = x+y*width+z*zstep;
 
                         if(z == -1) {
                             right_block = AIR_BLOCK;
                             top_block = AIR_BLOCK;
 
-                            if(y >= 0 && y < height-1 && x >= 0 && x < width-1) {
+                            if(y >= 0 && y < height-1 && x >= 0) {
                                 front_block = blocks[index+zstep];
                             } else {
                                 front_block = AIR_BLOCK;
@@ -219,12 +223,12 @@ class Chunk {
                                 right_block = AIR_BLOCK;
                             }
 
-                            if(x >= 0) {
+                            if(x >= 0 && y < height-1) {
                                 top_block = blocks[index+width];
                             } else {
                                 top_block = AIR_BLOCK;
                             }
-                            
+
                             front_block = AIR_BLOCK;
                         } else {
                             if(y == height-1) {
@@ -256,7 +260,7 @@ class Chunk {
                                 }
                             }
                         }
-                        
+                                                
                         // TODO: use primary bitmask
                         // TODO: octree?
                         // TODO: maybe dont use a "template vertices" for easy blocks, which only consist of 2 triangles per side
@@ -291,7 +295,7 @@ class Chunk {
                                     v[w++] += z_offset_n;
                                 }
                             }
-                        } else {
+                        } else if(true) {
                             if(right_block == 0) {
                                 float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
                                 v[w..(w+(vertices.length))] = vertices;
