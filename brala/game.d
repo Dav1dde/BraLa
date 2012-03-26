@@ -58,7 +58,7 @@ class BraLaGame : BaseGLFWEventHandler {
         connection.callback = &dispatch_packets;
 
         character = new Character(0);
-
+        
         super(window); // call this at the end or have a life with segfaults!
     }
     

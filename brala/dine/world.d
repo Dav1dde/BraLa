@@ -9,8 +9,8 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                  BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
-    import brala.dine.util : malloc, realloc, free
-    import brala.exception : WorldError;
+    import brala.dine.util : malloc, realloc, free;
+    import brala.exception : WorldError;import std.stdio;
     import brala.engine : BraLaEngine;
 }
 
@@ -158,18 +158,19 @@ class World {
         }
     }
    
-    bool is_air(Chunk chunk, vec3i chunkc, int x, int y, int z) {
+    bool is_air(Chunk chunk, vec3i wcoords, int x, int y, int z) {
         if(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth) {
             return chunk.blocks[x+y*width+z*zstep].id == 0;
         } else {
-            return get_block_safe(vec3i(chunkc.x*chunk.width+x, chunkc.y*chunk.height+y, chunkc.z*chunk.depth+z), AIR_BLOCK).id == 0;
+            return get_block_safe(vec3i(wcoords.x+x, wcoords.y+y, wcoords.z+z), AIR_BLOCK).id == 0;
         }
     }
     
     // rendering
-    void tessellate(Chunk chunk, vec3i chunkc,
-                    ref float* v = tessellate_buffer, ref size_t length = tessellate_buffer_length,
-                    bool force = false) {
+
+    // fills the vbo with the chunk content
+    // original version from florian boesch - http://codeflow.org/
+    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force = false) {
         if(chunk.vbo is null) {
             chunk.vbo = new Buffer();
         }
@@ -178,20 +179,39 @@ class World {
             int index;
             int w = 0;
 
-            float z_offset;
-            float y_offset;
-            float x_offset;
+            float z_offset, z_offset_n;
+            float y_offset, y_offset_t;
+            float x_offset, x_offset_r;
             
             Block value;
+            Block right_block;
+            Block front_block;
+            Block top_block;
 
+            Block back_block;
+            Block left_block;
+
+            vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
+            vec3i wcoords = wcoords_orig;
+            
             // TODO: use the optimized code with 3 lookups
             // TODO: primary bitmask, octree?
 
             foreach(z; 0..depth) {
-                z_offset = z+0.5f;
-                foreach(y; 0..height) {
+                z_offset = z + 0.5f;
+                z_offset_n = z + 1.5f;
+                
+                wcoords.z = wcoords_orig.z + z;
+                
+                foreach(y; 0..height-1) {
                     y_offset = y+0.5f;
+                    y_offset_t = y+1.5f;
 
+                    wcoords.x = wcoords_orig.x;
+                    wcoords.y = wcoords_orig.y + y;
+
+                    value = get_block_safe(wcoords);
+//                     writefln("%s - %s", w, y);
                     if(w+1024 > length) {
                         length = length + (depth-z)*width*height;
                         v = cast(float*)realloc(v, length*float.sizeof);
@@ -199,69 +219,98 @@ class World {
 
                     foreach(x; 0..width) {
                         x_offset = x+0.5f;
-                        
-                        value = chunk.blocks[x+y*width+z*zstep];
+                        x_offset_r = x+1.5f;
+                        wcoords.x = wcoords_orig.x + x;
 
-                        if(is_air(chunk, chunkc, x-1, y, z)) {
-                            float[] vertices = BLOCK_VERTICES_LEFT[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
+                        index = x+y*width+z*zstep;
+                        // TODO: render "left" and "back"
+                        if(x == width-1) {
+                            right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
+                        } else {
+                            right_block = chunk.blocks[index+1];
+                        }
+
+                        if(z == depth-1) {
+                            front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
+                        } else {
+                            front_block = chunk.blocks[index+zstep];
+                        }
+
+                        if(y == height-1) {
+                            top_block = AIR_BLOCK;
+                        } else {
+                            top_block = chunk.blocks[index+width];
+                        }
+                        
+//                         right_block = chunk.blocks[index+1];
+//                         top_block = chunk.blocks[index+width];
+//                         front_block = chunk.blocks[index+zstep];
+                        
+                        if(value.id == 0) {
+                            if(right_block.id != 0) {
+                                float[] vertices = BLOCK_VERTICES_LEFT[right_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset_r;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                            if(top_block.id != 0) {
+                                float[] vertices = BLOCK_VERTICES_BOTTOM[top_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset_t;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                            if(front_block.id != 0) {
+                                float[] vertices = BLOCK_VERTICES_FAR[front_block.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset_n;
+                                }
+                            }
+                        } else {
+                            if(right_block.id == 0) {
+                                float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                            if(top_block.id == 0) {
+                                float[] vertices = BLOCK_VERTICES_TOP[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                            if(front_block.id == 0) {
+                                float[] vertices = BLOCK_VERTICES_NEAR[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
                             }
                         }
-                        if(is_air(chunk, chunkc, x, y-1, z)) {
-                            float[] vertices = BLOCK_VERTICES_BOTTOM[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
-                        }
-                        if(is_air(chunk, chunkc, x, y, z-1)) {
-                            float[] vertices = BLOCK_VERTICES_FAR[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
-                        }
-                        if(is_air(chunk, chunkc, x+1, y, z)) {
-                            float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
-                        }
-                        if(is_air(chunk, chunkc, x, y+1, z)) {
-                            float[] vertices = BLOCK_VERTICES_TOP[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
-                        }
-                        if(is_air(chunk, chunkc, x, y, z+1)) {
-                            float[] vertices = BLOCK_VERTICES_NEAR[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
-                        }
+
+                        value = right_block;
                     }
                 }
             }
