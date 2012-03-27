@@ -74,6 +74,6 @@ class Character { // the one you're playing
         auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.15, position.z, // TODO: proper stance
                                                degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
        
-//         connection.send(packet);
+        connection.send(packet);
     }
 }

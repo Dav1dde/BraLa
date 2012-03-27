@@ -9,8 +9,8 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                  BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
-    import brala.dine.util : malloc, realloc, free;
-    import brala.exception : WorldError;import std.stdio;
+    import brala.dine.util : malloc, realloc, free, add_vertices;
+    import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
 }
 
@@ -157,15 +157,7 @@ class World {
             c.dirty = true;
         }
     }
-   
-    bool is_air(Chunk chunk, vec3i wcoords, int x, int y, int z) {
-        if(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth) {
-            return chunk.blocks[x+y*width+z*zstep].id == 0;
-        } else {
-            return get_block_safe(vec3i(wcoords.x+x, wcoords.y+y, wcoords.z+z), AIR_BLOCK).id == 0;
-        }
-    }
-    
+       
     // rendering
 
     // fills the vbo with the chunk content
@@ -248,65 +240,23 @@ class World {
                         
                         if(value.id == 0) {
                             if(right_block.id != 0) {
-                                float[] vertices = BLOCK_VERTICES_LEFT[right_block.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset_r;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("right_block", "left", true));
                             }
                             if(top_block.id != 0) {
-                                float[] vertices = BLOCK_VERTICES_BOTTOM[top_block.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset_t;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("top_block", "bottom", true));
                             }
                             if(front_block.id != 0) {
-                                float[] vertices = BLOCK_VERTICES_FAR[front_block.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset_n;
-                                }
+                                mixin(add_vertices("front_block", "far", true));
                             }
                         } else {
                             if(right_block.id == 0) {
-                                float[] vertices = BLOCK_VERTICES_RIGHT[value.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("value", "right", false));
                             }
                             if(top_block.id == 0) {
-                                float[] vertices = BLOCK_VERTICES_TOP[value.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("value", "top", false));
                             }
                             if(front_block.id == 0) {
-                                float[] vertices = BLOCK_VERTICES_NEAR[value.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("value", "near", false));
                             }
                         }
 
@@ -314,41 +264,20 @@ class World {
                             left_block = get_block_safe(vec3i(wcoords.x-1, wcoords.y, wcoords.z), AIR_BLOCK);
 
                             if(left_block.id == 0) {
-                                float[] vertices = BLOCK_VERTICES_LEFT[value.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("value", "left", false));
                             }
                         }
 
                         if(y == 0) {
                             // always render this, it's the lowest bedrock level
-                            float[] vertices = BLOCK_VERTICES_BOTTOM[value.id];
-                            v[w..(w+(vertices.length))] = vertices;
-                            size_t rw = w;
-                            for(; w < (rw+vertices.length); w += 5) {
-                                v[w++] += x_offset;
-                                v[w++] += y_offset;
-                                v[w++] += z_offset;
-                            }
+                            mixin(add_vertices("value", "bottom", false));
                         }
 
                         if(z == 0) {
                             back_block = get_block_safe(vec3i(wcoords.x, wcoords.y, wcoords.z-1), AIR_BLOCK);
 
                             if(back_block.id == 0) {
-                                float[] vertices = BLOCK_VERTICES_FAR[value.id];
-                                v[w..(w+(vertices.length))] = vertices;
-                                size_t rw = w;
-                                for(; w < (rw+vertices.length); w += 5) {
-                                    v[w++] += x_offset;
-                                    v[w++] += y_offset;
-                                    v[w++] += z_offset;
-                                }
+                                mixin(add_vertices("value", "far", false));
                             }
                         }
                         

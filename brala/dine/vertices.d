@@ -744,7 +744,7 @@ float[][] BLOCK_VERTICES_TOP = [
 float[][] BLOCK_VERTICES_BOTTOM = [
     [], // air
     simple_block(Side.BOTTOM, t(1, 1)), // stone
-    simple_block(Side.BOTTOM, t(0, 1)), // grass
+    simple_block(Side.BOTTOM, t(2, 1)), // grass
     simple_block(Side.BOTTOM, t(2, 1)), // dirt
     simple_block(Side.BOTTOM, t(0, 2)), // cobble
     simple_block(Side.BOTTOM, t(4, 1)), // wooden plank
