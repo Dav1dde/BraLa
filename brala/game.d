@@ -17,7 +17,7 @@ private {
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.dine.world : World;
-    import brala.dine.chunk : Chunk;
+    import brala.dine.chunk : Chunk, Block;
     import brala.character : Character;
     import brala.engine : BraLaEngine;
     import brala.input : BaseGLFWEventHandler;
@@ -225,6 +225,10 @@ class BraLaGame : BaseGLFWEventHandler {
             debug writefln("adding chunk: %s", packet);
             synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
         }
+    }
+
+    void on_packet(T : s.BlockChange)(T packet) {
+        synchronized(_world_lock) _current_world.set_block(vec3i(packet.x, packet.y, packet.z), Block(packet.type, packet.metadata));
     }
     
     void on_packet(T : s.PlayerPositionLook)(T packet)
