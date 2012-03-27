@@ -170,7 +170,9 @@ class World {
         if(chunk.dirty || force) {
             int index;
             int w = 0;
-
+            int y;
+            int hds = height / 16;
+            
             float z_offset, z_offset_n;
             float y_offset, y_offset_t;
             float x_offset, x_offset_r;
@@ -186,102 +188,107 @@ class World {
             vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
             vec3i wcoords = wcoords_orig;
             
-            // TODO: use the optimized code with 3 lookups
-            // TODO: primary bitmask, octree?
+            // TODO: octree?
 
             foreach(z; 0..depth) {
                 z_offset = z + 0.5f;
                 z_offset_n = z + 1.5f;
                 
                 wcoords.z = wcoords_orig.z + z;
-                
-                foreach(y; 0..height-1) {
-                    y_offset = y+0.5f;
-                    y_offset_t = y+1.5f;
 
-                    wcoords.x = wcoords_orig.x;
-                    wcoords.y = wcoords_orig.y + y;
-
-                    value = get_block_safe(wcoords);
-//                     writefln("%s - %s", w, y);
-                    if(w+1024 > length) {
-                        length = length + (depth-z)*width*height;
-                        v = cast(float*)realloc(v, length*float.sizeof);
-                    }
-
-                    foreach(x; 0..width) {
-                        x_offset = x+0.5f;
-                        x_offset_r = x+1.5f;
-                        wcoords.x = wcoords_orig.x + x;
-
-                        index = x+y*width+z*zstep;
-
-                        if(x == width-1) {
-                            right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
-                        } else {
-                            right_block = chunk.blocks[index+1];
-                        }
-
-                        if(z == depth-1) {
-                            front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
-                        } else {
-                            front_block = chunk.blocks[index+zstep];
-                        }
-
-                        if(y == height-1) {
-                            top_block = AIR_BLOCK;
-                        } else {
-                            top_block = chunk.blocks[index+width];
-                        }
+                foreach(b; 0..hds) {
+                    if((chunk.primary_bitmask >> b) & 1 ^ 1) continue;
+                    
+                    foreach(y_; 0..hds) {
+                        y = b*hds + y_;
                         
-//                         right_block = chunk.blocks[index+1];
-//                         top_block = chunk.blocks[index+width];
-//                         front_block = chunk.blocks[index+zstep];
-                        
-                        if(value.id == 0) {
-                            if(right_block.id != 0) {
-                                mixin(add_vertices("right_block", "left", true));
-                            }
-                            if(top_block.id != 0) {
-                                mixin(add_vertices("top_block", "bottom", true));
-                            }
-                            if(front_block.id != 0) {
-                                mixin(add_vertices("front_block", "far", true));
-                            }
-                        } else {
-                            if(right_block.id == 0) {
-                                mixin(add_vertices("value", "right", false));
-                            }
-                            if(top_block.id == 0) {
-                                mixin(add_vertices("value", "top", false));
-                            }
-                            if(front_block.id == 0) {
-                                mixin(add_vertices("value", "near", false));
-                            }
+                        y_offset = y+0.5f;
+                        y_offset_t = y+1.5f;
+
+                        wcoords.x = wcoords_orig.x;
+                        wcoords.y = wcoords_orig.y + y;
+
+                        value = get_block_safe(wcoords);
+    //                     writefln("%s - %s", w, y);
+                        if(w+1024 > length) {
+                            length = length + (depth-z)*width*height;
+                            v = cast(float*)realloc(v, length*float.sizeof);
                         }
 
-                        if(x == 0) {
-                            left_block = get_block_safe(vec3i(wcoords.x-1, wcoords.y, wcoords.z), AIR_BLOCK);
+                        foreach(x; 0..width) {
+                            x_offset = x+0.5f;
+                            x_offset_r = x+1.5f;
+                            wcoords.x = wcoords_orig.x + x;
 
-                            if(left_block.id == 0) {
-                                mixin(add_vertices("value", "left", false));
+                            index = x+y*width+z*zstep;
+
+                            if(x == width-1) {
+                                right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
+                            } else {
+                                right_block = chunk.blocks[index+1];
                             }
-                        }
 
-                        if(y == 0) {
-                            // always render this, it's the lowest bedrock level
-                            mixin(add_vertices("value", "bottom", false));
-                        }
-
-                        if(z == 0) {
-                            back_block = get_block_safe(vec3i(wcoords.x, wcoords.y, wcoords.z-1), AIR_BLOCK);
-
-                            if(back_block.id == 0) {
-                                mixin(add_vertices("value", "far", false));
+                            if(z == depth-1) {
+                                front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
+                            } else {
+                                front_block = chunk.blocks[index+zstep];
                             }
+
+                            if(y == height-1) {
+                                top_block = AIR_BLOCK;
+                            } else {
+                                top_block = chunk.blocks[index+width];
+                            }
+
+    //                         right_block = chunk.blocks[index+1];
+    //                         top_block = chunk.blocks[index+width];
+    //                         front_block = chunk.blocks[index+zstep];
+
+                            if(value.id == 0) {
+                                if(right_block.id != 0) {
+                                    mixin(add_vertices("right_block", "left", true));
+                                }
+                                if(top_block.id != 0) {
+                                    mixin(add_vertices("top_block", "bottom", true));
+                                }
+                                if(front_block.id != 0) {
+                                    mixin(add_vertices("front_block", "far", true));
+                                }
+                            } else {
+                                if(right_block.id == 0) {
+                                    mixin(add_vertices("value", "right", false));
+                                }
+                                if(top_block.id == 0) {
+                                    mixin(add_vertices("value", "top", false));
+                                }
+                                if(front_block.id == 0) {
+                                    mixin(add_vertices("value", "near", false));
+                                }
+                            }
+
+                            if(x == 0) {
+                                left_block = get_block_safe(vec3i(wcoords.x-1, wcoords.y, wcoords.z), AIR_BLOCK);
+
+                                if(left_block.id == 0) {
+                                    mixin(add_vertices("value", "left", false));
+                                }
+                            }
+
+                            if(y == 0) {
+                                // always render this, it's the lowest bedrock level
+                                mixin(add_vertices("value", "bottom", false));
+                            }
+
+                            if(z == 0) {
+                                back_block = get_block_safe(vec3i(wcoords.x, wcoords.y, wcoords.z-1), AIR_BLOCK);
+
+                                if(back_block.id == 0) {
+                                    mixin(add_vertices("value", "far", false));
+                                }
+                            }
+
+                            value = right_block;
                         }
-                        
-                        value = right_block;
                     }
                 }
             }

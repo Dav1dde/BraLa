@@ -60,6 +60,8 @@ class Chunk {
     bool empty;
     Block* blocks;
     ubyte[] biome_data;
+    ushort primary_bitmask;
+    ushort add_bitmask;
     
     Buffer vbo;
     GLenum vbo_type;

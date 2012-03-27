@@ -221,7 +221,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_packet(T : s.MapChunk)(T packet) {
-        if(packet.chunk.primary_bitmask != 0) {
+        if(packet.chunk.chunk.primary_bitmask != 0) {
             debug writefln("adding chunk: %s", packet);
             synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
         }

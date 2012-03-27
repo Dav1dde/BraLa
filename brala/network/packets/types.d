@@ -201,12 +201,14 @@ struct ChunkS { // TODO: implement send
     
     static ChunkS recv(Stream s) {
         ChunkS ret;
+        ret.chunk = new Chunk();
         
         ret.x = read!int(s);
         ret.z = read!int(s);
         ret.contiguous = read!bool(s);
-        ret.primary_bitmask = read!ushort(s);
-        ret.add_bitmask = read!ushort(s);
+        
+        ret.chunk.primary_bitmask = read!ushort(s);
+        ret.chunk.add_bitmask = read!ushort(s);
         
         int len = read!int(s);
         read!int(s); // unused data
@@ -215,18 +217,17 @@ struct ChunkS { // TODO: implement send
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
         
-        Chunk chunk = new Chunk();
-        chunk.fill_chunk_with_nothing();
+        ret.chunk.fill_chunk_with_nothing();
         
         size_t offset = 0;
         foreach(i; 0..16) {
-            if(ret.primary_bitmask & 1 << i) {
+            if(ret.chunk.primary_bitmask & 1 << i) {
                 ubyte[] temp = unc_data[offset..offset+4096];
                 
                 foreach(j, block_id; temp) {
                     vec3i coords = coords_from_j(j, i);
 
-                    chunk.blocks[chunk.to_flat(coords)].id = block_id;
+                    ret.chunk.blocks[chunk.to_flat(coords)].id = block_id;
                 }
                 
                 offset += 4096;
@@ -235,7 +236,7 @@ struct ChunkS { // TODO: implement send
         
         foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {
             foreach(i; 0..16) {
-                if(ret.primary_bitmask & 1 << i) { 
+                if(ret.chunk.primary_bitmask & 1 << i) { 
                     ubyte[] temp = unc_data[offset..offset+2048];
                     
                     for(size_t j = 0; j < temp.length; j++) {
@@ -244,8 +245,8 @@ struct ChunkS { // TODO: implement send
                         vec3i coords_m2 = coords_from_j(++j, i);
                         
                         // NOTE: the data is maybe extracted in the wrong order, still big endian ...
-                        mixin("chunk.blocks[chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
-                        mixin("chunk.blocks[chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
+                        mixin("ret.chunk.blocks[ret.chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
+                        mixin("ret.chunk.blocks[ret.chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
                     }
                     
                     offset += 2048;
@@ -255,11 +256,9 @@ struct ChunkS { // TODO: implement send
                 
         // skip add => last 256 bytes = biome_data
         if(ret.contiguous) {
-            chunk.biome_data = unc_data[$-256..$];
+            ret.chunk.biome_data = unc_data[$-256..$];
         }
-        
-        ret.chunk = chunk;
-        
+                
         return ret;
     }
     
