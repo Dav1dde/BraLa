@@ -223,7 +223,7 @@ class World {
                         wcoords.x = wcoords_orig.x + x;
 
                         index = x+y*width+z*zstep;
-                        // TODO: render "left" and "back"
+
                         if(x == width-1) {
                             right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
                         } else {
@@ -310,6 +310,48 @@ class World {
                             }
                         }
 
+                        if(x == 0) {
+                            left_block = get_block_safe(vec3i(wcoords.x-1, wcoords.y, wcoords.z), AIR_BLOCK);
+
+                            if(left_block.id == 0) {
+                                float[] vertices = BLOCK_VERTICES_LEFT[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                        }
+
+                        if(y == 0) {
+                            // always render this, it's the lowest bedrock level
+                            float[] vertices = BLOCK_VERTICES_BOTTOM[value.id];
+                            v[w..(w+(vertices.length))] = vertices;
+                            size_t rw = w;
+                            for(; w < (rw+vertices.length); w += 5) {
+                                v[w++] += x_offset;
+                                v[w++] += y_offset;
+                                v[w++] += z_offset;
+                            }
+                        }
+
+                        if(z == 0) {
+                            back_block = get_block_safe(vec3i(wcoords.x, wcoords.y, wcoords.z-1), AIR_BLOCK);
+
+                            if(back_block.id == 0) {
+                                float[] vertices = BLOCK_VERTICES_FAR[value.id];
+                                v[w..(w+(vertices.length))] = vertices;
+                                size_t rw = w;
+                                for(; w < (rw+vertices.length); w += 5) {
+                                    v[w++] += x_offset;
+                                    v[w++] += y_offset;
+                                    v[w++] += z_offset;
+                                }
+                            }
+                        }
+                        
                         value = right_block;
                     }
                 }
