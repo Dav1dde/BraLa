@@ -83,7 +83,7 @@ class BraLaGame : BaseGLFWEventHandler {
         start();
     }
 
-    bool poll(float delta_t) {
+    bool poll(TickDuration delta_t) {
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
         }
@@ -114,15 +114,17 @@ class BraLaGame : BaseGLFWEventHandler {
         }
     }
     
-    bool move(float delta_t) {
+    bool move(TickDuration delta_t) {
+        float factor_time = delta_t.to!("msecs", float) / 1000;
+
         bool moved = false;
-        
-        if(keymap[MOVE_FORWARD])  character.move_forward( delta_t * 55); moved = true;
-        if(keymap[MOVE_BACKWARD]) character.move_backward(delta_t * 55); moved = true;
-        if(keymap[STRAFE_LEFT])  character.strafe_left( delta_t * 55); moved = true;
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(delta_t * 55); moved = true;
-        if(mouse_offset.x != 0) character.rotatex(delta_t * mouse_offset.x * 175); moved = true;
-        if(mouse_offset.y != 0) character.rotatey(delta_t * mouse_offset.y * 175); moved = true;
+
+        if(keymap[MOVE_FORWARD])  character.move_forward( factor_time * 12); moved = true;
+        if(keymap[MOVE_BACKWARD]) character.move_backward(factor_time * 12); moved = true;
+        if(keymap[STRAFE_LEFT])  character.strafe_left( factor_time * 12); moved = true;
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(factor_time * 12); moved = true;
+        if(mouse_offset.x != 0) character.rotatex(factor_time * mouse_offset.x * 75); moved = true;
+        if(mouse_offset.y != 0) character.rotatey(factor_time * mouse_offset.y * 75); moved = true;
         mouse_offset.x = 0;
         mouse_offset.y = 0;
         

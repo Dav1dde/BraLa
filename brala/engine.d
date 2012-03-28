@@ -75,7 +75,7 @@ class BraLaEngine {
         glEnable(GL_CULL_FACE);
     }
     
-    void mainloop(bool delegate(float) callback) {        
+    void mainloop(bool delegate(TickDuration) callback) {
         bool stop = false;
         timer.start();
         
@@ -83,12 +83,9 @@ class BraLaEngine {
         debug TickDuration lastfps = TickDuration(0);
         
         while(!stop) {
-            float delta_ticks = (timer.get_time() - last).to!("msecs", float);
+            TickDuration delta_ticks = (timer.get_time() - last);
             
             stop = callback(delta_ticks);
-
-            glfwSwapBuffers();
-            glfwPollEvents();
         
             debug {
                 TickDuration t = timer.get_time();
@@ -99,6 +96,9 @@ class BraLaEngine {
             }
             
             last = timer.get_time();
+
+            glfwSwapBuffers();
+            glfwPollEvents();
         }
         
         TickDuration ts = timer.stop();
