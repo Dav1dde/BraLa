@@ -268,4 +268,3 @@ struct ChunkS { // TODO: implement send
                               x, z, contiguous, primary_bitmask, add_bitmask, chunk);
     } 
 }
-

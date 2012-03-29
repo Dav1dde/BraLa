@@ -11,13 +11,21 @@ private {
 }
 
 
-struct Block {
-    ubyte id;
-    
-    mixin(bitfields!(ubyte, "metadata", 4,
+struct Block {   
+    mixin(bitfields!(uint, "id", 12,
+                     ubyte, "metadata", 4,
                      ubyte, "block_light", 4,
                      ubyte, "sky_light", 4,
-                     ubyte, "", 4));  // padding
+                     ubyte, "", 8));  // padding
+
+    this(uint id) {
+        this.id = id;
+    }
+                     
+    this(uint id, ubyte metadata) {
+        this.id = id;
+        this.metadata = metadata;
+    }
                      
     const bool opEquals(const ref Block other) {
         return other.id == id && other.metadata == metadata;

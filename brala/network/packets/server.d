@@ -203,7 +203,7 @@ class MapChunk : IPacket {
 }
 
 class MultiBlockChange : IPacket {
-    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", Array!(int, byte), "data");
+    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", Array!(int, ubyte), "data");
 }
 
 class BlockChange : IPacket {
