@@ -10,7 +10,7 @@ enum BlockType {
     NA // placeholder for non existent ids
 }
 
-struct BlockDescriptor {   
+struct BlockDescriptor {
     bool opaque;
     BlockType type = BlockType.NA;
     string name;
@@ -25,7 +25,7 @@ private {
 
 // TODO: add correct tex-coords
 // TODO: add more, like bed, redstone repeater etc.
-BlockDescriptor blocks[256] = [
+BlockDescriptor[256] blocks = [
     { false, Air,       "air" },
     { true,  Block,     "stone" },
     { true,  Block,     "grass" },
@@ -152,21 +152,21 @@ BlockDescriptor blocks[256] = [
     { true,  Block,     "redstone lamp on" } // 124
 ];
 
-BlockDescriptor wood_types[4] = [
+BlockDescriptor[4] wood_types = [
     { true, Block, "oak wood" },
     { true, Block, "pine wood" },
     { true, Block, "birch wood" },
     { true, Block, "jungle wood" }
 ];
 
-BlockDescriptor leave_types[4] = [
+BlockDescriptor[4] leave_types = [
     { false, DataBlock, "oak leave" },
     { false, DataBlock, "pine leave" },
     { false, DataBlock, "birch leave" },
     { false, DataBlock, "jungle leave" }
 ];
 
-BlockDescriptor sapling_types[5] = [
+BlockDescriptor[5] sapling_types = [
     { true, DataBlock, "oak sapling" },
     { true, DataBlock, "pine sapling" },
     { true, DataBlock, "birch sapling" },
@@ -174,7 +174,7 @@ BlockDescriptor sapling_types[5] = [
     { true, DataBlock, "normal sapling" } // ?
 ];
 
-BlockDescriptor wheat_types[8] = [
+BlockDescriptor[8] wheat_types = [
     { false, Block, "wheat 0" },
     { false, Block, "wheat 1" },
     { false, Block, "wheat 2" },
@@ -184,14 +184,14 @@ BlockDescriptor wheat_types[8] = [
     { false, Block, "wheat 6" },
     { false, Block, "wheat 7" }
 ];
-    
-BlockDescriptor nether_wart_types[3] = [
+
+BlockDescriptor[3] nether_wart_types = [
     { false, Block, "nether wart 0" },
     { false, Block, "nether wart 1-2" },
     { false, Block, "nether wart 3" }
 ];
 
-BlockDescriptor wool_types[16] = [
+BlockDescriptor[16] wool_types = [
     { true, Block, "white" },
     { true, Block, "orange" },
     { true, Block, "magenta" },
@@ -209,8 +209,8 @@ BlockDescriptor wool_types[16] = [
     { true, Block, "red" },
     { true, Block, "black" }
 ];
-    
-BlockDescriptor slab_types[6] = [
+
+BlockDescriptor[6] slab_types = [
     { false, DataBlock, "stone slab" },
     { false, DataBlock, "sandstone slab" },
     { false, DataBlock, "wooden slab" },
@@ -219,13 +219,13 @@ BlockDescriptor slab_types[6] = [
     { false, DataBlock, "stone brick slab" }
 ];
 
-BlockDescriptor tall_grass_types[3] = [
+BlockDescriptor[3] tall_grass_types = [
     { false, Block, "dead bush" },
     { false, Block, "tall grass" },
     { false, Block, "fern" }
 ];
 
-BlockDescriptor stone_brick_types[4] = [
+BlockDescriptor[4] stone_brick_types = [
     { true, Block, "stone brick" },
     { true, Block, "mossy stone brick" },
     { true, Block, "cracked stone brick" },
