@@ -7,9 +7,8 @@ private {
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
-                                         BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
-    import brala.dine.util : malloc, realloc, free, add_vertices;
+    import brala.dine.util : malloc, realloc, free;
+    import brala.dine.builder.tesselator : Tessellator;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
 }
@@ -163,6 +162,8 @@ class World {
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
     void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force = false) {
+        Tessellator tessellator = Tessellator(this, v, length);
+
         if(chunk.vbo is null) {
             chunk.vbo = new Buffer();
         }
@@ -209,11 +210,8 @@ class World {
                         wcoords.y = wcoords_orig.y + y;
 
                         value = get_block_safe(wcoords);
-    //                     writefln("%s - %s", w, y);
-                        if(w+1024 > length) {
-                            length = length + (depth-z)*width*height;
-                            v = cast(float*)realloc(v, length*float.sizeof);
-                        }
+
+                        tessellator.realloc_buffer_if_needed(1024);
 
                         foreach(x; 0..width) {
                             x_offset = x+0.5f;
@@ -240,52 +238,9 @@ class World {
                                 top_block = chunk.blocks[index+width];
                             }
 
-    //                         right_block = chunk.blocks[index+1];
-    //                         top_block = chunk.blocks[index+width];
-    //                         front_block = chunk.blocks[index+zstep];
-
-                            if(value.id == 0) {
-                                if(right_block.id != 0) {
-                                    mixin(add_vertices("right_block", "left", true));
-                                }
-                                if(top_block.id != 0) {
-                                    mixin(add_vertices("top_block", "bottom", true));
-                                }
-                                if(front_block.id != 0) {
-                                    mixin(add_vertices("front_block", "far", true));
-                                }
-                            } else {
-                                if(right_block.id == 0) {
-                                    mixin(add_vertices("value", "right", false));
-                                }
-                                if(top_block.id == 0) {
-                                    mixin(add_vertices("value", "top", false));
-                                }
-                                if(front_block.id == 0) {
-                                    mixin(add_vertices("value", "near", false));
-                                }
-                            }
-
-                            if(x == 0) {
-                                left_block = get_block_safe(vec3i(wcoords.x-1, wcoords.y, wcoords.z), AIR_BLOCK);
-
-                                if(left_block.id == 0) {
-                                    mixin(add_vertices("value", "left", false));
-                                }
-                            }
-
-                            if(y == 0) {
-                                // always render this, it's the lowest bedrock level
-                                mixin(add_vertices("value", "bottom", false));
-                            }
-
-                            if(z == 0) {
-                                back_block = get_block_safe(vec3i(wcoords.x, wcoords.y, wcoords.z-1), AIR_BLOCK);
-
-                                if(back_block.id == 0) {
-                                    mixin(add_vertices("value", "far", false));
-                                }
-                            }
+                            tessellator.feed(wcoords, x, y, z,
+                                            x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
+                                            value, right_block, top_block, front_block);
 
                             value = right_block;
                         }
@@ -294,8 +249,8 @@ class World {
             }
 
             chunk.vbo_type = GL_FLOAT;
-            chunk.vbo_vcount = w / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
-            chunk.vbo.set_data(v[0..w], GL_FLOAT);
+            chunk.vbo_vcount = tessellator.elements / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
+            tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;
         }
