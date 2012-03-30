@@ -7,8 +7,8 @@ private {
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
-                                 BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
+    import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
+                                         BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
     import brala.dine.util : malloc, realloc, free, add_vertices;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;

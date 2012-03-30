@@ -1,4 +1,4 @@
-module brala.dine.vertices;
+module brala.dine.builder.vertices;
 
 private {
     import std.array : join;

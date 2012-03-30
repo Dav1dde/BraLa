@@ -1,4 +1,4 @@
-module brala.dine.constants;
+module brala.dine.builder.constants;
 
 
 enum Biome {

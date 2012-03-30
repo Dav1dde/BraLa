@@ -1,4 +1,4 @@
-module brala.dine.blocks;
+module brala.dine.builder.blocks;
 
 private {
 }
