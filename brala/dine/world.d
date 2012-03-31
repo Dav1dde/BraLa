@@ -7,10 +7,10 @@ private {
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.util : malloc, realloc, free;
     import brala.dine.builder.tessellator : Tessellator;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
+    import brala.utils.alloc : malloc, realloc, free;
 }
 
 private const Block AIR_BLOCK = Block(0);

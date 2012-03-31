@@ -8,11 +8,11 @@ private {
     
     import brala.dine.chunk : Block;
     import brala.dine.world : World;
-    import brala.dine.util : realloc;
     import brala.dine.builder.builder : AdvancedBlocksBuilder;
     import brala.dine.builder.blocks : blocks;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
+    import brala.utils.alloc : realloc;
 }
 
 
