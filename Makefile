@@ -7,7 +7,7 @@ export LICENSE          = GPLv3
 DCFLAGS_IMPORT      = -Ibrala/ -L-lcurl -L-lssl `pkg-config --libs --cflags gl3n glamour` -Isrc/d/
 DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictIL $(LINKERFLAG)-lDerelictUtil
 
-ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -unittest -g -gc -Jbrala/dine
+ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -unittest -g -gc
 
 include command.make
 
@@ -15,7 +15,7 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PAT
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
 
-CSOURCES             = $(call getSource,src$(PATH_SEP)c,c) 
+CSOURCES             = $(call getSource,src$(PATH_SEP)c,c)
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%.o,   $(CSOURCES))
 
 

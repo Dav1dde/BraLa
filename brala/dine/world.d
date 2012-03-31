@@ -8,7 +8,7 @@ private {
     
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.util : malloc, realloc, free;
-    import brala.dine.builder.tesselator : Tessellator;
+    import brala.dine.builder.tessellator : Tessellator;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
 }

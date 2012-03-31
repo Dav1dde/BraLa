@@ -1,4 +1,4 @@
-module brala.dine.builder.tesselator;
+module brala.dine.builder.tessellator;
 
 private {
     import glamour.gl : GL_FLOAT;
@@ -10,6 +10,7 @@ private {
     import brala.dine.world : World;
     import brala.dine.util : realloc;
     import brala.dine.builder.builder : AdvancedBlocksBuilder;
+    import brala.dine.builder.blocks : blocks;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
 }
@@ -55,54 +56,44 @@ struct Tessellator {
             buffer[elements++] = v;
         }
 
-    void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref float[] vertices) {
-        buffer[elements..(elements+(vertices.length))] = vertices;
+    void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref float[] vertices)
+        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
+        body {
+            buffer[elements..(elements+(vertices.length))] = vertices;
 
-        size_t end = elements+vertices.length;
-        for(; elements < end; elements += 5) {
-            buffer[elements++] += x_offset;
-            buffer[elements++] += y_offset;
-            buffer[elements++] += z_offset;
+            size_t end = elements+vertices.length;
+            for(; elements < end; elements += 5) {
+                buffer[elements++] += x_offset;
+                buffer[elements++] += y_offset;
+                buffer[elements++] += z_offset;
+            }
         }
-    }
 
-    void add_vertices(const ref float[] vertices) {
-        buffer[elements..(elements+(vertices.length))] = vertices;
-        elements += vertices.length;
-    }
+    void add_vertices(const ref float[] vertices)
+        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
+        body {
+            buffer[elements..(elements+(vertices.length))] = vertices;
+            elements += vertices.length;
+        }
     
     void feed(vec3i world_coords, int x, int y, int z,
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
               const ref Block value, const ref Block right, const ref Block top, const ref Block front) {
 
         if(value.id == 0) {
-            if(right.id != 0) {
-                add_template_vertices(x_offset_r, y_offset, z_offset, BLOCK_VERTICES_LEFT[right.id]);
-            }
-            if(top.id != 0) {
-                add_template_vertices(x_offset, y_offset_t, z_offset, BLOCK_VERTICES_BOTTOM[top.id]);
-            }
-            if(front.id != 0) {
-                add_template_vertices(x_offset, y_offset, z_offset_n, BLOCK_VERTICES_FAR[front.id]);
-            }
+            if(right.id != 0) add_template_vertices(x_offset_r, y_offset,   z_offset,   BLOCK_VERTICES_LEFT[right.id]);
+            if(top.id != 0)   add_template_vertices(x_offset,   y_offset_t, z_offset,   BLOCK_VERTICES_BOTTOM[top.id]);
+            if(front.id != 0) add_template_vertices(x_offset,   y_offset,   z_offset_n, BLOCK_VERTICES_FAR[front.id]);
         } else {
-            if(right.id == 0) {
-                add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
-            }
-            if(top.id == 0) {
-                add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
-            }
-            if(front.id == 0) {
-                add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
-            }
+            if(right.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
+            if(top.id == 0)   add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
+            if(front.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
         }
 
         if(x == 0) {
             Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
 
-            if(left.id == 0) {
-                add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_LEFT[value.id]);
-            }
+            if(left.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_LEFT[value.id]);
         }
 
         if(y == 0) {
@@ -113,9 +104,7 @@ struct Tessellator {
         if(z == 0) {
             Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
 
-            if(back.id == 0) {
-                add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_FAR[value.id]);
-            }
+            if(back.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_FAR[value.id]);
         }
     }
 
