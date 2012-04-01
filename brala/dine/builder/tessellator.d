@@ -82,9 +82,9 @@ struct Tessellator {
 
 
         if(blocks[value.id].opaque) {
-            if(right.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
-            if(top.id == 0)   add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
-            if(front.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
+            if(!blocks[right.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
+            if(!blocks[top.id].opaque)   add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
+            if(!blocks[front.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
         } else {
             if(right.id != 0) add_template_vertices(x_offset_r, y_offset,   z_offset,   BLOCK_VERTICES_LEFT[right.id]);
             if(top.id != 0)   add_template_vertices(x_offset,   y_offset_t, z_offset,   BLOCK_VERTICES_BOTTOM[top.id]);
