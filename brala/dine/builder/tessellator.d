@@ -8,7 +8,8 @@ private {
     
     import brala.dine.chunk : Block;
     import brala.dine.world : World;
-    import brala.dine.builder.builder : AdvancedBlocksBuilder;
+    import brala.dine.builder.builder : BlockBuilder;
+    import brala.dine.builder.constants : Side;
     import brala.dine.builder.blocks : blocks;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
@@ -24,7 +25,7 @@ struct Tessellator {
 
     size_t elements = 0;
 
-    mixin AdvancedBlocksBuilder!();
+    mixin BlockBuilder!();
     
     this(World world, ref float* buffer, ref size_t buffer_length) {
         this.world = world;
@@ -44,7 +45,7 @@ struct Tessellator {
     }
     
     void add_vertex(float x, float y, float z, float nx, float nz, float ny, float u, float v)
-        in { assert(elements+8 <= buffer_length, "not enough allocated memory for tesselator"); }
+        in { assert(elements+8 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
             buffer[elements++] = x;
             buffer[elements++] = y;
@@ -57,7 +58,7 @@ struct Tessellator {
         }
 
     void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref float[] vertices)
-        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
+        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
             buffer[elements..(elements+(vertices.length))] = vertices;
 
@@ -80,38 +81,53 @@ struct Tessellator {
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
               const ref Block value, const ref Block right, const ref Block top, const ref Block front) {
 
-
-        if(blocks[value.id].opaque) {
-            if(!blocks[right.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
-            if(!blocks[top.id].opaque)   add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
-            if(!blocks[front.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
-        } else {
-            if(right.id != 0) add_template_vertices(x_offset_r, y_offset,   z_offset,   BLOCK_VERTICES_LEFT[right.id]);
-            if(top.id != 0)   add_template_vertices(x_offset,   y_offset_t, z_offset,   BLOCK_VERTICES_BOTTOM[top.id]);
-            if(front.id != 0) add_template_vertices(x_offset,   y_offset,   z_offset_n, BLOCK_VERTICES_FAR[front.id]);
+        if(blocks[value.id].empty) { // render neighbours
+            if(right.id != 0) dispatch!(Side.LEFT)(x_offset_r, y_offset, z_offset, right);
+            if(top.id != 0)   dispatch!(Side.BOTTOM)(x_offset, y_offset_t, z_offset, top);
+            if(front.id !=0)  dispatch!(Side.FAR)(x_offset, y_offset, z_offset_n, front);
 
             if(value.id != 0) {
-                if(!blocks[right.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[value.id]);
-                if(!blocks[top.id].opaque)   add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[value.id]);
-                if(!blocks[front.id].opaque) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[value.id]);
+                if(blocks[right.id].empty) dispatch!(Side.RIGHT)(x_offset, y_offset, z_offset, value);
+                if(blocks[top.id].empty)   dispatch!(Side.TOP)(x_offset, y_offset, z_offset, value);
+                if(blocks[front.id].empty) dispatch!(Side.NEAR)(x_offset, y_offset, z_offset, value);
             }
+        } else {
+            if(blocks[right.id].empty) dispatch!(Side.RIGHT)(x_offset, y_offset, z_offset, value);
+            if(blocks[top.id].empty)   dispatch!(Side.TOP)(x_offset, y_offset, z_offset, value);
+            if(blocks[front.id].empty) dispatch!(Side.NEAR)(x_offset, y_offset, z_offset, value);
         }
 
         if(x == 0) {
             Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
 
-            if(left.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_LEFT[value.id]);
+            if(blocks[left.id].empty) dispatch!(Side.LEFT)(x_offset, y_offset, z_offset, value);
         }
 
         if(y == 0) {
             // always render this, it's the lowest bedrock level
-            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_BOTTOM[value.id]);
+            dispatch!(Side.BOTTOM)(x_offset, y_offset, z_offset, value);
         }
 
         if(z == 0) {
             Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
 
-            if(back.id == 0) add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_FAR[value.id]);
+            if(blocks[back.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset, value);
+        }
+    }
+
+    void tessellate_simple_block(Side side)(float x_offset, float y_offset, float z_offset, const ref Block block) {
+        static if(side == Side.LEFT) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_LEFT[block.id]);
+        } else static if(side == Side.RIGHT) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_RIGHT[block.id]);
+        } else static if(side == Side.NEAR) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_NEAR[block.id]);
+        } else static if(side == Side.FAR) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_FAR[block.id]);
+        } else static if(side == Side.TOP) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[block.id]);
+        } else static if(side == Side.BOTTOM) {
+            add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_BOTTOM[block.id]);
         }
     }
 

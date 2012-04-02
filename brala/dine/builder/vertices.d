@@ -3,16 +3,8 @@ module brala.dine.builder.vertices;
 private {
     import std.array : join;
 
+    import brala.dine.builder.constants : Side;
     import brala.dine.util : to_triangles;
-}
-
-enum Side : ubyte {
-    LEFT,
-    RIGHT,
-    NEAR,
-    FAR,
-    TOP,
-    BOTTOM
 }
 
 struct TextureSlice(float w, float h) {

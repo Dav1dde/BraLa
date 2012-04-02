@@ -1,6 +1,15 @@
 module brala.dine.builder.constants;
 
 
+enum Side : ubyte {
+    LEFT,
+    RIGHT,
+    NEAR,
+    FAR,
+    TOP,
+    BOTTOM
+}
+
 enum Biome {
     Ocean = 0,
     Plains,
