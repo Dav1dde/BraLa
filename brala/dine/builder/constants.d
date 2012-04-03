@@ -7,7 +7,8 @@ enum Side : ubyte {
     NEAR,
     FAR,
     TOP,
-    BOTTOM
+    BOTTOM,
+    ALL
 }
 
 enum Biome {

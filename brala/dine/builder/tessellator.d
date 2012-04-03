@@ -81,37 +81,36 @@ struct Tessellator {
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
               const ref Block value, const ref Block right, const ref Block top, const ref Block front) {
 
+       
         if(blocks[value.id].empty) { // render neighbours
-            if(right.id != 0) dispatch!(Side.LEFT)(x_offset_r, y_offset, z_offset, right);
-            if(top.id != 0)   dispatch!(Side.BOTTOM)(x_offset, y_offset_t, z_offset, top);
-            if(front.id !=0)  dispatch!(Side.FAR)(x_offset, y_offset, z_offset_n, front);
+            if(!blocks[right.id].empty) dispatch!(Side.LEFT)(x_offset_r, y_offset, z_offset, right);
+            if(!blocks[top.id].empty)   dispatch!(Side.BOTTOM)(x_offset, y_offset_t, z_offset, top);
+            if(!blocks[front.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset_n, front);
 
             if(value.id != 0) {
-                if(blocks[right.id].empty) dispatch!(Side.RIGHT)(x_offset, y_offset, z_offset, value);
-                if(blocks[top.id].empty)   dispatch!(Side.TOP)(x_offset, y_offset, z_offset, value);
-                if(blocks[front.id].empty) dispatch!(Side.NEAR)(x_offset, y_offset, z_offset, value);
+                dispatch!(Side.ALL)(x_offset, y_offset, z_offset, value);
             }
         } else {
             if(blocks[right.id].empty) dispatch!(Side.RIGHT)(x_offset, y_offset, z_offset, value);
             if(blocks[top.id].empty)   dispatch!(Side.TOP)(x_offset, y_offset, z_offset, value);
             if(blocks[front.id].empty) dispatch!(Side.NEAR)(x_offset, y_offset, z_offset, value);
-        }
 
-        if(x == 0) {
-            Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
+            if(x == 0) {
+                Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
 
-            if(blocks[left.id].empty) dispatch!(Side.LEFT)(x_offset, y_offset, z_offset, value);
-        }
+                if(blocks[left.id].empty) dispatch!(Side.LEFT)(x_offset, y_offset, z_offset, value);
+            }
 
-        if(y == 0) {
-            // always render this, it's the lowest bedrock level
-            dispatch!(Side.BOTTOM)(x_offset, y_offset, z_offset, value);
-        }
+            if(y == 0) {
+                // always render this, it's the lowest bedrock level
+                dispatch!(Side.BOTTOM)(x_offset, y_offset, z_offset, value);
+            }
 
-        if(z == 0) {
-            Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
+            if(z == 0) {
+                Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
 
-            if(blocks[back.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset, value);
+                if(blocks[back.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset, value);
+            }
         }
     }
 
@@ -128,6 +127,13 @@ struct Tessellator {
             add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_TOP[block.id]);
         } else static if(side == Side.BOTTOM) {
             add_template_vertices(x_offset, y_offset, z_offset, BLOCK_VERTICES_BOTTOM[block.id]);
+        } else static if(side == Side.ALL) {
+            tessellate_simple_block!(Side.LEFT)(x_offset, y_offset, z_offset, block);
+            tessellate_simple_block!(Side.RIGHT)(x_offset, y_offset, z_offset, block);
+            tessellate_simple_block!(Side.NEAR)(x_offset, y_offset, z_offset, block);
+            tessellate_simple_block!(Side.FAR)(x_offset, y_offset, z_offset, block);
+            tessellate_simple_block!(Side.TOP)(x_offset, y_offset, z_offset, block);
+            tessellate_simple_block!(Side.BOTTOM)(x_offset, y_offset, z_offset, block);
         }
     }
 

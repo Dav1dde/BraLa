@@ -36,6 +36,5 @@ fragment:
     out vec4 color_out;
 
     void main() {
-        color_out = texture(terrain, v_texcoord);
-//         color_out = vec4(v_texcoord, 1.0, 0.0);
+        color_out = texture(terrain, v_texcoord);        
     }
