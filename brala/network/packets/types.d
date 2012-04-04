@@ -225,7 +225,7 @@ struct ChunkS { // TODO: implement send
                 ubyte[] temp = unc_data[offset..offset+4096];
                 
                 foreach(j, block_id; temp) {
-                    vec3i coords = coords_from_j(j, i);
+                    vec3i coords = coords_from_j(cast(uint)j, i);
 
                     ret.chunk.blocks[chunk.to_flat(coords)].id = block_id;
                 }
@@ -239,7 +239,7 @@ struct ChunkS { // TODO: implement send
                 if(ret.chunk.primary_bitmask & 1 << i) { 
                     ubyte[] temp = unc_data[offset..offset+2048];
                     
-                    for(size_t j = 0; j < temp.length; j++) {
+                    for(uint j = 0; j < cast(uint)(temp.length); j++) {
                         ubyte dj = temp[j];
                         vec3i coords_m1 = coords_from_j(j, i);
                         vec3i coords_m2 = coords_from_j(++j, i);
