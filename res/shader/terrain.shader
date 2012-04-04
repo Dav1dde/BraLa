@@ -5,9 +5,9 @@ vertex:
     in vec3 normal;
     in vec2 texcoord;
 
-    smooth out vec3 v_position;
-    smooth out vec3 v_normal;
-    smooth out vec2 v_texcoord;
+    out vec3 v_position;
+    out vec3 v_normal;
+    out vec2 v_texcoord;
 
     uniform mat4 model;
     uniform mat4 view;
@@ -25,9 +25,9 @@ vertex:
     }
 
 fragment:
-    smooth in vec3 v_normal;
-    smooth in vec3 v_position;
-    smooth in vec2 v_texcoord;
+    in vec3 v_normal;
+    in vec3 v_position;
+    in vec2 v_texcoord;
 
     uniform sampler2D terrain;
 
