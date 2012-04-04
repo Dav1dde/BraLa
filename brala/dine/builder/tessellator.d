@@ -23,7 +23,7 @@ struct Tessellator {
     float* buffer;
     size_t buffer_length;
 
-    size_t elements = 0;
+    uint elements = 0;
 
     mixin BlockBuilder!();
     
