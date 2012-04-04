@@ -5,7 +5,11 @@ private {
     import glamour.gl;
     import glamour.sampler : Sampler;
     import derelict.glfw3.glfw3;
-    import derelict.devil.il;
+
+    version(stb) {
+    } else {
+        import derelict.devil.il;
+    }
     
     import std.conv : to, ConvException;
     
@@ -23,13 +27,20 @@ private {
 static this() {
     DerelictGLFW3.load();
     DerelictGL3.load();
-    DerelictIL.load();
+
+    version(stb) {
+    } else {
+        DerelictIL.load();
+    }
 
     if(!glfwInit()) {
         throw new InitError("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
     }
-    
-    ilInit();
+
+    version(stb) {
+    } else {
+        ilInit();
+    }
 }
 
 GLFWwindow _window;
