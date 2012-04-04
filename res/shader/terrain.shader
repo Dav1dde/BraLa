@@ -25,9 +25,9 @@ vertex:
     }
 
 fragment:
-    in vec3 v_normal;
-    in vec3 v_position;
-    in vec2 v_texcoord;
+    smooth in vec3 v_normal;
+    smooth in vec3 v_position;
+    smooth in vec2 v_texcoord;
 
     uniform sampler2D terrain;
 
