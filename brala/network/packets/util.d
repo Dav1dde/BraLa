@@ -129,9 +129,6 @@ mixin template Packet(ubyte id_, Vars...) {
     mixin(inject_data());
 }
 
-vec3i coords_from_j(uint j, uint y) {
-//     return Point3D((j & 0xF0) >> 4,
-//                     y*16 + (j & 0x0F),
-//                     j >> 8);
+vec3i coords_from_j(size_t j, uint y) {
     return vec3i(j & 0x0F, y*16 + (j >> 8), (j & 0xF0) >> 4);
 }
