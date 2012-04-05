@@ -20,7 +20,7 @@ class World {
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*12; // this value is the result of testing!
+        tessellate_buffer_length = width*height*depth*15; // this value is the result of testing!
         tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
     }
     
@@ -211,7 +211,7 @@ class World {
 
                         value = get_block_safe(wcoords);
 
-                        tessellator.realloc_buffer_if_needed(1024);
+                        tessellator.realloc_buffer_if_needed(1024*(depth-z));
 
                         foreach(x; 0..width) {
                             x_offset = x+0.5f;

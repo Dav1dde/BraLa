@@ -21,7 +21,7 @@ private {
     import brala.character : Character;
     import brala.engine : BraLaEngine;
     import brala.input : BaseGLFWEventHandler;
-    import brala.types : DefaultAA;
+    import brala.utils.defaultaa : DefaultAA;
     import brala.utils.queue : Queue;
     import brala.util : clear;
     import brala.config;

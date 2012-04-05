@@ -12,7 +12,7 @@ private {
     import glamour.shader : Shader;
     import glamour.texture : Texture2D;
     
-    import brala.types : Image;
+    import brala.utils.image : Image;
     import brala.exception : ResmgrError;
     
     debug import std.stdio : writefln;
@@ -148,7 +148,7 @@ class ResourceManager {
         
         synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
         // use add_many_wait for multithreaded texture loading, shaders to come.
-        static if(is(T : Texture2D) || is(T : Shader)) {
+        static if(true) { // FIXME: is(T : Texture2D) || is(T : Shader)
             taskfun(this, id, filename); 
             return null;
         } else {
@@ -255,7 +255,7 @@ class ResourceManager {
     
     protected void done_loading(T)(T res, string id) if(is_loadable!T){
         debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
-                                                          
+        
         synchronized (_lock) { 
             static if(is(T : Image)) images[id] = res;
             else static if(is(T : Shader)) shaders[id] = res;

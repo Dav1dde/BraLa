@@ -6,11 +6,6 @@ private {
     import glamour.sampler : Sampler;
     import derelict.glfw3.glfw3;
 
-    version(stb) {
-    } else {
-        import derelict.devil.il;
-    }
-    
     import std.conv : to, ConvException;
     
     import brala.engine : BraLaEngine;
@@ -28,18 +23,8 @@ static this() {
     DerelictGLFW3.load();
     DerelictGL3.load();
 
-    version(stb) {
-    } else {
-        DerelictIL.load();
-    }
-
     if(!glfwInit()) {
         throw new InitError("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
-    }
-
-    version(stb) {
-    } else {
-        ilInit();
     }
 }
 
