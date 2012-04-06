@@ -2,7 +2,7 @@ module brala.utils.image;
 
 private {
     import stb_image : stbi_load, stbi_image_free;
-    import glamour.gl : GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE;
+    import glamour.gl : GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE, GL_TEXTURE0;
     import glamour.texture : Texture2D;
 
     import std.string : toStringz, format;
@@ -94,9 +94,9 @@ class Image {
         this.height = new_height;
     }
 
-    Texture2D to_texture() {
-        Texture2D ret = new Texture2D(dest_format, width, height, dest_format, dest_type);
-        ret.set_data(data);
+    Texture2D to_texture(int unit = GL_TEXTURE0) {
+        Texture2D ret = new Texture2D(unit);
+        ret.set_data(data, dest_format, width, height, dest_format, dest_type);
         return ret;
     }
         

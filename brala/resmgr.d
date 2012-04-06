@@ -205,10 +205,9 @@ class ResourceManager {
         foreach(textask; textasks) {
             Image img = textask.task.workForce();
 
-            auto tex = new Texture2D(img.dest_format, img.width, // bugged?
-                                     img.height, img.dest_format, img.dest_type);
-            tex.set_data(img.data);
-            
+            // FIXME
+            auto tex = new Texture2D();
+            tex.set_data(img.data, img.dest_format, img.width, img.height, img.dest_format, img.dest_type);
 
             // we are still in the mainthread, so let's upload this sh*t to the gpu
             // but we still need to synchronize!
