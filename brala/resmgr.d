@@ -8,9 +8,10 @@ private {
     import core.time : dur;
     import std.typecons : Tuple;
     import std.string : toLower;
+    import std.format : format;
     
     import glamour.shader : Shader;
-    import glamour.texture : Texture2D;
+    import glamour.texture : ITexture, Texture2D;
     
     import brala.utils.image : Image;
     import brala.exception : ResmgrError;
@@ -54,7 +55,7 @@ Texture2D load_texture(ResourceManager rsmg, string id, string filename) {
 }
 
 private template is_loadable(T) {
-    static if(is(T : Image) || is(T : Shader) || is(T : Texture2D)) {
+    static if(is(T : Image) || is(T : Shader) || is(T : ITexture)) {
         enum is_loadable = true;
     } else {
         enum is_loadable = false;
@@ -65,7 +66,7 @@ private struct CBS {
     union {
         void delegate(Image) imgcb;
         void delegate(Shader) sdrcb;
-        void delegate(Texture2D) texcb;
+        void delegate(ITexture) texcb;
     }
     
     void opCall(T)(T arg) {
@@ -73,7 +74,7 @@ private struct CBS {
             auto cb = imgcb;
         } else static if(is(T : Shader)) {
             auto cb = sdrcb;
-        } else static if(is(T : Texture2D)) {
+        } else static if(is(T : ITexture)) {
             auto cb = texcb;
         } else {
             static assert(false, "Unknown argument type, no matching callback");
@@ -91,7 +92,7 @@ private struct CBS {
             ret.imgcb = cb;
         } else static if(is(T : void delegate(Shader))) {
             ret.sdrcb = cb;
-        } else static if(is(T : void delegate(Texture2D))) {
+        } else static if(is(T : void delegate(ITexture))) {
             ret.texcb = cb;
         } else {
             static assert(false, "Unknown callback-type.");
@@ -101,7 +102,7 @@ private struct CBS {
     }
 }
 
-enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE2D_TYPE }
+enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE_TYPE }
 
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
@@ -111,7 +112,7 @@ class ResourceManager {
     protected CBS[string] open_tasks;
     
     __gshared Shader[string] shaders;
-    __gshared Texture2D[string] textures;
+    __gshared ITexture[string] textures;
     __gshared Image[string] images;
         
     this(bool new_taskpool = true) {
@@ -134,14 +135,14 @@ class ResourceManager {
         string idt = id ~ T.stringof; 
         if((is(T : Image) && id in images) ||
            (is(T : Shader) && id in shaders) ||
-           (is(T : Texture2D) && id in textures) ||
+           (is(T : ITexture) && id in textures) ||
            idt in open_tasks) {
             throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
         }
         
         synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
         // use add_many_wait for multithreaded texture loading, shaders to come.
-        static if(true) { // FIXME: is(T : Texture2D) || is(T : Shader)
+        static if(true) { // FIXME: is(T : ITexture) || is(T : Shader)
             taskfun(this, id, filename); 
             return null;
         } else {
@@ -153,7 +154,7 @@ class ResourceManager {
     
     alias _add!(load_image, Image) add_image;
     alias _add!(load_shader, Shader) add_shader;
-    alias _add!(load_texture, Texture2D) add_texture;
+    alias _add!(load_texture, ITexture) add_texture;
     
     auto add(T)(string id, string filename, void delegate(T) cb = null) if(is_loadable!T) {
         static if(is(T : Image)) {
@@ -164,6 +165,27 @@ class ResourceManager {
             return add_texture(id, filename, cb);
         }
     }
+
+    void add(T)(T t, string id) if(is_loadable!T) {
+        string idt = id ~ T.stringof;
+        
+        synchronized (_lock) {
+            if((is(T : Image) && id in images) ||
+               (is(T : Shader) && id in shaders) ||
+               (is(T : ITexture) && id in textures) ||
+               idt in open_tasks) {
+                throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
+            }
+
+            static if(is(T : Image)) {
+                images[id] = t;
+            } else static if(is(T : Shader)) {
+                shaders[id] = t;
+            } else static if(is(T : ITexture)) {
+                textures[id] = t;
+            }
+        }
+    }
     
     void add_many(const Resource[] resources) {
         foreach(res; resources) {
@@ -171,7 +193,7 @@ class ResourceManager {
             switch(type) {
                 case IMAGE_TYPE: add_image(res.id, res.filename); break;
                 case SHADER_TYPE: add_shader(res.id, res.filename); break;
-                case TEXTURE2D_TYPE: add_texture(res.id, res.filename); break;
+                case TEXTURE_TYPE: add_texture(res.id, res.filename); break;
                 default: throw new ResmgrError("Unknown resource-type.");
             }
         }
@@ -190,7 +212,7 @@ class ResourceManager {
             switch(type) {
                 case IMAGE_TYPE: add_image(res.id, res.filename); break;
                 case SHADER_TYPE: add_shader(res.id, res.filename); break;
-                case TEXTURE2D_TYPE: textasks ~= TTT(add_image(res.id, res.filename), res); break;
+                case TEXTURE_TYPE: textasks ~= TTT(add_image(res.id, res.filename), res); break;
                 default: throw new ResmgrError("Unknown resource-type.");
             }
         }           
@@ -221,12 +243,14 @@ class ResourceManager {
     
     T get(T)(string id) if(is_loadable!T) {
         static if(is(T : Image)) {
-            return images[id];
+            if(Image* img = id in images) return *img;
         } else static if(is(T : Shader)) {
-            return shaders[id];
-        } else static if(is(T : Texture2D)) {
-            return textures[id];
+            if(Shader* shader = id in shaders) return *shader;
+        } else static if(is(T : ITexture)) {
+            if(ITexture* tex = id in textures) return *tex;
         }
+
+        throw new ResmgrError(format("No %s with id \"%s\" available.", T.stringof, id));
     }
     
     static int guess_type(string filename) {
@@ -239,8 +263,8 @@ class ResourceManager {
             case ".tga": return IMAGE_TYPE;
             case ".shader": return SHADER_TYPE;
             case ".glsl": return SHADER_TYPE;
-            case ".texture": return TEXTURE2D_TYPE;
-            case ".texture2d": return TEXTURE2D_TYPE;
+            case ".texture": return TEXTURE_TYPE;
+            case ".texture2d": return TEXTURE_TYPE;
             default: throw new ResmgrError("Unable to guess resource-type.");
         }
     }
@@ -251,7 +275,7 @@ class ResourceManager {
         synchronized (_lock) { 
             static if(is(T : Image)) images[id] = res;
             else static if(is(T : Shader)) shaders[id] = res;
-            else static if(is(T : Texture2D)) textures[id] = res;
+            else static if(is(T : ITexture)) textures[id] = res;
             
             string idt = id ~ T.stringof;
             if(CBS* t = idt in open_tasks) {

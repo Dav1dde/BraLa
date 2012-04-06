@@ -15,6 +15,7 @@ private {
     import brala.config : load_default_resources;
     import brala.network.packets.types : IPacket;
     import brala.exception : InitError;
+    import brala.utils.image : Image;
     
     import std.stdio : writefln;
 }
@@ -60,7 +61,9 @@ GLVersion init_opengl() {
 
 BraLaEngine init_engine(int width, int height, GLVersion glv) {
     auto engine = new BraLaEngine(width, height, glv);
+    
     load_default_resources(engine.resmgr); // I like! ~15mb in 837ms
+    engine.resmgr.add(engine.resmgr.get!Image("terrain").to_texture(), "terrain");
 
     Sampler terrain_sampler = new Sampler();
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -3,7 +3,7 @@ module brala.engine;
 private {
     import glamour.gl;
     import glamour.shader : Shader;
-    import glamour.texture : ITexture, Texture2D;
+    import glamour.texture : ITexture;
     import glamour.sampler : Sampler;
     
     import derelict.glfw3.glfw3;
@@ -135,7 +135,7 @@ class BraLaEngine {
     }
 
     void use_texture(string id) {
-        current_texture = resmgr.get!Texture2D(id);
+        current_texture = resmgr.get!ITexture(id);
     }
 
     void set_sampler(ITexture tex, Sampler s) {
@@ -143,6 +143,6 @@ class BraLaEngine {
     }
     
     void set_sampler(string tex_id, Sampler s) {
-        samplers[resmgr.get!Texture2D(tex_id)] = s;
+        samplers[resmgr.get!ITexture(tex_id)] = s;
     }
 }
