@@ -18,13 +18,6 @@ private {
     debug import std.stdio : writefln;
 }
 
-version(none) {
-    private __gshared Object _texlock;
-    static this() {
-        _texlock = new Object();
-    }
-}
-
 @property ResourceManager resmgr() {
     static bool initialized = false;
     __gshared static ResourceManager _resmgr;
