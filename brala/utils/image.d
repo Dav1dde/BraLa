@@ -35,6 +35,10 @@ class Image {
         this.comp = comp;
     }
 
+    static Image empty(int width, int height, int comp) {
+        return new Image(new ubyte[width*height*comp], width, height, comp);
+    }
+    
     static Image from_file(string filename) {
         int x;
         int y;

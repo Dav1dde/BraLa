@@ -12,7 +12,7 @@ private {
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
-    import brala.network.util : FixedEndianStream, read, write;
+    import brala.network.util : read, write;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
@@ -47,7 +47,7 @@ class Connection {
     this(string username, string password, int protocol_version = 29) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
-        endianstream = new FixedEndianStream(socketstream, Endian.bigEndian);
+        endianstream = new EndianStream(socketstream, Endian.bigEndian);
         queue = new PacketQueue();
         
         session = new Session();

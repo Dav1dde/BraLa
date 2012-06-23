@@ -16,22 +16,6 @@ private {
     debug import std.stdio : writefln;
 }
 
-
-// https://github.com/D-Programming-Language/phobos/pull/467
-class FixedEndianStream : EndianStream {
-    this(Stream source, Endian end = std.system.endian) {
-        super(source, end);
-    }
-    
-    override wchar[] readStringW(size_t length) {
-        wchar[] result = new wchar[length];
-        readExact(result.ptr, length * wchar.sizeof);
-        fixBlockBO(result.ptr, wchar.sizeof, length);
-        return result;
-    }
-}
-
-
 void write(Args...)(Stream s, Args data) {
     foreach(d; data) {
         write_impl(s, d);

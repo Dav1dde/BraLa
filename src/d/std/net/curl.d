@@ -164,6 +164,7 @@ import std.stream;
 import std.string;
 import std.traits;
 import std.typecons;
+import std.typetuple;
 
 version(unittest)
 {
@@ -295,6 +296,7 @@ void upload(Conn = AutoProtocol)(string loadFromPath, const(char)[] url, Conn co
     else static if (is(Conn : FTP))
     {
         conn.url = url;
+        conn.handle.set(CurlOption.upload, 1L);
     }
     else
     {
@@ -758,6 +760,7 @@ private auto _basicFTP(T)(const(char)[] url, const(void)[] sendData, FTP client)
 
     if (!sendData.empty)
     {
+        client.handle.set(CurlOption.upload, 1L);
         client.onSend = delegate size_t(void[] buf)
         {
             size_t minLen = min(buf.length, sendData.length);
@@ -1137,7 +1140,7 @@ private mixin template WorkerThreadProtocol(Unit, alias units)
 
 // Workaround bug #2458
 // It should really be defined inside the byLineAsync method.
-// Do not create instances of this struct since it will be 
+// Do not create instances of this struct since it will be
 // moved when the bug has been fixed.
 // Range that reads one line at a time asynchronously.
 static struct AsyncLineInputRange(Char)
@@ -1293,7 +1296,7 @@ unittest
 
 // Workaround bug #2458
 // It should really be defined inside the byLineAsync method.
-// Do not create instances of this struct since it will be 
+// Do not create instances of this struct since it will be
 // moved when the bug has been fixed.
 // Range that reads one chunk at a time asynchronously.
 static struct AsyncChunkInputRange
@@ -1551,12 +1554,6 @@ private mixin template Protocol()
     }
 
     // Network settings
-
-    /// The URL to specify the location of the resource.
-    @property void url(const(char)[] url)
-    {
-        p.curl.set(CurlOption.url, url);
-    }
 
     /** Proxy
      *  See: $(WEB curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTPROXY, _proxy)
@@ -1966,7 +1963,8 @@ struct HTTP
     this(const(char)[] url)
     {
         initialize();
-        p.curl.set(CurlOption.url, url);
+
+        this.url = url;
     }
 
     static HTTP opCall()
@@ -1998,7 +1996,6 @@ struct HTTP
 
     private void initialize()
     {
-        p.RefCounted.initialize();
         p.curl.initialize();
         maxRedirects = HTTP.defaultMaxRedirects;
         p.charset = "ISO-8859-1"; // Default charset defined in HTTP RFC
@@ -2056,6 +2053,14 @@ struct HTTP
         return p.curl.perform(throwOnError);
     }
 
+    /// The URL to specify the location of the resource.
+    @property void url(const(char)[] url)
+    {
+        if (!startsWith(url.toLower(), "http://", "https://"))
+            url = "http://" ~ url;
+        p.curl.set(CurlOption.url, url);
+    }
+
     // This is a workaround for mixed in content not having its
     // docs mixed in.
     version (StdDdoc)
@@ -2089,9 +2094,6 @@ struct HTTP
         @property void connectTimeout(Duration d);
 
         // Network settings
-
-        /// The URL to specify the location of the resource.
-        @property void url(const(char)[] url);
 
         /** Proxy
          *  See: $(WEB curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTPROXY, _proxy)
@@ -2636,7 +2638,8 @@ struct FTP
     this(const(char)[] url)
     {
         initialize();
-        p.curl.set(CurlOption.url, url);
+
+        this.url = url;
     }
 
     static FTP opCall()
@@ -2666,7 +2669,6 @@ struct FTP
 
     private void initialize()
     {
-        p.RefCounted.initialize();
         p.curl.initialize();
         p.encoding = "ISO-8859-1";
         dataTimeout = _defaultDataTimeout;
@@ -2688,6 +2690,14 @@ struct FTP
     private CurlCode _perform(bool throwOnError = true)
     {
         return p.curl.perform(throwOnError);
+    }
+
+    /// The URL to specify the location of the resource.
+    @property void url(const(char)[] url)
+    {
+        if (!startsWith(url.toLower(), "ftp://", "ftps://"))
+            url = "ftp://" ~ url;
+        p.curl.set(CurlOption.url, url);
     }
 
     // This is a workaround for mixed in content not having its
@@ -2723,9 +2733,6 @@ struct FTP
         @property void connectTimeout(Duration d);
 
         // Network settings
-
-        /// The URL to specify the location of the resource.
-        @property void url(const(char)[] url);
 
         /** Proxy
          *  See: $(WEB curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTPROXY, _proxy)
@@ -2872,10 +2879,9 @@ struct FTP
      * ---
      * import std.net.curl;
      * auto client = FTP();
-     * upload("my_file.txt", "ftp.digitalmars.com", client);
      * client.addCommand("RNFR my_file.txt");
      * client.addCommand("RNTO my_renamed_file.txt");
-     * client.perform();
+     * upload("my_file.txt", "ftp.digitalmars.com", client);
      * ---
      */
     void addCommand(const(char)[] command)
@@ -2943,7 +2949,6 @@ struct SMTP
     */
     this(string url)
     {
-        p.RefCounted.initialize();
         p.curl.initialize();
         auto lowered = url.toLower();
 
@@ -2969,6 +2974,14 @@ struct SMTP
     void perform()
     {
         p.curl.perform();
+    }
+
+    /// The URL to specify the location of the resource.
+    @property void url(const(char)[] url)
+    {
+        if (!startsWith(url.toLower(), "smtp://", "smtps://"))
+            url = "smtp://" ~ url;
+        p.curl.set(CurlOption.url, url);
     }
 
     // This is a workaround for mixed in content not having its
@@ -3004,9 +3017,6 @@ struct SMTP
         @property void connectTimeout(Duration d);
 
         // Network settings
-
-        /// The URL to specify the location of the resource.
-        @property void url(const(char)[] url);
 
         /** Proxy
          *  See: $(WEB curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTPROXY, _proxy)
@@ -3289,19 +3299,19 @@ struct Curl
         copy.stopped = false;
 
         with (CurlOption) {
-            auto tt = _TypeTuple!(file, writefunction, writeheader,
-                                  headerfunction, infile,
-                                  readfunction, ioctldata, ioctlfunction,
-                                  seekdata, seekfunction, sockoptdata,
-                                  sockoptfunction, opensocketdata,
-                                  opensocketfunction, noprogress,
-                                  progressdata, progressfunction,
-                                  debugdata, debugfunction,
-                                  ssl_ctx_function, interleavedata,
-                                  interleavefunction, chunk_data,
-                                  chunk_bgn_function, chunk_end_function,
-                                  fnmatch_data, fnmatch_function,
-                                  ssh_keydata, cookiejar, postfields);
+            auto tt = TypeTuple!(file, writefunction, writeheader,
+                                 headerfunction, infile,
+                                 readfunction, ioctldata, ioctlfunction,
+                                 seekdata, seekfunction, sockoptdata,
+                                 sockoptfunction, opensocketdata,
+                                 opensocketfunction, noprogress,
+                                 progressdata, progressfunction,
+                                 debugdata, debugfunction,
+                                 ssl_ctx_function, interleavedata,
+                                 interleavefunction, chunk_data,
+                                 chunk_bgn_function, chunk_end_function,
+                                 fnmatch_data, fnmatch_function,
+                                 ssh_keydata, cookiejar, postfields);
             foreach(option; tt)
                 copy.clear(option);
         }
@@ -3341,7 +3351,9 @@ struct Curl
 
     private string errorString(CurlCode code)
     {
-        return format("%s on handle %s", curl_easy_strerror(code), handle);
+        auto msgZ = curl_easy_strerror(code);
+        // doing the following (instead of just using std.conv.to!string) avoids 1 allocation
+        return format("%s on handle %s", msgZ[0 .. core.stdc.string.strlen(msgZ)], handle);
     }
 
     private void throwOnStopped(string message = null)
@@ -3678,7 +3690,7 @@ struct Curl
                                   size_t size, size_t nmemb, void* ptr)
     {
         auto b = cast(Curl*) ptr;
-        auto s = str[0..size*nmemb].chomp;
+        auto s = str[0..size*nmemb].chomp();
         if (b._onReceiveHeader != null)
             b._onReceiveHeader(s);
 
