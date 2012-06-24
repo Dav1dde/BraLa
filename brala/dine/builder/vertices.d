@@ -62,13 +62,14 @@ float[] simple_block(Side side, MCTextureSlice texture_slice) {
 
     float[3][6] positions = to_triangles(cbsd.positions);
     float[2][6] texcoords = to_triangles(texture_slice.texcoords);
-    
-    return join([positions[0], cbsd.normal, texcoords[0],
-                 positions[1], cbsd.normal, texcoords[1],
-                 positions[2], cbsd.normal, texcoords[2],
-                 positions[3], cbsd.normal, texcoords[3],
-                 positions[4], cbsd.normal, texcoords[4],
-                 positions[5], cbsd.normal, texcoords[5]]);
+
+                 // vertex      normal       texcoords     palette
+    return join([positions[0], cbsd.normal, texcoords[0], [0.0f, 0.0f],
+                 positions[1], cbsd.normal, texcoords[1], [0.0f, 0.0f],
+                 positions[2], cbsd.normal, texcoords[2], [0.0f, 0.0f],
+                 positions[3], cbsd.normal, texcoords[3], [0.0f, 0.0f],
+                 positions[4], cbsd.normal, texcoords[4], [0.0f, 0.0f],
+                 positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);
 }
 
 private alias MCTextureSlice t;

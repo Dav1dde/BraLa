@@ -20,7 +20,7 @@ class World {
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*15; // this value is the result of testing!
+        tessellate_buffer_length = width*height*depth*20; // this value is the result of testing!
         tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
     }
     
@@ -249,7 +249,7 @@ class World {
             }
 
             chunk.vbo_type = GL_FLOAT;
-            chunk.vbo_vcount = tessellator.elements / 8; // 8 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v
+            chunk.vbo_vcount = tessellator.elements / 10; // 10 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v, palette: s, t
             tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;
@@ -262,13 +262,15 @@ class World {
             GLuint position = engine.current_shader.get_attrib_location("position");
             GLuint normal = engine.current_shader.get_attrib_location("normal");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
-
-            // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v
-            uint stride = (3+3+2)*float.sizeof;
+            GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
+            //import std.stdio; writefln("%s", palettecoord);
+            // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v, palette: s, t
+            uint stride = (3+3+2+2)*float.sizeof;
 
             chunk.vbo.bind(position, 3, 0, stride);
             chunk.vbo.bind(normal, 3, 3*float.sizeof, stride);
             chunk.vbo.bind(texcoord, 2, (3+3)*float.sizeof, stride);
+            chunk.vbo.bind(palettecoord, 2, (3+3+2)*float.sizeof, stride);
         }
 
     

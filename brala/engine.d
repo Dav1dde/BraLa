@@ -54,8 +54,8 @@ class BraLaEngine {
 
     @property ITexture current_texture() { return _current_texture; }
     @property void current_texture(ITexture texture) {
-        if(_current_texture !is null) _current_texture.unbind();
         _current_texture = texture;
+        _current_texture.activate();
         _current_texture.bind();
         if(Sampler* sampler = _current_texture in samplers) {
             _current_sampler = *sampler;

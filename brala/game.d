@@ -139,7 +139,12 @@ class BraLaGame : BaseGLFWEventHandler {
         synchronized(_world_lock) {
             if(_current_world !is null) {
                 engine.use_shader("terrain");
+
                 engine.use_texture("terrain");
+                engine.use_texture("palette");
+                engine.current_shader.uniform1i("terrain", 0);
+                engine.current_shader.uniform1i("palette", 1);
+                
                 current_world.draw(engine);
             }
         }

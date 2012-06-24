@@ -18,6 +18,8 @@ mixin template BlockBuilder() {
             buffer[elements++] = nz;
             buffer[elements++] = u;
             buffer[elements++] = v;
+            buffer[elements++] = 0.0f;
+            buffer[elements++] = 0.0f;
         }
 
     void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref float[] vertices)
@@ -26,7 +28,7 @@ mixin template BlockBuilder() {
             buffer[elements..(elements+(vertices.length))] = vertices;
 
             size_t end = elements+vertices.length;
-            for(; elements < end; elements += 5) {
+            for(; elements < end; elements += 7) {
                 buffer[elements++] += x_offset;
                 buffer[elements++] += y_offset;
                 buffer[elements++] += z_offset;

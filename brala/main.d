@@ -3,7 +3,7 @@ module brala.main;
 
 private {
     import glamour.gl;
-    import glamour.sampler : Sampler;
+    import glamour.sampler : Sampler, Texture2D;
     import derelict.glfw3.glfw3;
 
     import std.conv : to, ConvException;
@@ -69,7 +69,9 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     Image palette = palette_atlas(engine.resmgr.get!Image("grasscolor"),
                                   engine.resmgr.get!Image("leavecolor"),
                                   engine.resmgr.get!Image("watercolor"));
-    engine.resmgr.add("palette", palette.to_texture());
+    Texture2D palette_tex = palette.to_texture();
+    palette_tex.unit = GL_TEXTURE0 + 1;
+    engine.resmgr.add("palette", palette_tex);
     
     Sampler terrain_sampler = new Sampler();
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
