@@ -14,9 +14,11 @@ enum {
 }
 
 // put texture files to the end, since there is no multithreaded texture-loading yet
-immutable Resource[] resources = [Resource("test_input", "./res/shader/test_input.shader", SHADER_TYPE),
-                                  Resource("terrain", "./res/shader/terrain.shader", SHADER_TYPE),
-                                  Resource("terrain", "./res/texture/terrain.png", IMAGE_TYPE)];
+immutable Resource[] resources = [Resource("terrain", "./res/shader/terrain.shader", SHADER_TYPE),
+                                  Resource("terrain", "./res/texture/terrain.png", IMAGE_TYPE),
+                                  Resource("grasscolor", "./res/texture/grasscolor.png", IMAGE_TYPE),
+                                  Resource("leavecolor", "./res/texture/leavecolor.png", IMAGE_TYPE),
+                                  Resource("watercolor", "./res/texture/watercolor.png", IMAGE_TYPE)];
 
 void load_default_resources(ResourceManager rsmg = null) {
     if(rsmg is null) {

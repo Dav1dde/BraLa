@@ -166,7 +166,7 @@ class ResourceManager {
         }
     }
 
-    void add(T)(T t, string id) if(is_loadable!T) {
+    void add(T)(string id, T t) if(is_loadable!T) {
         string idt = id ~ T.stringof;
         
         synchronized (_lock) {

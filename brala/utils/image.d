@@ -6,6 +6,8 @@ private {
     import glamour.texture : Texture2D;
 
     import std.string : toStringz, format;
+    import std.range : chunks;
+    import std.array : array;
 
     import brala.exception : ImageError;
 }
@@ -96,6 +98,31 @@ class Image {
         this.data = data;
         this.width = new_width;
         this.height = new_height;
+    }
+
+    Image copy() {
+        return new Image(data.dup, width, height, comp);
+    }
+
+    Image convert(int to_comp) {
+        if(to_comp == comp) {
+            return copy();
+        }
+
+        ubyte[] result;
+
+        if(to_comp == 4) {
+            foreach(chunk; chunks(data, comp)) {
+                result ~= chunk;
+                result ~= 255;
+            }
+        } else {
+            foreach(chunk; chunks(data, comp)) {
+                result ~= chunk[0..3];
+            }
+        }
+
+        return new Image(result, width, height, to_comp);
     }
 
     Texture2D to_texture(int unit = GL_TEXTURE0) {
