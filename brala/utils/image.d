@@ -12,6 +12,12 @@ private {
     import brala.exception : ImageError;
 }
 
+
+enum {
+    RGB = 3,
+    RGBA = 4
+}
+
 class Image {
     ubyte[] data;
     int width;
@@ -19,9 +25,9 @@ class Image {
     int comp;
 
     @property int dest_format() {
-        if(comp == 3) {
+        if(comp == RGB) {
             return GL_RGB;
-        } else if(comp == 4) {
+        } else if(comp == RGBA) {
             return GL_RGBA;
         } else {
             throw new ImageError("Unknown/Unsupported stbi image format");
@@ -53,7 +59,7 @@ class Image {
 
         scope(exit) stbi_image_free(data);
 
-        if(!(comp == 3 || comp == 4)) {
+        if(!(comp == RGB || comp == RGBA)) {
             throw new ImageError("Unknown/Unsupported stbi image format");
         }
         
@@ -111,7 +117,7 @@ class Image {
 
         ubyte[] result;
 
-        if(to_comp == 4) {
+        if(to_comp == RGBA) {
             foreach(chunk; chunks(data, comp)) {
                 result ~= chunk;
                 result ~= 255;

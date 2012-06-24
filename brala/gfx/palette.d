@@ -1,7 +1,7 @@
 module brala.gfx.palette;
 
 private {
-    import brala.utils.image : Image;
+    import brala.utils.image : Image, RGB;
 }
 
 
@@ -9,19 +9,19 @@ Image palette_atlas(Image grasscolor, Image leavecolor, Image watercolor)
     in { assert(grasscolor.width == leavecolor.width && grasscolor.width == watercolor.width);
          assert(grasscolor.height == leavecolor.height && grasscolor.height == watercolor.height); }
     body {
-        if(grasscolor.comp != 3) {
-            grasscolor = grasscolor.convert(3);
+        if(grasscolor.comp != RGB) {
+            grasscolor = grasscolor.convert(RGB);
         }
-        if(leavecolor.comp != 3) {
-            leavecolor = leavecolor.convert(3);
+        if(leavecolor.comp != RGB) {
+            leavecolor = leavecolor.convert(RGB);
         }
-        if(watercolor.comp != 3) {
-            watercolor = watercolor.convert(3);
+        if(watercolor.comp != RGB) {
+            watercolor = watercolor.convert(RGB);
         }
 
         int width = grasscolor.width; // others have the same width/height/comp
         int height = grasscolor.height;
-        int comp = 3;
+        int comp = RGB;
         /*  _____
            |__|__| Empty, grass
            |__|__| leaves, water
