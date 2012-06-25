@@ -40,6 +40,8 @@ fragment:
 
     void main() {
         vec4 terrain_texture = texture(terrain, v_texcoord);
-        vec4 palette_texture = texture(palette, vec2(0.5, 0.1));
-        color_out = terrain_texture;
+        vec4 palette_texture = texture(palette, v_palettecoord);
+        //vec4 palette_texture = vec4(0.3568627450980392, 0.5450980392156862, 0.09019607843137255, 1);
+        color_out = terrain_texture * palette_texture;
+        //color_out = palette_texture;
     }

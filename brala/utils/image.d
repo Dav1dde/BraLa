@@ -96,6 +96,24 @@ class Image {
             }
         }
 
+    void blend(int x, int y, Image img, ubyte[] function(ubyte[], ubyte[]) blend_func)
+        in { assert(img.width+x <= width && img.height+y <= height && comp == img.comp); }
+        body {
+            foreach(yc; 0..img.height) {
+                foreach(xc; 0..img.width) {
+                    int yindex_bigimg = (y+yc)*width*comp;
+                    int yindex_smallimg = yc*(img.width)*comp;
+                    
+                    int xindex_bigimg = (x+xc)*comp;
+                    int xindex_smallimg = xc*comp;
+
+                    data[xindex_bigimg+yindex_bigimg..xindex_bigimg+yindex_bigimg+comp] =
+                        blend_func(data[xindex_bigimg+yindex_bigimg..xindex_bigimg+yindex_bigimg+comp],
+                               img.data[xindex_smallimg+yindex_smallimg..xindex_smallimg+yindex_smallimg+comp]);
+                }
+            }
+        }
+        
     void resize(int new_width, int new_height) {
         ubyte[] new_data = new ubyte[new_width*new_height*comp];
 
