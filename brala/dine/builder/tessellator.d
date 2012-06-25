@@ -17,17 +17,31 @@ private {
 }
 
 
+align(1) struct Vertex {
+    float x;
+    float y;
+    float z;
+    float nx;
+    float ny;
+    float nz;
+    byte u_terrain;
+    byte v_terrain;
+    byte u_palette;
+    byte v_palette;
+}
+
+
 struct Tessellator {
     World world;
     
-    float* buffer;
+    Vertex* buffer;
     size_t buffer_length;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref float* buffer, ref size_t buffer_length) {
+    this(World world, ref Vertex* buffer, ref size_t buffer_length) {
         this.world = world;
         this.buffer = buffer;
         this.buffer_length = buffer_length;
@@ -35,7 +49,7 @@ struct Tessellator {
 
     void realloc_buffer(size_t interval) {
         buffer_length += interval;
-        buffer = cast(float*)realloc(buffer, buffer_length*float.sizeof);
+        buffer = cast(Vertex*)realloc(buffer, buffer_length*Vertex.sizeof);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -82,6 +96,6 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
-        vbo.set_data(buffer[0..elements], GL_FLOAT);
+        vbo.set_data(buffer[0..elements]);
     }
 }

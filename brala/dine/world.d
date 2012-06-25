@@ -1,13 +1,13 @@
 module brala.dine.world;
 
 private {
-    import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT;
+    import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT, GL_BYTE;
     import glamour.vbo : Buffer;
     
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.builder.tessellator : Tessellator;
+    import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
     import brala.utils.alloc : malloc, realloc, free;
@@ -16,12 +16,12 @@ private {
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static float* tessellate_buffer;
+    static Vertex* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*20; // this value is the result of testing!
-        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
+        tessellate_buffer_length = width*height*depth*10; // this value is the result of testing!
+        tessellate_buffer = cast(Vertex*)malloc(tessellate_buffer_length*Vertex.sizeof);
     }
     
     static ~this() {
@@ -161,7 +161,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force = false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref Vertex* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -249,7 +249,7 @@ class World {
             }
 
             chunk.vbo_type = GL_FLOAT;
-            chunk.vbo_vcount = tessellator.elements / 10; // 10 = vertex: x,y,z, normal: xn, yn, zn, texcoords: u, v, palette: s, t
+            chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
             tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;
@@ -265,14 +265,13 @@ class World {
             GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
             //import std.stdio; writefln("%s", palettecoord);
             // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v, palette: s, t
-            uint stride = (3+3+2+2)*float.sizeof;
+            uint stride = Vertex.sizeof;
 
-            chunk.vbo.bind(position, 3, 0, stride);
-            chunk.vbo.bind(normal, 3, 3*float.sizeof, stride);
-            chunk.vbo.bind(texcoord, 2, (3+3)*float.sizeof, stride);
-            chunk.vbo.bind(palettecoord, 2, (3+3+2)*float.sizeof, stride);
+            chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
+            chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
+            chunk.vbo.bind(texcoord, GL_BYTE, 2, Vertex().u_terrain.offsetof, stride);
+            chunk.vbo.bind(palettecoord, GL_BYTE, 2, Vertex().u_palette.offsetof, stride);
         }
-
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {

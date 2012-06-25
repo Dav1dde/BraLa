@@ -3,39 +3,38 @@ module brala.dine.builder.builder;
 private {
     import brala.dine.chunk : Block;
     import brala.dine.builder.constants : Side;
+    import brala.dine.builder.tessellator : Vertex;
 }
 
 
 mixin template BlockBuilder() {
-    void add_vertex(float x, float y, float z, float nx, float nz, float ny, float u, float v)
-        in { assert(elements+8 <= buffer_length, "not enough allocated memory for tessellator"); }
+    void add_vertex(float x, float y, float z, float nx, float ny, float nz, byte u, byte v)
+        in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements++] = x;
-            buffer[elements++] = y;
-            buffer[elements++] = z;
-            buffer[elements++] = nx;
-            buffer[elements++] = ny;
-            buffer[elements++] = nz;
-            buffer[elements++] = u;
-            buffer[elements++] = v;
-            buffer[elements++] = 0.0f;
-            buffer[elements++] = 0.0f;
+            buffer[elements++] = Vertex(x, y, z, nx, ny, nz, u, v, 0, 0);
         }
 
-    void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref float[] vertices)
+    void add_vertex(const ref Vertex vertex)
+        in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
+        body {
+            buffer[elements++] = vertex;
+        }
+        
+    void add_template_vertices(float x_offset, float y_offset, float z_offset, const ref Vertex[] vertices)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
             buffer[elements..(elements+(vertices.length))] = vertices;
 
             size_t end = elements+vertices.length;
-            for(; elements < end; elements += 7) {
-                buffer[elements++] += x_offset;
-                buffer[elements++] += y_offset;
-                buffer[elements++] += z_offset;
+            for(; elements < end; elements++) {
+                Vertex* vertex = &buffer[elements];
+                vertex.x += x_offset;
+                vertex.y += y_offset;
+                vertex.z += z_offset;
             }
         }
 
-    void add_vertices(const ref float[] vertices)
+    void add_vertices(const ref Vertex[] vertices)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
         body {
             buffer[elements..(elements+(vertices.length))] = vertices;

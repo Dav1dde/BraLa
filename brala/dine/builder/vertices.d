@@ -4,32 +4,30 @@ private {
     import std.array : join;
 
     import brala.dine.builder.constants : Side;
+    import brala.dine.builder.tessellator : Vertex;
     import brala.dine.util : to_triangles;
 }
 
-struct TextureSlice(float w, float h) {
-    static const float width = w;
-    static const float height = h;
+const byte ONE_BYTE = cast(byte)1;
 
-    float x;
-    float y;
-    float x_step = 1.0f/width;
-    float y_step = 1.0f/height;
+struct TextureSlice {
+    byte x;
+    byte y;
 
     alias texcoords this;
 
-    this(float lower_left_x, float lower_left_y) {
-        x = lower_left_x/width;
-        y = lower_left_y/height;
+    this(byte lower_left_x, byte lower_left_y) {
+        x = lower_left_x;
+        y = lower_left_y;
     }
 
-    @property float[2][4] texcoords() {
+    @property byte[2][4] texcoords() {
              // lower left, lower right,   upper right,    upper left
-        return [[x, y],     [x+x_step, y], [x+x_step, y-y_step], [x, y-y_step]];
+        return [[cast(byte)x, cast(byte)y],     [cast(byte)(x+ONE_BYTE), cast(byte)y], [cast(byte)(x+ONE_BYTE), cast(byte)(y-ONE_BYTE)], [cast(byte)x, cast(byte)(y-ONE_BYTE)]];
     }
 }
 
-alias TextureSlice!(16.0f, 16.0f) MCTextureSlice;
+alias TextureSlice MCTextureSlice;
 
 struct CubeSideData {
     float[3][4] positions; // 3*4, it's a cube!
@@ -57,24 +55,35 @@ immutable CubeSideData[6] CUBE_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-float[] simple_block(Side side, MCTextureSlice texture_slice) {
+Vertex[] simple_block(Side side, MCTextureSlice texture_slice) {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
-    float[2][6] texcoords = to_triangles(texture_slice.texcoords);
+    byte[2][6] texcoords = to_triangles(texture_slice.texcoords);
 
                  // vertex      normal       texcoords     palette
-    return join([positions[0], cbsd.normal, texcoords[0], [0.0f, 0.0f],
-                 positions[1], cbsd.normal, texcoords[1], [0.0f, 0.0f],
-                 positions[2], cbsd.normal, texcoords[2], [0.0f, 0.0f],
-                 positions[3], cbsd.normal, texcoords[3], [0.0f, 0.0f],
-                 positions[4], cbsd.normal, texcoords[4], [0.0f, 0.0f],
-                 positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);
+    Vertex[] data;
+
+    foreach(i; 0..6) {
+        data ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
+                       cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+                       texcoords[i][0], texcoords[i][1],
+                       0, 0);
+    }
+
+    return data;
+    
+/*    return join([positions[0], cbsd.normal, texcoords[0], [0, 0],
+                 positions[1], cbsd.normal, texcoords[1], [0, 0],
+                 positions[2], cbsd.normal, texcoords[2], [0, 0],
+                 positions[3], cbsd.normal, texcoords[3], [0, 0],
+                 positions[4], cbsd.normal, texcoords[4], [0, 0],
+                 positions[5], cbsd.normal, texcoords[5], [0, 0]]);*/
 }
 
 private alias MCTextureSlice t;
 
-float[][] BLOCK_VERTICES_LEFT = [
+Vertex[][] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
     simple_block(Side.LEFT, t(3, 1)), // grass
@@ -206,7 +215,7 @@ float[][] BLOCK_VERTICES_LEFT = [
     []
 ];
 
-float[][] BLOCK_VERTICES_RIGHT = [
+Vertex[][] BLOCK_VERTICES_RIGHT = [
     [], // air
     simple_block(Side.RIGHT, t(1, 1)), // stone
     simple_block(Side.RIGHT, t(3, 1)), // grass
@@ -338,7 +347,7 @@ float[][] BLOCK_VERTICES_RIGHT = [
     []
 ];
 
-float[][] BLOCK_VERTICES_NEAR = [
+Vertex[][] BLOCK_VERTICES_NEAR = [
     [], // air
     simple_block(Side.NEAR, t(1, 1)), // stone
     simple_block(Side.NEAR, t(3, 1)), // grass
@@ -470,7 +479,7 @@ float[][] BLOCK_VERTICES_NEAR = [
     []
 ];
 
-float[][] BLOCK_VERTICES_FAR = [
+Vertex[][] BLOCK_VERTICES_FAR = [
     [], // air
     simple_block(Side.FAR, t(1, 1)), // stone
     simple_block(Side.FAR, t(3, 1)), // grass
@@ -602,7 +611,7 @@ float[][] BLOCK_VERTICES_FAR = [
     []
 ];
 
-float[][] BLOCK_VERTICES_TOP = [
+Vertex[][] BLOCK_VERTICES_TOP = [
     [], // air
     simple_block(Side.TOP, t(1, 1)), // stone
     simple_block(Side.TOP, t(0, 1)), // grass
@@ -734,7 +743,7 @@ float[][] BLOCK_VERTICES_TOP = [
     []
 ];
 
-float[][] BLOCK_VERTICES_BOTTOM = [
+Vertex[][] BLOCK_VERTICES_BOTTOM = [
     [], // air
     simple_block(Side.BOTTOM, t(1, 1)), // stone
     simple_block(Side.BOTTOM, t(2, 1)), // grass
