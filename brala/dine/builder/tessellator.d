@@ -24,10 +24,10 @@ align(1) struct Vertex {
     float nx;
     float ny;
     float nz;
-    ubyte u_terrain;
-    ubyte v_terrain;
-    ubyte u_palette;
-    ubyte v_palette;
+    float u_terrain;
+    float v_terrain;
+    float u_palette;
+    float v_palette;
 }
 
 

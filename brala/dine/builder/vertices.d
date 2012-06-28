@@ -10,7 +10,7 @@ private {
 
 const byte ONE_BYTE = cast(byte)1;
 
-struct TextureSlice {
+/*struct TextureSlice {
     byte x;
     byte y;
 
@@ -24,12 +24,38 @@ struct TextureSlice {
     @property byte[2][4] texcoords() {
              // lower left,                                       lower right,
              // upper right,                                      upper left
-        return [[cast(byte)x, cast(byte)y],                       [cast(byte)(x+ONE_BYTE), cast(byte)y],
-                [cast(byte)(x+ONE_BYTE), cast(byte)(y-ONE_BYTE)], [cast(byte)x, cast(byte)(y-ONE_BYTE)]];
+        return [[cast(byte)(x*16), cast(byte)(y*16)],                       [cast(byte)((x+ONE_BYTE)*16), cast(byte)(y*16)],
+                [cast(byte)((x+ONE_BYTE)*16-1), cast(byte)((y-ONE_BYTE)*16)], [cast(byte)(x*16), cast(byte)((y-ONE_BYTE)*16)]];
+    }
+}
+alias TextureSlice MCTextureSlice;
+*/
+
+
+struct TextureSlice(float w, float h) {
+    static const float width = w;
+    static const float height = h;
+
+    static const float x_step = 1.0f/width;
+    static const float y_step = 1.0f/height;
+    
+    float x;
+    float y;
+
+    alias texcoords this;
+
+    this(byte lower_left_x, byte lower_left_y) {
+        x = lower_left_x/width;
+        y = lower_left_y/height;
+    }
+
+    @property float[2][4] texcoords() {
+        return [[x, y],     [x+x_step, y], [x+x_step, y-y_step], [x, y-y_step]];
     }
 }
 
-alias TextureSlice MCTextureSlice;
+alias TextureSlice!(16, 16) MCTextureSlice;
+
 
 struct CubeSideData {
     float[3][4] positions; // 3*4, it's a cube!
@@ -61,7 +87,7 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice) {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
-    byte[2][6] texcoords = to_triangles(texture_slice.texcoords);
+    float[2][6] texcoords = to_triangles(texture_slice.texcoords);
 
                  // vertex      normal       texcoords     palette
     Vertex[] data;
