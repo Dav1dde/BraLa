@@ -24,10 +24,10 @@ align(1) struct Vertex {
     float nx;
     float ny;
     float nz;
-    byte u_terrain;
-    byte v_terrain;
-    byte u_palette;
-    byte v_palette;
+    ubyte u_terrain;
+    ubyte v_terrain;
+    ubyte u_palette;
+    ubyte v_palette;
 }
 
 
@@ -96,6 +96,8 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
+        import std.stdio;
+        //writefln("%s – %s", elements, buffer[100..200]);
         vbo.set_data(buffer[0..elements]);
     }
 }

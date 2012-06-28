@@ -73,8 +73,7 @@ class Chunk {
     ushort add_bitmask;
     
     Buffer vbo;
-    GLenum vbo_type;
-    GLenum vbo_vcount;
+    size_t vbo_vcount;
     
     protected void free_chunk() {
         if(!empty) {

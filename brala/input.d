@@ -85,7 +85,7 @@ extern(C) {
         }
     }
 
-    void mouse_pos_callback(void* window, int x, int y) {
+    void cursor_pos_callback(void* window, int x, int y) {
         AEventHandler ae = cast_userptr(window);
         
         ae.on_mouse_pos(x, y);
@@ -141,7 +141,7 @@ class BaseGLFWEventHandler : AEventHandler {
         glfwSetKeyCallback(&key_callback);
         glfwSetCharCallback(&char_callback);
         glfwSetMouseButtonCallback(&mouse_button_callback);
-        glfwSetMousePosCallback(&mouse_pos_callback);
+        glfwSetCursorPosCallback(&cursor_pos_callback);
         glfwSetScrollCallback(&scroll_callback);
     }
 }

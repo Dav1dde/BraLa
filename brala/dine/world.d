@@ -1,7 +1,7 @@
 module brala.dine.world;
 
 private {
-    import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT, GL_BYTE;
+    import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT, GL_BYTE, GL_UNSIGNED_BYTE, GL_INT, GL_TRUE;
     import glamour.vbo : Buffer;
     
     import gl3n.linalg : vec3i, mat4;
@@ -248,8 +248,7 @@ class World {
                 }
             }
 
-            chunk.vbo_type = GL_FLOAT;
-            chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
+            chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
             tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;
@@ -269,8 +268,8 @@ class World {
 
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
-            chunk.vbo.bind(texcoord, GL_BYTE, 2, Vertex().u_terrain.offsetof, stride);
-            chunk.vbo.bind(palettecoord, GL_BYTE, 2, Vertex().u_palette.offsetof, stride);
+            chunk.vbo.bind(texcoord, GL_UNSIGNED_BYTE, 2, Vertex().u_terrain.offsetof, stride, GL_TRUE);
+            chunk.vbo.bind(palettecoord, GL_UNSIGNED_BYTE, 2, Vertex().u_palette.offsetof, stride, GL_TRUE);
         }
     
     void draw(BraLaEngine engine) {

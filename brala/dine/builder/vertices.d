@@ -22,8 +22,10 @@ struct TextureSlice {
     }
 
     @property byte[2][4] texcoords() {
-             // lower left, lower right,   upper right,    upper left
-        return [[cast(byte)x, cast(byte)y],     [cast(byte)(x+ONE_BYTE), cast(byte)y], [cast(byte)(x+ONE_BYTE), cast(byte)(y-ONE_BYTE)], [cast(byte)x, cast(byte)(y-ONE_BYTE)]];
+             // lower left,                                       lower right,
+             // upper right,                                      upper left
+        return [[cast(byte)x, cast(byte)y],                       [cast(byte)(x+ONE_BYTE), cast(byte)y],
+                [cast(byte)(x+ONE_BYTE), cast(byte)(y-ONE_BYTE)], [cast(byte)x, cast(byte)(y-ONE_BYTE)]];
     }
 }
 

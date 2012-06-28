@@ -17,13 +17,14 @@ vertex:
 
     void main() {
         vec4 view_pos = view * model * vec4(position, 1.0);
-
+        v_position = view_pos.xyz;
+        
         mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
         v_normal = v * normal;
+        
         v_texcoord = texcoord;
         v_palettecoord = palettecoord;
-        v_position = view_pos.xyz;
-
+        
         gl_Position = proj * view_pos;
     }
 
@@ -43,5 +44,6 @@ fragment:
         vec4 palette_texture = texture(palette, v_palettecoord);
         //vec4 palette_texture = vec4(0.3568627450980392, 0.5450980392156862, 0.09019607843137255, 1);
         color_out = terrain_texture * palette_texture;
-        //color_out = palette_texture;
+        //color_out = vec4(v_texcoord, 0, 0);
+        //color_out = vec4(v_texcoord, 1, 1);
     }
