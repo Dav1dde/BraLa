@@ -20,7 +20,7 @@ class World {
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*10; // this value is the result of testing!
+        tessellate_buffer_length = width*height*depth*2; // this value is the result of testing!
         tessellate_buffer = cast(Vertex*)malloc(tessellate_buffer_length*Vertex.sizeof);
     }
     
@@ -276,10 +276,10 @@ class World {
         foreach(chunkc, chunk; chunks) {
             tessellate(chunk, chunkc, tessellate_buffer, tessellate_buffer_length, false);
             bind(engine, chunk);
-            
+
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
             engine.flush_uniforms();
-            
+
             glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
         }
     }

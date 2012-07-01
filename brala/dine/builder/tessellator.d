@@ -48,8 +48,8 @@ struct Tessellator {
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval;
-        buffer = cast(Vertex*)realloc(buffer, buffer_length*Vertex.sizeof);
+        buffer_length += interval*Vertex.sizeof;
+        buffer = cast(Vertex*)realloc(buffer, buffer_length);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -96,8 +96,6 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
-        import std.stdio;
-        //writefln("%s – %s", elements, buffer[100..200]);
         vbo.set_data(buffer[0..elements]);
     }
 }

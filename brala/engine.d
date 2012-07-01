@@ -88,7 +88,7 @@ class BraLaEngine {
         
         while(!stop) {
             TickDuration delta_ticks = (timer.get_time() - last);
-            
+
             stop = callback(delta_ticks);
         
             debug {
