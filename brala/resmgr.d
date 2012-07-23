@@ -234,6 +234,16 @@ class ResourceManager {
         
         wait();
     }
+
+    void remove(T)(string id) if(is_loadable!T) {
+        static if(is(T : Image)) {
+            images.remove(id);
+        } else static if(is(T : Shader)) {
+            shaders.remove(id);
+        } else static if(is(T : ITexture)) {
+            textures.remove(id);
+        }
+    }
     
     void wait() {
         while(open_tasks.length > 0) {

@@ -7,6 +7,9 @@ private {
     import derelict.glfw3.glfw3;
 
     import std.conv : to, ConvException;
+    import std.path : buildPath, expandTilde;
+    import file = std.file;
+    import std.process : getenv;
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -15,7 +18,7 @@ private {
     import brala.config : load_default_resources;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
-    import brala.gfx.terrain : preprocess_terrain;
+    import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
     
@@ -65,6 +68,19 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     auto engine = new BraLaEngine(width, height, glv);
     
     engine.resmgr.load_default_resources(); // I like! ~15mb in 837ms
+
+    version(Windows) {
+        string path = buildPath(getenv("appdata"), ".minecraft", "bin");
+    } else {
+        string path = expandTilde("~/.minecraft/bin/minecraft.jar");
+    }
+    if(file.exists(path)) {
+        Image mc_terrain = extract_minecraft_terrain(path);
+
+        engine.resmgr.remove!Image("terrain");
+        engine.resmgr.add("terrain", mc_terrain);
+    }
+    
     Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
     engine.resmgr.add("terrain", terrain.to_texture());
     
@@ -110,7 +126,7 @@ int main(string[] args) {
             throw new InitError("Height is not a number.");
         }
     }
-    
+
     debug register_glfw_error_callback(&glfw_error_cb);
     
     debug writefln("init: %dx%d", width, height);

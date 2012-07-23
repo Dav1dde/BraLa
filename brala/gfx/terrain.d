@@ -1,7 +1,14 @@
 module brala.gfx.terrain;
 
 private {
-    import brala.utils.image : Image, RGBA;
+    import stb_image : stbi_load_from_memory, stbi_image_free;
+    
+    import std.zip : ZipArchive;
+    import std.path : expandTilde;
+    import file = std.file;
+    
+    import brala.exception : ImageError;
+    import brala.utils.image : Image, RGB, RGBA;
 }
 
 
@@ -20,4 +27,30 @@ Image preprocess_terrain(Image terrain) {
                   (t, o) => o[3] > 0 ? o : t.dup);
 
     return terrain;
+}
+
+
+Image extract_minecraft_terrain(string path) {
+    path = expandTilde(path);
+    ZipArchive za = new ZipArchive(file.read(path));
+    
+    auto am = za.directory["terrain.png"];
+    auto content = za.expand(am);;
+    
+    int x;
+    int y;
+    int comp;    
+    ubyte* data = stbi_load_from_memory(content.ptr, content.length, &x, &y, &comp, 0);
+
+    if(data is null) {
+        throw new ImageError("Unable to load terrain.png");
+    }
+
+    scope(exit) stbi_image_free(data);
+
+    if(!(comp == RGB || comp == RGBA)) {
+        throw new ImageError("Unknown/Unsupported stbi image format");
+    }
+
+    return new Image(data[0..x*y*comp].dup, x, y, comp);
 }
