@@ -68,7 +68,7 @@ class Chunk {
 
     bool empty;
     Block* blocks;
-    ubyte[] biome_data;
+    ubyte[256] biome_data;
     ushort primary_bitmask;
     ushort add_bitmask;
     

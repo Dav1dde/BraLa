@@ -8,12 +8,22 @@ private {
     
     import brala.dine.chunk : Block;
     import brala.dine.world : World;
-    import brala.dine.builder.builder : BlockBuilder;
-    import brala.dine.builder.constants : Side;
-    import brala.dine.builder.blocks : blocks;
-    import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
-                                         BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM;
+    import brala.dine.builder.builder; // import everything
+    import brala.dine.builder.blocks : BLOCKS;
+    import brala.dine.builder.biomes : BiomeData;
+    
     import brala.utils.alloc : realloc;
+}
+
+
+enum Side : ubyte {
+    LEFT,
+    RIGHT,
+    NEAR,
+    FAR,
+    TOP,
+    BOTTOM,
+    ALL
 }
 
 
@@ -34,22 +44,22 @@ align(1) struct Vertex {
 struct Tessellator {
     World world;
     
-    Vertex* buffer;
+    float* buffer;
     size_t buffer_length;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref Vertex* buffer, ref size_t buffer_length) {
+    this(World world, ref float* buffer, ref size_t buffer_length) {
         this.world = world;
         this.buffer = buffer;
         this.buffer_length = buffer_length;
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval*Vertex.sizeof;
-        buffer = cast(Vertex*)realloc(buffer, buffer_length);
+        buffer_length += interval*float.sizeof;
+        buffer = cast(float*)realloc(buffer, buffer_length);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -60,37 +70,38 @@ struct Tessellator {
     
     void feed(vec3i world_coords, int x, int y, int z,
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
-              const ref Block value, const ref Block right, const ref Block top, const ref Block front) {
+              const ref Block value, const ref Block right, const ref Block top, const ref Block front,
+              const ref BiomeData biome_data) {
 
        
-        if(blocks[value.id].empty) { // render neighbours
-            if(!blocks[right.id].empty) dispatch!(Side.LEFT)(x_offset_r, y_offset, z_offset, right);
-            if(!blocks[top.id].empty)   dispatch!(Side.BOTTOM)(x_offset, y_offset_t, z_offset, top);
-            if(!blocks[front.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset_n, front);
+        if(BLOCKS[value.id].empty) { // render neighbours
+            if(!BLOCKS[right.id].empty) dispatch!(Side.LEFT)(right, biome_data, x_offset_r, y_offset, z_offset);
+            if(!BLOCKS[top.id].empty)   dispatch!(Side.BOTTOM)(top, biome_data, x_offset, y_offset_t, z_offset);
+            if(!BLOCKS[front.id].empty) dispatch!(Side.FAR)(front, biome_data, x_offset, y_offset, z_offset_n);
 
             if(value.id != 0) {
-                dispatch!(Side.ALL)(x_offset, y_offset, z_offset, value);
+                dispatch!(Side.ALL)(value, biome_data, x_offset, y_offset, z_offset);
             }
         } else {
-            if(blocks[right.id].empty) dispatch!(Side.RIGHT)(x_offset, y_offset, z_offset, value);
-            if(blocks[top.id].empty)   dispatch!(Side.TOP)(x_offset, y_offset, z_offset, value);
-            if(blocks[front.id].empty) dispatch!(Side.NEAR)(x_offset, y_offset, z_offset, value);
+            if(BLOCKS[right.id].empty) dispatch!(Side.RIGHT)(value, biome_data, x_offset, y_offset, z_offset);
+            if(BLOCKS[top.id].empty)   dispatch!(Side.TOP)(value, biome_data, x_offset, y_offset, z_offset);
+            if(BLOCKS[front.id].empty) dispatch!(Side.NEAR)(value, biome_data, x_offset, y_offset, z_offset);
 
             if(x == 0) {
                 Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
 
-                if(blocks[left.id].empty) dispatch!(Side.LEFT)(x_offset, y_offset, z_offset, value);
+                if(BLOCKS[left.id].empty) dispatch!(Side.LEFT)(value, biome_data, x_offset, y_offset, z_offset);
             }
 
             if(y == 0) {
                 // always render this, it's the lowest bedrock level
-                dispatch!(Side.BOTTOM)(x_offset, y_offset, z_offset, value);
+                dispatch!(Side.BOTTOM)(value, biome_data, x_offset, y_offset, z_offset);
             }
 
             if(z == 0) {
                 Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
 
-                if(blocks[back.id].empty) dispatch!(Side.FAR)(x_offset, y_offset, z_offset, value);
+                if(BLOCKS[back.id].empty) dispatch!(Side.FAR)(value, biome_data, x_offset, y_offset, z_offset);
             }
         }
     }

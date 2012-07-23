@@ -7,6 +7,7 @@ private {
     import gl3n.linalg : vec3i, mat4;
     
     import brala.dine.chunk : Chunk, Block;
+    import brala.dine.builder.biomes : BIOMES;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
@@ -16,12 +17,12 @@ private {
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static Vertex* tessellate_buffer;
+    static float* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*2; // this value is the result of testing!
-        tessellate_buffer = cast(Vertex*)malloc(tessellate_buffer_length*Vertex.sizeof);
+        tessellate_buffer_length = width*height*depth*20; // this value is the result of testing!
+        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
     }
     
     static ~this() {
@@ -161,7 +162,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref Vertex* v, ref size_t length, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -240,7 +241,8 @@ class World {
 
                             tessellator.feed(wcoords, x, y, z,
                                             x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
-                                            value, right_block, top_block, front_block);
+                                            value, right_block, top_block, front_block,
+                                            BIOMES[chunk.biome_data[x+z*15]]);
 
                             value = right_block;
                         }
@@ -248,7 +250,8 @@ class World {
                 }
             }
 
-            chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
+            //chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
+            chunk.vbo_vcount = tessellator.elements / 10;
             tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;

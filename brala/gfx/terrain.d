@@ -18,6 +18,6 @@ Image preprocess_terrain(Image terrain) {
 
     terrain.blend(tile_width*3, 0, grass_overlay,
                   (t, o) => o[3] > 0 ? o : t.dup);
-    
+
     return terrain;
 }
