@@ -1,5 +1,8 @@
 module brala.dine.builder.biomes;
 
+private {
+    import std.typecons : Tuple;
+}
 
 enum Biome {
     OCEAN = 0,
@@ -27,10 +30,24 @@ enum Biome {
     JUNGLE_HILLS
 }
 
+alias Tuple!(float, "u", float, "v") UVTuple;
+
 struct BiomeData {
     byte id;
     float temperature;
     float rainfall;
+
+    @property UVTuple grass_uv() const {
+        return UVTuple(0.5 + (1-temperature/4.0f), (1-rainfall/4.0));
+    }
+
+    @property UVTuple leave_uv() const {
+        return UVTuple((1-temperature/4.0f), 0.5f + (1-rainfall/4.0));
+    }
+
+    @property UVTuple water_uv() const {
+        return UVTuple(0.5f + (1-temperature/4.0f), 0.5f + (1-rainfall/4.0));
+    }
 }
 
 BiomeData[23] BIOMES = [

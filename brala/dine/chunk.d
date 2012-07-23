@@ -28,11 +28,11 @@ struct Block {
         this.metadata = metadata;
     }
                      
-    const bool opEquals(const ref Block other) {
+    bool opEquals(const ref Block other) const {
         return other.id == id && other.metadata == metadata;
     }
     
-    const bool opEquals(const int id) {
+    bool opEquals(const int id) const {
         return id == this.id;
     }
 }

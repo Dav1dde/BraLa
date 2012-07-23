@@ -60,17 +60,18 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         float[] vertices = get_vertices!(s)(block.id);
 
-        add_template_vertices(vertices, x_offset, y_offset, z_offset, 0.6, 0.6);
+        add_template_vertices(vertices, x_offset, y_offset, z_offset,
+                              biome_data.grass_uv.field);
     }
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         float[] vertices = get_vertices!(s)(block.id);
 
-        add_template_vertices(vertices, x_offset, y_offset, z_offset, 0.7, 0.7);
+        add_template_vertices(vertices, x_offset, y_offset, z_offset,
+                              biome_data.leave_uv.field);
     }
 
-    
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
