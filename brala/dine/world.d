@@ -17,12 +17,12 @@ private {
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static float* tessellate_buffer;
+    static Vertex* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*20; // this value is the result of testing!
-        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
+        tessellate_buffer_length = width*height*depth*5; // this value is the result of testing!
+        tessellate_buffer = cast(Vertex*)malloc(tessellate_buffer_length*Vertex.sizeof);
     }
     
     static ~this() {
@@ -162,7 +162,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref Vertex* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -250,8 +250,8 @@ class World {
                 }
             }
 
-            //chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
-            chunk.vbo_vcount = tessellator.elements / 10;
+            chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
+            //chunk.vbo_vcount = tessellator.elements / 10;
             tessellator.fill_vbo(chunk.vbo);
 
             chunk.dirty = false;
@@ -272,7 +272,7 @@ class World {
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
             chunk.vbo.bind(texcoord, GL_FLOAT, 2, Vertex().u_terrain.offsetof, stride);
-            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, Vertex().u_palette.offsetof, stride);
+            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, Vertex().u_biome.offsetof, stride);
         }
     
     void draw(BraLaEngine engine) {

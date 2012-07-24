@@ -83,7 +83,7 @@ immutable CubeSideData[6] CUBE_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-float[] simple_block(Side side, MCTextureSlice texture_slice) {
+Vertex[] simple_block(Side side, MCTextureSlice texture_slice) {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
@@ -92,26 +92,26 @@ float[] simple_block(Side side, MCTextureSlice texture_slice) {
                  // vertex      normal       texcoords     palette
     Vertex[] data;
 
-    /*foreach(i; 0..6) {
+    foreach(i; 0..6) {
         data ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
                        cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
                        texcoords[i][0], texcoords[i][1],
                        0, 0);
     }
 
-    return data;*/
-    
+    return data;
+    /*
     return join([positions[0], cbsd.normal, texcoords[0], [0.0f, 0.0f],
                  positions[1], cbsd.normal, texcoords[1], [0.0f, 0.0f],
                  positions[2], cbsd.normal, texcoords[2], [0.0f, 0.0f],
                  positions[3], cbsd.normal, texcoords[3], [0.0f, 0.0f],
                  positions[4], cbsd.normal, texcoords[4], [0.0f, 0.0f],
-                 positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);
+                 positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);*/
 }
 
 private alias MCTextureSlice t;
 
-float[][] BLOCK_VERTICES_LEFT = [
+Vertex[][] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
     simple_block(Side.LEFT, t(3, 1)), // grass
@@ -243,7 +243,7 @@ float[][] BLOCK_VERTICES_LEFT = [
     []
 ];
 
-float[][] BLOCK_VERTICES_RIGHT = [
+Vertex[][] BLOCK_VERTICES_RIGHT = [
     [], // air
     simple_block(Side.RIGHT, t(1, 1)), // stone
     simple_block(Side.RIGHT, t(3, 1)), // grass
@@ -375,7 +375,7 @@ float[][] BLOCK_VERTICES_RIGHT = [
     []
 ];
 
-float[][] BLOCK_VERTICES_NEAR = [
+Vertex[][] BLOCK_VERTICES_NEAR = [
     [], // air
     simple_block(Side.NEAR, t(1, 1)), // stone
     simple_block(Side.NEAR, t(3, 1)), // grass
@@ -507,7 +507,7 @@ float[][] BLOCK_VERTICES_NEAR = [
     []
 ];
 
-float[][] BLOCK_VERTICES_FAR = [
+Vertex[][] BLOCK_VERTICES_FAR = [
     [], // air
     simple_block(Side.FAR, t(1, 1)), // stone
     simple_block(Side.FAR, t(3, 1)), // grass
@@ -639,7 +639,7 @@ float[][] BLOCK_VERTICES_FAR = [
     []
 ];
 
-float[][] BLOCK_VERTICES_TOP = [
+Vertex[][] BLOCK_VERTICES_TOP = [
     [], // air
     simple_block(Side.TOP, t(1, 1)), // stone
     simple_block(Side.TOP, t(0, 1)), // grass
@@ -771,7 +771,7 @@ float[][] BLOCK_VERTICES_TOP = [
     []
 ];
 
-float[][] BLOCK_VERTICES_BOTTOM = [
+Vertex[][] BLOCK_VERTICES_BOTTOM = [
     [], // air
     simple_block(Side.BOTTOM, t(1, 1)), // stone
     simple_block(Side.BOTTOM, t(2, 1)), // grass
@@ -903,7 +903,7 @@ float[][] BLOCK_VERTICES_BOTTOM = [
     []
 ];
 
-ref float[] get_vertices(Side side, T)(T index) if(isIntegral!T) {
+ref Vertex[] get_vertices(Side side, T)(T index) if(isIntegral!T) {
     static if(side == Side.LEFT) {
         return BLOCK_VERTICES_LEFT[index];
     } else static if(side == Side.RIGHT) {

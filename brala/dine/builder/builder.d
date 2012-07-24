@@ -18,19 +18,10 @@ mixin template BlockBuilder() {
                     float u, float v, float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements++] = x;
-            buffer[elements++] = y;
-            buffer[elements++] = z;
-            buffer[elements++] = nx;
-            buffer[elements++] = ny;
-            buffer[elements++] = nz;
-            buffer[elements++] = u;
-            buffer[elements++] = v;
-            buffer[elements++] = u_biome;
-            buffer[elements++] = v_biome;
+            buffer[elements++] = Vertex(x, y, z, nx, ny, nz, u, v, u_biome, v_biome);
         }
 
-    void add_template_vertices(const ref float[] vertices,
+    void add_template_vertices(const ref Vertex[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                float u_biome, float v_biome)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
@@ -39,16 +30,16 @@ mixin template BlockBuilder() {
 
             size_t end = elements+vertices.length;
             for(; elements < end;) {
-                buffer[elements++] += x_offset;
-                buffer[elements++] += y_offset;
-                buffer[elements++] += z_offset;
-                elements += 5;
-                buffer[elements++] += u_biome;
-                buffer[elements++] += v_biome;
+                Vertex* vertex = &buffer[elements++];
+                vertex.x += x_offset;
+                vertex.y += y_offset;
+                vertex.z += z_offset;
+                vertex.u_biome += u_biome;
+                vertex.v_biome += v_biome;
             }
         }
 
-    void add_vertices(const ref float[] vertices)
+    void add_vertices(const ref Vertex[] vertices)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
         body {
             buffer[elements..(elements+(vertices.length))] = vertices;
@@ -58,7 +49,7 @@ mixin template BlockBuilder() {
     // blocks
     void grass_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        float[] vertices = get_vertices!(s)(block.id);
+        Vertex[] vertices = get_vertices!(s)(block.id);
 
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.grass_uv.field);
@@ -66,7 +57,7 @@ mixin template BlockBuilder() {
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        float[] vertices = get_vertices!(s)(block.id);
+        Vertex[] vertices = get_vertices!(s)(block.id);
 
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.leave_uv.field);
