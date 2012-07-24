@@ -2,4 +2,8 @@
 *.kdev4
 *.rf
 *.o
+perf.*
+*.py
+terrain*.png
+bralad
 build/
