@@ -27,7 +27,7 @@ enum Side : ubyte {
 }
 
 
-align(1) struct Vertex {
+struct Vertex {
     float x;
     float y;
     float z;
