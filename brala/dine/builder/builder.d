@@ -18,7 +18,17 @@ mixin template BlockBuilder() {
                     float u, float v, float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements++] = Vertex(x, y, z, nx, ny, nz, u, v, u_biome, v_biome);
+            Vertex* vertex = &buffer[elements++];
+            vertex.x = x;
+            vertex.y = y;
+            vertex.z = z;
+            vertex.nx = nx;
+            vertex.ny = ny;
+            vertex.nz = nz;
+            vertex.u_terrain = u;
+            vertex.v_terrain = v;
+            vertex.u_biome = u_biome;
+            vertex.v_biome = v_biome;
         }
 
     void add_template_vertices(const ref Vertex[] vertices,

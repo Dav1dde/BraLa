@@ -265,10 +265,8 @@ class World {
             GLuint normal = engine.current_shader.get_attrib_location("normal");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
             GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
-            //import std.stdio; writefln("%s", palettecoord);
-            // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v, palette: s, t
-            uint stride = Vertex.sizeof;
 
+            uint stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
             chunk.vbo.bind(texcoord, GL_FLOAT, 2, Vertex().u_terrain.offsetof, stride);

@@ -107,6 +107,8 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
+        //float* v = cast(float*)buffer;
+        //vbo.set_data(v[0..elements*10]);
         vbo.set_data(buffer[0..elements]);
     }
 }
