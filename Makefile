@@ -7,7 +7,12 @@ export LICENSE          = GPLv3
 DCFLAGS_IMPORT      = -Ibrala/ -L-lcurl -L-lssl `pkg-config --libs --cflags gl3n glamour` -Isrc/d/
 DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictUtil
 
-ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -debug -unittest -g -gc -L-export-dynamic
+ifeq ($(DC),ldc2)
+	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-debug -unittest -g -gc -L-export-dynamic
+else
+	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -debug -unittest -g -gc -L-export-dynamic
+endif
+
 
 include command.make
 
