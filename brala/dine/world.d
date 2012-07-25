@@ -18,12 +18,12 @@ private {
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static float* tessellate_buffer;
+    static void* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
         tessellate_buffer_length = width*height*depth*80; // this value is the result of testing!
-        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length);
+        tessellate_buffer = cast(void*)malloc(tessellate_buffer_length);
     }
     
     static ~this() {
@@ -176,7 +176,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref void* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -265,7 +265,7 @@ class World {
             }
             //import std.stdio;
             //writeln("==============> ", tessellator.elements);
-            chunk.vbo_vcount = tessellator.elements / 10;
+            chunk.vbo_vcount = tessellator.elements / 40;
 
             debug size_t prev = chunk.vbo.length;
             assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);

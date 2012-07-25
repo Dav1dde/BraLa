@@ -21,9 +21,17 @@ mixin template BlockBuilder() {
                     float u, float v, float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            Vertex vertex = Vertex(x,y,z,nx,ny,nz,u,v,u_biome,v_biome);
-            // TODO
-            throw new Exception("not implemented");
+            buffer[elements..elements+4] = (cast(void*)&x)[0..4];
+            buffer[elements+4..elements+8] = (cast(void*)&y)[0..4];
+            buffer[elements+8..elements+12] = (cast(void*)&z)[0..4];
+            buffer[elements+12..elements+16] = (cast(void*)&nx)[0..4];
+            buffer[elements+16..elements+20] = (cast(void*)&ny)[0..4];
+            buffer[elements+20..elements+24] = (cast(void*)&nz)[0..4];
+            buffer[elements+24..elements+28] = (cast(void*)&u)[0..4];
+            buffer[elements+28..elements+32] = (cast(void*)&v)[0..4];
+            buffer[elements+32..elements+36] = (cast(void*)&u_biome)[0..4];
+            buffer[elements+36..elements+40] = (cast(void*)&v_biome)[0..4];
+            elements += 40;
         }
 
     void add_template_vertices(const ref Vertex[] vertices,
@@ -31,18 +39,20 @@ mixin template BlockBuilder() {
                                float u_biome, float v_biome)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            auto vv = cast(float*)vertices.ptr;
-            buffer[elements..(elements+(vertices.length*10))] = vv[0..vertices.length*10];
-
-            size_t end = elements+vertices.length*10;
-            for(; elements < end;) {
-                buffer[elements++] += x_offset;
-                buffer[elements++] += y_offset;
-                buffer[elements++] += z_offset;
-                elements += 5;
-                buffer[elements++] = u_biome;
-                buffer[elements++] = v_biome;
+            float[] data;
+            foreach(ref Vertex vertex; vertices) {
+                data ~= [vertex.x + x_offset, vertex.y + y_offset, vertex.z + z_offset,
+                         vertex.nx, vertex.ny, vertex.nz,
+                         vertex.u_terrain, vertex.v_terrain, u_biome, v_biome];
             }
+
+            buffer[elements..(elements+(data.length*float.sizeof))] = cast(void[])data;
+            elements += data.length*float.sizeof;
+            
+            //import std.stdio; writeln(vertices);
+            //auto vv = cast(void*)vertices.ptr;
+            //buffer[elements..(elements+(vertices.length*Vertex.sizeof))] = vv[0..vertices.length*Vertex.sizeof];
+            //elements += vertices.length*Vertex.sizeof;
         }
 
     void add_vertices(const ref Vertex[] vertices)

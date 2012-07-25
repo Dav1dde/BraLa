@@ -50,22 +50,22 @@ struct Vertex {
 struct Tessellator {
     World world;
     
-    float* buffer;
+    void* buffer;
     size_t buffer_length;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref float* buffer, ref size_t buffer_length) {
+    this(World world, ref void* buffer, ref size_t buffer_length) {
         this.world = world;
         this.buffer = buffer;
         this.buffer_length = buffer_length;
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval*float.sizeof;
-        buffer = cast(float*)realloc(buffer, buffer_length);
+        buffer_length += interval;
+        buffer = cast(void*)realloc(buffer, buffer_length);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -114,7 +114,9 @@ struct Tessellator {
 
     void fill_vbo(Buffer vbo) {
         //size_t prev = vbo.length;
-        vbo.set_data(buffer, elements*float.sizeof);
+        //import std.stdio;
+        //writeln(elements);
+        vbo.set_data(buffer, elements);
         //return vbo.length - prev;
     }
 }
