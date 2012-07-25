@@ -11,6 +11,7 @@ private {
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
+    import brala.utils.mem : MemCounter;
     import brala.utils.alloc : malloc, realloc, free;
 }
 
@@ -37,6 +38,8 @@ class World {
     
     Chunk[vec3i] chunks;
     vec3i spawn;
+
+    MemCounter vram = MemCounter("vram");
     
     this() {}
     
@@ -52,28 +55,39 @@ class World {
     // you should also lose all other references to this chunk
     //
     // old chunk will be cleared
-    void add_chunk(Chunk chunk, vec3i chunkc) {
+    void add_chunk(Chunk chunk, vec3i chunkc, bool mark_dirty=true) {
         if(Chunk* c = chunkc in chunks) {
             c.empty_chunk();
         } 
         
         chunks[chunkc] = chunk;
-        mark_surrounding_chunks_dirty(chunkc);
+        if(mark_dirty) {
+            mark_surrounding_chunks_dirty(chunkc);
+        }
     }
-    
-    void remove_chunk(vec3i chunkc)
+
+    /// only safe when called from mainthread
+    void remove_chunk(vec3i chunkc, bool mark_dirty=true)
         in { assert(chunkc in chunks); }
         body {
-            chunks[chunkc].empty_chunk();
+            Chunk chunk = chunks[chunkc];
+            chunk.empty_chunk();
+
+            if(chunk.vbo !is null && chunk.vbo.buffer != 0) {
+                vram.remove(chunk.vbo.length);
+                chunk.vbo.remove();
+            }
+            
             chunks.remove(chunkc);
 
-            mark_surrounding_chunks_dirty(chunkc);
+            if(mark_dirty) {
+                mark_surrounding_chunks_dirty(chunkc);
+            }
         }
     
     void remove_all_chunks() {
-        foreach(key, chunk; chunks) {
-            chunk.empty_chunk();
-            chunks.remove(key);
+        foreach(key; chunks.keys()) {
+            remove_chunk(key);
         }
     }
     
@@ -251,9 +265,22 @@ class World {
             }
 
             chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
-            //chunk.vbo_vcount = tessellator.elements / 10;
-            tessellator.fill_vbo(chunk.vbo);
 
+            debug size_t prev = chunk.vbo.length;
+            assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
+            tessellator.fill_vbo(chunk.vbo);
+            debug {
+                if(prev == 0 && chunk.vbo.length) {
+                    vram.add(chunk.vbo.length);
+                } else {
+                    vram.adjust(chunk.vbo.length - prev);
+                }
+            }
+
+            import std.file;
+            import std.string;
+            std.file.write("/tmp/chunk.data", format("%s", (cast(float*)v)[0..tessellator.elements*10]));
+            
             chunk.dirty = false;
         }
     }
@@ -268,9 +295,9 @@ class World {
 
             uint stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
-            chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
-            chunk.vbo.bind(texcoord, GL_FLOAT, 2, Vertex().u_terrain.offsetof, stride);
-            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, Vertex().u_biome.offsetof, stride);
+            chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
+            chunk.vbo.bind(texcoord, GL_FLOAT, 2, 24, stride);
+            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, 32, stride);
         }
     
     void draw(BraLaEngine engine) {
