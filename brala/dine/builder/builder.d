@@ -6,6 +6,9 @@ private {
 }
 
 public {
+    import std.array : array, join;
+    import std.algorithm : map;
+    
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
@@ -18,17 +21,9 @@ mixin template BlockBuilder() {
                     float u, float v, float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            Vertex* vertex = &buffer[elements++];
-            vertex.x = x;
-            vertex.y = y;
-            vertex.z = z;
-            vertex.nx = nx;
-            vertex.ny = ny;
-            vertex.nz = nz;
-            vertex.u_terrain = u;
-            vertex.v_terrain = v;
-            vertex.u_biome = u_biome;
-            vertex.v_biome = v_biome;
+            Vertex vertex = Vertex(x,y,z,nx,ny,nz,u,v,u_biome,v_biome);
+            // TODO
+            throw new Exception("not implemented");
         }
 
     void add_template_vertices(const ref Vertex[] vertices,
@@ -36,24 +31,25 @@ mixin template BlockBuilder() {
                                float u_biome, float v_biome)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements..(elements+(vertices.length))] = vertices;
+            auto vv = cast(float*)vertices.ptr;
+            buffer[elements..(elements+(vertices.length*10))] = vv[0..vertices.length*10];
 
-            size_t end = elements+vertices.length;
+            size_t end = elements+vertices.length*10;
             for(; elements < end;) {
-                Vertex* vertex = &buffer[elements++];
-                vertex.x += x_offset;
-                vertex.y += y_offset;
-                vertex.z += z_offset;
-                vertex.u_biome += u_biome;
-                vertex.v_biome += v_biome;
+                buffer[elements++] += x_offset;
+                buffer[elements++] += y_offset;
+                buffer[elements++] += z_offset;
+                elements += 5;
+                buffer[elements++] = u_biome;
+                buffer[elements++] = v_biome;
             }
         }
 
     void add_vertices(const ref Vertex[] vertices)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
         body {
-            buffer[elements..(elements+(vertices.length))] = vertices;
-            elements += vertices.length;
+            // TODO
+            throw new Exception("not implemented");
         }
 
     // blocks

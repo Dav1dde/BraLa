@@ -18,12 +18,12 @@ private {
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static Vertex* tessellate_buffer;
+    static float* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*5; // this value is the result of testing!
-        tessellate_buffer = cast(Vertex*)malloc(tessellate_buffer_length*Vertex.sizeof);
+        tessellate_buffer_length = width*height*depth*80; // this value is the result of testing!
+        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length);
     }
     
     static ~this() {
@@ -176,7 +176,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref Vertex* v, ref size_t length, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -263,8 +263,9 @@ class World {
                     }
                 }
             }
-
-            chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
+            //import std.stdio;
+            //writeln("==============> ", tessellator.elements);
+            chunk.vbo_vcount = tessellator.elements / 10;
 
             debug size_t prev = chunk.vbo.length;
             assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
@@ -276,10 +277,6 @@ class World {
                     vram.adjust(chunk.vbo.length - prev);
                 }
             }
-
-            import std.file;
-            import std.string;
-            std.file.write("/tmp/chunk.data", format("%s", (cast(float*)v)[0..tessellator.elements*10]));
             
             chunk.dirty = false;
         }

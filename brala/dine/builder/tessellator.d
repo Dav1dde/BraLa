@@ -38,28 +38,34 @@ struct Vertex {
     float v_terrain;
     float u_biome;
     float v_biome;
+
+    @property float[] test() const {
+        return [x,y,z,nx,ny,nz,u_terrain,v_terrain,u_biome,v_biome];
+    }
+
+    alias test this;
 }
 
 
 struct Tessellator {
     World world;
     
-    Vertex* buffer;
+    float* buffer;
     size_t buffer_length;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref Vertex* buffer, ref size_t buffer_length) {
+    this(World world, ref float* buffer, ref size_t buffer_length) {
         this.world = world;
         this.buffer = buffer;
         this.buffer_length = buffer_length;
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval*Vertex.sizeof;
-        buffer = cast(Vertex*)realloc(buffer, buffer_length);
+        buffer_length += interval*float.sizeof;
+        buffer = cast(float*)realloc(buffer, buffer_length);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -108,7 +114,7 @@ struct Tessellator {
 
     void fill_vbo(Buffer vbo) {
         //size_t prev = vbo.length;
-        vbo.set_data(buffer, elements*Vertex.sizeof);
+        vbo.set_data(buffer, elements*float.sizeof);
         //return vbo.length - prev;
     }
 }
