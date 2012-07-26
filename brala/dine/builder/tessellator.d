@@ -38,12 +38,6 @@ struct Vertex {
     float v_terrain;
     float u_biome;
     float v_biome;
-
-    @property float[] test() const {
-        return [x,y,z,nx,ny,nz,u_terrain,v_terrain,u_biome,v_biome];
-    }
-
-    alias test this;
 }
 
 
