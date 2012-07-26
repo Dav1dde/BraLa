@@ -38,15 +38,15 @@ struct BiomeData {
     float rainfall;
 
     @property UVTuple grass_uv() const {
-        return UVTuple(0.5 + (1-temperature/4.0f), (1-rainfall/4.0));
+        return UVTuple(0.5 + (1-temperature/2.0f)/2.0f, (1-rainfall/2.0)/2.0f);
     }
 
     @property UVTuple leave_uv() const {
-        return UVTuple((1-temperature/4.0f), 0.5f + (1-rainfall/4.0));
+        return UVTuple((1-temperature/2.0f)/2.0f, 0.5f + (1-rainfall/2.0f)/2.0f);
     }
 
     @property UVTuple water_uv() const {
-        return UVTuple(0.5f + (1-temperature/4.0f), 0.5f + (1-rainfall/4.0));
+        return UVTuple(0.5f + (1-temperature/2.0f)/2.0f, 0.5f + (1-rainfall/2.0f)/2.0f);
     }
 }
 
