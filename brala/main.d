@@ -45,7 +45,7 @@ GLFWwindow open_glfw_win(int width, int height) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
     }
     
-    //glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
     
     glfwSwapInterval(0); // change this to 1?
     

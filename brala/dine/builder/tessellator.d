@@ -12,7 +12,7 @@ private {
     import brala.dine.builder.blocks : BLOCKS;
     import brala.dine.builder.biomes : BiomeData;
     
-    import brala.utils.alloc : realloc;
+    import brala.utils.memory : realloc;
 }
 
 
@@ -34,8 +34,10 @@ struct Vertex {
     float nx;
     float ny;
     float nz;
-    float u_terrain;
-    float v_terrain;
+    byte u_terrain;
+    byte v_terrain;
+    byte u_mask;
+    byte v_mask;
     float u_biome;
     float v_biome;
 }

@@ -1,7 +1,8 @@
 module brala.dine.world;
 
 private {
-    import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT;
+    //import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT, GL_BYTE;
+    import glamour.gl;
     import glamour.vbo : Buffer;
     
     import gl3n.linalg : vec3i, mat4;
@@ -11,8 +12,7 @@ private {
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
-    import brala.utils.mem : MemCounter;
-    import brala.utils.alloc : malloc, realloc, free;
+    import brala.utils.memory : MemoryCounter, malloc;
 }
 
 private const Block AIR_BLOCK = Block(0);
@@ -39,7 +39,7 @@ class World {
     Chunk[vec3i] chunks;
     vec3i spawn;
 
-    MemCounter vram = MemCounter("vram");
+    MemoryCounter vram = MemoryCounter("vram");
     
     this() {}
     
@@ -263,9 +263,8 @@ class World {
                     }
                 }
             }
-            //import std.stdio;
-            //writeln("==============> ", tessellator.elements);
-            chunk.vbo_vcount = tessellator.elements / 40;
+
+            chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
 
             debug size_t prev = chunk.vbo.length;
             assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
@@ -288,13 +287,15 @@ class World {
             GLuint position = engine.current_shader.get_attrib_location("position");
             GLuint normal = engine.current_shader.get_attrib_location("normal");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
+            GLuint mask = engine.current_shader.get_attrib_location("mask");
             GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
 
             uint stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
-            chunk.vbo.bind(texcoord, GL_FLOAT, 2, 24, stride);
-            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, 32, stride);
+            chunk.vbo.bind(texcoord, GL_BYTE, 2, 24, stride);
+            chunk.vbo.bind(mask, GL_BYTE, 2, 26, stride);
+            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, 28, stride);
         }
     
     void draw(BraLaEngine engine) {

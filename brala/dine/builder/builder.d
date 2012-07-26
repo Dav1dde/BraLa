@@ -17,20 +17,25 @@ public {
 
 
 mixin template BlockBuilder() {
-    void add_vertex(float x, float y, float z, float nx, float ny, float nz,
-                    float u, float v, float u_biome, float v_biome)
+    void add_vertex(float x, float y, float z,
+                    float nx, float ny, float nz,
+                    ubyte u_terrain, ubyte v_terrain,
+                    ubyte u_mask, ubyte v_mask,
+                    float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
             buffer[elements..(elements+=4)] = (cast(void*)&x)[0..4];
-            buffer[elements..(elements+=8)] = (cast(void*)&y)[0..4];
-            buffer[elements..(elements+=12)] = (cast(void*)&z)[0..4];
-            buffer[elements..(elements+=16)] = (cast(void*)&nx)[0..4];
-            buffer[elements..(elements+=20)] = (cast(void*)&ny)[0..4];
-            buffer[elements..(elements+=24)] = (cast(void*)&nz)[0..4];
-            buffer[elements..(elements+=28)] = (cast(void*)&u)[0..4];
-            buffer[elements..(elements+=32)] = (cast(void*)&v)[0..4];
-            buffer[elements..(elements+=36)] = (cast(void*)&u_biome)[0..4];
-            buffer[elements..(elements+=40)] = (cast(void*)&v_biome)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&y)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&z)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&nx)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&ny)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&nz)[0..4];
+            buffer[elements..(elements+=1)] = (cast(void*)&u_terrain)[0..1];
+            buffer[elements..(elements+=1)] = (cast(void*)&v_terrain)[0..1];
+            buffer[elements..(elements+=1)] = (cast(void*)&u_mask)[0..1];
+            buffer[elements..(elements+=1)] = (cast(void*)&v_mask)[0..1];
+            buffer[elements..(elements+=4)] = (cast(void*)&u_biome)[0..4];
+            buffer[elements..(elements+=4)] = (cast(void*)&v_biome)[0..4];
         }
 
     void add_template_vertices(const ref Vertex[] vertices,

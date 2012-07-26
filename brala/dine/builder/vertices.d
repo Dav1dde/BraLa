@@ -8,9 +8,14 @@ private {
     import brala.dine.util : to_triangles;
 }
 
-const byte ONE_BYTE = cast(byte)1;
 
-/*struct TextureSlice {
+struct TextureSlice(float w, float h) {
+    static const float width = w;
+    static const float height = h;
+
+    static const float x_step = 1.0f/width;
+    static const float y_step = 1.0f/height;
+    
     byte x;
     byte y;
 
@@ -22,35 +27,10 @@ const byte ONE_BYTE = cast(byte)1;
     }
 
     @property byte[2][4] texcoords() {
-             // lower left,                                       lower right,
-             // upper right,                                      upper left
-        return [[cast(byte)(x*16), cast(byte)(y*16)],                       [cast(byte)((x+ONE_BYTE)*16), cast(byte)(y*16)],
-                [cast(byte)((x+ONE_BYTE)*16-1), cast(byte)((y-ONE_BYTE)*16)], [cast(byte)(x*16), cast(byte)((y-ONE_BYTE)*16)]];
-    }
-}
-alias TextureSlice MCTextureSlice;
-*/
-
-
-struct TextureSlice(float w, float h) {
-    static const float width = w;
-    static const float height = h;
-
-    static const float x_step = 1.0f/width;
-    static const float y_step = 1.0f/height;
-    
-    float x;
-    float y;
-
-    alias texcoords this;
-
-    this(byte lower_left_x, byte lower_left_y) {
-        x = lower_left_x/width;
-        y = lower_left_y/height;
-    }
-
-    @property float[2][4] texcoords() {
-        return [[x, y],     [x+x_step, y], [x+x_step, y-y_step], [x, y-y_step]];
+        return [[cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+1), cast(byte)y],
+                [cast(byte)(x+1), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)]];
     }
 }
 
@@ -83,11 +63,17 @@ immutable CubeSideData[6] CUBE_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-Vertex[] simple_block(Side side, MCTextureSlice texture_slice) {
+Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice mask_slice=MCTextureSlice(-1, -1)) {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
-    float[2][6] texcoords = to_triangles(texture_slice.texcoords);
+    byte[2][6] texcoords = to_triangles(texture_slice.texcoords);
+    byte[2][6] mask;
+    if(mask_slice.x == -1 && mask_slice.y == -1) {
+        mask = texcoords;
+    } else {
+        mask = to_triangles(mask_slice.texcoords);
+    }
 
                  // vertex      normal       texcoords     palette
     Vertex[] data;
@@ -96,6 +82,7 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice) {
         data ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
                        cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
                        texcoords[i][0], texcoords[i][1],
+                       mask[i][0], mask[i][1],
                        0, 0);
     }
 
@@ -141,7 +128,7 @@ private alias MCTextureSlice t;
 Vertex[][] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
-    simple_block(Side.LEFT, t(3, 1)), // grass
+    simple_block(Side.LEFT, t(3, 1), t(6, 3)), // grass
     simple_block(Side.LEFT, t(2, 1)), // dirt
     simple_block(Side.LEFT, t(0, 2)), // cobble
     simple_block(Side.LEFT, t(4, 1)), // wooden plank
@@ -273,7 +260,7 @@ Vertex[][] BLOCK_VERTICES_LEFT = [
 Vertex[][] BLOCK_VERTICES_RIGHT = [
     [], // air
     simple_block(Side.RIGHT, t(1, 1)), // stone
-    simple_block(Side.RIGHT, t(3, 1)), // grass
+    simple_block(Side.RIGHT, t(3, 1), t(6, 3)), // grass
     simple_block(Side.RIGHT, t(2, 1)), // dirt
     simple_block(Side.RIGHT, t(0, 2)), // cobble
     simple_block(Side.RIGHT, t(4, 1)), // wooden plank
@@ -405,7 +392,7 @@ Vertex[][] BLOCK_VERTICES_RIGHT = [
 Vertex[][] BLOCK_VERTICES_NEAR = [
     [], // air
     simple_block(Side.NEAR, t(1, 1)), // stone
-    simple_block(Side.NEAR, t(3, 1)), // grass
+    simple_block(Side.NEAR, t(3, 1), t(6, 3)), // grass
     simple_block(Side.NEAR, t(2, 1)), // dirt
     simple_block(Side.NEAR, t(0, 2)), // cobble
     simple_block(Side.NEAR, t(4, 1)), // wooden plank
@@ -537,7 +524,7 @@ Vertex[][] BLOCK_VERTICES_NEAR = [
 Vertex[][] BLOCK_VERTICES_FAR = [
     [], // air
     simple_block(Side.FAR, t(1, 1)), // stone
-    simple_block(Side.FAR, t(3, 1)), // grass
+    simple_block(Side.FAR, t(3, 1), t(6, 3)), // grass
     simple_block(Side.FAR, t(2, 1)), // dirt
     simple_block(Side.FAR, t(0, 2)), // cobble
     simple_block(Side.FAR, t(4, 1)), // wooden plank

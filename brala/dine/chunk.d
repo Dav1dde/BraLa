@@ -8,7 +8,7 @@ private {
     
     import gl3n.linalg : vec3i;
     import brala.dine.util : log2_ub;
-    import brala.utils.alloc : calloc, free;
+    import brala.utils.memory : calloc, free;
 }
 
 
