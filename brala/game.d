@@ -91,8 +91,8 @@ class BraLaGame : BaseGLFWEventHandler {
         foreach(chunkc; chunk_removal_queue) {
             synchronized(_world_lock) {
                 if(Chunk* chunk = chunkc in _current_world.chunks) {
-                    if(chunk.vbo !is null && chunk.vbo.buffer != 0) chunk.vbo.remove();
                     _current_world.remove_chunk(chunkc);
+                    debug _current_world.vram.print();
                 }
             }
         }
@@ -231,6 +231,7 @@ class BraLaGame : BaseGLFWEventHandler {
         if(packet.chunk.chunk.primary_bitmask != 0) {
             debug writefln("adding chunk: %s", packet);
             synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
+            debug _current_world.vram.print();
         }
     }
 

@@ -27,7 +27,7 @@ enum Side : ubyte {
 }
 
 
-align(1) struct Vertex {
+struct Vertex {
     float x;
     float y;
     float z;
@@ -36,30 +36,30 @@ align(1) struct Vertex {
     float nz;
     float u_terrain;
     float v_terrain;
-    float u_palette;
-    float v_palette;
+    float u_biome;
+    float v_biome;
 }
 
 
 struct Tessellator {
     World world;
     
-    float* buffer;
+    void* buffer;
     size_t buffer_length;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref float* buffer, ref size_t buffer_length) {
+    this(World world, ref void* buffer, ref size_t buffer_length) {
         this.world = world;
         this.buffer = buffer;
         this.buffer_length = buffer_length;
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval*float.sizeof;
-        buffer = cast(float*)realloc(buffer, buffer_length);
+        buffer_length += interval;
+        buffer = cast(void*)realloc(buffer, buffer_length);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
@@ -107,6 +107,10 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
-        vbo.set_data(buffer[0..elements]);
+        //size_t prev = vbo.length;
+        //import std.stdio;
+        //writeln(elements);
+        vbo.set_data(buffer, elements);
+        //return vbo.length - prev;
     }
 }

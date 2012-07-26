@@ -6,6 +6,9 @@ private {
 }
 
 public {
+    import std.array : array, join;
+    import std.algorithm : map;
+    
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
@@ -18,47 +21,47 @@ mixin template BlockBuilder() {
                     float u, float v, float u_biome, float v_biome)
         in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements++] = x;
-            buffer[elements++] = y;
-            buffer[elements++] = z;
-            buffer[elements++] = nx;
-            buffer[elements++] = ny;
-            buffer[elements++] = nz;
-            buffer[elements++] = u;
-            buffer[elements++] = v;
-            buffer[elements++] = u_biome;
-            buffer[elements++] = v_biome;
+            buffer[elements..(elements+=4)] = (cast(void*)&x)[0..4];
+            buffer[elements..(elements+=8)] = (cast(void*)&y)[0..4];
+            buffer[elements..(elements+=12)] = (cast(void*)&z)[0..4];
+            buffer[elements..(elements+=16)] = (cast(void*)&nx)[0..4];
+            buffer[elements..(elements+=20)] = (cast(void*)&ny)[0..4];
+            buffer[elements..(elements+=24)] = (cast(void*)&nz)[0..4];
+            buffer[elements..(elements+=28)] = (cast(void*)&u)[0..4];
+            buffer[elements..(elements+=32)] = (cast(void*)&v)[0..4];
+            buffer[elements..(elements+=36)] = (cast(void*)&u_biome)[0..4];
+            buffer[elements..(elements+=40)] = (cast(void*)&v_biome)[0..4];
         }
 
-    void add_template_vertices(const ref float[] vertices,
+    void add_template_vertices(const ref Vertex[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                float u_biome, float v_biome)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements..(elements+(vertices.length))] = vertices;
-
-            size_t end = elements+vertices.length;
-            for(; elements < end;) {
-                buffer[elements++] += x_offset;
-                buffer[elements++] += y_offset;
-                buffer[elements++] += z_offset;
-                elements += 5;
-                buffer[elements++] += u_biome;
-                buffer[elements++] += v_biome;
+            size_t end = elements + vertices.length*Vertex.sizeof;
+            
+            buffer[elements..end] = cast(void[])vertices;
+            
+            for(; elements < end; elements += Vertex.sizeof) {
+                Vertex* vertex = cast(Vertex*)&buffer[elements];
+                vertex.x += x_offset;
+                vertex.y += y_offset;
+                vertex.z += z_offset;
+                vertex.u_biome = u_biome;
+                vertex.v_biome = v_biome;
             }
         }
 
-    void add_vertices(const ref float[] vertices)
+    void add_vertices(const ref Vertex[] vertices)
         in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
         body {
-            buffer[elements..(elements+(vertices.length))] = vertices;
-            elements += vertices.length;
+            buffer[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
         }
 
     // blocks
     void grass_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        float[] vertices = get_vertices!(s)(block.id);
+        Vertex[] vertices = get_vertices!(s)(block.id);
 
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.grass_uv.field);
@@ -66,7 +69,7 @@ mixin template BlockBuilder() {
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        float[] vertices = get_vertices!(s)(block.id);
+        Vertex[] vertices = get_vertices!(s)(block.id);
 
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.leave_uv.field);

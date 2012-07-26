@@ -11,18 +11,19 @@ private {
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
+    import brala.utils.mem : MemCounter;
     import brala.utils.alloc : malloc, realloc, free;
 }
 
 private const Block AIR_BLOCK = Block(0);
 
 class World {
-    static float* tessellate_buffer;
+    static void* tessellate_buffer;
     static size_t tessellate_buffer_length;
     
     static this() {
-        tessellate_buffer_length = width*height*depth*20; // this value is the result of testing!
-        tessellate_buffer = cast(float*)malloc(tessellate_buffer_length*float.sizeof);
+        tessellate_buffer_length = width*height*depth*80; // this value is the result of testing!
+        tessellate_buffer = cast(void*)malloc(tessellate_buffer_length);
     }
     
     static ~this() {
@@ -37,6 +38,8 @@ class World {
     
     Chunk[vec3i] chunks;
     vec3i spawn;
+
+    MemCounter vram = MemCounter("vram");
     
     this() {}
     
@@ -52,28 +55,39 @@ class World {
     // you should also lose all other references to this chunk
     //
     // old chunk will be cleared
-    void add_chunk(Chunk chunk, vec3i chunkc) {
+    void add_chunk(Chunk chunk, vec3i chunkc, bool mark_dirty=true) {
         if(Chunk* c = chunkc in chunks) {
             c.empty_chunk();
         } 
         
         chunks[chunkc] = chunk;
-        mark_surrounding_chunks_dirty(chunkc);
+        if(mark_dirty) {
+            mark_surrounding_chunks_dirty(chunkc);
+        }
     }
-    
-    void remove_chunk(vec3i chunkc)
+
+    /// only safe when called from mainthread
+    void remove_chunk(vec3i chunkc, bool mark_dirty=true)
         in { assert(chunkc in chunks); }
         body {
-            chunks[chunkc].empty_chunk();
+            Chunk chunk = chunks[chunkc];
+            chunk.empty_chunk();
+
+            if(chunk.vbo !is null && chunk.vbo.buffer != 0) {
+                vram.remove(chunk.vbo.length);
+                chunk.vbo.remove();
+            }
+            
             chunks.remove(chunkc);
 
-            mark_surrounding_chunks_dirty(chunkc);
+            if(mark_dirty) {
+                mark_surrounding_chunks_dirty(chunkc);
+            }
         }
     
     void remove_all_chunks() {
-        foreach(key, chunk; chunks) {
-            chunk.empty_chunk();
-            chunks.remove(key);
+        foreach(key; chunks.keys()) {
+            remove_chunk(key);
         }
     }
     
@@ -162,7 +176,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref float* v, ref size_t length, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, ref void* v, ref size_t length, bool force=false) {
         Tessellator tessellator = Tessellator(this, v, length);
 
         if(chunk.vbo is null) {
@@ -249,11 +263,21 @@ class World {
                     }
                 }
             }
+            //import std.stdio;
+            //writeln("==============> ", tessellator.elements);
+            chunk.vbo_vcount = tessellator.elements / 40;
 
-            //chunk.vbo_vcount = tessellator.elements * __traits(allMembers, Vertex).length;
-            chunk.vbo_vcount = tessellator.elements / 10;
+            debug size_t prev = chunk.vbo.length;
+            assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
             tessellator.fill_vbo(chunk.vbo);
-
+            debug {
+                if(prev == 0 && chunk.vbo.length) {
+                    vram.add(chunk.vbo.length);
+                } else {
+                    vram.adjust(chunk.vbo.length - prev);
+                }
+            }
+            
             chunk.dirty = false;
         }
     }
@@ -265,14 +289,12 @@ class World {
             GLuint normal = engine.current_shader.get_attrib_location("normal");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
             GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
-            //import std.stdio; writefln("%s", palettecoord);
-            // stride = vertex: x,y,z, normal: xn, xy, xz, texcoords: u, v, palette: s, t
-            uint stride = Vertex.sizeof;
 
+            uint stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
-            chunk.vbo.bind(normal, GL_FLOAT, 3, Vertex().nx.offsetof, stride);
-            chunk.vbo.bind(texcoord, GL_FLOAT, 2, Vertex().u_terrain.offsetof, stride);
-            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, Vertex().u_palette.offsetof, stride);
+            chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
+            chunk.vbo.bind(texcoord, GL_FLOAT, 2, 24, stride);
+            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, 32, stride);
         }
     
     void draw(BraLaEngine engine) {
