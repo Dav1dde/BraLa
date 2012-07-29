@@ -9,6 +9,7 @@ private {
     import std.system : Endian;
     import std.string : format;
     import std.array : join;
+    import std.conv : to;
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
@@ -39,12 +40,12 @@ class Connection {
     
     void delegate(ubyte, void*) callback;
     
-    immutable string username;
-    immutable string password;
+    /+immutable+/ string username;
+    /+immutable+/ string password;
 
-    immutable int protocol_version;
+    /+immutable+/ byte protocol_version;
     
-    this(string username, string password, int protocol_version = 29) {
+    this(string username, string password, byte protocol_version = 39) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
@@ -95,15 +96,24 @@ class Connection {
     void login() {
         assert(callback !is null);
         
-        auto handshake = new c.Handshake(join([username, connected_to.toHostNameString(), connected_to.toPortString()], ";"));
+        auto handshake = new c.Handshake(protocol_version, username, connected_to.toHostNameString(), to!int(connected_to.toPortString()));
         handshake.send(endianstream);
+
+        ubyte repl_byte = read!ubyte(endianstream);
+        if(repl_byte == s.Disconnect.id) {
+            throw new ServerError(s.Disconnect.recv(endianstream).reason);
+        } else if(repl_byte != s.EncryptionKeyRequest.id) {
+            throw new ServerError("Server didn't respond with a EncryptionKeyRequest.");
+        }
         
-        if(read!ubyte(endianstream) != s.Handshake.id) throw new ServerError("Server didn't respond with a handshake.");
+        auto enc_request = s.EncryptionKeyRequest.recv(endianstream);
+        callback(enc_request.id, cast(void*)enc_request);
+
+        writefln("%s", enc_request);
+
+        writefln("0x%02X", read!ubyte(endianstream));
         
-        auto repl_handshake = s.Handshake.recv(endianstream);
-        callback(repl_handshake.id, cast(void*)repl_handshake);
-        
-        if(repl_handshake.connection_hash != "-") {
+/*        if(repl_handshake.connection_hash != "-") {
             // currently not working, session login etc. works,
             // but server kicks with "Protocol Error"
             if(!session.logged_in) {
@@ -115,7 +125,7 @@ class Connection {
         }
         
         auto login = new c.Login(protocol_version, username);
-        login.send(endianstream);
+        login.send(endianstream);*/
     }
     
     void poll() {

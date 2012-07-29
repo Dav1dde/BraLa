@@ -5,6 +5,8 @@ private {
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
+    import std.datetime : SysTime, Clock;
+    import core.time : Duration;
 
     import brala.network.util : urlencode;    
     import brala.exception : SessionError;
@@ -14,26 +16,29 @@ private {
 
 
 class Session {
-    static const string launcher_version = "17";
+    static const int launcher_version = 1337;
     static const string login_url = "https://login.minecraft.net";
-    static const string keep_alive_url = "https://login.minecraft.net/session";
     static const string join_server_url = "http://session.minecraft.net/game/joinserver.jsp";
+    static const string check_session_url = "http://session.minecraft.net/game/checkserver.jsp";
     
-    private bool _logged_in = false;
-    @property logged_in() { return _logged_in; }
+    private SysTime _last_login;
+    @property last_login() { return _last_login; }
     
     long game_version;
     string cusername;
     string username;
     string session_id;
     
-    this() {
+    this(string username, string password) {
+        this.username = username;
+        this.password = password;
     }
     
-    void login(string username, string password) {
-        debug writefln(`(SESSION) Logging in as: "%s"`, username);
-        auto res = post(login_url, urlencode(["user" : username, "password" : password, "version" : launcher_version]));
-        debug writefln(`(SESSION) Server returned: "%s"`, res);
+    void login() {
+        auto res = post(login_url,
+                        urlencode(["user" : username,
+                                   "password" : password,
+                                   "version" : launcher_version]));
         
         if(res.count(":") == 3) {
             string[] s = res.idup.split(":");
@@ -46,22 +51,29 @@ class Session {
             throw new SessionError(`Unable to login as user "` ~ username ~ `".`);
         }
      
-        _logged_in = true;
+        _last_login = Clock.currTime();
+    }
+
+    void login_if_needed() {
+        if(session_id.length == 0 || (Clock.currTime() - _last_login).total!"secs" > 50) {
+            login();
+        }
     }
     
-    void join(string server_hash) {
-        debug writefln(`(SESSION) Sending join request, server hash: "%s", user: "%s", session_id: "%s"`, server_hash, username, session_id);
-        auto res = get(join_server_url ~ "?" ~ urlencode(["user" : username, "sessionId" : session_id, "serverId" : server_hash]));
-        debug writefln(`(SESSION) Server returned: "%s"`, res);
+    void join(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
+        login_if_needed();
+        
+        auto res = get(join_server_url ~ "?" ~
+                       urlencode(["user" : username,
+                                  "sessionId" : session_id,
+                                  "serverId" : server_id]));
         
         if(res != "OK") {
             throw new SessionError(res.idup);
         }
     }
     
-    void keep_alive() {
-        debug writefln(`(SESSION) Sending keep alive, username: "%s", session_id: "%s"`, username, session_id);
-        auto res = get(keep_alive_url ~ "?" ~ urlencode(["name" : username, "session" : session_id]));
-        debug writefln(`(SESSION) Server returned: "%s"`, res);
+    static string login_hash(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
+        // TODO
     }
 }
