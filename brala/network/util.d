@@ -29,8 +29,7 @@ private void write_impl(T : string)(Stream s, T data) {
     s.writeStringW(toUTF16(data));
 }
 
-private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool) || is(T : EntityMetadataS) ||
-                                                  is(T : Slot) || is(T : ChunkS))) {
+private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {
     static if(isArray!T) {
         static if(isDynamicArray!T) {
             write(s, cast(short)data.length);
