@@ -1,0 +1,3 @@
+[submodule "src/d/openssl"]
+	path = src/d/openssl
+	url = git://github.com/D-Programming-Deimos/openssl.git
