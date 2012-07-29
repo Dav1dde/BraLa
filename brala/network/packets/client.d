@@ -16,34 +16,11 @@ mixin get_packets_mixin!(brala.network.packets.client);
 alias server.KeepAlive KeepAlive;
 
 class Login : IPacket {
-    const ubyte id = 0x01;
-    
-    int protocol_version;
-    string username;
-       
-    this(int protocol_version, string username) {
-        this.protocol_version = protocol_version;
-        this.username = username;
-    }
-    
-    void send(Stream s) {
-        write(s, id, protocol_version, username, "", 0, 0, NULL_BYTE, NULL_UBYTE, NULL_UBYTE);
-    }
-    
-    static Login recv(Stream s) {
-        auto ret = new Login(read!(int, string)(s).field);
-        read!(string, int, int, byte, ubyte, ubyte)(s);        
-        return ret;
-    }
-    
-    string toString() {
-        return .stringof[7..$] ~ `.Login(int protocol_version : "` ~ to!string(protocol_version) ~
-                                       `", string username : "` ~ to!string(username) ~ `")`;
-    }
+    mixin Packet!(0x01);
 }
 
 class Handshake : IPacket {
-    mixin Packet!(0x02, string, "username");
+    mixin Packet!(0x02, byte, "protocol_version", string, "username", string, "host", int, "port");
 }
 
 public alias server.ChatMessage ChatMessage;
@@ -53,7 +30,9 @@ class UseEntity : IPacket {
     mixin Packet!(0x07, int, "user", int, "target", bool, "left_click");
 }
 
-public alias server.Respawn Respawn;
+class Respawn : IPacket {
+    mixin Packet!(0x09);
+}
 
 class Player : IPacket {
     mixin Packet!(0x0A, bool, "on_ground");
@@ -76,7 +55,8 @@ class PlayerDigging : IPacket {
 }
 
 class PlayerBlockPlacement : IPacket {
-    mixin Packet!(0x0F, int, "x", byte, "y", int, "z", byte, "direction", Slot, "slot");
+    mixin Packet!(0x0F, int, "x", ubyte, "y", int, "z", byte, "direction", Slot, "item",
+                        byte, "cursor_x", byte, "cursor_y", byte, "cursor_z");
 }
 
 class HoldingChange : IPacket {
@@ -103,6 +83,17 @@ class EnchantItem : IPacket {
 public alias server.UpdateSign UpdateSign;
 public alias server.PlayerAbilities PlayerAbilities;
 public alias server.PluginMessage PluginMessage;
+public alias server.TabComplete TabComplete;
+
+class LocaleViewDistance : IPacket {
+    mixin Packet!(0xCC, string, "locale", byte, "view_distance", byte, "chat_flags", byte, "difficulty");
+}
+
+class ClientStatuses : IPacket {
+    mixin Packet!(0xCD, byte, "payload");
+}
+
+public alias server.EncryptionKeyResponse EncryptionKeyResponse;
 
 class ServerListPing : IPacket {
     mixin Packet!(0xFE);

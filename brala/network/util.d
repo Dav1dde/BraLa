@@ -11,8 +11,6 @@ private {
     import std.utf : toUTF16, toUTF8;
     import std.uri : encodeComponent;
     
-    import brala.network.packets.types : EntityMetadataS, Slot, ChunkS;
-    
     debug import std.stdio : writefln;
 }
 
@@ -31,18 +29,6 @@ private void write_impl(T : string)(Stream s, T data) {
     s.writeStringW(toUTF16(data));
 }
 
-private void write_impl(T : EntityMetadataS)(Stream s, T data) {
-    s.writeBlock(&data, EntityMetadataS.sizeof); // TODO: this could be wrong, I think this isn't sent as BigEndian
-}
-
-private void write_impl(T : Slot)(Stream s, T data) {
-    s.writeBlock(&data, Slot.sizeof); // TODO: see EntityMetadataS
-}
-
-private void write_impl(T : ChunkS)(Stream s, T data) {
-    s.writeBlock(&data, ChunkS.sizeof); // TODO: see EntityMetadataS
-}
-
 private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool) || is(T : EntityMetadataS) ||
                                                   is(T : Slot) || is(T : ChunkS))) {
     static if(isArray!T) {
@@ -53,8 +39,10 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool) |
         foreach(d; data) {
             write(s, d);
         }
-    } else {
+    } else static if(__traits(compiles, s.write(data))) {
         s.write(data);
+    } else {
+        s.writeBlock(&data, T.sizeof); // TODO: implement .send for MapChunkS, EntityMetadataS, Slot
     }
 }
 
@@ -89,20 +77,11 @@ private string read_impl(T)(Stream s) if(is(T : string)) {
     return toUTF8(ret_utf16);
 }
 
-private EntityMetadataS read_impl(T)(Stream s) if(is(T : EntityMetadataS)) {
-    return EntityMetadataS.recv(s);
+private auto read_impl(T)(Stream s) if(__traits(compiles, mixin("T.recv(s)"))) {
+    return T.recv(s);
 }
 
-private Slot read_impl(T)(Stream s) if(is(T : Slot)) {
-    return Slot.recv(s);
-}
-
-private ChunkS read_impl(T)(Stream s) if(is(T : ChunkS)) {
-    return ChunkS.recv(s);
-}
-
-private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || is(T : EntityMetadataS) ||
-                                      is(T : Slot) || is(T : ChunkS))) {
+private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits(compiles, mixin("T.recv(s)")))) {
     T ret;
     
     static if(isArray!T) {

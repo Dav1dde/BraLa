@@ -5,7 +5,7 @@ private {
     import std.stream : Stream;
     import std.string : format;
     
-    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, ChunkS;
+    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray, MapChunkS, MapChunkBulkS;
     import brala.network.packets.util;
 }
 
@@ -18,8 +18,8 @@ class KeepAlive : IPacket {
 }
 
 class Login : IPacket {
-    mixin Packet!(0x01, int, "entity_id", string, "unused", string, "level_type", int, "mode",
-                        int, "dimension", byte, "difficulty", ubyte, "world_height", ubyte, "max_players");
+    mixin Packet!(0x01, int, "entity_id", string, "level_type", byte, "mode", byte, "dimension", 
+                        byte, "difficulty", ubyte, "unused", ubyte, "max_players");
 }
 
 class Handshake : IPacket {
@@ -35,7 +35,7 @@ class TimeUpdate : IPacket {
 }
 
 class EntityEquipment : IPacket {
-    mixin Packet!(0x05, int, "entity_id", short, "slot", short, "item_id", short, "damage");
+    mixin Packet!(0x05, int, "entity_id", short, "slot_id", Slot, "item");
 }
 
 class SpawnPosition : IPacket {
@@ -64,7 +64,7 @@ class Animation : IPacket {
 
 class NamedEntitySpawn : IPacket {
     mixin Packet!(0x14, int, "entity_id", string, "username", int, "x", int, "y", int, "z",
-                        byte, "rotation", byte, "pitch", short, "current_item");
+                        byte, "yaw", byte, "pitch", short, "current_item", EntityMetadataS, "metadata");
 }
 
 class PickupSpawn : IPacket {
@@ -127,7 +127,9 @@ class AddObject : IPacket {
 
 class MobSpawn : IPacket {
     mixin Packet!(0x18, int, "entity_id", byte, "type", int, "x", int, "y", int, "z",
-                        byte, "yaw", byte, "pitch", byte, "head_yaw", EntityMetadataS, "metadata");
+                        byte, "yaw", byte, "pitch", byte, "head_yaw",
+                        short, "velocity_x", short, "velocity_y", short, "velocity_z",
+                        EntityMetadataS, "metadata");
 }
 
 class Painting : IPacket {
@@ -143,7 +145,7 @@ class EntityVelocity : IPacket {
 }
 
 class DestroyEntity : IPacket {
-    mixin Packet!(0x1D, int, "entity_id");
+    mixin Packet!(0x1D, Array!(byte, int), "entities");
 }
 
 class Entity : IPacket {
@@ -194,12 +196,8 @@ class Experience : IPacket {
     mixin Packet!(0x2B, float, "experience_bar", short, "level", short, "total_experience");
 }
 
-class PreChunk : IPacket {
-    mixin Packet!(0x32, int, "x", int, "z", bool, "mode");
-}
-
 class MapChunk : IPacket {
-    mixin Packet!(0x33, ChunkS, "chunk");
+    mixin Packet!(0x33, MapChunkS, "chunk");
 }
 
 class MultiBlockChange : IPacket {
@@ -207,19 +205,32 @@ class MultiBlockChange : IPacket {
 }
 
 class BlockChange : IPacket {
-    mixin Packet!(0x35, int, "x", byte, "y", int, "z", byte, "type", byte, "metadata");
+    mixin Packet!(0x35, int, "x", byte, "y", int, "z", short, "type", byte, "metadata");
 }
 
 class BlockAction : IPacket {
-    mixin Packet!(0x36, int, "x", short, "y", int, "z", byte, "byte1", byte, "byte2");
+    mixin Packet!(0x36, int, "x", short, "y", int, "z", byte, "byte1", byte, "byte2", byte, "block_id");
+}
+
+class BlockBreakAnimation : IPacket {
+    mixin Packet!(0x37, int, "entity_id", int, "x", int, "y", int, "z", byte, "unknown");
+}
+
+class MapChunkBulk : IPacket {
+    mixin Packet!(0x38, MapChunkBulkS, "chunk_bulk");
 }
 
 class Explosion : IPacket {
-    mixin Packet!(0x3C, double, "x", double, "y", double, "z", float, "radius", Array!(int, byte), "records");
+    mixin Packet!(0x3C, double, "x", double, "y", double, "z", float, "radius",
+                        Array!(int, StaticArray!(byte, 3)), "records", StaticArray!(float, 3), "unknown");
 }
 
 class SoundParticleEffect : IPacket {
     mixin Packet!(0x3D, int, "effect_id", int, "x", byte, "y", int, "z", int, "data");
+}
+
+class NamedSoundEffect : IPacket {
+    mixin Packet!(0x3E, string, "sound", int, "x", int, "y", int, "z", float, "volume", byte, "pitch");
 }
 
 class NewInvalidState : IPacket {
@@ -267,7 +278,7 @@ class ItemData : IPacket {
 }
 
 class UpdateTileEntity : IPacket {
-    mixin Packet!(0x84, int, "x", short, "y", int, "z", byte, "action", int, "custom1", int, "custom2", int, "custom3");
+    mixin Packet!(0x84, int, "x", short, "y", int, "z", byte, "action", Array!(short, byte), "nbt_data");
 }
 
 class IncrementStatistic : IPacket {
@@ -279,11 +290,23 @@ class PlayerListItem : IPacket {
 }
 
 class PlayerAbilities : IPacket {
-    mixin Packet!(0xCA, bool, "is_invunerable", bool, "is_flying", bool, "can_fly", bool, "can_instant_destroy");
+    mixin Packet!(0xCA, byte, "flags", byte, "flying_speed", byte, "walking_speed");
+}
+
+class TabComplete : IPacket {
+    mixin Packet!(0xCB, string, "text");
 }
 
 class PluginMessage : IPacket {
     mixin Packet!(0xFA, string, "channel", Array!(short, byte), "data");
+}
+
+class EncryptionKeyResponse : IPacket {
+    mixin Packet!(0xFC, Array!(short, byte), "shared_secret", Array!(short, byte), "verify_token");
+}
+
+class EncryptionKeyRequest : IPacket {
+    mixin Packet!(0xFD, string, "server_id", Array!(short, byte), "public_key", Array!(short, byte), "verify_token");
 }
 
 class Disconnect : IPacket {

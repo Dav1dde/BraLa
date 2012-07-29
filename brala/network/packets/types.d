@@ -148,28 +148,11 @@ struct Slot {
             ret.metadata = read!short(s);
         }
         
-        if([0x103, 0x105, 0x15a, 0x167, // Flint&Steel, bow, fishing rod, shears
-            // Tools:
-            // sword, shovel, pickaxe, axe, hoe
-            0x10C, 0x10D, 0x10E, 0x10F, 0x122, // wood
-            0x110, 0x111, 0x112, 0x113, 0x123, // stone
-            0x10B, 0x100, 0x101, 0x102, 0x124, // iron
-            0x114, 0x115, 0x116, 0x117, 0x125, // diamond
-            0x11B, 0x11C, 0x11D, 0x11E, 0x126, // gold
-            // Armour:
-            // helmet, chestplate, leggings, boots
-            0x12A, 0x12B, 0x12C, 0x12D, // leather
-            0x12E, 0x12F, 0x130, 0x131, // chain
-            0x132, 0x133, 0x134, 0x135, // iron
-            0x136, 0x137, 0x138, 0x139, // diamond 
-            0x13A, 0x13B, 0x13C, 0x13D  // gold
-            ].canFind(ret.block)) {
-            int len = read!short(s);
+        int len = read!short(s);
                         
-            if(len != -1) {
-                ret.nbt_data = new byte[len];
-                s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
-            }
+        if(len != -1) {
+            ret.nbt_data = new byte[len];
+            s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
         }
         
         return ret;
@@ -189,8 +172,13 @@ struct Array(T, S) {
     alias arr this;
 }
 
+struct StaticArray(T, size_t length) {
+    T[length] arr;
+    alias arr this;
+}
 
-struct ChunkS { // TODO: implement send
+
+struct MapChunkS { // TODO: implement send
     int x;
     int z;
     bool contiguous;
@@ -199,7 +187,7 @@ struct ChunkS { // TODO: implement send
     Chunk chunk;
     alias chunk this;
     
-    static ChunkS recv(Stream s) {
+    static MapChunkS recv(Stream s) {
         ChunkS ret;
         ret.chunk = new Chunk();
         
@@ -211,8 +199,6 @@ struct ChunkS { // TODO: implement send
         ret.chunk.add_bitmask = read!ushort(s);
         
         int len = read!int(s);
-        read!int(s); // unused data
-        
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
@@ -267,4 +253,9 @@ struct ChunkS { // TODO: implement send
                              `ushort add_bitmask : "%016b", Chunk chunk : "%s")`,
                               x, z, contiguous, primary_bitmask, add_bitmask, chunk);
     } 
+}
+
+struct MapChunkBulkS {
+    static MapChunkBulkS recv(Stream s) {
+    }
 }
