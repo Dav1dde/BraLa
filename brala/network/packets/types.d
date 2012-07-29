@@ -188,7 +188,7 @@ struct MapChunkS { // TODO: implement send
     alias chunk this;
     
     static MapChunkS recv(Stream s) {
-        ChunkS ret;
+        MapChunkS ret;
         ret.chunk = new Chunk();
         
         ret.x = read!int(s);
@@ -257,5 +257,6 @@ struct MapChunkS { // TODO: implement send
 
 struct MapChunkBulkS {
     static MapChunkBulkS recv(Stream s) {
+        return MapChunkBulkS();
     }
 }

@@ -219,20 +219,14 @@ class BraLaGame : BaseGLFWEventHandler {
         }
     }
     
-    void on_packet(T : s.PreChunk)(T packet) {
-        debug writefln("%s", packet);
-        
-        if(packet.mode == false) {
-            chunk_removal_queue.add(vec3i(packet.x, 0, packet.z));
-        }
-    }
-    
     void on_packet(T : s.MapChunk)(T packet) {
         if(packet.chunk.chunk.primary_bitmask != 0) {
             debug writefln("adding chunk: %s", packet);
             synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
             debug _current_world.vram.print();
         }
+
+        // TODO: add chunks to removal queue: chunk_removal_queue.add(vec3i(packet.x, 0, packet.z));
     }
 
     void on_packet(T : s.BlockChange)(T packet) {
