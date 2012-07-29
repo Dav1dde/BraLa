@@ -51,7 +51,7 @@ class Connection {
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
         queue = new PacketQueue();
         
-        session = new Session();
+        session = new Session(username, password);
         
         this.username = username;
         this.password = password;

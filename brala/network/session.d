@@ -27,6 +27,7 @@ class Session {
     long game_version;
     string cusername;
     string username;
+    string password;
     string session_id;
     
     this(string username, string password) {
@@ -38,7 +39,7 @@ class Session {
         auto res = post(login_url,
                         urlencode(["user" : username,
                                    "password" : password,
-                                   "version" : launcher_version]));
+                                   "version" : to!string(launcher_version)]));
         
         if(res.count(":") == 3) {
             string[] s = res.idup.split(":");
@@ -55,7 +56,7 @@ class Session {
     }
 
     void login_if_needed() {
-        if(session_id.length == 0 || (Clock.currTime() - _last_login).total!"secs" > 50) {
+        if(session_id.length == 0 || (Clock.currTime() - _last_login).total!"seconds" > 50) {
             login();
         }
     }
@@ -75,5 +76,6 @@ class Session {
     
     static string login_hash(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
         // TODO
+        return "";
     }
 }

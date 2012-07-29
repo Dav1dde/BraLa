@@ -4,8 +4,8 @@ export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
 export LICENSE          = GPLv3
 
-DCFLAGS_IMPORT      = -Ibrala/ -L-lcurl -L-lssl `pkg-config --libs --cflags gl3n glamour` -Isrc/d/
-DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictUtil
+DCFLAGS_IMPORT      = -Ibrala/ `pkg-config --libs --cflags gl3n glamour` -Isrc/d/ -Isrc/d/openssl/
+DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictUtil -L-lcurl -L-lssl -L-lcrypto
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-debug -unittest -g -gc -L-export-dynamic
