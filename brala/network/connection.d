@@ -14,10 +14,11 @@ private {
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
     import brala.network.util : read, write;
-    import brala.network.packets.types : IPacket;
+    import brala.network.packets.types : IPacket, Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.utils.queue : PacketQueue;
+    import brala.utils.crypto : decode_public, encrypt;
     
     debug import std.stdio : writefln;
 }
@@ -109,23 +110,16 @@ class Connection {
         auto enc_request = s.EncryptionKeyRequest.recv(endianstream);
         callback(enc_request.id, cast(void*)enc_request);
 
-        writefln("%s", enc_request);
+        auto rsa = decode_public(enc_request.public_key.arr);
 
-        writefln("0x%02X", read!ubyte(endianstream));
+        ubyte[] enc_verify_token = rsa.encrypt(enc_request.verify_token.arr);
+        // TODO: generate serious shared secret
+        ubyte[] shared_secret = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
         
-/*        if(repl_handshake.connection_hash != "-") {
-            // currently not working, session login etc. works,
-            // but server kicks with "Protocol Error"
-            if(!session.logged_in) {
-                session.login(username, password);
-            }
-            debug writefln(repl_handshake.connection_hash);
-            session.join(repl_handshake.connection_hash);
-//             session.keep_alive();
-        }
-        
-        auto login = new c.Login(protocol_version, username);
-        login.send(endianstream);*/
+        auto c = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
+                                             Array!(short, ubyte)(enc_verify_token));
+        c.send(endianstream);
     }
     
     void poll() {

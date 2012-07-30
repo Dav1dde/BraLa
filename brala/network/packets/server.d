@@ -302,11 +302,11 @@ class PluginMessage : IPacket {
 }
 
 class EncryptionKeyResponse : IPacket {
-    mixin Packet!(0xFC, Array!(short, byte), "shared_secret", Array!(short, byte), "verify_token");
+    mixin Packet!(0xFC, Array!(short, ubyte), "shared_secret", Array!(short, ubyte), "verify_token");
 }
 
 class EncryptionKeyRequest : IPacket {
-    mixin Packet!(0xFD, string, "server_id", Array!(short, byte), "public_key", Array!(short, byte), "verify_token");
+    mixin Packet!(0xFD, string, "server_id", Array!(short, ubyte), "public_key", Array!(short, ubyte), "verify_token");
 }
 
 class Disconnect : IPacket {

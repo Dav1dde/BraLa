@@ -12,6 +12,7 @@ private {
     import brala.network.util : urlencode;
     import brala.exception : SessionError;
     import brala.utils.hash : SHA1;
+    import brala.utils.crypto : decode_public, der_encode;
     
     debug import std.stdio : writefln;
 }
@@ -80,7 +81,7 @@ class Session {
         auto digest = new SHA1();
         digest.update(server_id);
         digest.update(shared_secret);
-        digest.update(public_key); // TODO DER encode public key!
+        digest.update(decode_public(public_key).der_encode());
 
         long d = to!long(digest.hexdigest, 16);
         if(d >> (39*4 & 0x8)) {
