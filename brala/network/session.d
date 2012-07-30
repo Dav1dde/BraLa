@@ -5,11 +5,13 @@ private {
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
+    import std.string : format;
     import std.datetime : SysTime, Clock;
     import core.time : Duration;
 
-    import brala.network.util : urlencode;    
+    import brala.network.util : urlencode;
     import brala.exception : SessionError;
+    import brala.utils.hash : SHA1;
     
     debug import std.stdio : writefln;
 }
@@ -67,7 +69,7 @@ class Session {
         auto res = get(join_server_url ~ "?" ~
                        urlencode(["user" : username,
                                   "sessionId" : session_id,
-                                  "serverId" : server_id]));
+                                  "serverId" : login_hash(server_id, shared_secret, public_key)]));
         
         if(res != "OK") {
             throw new SessionError(res.idup);
@@ -75,7 +77,15 @@ class Session {
     }
     
     static string login_hash(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
-        // TODO
-        return "";
+        auto digest = new SHA1();
+        digest.update(server_id);
+        digest.update(shared_secret);
+        digest.update(public_key); // TODO DER encode public key!
+
+        long d = to!long(digest.hexdigest, 16);
+        if(d >> (39*4 & 0x8)) {
+            return "-%x".format((-d) & (2^^(40*4)-1));
+        }        
+        return "%x".format(d);
     }
 }
