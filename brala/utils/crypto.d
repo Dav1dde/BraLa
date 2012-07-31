@@ -1,10 +1,9 @@
 module brala.utils.crypto;
 
 private {
-    import std.exception : enforce;
-    import std.base64;
-    import std.stdio;
+    import core.stdc.time : tm, time;
     
+    import deimos.openssl.rand;
     import deimos.openssl.rsa;
     import deimos.openssl.x509;
     import deimos.openssl.err;
@@ -35,7 +34,26 @@ ubyte[] encrypt(RSA* rsa, ubyte[] data) {
     return buf;
 }
 
+
+void seed_prng() {
+    auto t = time(null);
+    RAND_seed(cast(void*)&t, t.sizeof);
+}
+
+void seed_prng(ubyte[] seed) {
+    RAND_seed(seed.ptr, seed.length);
+}
+
+ubyte[] get_random(size_t size) {
+    ubyte[] rand = new ubyte[size];
+    if(!RAND_bytes(rand.ptr, size)) {
+        throw new Exception(get_openssl_error());
+    }
     
+    return rand;
+}
+
+
 string get_openssl_error() {
      uint e = ERR_get_error();
      char[] buf = new char[512];

@@ -7,18 +7,21 @@ private {
     import std.socketstream : SocketStream;
     import std.stream : EndianStream, BOM;
     import std.system : Endian;
+    import std.exception : enforceEx;
     import std.string : format;
     import std.array : join;
     import std.conv : to;
         
     import brala.exception : ConnectionError, ServerError;
     import brala.network.session : Session;
+    import brala.network.stream : AESStream;
     import brala.network.util : read, write;
     import brala.network.packets.types : IPacket, Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.utils.queue : PacketQueue;
-    import brala.utils.crypto : decode_public, encrypt;
+    import brala.utils.aes : AES128CFB8;
+    import brala.utils.crypto : decode_public, encrypt, seed_prng, get_random;
     
     debug import std.stdio : writefln;
 }
@@ -113,13 +116,26 @@ class Connection {
         auto rsa = decode_public(enc_request.public_key.arr);
 
         ubyte[] enc_verify_token = rsa.encrypt(enc_request.verify_token.arr);
-        // TODO: generate serious shared secret
-        ubyte[] shared_secret = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        seed_prng();
+        ubyte[] shared_secret = get_random(16);
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
         
-        auto c = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
-                                             Array!(short, ubyte)(enc_verify_token));
-        c.send(endianstream);
+        auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
+                                                   Array!(short, ubyte)(enc_verify_token));
+        enc_key.send(endianstream);
+
+        repl_byte = read!ubyte(endianstream);
+        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id, "Server didn't respond with EncryptionKeyResponse.");
+        auto enc_response = s.EncryptionKeyResponse.recv(endianstream);
+        writefln("%s", enc_response);
+        enforceEx!ServerError(enc_response.verify_token.length == 0 && enc_response.shared_secret.length == 0,
+                              "Expected empty payload in EncryptionKeyResponse.");
+
+        auto aes_stream = new AESStream!AES128CFB8(socketstream, new AES128CFB8(shared_secret, shared_secret));
+        endianstream = new EndianStream(aes_stream, Endian.bigEndian);
+
+        (new c.ClientStatuses(cast(byte)0)).send(endianstream);
+        endianstream.flush();
     }
     
     void poll() {
