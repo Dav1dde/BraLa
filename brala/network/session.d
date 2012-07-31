@@ -67,13 +67,11 @@ class Session {
     
     void join(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
         login_if_needed();
-        
+
         auto res = get(join_server_url ~ "?" ~
-                       urlencode(["user" : username,
+                       urlencode(["user" : cusername,
                                   "sessionId" : session_id,
                                   "serverId" : login_hash(server_id, shared_secret, public_key)]));
-
-        writefln("%s", session_id);
         
         if(res != "OK") {
             throw new SessionError("Failed to join server: " ~ res.idup);
