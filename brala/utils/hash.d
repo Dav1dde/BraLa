@@ -5,6 +5,7 @@ private {
     import std.format : formattedWrite;
     import std.exception : enforce;
     import std.array : appender;
+    import std.range : ElementEncodingType;
 
     import deimos.openssl.md4;
     import deimos.openssl.md5;
@@ -29,8 +30,7 @@ class Hash(Handle, alias HASH_Init, alias HASH_Update, alias HASH_Final, size_t 
     }
 
     void update(T)(T data) if(isArray!T) {
-        enforce(!_is_final, "Hash already finialized.");
-        HASH_Update(&openssl_handle, data.ptr, data.length);
+        update(data.ptr, (ElementEncodingType!T).sizeof*data.length);
     }
 
     void update(T)(T ptr, size_t size) if(isPointer!T) {

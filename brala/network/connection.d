@@ -100,7 +100,9 @@ class Connection {
     void login() {
         assert(callback !is null);
         
-        auto handshake = new c.Handshake(protocol_version, username, connected_to.toHostNameString(), to!int(connected_to.toPortString()));
+        auto handshake = new c.Handshake(protocol_version, username,
+                                         connected_to.toHostNameString(),
+                                         to!int(connected_to.toPortString()));
         handshake.send(endianstream);
 
         ubyte repl_byte = read!ubyte(endianstream);
@@ -112,31 +114,41 @@ class Connection {
         
         auto enc_request = s.EncryptionKeyRequest.recv(endianstream);
         callback(enc_request.id, cast(void*)enc_request);
-
+        
         auto rsa = decode_public(enc_request.public_key.arr);
 
         ubyte[] enc_verify_token = rsa.encrypt(enc_request.verify_token.arr);
         seed_prng();
         ubyte[] shared_secret = get_random(16);
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
+
+        if(enc_request.server_id != "-") {
+            session.join(enc_request.server_id, shared_secret, enc_request.public_key.arr);
+        }
         
         auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
                                                    Array!(short, ubyte)(enc_verify_token));
         enc_key.send(endianstream);
 
         repl_byte = read!ubyte(endianstream);
-        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id, "Server didn't respond with EncryptionKeyResponse.");
+        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id, "Server didn't respond with a EncryptionKeyResponse.");
         auto enc_response = s.EncryptionKeyResponse.recv(endianstream);
-        writefln("%s", enc_response);
         enforceEx!ServerError(enc_response.verify_token.length == 0 && enc_response.shared_secret.length == 0,
                               "Expected empty payload in EncryptionKeyResponse.");
+        callback(enc_response.id, cast(void*)enc_response);
 
         auto aes_stream = new AESStream!AES128CFB8(socketstream, new AES128CFB8(shared_secret, shared_secret));
         endianstream = new EndianStream(aes_stream, Endian.bigEndian);
 
         (new c.ClientStatuses(cast(byte)0)).send(endianstream);
         endianstream.flush();
+
+        repl_byte = read!ubyte(endianstream);
+        enforceEx!ServerError(repl_byte == s.Login.id, "Server didn't respond with a Login packet.");
+        auto login = s.Login.recv(endianstream);
+        callback(login.id, cast(void*)login);
     }
+
     
     void poll() {
         try {
@@ -154,6 +166,7 @@ class Connection {
         foreach(packet; queue) {
             packet.send(endianstream);
         }
+        endianstream.flush();
         
         assert(callback !is null);
         switch(packet_id) {

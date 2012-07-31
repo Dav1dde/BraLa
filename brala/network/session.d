@@ -5,14 +5,15 @@ private {
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
-    import std.string : format;
+    import std.string : format, munch;
     import std.datetime : SysTime, Clock;
+    import std.bigint : BigInt;
     import core.time : Duration;
 
-    import brala.network.util : urlencode;
     import brala.exception : SessionError;
     import brala.utils.hash : SHA1;
     import brala.utils.crypto : decode_public, der_encode;
+    import brala.network.util : urlencode, twos_compliment, to_hexdigest;
     
     debug import std.stdio : writefln;
 }
@@ -43,7 +44,7 @@ class Session {
                         urlencode(["user" : username,
                                    "password" : password,
                                    "version" : to!string(launcher_version)]));
-        
+
         if(res.count(":") == 3) {
             string[] s = res.idup.split(":");
             
@@ -52,7 +53,7 @@ class Session {
             this.cusername = s[2];
             this.session_id = s[3];
         } else {
-            throw new SessionError(`Unable to login as user "` ~ username ~ `".`);
+            throw new SessionError(`Unable to login as user "` ~ username ~ `". ` ~ res.idup);
         }
      
         _last_login = Clock.currTime();
@@ -71,9 +72,11 @@ class Session {
                        urlencode(["user" : username,
                                   "sessionId" : session_id,
                                   "serverId" : login_hash(server_id, shared_secret, public_key)]));
+
+        writefln("%s", session_id);
         
         if(res != "OK") {
-            throw new SessionError(res.idup);
+            throw new SessionError("Failed to join server: " ~ res.idup);
         }
     }
     
@@ -81,12 +84,17 @@ class Session {
         auto digest = new SHA1();
         digest.update(server_id);
         digest.update(shared_secret);
-        digest.update(decode_public(public_key).der_encode());
+        digest.update(public_key);
+        
+        string hexdigest = digest.hexdigest;
+        bool negativ = (digest.digest[0] & 0x80) == 0x80;
+        if(negativ) {
+            hexdigest = to_hexdigest(twos_compliment(digest.digest));
+        }
 
-        long d = to!long(digest.hexdigest, 16);
-        if(d >> (39*4 & 0x8)) {
-            return "-%x".format((-d) & (2^^(40*4)-1));
-        }        
-        return "%x".format(d);
+        hexdigest.munch("0");
+
+        if(negativ) return "-" ~ hexdigest;
+        return hexdigest;
     }
 }

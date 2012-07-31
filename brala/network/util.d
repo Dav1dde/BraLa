@@ -6,7 +6,8 @@ private {
     import std.typecons : Tuple;
     import std.traits : isArray, isStaticArray, isDynamicArray;
     import std.algorithm : map;
-    import std.array : join;
+    import std.format : formattedWrite;
+    import std.array : join, appender;
     import std.range : ElementEncodingType;
     import std.utf : toUTF16, toUTF8;
     import std.uri : encodeComponent;
@@ -117,4 +118,29 @@ string urlencode(string[string] c) {
     }
     
     return s.join("&");
+}
+
+ubyte[] twos_compliment(ubyte[] inp) {
+    foreach(ref d; inp) {
+        d = ~d;
+    }
+
+    bool carry = true;
+    size_t i = inp.length - 1;
+    while(carry) {
+        carry = (inp[i] == 0xff);
+        inp[i--]++;
+    }
+
+    return inp;
+}
+
+string to_hexdigest(ubyte[] inp) {
+    auto app = appender!string();
+
+    foreach(b; inp) {
+        formattedWrite(app, "%02x", b);
+    }
+
+    return app.data;
 }
