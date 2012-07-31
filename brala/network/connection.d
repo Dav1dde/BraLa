@@ -12,7 +12,7 @@ private {
     import std.array : join;
     import std.conv : to;
         
-    import brala.exception : ConnectionError, ServerError;
+    import brala.exception : ConnectionError, ServerError, SessionError;
     import brala.network.session : Session;
     import brala.network.stream : AESStream;
     import brala.network.util : read, write;
@@ -46,7 +46,8 @@ class Connection {
     
     /+immutable+/ string username;
     /+immutable+/ string password;
-
+    /+immutable+/ string minecraft_username;
+    
     /+immutable+/ byte protocol_version;
     
     this(string username, string password, byte protocol_version = 39) {
@@ -56,6 +57,14 @@ class Connection {
         queue = new PacketQueue();
         
         session = new Session(username, password);
+
+        try {
+            session.login();
+            this.minecraft_username = session.minecraft_username;
+        } catch(SessionError e) {
+            debug writefln("%s", e.message);
+            this.minecraft_username = username;
+        }
         
         this.username = username;
         this.password = password;
@@ -100,7 +109,7 @@ class Connection {
     void login() {
         assert(callback !is null);
         
-        auto handshake = new c.Handshake(protocol_version, username,
+        auto handshake = new c.Handshake(protocol_version, minecraft_username,
                                          connected_to.toHostNameString(),
                                          to!int(connected_to.toPortString()));
         handshake.send(endianstream);
@@ -123,6 +132,7 @@ class Connection {
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
 
         if(enc_request.server_id != "-") {
+            enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ username ~ `". `);
             session.join(enc_request.server_id, shared_secret, enc_request.public_key.arr);
         }
         
@@ -146,6 +156,7 @@ class Connection {
         repl_byte = read!ubyte(endianstream);
         enforceEx!ServerError(repl_byte == s.Login.id, "Server didn't respond with a Login packet.");
         auto login = s.Login.recv(endianstream);
+        on_packet!(s.Login)(login);
         callback(login.id, cast(void*)login);
     }
 

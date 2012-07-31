@@ -29,7 +29,7 @@ class Session {
     @property last_login() { return _last_login; }
     
     long game_version;
-    string cusername;
+    string minecraft_username;
     string username;
     string password;
     string session_id;
@@ -50,13 +50,17 @@ class Session {
             
             this.game_version = to!long(s[0]);
             this.username = username;
-            this.cusername = s[2];
+            this.minecraft_username = s[2];
             this.session_id = s[3];
         } else {
             throw new SessionError(`Unable to login as user "` ~ username ~ `". ` ~ res.idup);
         }
      
         _last_login = Clock.currTime();
+    }
+
+    @property bool logged_in() {
+        return cast(bool)session_id.length;
     }
 
     void login_if_needed() {
@@ -69,7 +73,7 @@ class Session {
         login_if_needed();
 
         auto res = get(join_server_url ~ "?" ~
-                       urlencode(["user" : cusername,
+                       urlencode(["user" : minecraft_username,
                                   "sessionId" : session_id,
                                   "serverId" : login_hash(server_id, shared_secret, public_key)]));
         

@@ -8,6 +8,7 @@ private {
 
     import std.conv : to, ConvException;
     import std.path : buildPath, expandTilde;
+    import std.zlib : ZlibException;
     import file = std.file;
     import std.process : getenv;
     
@@ -45,7 +46,7 @@ GLFWwindow open_glfw_win(int width, int height) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
     }
     
-    //glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
     
     glfwSwapInterval(0); // change this to 1?
     
@@ -75,10 +76,12 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
         string path = expandTilde("~/.minecraft/bin/minecraft.jar");
     }
     if(file.exists(path)) {
-        Image mc_terrain = extract_minecraft_terrain(path);
+        try {
+            Image mc_terrain = extract_minecraft_terrain(path);
 
-        engine.resmgr.remove!Image("terrain");
-        engine.resmgr.add("terrain", mc_terrain);
+            engine.resmgr.remove!Image("terrain");
+            engine.resmgr.add("terrain", mc_terrain);
+        } catch(ZlibException) {}
     }
     
     Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));

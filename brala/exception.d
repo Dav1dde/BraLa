@@ -5,8 +5,11 @@ private {
 
 
 class BraLaException : Exception {
+    string message;
+    
     this(string msg) {
         super(msg);
+        message = msg;
     }
 }
 
