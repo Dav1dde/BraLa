@@ -152,12 +152,6 @@ class Connection {
 
         (new c.ClientStatuses(cast(byte)0)).send(endianstream);
         endianstream.flush();
-
-        repl_byte = read!ubyte(endianstream);
-        enforceEx!ServerError(repl_byte == s.Login.id, "Server didn't respond with a Login packet.");
-        auto login = s.Login.recv(endianstream);
-        on_packet!(s.Login)(login);
-        callback(login.id, cast(void*)login);
     }
 
     
@@ -178,7 +172,7 @@ class Connection {
             packet.send(endianstream);
         }
         endianstream.flush();
-        
+
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id

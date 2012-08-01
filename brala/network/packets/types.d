@@ -122,7 +122,7 @@ struct EntityMetadataS {
 }
 
 struct Slot {
-    short block;
+    short item;
     byte item_count = 0;
     short metadata = 0;
     byte[] nbt_data;
@@ -141,20 +141,21 @@ struct Slot {
     static Slot recv(Stream s) {
         Slot ret;
         
-        ret.block = read!short(s);
+        ret.item = read!short(s);
         
-        if(ret.block != -1) {
+        if(ret.item != -1) {
             ret.item_count = read!byte(s);
             ret.metadata = read!short(s);
+
+            int len = read!short(s);
+
+            if(len != -1) {
+                debug assert(len >= 0);
+                ret.nbt_data = new byte[len];
+                s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
+            }
         }
-        
-        int len = read!short(s);
-                        
-        if(len != -1) {
-            ret.nbt_data = new byte[len];
-            s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
-        }
-        
+            
         return ret;
     }
     
@@ -162,7 +163,7 @@ struct Slot {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
         
         return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
-                       s, block, item_count, metadata, nbt_data);
+                       s, item, item_count, metadata, nbt_data);
     }
 }
 

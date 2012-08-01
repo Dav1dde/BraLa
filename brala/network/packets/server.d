@@ -233,7 +233,7 @@ class NamedSoundEffect : IPacket {
     mixin Packet!(0x3E, string, "sound", int, "x", int, "y", int, "z", float, "volume", byte, "pitch");
 }
 
-class NewInvalidState : IPacket {
+class ChangeGameState : IPacket {
     mixin Packet!(0x46, byte, "reason", byte, "gamemode");
 }
 

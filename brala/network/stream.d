@@ -2,6 +2,7 @@ module brala.network.stream;
 
 private {
     import std.stream : Stream, FilterStream, BufferedStream;
+    import brala.utils.crypto : get_openssl_error;
 }
 
 class AESStream(AES) : FilterStream {
@@ -47,6 +48,7 @@ class AESStream(AES) : FilterStream {
         } else {
             // possible segfault, aes.decrypt returns more bytes (padding)?
             size_t r = super.readBlock(read_buffer.ptr, read_buffer.length);
+            if(r == 0) return 0;
             ubyte[] decrypted = aes.decrypt(read_buffer.ptr, r);
             read_buffer[0..decrypted.length] = decrypted;
             read_buffer_len = decrypted.length;
