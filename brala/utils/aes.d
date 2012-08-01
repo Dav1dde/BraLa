@@ -29,23 +29,23 @@ class AES(alias gen) {
     // TODO uninit EVP
 
     ubyte[] encrypt(const(void)* data, size_t size) {
-        ubyte[] out_ = new ubyte[size + 15 + 16];
+        ubyte[] out_ = new ubyte[size];
         int outlen;
         if(!EVP_EncryptUpdate(&ctx_encrypt, out_.ptr, &outlen, cast(const(ubyte)*)data, cast(int)size)) {
             throw new Exception(get_openssl_error());
         }
-        
+        assert(outlen == out_.length);
         out_.length = outlen;
         return out_;
     }
 
     ubyte[] decrypt(const(void)* data, size_t size) {
-        ubyte[] out_ = new ubyte[size + 16 + 16];
+        ubyte[] out_ = new ubyte[size];
         int outlen;
         if(!EVP_DecryptUpdate(&ctx_decrypt, out_.ptr, &outlen, cast(const(ubyte)*)data, cast(int)size)) {
             throw new Exception(get_openssl_error());
         }
-
+        assert(outlen == out_.length);
         out_.length = outlen;
         return out_;
     }

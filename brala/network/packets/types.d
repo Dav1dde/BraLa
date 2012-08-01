@@ -9,7 +9,7 @@ private {
     import std.metastrings : toStringNow;
     import std.algorithm : canFind;
     import std.string : format;
-    import std.array : join;
+    import std.array : join, appender;
     import std.conv : to;
     import std.zlib : uncompress;
     
@@ -17,7 +17,7 @@ private {
     
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
-    import brala.network.util : read;
+    import brala.network.util : read, write;
     import brala.exception : ServerError;
 }
 
@@ -179,6 +179,7 @@ struct StaticArray(T, size_t length) {
 }
 
 
+// Chunk stuff
 struct MapChunkS { // TODO: implement send
     int x;
     int z;
@@ -205,48 +206,55 @@ struct MapChunkS { // TODO: implement send
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
         
         ret.chunk.fill_chunk_with_nothing();
-        
+
+        // if ret.contiguous, there is biome data
+        parse_raw_chunk(ret.chunk, unc_data, ret.contiguous);
+                
+        return ret;
+    }
+
+    static size_t parse_raw_chunk(Chunk chunk, const ref ubyte[] unc_data, bool biome_data) {
         size_t offset = 0;
         foreach(i; 0..16) {
-            if(ret.chunk.primary_bitmask & 1 << i) {
-                ubyte[] temp = unc_data[offset..offset+4096];
-                
+            if(chunk.primary_bitmask & 1 << i) {
+                const(ubyte)[] temp = unc_data[offset..offset+4096];
+
                 foreach(j, block_id; temp) {
                     vec3i coords = coords_from_j(cast(uint)j, i);
 
-                    ret.chunk.blocks[chunk.to_flat(coords)].id = block_id;
+                    chunk.blocks[chunk.to_flat(coords)].id = block_id;
                 }
-                
+
                 offset += 4096;
             }
         }
-        
+
         foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {
             foreach(i; 0..16) {
-                if(ret.chunk.primary_bitmask & 1 << i) { 
-                    ubyte[] temp = unc_data[offset..offset+2048];
-                    
+                if(chunk.primary_bitmask & 1 << i) {
+                    const(ubyte)[] temp = unc_data[offset..offset+2048];
+
                     for(uint j = 0; j < cast(uint)(temp.length); j++) {
                         ubyte dj = temp[j];
                         vec3i coords_m1 = coords_from_j(j, i);
                         vec3i coords_m2 = coords_from_j(++j, i);
-                        
+
                         // NOTE: the data is maybe extracted in the wrong order, still big endian ...
-                        mixin("ret.chunk.blocks[ret.chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
-                        mixin("ret.chunk.blocks[ret.chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
+                        mixin("chunk.blocks[chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
                     }
-                    
+
                     offset += 2048;
                 }
             }
         }
-                
-        // skip add => last 256 bytes = biome_data
-        if(ret.contiguous) {
-            ret.chunk.biome_data = unc_data[$-256..$];
+
+        if(biome_data) {
+            chunk.biome_data = unc_data[offset..(offset+256)];
+            offset += 256;
         }
-                
-        return ret;
+
+        return offset;
     }
     
     string toString() {
@@ -257,7 +265,64 @@ struct MapChunkS { // TODO: implement send
 }
 
 struct MapChunkBulkS {
+    alias Tuple!(vec3i, "coords", Chunk, "chunk") CoordChunkTuple;
+    
+    short chunk_count;
+    CoordChunkTuple[] chunks;
+
+    struct MetaInformation {
+        int x;
+        int z;
+        short primary_bitmask;
+        short add_bitmask;
+
+        this(int x, int y, short primary_bitmask, short add_bitmask) {
+            this.x = x;
+            this.z = z;
+            this.primary_bitmask = primary_bitmask;
+            this.add_bitmask = add_bitmask;
+        }
+        
+        static MetaInformation recv(Stream s) {
+            return MetaInformation(read!(int, int, short, short)(s).field);
+        }
+
+        void send(Stream s) {
+            write!(int, int, short, short)(s, x, z, primary_bitmask, add_bitmask);
+        }
+    }
+
     static MapChunkBulkS recv(Stream s) {
-        return MapChunkBulkS();
+        MapChunkBulkS ret = MapChunkBulkS();
+
+        ret.chunk_count = read!byte(s);
+
+        uint len = read!uint(s);
+        ubyte[] compressed_data = new ubyte[len];
+        s.readExact(compressed_data.ptr, len);
+        ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
+
+        auto app = appender!(CoordChunkTuple[])();
+        app.reserve(len);
+        foreach(i; 0..len) {
+            auto m = MetaInformation.recv(s);
+
+            vec3i coords = vec3i(m.x, 0, m.z);
+            Chunk chunk = new Chunk();
+            chunk.primary_bitmask = m.primary_bitmask;
+            chunk.add_bitmask = m.add_bitmask;
+
+            app.put(CoordChunkTuple(coords, chunk));
+        }
+        ret.chunks = app.data;
+
+        size_t offset = 0;
+        foreach(cc; ret.chunks) {
+            cc.chunk.fill_chunk_with_nothing();
+            
+            offset += MapChunkS.parse_raw_chunk(cc.chunk, unc_data[offset..$], true);
+        }
+
+        return ret;
     }
 }
