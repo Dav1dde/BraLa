@@ -276,7 +276,7 @@ struct MapChunkBulkS {
         short primary_bitmask;
         short add_bitmask;
 
-        this(int x, int y, short primary_bitmask, short add_bitmask) {
+        this(int x, int z, short primary_bitmask, short add_bitmask) {
             this.x = x;
             this.z = z;
             this.primary_bitmask = primary_bitmask;
@@ -324,5 +324,16 @@ struct MapChunkBulkS {
         }
 
         return ret;
+    }
+
+    string toString() {
+        auto app = appender!string();
+        foreach(i, cc; chunks) {
+            app.put("\n\t");
+            app.put(`%d: CoordChunkTuple : [vec3i coords : %s, Chunk chunk : "%s"]`.format(i+1, cc.coords, cc.chunk));
+        }
+        app.put("\n");
+        
+        return `MapChunkBulkS(short chunk_count : "%s", CoordChunkTuple[] chunks : [%s]`.format(chunk_count, app.data);
     }
 }

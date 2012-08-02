@@ -229,6 +229,10 @@ class BraLaGame : BaseGLFWEventHandler {
         // TODO: add chunks to removal queue: chunk_removal_queue.add(vec3i(packet.x, 0, packet.z));
     }
 
+    void on_packet(T : s.MapChunkBulk)(T packet) {
+        debug writefln("%s", packet);
+    }
+
     void on_packet(T : s.BlockChange)(T packet) {
         synchronized(_world_lock) _current_world.set_block(vec3i(packet.x, packet.y, packet.z), Block(packet.type, packet.metadata));
     }
