@@ -284,7 +284,7 @@ class BraLaGame : BaseGLFWEventHandler {
     }
 
     void on_packet(T)(T packet) {
-        debug writefln("Unhandled packet: %s", packet);
+        //debug writefln("Unhandled packet: %s", packet);
     }
     
     // UI-Events

@@ -293,9 +293,9 @@ struct MapChunkBulkS {
     }
 
     static MapChunkBulkS recv(Stream s) {
-        MapChunkBulkS ret = MapChunkBulkS();
+        MapChunkBulkS ret;
 
-        ret.chunk_count = read!byte(s);
+        ret.chunk_count = read!short(s);
 
         uint len = read!uint(s);
         ubyte[] compressed_data = new ubyte[len];
@@ -303,8 +303,8 @@ struct MapChunkBulkS {
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
 
         auto app = appender!(CoordChunkTuple[])();
-        app.reserve(len);
-        foreach(i; 0..len) {
+        app.reserve(ret.chunk_count);
+        foreach(i; 0..ret.chunk_count) {
             auto m = MetaInformation.recv(s);
 
             vec3i coords = vec3i(m.x, 0, m.z);
