@@ -4,6 +4,7 @@ module brala.main;
 private {
     import glamour.gl;
     import glamour.sampler : Sampler, Texture2D;
+    import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import derelict.glfw3.glfw3;
 
     import std.conv : to, ConvException;
@@ -23,7 +24,7 @@ private {
     import brala.exception : InitError;
     import brala.utils.image : Image;
     
-    import std.stdio : writefln;
+    import std.stdio : stderr, writefln;
 }
 
 static this() {
@@ -56,8 +57,19 @@ GLFWwindow open_glfw_win(int width, int height) {
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {
-        writefln("GLFW ERROR(%d): %s", errno, error);
+        stderr.writefln("GLFW ERROR(%d): %s", errno, error);
         last_errno = errno;
+    }
+}
+
+void glamour_error_cb(GLenum errno, string func) {
+    static GLenum last_errno = GL_NO_ERROR;
+    static string last_func = "";
+
+    if(last_errno != errno && last_func != func) {
+        stderr.writefln(`OpenGL function "%s" failed: "%s."`, func, gl_error_string(errno));
+        last_errno = errno;
+        last_func = func;
     }
 }
 
@@ -81,7 +93,9 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
 
             engine.resmgr.remove!Image("terrain");
             engine.resmgr.add("terrain", mc_terrain);
-        } catch(ZlibException) {}
+        } catch(ZlibException e) {
+            stderr.writefln(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
+        }
     }
     
     Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
@@ -131,6 +145,7 @@ int main(string[] args) {
     }
 
     debug register_glfw_error_callback(&glfw_error_cb);
+    debug glamour_set_error_callback(&glamour_error_cb);
     
     debug writefln("init: %dx%d", width, height);
     GLFWwindow win = open_glfw_win(width, height);
