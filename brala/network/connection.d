@@ -184,7 +184,6 @@ class Connection {
         }
     }
     
-
     void run() {
         while(_connected) {
             poll();

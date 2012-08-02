@@ -218,6 +218,8 @@ class BlockBreakAnimation : IPacket {
 
 class MapChunkBulk : IPacket {
     mixin Packet!(0x38, MapChunkBulkS, "chunk_bulk");
+    alias chunk_bulk.chunk_count chunk_count;
+    alias chunk_bulk.chunks chunks;
 }
 
 class Explosion : IPacket {

@@ -231,6 +231,12 @@ class BraLaGame : BaseGLFWEventHandler {
 
     void on_packet(T : s.MapChunkBulk)(T packet) {
         debug writefln("%s", packet);
+
+        foreach(cc; packet.chunks) {
+            synchronized(_world_lock) {
+                _current_world.add_chunk(cc.chunk, cc.coords);
+            }
+        }
     }
 
     void on_packet(T : s.BlockChange)(T packet) {
