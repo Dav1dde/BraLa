@@ -12,7 +12,7 @@ private {
 
     import brala.exception : SessionError;
     import brala.utils.hash : SHA1;
-    import brala.utils.crypto : decode_public, der_encode;
+    import brala.network.crypto : decode_public;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
     
     debug import std.stdio : writefln;

@@ -1,7 +1,7 @@
 module brala.utils.aes;
 
 private {
-    import brala.utils.crypto : get_openssl_error;
+    import brala.network.crypto : get_openssl_error;
     
     import deimos.openssl.evp;
 }
