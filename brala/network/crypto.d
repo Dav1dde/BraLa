@@ -52,9 +52,9 @@ class PBEWithMD5AndDES {
     protected ubyte[] key;
     protected ubyte[] IV;
     
-    this(ubyte[] key) {
-        ubyte[] md5_key = cast(ubyte[])(generate_md5_key(key, 5)[0..16]);
-        
+    this(ubyte[] inp_key) {
+        ubyte[] md5_key = generate_md5_key(inp_key, 5);
+
         this.key = md5_key[0..8];
         this.IV = md5_key[8..16];
     }
@@ -78,13 +78,15 @@ class PBEWithMD5AndDES {
         return decrypted[0..$-(decrypted[$-1])];
     }
 
-    static ubyte[] generate_md5_key(ubyte[] key, size_t rounds) {
+    ubyte[] generate_md5_key(ubyte[] key, size_t rounds) {
         ubyte[] ret = (new MD5(key)).digest;
+
         foreach(_; 0..(rounds-1)) {
             ret = (new MD5(ret)).digest;
         }
 
-        return ret;
+        ubyte[] reth = new ubyte[16]; // strange. if ret leaves the scope it changes contents?
+        reth[0..16] = ret[0..16];
+        return reth;
     }
-    
 }
