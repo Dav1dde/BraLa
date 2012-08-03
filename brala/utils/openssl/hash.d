@@ -1,16 +1,18 @@
-module brala.utils.hash;
+module brala.utils.openssl.hash;
 
 private {
     import std.traits : isPointer, isArray;
     import std.format : formattedWrite;
-    import std.exception : enforce;
+    import std.exception : enforceEx;
     import std.array : appender;
     import std.range : ElementEncodingType;
-
+    
     import deimos.openssl.md4;
     import deimos.openssl.md5;
     import deimos.openssl.mdc2;
     import deimos.openssl.sha;
+
+    import brala.utils.openssl.exception : OpenSSLException;
 }
 
 
@@ -34,7 +36,7 @@ class Hash(Handle, alias HASH_Init, alias HASH_Update, alias HASH_Final, size_t 
     }
 
     void update(T)(T ptr, size_t size) if(isPointer!T) {
-        enforce(!_is_final, "Hash already finialized.");
+        enforceEx!OpenSSLException(!_is_final, "Hash already finialized.");
         HASH_Update(&openssl_handle, ptr, size);
     }
 

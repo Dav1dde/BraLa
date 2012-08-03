@@ -7,11 +7,12 @@ private {
     import std.conv : to;
     import std.string : format, munch;
     import std.datetime : SysTime, Clock;
-    import std.bigint : BigInt;
+    import std.path : buildPath, expandTilde;
+    import file = std.file;
     import core.time : Duration;
 
     import brala.exception : SessionError;
-    import brala.utils.hash : SHA1;
+    import brala.utils.openssl.hash : SHA1;
     import brala.network.crypto : decode_public;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
     

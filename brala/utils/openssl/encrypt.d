@@ -1,28 +1,13 @@
-module brala.utils.aes;
+module brala.utils.openssl.enrypt;
 
 private {
-    import std.conv : to;
-    
     import deimos.openssl.evp;
-    import deimos.openssl.err;
+
+    import brala.utils.openssl.exception : OpenSSLException;
 }
 
-
-string get_openssl_error() {
-    uint e = ERR_get_error();
-    char[] buf = new char[512];
-    ERR_error_string(e, buf.ptr);
-    return to!string(buf.ptr); // to!string stops at \0
-}
-
-
-class AESError : Exception {
-    this(string msg) {
-        super(msg);
-    }
-}
-
-class AES(alias gen) {
+// http://www.openssl.org/docs/crypto/EVP_EncryptInit.html
+class Encrypt(alias gen) {
     const(ubyte)[] key;
     const(ubyte)[] iv;
 
@@ -62,7 +47,7 @@ class AES(alias gen) {
             ubyte[] out_ = new ubyte[size + _block_size-1];
             int outlen;
             if(!EVP_EncryptUpdate(&ctx_encrypt, out_.ptr, &outlen, cast(const(ubyte)*)data, cast(int)size)) {
-                throw new AESError(get_openssl_error());
+                throw new OpenSSLException();
             }
             out_.length = outlen;
 
@@ -75,7 +60,7 @@ class AES(alias gen) {
             ubyte[] out_ = new ubyte[size + _block_size];
             int outlen;
             if(!EVP_DecryptUpdate(&ctx_decrypt, out_.ptr, &outlen, cast(const(ubyte)*)data, cast(int)size)) {
-                throw new AESError(get_openssl_error());
+                throw new OpenSSLException();
             }
             out_.length = outlen;
 
@@ -89,7 +74,7 @@ class AES(alias gen) {
             int outlen;
 
             if(!EVP_EncryptFinal_ex(&ctx_encrypt, out_.ptr, &outlen)) {
-                throw new AESError(get_openssl_error());
+                throw new OpenSSLException();
             }
             out_.length = outlen;
 
@@ -105,7 +90,7 @@ class AES(alias gen) {
             int outlen;
 
             if(!EVP_DecryptFinal_ex(&ctx_decrypt, out_.ptr, &outlen)) {
-                throw new AESError(get_openssl_error());
+                throw new OpenSSLException();
             }
             out_.length = outlen;
 
@@ -115,4 +100,5 @@ class AES(alias gen) {
         }
 }
 
-alias AES!(EVP_aes_128_cfb8) AES128CFB8;
+alias Encrypt!(EVP_aes_128_cfb8) AES128CFB8;
+alias Encrypt!(EVP_des_cbc) DESCBC;

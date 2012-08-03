@@ -19,8 +19,6 @@ class AESStream(AES) : FilterStream {
 
     this(Stream stream, AES aes, size_t buffer_size = DEFAULT_BUFFER_SIZE) {
         super(stream);
-
-        seekable = false;
         
         this.aes = aes;
         this.read_buffer = new ubyte[buffer_size];

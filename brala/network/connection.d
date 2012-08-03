@@ -20,7 +20,7 @@ private {
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.utils.queue : PacketQueue;
-    import brala.utils.aes : AES128CFB8;
+    import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.crypto : decode_public, encrypt, seed_prng, get_random;
     
     debug import std.stdio : writefln;

@@ -4,7 +4,7 @@ private {
     import std.conv : to;
     import core.stdc.time : tm, time;
 
-    import brala.utils.aes : get_openssl_error;
+    import brala.utils.openssl.exception : OpenSSLException;
     
     import deimos.openssl.rand;
     import deimos.openssl.rsa;
@@ -12,7 +12,7 @@ private {
 }
 
 RSA* decode_public(const(ubyte)[] public_key)
-    out(rsa) { assert(rsa !is null, get_openssl_error()); }
+    out(rsa) { assert(rsa !is null); }
     body {
         auto mem_ptr = public_key.ptr;
 
@@ -40,7 +40,7 @@ void seed_prng(ubyte[] seed) {
 ubyte[] get_random(size_t size) {
     ubyte[] rand = new ubyte[size];
     if(!RAND_bytes(rand.ptr, size)) {
-        throw new Exception(get_openssl_error());
+        throw new OpenSSLException();
     }
     
     return rand;
