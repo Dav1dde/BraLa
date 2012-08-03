@@ -26,9 +26,14 @@ class Hash(Handle, alias HASH_Init, alias HASH_Update, alias HASH_Final, size_t 
         HASH_Init(&openssl_handle);
     }
 
-    this(T)(T data) {
+    this(T)(T data) if(isArray!T) {
         HASH_Init(&openssl_handle);
         update(data);
+    }
+
+    this(T)(T ptr, size_t size) if(isPointer!T) {
+        HASH_Init(&openssl_handle);
+        update(ptr, size);
     }
 
     void update(T)(T data) if(isArray!T) {
@@ -84,4 +89,6 @@ unittest {
     assert(s1.hexdigest == (new SHA1("testing123yay")).hexdigest);
 
     assert((new SHA1("trolol12o")).hexdigest == "3ad89007366442c747017d84985e4b7a86c6f440");
+
+    assert((new MD5("IamAtest")).hexdigest == "80892e42a8023f8435ec2eee97ef6c5e");
 }

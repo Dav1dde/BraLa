@@ -1,6 +1,9 @@
 module brala.utils.openssl.enrypt;
 
 private {
+    import std.range : ElementEncodingType;
+    import std.range : isArray, isPointer;
+    
     import deimos.openssl.evp;
 
     import brala.utils.openssl.exception : OpenSSLException;
@@ -41,7 +44,11 @@ class Encrypt(alias gen) {
         EVP_CIPHER_CTX_cleanup(&ctx_decrypt);
     }
 
-    ubyte[] encrypt(const(void)* data, size_t size)
+    ubyte[] encrypt(T)(T data) if(isArray!T) {
+        return encrypt(data.ptr, (ElementEncodingType!T).sizeof*data.length);
+    }
+    
+    ubyte[] encrypt(T)(T data, size_t size) if(isPointer!T)
         in { assert(!_encrypt_finalized); }
         body {
             ubyte[] out_ = new ubyte[size + _block_size-1];
@@ -54,8 +61,12 @@ class Encrypt(alias gen) {
             return out_;
         }
 
-    ubyte[] decrypt(const(void)* data, size_t size)
-        in { assert(!_decrypt_finalized); }
+    ubyte[] decrypt(T)(T data) if(isArray!T) {
+        return decrypt(data.ptr, (ElementEncodingType!T).sizeof*data.length);
+    }
+
+    ubyte[] decrypt(T)(T data, size_t size) if(isPointer!T)
+        in { assert(!_decrypt_finalized); } 
         body {
             ubyte[] out_ = new ubyte[size + _block_size];
             int outlen;

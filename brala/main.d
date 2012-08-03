@@ -144,6 +144,11 @@ int main(string[] args) {
         }
     }
 
+    import brala.network.session;
+    minecraft_credentials();
+
+    return 0;
+
     debug register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
     
