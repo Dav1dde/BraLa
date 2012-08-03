@@ -78,10 +78,10 @@ class PBEWithMD5AndDES {
         return decrypted[0..$-(decrypted[$-1])];
     }
 
-    static string generate_md5_key(ubyte[] key, size_t rounds) {
-        string ret = (new MD5(key)).hexdigest;
+    static ubyte[] generate_md5_key(ubyte[] key, size_t rounds) {
+        ubyte[] ret = (new MD5(key)).digest;
         foreach(_; 0..(rounds-1)) {
-            ret = (new MD5(key)).hexdigest;
+            ret = (new MD5(ret)).digest;
         }
 
         return ret;
