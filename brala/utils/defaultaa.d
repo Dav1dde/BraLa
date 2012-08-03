@@ -20,11 +20,11 @@ struct DefaultAA(value_type, key_type, alias default__) {
     }
 
     value_type opIndex(key_type key) {
-        if(key !in _store) {
-            _store[key] = _get_default();
+        if(value_type* value = key in _store) {
+            return *value;
+        } else {
+            return _get_default();
         }
-
-        return _store[key];
     }
 
     void opIndexAssign(value_type value, key_type key) {
