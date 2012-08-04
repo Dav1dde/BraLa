@@ -243,6 +243,8 @@ IMPORT_PATH         = ./import
 DOC_PATH            = ./doc
 DDOC_PATH           = ./ddoc
 DBUILD_PATH         = ./build
+DBUILD_PATH_GL3N    = ./build
+DBUILD_PATH_GLAMOUR = ./build
 CBUILD_PATH         = ./build
 
 LIBNAME             = lib$(PROJECT_NAME)-$(COMPILER)$(STATIC_LIB_EXT)
