@@ -18,11 +18,13 @@ private {
     import brala.resmgr : resmgr;
     import brala.input : register_glfw_error_callback;
     import brala.config : load_default_resources;
+    import brala.network.session : minecraft_credentials;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
+    import brala.utils.dargs : get_options, Alias;
     
     import std.stdio : stderr, writefln;
 }
@@ -124,40 +126,58 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     return engine;
 }
 
-int main(string[] args) {
-    scope(exit) glfwTerminate();
-    
-    int width = 1024;
-    int height = 800;
-    
-    if(args.length == 7) {
-        try {
-            width = to!(int)(args[5]);
-        } catch(ConvException) {
-            throw new InitError("Width is not a number.");
-        }
-        
-        try {
-            height = to!(int)(args[6]);
-        } catch(ConvException) {
-            throw new InitError("Height is not a number.");
-        }
-    }
+struct AppArguments {
+    string username;
+    Alias!("username") u;
 
+    string password;
+    Alias!("password") p;
+
+    bool credentials;
+    Alias!("credentials") c;
+    
+    uint width = 1024;
+    uint height = 800;
+
+    string host;
+    Alias!("host") h;
+    ushort port = 25565;
+}
+
+
+int main() {
+    scope(exit) glfwTerminate();
+
+    auto args = get_options!AppArguments();
+    
     debug register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
     
-    debug writefln("init: %dx%d", width, height);
-    GLFWwindow win = open_glfw_win(width, height);
+    debug writefln("init: %dx%d", args.width, args.height);
+    GLFWwindow win = open_glfw_win(args.width, args.height);
     
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
-                   
-    auto engine = init_engine(width, height, glv);
 
-    auto game = new BraLaGame(engine, win, args[1], args[2]);
-    game.start(args[3], to!ushort(args[4]));
+
+    string username = args.username;
+    string password = args.password;
+    if(args.credentials) {
+        auto credentials = minecraft_credentials();
+
+        if(credentials.username.length) {
+            username = credentials.username;
+        }
+        if(credentials.password.length) {
+            password = credentials.password;
+        }
+    }
+   
+    auto engine = init_engine(args.width, args.height, glv);
+
+    auto game = new BraLaGame(engine, win, username, password);
+    game.start(args.host, args.port);
     
     return 0;
 }

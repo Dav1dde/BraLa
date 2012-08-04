@@ -107,6 +107,8 @@ class Session {
 string minecraft_folder() {
     version(Windows) {
         return getenv("appdata");
+    } else version(OSX) {
+        return expandTile("~/Library/Application Support/minecraft");
     } else {
         return expandTilde("~/.minecraft/");
     }

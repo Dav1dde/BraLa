@@ -85,8 +85,6 @@ class PBEWithMD5AndDES {
             ret = (new MD5(ret)).digest;
         }
 
-        ubyte[] reth = new ubyte[16]; // strange. if ret leaves the scope it changes contents?
-        reth[0..16] = ret[0..16];
-        return reth;
+        return ret.dup;
     }
 }
