@@ -3,12 +3,13 @@ module brala.main;
 
 private {
     import glamour.gl;
-    import glamour.sampler : Sampler, Texture2D;
+    import glamour.sampler : Sampler;
+    import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import derelict.glfw3.glfw3;
 
-    import std.conv : to, ConvException;
-    import std.path : buildPath, expandTilde;
+    import std.conv : to;
+    import std.path : buildPath;
     import std.zlib : ZlibException;
     import file = std.file;
     import std.process : getenv;
@@ -18,7 +19,7 @@ private {
     import brala.resmgr : resmgr;
     import brala.input : register_glfw_error_callback;
     import brala.config : load_default_resources;
-    import brala.network.session : minecraft_credentials;
+    import brala.network.session : minecraft_folder, minecraft_credentials;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
@@ -84,11 +85,7 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     
     engine.resmgr.load_default_resources(); // I like! ~15mb in 837ms
 
-    version(Windows) {
-        string path = buildPath(getenv("appdata"), ".minecraft", "bin");
-    } else {
-        string path = expandTilde("~/.minecraft/bin/minecraft.jar");
-    }
+    string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
     if(file.exists(path)) {
         try {
             Image mc_terrain = extract_minecraft_terrain(path);

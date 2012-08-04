@@ -31,12 +31,11 @@ Image preprocess_terrain(Image terrain) {
 
 
 Image extract_minecraft_terrain(string path) {
-    path = expandTilde(path);
     ZipArchive za = new ZipArchive(file.read(path));
-    
+
     auto am = za.directory["terrain.png"];
-    auto content = za.expand(am);;
-    
+    auto content = za.expand(am);
+
     int x;
     int y;
     int comp;    
