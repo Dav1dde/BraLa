@@ -33,7 +33,11 @@ private void write_impl(T : string)(Stream s, T data) {
 private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {
     static if(isArray!T) {
         static if(isDynamicArray!T) {
-            write(s, cast(short)data.length);
+            static if(__traits(hasMember, T, "LenType")) {
+                write(s, cast(T.LenType)data.length);
+            } else {
+                write(s, cast(short)data.length);
+            }
         }
         
         foreach(d; data) {

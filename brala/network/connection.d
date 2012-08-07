@@ -135,7 +135,7 @@ class Connection {
             enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ username ~ `". `);
             session.join(enc_request.server_id, shared_secret, enc_request.public_key.arr);
         }
-        
+
         auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
                                                    Array!(short, ubyte)(enc_verify_token));
         enc_key.send(endianstream);
