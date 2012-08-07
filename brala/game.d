@@ -21,9 +21,10 @@ private {
     import brala.character : Character;
     import brala.engine : BraLaEngine;
     import brala.input : BaseGLFWEventHandler;
+    import brala.gfx.text : parse_chat;
+    import brala.util : clear;
     import brala.utils.defaultaa : DefaultAA;
     import brala.utils.queue : Queue;
-    import brala.util : clear;
     import brala.config;
     
     debug import std.stdio;
@@ -206,7 +207,8 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     void on_packet(T : s.ChatMessage)(T packet) {
-        debug writefln("%s", packet);
+        auto chat = parse_chat(packet.message);
+        chat.print_colorized();
     }
     
     void on_packet(T : s.SpawnPosition)(T packet) {

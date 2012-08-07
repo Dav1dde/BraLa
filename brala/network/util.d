@@ -73,7 +73,7 @@ private string read_impl(T)(Stream s) if(is(T : string)) {
     s.read(length);
     
     wchar[] ret_utf16 = s.readStringW(length);
-      
+    
     return toUTF8(ret_utf16);
 }
 
