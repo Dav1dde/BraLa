@@ -91,18 +91,6 @@ class Connection {
         this.password = password;
     }
     
-    this(string username, string password, bool snoop, Address to) {
-        this(username, password, snoop);
-        
-        connect(to);
-    }
-    
-    this(string username, string password, bool snoop, string host, ushort port) {
-        this(username, password, snoop);
-        
-        connect(host, port);
-    }
-    
     void connect(Address to) {
         socket.connect(to);
         _connected = true;
@@ -226,12 +214,9 @@ class Connection {
 
 class ThreadedConnection : Connection {
     protected Thread _thread = null;
-    @property Thread thread() { return _thread; }
-    
+    @property Thread thread() { return _thread; }    
     
     this(string username, string password, bool snoop) { super(username, password, snoop); }
-    this(string username, string password, bool snoop, Address to) { super(username, password, snoop, to); }
-    this(string username, string password, bool snoop, string host, ushort port) { super(username, password, snoop, host, port); }
     
     void run() {
         if(_thread is null) {

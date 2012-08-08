@@ -24,6 +24,7 @@ class TTimer(T...) : Thread {
     void delegate(Args) func;
 
     protected Event _finished;
+    @property bool is_finished() { return _finished.is_set; }
     
     this(Duration interval, void delegate(Args) func, Args args) {
         super(&run);
