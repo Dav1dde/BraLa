@@ -7,3 +7,6 @@
 [submodule "src/d/glamour"]
 	path = src/d/glamour
 	url = https://github.com/Dav1dde/glamour.git
+[submodule "src/d/derelict3"]
+	path = src/d/derelict3
+	url = git://github.com/aldacron/Derelict3.git

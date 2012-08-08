@@ -4,8 +4,8 @@ export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
 export LICENSE          = GPLv3
 
-DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/
-DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lDerelictGL3 $(LINKERFLAG)-lDerelictGLFW3 $(LINKERFLAG)-lDerelictUtil -L-lcurl -L-lssl -L-lcrypto
+DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/
+DCFLAGS_LINK        = $(LDCFLAGS) -L-lcurl -L-lssl -L-lcrypto
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc -L-export-dynamic
@@ -23,6 +23,9 @@ DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES
 DSOURCES_GL3N	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
 DOBJECTS_GL3N	     = $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%.o,   $(DSOURCES_GL3N))
 
+DSOURCES_DERELICT    = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import,d)
+DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_DERELICT))
+
 DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
 DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_GLAMOUR))
 
@@ -34,8 +37,8 @@ all: brala
 
 .PHONY: clean
 
-brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_GLAMOUR)
-	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_GLAMOUR) $(OUTPUT)bralad
+brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_DERELICT) $(DSOURCES_GLAMOUR)
+	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_GLAMOUR) $(DSOURCES_DERELICT) $(OUTPUT)bralad
 
 	
 # create object files
@@ -43,6 +46,9 @@ $(DBUILD_PATH)$(PATH_SEP)%.o : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GL3N)$(PATH_SEP)%.o : %.d
+	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+
+$(DBUILD_PATH_DERELICT)$(PATH_SEP)%.o: %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o : %.d

@@ -123,9 +123,11 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice ma
                  positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);*/
 }
 
+enum size_t BLOCK_IDS = 137;
+
 private alias MCTextureSlice t;
 
-Vertex[][] BLOCK_VERTICES_LEFT = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // air
     simple_block(Side.LEFT, t(1, 1)), // stone
     simple_block(Side.LEFT, t(3, 1), t(6, 3)), // grass
@@ -257,7 +259,7 @@ Vertex[][] BLOCK_VERTICES_LEFT = [
     []
 ];
 
-Vertex[][] BLOCK_VERTICES_RIGHT = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     [], // air
     simple_block(Side.RIGHT, t(1, 1)), // stone
     simple_block(Side.RIGHT, t(3, 1), t(6, 3)), // grass
@@ -389,7 +391,7 @@ Vertex[][] BLOCK_VERTICES_RIGHT = [
     []
 ];
 
-Vertex[][] BLOCK_VERTICES_NEAR = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // air
     simple_block(Side.NEAR, t(1, 1)), // stone
     simple_block(Side.NEAR, t(3, 1), t(6, 3)), // grass
@@ -521,7 +523,7 @@ Vertex[][] BLOCK_VERTICES_NEAR = [
     []
 ];
 
-Vertex[][] BLOCK_VERTICES_FAR = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     [], // air
     simple_block(Side.FAR, t(1, 1)), // stone
     simple_block(Side.FAR, t(3, 1), t(6, 3)), // grass
@@ -653,7 +655,7 @@ Vertex[][] BLOCK_VERTICES_FAR = [
     []
 ];
 
-Vertex[][] BLOCK_VERTICES_TOP = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // air
     simple_block(Side.TOP, t(1, 1)), // stone
     simple_block(Side.TOP, t(0, 1)), // grass
@@ -785,7 +787,7 @@ Vertex[][] BLOCK_VERTICES_TOP = [
     []
 ];
 
-Vertex[][] BLOCK_VERTICES_BOTTOM = [
+Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // air
     simple_block(Side.BOTTOM, t(1, 1)), // stone
     simple_block(Side.BOTTOM, t(2, 1)), // grass
