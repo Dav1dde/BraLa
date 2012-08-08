@@ -39,7 +39,7 @@ Image extract_minecraft_terrain(string path) {
     int x;
     int y;
     int comp;    
-    ubyte* data = stbi_load_from_memory(content.ptr, content.length, &x, &y, &comp, 0);
+    ubyte* data = stbi_load_from_memory(content.ptr, cast(uint)content.length, &x, &y, &comp, 0);
 
     if(data is null) {
         throw new ImageError("Unable to load terrain.png");

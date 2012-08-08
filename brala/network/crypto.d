@@ -25,7 +25,7 @@ RSA* decode_public(const(ubyte)[] public_key)
 ubyte[] encrypt(RSA* rsa, ubyte[] data) {
     size_t s = RSA_size(rsa);
     ubyte[] buf = new ubyte[s];
-    RSA_public_encrypt(data.length, data.ptr, buf.ptr, rsa, RSA_PKCS1_PADDING);
+    RSA_public_encrypt(cast(uint)data.length, data.ptr, buf.ptr, rsa, RSA_PKCS1_PADDING);
     return buf;
 }
 
@@ -36,12 +36,12 @@ void seed_prng() {
 }
 
 void seed_prng(ubyte[] seed) {
-    RAND_seed(seed.ptr, seed.length);
+    RAND_seed(seed.ptr, cast(uint)seed.length);
 }
 
 ubyte[] get_random(size_t size) {
     ubyte[] rand = new ubyte[size];
-    if(!RAND_bytes(rand.ptr, size)) {
+    if(!RAND_bytes(rand.ptr, cast(uint)size)) {
         throw new OpenSSLException();
     }
     

@@ -306,7 +306,7 @@ class World {
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
             engine.flush_uniforms();
 
-            glDrawArrays(GL_TRIANGLES, 0, chunk.vbo_vcount);
+            glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
         }
     }
 }
