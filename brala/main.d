@@ -139,6 +139,8 @@ struct AppArguments {
     string host;
     Alias!("host") h;
     ushort port = 25565;
+
+    bool no_snoop = false;
 }
 
 
@@ -173,7 +175,7 @@ int main() {
    
     auto engine = init_engine(args.width, args.height, glv);
 
-    auto game = new BraLaGame(engine, win, username, password);
+    auto game = new BraLaGame(engine, win, username, password, !args.no_snoop);
     game.start(args.host, args.port);
     
     return 0;

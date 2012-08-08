@@ -5,6 +5,7 @@ private {
 
     import std.getopt : getopt;
     import std.string : join;
+    import std.array : replace;
     import std.typetuple : TypeTuple, NoDuplicates, staticIndexOf;
 }
 
@@ -55,7 +56,7 @@ private static string[] build_param_list(T)() {
                 }
             }
 
-            res ~= `"`~temp~`", &args.`~member~``;
+            res ~= `"`~temp.replace("_", "-")~`", &args.`~member~``;
         }
     }
     

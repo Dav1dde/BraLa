@@ -50,12 +50,12 @@ class BraLaGame : BaseGLFWEventHandler {
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
     
-    this(BraLaEngine engine, void* window, string username, string password) {
+    this(BraLaEngine engine, void* window, string username, string password, bool snoop) {
         _world_lock = new Object();
         chunk_removal_queue = new Queue!vec3i();
 
         this.engine = engine;
-        connection = new ThreadedConnection(username, password);
+        connection = new ThreadedConnection(username, password, snoop);
         connection.callback = &dispatch_packets;
 
         character = new Character(0);

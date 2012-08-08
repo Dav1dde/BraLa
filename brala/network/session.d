@@ -1,7 +1,11 @@
 module brala.network.session;
 
 private {
-    import std.net.curl : get, post;
+    import glamour.gl : glGetString, GL_VERSION, GL_VENDOR;
+
+    import core.cpuid : isX86_64;
+    import core.time : Duration;
+    import std.net.curl : CurlException, get, post;
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
@@ -10,7 +14,8 @@ private {
     import std.path : buildPath, expandTilde;
     import file = std.file;
     import std.typecons : Tuple;
-    import core.time : Duration;
+    import std.system : os;
+    import std.stdio : stderr;
 
     import brala.exception : SessionError;
     import brala.utils.openssl.hash : SHA1;
@@ -26,6 +31,7 @@ class Session {
     static const string login_url = "https://login.minecraft.net";
     static const string join_server_url = "http://session.minecraft.net/game/joinserver.jsp";
     static const string check_session_url = "http://session.minecraft.net/game/checkserver.jsp";
+    static const string snoop_url = "http://snoop.minecraft.net/client";
     
     private SysTime _last_login;
     @property last_login() { return _last_login; }
@@ -42,10 +48,9 @@ class Session {
     }
     
     void login() {
-        auto res = post(login_url,
-                        urlencode(["user" : username,
-                                   "password" : password,
-                                   "version" : to!string(launcher_version)]));
+        auto res = login_url.post(urlencode(["user" : username,
+                                             "password" : password,
+                                             "version" : to!string(launcher_version)]));
 
         if(res.count(":") == 4) {
             string[] s = res.idup.split(":");
@@ -100,6 +105,39 @@ class Session {
 
         if(negativ) return "-" ~ hexdigest;
         return hexdigest;
+    }
+
+    static void snoop() {        
+        snoop("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
+              "D Compiler: " ~ to!string(__VERSION__), to!string(glGetString(GL_VERSION)),
+              to!string(glGetString(GL_VENDOR)));
+    }
+
+    static void snoop(string version_, string os_name, string os_version, string os_arch,
+                      string memory_total, string memory_max, string java_version,
+                      string opengl_version, string opengl_vendor) {
+        debug {
+            writefln(`Snooping: version: "%s", os_name: "%s", os_version: "%s", `
+                     `os_architecture: "%s", memory_total: "%s", memory_max: "%s", `
+                     `java_version: "%s", opengl_version: "%s", opengl_vendor: "%s"`,
+                     version_, os_name, os_version,
+                     os_arch, memory_total, memory_max,
+                     java_version, opengl_version, opengl_vendor);
+        }
+
+        try {
+            snoop_url.post(urlencode(["version": version_,
+                                      "os_name": os_name,
+                                      "os_version": os_version,
+                                      "os_architecture": os_arch,
+                                      "memory_total": memory_total,
+                                      "memory_max": memory_max,
+                                      "java_version": java_version,
+                                      "opengl_version": opengl_version,
+                                      "opengl_vendor": opengl_vendor]));
+        } catch(CurlException e) {
+            stderr.writefln(`Unable to snoop: "%s"`, e.msg);
+        }
     }
 }
 

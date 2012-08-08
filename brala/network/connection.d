@@ -2,7 +2,11 @@ module brala.network.connection;
 
 
 private {
-    import core.thread : Thread;    
+    import glamour.gl : glGetString, GL_VERSION, GL_VENDOR;
+    
+    import core.thread : Thread;
+    import core.time : dur;
+    import core.cpuid : isX86_64;
     import std.socket : SocketException, SocketShutdown, TcpSocket, Address, getAddress;
     import std.socketstream : SocketStream;
     import std.stream : EndianStream, BOM;
@@ -11,7 +15,9 @@ private {
     import std.string : format;
     import std.array : join;
     import std.conv : to;
-        
+    import std.typecons : tuple;
+    import std.system : os;
+
     import brala.exception : ConnectionError, ServerError, SessionError;
     import brala.network.session : Session;
     import brala.network.stream : AESStream;
@@ -22,6 +28,7 @@ private {
     import brala.utils.queue : PacketQueue;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.crypto : decode_public, encrypt, seed_prng, get_random;
+    import brala.utils.thread : Timer;
     
     debug import std.stdio : writefln;
 }
@@ -48,9 +55,9 @@ class Connection {
     /+immutable+/ string password;
     /+immutable+/ string minecraft_username;
     
-    /+immutable+/ byte protocol_version;
+    immutable byte protocol_version = 39;
     
-    this(string username, string password, byte protocol_version = 39) {
+    this(string username, string password, bool snoop) {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
@@ -65,20 +72,33 @@ class Connection {
             debug writefln("%s", e.message);
             this.minecraft_username = username;
         }
-        
+
+        if(snoop) {
+            auto snoop_args = tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit",
+                                    "-1", "-1", "D Compiler: " ~ to!string(__VERSION__),
+                                    to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
+
+            void snoop_timer() {
+                auto timer = new Timer(dur!"minutes"(11), delegate void() { Session.snoop(snoop_args.expand);
+                                                                           snoop_timer(); });
+                timer.start();
+            }
+
+            snoop_timer();
+        }
+   
         this.username = username;
         this.password = password;
-        this.protocol_version = protocol_version;
     }
     
-    this(string username, string password, Address to) {
-        this(username, password);
+    this(string username, string password, bool snoop, Address to) {
+        this(username, password, snoop);
         
         connect(to);
     }
     
-    this(string username, string password, string host, ushort port) {
-        this(username, password);
+    this(string username, string password, bool snoop, string host, ushort port) {
+        this(username, password, snoop);
         
         connect(host, port);
     }
@@ -209,9 +229,9 @@ class ThreadedConnection : Connection {
     @property Thread thread() { return _thread; }
     
     
-    this(string username, string password) { super(username, password); }
-    this(string username, string password, Address to) { super(username, password, to); }
-    this(string username, string password, string host, ushort port) { super(username, password, host, port); }
+    this(string username, string password, bool snoop) { super(username, password, snoop); }
+    this(string username, string password, bool snoop, Address to) { super(username, password, snoop, to); }
+    this(string username, string password, bool snoop, string host, ushort port) { super(username, password, snoop, host, port); }
     
     void run() {
         if(_thread is null) {
