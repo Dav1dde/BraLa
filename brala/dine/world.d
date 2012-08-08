@@ -1,7 +1,6 @@
 module brala.dine.world;
 
 private {
-    //import glamour.gl : GLuint, glDrawArrays, GL_TRIANGLES, GL_FLOAT, GL_BYTE;
     import glamour.gl;
     import glamour.vbo : Buffer;
     

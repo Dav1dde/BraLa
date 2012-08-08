@@ -47,7 +47,7 @@ class Session {
                                    "password" : password,
                                    "version" : to!string(launcher_version)]));
 
-        if(res.count(":") == 3) {
+        if(res.count(":") == 4) {
             string[] s = res.idup.split(":");
             
             this.game_version = to!long(s[0]);
