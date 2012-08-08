@@ -7,7 +7,7 @@ private {
 }
 
 string get_openssl_error() {
-    uint e = ERR_get_error();
+    size_t e = ERR_get_error();
     char[] buf = new char[512];
     ERR_error_string(e, buf.ptr);
     return to!string(buf.ptr); // to!string stops at \0
