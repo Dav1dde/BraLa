@@ -158,7 +158,6 @@ import std.conv;
 import std.datetime;
 import std.encoding;
 import std.exception;
-import std.regex;
 import std.socket : InternetAddress;
 import std.stream;
 import std.string;
@@ -2448,7 +2447,6 @@ struct HTTP
             }
             if (header.startsWith("HTTP/"))
             {
-                import std.stdio; writefln("startswith http");
                 string[string] empty;
                 p.headersIn = empty; // clear
 
