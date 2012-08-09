@@ -78,16 +78,16 @@ class Connection {
                                     "-1", "-1", "D Compiler: " ~ to!string(__VERSION__),
                                     to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
 
-            void snoop_timer() {
-                if(_connected) {
-                    auto timer = new Timer(dur!"minutes"(11),
+            void snoop_timer(bool init=false) {
+                if(_connected || init) {
+                    auto timer = new Timer(dur!"seconds"(11),
                          delegate void() { Session.snoop(snoop_args.expand); snoop_timer(); });
                     timer.isDaemon = true;
                     timer.start();
                 }
             }
 
-            snoop_timer();
+            snoop_timer(true);
         }
    
         this.username = username;

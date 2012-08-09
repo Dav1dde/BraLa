@@ -1,11 +1,8 @@
 module brala.resmgr;
 
 private {
-    import std.parallelism : task, Task, taskPool, TaskPool;
     import std.path : extension;
     import std.file : exists;
-    import core.thread : Thread;
-    import core.time : dur;
     import std.typecons : Tuple;
     import std.string : toLower;
     import std.format : format;
@@ -19,22 +16,6 @@ private {
     debug import std.stdio : writefln;
 }
 
-@property ResourceManager resmgr() {
-    static bool initialized = false;
-    __gshared static ResourceManager _resmgr;
-    
-    if(!initialized) {
-        synchronized {
-            if(!_resmgr) {
-                _resmgr = new ResourceManager();
-            }
-        }
-        
-        initialized = true;
-    }
-    
-    return _resmgr;
-}
 
 Image load_image(ResourceManager rsmg, string id, string filename) {
     Image img = Image.from_file(filename);
@@ -107,25 +88,17 @@ enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE_TYPE }
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
 class ResourceManager {
-    protected Object _lock;
-    protected TaskPool task_pool;
-    protected CBS[string] open_tasks;
-    
-    __gshared Shader[string] shaders;
-    __gshared ITexture[string] textures;
-    __gshared Image[string] images;
+    protected CBS[string] open_tasks;    
+    protected Shader[string] shaders;
+    protected ITexture[string] textures;
+    protected Image[string] images;
         
-    this() {
-        _lock = new Object();
-        
-        task_pool = new TaskPool();
-        task_pool.isDaemon = true;
-    } 
+    this() {}
   
     protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
         debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
         
-        if(!exists(filename)) {
+        if(!filename.exists()) {
             throw new ResmgrError("Can not load file \"" ~ filename ~ "\", it does not exist!");
         }
         
@@ -137,16 +110,9 @@ class ResourceManager {
             throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
         }
         
-        synchronized (_lock) open_tasks[idt] = CBS.from_cb(cb);
-        // use add_many_wait for multithreaded texture loading, shaders to come.
-        static if(true) { // FIXME: is(T : ITexture) || is(T : Shader)
-            taskfun(this, id, filename); 
-            return null;
-        } else {
-            auto t = task!taskfun(this, id, filename);
-            task_pool.put(t);
-            return t;
-        }
+        open_tasks[idt] = CBS.from_cb(cb);
+
+        taskfun(this, id, filename);
     }
     
     alias _add!(load_image, Image) add_image;
@@ -166,21 +132,19 @@ class ResourceManager {
     void add(T)(string id, T t) if(is_loadable!T) {
         string idt = id ~ T.stringof;
         
-        synchronized (_lock) {
-            if((is(T : Image) && id in images) ||
-               (is(T : Shader) && id in shaders) ||
-               (is(T : ITexture) && id in textures) ||
-               idt in open_tasks) {
-                throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
-            }
+        if((is(T : Image) && id in images) ||
+           (is(T : Shader) && id in shaders) ||
+           (is(T : ITexture) && id in textures) ||
+           idt in open_tasks) {
+            throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
+        }
 
-            static if(is(T : Image)) {
-                images[id] = t;
-            } else static if(is(T : Shader)) {
-                shaders[id] = t;
-            } else static if(is(T : ITexture)) {
-                textures[id] = t;
-            }
+        static if(is(T : Image)) {
+            images[id] = t;
+        } else static if(is(T : Shader)) {
+            shaders[id] = t;
+        } else static if(is(T : ITexture)) {
+            textures[id] = t;
         }
     }
     
@@ -196,42 +160,6 @@ class ResourceManager {
         }
     }
     
-    // Use this when you would call, after feeding the resmgr, anyways .wait()
-    // it will load the texture-images seperatly and then upload them to opengl
-    // as texture.
-    void add_many_wait(const Resource[] resources) {
-        alias Tuple!(Task!(load_image, typeof(this), string, string)*, "task", Resource, "res") TTT;
-        TTT[] textasks;
-        
-        foreach(res; resources) {
-            int type = res.type == AUTO_TYPE ? guess_type(res.filename) : res.type;
-            
-            switch(type) {
-                case IMAGE_TYPE: add_image(res.id, res.filename); break;
-                case SHADER_TYPE: add_shader(res.id, res.filename); break;
-                case TEXTURE_TYPE: textasks ~= TTT(add_image(res.id, res.filename), res); break;
-                default: throw new ResmgrError("Unknown resource-type.");
-            }
-        }           
-    
-        foreach(textask; textasks) {
-            Image img = textask.task.workForce();
-
-            // FIXME
-            auto tex = new Texture2D();
-            tex.set_data(img.data, img.dest_format, img.width, img.height, img.dest_format, img.dest_type);
-
-            // we are still in the mainthread, so let's upload this sh*t to the gpu
-            // but we still need to synchronize!
-            synchronized(_lock) {
-                images.remove(textask.res.id);
-                textures[textask.res.id] = tex;
-            }
-        }
-        
-        wait();
-    }
-
     void remove(T)(string id) if(is_loadable!T) {
         static if(is(T : Image)) {
             images.remove(id);
@@ -239,12 +167,6 @@ class ResourceManager {
             shaders.remove(id);
         } else static if(is(T : ITexture)) {
             textures.remove(id);
-        }
-    }
-    
-    void wait() {
-        while(open_tasks.length > 0) {
-            Thread.sleep(dur!("msecs")(100));
         }
     }
     
@@ -257,7 +179,7 @@ class ResourceManager {
             if(ITexture* tex = id in textures) return *tex;
         }
 
-        throw new ResmgrError(format("No %s with id \"%s\" available.", T.stringof, id));
+        throw new ResmgrError("No %s with id \"%s\" available.".format(T.stringof, id));
     }
     
     static int guess_type(string filename) {
@@ -279,17 +201,16 @@ class ResourceManager {
     protected void done_loading(T)(T res, string id) if(is_loadable!T){
         debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
         
-        synchronized (_lock) { 
-            static if(is(T : Image)) images[id] = res;
-            else static if(is(T : Shader)) shaders[id] = res;
-            else static if(is(T : ITexture)) textures[id] = res;
-            
-            string idt = id ~ T.stringof;
-            if(CBS* t = idt in open_tasks) {
-                (*t)(res);
-                
-                open_tasks.remove(idt);
-            }
+        static if(is(T : Image)) images[id] = res;
+        else static if(is(T : Shader)) shaders[id] = res;
+        else static if(is(T : ITexture)) textures[id] = res;
+
+        string idt = id ~ T.stringof;
+        if(CBS* t = idt in open_tasks) {
+            auto cb = *t;
+            cb(res);
+
+            open_tasks.remove(idt);
         }
     }
 }

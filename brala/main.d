@@ -16,7 +16,6 @@ private {
     
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
-    import brala.resmgr : resmgr;
     import brala.input : register_glfw_error_callback;
     import brala.config : load_default_resources;
     import brala.network.session : minecraft_folder, minecraft_credentials;
@@ -50,7 +49,7 @@ GLFWwindow open_glfw_win(int width, int height) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
     }
     
-    glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    //glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
     
     glfwSwapInterval(0); // change this to 1?
     
