@@ -17,6 +17,7 @@ endif
 include command.make
 
 OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
+
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
 
@@ -29,16 +30,18 @@ DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(
 DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
 DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_GLAMOUR))
 
+DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)std,d)
+DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%.o,   $(DSOURCES_OTHER))
+
 CSOURCES             = $(call getSource,src$(PATH_SEP)c,c)
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%.o,   $(CSOURCES))
-
 
 all: brala
 
 .PHONY: clean
 
-brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_DERELICT) $(DSOURCES_GLAMOUR)
-	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_GLAMOUR) $(DSOURCES_DERELICT) $(OUTPUT)bralad
+brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_DERELICT) $(DSOURCES_GLAMOUR) $(DSOURCES_OTHER)
+	$(DC) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DSOURCES_GLAMOUR) $(DSOURCES_DERELICT) $(DSOURCES_OTHER) $(DCFLAGS) $(DCFLAGS_LINK) $(OUTPUT)bralad
 
 	
 # create object files
@@ -53,7 +56,10 @@ $(DBUILD_PATH_DERELICT)$(PATH_SEP)%.o: %.d
 
 $(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
-	
+
+$(DBUILD_PATH_OTHER)$(PATH_SEP)%.o : %.d
+	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+
 $(CBUILD_PATH)$(PATH_SEP)%.o : %.c
 	gcc -c -std=c99 -lz $< -o $@
 

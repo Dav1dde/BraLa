@@ -246,6 +246,7 @@ DBUILD_PATH         = ./build
 DBUILD_PATH_GL3N    = ./build
 DBUILD_PATH_GLAMOUR = ./build
 DBUILD_PATH_DERELICT = ./build
+DBUILD_PATH_OTHER   = ./build
 CBUILD_PATH         = ./build
 
 LIBNAME             = lib$(PROJECT_NAME)-$(COMPILER)$(STATIC_LIB_EXT)
