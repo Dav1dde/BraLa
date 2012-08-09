@@ -79,9 +79,12 @@ class Connection {
                                     to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
 
             void snoop_timer() {
-                auto timer = new Timer(dur!"minutes"(11), delegate void() { Session.snoop(snoop_args.expand);
-                                                                           snoop_timer(); });
-                timer.start();
+                if(_connected) {
+                    auto timer = new Timer(dur!"minutes"(11),
+                         delegate void() { Session.snoop(snoop_args.expand); snoop_timer(); });
+                    timer.isDaemon = true;
+                    timer.start();
+                }
             }
 
             snoop_timer();
@@ -223,7 +226,7 @@ class ThreadedConnection : Connection {
             _thread = new Thread(&(super.run));
             _thread.isDaemon = true;
         }
-        
+
         _thread.start();
     }
 }

@@ -96,17 +96,17 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
             stderr.writefln(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
         }
     }
-    
+
     Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
     engine.resmgr.add("terrain", terrain.to_texture());
-    
+
     Image palette = palette_atlas(engine.resmgr.get!Image("grasscolor"),
                                   engine.resmgr.get!Image("leavecolor"),
                                   engine.resmgr.get!Image("watercolor"));
     Texture2D palette_tex = palette.to_texture();
     palette_tex.unit = GL_TEXTURE0 + 1;
     engine.resmgr.add("palette", palette_tex);
-    
+
     Sampler terrain_sampler = new Sampler();
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
     terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -117,7 +117,7 @@ BraLaEngine init_engine(int width, int height, GLVersion glv) {
     float max_aniso = 0.0f;
     glGetFloatv(GL_TEXTURE_MAX_ANISOTROPY_EXT, &max_aniso);
     terrain_sampler.set_parameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso);
-    
+
     engine.set_sampler("terrain", terrain_sampler);
 
     return engine;
@@ -177,6 +177,6 @@ int main() {
 
     auto game = new BraLaGame(engine, win, username, password, !args.no_snoop);
     game.start(args.host, args.port);
-    
+
     return 0;
 }

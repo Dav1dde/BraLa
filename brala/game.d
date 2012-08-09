@@ -108,7 +108,7 @@ class BraLaGame : BaseGLFWEventHandler {
         }
         
         if(quit || keymap[GLFW_KEY_ESCAPE]) {
-            disconnect("Goodboy from BraLa.");
+            if(connection.connected) disconnect("Goodboy from BraLa.");
             return true;
         } else {
             return false;

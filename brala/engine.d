@@ -65,7 +65,7 @@ class BraLaEngine {
     
     this(int width, int height, GLVersion glv) {
         timer = new Timer();
-        resmgr = new ResourceManager(true);
+        resmgr = new ResourceManager();
         
         opengl_version = glv;
         _viewport = vec2i(width, height);

@@ -115,14 +115,11 @@ class ResourceManager {
     __gshared ITexture[string] textures;
     __gshared Image[string] images;
         
-    this(bool new_taskpool = true) {
+    this() {
         _lock = new Object();
         
-        if(new_taskpool) {
-            task_pool = new TaskPool();
-        } else {
-            task_pool = taskPool;
-        }
+        task_pool = new TaskPool();
+        task_pool.isDaemon = true;
     } 
   
     protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
