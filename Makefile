@@ -61,7 +61,7 @@ $(DBUILD_PATH_OTHER)$(PATH_SEP)%.o : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_LINK) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(CBUILD_PATH)$(PATH_SEP)%.o : %.c
-	gcc -c -std=c99 -lz $< -o $@
+	$(CC) -c -std=c99 -lz $< -o $@
 
 buildDir: $(OBJDIRS)
 
