@@ -8,6 +8,7 @@ private {
 
     import std.parallelism : TaskPool;
     import std.range : cycle, zip, take, popFrontN;
+    import std.algorithm : filter;
     import std.typecons : Tuple;
     import std.math : ceil;
     
@@ -319,7 +320,7 @@ class World {
         }
     
     void draw(BraLaEngine engine) {
-        auto r = zip(zip(chunks.byKey, chunks.byValue),
+        auto r = zip(zip(chunks.byKey, chunks.byValue).filter!("a[1].dirty"),
                      cycle(tesselation_buffer));
 
         alias void delegate() CB;
@@ -331,32 +332,34 @@ class World {
                 Chunk chunk = data[0][1];
                 auto buffer = data[1];
 
-                if(chunk.dirty) {
-                    size_t elements = tessellate(chunk, chunkc, &buffer);
-                    cb_queue.add(delegate void() {
-                        if(chunk.vbo is null) {
-                            chunk.vbo = new Buffer();
+                size_t elements = tessellate(chunk, chunkc, &buffer);
+                cb_queue.add(delegate void() {
+                    if(chunk.vbo is null) {
+                        chunk.vbo = new Buffer();
+                    }
+
+                    debug size_t prev = chunk.vbo.length;
+
+                    chunk.vbo.set_data(buffer.ptr, elements);
+                    chunk.dirty = false;
+
+                    debug {
+                        if(prev == 0 && chunk.vbo.length) {
+                            vram.add(chunk.vbo.length);
+                        } else {
+                            vram.adjust(chunk.vbo.length - prev);
                         }
-
-                        debug size_t prev = chunk.vbo.length;
-                            
-                        chunk.vbo.set_data(buffer.ptr, elements);
-                        chunk.dirty = false;
-
-                        debug {
-                            if(prev == 0 && chunk.vbo.length) {
-                                vram.add(chunk.vbo.length);
-                            } else {
-                                vram.adjust(chunk.vbo.length - prev);
-                            }
-                        }                        
-                    });
-                }
+                    }
+                });
             }
             r.popFrontN(tesselation_buffer.length);
 
             foreach(cb; cb_queue) {
                 cb();
+            }
+            
+            if(r.empty) {
+                break;
             }
         }
 
