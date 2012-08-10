@@ -50,7 +50,7 @@ class BraLaGame : BaseGLFWEventHandler {
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
 
-    size_t tessellation_threads = 1;
+    size_t tessellation_threads = 3;
     
     this(BraLaEngine engine, void* window, string username, string password, bool snoop) {
         _world_lock = new Object();

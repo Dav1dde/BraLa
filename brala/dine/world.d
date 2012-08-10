@@ -7,13 +7,16 @@ private {
     import gl3n.linalg : vec3i, mat4;
 
     import std.parallelism : TaskPool;
-    import std.range : cycle, zip;
+    import std.range : cycle, zip, take, popFrontN;
+    import std.typecons : Tuple;
+    import std.math : ceil;
     
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BIOMES;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
+    import brala.utils.queue : Queue;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
 
@@ -57,13 +60,17 @@ class World {
 
     MemoryCounter vram = MemoryCounter("vram");
 
-    TessellationBuffer[] tesselation_buffer;
+    protected TessellationBuffer[] tesselation_buffer;
+    protected TaskPool task_pool;
     
     this(size_t threads) {
         threads = threads ? threads : 1;
         foreach(i; 0..threads) {
             tesselation_buffer ~= TessellationBuffer(default_tessellation_bufer_size);
         }
+
+        task_pool = new TaskPool(threads);
+        task_pool.isDaemon = true;
     }
     
     this(size_t threads, vec3i spawn) {
@@ -74,6 +81,8 @@ class World {
     ~this() {
         remove_all_chunks();
 
+        task_pool.stop();
+        
         foreach(ref tb; tesselation_buffer) {
             tb.free();
         }
@@ -204,112 +213,92 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
+    size_t tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
         Tessellator tessellator = Tessellator(this, tb);
 
-        if(chunk.vbo is null) {
-            chunk.vbo = new Buffer();
-        }
+        int index;
+        int w = 0;
+        int y;
+        int hds = height / 16;
 
-        {
-            int index;
-            int w = 0;
-            int y;
-            int hds = height / 16;
-            
-            float z_offset, z_offset_n;
-            float y_offset, y_offset_t;
-            float x_offset, x_offset_r;
-            
-            Block value;
-            Block right_block;
-            Block front_block;
-            Block top_block;
+        float z_offset, z_offset_n;
+        float y_offset, y_offset_t;
+        float x_offset, x_offset_r;
 
-            Block back_block;
-            Block left_block;
+        Block value;
+        Block right_block;
+        Block front_block;
+        Block top_block;
 
-            vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
-            vec3i wcoords = wcoords_orig;
-            
-            // TODO: octree?
+        Block back_block;
+        Block left_block;
 
-            foreach(z; 0..depth) {
-                z_offset = z + 0.5f;
-                z_offset_n = z + 1.5f;
-                
-                wcoords.z = wcoords_orig.z + z;
+        vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
+        vec3i wcoords = wcoords_orig;
 
-                foreach(b; 0..hds) {
-                    if((chunk.primary_bitmask >> b) & 1 ^ 1) continue;
-                    
-                    foreach(y_; 0..hds) {
-                        y = b*hds + y_;
-                        
-                        y_offset = y+0.5f;
-                        y_offset_t = y+1.5f;
+        foreach(z; 0..depth) {
+            z_offset = z + 0.5f;
+            z_offset_n = z + 1.5f;
 
-                        wcoords.x = wcoords_orig.x;
-                        wcoords.y = wcoords_orig.y + y;
+            wcoords.z = wcoords_orig.z + z;
 
-                        value = get_block_safe(wcoords);
+            foreach(b; 0..hds) {
+                if((chunk.primary_bitmask >> b) & 1 ^ 1) continue;
 
-                        tessellator.realloc_buffer_if_needed(1024*(depth-z));
+                foreach(y_; 0..hds) {
+                    y = b*hds + y_;
 
-                        foreach(x; 0..width) {
-                            x_offset = x+0.5f;
-                            x_offset_r = x+1.5f;
-                            wcoords.x = wcoords_orig.x + x;
+                    y_offset = y+0.5f;
+                    y_offset_t = y+1.5f;
 
-                            index = x+y*width+z*zstep;
+                    wcoords.x = wcoords_orig.x;
+                    wcoords.y = wcoords_orig.y + y;
 
-                            if(x == width-1) {
-                                right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
-                            } else {
-                                right_block = chunk.blocks[index+1];
-                            }
+                    value = get_block_safe(wcoords);
 
-                            if(z == depth-1) {
-                                front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
-                            } else {
-                                front_block = chunk.blocks[index+zstep];
-                            }
+                    tessellator.realloc_buffer_if_needed(1024*(depth-z));
 
-                            if(y == height-1) {
-                                top_block = AIR_BLOCK;
-                            } else {
-                                top_block = chunk.blocks[index+width];
-                            }
+                    foreach(x; 0..width) {
+                        x_offset = x+0.5f;
+                        x_offset_r = x+1.5f;
+                        wcoords.x = wcoords_orig.x + x;
 
-                            tessellator.feed(wcoords, x, y, z,
-                                            x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
-                                            value, right_block, top_block, front_block,
-                                            BIOMES[chunk.biome_data[x+z*15]]);
+                        index = x+y*width+z*zstep;
 
-                            value = right_block;
+                        if(x == width-1) {
+                            right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
+                        } else {
+                            right_block = chunk.blocks[index+1];
                         }
+
+                        if(z == depth-1) {
+                            front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
+                        } else {
+                            front_block = chunk.blocks[index+zstep];
+                        }
+
+                        if(y == height-1) {
+                            top_block = AIR_BLOCK;
+                        } else {
+                            top_block = chunk.blocks[index+width];
+                        }
+
+                        tessellator.feed(wcoords, x, y, z,
+                                        x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
+                                        value, right_block, top_block, front_block,
+                                        BIOMES[chunk.biome_data[x+z*15]]);
+
+                        value = right_block;
                     }
                 }
             }
-
-            chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
-
-            debug {
-                size_t prev = chunk.vbo.length;
-
-                if(prev == 0 && chunk.vbo.length) {
-                    vram.add(chunk.vbo.length);
-                } else {
-                    vram.adjust(chunk.vbo.length - prev);
-                }
-
-                assert(cast(size_t)tb.ptr % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
-            }
-
-            tessellator.fill_vbo(chunk.vbo);
-            
-            chunk.dirty = false;
         }
+
+        chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
+
+        debug assert(cast(size_t)tb.ptr % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
+
+        return tessellator.elements;
     }
 
     void bind(BraLaEngine engine, Chunk chunk)
@@ -330,12 +319,40 @@ class World {
         }
     
     void draw(BraLaEngine engine) {
-        foreach(chunkc, chunk; chunks) {
-            if(chunk.dirty) {
-                tessellate(chunk, chunkc, &tesselation_buffer[0]);
-            }
-            bind(engine, chunk);
+        auto r = zip(zip(chunks.byKey, chunks.byValue),
+                     cycle(tesselation_buffer));
 
+        alias void delegate() CB;
+        auto cb_queue = new Queue!CB();
+
+        foreach(i; 0..cast(size_t)ceil(chunks.length/cast(float)tesselation_buffer.length)) {
+            foreach(data; task_pool.parallel(r.take(tesselation_buffer.length), 2)) {
+                vec3i chunkc = data[0][0];
+                Chunk chunk = data[0][1];
+                auto buffer = data[1];
+
+                if(chunk.dirty) {
+                    size_t elements = tessellate(chunk, chunkc, &buffer);
+                    cb_queue.add(delegate void() {
+                        if(chunk.vbo is null) {
+                            chunk.vbo = new Buffer();
+                        }
+
+                        chunk.vbo.set_data(buffer.ptr, elements);
+                        chunk.dirty = false;
+                    });
+                }
+            }
+            r.popFrontN(tesselation_buffer.length);
+
+            foreach(cb; cb_queue) {
+                cb();
+            }
+        }
+
+        foreach(chunkc, chunk; chunks) {
+            bind(engine, chunk);
+ 
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
             engine.flush_uniforms();
 
