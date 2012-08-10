@@ -5,6 +5,11 @@ BraLa is an opensource minecraft (S)MP Client:
 
 ![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_01.png)
 
+This screenshot was taken with the 8x8 texture pack which comes with BraLa. No worries, if you have
+minecraft installed, BraLa will try to extract the terrain.png from it and use that as texture.
+
+I would like to redistribute a higher resolution texture pack with BraLa, but unfortunatly
+I don't have the permission to do so. If you have a texture pack, which I am allowed to use, please contact me.
 
 ## Features ##
 
@@ -19,7 +24,7 @@ What BraLa *can* do:
 * Authenticate with the official login servers
 * Read the lastlogin file
 * Send "snoop" requests
-* Display biome colors based on rainfall/temperature
+* Display biome colors, based on rainfall/temperature
 * Display all solid blocks
 
 Not a whole lot, but a start.
@@ -59,7 +64,7 @@ git submodule update
 
 Since BraLa is written mostly in D, you need a D2 compiler. BraLa compiles with all major D compilers,
 [DMD](http://dlang.org/download.html), [LDC](https://github.com/ldc-developers/ldc) and 
-[GDC](https://github.com/D-Programming-GDC/GDC)
+[GDC](https://github.com/D-Programming-GDC/GDC).
 
 #### DMD ####
 
