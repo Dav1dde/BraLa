@@ -22,33 +22,33 @@ mixin template BlockBuilder() {
                     ubyte u_terrain, ubyte v_terrain,
                     ubyte u_mask, ubyte v_mask,
                     float u_biome, float v_biome)
-        in { assert(elements+1 <= buffer_length, "not enough allocated memory for tessellator"); }
+        in { assert(elements+1 <= buffer.length, "not enough allocated memory for tessellator"); }
         body {
-            buffer[elements..(elements+=4)] = (cast(void*)&x)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&y)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&z)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&nx)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&ny)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&nz)[0..4];
-            buffer[elements..(elements+=1)] = (cast(void*)&u_terrain)[0..1];
-            buffer[elements..(elements+=1)] = (cast(void*)&v_terrain)[0..1];
-            buffer[elements..(elements+=1)] = (cast(void*)&u_mask)[0..1];
-            buffer[elements..(elements+=1)] = (cast(void*)&v_mask)[0..1];
-            buffer[elements..(elements+=4)] = (cast(void*)&u_biome)[0..4];
-            buffer[elements..(elements+=4)] = (cast(void*)&v_biome)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&x)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&y)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&z)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&nx)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&ny)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&nz)[0..4];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_terrain)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_terrain)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_mask)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_mask)[0..1];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&u_biome)[0..4];
+            buffer.ptr[elements..(elements+=4)] = (cast(void*)&v_biome)[0..4];
         }
 
     void add_template_vertices(const ref Vertex[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                float u_biome, float v_biome)
-        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tessellator"); }
+        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
         body {
             size_t end = elements + vertices.length*Vertex.sizeof;
             
-            buffer[elements..end] = cast(void[])vertices;
+            buffer.ptr[elements..end] = cast(void[])vertices;
             
             for(; elements < end; elements += Vertex.sizeof) {
-                Vertex* vertex = cast(Vertex*)&buffer[elements];
+                Vertex* vertex = cast(Vertex*)&((buffer.ptr)[elements]);
                 vertex.x += x_offset;
                 vertex.y += y_offset;
                 vertex.z += z_offset;
@@ -58,9 +58,9 @@ mixin template BlockBuilder() {
         }
 
     void add_vertices(const ref Vertex[] vertices)
-        in { assert(elements+vertices.length <= buffer_length, "not enough allocated memory for tesselator"); }
+        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tesselator"); }
         body {
-            buffer[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
+            buffer.ptr[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
         }
 
     // blocks

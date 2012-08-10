@@ -5,28 +5,45 @@ private {
     import glamour.vbo : Buffer;
     
     import gl3n.linalg : vec3i, mat4;
+
+    import std.parallelism : TaskPool;
+    import std.range : cycle, zip;
     
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BIOMES;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
-    import brala.utils.memory : MemoryCounter, malloc;
+    import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
 
 private const Block AIR_BLOCK = Block(0);
 
+struct TessellationBuffer {
+    void* ptr = null;
+    alias ptr this; 
+    size_t length = 0;
+
+    this(size_t size) {
+        ptr = cast(void*)malloc(size);
+        length = size;
+    }
+
+    void realloc(size_t size) {
+        ptr = cast(void*).realloc(ptr, size);
+        length = size;
+    }
+    
+    void free() {
+        .free(ptr);
+        ptr = null;
+        length = 0;
+    }
+}
+
+
 class World {
-    static void* tessellate_buffer;
-    static size_t tessellate_buffer_length;
-    
-    static this() {
-        tessellate_buffer_length = width*height*depth*80; // this value is the result of testing!
-        tessellate_buffer = cast(void*)malloc(tessellate_buffer_length);
-    }
-    
-    static ~this() {
-    }
+    static const default_tessellation_bufer_size = width*height*depth*80;
     
     const int width = 16;
     const int height = 256;
@@ -39,15 +56,27 @@ class World {
     vec3i spawn;
 
     MemoryCounter vram = MemoryCounter("vram");
+
+    TessellationBuffer[] tesselation_buffer;
     
-    this() {}
+    this(size_t threads) {
+        threads = threads ? threads : 1;
+        foreach(i; 0..threads) {
+            tesselation_buffer ~= TessellationBuffer(default_tessellation_bufer_size);
+        }
+    }
     
-    this(vec3i spawn) {
+    this(size_t threads, vec3i spawn) {
         this.spawn = spawn;
+        this(threads);
     }
     
     ~this() {
         remove_all_chunks();
+
+        foreach(ref tb; tesselation_buffer) {
+            tb.free();
+        }
     }
     
     // when a chunk is passed to this method, the world will take care of it's memory
@@ -175,14 +204,14 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, ref void* v, ref size_t length, bool force=false) {
-        Tessellator tessellator = Tessellator(this, v, length);
+    void tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb, bool force=false) {
+        Tessellator tessellator = Tessellator(this, tb);
 
         if(chunk.vbo is null) {
             chunk.vbo = new Buffer();
         }
 
-        if(chunk.dirty || force) {
+        {
             int index;
             int w = 0;
             int y;
@@ -265,16 +294,19 @@ class World {
 
             chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
 
-            debug size_t prev = chunk.vbo.length;
-            assert(cast(size_t)v % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
-            tessellator.fill_vbo(chunk.vbo);
             debug {
+                size_t prev = chunk.vbo.length;
+
                 if(prev == 0 && chunk.vbo.length) {
                     vram.add(chunk.vbo.length);
                 } else {
                     vram.adjust(chunk.vbo.length - prev);
                 }
+
+                assert(cast(size_t)tb.ptr % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
             }
+
+            tessellator.fill_vbo(chunk.vbo);
             
             chunk.dirty = false;
         }
@@ -299,7 +331,7 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {
-            tessellate(chunk, chunkc, tessellate_buffer, tessellate_buffer_length, false);
+            tessellate(chunk, chunkc, &tesselation_buffer[0], false);
             bind(engine, chunk);
 
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);

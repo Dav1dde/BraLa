@@ -49,6 +49,8 @@ class BraLaGame : BaseGLFWEventHandler {
     bool quit = false;
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
+
+    size_t tessellation_threads = 1;
     
     this(BraLaEngine engine, void* window, string username, string password, bool snoop) {
         _world_lock = new Object();
@@ -200,7 +202,7 @@ class BraLaGame : BaseGLFWEventHandler {
                 _current_world.remove_all_chunks();
             }
             
-            _current_world = new World();
+            _current_world = new World(tessellation_threads);
         }
         
         character = new Character(packet.entity_id);
