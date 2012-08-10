@@ -338,8 +338,18 @@ class World {
                             chunk.vbo = new Buffer();
                         }
 
+                        debug size_t prev = chunk.vbo.length;
+                            
                         chunk.vbo.set_data(buffer.ptr, elements);
                         chunk.dirty = false;
+
+                        debug {
+                            if(prev == 0 && chunk.vbo.length) {
+                                vram.add(chunk.vbo.length);
+                            } else {
+                                vram.adjust(chunk.vbo.length - prev);
+                            }
+                        }                        
                     });
                 }
             }
