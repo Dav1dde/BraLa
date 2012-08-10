@@ -7,7 +7,7 @@ private {
     import gl3n.linalg : vec3i;
     
     import brala.dine.chunk : Block;
-    import brala.dine.world : World;
+    import brala.dine.world : World, TessellationBuffer;
     import brala.dine.builder.builder; // import everything
     import brala.dine.builder.blocks : BLOCKS;
     import brala.dine.builder.biomes : BiomeData;
@@ -46,26 +46,23 @@ struct Vertex {
 struct Tessellator {
     World world;
     
-    void* buffer;
-    size_t buffer_length;
+    TessellationBuffer* buffer;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, ref void* buffer, ref size_t buffer_length) {
+    this(World world, TessellationBuffer* tb) {
         this.world = world;
-        this.buffer = buffer;
-        this.buffer_length = buffer_length;
+        buffer = tb;
     }
 
     void realloc_buffer(size_t interval) {
-        buffer_length += interval;
-        buffer = cast(void*)realloc(buffer, buffer_length);
+        buffer.realloc(buffer.length + interval);
     }
 
     void realloc_buffer_if_needed(size_t interval) {
-        if(elements+interval >= buffer_length) {
+        if(elements+interval >= buffer.length) {
             realloc_buffer(interval);
         }
     }
@@ -112,7 +109,7 @@ struct Tessellator {
         //size_t prev = vbo.length;
         //import std.stdio;
         //writeln(elements);
-        vbo.set_data(buffer, elements);
+        vbo.set_data(buffer.ptr, elements);
         //return vbo.length - prev;
     }
 }
