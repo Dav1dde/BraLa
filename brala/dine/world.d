@@ -204,7 +204,7 @@ class World {
 
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
-    void tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb, bool force=false) {
+    void tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
         Tessellator tessellator = Tessellator(this, tb);
 
         if(chunk.vbo is null) {
@@ -331,7 +331,9 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(chunkc, chunk; chunks) {
-            tessellate(chunk, chunkc, &tesselation_buffer[0], false);
+            if(chunk.dirty) {
+                tessellate(chunk, chunkc, &tesselation_buffer[0]);
+            }
             bind(engine, chunk);
 
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);

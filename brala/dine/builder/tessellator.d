@@ -109,7 +109,7 @@ struct Tessellator {
         //size_t prev = vbo.length;
         //import std.stdio;
         //writeln(elements);
-        vbo.set_data((*buffer).ptr, elements);
+        vbo.set_data(buffer.ptr, elements);
         //return vbo.length - prev;
     }
 }
