@@ -13,7 +13,7 @@ private {
     import std.math : ceil;
     
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.builder.biomes : BIOMES;
+    import brala.dine.builder.biomes : BIOMES, BiomeData;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.dine.util : py_div, py_mod;
     import brala.exception : WorldError;

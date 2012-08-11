@@ -8,6 +8,7 @@ private {
     
     import gl3n.linalg : vec3i;
     import brala.dine.util : log2_ub;
+    import brala.dine.builder.biomes : BIOMES, Biome;
     import brala.utils.memory : calloc, free;
 }
 
@@ -141,6 +142,18 @@ class Chunk {
             return Block(0, 0);
         }
     }
+
+    Biome get_biome(int column) {
+        return cast(Biome)biome_data[column];
+    }
+
+    Biome get_biome_safe(int column) {
+        if(column < biome_data.length && biome_data[column] < BIOMES.length) {
+            return cast(Biome)biome_data[column];
+        } else {
+            return cast(Biome)0;
+        }
+    }
         
     // operator overloading
     Block opIndex(size_t flat)
@@ -182,7 +195,7 @@ class Chunk {
             return result;
         }
     
-    int opApply(int delegate(uint, const ref Block) dg)
+    int opApply(int delegate(size_t, const ref Block) dg)
         in { assert(!empty); }
         body {
             int result;
