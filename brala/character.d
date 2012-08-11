@@ -71,7 +71,7 @@ class Character { // the one you're playing
     
     void send_packet(Connection connection) {
         quat rotation = cam.get_rotation(YAW_0_DIRECTION);
-        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 0.15, position.z, // TODO: proper stance
+        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 1.6, position.z,
                                                degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
        
         connection.send(packet);

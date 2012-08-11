@@ -15,6 +15,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BIOMES;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
+    import brala.dine.util : py_div, py_mod;
     import brala.exception : WorldError;
     import brala.engine : BraLaEngine;
     import brala.utils.queue : Queue;
@@ -143,15 +144,18 @@ class World {
     void set_block(vec3i position, Block block)
         in { assert(position.y >= min_height && position.y <= max_height); }
         body {
-            vec3i chunkc = vec3i(position.x / width, position.y / height, position.z / depth);
+            vec3i chunkc = vec3i(py_div(position.x, width),
+                                 py_div(position.y, height),
+                                 py_div(position.z, depth));
             Chunk chunk = get_chunk(chunkc);
             
             if(chunk is null) {
                 throw new WorldError("No chunk available for position " ~ position.toString());
             }
             
-            vec3i block_position = vec3i(position.x % width, position.y % height, position.z % depth);
-            uint flat = chunk.to_flat(block_position);
+            uint flat = chunk.to_flat(py_mod(position.x, width),
+                                      py_mod(position.y, height),
+                                      py_mod(position.z, depth));
             
             if(chunk[flat] != block) {
                 chunk[flat] = block;
@@ -162,31 +166,37 @@ class World {
     Block get_block(vec3i position)
         in { assert(position.y >= min_height && position.y <= max_height); }
         body {
-            Chunk chunk = get_chunk(position.x / width, position.y / height, position.z / depth);
+            Chunk chunk = get_chunk(py_div(position.x, width),
+                                    py_div(position.y, height),
+                                    py_div(position.z, depth));
             
             if(chunk is null) {
                 throw new WorldError("No chunk available for position " ~ position.toString());
             }
             
-            return chunk[chunk.to_flat(position.x % width, position.y % height, position.z % depth)];
+            return chunk[chunk.to_flat(py_mod(position.x, width),
+                                       py_mod(position.y, height),
+                                       py_mod(position.z, depth))];
         }
 
     Block get_block_safe(vec3i position, Block def = AIR_BLOCK) {
-        Chunk chunk = get_chunk(position.x / width, position.y / height, position.z / depth);
+        Chunk chunk = get_chunk(py_div(position.x, width),
+                                py_div(position.y, height),
+                                py_div(position.z, depth));
 
-        if(chunk is null) return def;
+        if(chunk is null) { return def; }
 
-        int x = position.x % width;
-        int y = position.y % height;
-        int z = position.z % depth;
-
-        if(x >= 0 && x < chunk.width && y >= 0 && y < chunk.height && z >= 0 && z < chunk.depth) {        
+        int x = py_mod(position.x, width);
+        int y = py_mod(position.y, height);
+        int z = py_mod(position.z, depth);
+        
+        if(x >= 0 && x < chunk.width && y >= 0 && y < chunk.height && z >= 0 && z < chunk.depth) {
             return chunk[chunk.to_flat(x, y, z)];
         } else {
             return def;
         }
     }
-
+    
     void mark_surrounding_chunks_dirty(int x, int y, int z) {
         return mark_surrounding_chunks_dirty(vec3i(x, y, z));
     }
@@ -218,7 +228,6 @@ class World {
         Tessellator tessellator = Tessellator(this, tb);
 
         int index;
-        int w = 0;
         int y;
         int hds = height / 16;
 
@@ -230,9 +239,6 @@ class World {
         Block right_block;
         Block front_block;
         Block top_block;
-
-        Block back_block;
-        Block left_block;
 
         vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
         vec3i wcoords = wcoords_orig;
@@ -273,7 +279,7 @@ class World {
                         }
 
                         if(z == depth-1) {
-                            front_block = get_block_safe(vec3i(wcoords.x,   wcoords.y,   wcoords.z+1), AIR_BLOCK);
+                            front_block = get_block_safe(vec3i(wcoords.x,  wcoords.y,   wcoords.z+1), AIR_BLOCK);
                         } else {
                             front_block = chunk.blocks[index+zstep];
                         }
