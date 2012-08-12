@@ -80,7 +80,7 @@ class Connection {
 
             void snoop_timer(bool init=false) {
                 if(_connected || init) {
-                    auto timer = new Timer(dur!"seconds"(11),
+                    auto timer = new Timer(dur!"minutes"(11),
                          delegate void() { Session.snoop(snoop_args.expand); snoop_timer(); });
                     timer.isDaemon = true;
                     timer.start();
