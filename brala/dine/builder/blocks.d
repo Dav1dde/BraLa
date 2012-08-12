@@ -24,8 +24,7 @@ private {
     alias BlockType.NA NA;
 }
 
-// TODO: add correct tex-coords
-// TODO: add more, like bed, redstone repeater etc.
+// some opaque values might be wrong
 BlockDescriptor[256] BLOCKS = [
     { true,  false, Air,       "air" },
     { false, true,  Block,     "stone" },
@@ -150,7 +149,21 @@ BlockDescriptor[256] BLOCKS = [
     { false, true,  Block,     "end stone" },
     { true,  false, Block,     "dragon egg" },
     { false, true,  Block,     "redstone lamp" },
-    { false, true,  Block,     "redstone lamp on" } // 124
+    { false, true,  Block,     "redstone lamp on" },
+    { false, false, DataBlock, "wooden double slab" },
+    { true,  true,  DataBlock, "wooden slab" },
+    { true,  true,  DataBlock, "cocoa plant" },
+    { true,  false, DataBlock, "sandstone stair" },
+    { false, false, Block,     "emerald ore" },
+    { true,  false, Block,     "ender chest" },
+    { true,  true,  Block,     "tripwire hook" },
+    { true,  true,  Block,     "tripwire" },
+    { false, false, Block,     "emerald block" },
+    { true,  false, DataBlock, "spruce wood stair" },
+    { true,  false, DataBlock, "birch wood stair" },
+    { true,  false, DataBlock, "jungle wood stair" },
+    { false, false, Block,     "command block" },
+    { true,  true,  Block,     "beacon block" }
 ];
 
 BlockDescriptor[4] WOOD_TYPES = [

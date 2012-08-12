@@ -88,6 +88,7 @@ class Connection {
             }
 
             snoop_timer(true);
+            session.snoop();
         }
    
         this.username = username;
