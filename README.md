@@ -114,3 +114,7 @@ BraLa supports a few commandline options:
 --width                     specifies the width of the window
 --height                    specifies the height of the window
 ```
+
+## License ##
+
+See [COPYING](https://github.com/Dav1dde/BraLa/blob/master/COPYING) for the GNU GENERAL PUBLIC LICENSE v3
