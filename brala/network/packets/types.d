@@ -12,6 +12,8 @@ private {
     import std.array : join, appender;
     import std.conv : to;
     import std.zlib : uncompress;
+    import std.exception : enforceEx;
+    import core.stdc.errno;
     
     import gl3n.linalg : vec3i;
     
@@ -125,7 +127,7 @@ struct Slot {
     short item;
     byte item_count = 0;
     short metadata = 0;
-    byte[] nbt_data;
+    nbt_node* nbt_tree;
     
     private size_t _slot;
     private bool has_array_position;
@@ -151,8 +153,11 @@ struct Slot {
 
             if(len != -1) {
                 debug assert(len >= 0);
-                ret.nbt_data = new byte[len];
-                s.readExact(ret.nbt_data.ptr, len); // TODO: parsing into nbt
+                ubyte[] compressed_data = new ubyte[len];
+                s.readExact(compressed_data.ptr, len); 
+                ret.nbt_tree = nbt_parse_compressed(compressed_data.ptr, len);
+                enforceEx!ServerError(ret.nbt_tree !is null, to!string(nbt_error_to_string(cast(nbt_status)errno)));
+                // TODO: this is f*cking important! free the nbt tree! or create a wrapper class with a dtor which will call nbt_free
             }
         }
             
@@ -162,8 +167,8 @@ struct Slot {
     string toString() {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
         
-        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", byte[] nbt_data : "%s"`,
-                       s, item, item_count, metadata, nbt_data);
+        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", nbt_tree* nbt_tree : "%s"`,
+                       s, item, item_count, metadata, cast(void*)nbt_tree);
     }
 }
 
