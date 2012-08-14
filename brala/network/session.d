@@ -5,7 +5,6 @@ private {
 
     import core.cpuid : isX86_64;
     import core.time : Duration;
-    import std.net.curl : CurlException, get, post;
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
@@ -21,6 +20,8 @@ private {
     import brala.utils.openssl.hash : SHA1;
     import brala.network.crypto : decode_public, PBEWithMD5AndDES;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
+
+    import arsd.http : post, get;
     
     debug import std.stdio : writefln;
 }
@@ -48,9 +49,9 @@ class Session {
     }
     
     void login() {
-        auto res = login_url.post(urlencode(["user" : username,
-                                             "password" : password,
-                                             "version" : to!string(launcher_version)]));
+        auto res = login_url.post(["user" : username,
+                                   "password" : password,
+                                   "version" : to!string(launcher_version)]);
 
         if(res.count(":") == 4) {
             string[] s = res.idup.split(":");
@@ -126,16 +127,16 @@ class Session {
         }
 
         try {
-            snoop_url.post(urlencode(["version": version_,
-                                      "os_name": os_name,
-                                      "os_version": os_version,
-                                      "os_architecture": os_arch,
-                                      "memory_total": memory_total,
-                                      "memory_max": memory_max,
-                                      "java_version": java_version,
-                                      "opengl_version": opengl_version,
-                                      "opengl_vendor": opengl_vendor]));
-        } catch(CurlException e) {
+            snoop_url.post(["version": version_,
+                            "os_name": os_name,
+                            "os_version": os_version,
+                            "os_architecture": os_arch,
+                            "memory_total": memory_total,
+                            "memory_max": memory_max,
+                            "java_version": java_version,
+                            "opengl_version": opengl_version,
+                            "opengl_vendor": opengl_vendor]);
+        } catch(Exception e) {
             stderr.writefln(`Unable to snoop: "%s"`, e.msg);
         }
     }
