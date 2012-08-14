@@ -5,7 +5,8 @@ private {
     import std.stream : Stream;
     import std.string : format;
     
-    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray, MapChunkS, MapChunkBulkS;
+    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray,
+                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData;
     import brala.network.packets.util;
 }
 
@@ -201,7 +202,7 @@ class MapChunk : IPacket {
 }
 
 class MultiBlockChange : IPacket {
-    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", Array!(int, ubyte), "data");
+    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", MultiBlockChangeData, "data");
 }
 
 class BlockChange : IPacket {

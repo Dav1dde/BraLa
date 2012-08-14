@@ -337,3 +337,40 @@ struct MapChunkBulkS {
         return `MapChunkBulkS(short chunk_count : "%s", CoordChunkTuple[] chunks : [%s]`.format(chunk_count, app.data);
     }
 }
+
+struct MultiBlockChangeData {
+    uint[] data;
+    alias data this;
+
+    static MultiBlockChangeData recv(Stream s) {
+        MultiBlockChangeData ret;
+        
+        int length = read!int(s);
+
+        auto app = appender!(uint[])();
+        app.reserve(length/4);
+
+        foreach(_; 0..length/4) {
+            app.put(read!uint(s));
+        }
+
+        ret.data = app.data;
+
+        return ret;
+    }
+
+    void load_into_chunk(Chunk chunk) {
+        foreach(block_data; data) {
+            Block block;
+
+            block.metadata = block_data & 0x0000000f;
+            block.id = (block_data & 0x0000fff0) >> 4;
+
+            int y = (block_data & 0x00ff0000) >> 16;
+            int z = (block_data & 0x0f000000) >> 24;
+            int x = (block_data & 0xf0000000) >> 28;
+
+            chunk.blocks[chunk.to_flat(x, y, z)] = block;
+        }
+    }
+}

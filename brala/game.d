@@ -253,28 +253,12 @@ class BraLaGame : BaseGLFWEventHandler {
 
     void on_packet(T : s.MultiBlockChange)(T packet) {
         vec3i chunkc = vec3i(packet.x, 0, packet.z);
-
-        ubyte[] cdata = packet.data;
-        connection.endianstream.fixBlockBO(cdata, int.sizeof, packet.record_count);
-        uint[] data = cast(uint[])cdata;
         
         synchronized(_world_lock) {
             Chunk chunk = _current_world.get_chunk(chunkc);
 
             if(chunk !is null) {
-                foreach(block_data; data) {
-                    Block block;
-
-                    block.metadata = block_data & 0x0000000f;
-                    block.id = (block_data & 0x0000fff0) >> 4;
-
-                    int y = (block_data & 0x00ff0000) >> 16;
-                    int z = (block_data & 0x0f000000) >> 24;
-                    int x = (block_data & 0xf0000000) >> 28;
-
-                    chunk.blocks[chunk.to_flat(x, y, z)] = block;
-                }
-
+                packet.data.load_into_chunk(chunk);
                 chunk.dirty = true;
             }
         }

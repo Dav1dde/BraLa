@@ -103,7 +103,7 @@ private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits
             
             foreach(i; 0..len) {
                 ret ~= read!(ElementEncodingType!T)(s);
-                static if(!__traits(hasMember, T, "LenType") &&__traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
+                static if(!__traits(hasMember, T, "LenType") && __traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
             }
         }
     } else {
