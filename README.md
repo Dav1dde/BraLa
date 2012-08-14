@@ -41,8 +41,6 @@ you to use the gdb debugger.
 * [glfw3](https://github.com/elmindreda/glfw) (as dynamic library, e.g. available in the Archlinux AUR)
 * OpenGL
 * OpenSSL
-* [Curl 7](http://curl.haxx.se/) (development version) -
-Unfortunatly the Curl versions in the debian like linux distributions are outdated and can't be used.
 
 I recommend you to use/install [MingW](http://www.mingw.org/)/[Msys](http://www.mingw.org/wiki/msys/)
 on Windows to build BraLa. MingW/Msys allow you to use the Makefile which comes with BraLa.
