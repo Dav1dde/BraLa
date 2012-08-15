@@ -5,7 +5,7 @@ export VERSION          =
 export LICENSE          = GPLv3
 
 DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/
-DCFLAGS_LINK        = $(LDCFLAGS) -L-lcurl -L-lssl -L-lcrypto
+DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc -L-export-dynamic

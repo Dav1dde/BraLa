@@ -9,6 +9,7 @@ private {
     import brala.utils.openssl.exception : OpenSSLException;
 }
 
+
 // http://www.openssl.org/docs/crypto/EVP_EncryptInit.html
 class Encrypt(alias gen) {
     const(ubyte)[] key;
