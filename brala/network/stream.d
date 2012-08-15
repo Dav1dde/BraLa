@@ -5,17 +5,17 @@ private {
 }
 
 class AESStream(AES) : FilterStream {
-    ubyte[] read_buffer; // stores *decrypted* data
-    size_t read_buffer_pos = 0;
-    size_t read_buffer_len = 0;
+    protected ubyte[] read_buffer; // stores *decrypted* data
+    protected size_t read_buffer_pos = 0;
+    protected size_t read_buffer_len = 0;
 
-    ubyte[] write_buffer;
-    size_t write_buffer_pos = 0;
-    size_t write_buffer_len = 0;
+    protected ubyte[] write_buffer;
+    protected size_t write_buffer_pos = 0;
+    protected size_t write_buffer_len = 0;
     
     enum size_t DEFAULT_BUFFER_SIZE = 4096;
     
-    AES aes;
+    protected AES aes;
 
     this(Stream stream, AES aes, size_t buffer_size = DEFAULT_BUFFER_SIZE) {
         super(stream);

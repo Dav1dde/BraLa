@@ -15,7 +15,7 @@ class Queue(type) {
         _lock = new Object();
     }
     
-    void add(type d) {
+    void put(type d) {
         synchronized(_lock) data ~= d;
     }
     
@@ -23,7 +23,7 @@ class Queue(type) {
         return data.empty;
     }
     
-    type pop_front() {
+    type popFront() {
         type p;
         
         synchronized(_lock) {
@@ -34,7 +34,7 @@ class Queue(type) {
         return p;
     }
     
-    type pop_back() {
+    type popBack() {
         type p;
         
         synchronized(_lock) {
@@ -44,12 +44,20 @@ class Queue(type) {
         
         return p;
     }
+
+    type front() {
+        return data.front;
+    }
+
+    type back() {
+        return data.back;
+    }
     
     int opApply(int delegate(type d) dg) {
         int result;
 
         while(!data.empty) {
-            result = dg(pop_front());
+            result = dg(popFront());
             if(result) break;
         }
         

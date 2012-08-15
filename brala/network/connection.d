@@ -115,7 +115,7 @@ class Connection {
     }
     
     void send(T : IPacket)(T packet) {
-        queue.add(packet);
+        queue.put(packet);
     }
     
     void login() {

@@ -225,7 +225,7 @@ class Chunk {
         out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth); }
         body {
             return vec3i(flat & (width-1), // x: flat % width
-                         (flat >> log2width) & (height-1), // y: (flat / width) % height
+                        (flat >> log2width) & (height-1), // y: (flat / width) % height
                          flat >> log2heightwidth); // z: flat / (height*width)
         }
 }

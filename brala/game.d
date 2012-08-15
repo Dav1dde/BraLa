@@ -229,7 +229,7 @@ class BraLaGame : BaseGLFWEventHandler {
             synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
             debug _current_world.vram.print();
         } else if(packet.chunk.chunk.add_bitmask == 0) {
-            chunk_removal_queue.add(vec3i(packet.chunk.x, 0, packet.chunk.z));
+            chunk_removal_queue.put(vec3i(packet.chunk.x, 0, packet.chunk.z));
         }
     }
 
@@ -241,7 +241,7 @@ class BraLaGame : BaseGLFWEventHandler {
                 if(cc.chunk.primary_bitmask != 0) {
                     _current_world.add_chunk(cc.chunk, cc.coords);
                 } else if(cc.chunk.add_bitmask == 0) {
-                    chunk_removal_queue.add(cc.coords);
+                    chunk_removal_queue.put(cc.coords);
                 }
             }
         }

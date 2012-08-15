@@ -339,7 +339,7 @@ class World {
                 auto buffer = data[1];
 
                 size_t elements = tessellate(chunk, chunkc, &buffer);
-                cb_queue.add(delegate void() {
+                cb_queue.put(delegate void() {
                     if(chunk.vbo is null) {
                         chunk.vbo = new Buffer();
                     }
