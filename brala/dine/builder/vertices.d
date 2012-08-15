@@ -75,7 +75,6 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice ma
         mask = to_triangles(mask_slice.texcoords);
     }
 
-                 // vertex      normal       texcoords     palette
     Vertex[] data;
 
     foreach(i; 0..6) {
@@ -87,40 +86,6 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice ma
     }
 
     return data;
-
-    /*return [Vertex(positions[0][0], positions[0][1], positions[0][2],
-                   cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                   texcoords[0][0], texcoords[0][1],
-                   0, 0),
-           Vertex(positions[1][0], positions[1][1], positions[1][2],
-                  cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                  texcoords[1][0], texcoords[1][1],
-                  0, 0),
-           Vertex(positions[2][0], positions[2][1], positions[2][2],
-                  cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                  texcoords[2][0], texcoords[2][1],
-                  0, 0),
-           Vertex(positions[3][0], positions[3][1], positions[3][2],
-                  cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                  texcoords[3][0], texcoords[3][1],
-                  0, 0),
-           Vertex(positions[4][0], positions[4][1], positions[4][2],
-                  cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                  texcoords[4][0], texcoords[4][1],
-                  0, 0),
-           Vertex(positions[5][0], positions[5][1], positions[5][2],
-                  cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                  texcoords[5][0], texcoords[5][1],
-                  0, 0),
-           ];*/
-    
-    /*
-    return join([positions[0], cbsd.normal, texcoords[0], [0.0f, 0.0f],
-                 positions[1], cbsd.normal, texcoords[1], [0.0f, 0.0f],
-                 positions[2], cbsd.normal, texcoords[2], [0.0f, 0.0f],
-                 positions[3], cbsd.normal, texcoords[3], [0.0f, 0.0f],
-                 positions[4], cbsd.normal, texcoords[4], [0.0f, 0.0f],
-                 positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);*/
 }
 
 enum size_t BLOCK_IDS = 139;
