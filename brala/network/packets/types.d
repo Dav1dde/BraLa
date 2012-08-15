@@ -1,8 +1,6 @@
 module brala.network.packets.types;
 
 private {
-    import nbt.nbt;
-    
     import std.stream : Stream;
     import std.typetuple : TypeTuple, staticIndexOf, staticMap;
     import std.typecons : Tuple;
@@ -20,6 +18,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read, write;
+    import brala.utils.nbt : NbtTree;
     import brala.exception : ServerError;
 }
 
@@ -127,7 +126,7 @@ struct Slot {
     short item;
     byte item_count = 0;
     short metadata = 0;
-    nbt_node* nbt_tree;
+    NbtTree nbt_tree;
     
     private size_t _slot;
     private bool has_array_position;
@@ -155,9 +154,7 @@ struct Slot {
                 debug assert(len >= 0);
                 ubyte[] compressed_data = new ubyte[len];
                 s.readExact(compressed_data.ptr, len); 
-                ret.nbt_tree = nbt_parse_compressed(compressed_data.ptr, len);
-                enforceEx!ServerError(ret.nbt_tree !is null, to!string(nbt_error_to_string(cast(nbt_status)errno)));
-                // TODO: this is f*cking important! free the nbt tree! or create a wrapper class with a dtor which will call nbt_free
+                ret.nbt_tree = NbtTree.parse_compressed(compressed_data.ptr, len);
             }
         }
             
@@ -167,8 +164,8 @@ struct Slot {
     string toString() {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
         
-        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", nbt_tree* nbt_tree : "%s"`,
-                       s, item, item_count, metadata, cast(void*)nbt_tree);
+        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", NbtTree nbt_tree : "%s"`,
+                       s, item, item_count, metadata, nbt_tree);
     }
 }
 

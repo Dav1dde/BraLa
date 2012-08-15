@@ -9,6 +9,7 @@ private {
     import std.typetuple : TypeTuple, NoDuplicates, staticIndexOf;
 }
 
+// Based on: https://gist.github.com/2622791
 
 T get_options(T)() {
     return get_options!T(Runtime.args);
