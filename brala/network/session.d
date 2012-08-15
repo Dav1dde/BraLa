@@ -21,7 +21,7 @@ private {
     import brala.network.crypto : decode_public, PBEWithMD5AndDES;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
 
-    import arsd.http : post, get;
+    import arsd.http : HttpException, post, get;
     
     debug import std.stdio : writefln;
 }
@@ -136,7 +136,7 @@ class Session {
                             "java_version": java_version,
                             "opengl_version": opengl_version,
                             "opengl_vendor": opengl_vendor]);
-        } catch(Exception e) {
+        } catch(HttpException e) {
             stderr.writefln(`Unable to snoop: "%s"`, e.msg);
         }
     }

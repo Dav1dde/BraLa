@@ -5,15 +5,22 @@ module arsd.http;
 pragma(lib, "crypto");
 pragma(lib, "ssl");
 
+class HttpException : Exception {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+
 /**
 	Gets a textual document, ignoring headers. Throws on non-text or error.
 */
 string get(string url) {
 	auto hr = httpRequest("GET", url);
 	if(hr.code != 200)
-		throw new Exception(format("HTTP answered %d instead of 200 on %s", hr.code, url));
+		throw new HttpException(format("HTTP answered %d instead of 200 on %s", hr.code, url));
 	if(hr.contentType.indexOf("text/") == -1)
-		throw new Exception(hr.contentType ~ " is bad content for conversion to string");
+		throw new HttpException(hr.contentType ~ " is bad content for conversion to string");
 	return cast(string) hr.content;
 
 }
@@ -31,9 +38,9 @@ string post(string url, string[string] args) {
 
 	auto hr = httpRequest("POST", url, cast(ubyte[]) content, ["Content-Type: application/x-www-form-urlencoded"]);
 	if(hr.code != 200)
-		throw new Exception(format("HTTP answered %d instead of 200", hr.code));
+		throw new HttpException(format("HTTP answered %d instead of 200", hr.code));
 	if(hr.contentType.indexOf("text/") == -1)
-		throw new Exception(hr.contentType ~ " is bad content for conversion to string");
+		throw new HttpException(hr.contentType ~ " is bad content for conversion to string");
 
 	return cast(string) hr.content;
 }
@@ -65,7 +72,7 @@ struct UriParts {
 			useHttps = true;
 		else
 		if(uri[0..7] != "http://")
-			throw new Exception("You must use an absolute, http or https URL.");
+			throw new HttpException("You must use an absolute, http or https URL.");
 
 		int start = useHttps ? 8 : 7;
 
@@ -121,7 +128,7 @@ HttpResponse httpRequest(string method, string uri, const(ubyte)[] content = nul
     if(u.useHttps) {
         void sslAssert(bool ret){
             if (!ret){
-                throw new Exception("SSL_ERROR");
+                throw new HttpException("SSL_ERROR");
             }
         }
         SSL_library_init();
@@ -207,7 +214,7 @@ body {
  cont:
 	string l = readln();
 	if(l[0..9] != "HTTP/1.1 ")
-		throw new Exception("Not talking to a http server");
+		throw new HttpException("Not talking to a http server");
 
 	hr.code = to!int(l[9..12]); // HTTP/1.1 ### OK
 
