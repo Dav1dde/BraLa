@@ -140,6 +140,7 @@ BlockDescriptor[256] BLOCKS = [
     { true,  false, Block,     "lily pad" },
     { false, true,  Block,     "nether brick" },
     { true,  false, Block,     "nether brick fence" },
+    { true,  false, DataBlock, "nether brick stair" },
     { true,  false, DataBlock, "nether wart" },
     { true,  false, Block,     "enchantment table" },
     { true,  false, DataBlock, "brewing stand" },

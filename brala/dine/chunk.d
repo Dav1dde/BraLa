@@ -5,6 +5,7 @@ private {
     import glamour.vbo : Buffer;
     
     import std.bitmanip : bitfields;
+    import std.string : format;
     
     import gl3n.linalg : vec3i;
     import brala.dine.util : log2_ub;
@@ -35,6 +36,11 @@ struct Block {
     
     bool opEquals(const int id) const {
         return id == this.id;
+    }
+
+    string toString() {
+        return `Block(id : %s, metadata : %s, block_light : %s, sky_light : %s`
+                .format(id, metadata, block_light, sky_light);
     }
 }
 

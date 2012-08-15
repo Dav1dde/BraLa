@@ -85,7 +85,6 @@ mixin template BlockBuilder() {
         switch(block.id) {
             case 2: mixin(single_side("grass_block")); break;
             case 18: mixin(single_side("leave_block")); break;
-            case 79: break;
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
     }
