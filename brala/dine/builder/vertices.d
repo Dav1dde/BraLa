@@ -123,7 +123,7 @@ Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice ma
                  positions[5], cbsd.normal, texcoords[5], [0.0f, 0.0f]]);*/
 }
 
-enum size_t BLOCK_IDS = 137;
+enum size_t BLOCK_IDS = 139;
 
 private alias MCTextureSlice t;
 
@@ -226,7 +226,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.LEFT, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -243,6 +243,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     simple_block(Side.LEFT, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.LEFT, t(10, 10)), // cauldron
@@ -252,11 +253,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // dragon egg
     simple_block(Side.LEFT, t(3, 14)), // redstone lamp
     simple_block(Side.LEFT, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.LEFT, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.LEFT, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
@@ -358,7 +368,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.RIGHT, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -375,6 +385,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     simple_block(Side.RIGHT, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.RIGHT, t(10, 10)), // cauldron
@@ -384,11 +395,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     [], // dragon egg
     simple_block(Side.RIGHT, t(3, 14)), // redstone lamp
     simple_block(Side.RIGHT, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.RIGHT, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.RIGHT, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
@@ -490,7 +510,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.NEAR, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -507,6 +527,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     simple_block(Side.NEAR, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.NEAR, t(10, 10)), // cauldron
@@ -516,11 +537,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // dragon egg
     simple_block(Side.NEAR, t(3, 14)), // redstone lamp
     simple_block(Side.NEAR, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.NEAR, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.NEAR, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
@@ -622,7 +652,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.FAR, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -639,6 +669,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     simple_block(Side.FAR, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.FAR, t(10, 10)), // cauldron
@@ -648,11 +679,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     [], // dragon egg
     simple_block(Side.FAR, t(3, 14)), // redstone lamp
     simple_block(Side.FAR, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.FAR, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.FAR, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
@@ -754,7 +794,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.TOP, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -771,6 +811,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     simple_block(Side.TOP, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.TOP, t(10, 9)), // cauldron
@@ -780,11 +821,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // dragon egg
     simple_block(Side.TOP, t(3, 14)), // redstone lamp
     simple_block(Side.TOP, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.TOP, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.TOP, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
@@ -886,7 +936,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // locked chest
     [], // trapdoor
     [], // hidden silverfish
-    [], // stone brick
+    simple_block(Side.BOTTOM, t(6, 4)), // stone brick
     [], // huge brown mushroom
     [], // huge red mushroom
     [], // iron bar
@@ -903,6 +953,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     simple_block(Side.BOTTOM, t(0, 15)), // nether brick
     [], // nether brick fence
     [], // nether wart
+    [], // nether brick stair
     [], // enchantment table
     [], // brewing stand
     simple_block(Side.BOTTOM, t(10, 9)), // cauldron
@@ -912,11 +963,20 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // dragon egg
     simple_block(Side.BOTTOM, t(3, 14)), // redstone lamp
     simple_block(Side.BOTTOM, t(4, 14)), // redstone lamp on
-    [], // padding to 128 blocks
-    [],
-    [],
-    [],
-    []
+    [], // wooden double slab
+    [], // wooden slab
+    [], // cocoa plant
+    [], // sandstone stairs
+    simple_block(Side.BOTTOM, t(11, 11)), // emerald ore
+    [], // ender chest
+    [], // tripwire hook
+    [], // tripwire
+    simple_block(Side.BOTTOM, t(9, 2)), // emerald block
+    [], // spruce wood stairs
+    [], // birch wood stairs
+    [], // jungle wood stairs
+    [], // command block
+    []  // beacon block
 ];
 
 ref Vertex[] get_vertices(Side side, T)(T index) if(isIntegral!T) {
