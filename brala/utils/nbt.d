@@ -29,6 +29,10 @@ class NbtTree {
         }
     }
 
+    NbtTree clone() {
+        return new NbtTree(nbt_clone(root));
+    }
+    
     static NbtTree parse_file(in char[] filename) {
         return new NbtTree(check_nbt!nbt_parse_path(filename.toStringz()));
     }
@@ -91,6 +95,10 @@ class NbtTree {
 
     nbt_node* find_by_path(in char[] name) {
         return check_nbt!nbt_find_by_path(root, name.toStringz());
+    }
+
+    string dump_ascii() {
+        return to!string(nbt_dump_ascii(root));
     }
 
     bool opEquals(NbtTree other) const {
