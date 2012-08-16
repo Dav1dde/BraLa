@@ -9,6 +9,7 @@ private {
 public {
     import std.array : array, join;
     import std.algorithm : map;
+    import std.functional : memoize;
     
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
@@ -85,16 +86,15 @@ mixin template BlockBuilder() {
             case 0: tex = MCTextureSlice(4, 2); break; // oak
             case 1: tex = MCTextureSlice(4, 8); break; // spruce
             case 2: tex = MCTextureSlice(5, 8); break; // birch
-            case 3: tex = MCTextureSlice(10, 10); break; // jungle
+            case 3: tex = MCTextureSlice(9, 10); break; // jungle
         }
         ```;
         
         MCTextureSlice tex;
         byte[2][4] texcoords;
-        // TODO: some tweaks required, wrong rotation
         // TODO: rewrite it/think of something better, I don't like it
-        static if(s == Side.NEAR || s == Side.FAR) { // south
-            if(block.metadata == 0) {
+        static if(s == Side.NEAR || s == Side.FAR) { // south and north
+            if((block.metadata & 0xc) == 0) {
                 mixin(set_tex);
                 texcoords = tex.texcoords;
             } else if(block.metadata & 0x4) {
@@ -103,8 +103,8 @@ mixin template BlockBuilder() {
             } else { // it is 0x8
                 texcoords = MCTextureSlice(5, 2).texcoords;
             }
-        } else static if(s == Side.LEFT || s == Side.RIGHT) { // west
-            if(block.metadata == 0) {
+        } else static if(s == Side.LEFT || s == Side.RIGHT) { // west and east
+            if((block.metadata & 0xc) == 0) {
                 mixin(set_tex);
                 texcoords = tex.texcoords;
             } else if(block.metadata & 0x8) {
@@ -114,18 +114,21 @@ mixin template BlockBuilder() {
                 texcoords = MCTextureSlice(5, 2).texcoords;
             }
         } else static if(s == Side.TOP || s == Side.BOTTOM) {
-            if(block.metadata > 0) {
+            if(block.metadata & 0x4) {
                 mixin(set_tex);
                 texcoords = tex.texcoords;
+            } else if(block.metadata & 0x8) {
+                mixin(set_tex);
+                texcoords = tex.texcoords_90;
             } else { // it is 0x0
                 texcoords = MCTextureSlice(5, 2).texcoords;
             }
         } else {
-            static assert(false, "use single_side string-mixin for wood_block.");
+            static assert(false, "use single_side string-mixin gen for wood_block.");
         }
 
-        // TODO: maybe memoize
-        auto sb = simple_block(s, texcoords);
+        // TODO: find out if memoize speeds things up, since this is not an expensive computation
+        auto sb = memoize!(simple_block, 16)(s, texcoords);
         add_template_vertices(sb, x_offset, y_offset, z_offset, 0, 0);
     }
         

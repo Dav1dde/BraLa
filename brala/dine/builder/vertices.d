@@ -87,7 +87,11 @@ immutable CubeSideData[6] CUBE_VERTICES = [
 
 private const byte[2][4] nslice = MCTextureSlice(-1, -1).texcoords;
 
-Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice=nslice) pure {
+Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
+    return simple_block(side, texture_slice, nslice);
+}
+
+Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
