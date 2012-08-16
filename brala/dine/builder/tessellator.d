@@ -17,15 +17,21 @@ private {
 
 
 enum Side : ubyte {
-    LEFT,
-    RIGHT,
-    NEAR,
-    FAR,
+    NEAR, // south
+    LEFT, // west
+    FAR, // north
+    RIGHT, // east
     TOP,
     BOTTOM,
     ALL
 }
 
+enum Facing {
+    SOUTH,
+    WEST,
+    NORTH,
+    EAST
+}   
 
 struct Vertex {
     float x;

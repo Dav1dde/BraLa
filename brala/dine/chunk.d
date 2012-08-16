@@ -39,7 +39,7 @@ struct Block {
     }
 
     string toString() {
-        return `Block(id : %s, metadata : %s, block_light : %s, sky_light : %s`
+        return `Block(id : %s, metadata : %s, block_light : %s, sky_light : %s)`
                 .format(id, metadata, block_light, sky_light);
     }
 }

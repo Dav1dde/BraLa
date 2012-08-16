@@ -32,6 +32,27 @@ struct TextureSlice(float w, float h) {
                 [cast(byte)(x+1), cast(byte)(y-1)],
                 [cast(byte)x,     cast(byte)(y-1)]];
     }
+
+    @property byte[2][4] texcoords_90() {
+        return [[cast(byte)(x+1), cast(byte)y],
+                [cast(byte)(x+1), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)y]];
+    }
+
+    @property byte[2][4] texcoords_180() {
+        return [[cast(byte)(x+1), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+1), cast(byte)y]];
+    }
+
+    @property byte[2][4] texcoords_270() {
+        return [[cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+1), cast(byte)y],
+                [cast(byte)(x+1), cast(byte)(y-1)]];
+    }
 }
 
 alias TextureSlice!(16, 16) MCTextureSlice;
@@ -44,17 +65,17 @@ struct CubeSideData {
 
 // TODO texcoords
 immutable CubeSideData[6] CUBE_VERTICES = [
+    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // front
+       [0.0f, 0.0f, 1.0f] },
+    
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]], // left
        [-1.0f, 0.0f, 0.0f] },
 
-    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
-
-    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // front
-       [0.0f, 0.0f, 1.0f] },
-
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // back
        [0.0f, 0.0f, -1.0f] },
+
+    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f]], // right
+       [1.0f, 0.0f, 0.0f] },
 
     { [[-0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, -0.5f]], // top
        [0.0f, 1.0f, 0.0f]  },
@@ -63,16 +84,18 @@ immutable CubeSideData[6] CUBE_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-Vertex[] simple_block(Side side, MCTextureSlice texture_slice, MCTextureSlice mask_slice=MCTextureSlice(-1, -1)) {
+private const byte[2][4] nslice = MCTextureSlice(-1, -1).texcoords;
+
+Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice=nslice) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     float[3][6] positions = to_triangles(cbsd.positions);
-    byte[2][6] texcoords = to_triangles(texture_slice.texcoords);
+    byte[2][6] texcoords = to_triangles(texture_slice);
     byte[2][6] mask;
-    if(mask_slice.x == -1 && mask_slice.y == -1) {
+    if(mask_slice == nslice) {
         mask = texcoords;
     } else {
-        mask = to_triangles(mask_slice.texcoords);
+        mask = to_triangles(mask_slice);
     }
 
     Vertex[] data;

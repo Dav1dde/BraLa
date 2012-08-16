@@ -12,7 +12,7 @@ public {
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
-                                         get_vertices;
+                                         get_vertices, MCTextureSlice, simple_block;
 }
 
 
@@ -71,6 +71,62 @@ mixin template BlockBuilder() {
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.grass_uv.field);
     }
+
+    void wood_block(Side s)(const ref Block block, const ref BiomeData biome_data,
+                            float x_offset, float y_offset, float z_offset) {
+
+        if(block.metadata == 0) {
+            tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
+        }
+
+        enum set_tex = ```
+        final switch(block.metadata & 0x3) {
+            case 0: tex = MCTextureSlice(4, 2); break; // oak
+            case 1: tex = MCTextureSlice(4, 8); break; // spruce
+            case 2: tex = MCTextureSlice(5, 8); break; // birch
+            case 3: tex = MCTextureSlice(10, 10); break; // jungle
+        }
+        ```;
+        
+        MCTextureSlice tex;
+        byte[2][4] texcoords;
+        // TODO: some tweaks required, wrong rotation
+        // TODO: rewrite it/think of something better, I don't like it
+        static if(s == Side.NEAR || s == Side.FAR) { // south
+            if(block.metadata == 0) {
+                mixin(set_tex);
+                texcoords = tex.texcoords;
+            } else if(block.metadata & 0x4) {
+                mixin(set_tex);
+                texcoords = tex.texcoords_90;
+            } else { // it is 0x8
+                texcoords = MCTextureSlice(5, 2).texcoords;
+            }
+        } else static if(s == Side.LEFT || s == Side.RIGHT) { // west
+            if(block.metadata == 0) {
+                mixin(set_tex);
+                texcoords = tex.texcoords;
+            } else if(block.metadata & 0x8) {
+                mixin(set_tex);
+                texcoords = tex.texcoords_90;
+            } else { // it is 0x4
+                texcoords = MCTextureSlice(5, 2).texcoords;
+            }
+        } else static if(s == Side.TOP || s == Side.BOTTOM) {
+            if(block.metadata > 0) {
+                mixin(set_tex);
+                texcoords = tex.texcoords;
+            } else { // it is 0x0
+                texcoords = MCTextureSlice(5, 2).texcoords;
+            }
+        } else {
+            static assert(false, "use single_side string-mixin for wood_block.");
+        }
+
+        // TODO: maybe memoize
+        auto sb = simple_block(s, texcoords);
+        add_template_vertices(sb, x_offset, y_offset, z_offset, 0, 0);
+    }
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
@@ -83,8 +139,9 @@ mixin template BlockBuilder() {
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
-            case 2: mixin(single_side("grass_block")); break;
-            case 18: mixin(single_side("leave_block")); break;
+            case 2: mixin(single_side("grass_block")); break; // grass
+            case 17: mixin(single_side("wood_block")); break; // wood
+            case 18: mixin(single_side("leave_block")); break; // leaves
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
     }

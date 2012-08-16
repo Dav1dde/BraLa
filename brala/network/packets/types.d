@@ -236,12 +236,11 @@ struct MapChunkS { // TODO: implement send
                 if(chunk.primary_bitmask & 1 << i) {
                     const(ubyte)[] temp = unc_data[offset..offset+2048];
 
-                    for(uint j = 0; j < cast(uint)(temp.length); j++) {
-                        ubyte dj = temp[j];
-                        vec3i coords_m1 = coords_from_j(j, i);
-                        vec3i coords_m2 = coords_from_j(++j, i);
+                    uint j = 0;
+                    foreach(dj; temp) {
+                        vec3i coords_m1 = coords_from_j(j++, i);
+                        vec3i coords_m2 = coords_from_j(j++, i);
 
-                        // NOTE: the data is maybe extracted in the wrong order, still big endian ...
                         mixin("chunk.blocks[chunk.to_flat(coords_m1)]." ~ f ~ " = dj & 0x0F;");
                         mixin("chunk.blocks[chunk.to_flat(coords_m2)]." ~ f ~ " = dj >> 4;");
                     }
