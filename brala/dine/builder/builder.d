@@ -2,7 +2,8 @@ module brala.dine.builder.builder;
 
 private {
     import brala.dine.chunk : Block;
-    import brala.dine.builder.tessellator : Vertex, Side;
+    import brala.dine.builder.tessellator : Vertex;
+    import brala.dine.builder.constants : Side;
 }
 
 public {

@@ -4,7 +4,8 @@ private {
     import std.array : join;
     import std.traits : isIntegral;
 
-    import brala.dine.builder.tessellator : Vertex, Side;
+    import brala.dine.builder.tessellator : Vertex;
+    import brala.dine.builder.constants : Side;
     import brala.dine.util : to_triangles;
 }
 

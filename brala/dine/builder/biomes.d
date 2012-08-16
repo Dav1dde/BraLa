@@ -4,31 +4,8 @@ private {
     import std.typecons : Tuple;
 }
 
-enum Biome {
-    OCEAN = 0,
-    PLAINS,
-    DESERT,
-    EXTREME_HILLS,
-    FOREST,
-    TAIGA,
-    SWAMPLAND,
-    RIVER,
-    HELL,
-    SKY,
-    FROZEN_OCEAN,
-    FROZEN_RIVER,
-    ICE_PLAINS,
-    ICE_MOUNTAINS,
-    MUSHROOM_ISLAND,
-    MUSHROOM_ISLAND_SHORE,
-    BEACH,
-    DESERT_HILLS,
-    FOREST_HILLS,
-    TAIGA_HILLS,
-    EXTREME_HILLS_EDGE,
-    JUNGLE,
-    JUNGLE_HILLS
-}
+public import brala.dine.builder.constants : Biome;
+
 
 alias Tuple!(float, "u", float, "v") UVTuple;
 
