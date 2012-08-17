@@ -154,10 +154,17 @@ mixin template BlockBuilder() {
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        Vertex[] vertices = get_vertices!(s)(block.id);
-
-        add_template_vertices(vertices, x_offset, y_offset, z_offset,
-                              biome_data.leave_uv.field);
+        final switch(block.metadata & 0x03) {
+            case 0: enum vertices = simple_block(s, MCTextureSlice(5, 4)); // oak
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+            case 1: enum vertices = simple_block(s, MCTextureSlice(5, 9)); // spruce
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+            case 2: enum vertices = simple_block(s, MCTextureSlice(5, 4)); // birch, uses oak texture
+                    // birch trees have a different biome color?
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+            case 3: enum vertices = simple_block(s, MCTextureSlice(5, 13)); // jungle
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+        }
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
