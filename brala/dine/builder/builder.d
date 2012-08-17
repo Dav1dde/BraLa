@@ -10,7 +10,7 @@ public {
     import std.array : array, join;
     import std.algorithm : map;
     import std.functional : memoize;
-    import std.metastrings : toStringNow;
+    import std.typetuple : TypeTuple;
     
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
@@ -18,6 +18,11 @@ public {
                                          get_vertices, MCTextureSlice, simple_block;
 }
 
+
+template WoolPair(byte xi, byte yi) {
+    enum x = xi;
+    enum y = yi;
+}
 
 mixin template BlockBuilder() {
     void add_vertex(float x, float y, float z,
@@ -167,6 +172,23 @@ mixin template BlockBuilder() {
         }
     }
 
+    void wool_block(Side s)(const ref Block block, const ref BiomeData biome_data,
+                            float x_offset, float y_offset, float z_offset) {
+        static string wool_vertices() {
+            return `enum vertices = simple_block(s, MCTextureSlice(slice.x, slice.y).texcoords);
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
+        }
+
+        alias WoolPair t;
+        final switch(block.metadata) {                                                     
+            foreach(i, slice; TypeTuple!(t!(0, 5),  t!(2, 14), t!(2, 13), t!(2, 12), t!(2, 11), t!(2, 10), t!(2, 9), t!(2, 8),
+                                         t!(1, 15), t!(1, 14), t!(1, 13), t!(1, 12), t!(1, 11), t!(1, 10), t!(1, 9), t!(1, 8))) {
+                // TODO: find out why green colors are bugged
+                case i: mixin(wool_vertices()); break;
+            }
+        }
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -174,6 +196,7 @@ mixin template BlockBuilder() {
             case 5: mixin(single_side("plank_block")); break; // planks
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
+            case 35: mixin(single_side("wool_block")); break; // wool
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
     }
