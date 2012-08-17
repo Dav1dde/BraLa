@@ -51,4 +51,5 @@ fragment:
         //color.rgb*color.a*biome + color.rgb*(1-color.a)
         
         color_out = color*alpha*biome + color*(1.0-alpha);
+        //color_out = vec4(v_texcoord, 0, 0);
     }

@@ -170,7 +170,8 @@ mixin template BlockBuilder() {
     void wool_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                             float x_offset, float y_offset, float z_offset) {
         static string wool_vertices() {
-            return `enum vertices = simple_block(s, MCTextureSlice(slice.x, slice.y).texcoords);
+                    // no enum possible due to CTFE bug?
+            return `auto vertices = memoize!(simple_block, 16)(s, MCTextureSlice(slice.x, slice.y).texcoords);
                     add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
         }
 
@@ -178,7 +179,6 @@ mixin template BlockBuilder() {
         final switch(block.metadata) {                                                     
             foreach(i, slice; TypeTuple!(t!(0, 5),  t!(2, 14), t!(2, 13), t!(2, 12), t!(2, 11), t!(2, 10), t!(2, 9), t!(2, 8),
                                          t!(1, 15), t!(1, 14), t!(1, 13), t!(1, 12), t!(1, 11), t!(1, 10), t!(1, 9), t!(1, 8))) {
-                // TODO: find out why green colors are bugged
                 case i: mixin(wool_vertices()); break;
             }
         }
