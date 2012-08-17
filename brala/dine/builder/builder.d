@@ -10,6 +10,7 @@ public {
     import std.array : array, join;
     import std.algorithm : map;
     import std.functional : memoize;
+    import std.metastrings : toStringNow;
     
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
@@ -40,7 +41,7 @@ mixin template BlockBuilder() {
             buffer.ptr[elements..(elements+=4)] = (cast(void*)&v_biome)[0..4];
         }
 
-    void add_template_vertices(const ref Vertex[] vertices,
+    void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                float u_biome, float v_biome)
         in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
@@ -59,7 +60,7 @@ mixin template BlockBuilder() {
             }
         }
 
-    void add_vertices(const ref Vertex[] vertices)
+    void add_vertices(T : Vertex)(const auto ref T[] vertices)
         in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tesselator"); }
         body {
             buffer.ptr[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
@@ -72,6 +73,26 @@ mixin template BlockBuilder() {
 
         add_template_vertices(vertices, x_offset, y_offset, z_offset,
                               biome_data.grass_uv.field);
+    }
+
+    void plank_block(Side s)(const ref Block block, const ref BiomeData biome_data,
+                             float x_offset, float y_offset, float z_offset) {
+        static string plank_vertices(string x, string y) {
+            return `enum tex = MCTextureSlice(` ~ x ~ `, ` ~ y ~ `);
+                    static if(s == Side.TOP) {
+                        enum vertices = simple_block(s, tex.texcoords_90);
+                    } else {
+                        enum vertices = simple_block(s, tex.texcoords);
+                    }
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
+        }
+        
+        final switch(block.metadata & 0x3) {
+            case 0: mixin(plank_vertices("4", "1")); break; // oak
+            case 1: mixin(plank_vertices("6", "13")); break; // spruce
+            case 2: mixin(plank_vertices("6", "14")); break; // birch
+            case 3: mixin(plank_vertices("7", "13")); break; // jungle
+        }
     }
 
     void wood_block(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -144,6 +165,7 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
             case 2: mixin(single_side("grass_block")); break; // grass
+            case 5: mixin(single_side("plank_block")); break; // planks
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);

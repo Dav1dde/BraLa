@@ -103,17 +103,17 @@ Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice
         mask = to_triangles(mask_slice);
     }
 
-    Vertex[] data;
+    Vertex[6] data;
 
     foreach(i; 0..6) {
-        data ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
-                       cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                       texcoords[i][0], texcoords[i][1],
-                       mask[i][0], mask[i][1],
-                       0, 0);
+        data[i] = Vertex(positions[i][0], positions[i][1], positions[i][2],
+                         cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+                         texcoords[i][0], texcoords[i][1],
+                         mask[i][0], mask[i][1],
+                         0, 0);
     }
 
-    return data;
+    return data.dup;
 }
 
 enum size_t BLOCK_IDS = 139;
