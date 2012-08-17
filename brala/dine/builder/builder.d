@@ -147,9 +147,8 @@ mixin template BlockBuilder() {
         } else {
             static assert(false, "use single_side string-mixin gen for wood_block.");
         }
-
-        // TODO: find out if memoize speeds things up, since this is not an expensive computation
-        auto sb = memoize!(simple_block, 16)(s, texcoords);
+        
+        auto sb = memoize!(simple_block, 16)(s, texcoords); // memoize is faster!
         add_template_vertices(sb, x_offset, y_offset, z_offset, 0, 0);
     }
         

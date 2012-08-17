@@ -13,7 +13,7 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.process : getenv;
-    
+
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.input : register_glfw_error_callback;
@@ -25,7 +25,7 @@ private {
     import brala.exception : InitError;
     import brala.utils.image : Image;
     import brala.utils.dargs : get_options, Alias;
-    
+
     import std.stdio : stderr, writefln;
 }
 
@@ -42,17 +42,17 @@ GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {
     glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
-    
+
     _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
-    
+
     if(!_window) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
     }
-    
+
     glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-    
+
     glfwSwapInterval(0); // change this to 1?
-    
+
     return _window;
 }
 
@@ -81,7 +81,7 @@ GLVersion init_opengl() {
 
 BraLaEngine init_engine(int width, int height, GLVersion glv) {
     auto engine = new BraLaEngine(width, height, glv);
-    
+
     engine.resmgr.load_default_resources(); // I like! ~15mb in 837ms
 
     string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
@@ -131,7 +131,7 @@ struct AppArguments {
 
     bool credentials;
     Alias!("credentials") c;
-    
+
     uint width = 1024;
     uint height = 800;
 
@@ -147,17 +147,16 @@ int main() {
     scope(exit) glfwTerminate();
 
     auto args = get_options!AppArguments();
-    
+
     debug register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
-    
+
     debug writefln("init: %dx%d", args.width, args.height);
     GLFWwindow win = open_glfw_win(args.width, args.height);
-    
+
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
-
 
     string username = args.username;
     string password = args.password;
@@ -171,7 +170,7 @@ int main() {
             password = credentials.password;
         }
     }
-   
+
     auto engine = init_engine(args.width, args.height, glv);
 
     auto game = new BraLaGame(engine, win, username, password, !args.no_snoop);
