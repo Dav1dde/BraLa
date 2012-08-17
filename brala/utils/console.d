@@ -1,6 +1,5 @@
 module brala.utils.console;
 
-
 private {
     import std.stdio : File, stdout, stderr;
     import std.array : appender, join;
@@ -9,6 +8,7 @@ private {
     import std.process : environment;
     import std.typecons : TypeTuple;
 }
+
 
 enum Attribute : int {
     NONE       = 0b000000000000000000000000,
@@ -154,7 +154,7 @@ version(Posix) {
         f.writeln(c);
     }
 } else { // VERSION not POSIX
-    bool color_terminal(File f = stdout) {
+    bool color_terminal(File f=stdout) {
         return false;
     }
 

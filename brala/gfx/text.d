@@ -38,6 +38,7 @@ enum Style : char {
 }
 
 int[Style] colorize_mapping;
+Regex!char SENDER_RE;
 
 static this() {
     colorize_mapping = [Style.BLACK: c.Attribute.BLACK,
@@ -65,6 +66,8 @@ static this() {
                         Style.PLAIN_WHITE: c.Attribute.RESET,
 
                         Style.DEFAULT: c.Attribute.RESET];
+
+    SENDER_RE = regex(`^<([\w, _]+)>`, `g`);
 }
 
 
@@ -82,12 +85,6 @@ struct ChatMessage {
     void print_colorized() {
         c.print_colorized(text, colorize_mapping);
     }
-}
-
-Regex!char SENDER_RE;
-
-static this() {
-    SENDER_RE = regex(`^<([\w, _]+)>`, `g`);
 }
 
 ChatMessage parse_chat(string chat_line) {
