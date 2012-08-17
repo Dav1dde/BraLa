@@ -83,12 +83,7 @@ mixin template BlockBuilder() {
     void plank_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         static string plank_vertices(string x, string y) {
-            return `enum tex = MCTextureSlice(` ~ x ~ `, ` ~ y ~ `);
-                    static if(s == Side.TOP) {
-                        enum vertices = simple_block(s, tex.texcoords_90);
-                    } else {
-                        enum vertices = simple_block(s, tex.texcoords);
-                    }
+            return `enum vertices = simple_block(s, MCTextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
                     add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
         }
         
@@ -142,10 +137,10 @@ mixin template BlockBuilder() {
         } else static if(s == Side.TOP || s == Side.BOTTOM) {
             if(block.metadata & 0x4) {
                 mixin(set_tex);
-                texcoords = tex.texcoords;
+                texcoords = tex.texcoords_90;
             } else if(block.metadata & 0x8) {
                 mixin(set_tex);
-                texcoords = tex.texcoords_90;
+                texcoords = tex.texcoords;
             } else { // it is 0x0
                 texcoords = MCTextureSlice(5, 2).texcoords;
             }
