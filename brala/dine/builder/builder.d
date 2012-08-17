@@ -167,6 +167,26 @@ mixin template BlockBuilder() {
         }
     }
 
+    void sandstone_block(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                 float x_offset, float y_offset, float z_offset) {
+        if(block.metadata == 0) {
+            return tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
+        }
+
+        static if(s == Side.TOP || s == Side.BOTTOM) {
+            enum vertices = simple_block(s, MCTextureSlice(0, 12).texcoords);
+            add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+        } else {
+            if(block.metadata == 0x1) { // chiseled
+                enum vertices = simple_block(s, MCTextureSlice(5, 15).texcoords);
+                add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+            } else { // smooth
+                enum vertices = simple_block(s, MCTextureSlice(6, 15).texcoords);
+                add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+            }
+        }
+    }
+
     void wool_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                             float x_offset, float y_offset, float z_offset) {
         static string wool_vertices() {
@@ -191,6 +211,7 @@ mixin template BlockBuilder() {
             case 5: mixin(single_side("plank_block")); break; // planks
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
+            case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 35: mixin(single_side("wool_block")); break; // wool
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
