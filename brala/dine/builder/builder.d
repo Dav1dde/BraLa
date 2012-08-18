@@ -260,6 +260,16 @@ mixin template BlockBuilder() {
         }
     }
 
+    void wooden_double_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                    float x_offset, float y_offset, float z_offset) {
+        final switch(block.metadata & 0x3) {
+            case 0: mixin(add_block_enum_vertices("4", "1")); break; // oak
+            case 1: mixin(add_block_enum_vertices("6", "13")); break; // spruce
+            case 2: mixin(add_block_enum_vertices("6", "14")); break; // birch
+            case 3: mixin(add_block_enum_vertices("7", "13")); break; // jungle
+        }
+    }
+
     void wooden_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         bool upside_down = (block.metadata & 0x8) != 0;
@@ -283,6 +293,7 @@ mixin template BlockBuilder() {
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
+            case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
