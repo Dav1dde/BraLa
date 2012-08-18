@@ -214,10 +214,48 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         bool upside_down = (block.metadata & 0x8) != 0;
         final switch(block.metadata & 0x3) {
-            case 0: mixin(add_slab_enum_vertices("4", "1")); break; // oak
-            case 1: mixin(add_slab_enum_vertices("6", "13")); break; // spruce
-            case 2: mixin(add_slab_enum_vertices("6", "14")); break; // birch
-            case 3: mixin(add_slab_enum_vertices("7", "13")); break; // jungle
+            case 0: mixin(add_slab_enum_vertices(s, "4", "1")); break; // oak
+            case 1: mixin(add_slab_enum_vertices(s, "6", "13")); break; // spruce
+            case 2: mixin(add_slab_enum_vertices(s, "6", "14")); break; // birch
+            case 3: mixin(add_slab_enum_vertices(s, "7", "13")); break; // jungle
+        }
+    }
+
+    void stone_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
+                             float x_offset, float y_offset, float z_offset) {
+        bool upside_down = (block.metadata & 0x8) != 0;
+
+        static if(s == Side.TOP) {
+            bool tessellated = true;
+            if(block.metadata == 0) { // stone
+                mixin(add_slab_enum_vertices(s, "6", "1"));
+            } else if((block.metadata & 0x7) == 1) { // sandstone
+                mixin(add_slab_enum_vertices(s, "0", "12"));
+            } else {
+                tessellated = false;
+            }
+        } else static if(s == Side.BOTTOM) {
+            bool tessellated = true;
+            if(block.metadata == 0) { // stone
+                mixin(add_slab_enum_vertices(s, "6", "1"));
+            } else if((block.metadata & 0x7) == 1) { // sandstone
+                mixin(add_slab_enum_vertices(s, "0", "14"));
+            } else {
+                tessellated = false;
+            }
+        } else {
+            bool tessellated = false;
+        }
+
+        if(!tessellated) {
+            final switch(block.metadata & 0x7) {
+                case 0: mixin(add_slab_enum_vertices(s, "5", "1")); break; // stone
+                case 1: mixin(add_slab_enum_vertices(s, "0", "13")); break; // sandstone
+                case 2: mixin(add_slab_enum_vertices(s, "4", "1")); break; // wooden stone
+                case 3: mixin(add_slab_enum_vertices(s, "0", "2")); break; // cobblestone
+                case 4: mixin(add_slab_enum_vertices(s, "7", "1")); break; // brick
+                case 5: mixin(add_slab_enum_vertices(s, "6", "4")); break; // stone brick
+            }
         }
     }
 
@@ -230,6 +268,7 @@ mixin template BlockBuilder() {
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 35: mixin(single_side("wool_block")); break; // wool
+            case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
@@ -266,9 +305,17 @@ static string add_block_enum_vertices(string x, string y) {
             add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
 }
 
-static string add_slab_enum_vertices(string x, string y) {
-    return `enum vertices = simple_slab(s, false, SlabTextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
-            enum vertices_usd = simple_slab(s, true, SlabTextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
+static string add_slab_enum_vertices(Side s, string x, string y) {
+    string v;
+    if(s == Side.TOP || s == Side.BOTTOM) {
+        v = `enum vertices = simple_slab(s, false, TextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
+             enum vertices_usd = simple_slab(s, true, TextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);`;
+    } else {
+        v = `enum vertices = simple_slab(s, false, SlabTextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
+             enum vertices_usd = simple_slab(s, true, SlabTextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);`;
+    }
+    
+    return  v ~ `
             if(upside_down) {
                 add_template_vertices(vertices_usd, x_offset, y_offset, z_offset, 0, 0);
             } else {

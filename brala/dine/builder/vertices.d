@@ -67,10 +67,10 @@ struct SlabTextureSlice {
         }
     
     @property byte[2][4] texcoords() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
+        return [[cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+2), cast(byte)y],
                 [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)x,     cast(byte)(y-2)]];
+                [cast(byte)x,     cast(byte)(y-1)]];
     }
 }
 
