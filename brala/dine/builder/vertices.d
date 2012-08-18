@@ -2,6 +2,7 @@ module brala.dine.builder.vertices;
 
 private {
     import std.array : join;
+    import std.math : abs;
     import std.traits : isIntegral;
 
     import brala.dine.builder.tessellator : Vertex;
@@ -10,53 +11,68 @@ private {
 }
 
 
-struct TextureSlice(float w, float h) {
-    static const float width = w;
-    static const float height = h;
-
-    static const float x_step = 1.0f/width;
-    static const float y_step = 1.0f/height;
-    
+struct TextureSlice {
     byte x;
     byte y;
 
     alias texcoords this;
 
-    this(byte lower_left_x, byte lower_left_y) {
-        x = lower_left_x;
-        y = lower_left_y;
-    }
+    this(byte lower_left_x, byte lower_left_y)
+        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max); }
+        body {
+            x = cast(byte)(lower_left_x*2);
+            y = cast(byte)(lower_left_y*2);
+        }
 
     @property byte[2][4] texcoords() {
         return [[cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+1), cast(byte)y],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)]];
     }
 
     @property byte[2][4] texcoords_90() {
-        return [[cast(byte)(x+1), cast(byte)y],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)],
+        return [[cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)],
                 [cast(byte)x,     cast(byte)y]];
     }
 
     @property byte[2][4] texcoords_180() {
-        return [[cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)],
+        return [[cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)],
                 [cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+1), cast(byte)y]];
+                [cast(byte)(x+2), cast(byte)y]];
     }
 
     @property byte[2][4] texcoords_270() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
+        return [[cast(byte)x,     cast(byte)(y-2)],
                 [cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+1), cast(byte)y],
-                [cast(byte)(x+1), cast(byte)(y-1)]];
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-2)]];
     }
 }
 
-alias TextureSlice!(16, 16) MCTextureSlice;
+struct SlabTextureSlice {
+    byte x;
+    byte y;
+
+    alias texcoords this;
+
+    this(byte lower_left_x, byte lower_left_y)
+        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max); }
+        body {
+            x = cast(byte)(lower_left_x*2);
+            y = cast(byte)(lower_left_y*2);
+        }
+    
+    @property byte[2][4] texcoords() {
+        return [[cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)]];
+    }
+}
 
 
 struct CubeSideData {
@@ -64,7 +80,6 @@ struct CubeSideData {
     float[3] normal;
 }
 
-// TODO texcoords
 immutable CubeSideData[6] CUBE_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // front
        [0.0f, 0.0f, 1.0f] },
@@ -85,15 +100,7 @@ immutable CubeSideData[6] CUBE_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-private const byte[2][4] nslice = MCTextureSlice(-1, -1).texcoords;
-
-Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
-    return simple_block(side, texture_slice, nslice);
-}
-
-Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
-    CubeSideData cbsd = CUBE_VERTICES[side];
-
+private enum mk_vertices = `
     float[3][6] positions = to_triangles(cbsd.positions);
     byte[2][6] texcoords = to_triangles(texture_slice);
     byte[2][6] mask;
@@ -113,12 +120,73 @@ Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice
                          0, 0);
     }
 
-    return data.dup;
+    return data.dup;`;
+
+private const byte[2][4] nslice = TextureSlice(-1, -1).texcoords;
+
+Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
+    return simple_block(side, texture_slice, nslice);
 }
+
+Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+    CubeSideData cbsd = CUBE_VERTICES[side];
+
+    mixin(mk_vertices);
+}
+
+immutable CubeSideData[6] SLAB_VERTICES = [
+    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // front
+       [0.0f, 0.0f, 1.0f] },
+
+    { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, -0.5f]], // left
+       [-1.0f, 0.0f, 0.0f] },
+
+    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // back
+       [0.0f, 0.0f, -1.0f] },
+
+    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // right
+       [1.0f, 0.0f, 0.0f] },
+
+    { [[-0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f], [-0.5f, 0.0f, -0.5f]], // top
+       [0.0f, 1.0f, 0.0f]  },
+
+    { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
+       [0.0f, -1.0f, 0.0f] }
+];
+
+immutable CubeSideData[6] SLAB_VERTICES_UPSIDEDOWN = upside_down_slabs();
+
+private CubeSideData[6] upside_down_slabs() {
+    CubeSideData[6] ret = SLAB_VERTICES.dup;
+
+    foreach(ref side; ret) {
+        foreach(ref vertex; side.positions) {
+            vertex[1] += 0.5f;
+        }
+    }
+
+    return ret;
+}
+
+Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice) pure {
+    return simple_slab(side, upside_down, texture_slice, nslice);
+}
+
+Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+    CubeSideData cbsd;
+    if(upside_down) {
+        cbsd = SLAB_VERTICES_UPSIDEDOWN[side];
+    } else {
+        cbsd = SLAB_VERTICES[side];
+    }
+
+    mixin(mk_vertices);
+}
+
 
 enum size_t BLOCK_IDS = 139;
 
-private alias MCTextureSlice t;
+private alias TextureSlice t;
 
 Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // air

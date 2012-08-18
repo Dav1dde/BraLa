@@ -24,8 +24,8 @@ vertex:
         mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
         v_normal = v * normal;
         
-        v_texcoord = texcoord/16.0;
-        v_mask = mask/16.0;
+        v_texcoord = texcoord/32.0;
+        v_mask = mask/32.0;
         v_palettecoord = palettecoord;
         
         gl_Position = proj * view_pos;
