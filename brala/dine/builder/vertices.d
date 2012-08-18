@@ -232,7 +232,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // red mushroom
     simple_block(Side.LEFT, t(7, 2)), // gold block
     simple_block(Side.LEFT, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.LEFT, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.LEFT, t(7, 1)), // brick
     simple_block(Side.LEFT, t(8, 1)), // tnt
@@ -374,7 +374,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     [], // red mushroom
     simple_block(Side.RIGHT, t(7, 2)), // gold block
     simple_block(Side.RIGHT, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.RIGHT, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.RIGHT, t(7, 1)), // brick
     simple_block(Side.RIGHT, t(8, 1)), // tnt
@@ -516,7 +516,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // red mushroom
     simple_block(Side.NEAR, t(7, 2)), // gold block
     simple_block(Side.NEAR, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.NEAR, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.NEAR, t(7, 1)), // brick
     simple_block(Side.NEAR, t(8, 1)), // tnt
@@ -658,7 +658,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     [], // red mushroom
     simple_block(Side.FAR, t(7, 2)), // gold block
     simple_block(Side.FAR, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.FAR, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.FAR, t(7, 1)), // brick
     simple_block(Side.FAR, t(8, 1)), // tnt
@@ -800,7 +800,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // red mushroom
     simple_block(Side.TOP, t(7, 2)), // gold block
     simple_block(Side.TOP, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.TOP, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.TOP, t(7, 1)), // brick
     simple_block(Side.TOP, t(9, 1)), // tnt
@@ -942,7 +942,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // red mushroom
     simple_block(Side.BOTTOM, t(7, 2)), // gold block
     simple_block(Side.BOTTOM, t(6, 2)), // iron block
-    [], // double slab
+    simple_block(Side.BOTTOM, t(5, 1)), // double slab
     [], // slab
     simple_block(Side.BOTTOM, t(7, 1)), // brick
     simple_block(Side.BOTTOM, t(10, 1)), // tnt

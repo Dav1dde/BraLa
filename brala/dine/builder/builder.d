@@ -67,7 +67,7 @@ mixin template BlockBuilder() {
         }
 
     void add_vertices(T : Vertex)(const auto ref T[] vertices)
-        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tesselator"); }
+        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
         body {
             buffer.ptr[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
         }
@@ -169,16 +169,15 @@ mixin template BlockBuilder() {
             return tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
         }
 
-        static if(s == Side.TOP || s == Side.BOTTOM) {
-            enum vertices = simple_block(s, TextureSlice(0, 12).texcoords);
-            add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+        static if(s == Side.TOP) {
+            mixin(add_block_enum_vertices("0", "12"));
+        } else static if(s == Side.BOTTOM) {
+            mixin(add_block_enum_vertices("0", "14"));
         } else {
             if(block.metadata == 0x1) { // chiseled
-                enum vertices = simple_block(s, TextureSlice(5, 15).texcoords);
-                add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+                mixin(add_block_enum_vertices("5", "15"));
             } else { // smooth
-                enum vertices = simple_block(s, TextureSlice(6, 15).texcoords);
-                add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+                mixin(add_block_enum_vertices("6", "15"));
             }
         }
     }
@@ -200,24 +199,16 @@ mixin template BlockBuilder() {
         }
     }
 
-    void stonebrick_block(Side s)(const ref Block block, const ref BiomeData biome_data,
-                                  float x_offset, float y_offset, float z_offset) {
-        final switch(block.metadata & 0x3) {
-            case 0: mixin(add_block_enum_vertices("6", "4")); break; // normal
-            case 1: mixin(add_block_enum_vertices("4", "7")); break; // mossy
-            case 2: mixin(add_block_enum_vertices("5", "7")); break; // cracked
-            case 3: mixin(add_block_enum_vertices("5", "14")); break; // chiseled
-        }
-    }
-
-    void wooden_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
-                             float x_offset, float y_offset, float z_offset) {
-        bool upside_down = (block.metadata & 0x8) != 0;
-        final switch(block.metadata & 0x3) {
-            case 0: mixin(add_slab_enum_vertices(s, "4", "1")); break; // oak
-            case 1: mixin(add_slab_enum_vertices(s, "6", "13")); break; // spruce
-            case 2: mixin(add_slab_enum_vertices(s, "6", "14")); break; // birch
-            case 3: mixin(add_slab_enum_vertices(s, "7", "13")); break; // jungle
+    void stone_double_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                   float x_offset, float y_offset, float z_offset) {
+        final switch(block.metadata & 0x7) {
+            case 0: tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset); break;
+            case 1: Block sandstone = Block(24); // sandstone
+                    tessellate_simple_block!(s)(sandstone, biome_data, x_offset, y_offset, z_offset); break;
+            case 2: mixin(add_block_enum_vertices("4", "1")); break; // wooden stone
+            case 3: mixin(add_block_enum_vertices("0", "2")); break; // cobblestone
+            case 4: mixin(add_block_enum_vertices("7", "1")); break; // brick
+            case 5: mixin(add_block_enum_vertices("6", "4")); break; // stone brick
         }
     }
 
@@ -259,6 +250,27 @@ mixin template BlockBuilder() {
         }
     }
 
+    void stonebrick_block(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                  float x_offset, float y_offset, float z_offset) {
+        final switch(block.metadata & 0x3) {
+            case 0: mixin(add_block_enum_vertices("6", "4")); break; // normal
+            case 1: mixin(add_block_enum_vertices("4", "7")); break; // mossy
+            case 2: mixin(add_block_enum_vertices("5", "7")); break; // cracked
+            case 3: mixin(add_block_enum_vertices("5", "14")); break; // chiseled
+        }
+    }
+
+    void wooden_slab(Side s)(const ref Block block, const ref BiomeData biome_data,
+                             float x_offset, float y_offset, float z_offset) {
+        bool upside_down = (block.metadata & 0x8) != 0;
+        final switch(block.metadata & 0x3) {
+            case 0: mixin(add_slab_enum_vertices(s, "4", "1")); break; // oak
+            case 1: mixin(add_slab_enum_vertices(s, "6", "13")); break; // spruce
+            case 2: mixin(add_slab_enum_vertices(s, "6", "14")); break; // birch
+            case 3: mixin(add_slab_enum_vertices(s, "7", "13")); break; // jungle
+        }
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -268,6 +280,7 @@ mixin template BlockBuilder() {
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 35: mixin(single_side("wool_block")); break; // wool
+            case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
