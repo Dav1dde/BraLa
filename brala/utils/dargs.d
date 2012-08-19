@@ -2,14 +2,17 @@ module brala.utils.dargs;
 
 private {
     import core.runtime : Runtime;
+    import core.stdc.stdlib : exit;
 
     import std.getopt : getopt;
+    import std.algorithm : canFind, any;
     import std.string : join;
-    import std.array : replace;
-    import std.typetuple : TypeTuple, NoDuplicates, staticIndexOf;
+    import std.array : replace, split;
+    import std.stdio : writef, write;
+    import std.typetuple : TypeTuple, NoDuplicates;
 }
 
-// Based on: https://gist.github.com/2622791
+// Based on Robiks idea and code: https://gist.github.com/2622791
 
 T get_options(T)() {
     return get_options!T(Runtime.args);
@@ -18,7 +21,28 @@ T get_options(T)() {
 T get_options(T)(string[] app_args) {
     T args = T();
 
-    mixin(`getopt(app_args, `~ join(build_param_list!T(), ", ") ~`);`);
+    enum param_list = build_param_list!T();
+
+    void help() { // TODO: improve, this is ugly and prints no header and description
+        string h;
+
+        foreach(param; param_list) {
+            auto p = param.split(`"`)[1];
+            auto s = p.split("|");
+
+            writef("\t--%s", s[0]);
+            if(s.length > 1) {
+                writef("\t-%s", s[1]);
+            }
+
+            write("\n");
+        }
+
+        Runtime.terminate();
+        exit(0);
+    }
+
+    mixin(`getopt(app_args, `~ param_list.join(", ") ~`);`);
 
     return args;
 }
@@ -44,6 +68,8 @@ private template AliasTuple(string n, string t) {
 
 private static string[] build_param_list(T)() {
     string[] res;
+    bool has_help;
+    bool has_help_short;
 
     alias get_alias!(T) aliasses;
     
@@ -51,14 +77,30 @@ private static string[] build_param_list(T)() {
         static if(!__traits(compiles, mixin(`T.` ~ member ~ `.alias_to`))) {    
             string temp = member;
 
+            if(temp == "help") {
+                has_help = true;
+            }
+
             foreach(A; aliasses) {
                 static if(A.long_name == member) {
                     temp ~= "|" ~ A.name;
+                    if(A.name == "h") {
+                        has_help_short = true;
+                    }
                 }
             }
 
-            res ~= `"`~temp.replace("_", "-")~`", &args.`~member~``;
+            res ~= `"`~temp.replace("_", "-")~`", &args.`~member;
         }
+    }
+
+    if(!has_help) {
+        string temp = "help";
+        if(!has_help_short) {
+            temp ~= "|h";
+        }
+
+        res ~= `"` ~ temp ~ `", &help`;
     }
     
     return res;
