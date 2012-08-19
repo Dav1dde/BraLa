@@ -140,6 +140,7 @@ struct AppArguments {
     ushort port = 25565;
 
     bool no_snoop = false;
+    size_t tessellation_threads = 3;
 }
 
 
@@ -173,7 +174,7 @@ int main() {
 
     auto engine = init_engine(args.width, args.height, glv);
 
-    auto game = new BraLaGame(engine, win, username, password, !args.no_snoop);
+    auto game = new BraLaGame(engine, win, username, password, args);
     game.start(args.host, args.port);
 
     return 0;

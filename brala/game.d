@@ -11,7 +11,8 @@ private {
     
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
-        
+
+    import brala.main : AppArguments;
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
@@ -43,8 +44,8 @@ class BraLaGame : BaseGLFWEventHandler {
     protected World _current_world;    
     @property current_world() { return _current_world; }
     
-    DefaultAA!(bool, int, false) keymap;
-    vec2i mouse_offset = vec2i(0, 0);
+    protected DefaultAA!(bool, int, false) keymap;
+    protected vec2i mouse_offset = vec2i(0, 0);
     
     bool quit = false;
     protected bool moved = false;
@@ -52,12 +53,14 @@ class BraLaGame : BaseGLFWEventHandler {
 
     size_t tessellation_threads = 3;
     
-    this(BraLaEngine engine, void* window, string username, string password, bool snoop) {
+    this(BraLaEngine engine, void* window, string username, string password, AppArguments app_args) {
+        this.tessellation_threads = app_args.tessellation_threads;
+    
         _world_lock = new Object();
         chunk_removal_queue = new Queue!vec3i();
 
         this.engine = engine;
-        connection = new ThreadedConnection(username, password, snoop);
+        connection = new ThreadedConnection(username, password, !app_args.no_snoop);
         connection.callback = &dispatch_packets;
 
         character = new Character(0);
