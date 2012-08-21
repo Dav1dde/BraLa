@@ -7,7 +7,7 @@ private {
 
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.constants : Side, Facing;
-    import brala.dine.util : to_triangles;
+    import brala.dine.util : to_triangles, to_triangles_other_winding;
 }
 
 
@@ -308,7 +308,7 @@ immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
 ];
 
 
-cbsd rotate_90()(CubeSideData cbsd) {
+CubeSideData rotate_90()(CubeSideData cbsd) pure {
     foreach(ref vertex; cbsd.positions) {
         auto x = vertex[0];
         vertex[0] = -vertex[2];
@@ -318,11 +318,60 @@ cbsd rotate_90()(CubeSideData cbsd) {
     return cbsd;
 }
 
+CubeSideData rotate_180(CubeSideData cbsd) pure {
+    foreach(ref vertex; cbsd.positions) {
+        vertex[0] = -vertex[0];
+        vertex[2] = -vertex[2];
+    }
+
+    return cbsd;
+}
+
+CubeSideData rotate_270(CubeSideData cbsd) pure {
+    foreach(ref vertex; cbsd.positions) {
+        auto x = vertex[0];
+        vertex[0] = vertex[2];
+        vertex[2] = -x;
+    }
+
+    return cbsd;
+}
+
+CubeSideData make_upsidedown(CubeSideData cbsd) pure {
+    foreach(ref vertex; cbsd.positions) {
+        vertex[1] = -vertex[1];
+    }
+    cbsd.normal = -cbsd.normal[];
+
+    return cbsd;
+}
+
+// CubeSideData make_upsidedown(CubeSideData cbsd) pure {
+//     for(size_t i = 3; i >= 0; i--) {
+//         cbsd.positions[i][1] = -cbsd.positions[i][1];
+//     }
+//     cbsd.normal = -cbsd.normal[];
+// 
+//     return cbsd;
+// }
+
 string mk_stair_vertex(string v, string m) pure {
     return `
-        cbsd = ` ~ v ~ `;
-        positions = to_triangles(cbsd.positions);
-        texcoords = to_triangles(texture_slice.` ~ m ~ `);
+        final switch(face) {
+            case Facing.SOUTH: cbsd = rotate_90(` ~ v ~ `); break;
+            case Facing.WEST: cbsd = rotate_180(` ~ v ~ `); break;
+            case Facing.NORTH: cbsd = rotate_270(` ~ v ~ `); break;
+            case Facing.EAST: cbsd = ` ~ v ~ `; break;
+        }
+        if(upside_down) {
+            cbsd = make_upsidedown(cbsd);
+            positions = to_triangles_other_winding(cbsd.positions);
+            texcoords = to_triangles_other_winding(texture_slice.` ~ m ~ `);
+        } else {
+            positions = to_triangles(cbsd.positions);
+            texcoords = to_triangles(texture_slice.` ~ m ~ `);
+        }
+        
 
         foreach(i; 0..6) {
             ret ~= Vertex(positions[i][0], positions[i][1], positions[i][2],

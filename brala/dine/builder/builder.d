@@ -283,7 +283,7 @@ mixin template BlockBuilder() {
 
     void sandstone_stair(Side s)(const ref Block block, const ref BiomeData biome_data,
                                  float x_offset, float y_offset, float z_offset) {
-        add_template_vertices(simple_stair(s, Facing.NORTH, false, StairTextureSlice(0, 13, 0, 12)), x_offset, y_offset, z_offset, 0, 0);
+        add_template_vertices(simple_stair(s, Facing.NORTH, true, StairTextureSlice(0, 13, 0, 12)), x_offset, y_offset, z_offset, 0, 0);
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
