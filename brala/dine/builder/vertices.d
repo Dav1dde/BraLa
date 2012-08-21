@@ -6,7 +6,7 @@ private {
     import std.traits : isIntegral;
 
     import brala.dine.builder.tessellator : Vertex;
-    import brala.dine.builder.constants : Side;
+    import brala.dine.builder.constants : Side, Facing;
     import brala.dine.util : to_triangles;
 }
 
@@ -24,6 +24,7 @@ struct TextureSlice {
             y = cast(byte)(lower_left_y*2);
         }
 
+    pure:
     @property byte[2][4] texcoords() {
         return [[cast(byte)x,     cast(byte)y],
                 [cast(byte)(x+2), cast(byte)y],
@@ -65,12 +66,91 @@ struct SlabTextureSlice {
             x = cast(byte)(lower_left_x*2);
             y = cast(byte)(lower_left_y*2);
         }
-    
+
+    pure:
     @property byte[2][4] texcoords() {
         return [[cast(byte)x,     cast(byte)y],
                 [cast(byte)(x+2), cast(byte)y],
                 [cast(byte)(x+2), cast(byte)(y-1)],
                 [cast(byte)x,     cast(byte)(y-1)]];
+    }
+}
+
+struct StairTextureSlice {
+    byte x;
+    byte y;
+
+    byte x2;
+    byte y2;
+
+    alias texcoords this;
+
+    this(byte lower_left_x, byte lower_left_y, byte lower_left_x2, byte lower_left_y2)
+        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max);
+             assert(abs(lower_left_x2*2) <= byte.max && abs(lower_left_y2*2) <= byte.max); }
+        body {
+            x = cast(byte)(lower_left_x*2);
+            y = cast(byte)(lower_left_y*2);
+
+            x2 = cast(byte)(lower_left_x2*2);
+            y2 = cast(byte)(lower_left_y2*2);
+        }
+
+    pure:
+    @property byte[2][4] texcoords() {
+        return [[cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)]];
+    }
+
+    @property byte[2][4] texcoords2() {
+        return [[cast(byte)x2,     cast(byte)y2],
+                [cast(byte)(x2+2), cast(byte)y2],
+                [cast(byte)(x2+2), cast(byte)(y2-2)],
+                [cast(byte)x2,     cast(byte)(y2-2)]];
+    }
+
+    @property byte[2][4] texcoords_step_lower() {
+        return [[cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_upper() {
+        return [[cast(byte)x,     cast(byte)(y-2)],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_top_front() {
+        return [[cast(byte)x2,     cast(byte)y2],
+                [cast(byte)(x2+2), cast(byte)y2],
+                [cast(byte)(x2+2), cast(byte)(y2-1)],
+                [cast(byte)x2,     cast(byte)(y2-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_top_back() {
+        return [[cast(byte)x2,     cast(byte)(y2-1)],
+                [cast(byte)(x2+2), cast(byte)(y2-1)],
+                [cast(byte)(x2+2), cast(byte)y2],
+                [cast(byte)x2,     cast(byte)y2]];
+    }
+
+    @property byte[2][4] texcoords_step_side_front() {
+        return [[cast(byte)(x),   cast(byte)y],
+                [cast(byte)(x+1), cast(byte)y],
+                [cast(byte)(x+1), cast(byte)(y-1)],
+                [cast(byte)(x),   cast(byte)(y-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_side_back() {
+        return [[cast(byte)(x+1), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)(x+1), cast(byte)(y-2)]];
     }
 }
 
@@ -81,13 +161,13 @@ struct CubeSideData {
 }
 
 immutable CubeSideData[6] CUBE_VERTICES = [
-    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // front
+    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // near
        [0.0f, 0.0f, 1.0f] },
     
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]], // left
        [-1.0f, 0.0f, 0.0f] },
 
-    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // back
+    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // far
        [0.0f, 0.0f, -1.0f] },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f]], // right
@@ -118,9 +198,7 @@ private enum mk_vertices = `
                          texcoords[i][0], texcoords[i][1],
                          mask[i][0], mask[i][1],
                          0, 0);
-    }
-
-    return data.dup;`;
+    }`;
 
 private const byte[2][4] nslice = TextureSlice(-1, -1).texcoords;
 
@@ -132,16 +210,17 @@ Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     mixin(mk_vertices);
+    return data.dup;
 }
 
 immutable CubeSideData[6] SLAB_VERTICES = [
-    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // front
+    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // near
        [0.0f, 0.0f, 1.0f] },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, -0.5f]], // left
        [-1.0f, 0.0f, 0.0f] },
 
-    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // back
+    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // far
        [0.0f, 0.0f, -1.0f] },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // right
@@ -181,6 +260,128 @@ Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice, byte
     }
 
     mixin(mk_vertices);
+    return data.dup;
+}
+
+// stair mess starts here
+// TODO: debug normals
+immutable CubeSideData[3] STAIR_VERTICES_NEAR = [
+    { [[0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f], [0.0f, 0.0f, -0.5f], [0.0f, 0.0f, 0.5f]], // y+
+      [0.0f, 1.0f, 0.0f] },
+
+    { [[0.0f, 0.5f, -0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.0f, 0.5f], [0.0f, 0.0f, -0.5f]], // upper
+      [0.0f, 0.0f, 1.0f] },
+ 
+    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // lower
+      [0.0f, 0.0f, 1.0f] }
+];
+
+immutable CubeSideData[1] STAIR_VERTICES_FAR = [
+    { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]],
+      [0.0f, -1.0f, 0.0f] }
+];
+
+immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
+    { [[0.0f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [0.0f, 0.0f, 0.5f]],
+      [-1.0f, 0.0f, 0.0f] },
+
+    { [[-0.5f, -0.5f, 0.5f], [0.0f, -0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]],
+      [-1.0f, 0.0f, 0.0f] }
+];
+
+immutable CubeSideData[2] STAIR_VERTICES_RIGHT = [
+    { [[0.0f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, -0.5f, -0.5f], [0.0f, -0.5f, -0.5f]],
+      [1.0f, 0.0f, 0.0f] },
+
+    { [[0.0f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.0f, 0.5f, -0.5f]],
+      [1.0f, 0.0f, 0.0f] }
+];
+
+immutable CubeSideData[1] STAIR_VERTICES_TOP = [
+    { [[-0.5f, 0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]],
+      [0.0f, 1.0f, 0.0f] }
+];
+
+immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
+    { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]],
+      [0.0f, -1.0f, 0.0f] }
+];
+
+
+cbsd rotate_90()(CubeSideData cbsd) {
+    foreach(ref vertex; cbsd.positions) {
+        auto x = vertex[0];
+        vertex[0] = -vertex[2];
+        vertex[2] = x;
+    }
+
+    return cbsd;
+}
+
+string mk_stair_vertex(string v, string m) pure {
+    return `
+        cbsd = ` ~ v ~ `;
+        positions = to_triangles(cbsd.positions);
+        texcoords = to_triangles(texture_slice.` ~ m ~ `);
+
+        foreach(i; 0..6) {
+            ret ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
+                          cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+                          texcoords[i][0], texcoords[i][1],
+                          mask[i][0], mask[i][1],
+                          0, 0);
+        }`;
+}
+
+// Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice) pure {
+//     return simple_stair(s, face, upside_down, texture_slice, nslice);
+// }
+
+Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice/+, StairTextureSlice mask_slice+/) pure { // well not so simple
+    Vertex[] ret;
+
+    CubeSideData cbsd;
+    float[3][6] positions;
+    byte[2][6] texcoords;
+    byte[2][6] mask;
+
+    final switch(s) {
+        case Side.NEAR: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_NEAR[0]", "texcoords_step_top_front"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_NEAR[1]", "texcoords_step_upper"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_NEAR[2]", "texcoords_step_lower"));
+            break;
+        }
+        case Side.LEFT: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[0]", "texcoords_step_side_front"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[1]", "texcoords_step_side_back"));
+
+            break;
+        }
+        case Side.FAR: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_FAR[0]", "texcoords"));
+            break;
+        }
+        case Side.RIGHT: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_RIGHT[0]", "texcoords_step_side_front"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_RIGHT[1]", "texcoords_step_side_back"));
+
+            break;
+        }
+        case Side.TOP: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_TOP[0]", "texcoords_step_top_back"));
+
+            break;
+        }
+        case Side.BOTTOM: {
+            mixin(mk_stair_vertex("STAIR_VERTICES_BOTTOM[0]", "texcoords"));
+
+            break;
+        }
+        case Side.ALL: assert(false);
+    }
+
+    return ret;
 }
 
 

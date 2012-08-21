@@ -3,7 +3,7 @@ module brala.dine.builder.builder;
 private {
     import brala.dine.chunk : Block;
     import brala.dine.builder.tessellator : Vertex;
-    import brala.dine.builder.constants : Side;
+    import brala.dine.builder.constants : Side, Facing;
 }
 
 public {
@@ -15,8 +15,8 @@ public {
     import brala.dine.builder.biomes : BiomeData, BIOMES;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
-                                         get_vertices, TextureSlice, SlabTextureSlice,
-                                         simple_block, simple_slab;
+                                         get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
+                                         simple_block, simple_slab, simple_stair;
 }
 
 
@@ -281,6 +281,11 @@ mixin template BlockBuilder() {
         }
     }
 
+    void sandstone_stair(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                 float x_offset, float y_offset, float z_offset) {
+        add_template_vertices(simple_stair(s, Facing.NORTH, false, StairTextureSlice(0, 13, 0, 12)), x_offset, y_offset, z_offset, 0, 0);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -295,6 +300,7 @@ mixin template BlockBuilder() {
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
+            case 128: mixin(single_side("sandstone_stair")); break; // sandstone stair
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }
     }
