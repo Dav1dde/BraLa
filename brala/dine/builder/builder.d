@@ -281,9 +281,14 @@ mixin template BlockBuilder() {
         }
     }
 
-    void sandstone_stair(Side s)(const ref Block block, const ref BiomeData biome_data,
-                                 float x_offset, float y_offset, float z_offset) {
-        add_template_vertices(simple_stair(s, Facing.NORTH, true, StairTextureSlice(0, 13, 0, 12)), x_offset, y_offset, z_offset, 0, 0);
+    void stair(Side s)(const ref Block block, StairTextureSlice tex, const ref BiomeData biome_data,
+                       float x_offset, float y_offset, float z_offset) {
+        enum fs = [Facing.WEST, Facing.EAST, Facing.NORTH, Facing.SOUTH];
+
+        Facing f = fs[block.metadata & 0x3];
+        bool upside_down = (block.metadata & 0x4) != 0;
+        
+        add_template_vertices(simple_stair(s, f, upside_down, tex), x_offset, y_offset, z_offset, 0, 0);
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -297,11 +302,41 @@ mixin template BlockBuilder() {
             case 35: mixin(single_side("wool_block")); break; // wool
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
+            case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
+                     biome_data, x_offset, y_offset, z_offset); break;
+            case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
+                     biome_data, x_offset, y_offset, z_offset); break;
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
+            case 108: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 1, 7, 1), // brick stair
+                      biome_data, x_offset, y_offset, z_offset); break;
+            case 109: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 4, 6, 4), // stone brick stair
+                      biome_data, x_offset, y_offset, z_offset); break;
+            case 114: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 15, 0, 15), // nether brick stair
+                      biome_data, x_offset, y_offset, z_offset); break;
             case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
-            case 128: mixin(single_side("sandstone_stair")); break; // sandstone stair
+            case 128: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 13, 0, 12), // sandstone stair
+                      biome_data, x_offset, y_offset, z_offset); break;
+            case 134: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 13, 6, 13), // spruce wood stair
+                      biome_data, x_offset, y_offset, z_offset); break;
+            case 135: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 14, 6, 14), // birch wood stair
+                      biome_data, x_offset, y_offset, z_offset); break;
+            case 136: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 13, 7, 13), // jungle wood stair
+                      biome_data, x_offset, y_offset, z_offset); break;
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
+        }
+    }
+
+    void dispatch_single_side(alias func, Side s, Args...)(Args args) {
+        static if(s == Side.ALL) {
+            func!(Side.LEFT)(args);
+            func!(Side.RIGHT)(args);
+            func!(Side.NEAR)(args);
+            func!(Side.FAR)(args);
+            func!(Side.TOP)(args);
+            func!(Side.BOTTOM)(args);
+        } else {
+            func!(s)(args);
         }
     }
 
@@ -353,16 +388,16 @@ static string add_slab_enum_vertices(Side s, string x, string y) {
             }`;
 }
 
-string single_side(string cmd) {
+string single_side(string func) {
     return 
     `static if(side == Side.ALL) {` ~
-        cmd ~ `!(Side.LEFT)(block, biome_data, x_offset, y_offset, z_offset);` ~
-        cmd ~ `!(Side.RIGHT)(block, biome_data, x_offset, y_offset, z_offset);` ~
-        cmd ~ `!(Side.NEAR)(block, biome_data, x_offset, y_offset, z_offset);` ~
-        cmd ~ `!(Side.FAR)(block, biome_data, x_offset, y_offset, z_offset);` ~
-        cmd ~ `!(Side.TOP)(block, biome_data, x_offset, y_offset, z_offset);` ~
-        cmd ~ `!(Side.BOTTOM)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.LEFT)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.RIGHT)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.NEAR)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.FAR)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.TOP)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(Side.BOTTOM)(block, biome_data, x_offset, y_offset, z_offset);` ~
     `} else {` ~
-        cmd ~ `!(side)(block, biome_data, x_offset, y_offset, z_offset);` ~
+        func ~ `!(side)(block, biome_data, x_offset, y_offset, z_offset);` ~
     `}`;
 }

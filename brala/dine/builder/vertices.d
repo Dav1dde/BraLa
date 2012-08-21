@@ -346,15 +346,6 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     return cbsd;
 }
 
-// CubeSideData make_upsidedown(CubeSideData cbsd) pure {
-//     for(size_t i = 3; i >= 0; i--) {
-//         cbsd.positions[i][1] = -cbsd.positions[i][1];
-//     }
-//     cbsd.normal = -cbsd.normal[];
-// 
-//     return cbsd;
-// }
-
 string mk_stair_vertex(string v, string m) pure {
     return `
         final switch(face) {
