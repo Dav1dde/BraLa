@@ -22,6 +22,8 @@ enum size_t BLOCK_IDS = 139;
 // stuipid dmd bug
 private {
     import brala.dine.builder.vertices_.util;
+    
+    byte[2][4] t(byte x, byte y) { return TextureSlice(x, y).texcoords; }
 
     Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
         return simple_block(side, texture_slice, nslice);
