@@ -119,10 +119,10 @@ struct StairTextureSlice {
     }
 
     @property byte[2][4] texcoords_step_upper() {
-        return [[cast(byte)x,     cast(byte)(y-2)],
-                [cast(byte)(x+2), cast(byte)(y-2)],
+        return [[cast(byte)x,     cast(byte)(y-1)],
                 [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)]];
     }
 
     @property byte[2][4] texcoords_step_top_front() {
@@ -135,8 +135,8 @@ struct StairTextureSlice {
     @property byte[2][4] texcoords_step_top_back() {
         return [[cast(byte)x2,     cast(byte)(y2-1)],
                 [cast(byte)(x2+2), cast(byte)(y2-1)],
-                [cast(byte)(x2+2), cast(byte)y2],
-                [cast(byte)x2,     cast(byte)y2]];
+                [cast(byte)(x2+2), cast(byte)(y2-2)],
+                [cast(byte)x2,     cast(byte)(y2-2)]];
     }
 
     @property byte[2][4] texcoords_step_side_front() {
@@ -151,6 +151,67 @@ struct StairTextureSlice {
                 [cast(byte)(x+2), cast(byte)y],
                 [cast(byte)(x+2), cast(byte)(y-2)],
                 [cast(byte)(x+1), cast(byte)(y-2)]];
+    }
+
+
+
+    alias texcoords texcoords2_upsidedown;
+    alias texcoords2 texcoords_upsidedown;
+
+//     @property byte[2][4] texcoords_upsidedown() {
+//         return [[cast(byte)x2,     cast(byte)y2],
+//                 [cast(byte)(x2+2), cast(byte)y2],
+//                 [cast(byte)(x2+2), cast(byte)(y2-2)],
+//                 [cast(byte)x2,     cast(byte)(y2-2)]];
+//     }
+// 
+//     @property byte[2][4] texcoords2_upsidedown() {
+//         return [[cast(byte)x,     cast(byte)y],
+//                 [cast(byte)(x+2), cast(byte)y],
+//                 [cast(byte)(x+2), cast(byte)(y-2)],
+//                 [cast(byte)x,     cast(byte)(y-2)]];
+//     }
+
+    @property byte[2][4] texcoords_step_lower_upsidedown() {
+        return [[cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)x,     cast(byte)y]];
+    }
+
+    @property byte[2][4] texcoords_step_upper_upsidedown() {
+        return [[cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)x,     cast(byte)(y-2)]];
+    }
+
+    @property byte[2][4] texcoords_step_top_front_upsidedown() {
+        return [[cast(byte)x,     cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)x,     cast(byte)y]];
+    }
+
+    @property byte[2][4] texcoords_step_top_back_upsidedown() {
+        return [[cast(byte)x,     cast(byte)y],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+2), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_side_front_upsidedown() {
+        return [[cast(byte)x,     cast(byte)(y-2)],
+                [cast(byte)(x+1), cast(byte)(y-2)],
+                [cast(byte)(x+1), cast(byte)(y-1)],
+                [cast(byte)x,     cast(byte)(y-1)]];
+    }
+
+    @property byte[2][4] texcoords_step_side_back_upsidedown() {
+        return [[cast(byte)(x+1), cast(byte)(y-2)],
+                [cast(byte)(x+2), cast(byte)(y-2)],
+                [cast(byte)(x+2), cast(byte)y],
+                [cast(byte)(x+1), cast(byte)y]];
     }
 }
 
@@ -266,10 +327,10 @@ Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice, byte
 // stair mess starts here
 // TODO: debug normals
 immutable CubeSideData[3] STAIR_VERTICES_NEAR = [
-    { [[0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f], [0.0f, 0.0f, -0.5f], [0.0f, 0.0f, 0.5f]], // y+
+    { [[0.0f, 0.0f, -0.5f], [0.0f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f]], // y+
       [0.0f, 1.0f, 0.0f] },
 
-    { [[0.0f, 0.5f, -0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.0f, 0.5f], [0.0f, 0.0f, -0.5f]], // upper
+    { [[0.0f, 0.0f, 0.5f], [0.0f, 0.0f, -0.5f], [0.0f, 0.5f, -0.5f], [0.0f, 0.5f, 0.5f]], // upper
       [0.0f, 0.0f, 1.0f] },
  
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // lower
@@ -282,7 +343,7 @@ immutable CubeSideData[1] STAIR_VERTICES_FAR = [
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
-    { [[0.0f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [0.0f, 0.0f, 0.5f]],
+    { [[0.5f, 0.0f, 0.5f], [0.0f, 0.0f, 0.5f], [0.0f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f]], // small, front
       [-1.0f, 0.0f, 0.0f] },
 
     { [[-0.5f, -0.5f, 0.5f], [0.0f, -0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]],
@@ -290,7 +351,7 @@ immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_RIGHT = [
-    { [[0.0f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, -0.5f, -0.5f], [0.0f, -0.5f, -0.5f]],
+    { [[0.5f, -0.5f, -0.5f], [0.0f, -0.5f, -0.5f], [0.0f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // small, front
       [1.0f, 0.0f, 0.0f] },
 
     { [[0.0f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.0f, 0.5f, -0.5f]],
@@ -298,12 +359,12 @@ immutable CubeSideData[2] STAIR_VERTICES_RIGHT = [
 ];
 
 immutable CubeSideData[1] STAIR_VERTICES_TOP = [
-    { [[-0.5f, 0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]],
+    { [[-0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.5f, -0.5f]],
       [0.0f, 1.0f, 0.0f] }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
-    { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]],
+    { [[-0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f]],
       [0.0f, -1.0f, 0.0f] }
 ];
 
@@ -357,7 +418,7 @@ string mk_stair_vertex(string v, string m) pure {
         if(upside_down) {
             cbsd = make_upsidedown(cbsd);
             positions = to_triangles_other_winding(cbsd.positions);
-            texcoords = to_triangles_other_winding(texture_slice.` ~ m ~ `);
+            texcoords = to_triangles_other_winding(texture_slice.` ~ m ~ `_upsidedown);
         } else {
             positions = to_triangles(cbsd.positions);
             texcoords = to_triangles(texture_slice.` ~ m ~ `);
@@ -377,7 +438,7 @@ string mk_stair_vertex(string v, string m) pure {
 //     return simple_stair(s, face, upside_down, texture_slice, nslice);
 // }
 
-Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice/+, StairTextureSlice mask_slice+/) pure { // well not so simple
+Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice) pure { // well not so simple
     Vertex[] ret;
 
     CubeSideData cbsd;
