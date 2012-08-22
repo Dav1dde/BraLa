@@ -25,7 +25,7 @@ What BraLa *can* do:
 * Read the lastlogin file
 * Send "snoop" requests
 * Display biome colors, based on rainfall/temperature
-* Display all solid blocks
+* Display all solid blocks (including stairs and half slabs)
 
 Not a whole lot, but a start.
 
