@@ -26,16 +26,6 @@ uint log2_ub(uint v) { // unrolled bitwise log2
     return r + (v >> 1);
 }
 
-T[6] to_triangles(T)(T[4] quad) {
-    return [quad[0], quad[1], quad[2],
-            quad[0], quad[2], quad[3]];
-}
-
-T[6] to_triangles_other_winding(T)(T[4] quad) {
-    return [quad[1], quad[0], quad[2],
-            quad[2], quad[0], quad[3]];
-}
-
 int py_div(int a, int b) {
     return a < 0 ? (a - (b-1)) / b : a / b;
 }
