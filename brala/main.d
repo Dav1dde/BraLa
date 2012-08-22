@@ -13,6 +13,8 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.process : getenv;
+    import std.range : zip;
+    import std.array : join;
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -141,6 +143,38 @@ struct AppArguments {
 
     bool no_snoop = false;
     size_t tessellation_threads = 3;
+
+    void help(string[][] p) {
+        string[] help_strings = [
+            "specifies the username, which will be used to auth with the login servers,\n" ~
+            "\t\t\tif this is not possible and the server is in offline mode, it will be used\n" ~
+            "\t\t\tas playername",
+
+            "the password which is used to authenticate with the login servers, set this\n" ~
+            "\t\t\tto a random value if you don't want to authenticate with the servers",
+
+            "uses minecrafts lastlogin file for authentication and logging in,\n" ~
+            "\t\t\t--username and --password are used as fallback",
+
+            "specifies the width of the window",
+
+            "specifies the height of the window",
+
+            "the IP/adress of the minecraft server",
+
+            "the port of the minecraft server, defaults to 25565",
+
+            `disables "snooping" (= sending completly anonym information to mojang)`,
+
+            "specifies the number of threads used to tessellate the terrain, defaults to 3.\n" ~ 
+            "\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
+            "\t\t\tmore CPU usage, but faster terrain tessellation.",
+        ];
+
+        foreach(d; zip(p, help_strings)) {
+            writefln("--%s\t%s", d[0].join("\t-"), d[1]);
+        }
+    }
 }
 
 

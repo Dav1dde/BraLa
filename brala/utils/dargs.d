@@ -24,18 +24,21 @@ T get_options(T)(string[] app_args) {
     enum param_list = build_param_list!T();
 
     void help() { // TODO: improve, this is ugly and prints no header and description
-        string h;
+        string[][] h;
 
         foreach(param; param_list) {
             auto p = param.split(`"`)[1];
             auto s = p.split("|");
 
-            writef("\t--%s", s[0]);
-            if(s.length > 1) {
-                writef("\t-%s", s[1]);
-            }
+            h ~= s;
+        }
 
-            write("\n");
+        static if(__traits(hasMember, T, "help")) {
+            static if(__traits(compiles, args.help(h))) {
+                args.help(h);
+            } else {
+                args.help();
+            }
         }
 
         Runtime.terminate();
@@ -72,13 +75,13 @@ private static string[] build_param_list(T)() {
     bool has_help_short;
 
     alias get_alias!(T) aliasses;
-    
+
     foreach(member; __traits(allMembers, T)) {
         static if(!__traits(compiles, mixin(`T.` ~ member ~ `.alias_to`))) {    
             string temp = member;
 
             if(temp == "help") {
-                has_help = true;
+                continue;
             }
 
             foreach(A; aliasses) {
@@ -94,14 +97,11 @@ private static string[] build_param_list(T)() {
         }
     }
 
-    if(!has_help) {
-        string temp = "help";
-        if(!has_help_short) {
-            temp ~= "|h";
-        }
-
-        res ~= `"` ~ temp ~ `", &help`;
+    string temp = "help";
+    if(!has_help_short) {
+        temp ~= "|h";
     }
+    res ~= `"` ~ temp ~ `", &help`;
     
     return res;
 }
