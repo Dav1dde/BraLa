@@ -41,9 +41,9 @@ static this() {
 GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {
-    glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
 
-    _window = glfwOpenWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
+    _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
 
     if(!_window) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
@@ -79,8 +79,8 @@ GLVersion init_opengl() {
     return DerelictGL3.reload();
 }
 
-BraLaEngine init_engine(int width, int height, GLVersion glv) {
-    auto engine = new BraLaEngine(width, height, glv);
+BraLaEngine init_engine(void* window, int width, int height, GLVersion glv) {
+    auto engine = new BraLaEngine(window, width, height, glv);
 
     engine.resmgr.load_default_resources(); // I like! ~15mb in 837ms
 
@@ -172,7 +172,7 @@ int main() {
         }
     }
 
-    auto engine = init_engine(args.width, args.height, glv);
+    auto engine = init_engine(win, args.width, args.height, glv);
 
     auto game = new BraLaGame(engine, win, username, password, args);
     game.start(args.host, args.port);

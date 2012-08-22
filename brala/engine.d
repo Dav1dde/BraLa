@@ -21,6 +21,7 @@ class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
     Timer timer;
     ResourceManager resmgr;
+    void* window;
 
     @property vec2i viewport() {
         return _viewport;
@@ -63,7 +64,7 @@ class BraLaEngine {
         }
     }
     
-    this(int width, int height, GLVersion glv) {
+    this(void* window, int width, int height, GLVersion glv) {
         timer = new Timer();
         resmgr = new ResourceManager();
         
@@ -101,7 +102,7 @@ class BraLaEngine {
             
             last = timer.get_time();
 
-            glfwSwapBuffers();
+            glfwSwapBuffers(window);
             glfwPollEvents();
         }
         
