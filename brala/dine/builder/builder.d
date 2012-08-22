@@ -217,36 +217,30 @@ mixin template BlockBuilder() {
         bool upside_down = (block.metadata & 0x8) != 0;
 
         static if(s == Side.TOP) {
-            bool tessellated = true;
-            if(block.metadata == 0) { // stone
+            if((block.metadata & 0x7) == 0) { // stone
                 mixin(add_slab_enum_vertices(s, "6", "1"));
+                return;
             } else if((block.metadata & 0x7) == 1) { // sandstone
                 mixin(add_slab_enum_vertices(s, "0", "12"));
-            } else {
-                tessellated = false;
+                return;
             }
         } else static if(s == Side.BOTTOM) {
-            bool tessellated = true;
-            if(block.metadata == 0) { // stone
+            if((block.metadata & 0x7) == 0) { // stone
                 mixin(add_slab_enum_vertices(s, "6", "1"));
+                return;
             } else if((block.metadata & 0x7) == 1) { // sandstone
                 mixin(add_slab_enum_vertices(s, "0", "14"));
-            } else {
-                tessellated = false;
+                return;
             }
-        } else {
-            bool tessellated = false;
         }
 
-        if(!tessellated) {
-            final switch(block.metadata & 0x7) {
-                case 0: mixin(add_slab_enum_vertices(s, "5", "1")); break; // stone
-                case 1: mixin(add_slab_enum_vertices(s, "0", "13")); break; // sandstone
-                case 2: mixin(add_slab_enum_vertices(s, "4", "1")); break; // wooden stone
-                case 3: mixin(add_slab_enum_vertices(s, "0", "2")); break; // cobblestone
-                case 4: mixin(add_slab_enum_vertices(s, "7", "1")); break; // brick
-                case 5: mixin(add_slab_enum_vertices(s, "6", "4")); break; // stone brick
-            }
+        final switch(block.metadata & 0x7) {
+            case 0: mixin(add_slab_enum_vertices(s, "5", "1")); break; // stone
+            case 1: mixin(add_slab_enum_vertices(s, "0", "13")); break; // sandstone
+            case 2: mixin(add_slab_enum_vertices(s, "4", "1")); break; // wooden stone
+            case 3: mixin(add_slab_enum_vertices(s, "0", "2")); break; // cobblestone
+            case 4: mixin(add_slab_enum_vertices(s, "7", "1")); break; // brick
+            case 5: mixin(add_slab_enum_vertices(s, "6", "4")); break; // stone brick
         }
     }
 
