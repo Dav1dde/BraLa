@@ -23,7 +23,7 @@ T get_options(T)(string[] app_args) {
 
     enum param_list = build_param_list!T();
 
-    void help() { // TODO: improve, this is ugly and prints no header and description
+    void help() { // TODO: improve this!
         string[][] h;
 
         foreach(param; param_list) {
@@ -34,8 +34,10 @@ T get_options(T)(string[] app_args) {
         }
 
         static if(__traits(hasMember, T, "help")) {
-            static if(__traits(compiles, args.help(h))) {
-                args.help(h);
+            static if(__traits(compiles, args.help(app_args, h))) {
+                args.help(app_args, h);
+            } else static if(__traits(compiles, args.help(app_args))) {
+                args.help(app_args);
             } else {
                 args.help();
             }
