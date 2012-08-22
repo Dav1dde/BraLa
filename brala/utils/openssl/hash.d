@@ -69,17 +69,17 @@ class Hash(Handle, alias HASH_Init, alias HASH_Update, alias HASH_Final, size_t 
     }
 }
 
-alias Hash!(MD4_CTX, MD4_Init, MD4_Update, MD4_Final, MD4_DIGEST_LENGTH) MD4;
+// alias Hash!(MD4_CTX, MD4_Init, MD4_Update, MD4_Final, MD4_DIGEST_LENGTH) MD4;
 alias Hash!(MD5_CTX, MD5_Init, MD5_Update, MD5_Final, MD5_DIGEST_LENGTH) MD5;
 
-alias Hash!(MDC2_CTX, MDC2_Init, MDC2_Update, MDC2_Final, MDC2_DIGEST_LENGTH) MDC2;
+// alias Hash!(MDC2_CTX, MDC2_Init, MDC2_Update, MDC2_Final, MDC2_DIGEST_LENGTH) MDC2;
 
-alias Hash!(SHA_CTX, SHA_Init, SHA_Update, SHA_Final, SHA_DIGEST_LENGTH) SHA0;
+// alias Hash!(SHA_CTX, SHA_Init, SHA_Update, SHA_Final, SHA_DIGEST_LENGTH) SHA0;
 alias Hash!(SHA_CTX, SHA1_Init, SHA1_Update, SHA1_Final, SHA_DIGEST_LENGTH) SHA1;
-alias Hash!(SHA256_CTX, SHA224_Init, SHA224_Update, SHA224_Final, SHA224_DIGEST_LENGTH) SHA224;
-alias Hash!(SHA256_CTX, SHA256_Init, SHA256_Update, SHA256_Final, SHA256_DIGEST_LENGTH) SHA256;
-alias Hash!(SHA512_CTX, SHA384_Init, SHA384_Update, SHA384_Final, SHA384_DIGEST_LENGTH) SHA384;
-alias Hash!(SHA512_CTX, SHA512_Init, SHA512_Update, SHA512_Final, SHA512_DIGEST_LENGTH) SHA512;
+// alias Hash!(SHA256_CTX, SHA224_Init, SHA224_Update, SHA224_Final, SHA224_DIGEST_LENGTH) SHA224;
+// alias Hash!(SHA256_CTX, SHA256_Init, SHA256_Update, SHA256_Final, SHA256_DIGEST_LENGTH) SHA256;
+// alias Hash!(SHA512_CTX, SHA384_Init, SHA384_Update, SHA384_Final, SHA384_DIGEST_LENGTH) SHA384;
+// alias Hash!(SHA512_CTX, SHA512_Init, SHA512_Update, SHA512_Final, SHA512_DIGEST_LENGTH) SHA512;
 
 unittest {
     auto s1 = new SHA1();
