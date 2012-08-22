@@ -3,7 +3,7 @@ BraLa
 
 BraLa is an opensource minecraft (S)MP Client:
 
-![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_01.png)
+![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_02.png)
 
 This screenshot was taken with the 8x8 texture pack which comes with BraLa. No worries, if you have
 minecraft installed, BraLa will try to extract the terrain.png from it and use that as texture.

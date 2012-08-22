@@ -117,7 +117,7 @@ BraLaEngine init_engine(void* window, int width, int height, GLVersion glv) {
 
     float max_aniso = 0.0f;
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_aniso);
-    terrain_sampler.set_parameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso);
+    terrain_sampler.set_parameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso >= 8 ? 8.0f : max_aniso);
 
     engine.set_sampler("terrain", terrain_sampler);
 
