@@ -1,6 +1,8 @@
 BraLa
 =====
 
+[![Flattr this](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/854394/Dav1ddeBraLa-on-GitHub)
+
 BraLa is an opensource minecraft (S)MP Client:
 
 ![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_02.png)
