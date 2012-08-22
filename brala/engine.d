@@ -65,6 +65,8 @@ class BraLaEngine {
     }
     
     this(void* window, int width, int height, GLVersion glv) {
+        this.window = window;
+        
         timer = new Timer();
         resmgr = new ResourceManager();
         
@@ -101,6 +103,11 @@ class BraLaEngine {
             }
             
             last = timer.get_time();
+
+//             if(void* win = glfwGetCurrentContext()) {
+//                 glfwSwapBuffers(win);
+//                 glfwPollEvents();
+//             }
 
             glfwSwapBuffers(window);
             glfwPollEvents();
