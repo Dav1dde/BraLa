@@ -16,7 +16,8 @@ private {
 }
 
 
-struct Vertex {
+align(1) struct Vertex {
+    align(1):
     float x;
     float y;
     float z;
@@ -31,6 +32,7 @@ struct Vertex {
     byte v_terrain;
     byte u_mask;
     byte v_mask;
+    float pad; // I have no idea why you need that padding
 }
 
 
