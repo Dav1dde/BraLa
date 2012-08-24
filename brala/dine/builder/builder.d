@@ -12,7 +12,7 @@ public {
     import std.functional : memoize;
     import std.typetuple : TypeTuple;
     
-    import brala.dine.builder.biomes : BiomeData, BIOMES;
+    import brala.dine.builder.biomes : BiomeData;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
                                          get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
@@ -89,8 +89,7 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         Vertex[] vertices = get_vertices!(s)(block.id);
 
-        // TODO: BIOME COLOR
-        add_template_vertices(vertices, x_offset, y_offset, z_offset);
+        add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.grass.field);
     }
 
     void plank_block(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -162,17 +161,17 @@ mixin template BlockBuilder() {
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        // TODO: BIOME COLOR
+
         final switch(block.metadata & 0x03) {
             case 0: enum vertices = simple_block(s, TextureSlice(5, 4)); // oak
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 1: enum vertices = simple_block(s, TextureSlice(5, 9)); // spruce
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 2: enum vertices = simple_block(s, TextureSlice(5, 4)); // birch, uses oak texture
                     // birch trees have a different biome color?
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 3: enum vertices = simple_block(s, TextureSlice(5, 13)); // jungle
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
         }
     }
 

@@ -11,12 +11,13 @@ private {
     import std.algorithm : filter;
     import std.typecons : Tuple;
     import std.math : ceil;
-    
+
     import brala.dine.chunk : Chunk, Block;
-    import brala.dine.builder.biomes : BIOMES, BiomeData;
+    import brala.dine.builder.biomes : BiomeSet;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.dine.util : py_div, py_mod;
     import brala.exception : WorldError;
+    import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
     import brala.utils.queue : Queue;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
@@ -62,10 +63,14 @@ class World {
 
     MemoryCounter vram = MemoryCounter("vram");
 
+    BiomeSet biome_set;
+
     protected TessellationBuffer[] tesselation_buffer;
     protected TaskPool task_pool;
     
-    this(size_t threads) {
+    this(ResourceManager resmgr, size_t threads) {
+        biome_set.update_colors(resmgr);
+        
         threads = threads ? threads : 1;
         foreach(i; 0..threads) {
             tesselation_buffer ~= TessellationBuffer(default_tessellation_bufer_size);
@@ -75,9 +80,9 @@ class World {
         task_pool.isDaemon = true;
     }
     
-    this(size_t threads, vec3i spawn) {
+    this(ResourceManager resmgr, vec3i spawn, size_t threads) {
         this.spawn = spawn;
-        this(threads);
+        this(resmgr, threads);
     }
     
     ~this() {
@@ -293,7 +298,7 @@ class World {
                         tessellator.feed(wcoords, x, y, z,
                                         x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
                                         value, right_block, top_block, front_block,
-                                        BIOMES[chunk.biome_data[x+z*15]]);
+                                        biome_set.biomes[chunk.biome_data[x+z*15]]);
 
                         value = right_block;
                     }

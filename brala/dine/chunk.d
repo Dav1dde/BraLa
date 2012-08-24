@@ -9,7 +9,7 @@ private {
     
     import gl3n.linalg : vec3i;
     import brala.dine.util : log2_ub;
-    import brala.dine.builder.biomes : BIOMES, Biome;
+    import brala.dine.builder.biomes : DEFAULT_BIOMES, Biome;
     import brala.utils.memory : calloc, free;
 }
 
@@ -154,7 +154,7 @@ class Chunk {
     }
 
     Biome get_biome_safe(int column) {
-        if(column < biome_data.length && biome_data[column] < BIOMES.length) {
+        if(column < biome_data.length && biome_data[column] < DEFAULT_BIOMES.length) {
             return cast(Biome)biome_data[column];
         } else {
             return cast(Biome)0;

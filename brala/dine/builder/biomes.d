@@ -2,32 +2,76 @@ module brala.dine.builder.biomes;
 
 private {
     import std.typecons : Tuple;
+
+    import brala.resmgr : ResourceManager;
+    import brala.utils.image : Image;
 }
 
 public import brala.dine.builder.constants : Biome;
 
 
-alias Tuple!(float, "u", float, "v") UVTuple;
+alias Tuple!(ubyte, "r", ubyte, "g", ubyte, "b", ubyte, "a") Color4;
+
+
+struct BiomeSet {
+    BiomeData[23] biomes = DEFAULT_BIOMES.dup;
+
+    this(ResourceManager resmgr) {
+        update_colors(resmgr);
+    }
+
+    this(BiomeData[23] biomes) {
+        this.biomes = biomes;
+    }
+
+    this(ResourceManager resmgr, BiomeData[23] biomes) {
+        this(biomes);
+        update_colors(resmgr);
+    }
+
+    void update_colors(ResourceManager resmgr) {
+        foreach(ref biome; biomes) {
+            Image grass_img = resmgr.get!Image("grasscolor");
+            Pixel pixel = biome.to_pixel(grass_img.width, grass_img.height);
+
+            ubyte[] grass = grass_img.get_pixel(pixel.field);
+            ubyte[] leave = resmgr.get!Image("leavecolor").get_pixel(pixel.field);
+            ubyte[] water = resmgr.get!Image("watercolor").get_pixel(pixel.field);
+
+            biome.color.grass = Color4(grass[0], grass[1], grass[2], cast(ubyte)0xff);
+            biome.color.leave = Color4(leave[0], leave[1], leave[2], cast(ubyte)0xff);
+            biome.color.water = Color4(water[0], water[1], water[2], cast(ubyte)0xff);
+        }
+    }
+}
+
+alias Tuple!(int, "x", int, "y") Pixel;
 
 struct BiomeData {
     byte id;
     float temperature;
     float rainfall;
 
-    @property UVTuple grass_uv() const {
-        return UVTuple(0.5 + (1-temperature/2.0f)/2.0f, (1-rainfall/2.0)/2.0f);
+    struct Color {
+        Color4 grass;
+        Color4 leave;
+        Color4 water;
     }
 
-    @property UVTuple leave_uv() const {
-        return UVTuple((1-temperature/2.0f)/2.0f, 0.5f + (1-rainfall/2.0f)/2.0f);
-    }
+    Color color;
 
-    @property UVTuple water_uv() const {
-        return UVTuple(0.5f + (1-temperature/2.0f)/2.0f, 0.5f + (1-rainfall/2.0f)/2.0f);
+    Pixel to_pixel(int width, int height) const {       
+        int x = cast(int)(width*(temperature/2.0f));
+        int y = cast(int)(height*(rainfall/2.0f));
+
+        x = x == width ? x-1 : x;
+        y = y == height ? y-1 : y;
+        
+        return Pixel(x, y);
     }
 }
 
-BiomeData[23] BIOMES = [
+const BiomeData[23] DEFAULT_BIOMES = [
     {0, 0.50f, 0.50f},   // Ocean
     {1, 0.80f, 0.40f},   // Plains
     {2, 2.00f, 0.00f},   // Desert

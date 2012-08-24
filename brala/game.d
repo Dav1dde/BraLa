@@ -147,9 +147,7 @@ class BraLaGame : BaseGLFWEventHandler {
                 engine.use_shader("terrain");
 
                 engine.use_texture("terrain");
-                engine.use_texture("palette");
                 engine.current_shader.uniform1i("terrain", 0);
-                engine.current_shader.uniform1i("palette", 1);
                 
                 current_world.draw(engine);
             }
@@ -205,7 +203,7 @@ class BraLaGame : BaseGLFWEventHandler {
                 _current_world.remove_all_chunks();
             }
             
-            _current_world = new World(tessellation_threads);
+            _current_world = new World(engine.resmgr, tessellation_threads);
         }
         
         character = new Character(packet.entity_id);

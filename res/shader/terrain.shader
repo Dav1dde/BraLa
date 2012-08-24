@@ -46,6 +46,5 @@ fragment:
         vec4 color = texture(terrain, v_texcoord);
         float alpha = texture(terrain, v_mask).a;
 
-        //color_out = color*alpha*v_color + color*(1.0-alpha);
-        color_out = color;
+        color_out = color*alpha*v_color + color*(1.0-alpha);
     }
