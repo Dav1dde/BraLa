@@ -129,8 +129,10 @@ class Connection {
         ubyte repl_byte = read!ubyte(endianstream);
         if(repl_byte == s.Disconnect.id) {
             throw new ServerError(s.Disconnect.recv(endianstream).reason);
-        } else if(repl_byte != s.EncryptionKeyRequest.id) {
-            throw new ServerError("Server didn't respond with a EncryptionKeyRequest.");
+        } else if(repl_byte != s.EncryptionKeyRequest.id) { // assume encryption is disabled
+            debug writefln("Assuming server doesn't support encryption, skipping it.");
+            dispatch_packet(repl_byte);
+            return;
         }
         
         auto enc_request = s.EncryptionKeyRequest.recv(endianstream);
@@ -185,6 +187,10 @@ class Connection {
         }
         endianstream.flush();
 
+        dispatch_packet(packet_id);
+    }
+
+    void dispatch_packet(ubyte packet_id) {
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
