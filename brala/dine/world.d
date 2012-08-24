@@ -298,7 +298,7 @@ class World {
                         tessellator.feed(wcoords, x, y, z,
                                         x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
                                         value, right_block, top_block, front_block,
-                                        biome_set.biomes[chunk.biome_data[x+z*15]]);
+                                        biome_set.biomes[chunk.biome_data[chunk.get_biome_safe(x+z*15)]]);
 
                         value = right_block;
                     }
