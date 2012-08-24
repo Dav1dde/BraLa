@@ -1,4 +1,4 @@
-module brala.utils.crypto;
+module brala.network.crypto;
 
 private {
     import std.conv : to;
