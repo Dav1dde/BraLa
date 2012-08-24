@@ -20,17 +20,25 @@ public {
 }
 
 
-template WoolPair(byte xi, byte yi) {
-    enum x = xi;
-    enum y = yi;
+protected {
+    template WoolPair(byte xi, byte yi) {
+        enum x = xi;
+        enum y = yi;
+    }
+
+    template isUbyte(T) {
+        enum isUbyte = is(T : ubyte);
+    }
+
+    enum byte BYTE_0 = cast(byte)0;
 }
 
 mixin template BlockBuilder() {
     void add_vertex(float x, float y, float z,
                     float nx, float ny, float nz,
-                    ubyte u_terrain, ubyte v_terrain,
-                    ubyte u_mask, ubyte v_mask,
-                    float u_biome, float v_biome)
+                    ubyte r, ubyte g, ubyte b, ubyte a,
+                    byte u_terrain, byte v_terrain,
+                    byte u_mask, byte v_mask)
         in { assert(elements+1 <= buffer.length, "not enough allocated memory for tessellator"); }
         body {
             buffer.ptr[elements..(elements+=4)] = (cast(void*)&x)[0..4];
@@ -39,17 +47,19 @@ mixin template BlockBuilder() {
             buffer.ptr[elements..(elements+=4)] = (cast(void*)&nx)[0..4];
             buffer.ptr[elements..(elements+=4)] = (cast(void*)&ny)[0..4];
             buffer.ptr[elements..(elements+=4)] = (cast(void*)&nz)[0..4];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&r)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&g)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&b)[0..1];
+            buffer.ptr[elements..(elements+=1)] = (cast(void*)&a)[0..1];
             buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_terrain)[0..1];
             buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_terrain)[0..1];
             buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_mask)[0..1];
             buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_mask)[0..1];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&u_biome)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&v_biome)[0..4];
         }
 
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                float x_offset, float y_offset, float z_offset,
-                               float u_biome, float v_biome)
+                               ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
         in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
         body {
             size_t end = elements + vertices.length*Vertex.sizeof;
@@ -61,8 +71,10 @@ mixin template BlockBuilder() {
                 vertex.x += x_offset;
                 vertex.y += y_offset;
                 vertex.z += z_offset;
-                vertex.u_biome = u_biome;
-                vertex.v_biome = v_biome;
+                vertex.r = r;
+                vertex.g = g;
+                vertex.b = b;
+                vertex.a = a;
             }
         }
 
@@ -77,8 +89,8 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         Vertex[] vertices = get_vertices!(s)(block.id);
 
-        add_template_vertices(vertices, x_offset, y_offset, z_offset,
-                              biome_data.grass_uv.field);
+        // TODO: BIOME COLOR
+        add_template_vertices(vertices, x_offset, y_offset, z_offset);
     }
 
     void plank_block(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -95,7 +107,7 @@ mixin template BlockBuilder() {
                             float x_offset, float y_offset, float z_offset) {
 
         if(block.metadata == 0) {
-            tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
+            return tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
         }
 
         enum set_tex = ```
@@ -145,21 +157,22 @@ mixin template BlockBuilder() {
         }
         
         auto sb = memoize!(simple_block, 16)(s, texcoords); // memoize is faster!
-        add_template_vertices(sb, x_offset, y_offset, z_offset, 0, 0);
+        add_template_vertices(sb, x_offset, y_offset, z_offset);
     }
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
+        // TODO: BIOME COLOR
         final switch(block.metadata & 0x03) {
             case 0: enum vertices = simple_block(s, TextureSlice(5, 4)); // oak
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
             case 1: enum vertices = simple_block(s, TextureSlice(5, 9)); // spruce
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
             case 2: enum vertices = simple_block(s, TextureSlice(5, 4)); // birch, uses oak texture
                     // birch trees have a different biome color?
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
             case 3: enum vertices = simple_block(s, TextureSlice(5, 13)); // jungle
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.leave_uv.field); break;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset/+, biome_data.leave_uv.field+/); break;
         }
     }
 
@@ -187,7 +200,7 @@ mixin template BlockBuilder() {
         static string wool_vertices() {
                     // no enum possible due to CTFE bug?
             return `auto vertices = memoize!(simple_block, 16)(s, TextureSlice(slice.x, slice.y).texcoords);
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
+                    add_template_vertices(vertices, x_offset, y_offset, z_offset);`;
         }
 
         alias WoolPair t;
@@ -282,7 +295,7 @@ mixin template BlockBuilder() {
         Facing f = fs[block.metadata & 0x3];
         bool upside_down = (block.metadata & 0x4) != 0;
         
-        add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset, 0, 0);
+        add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -337,17 +350,17 @@ mixin template BlockBuilder() {
     void tessellate_simple_block(Side side)(const ref Block block, const ref BiomeData biome_data,
                                             float x_offset, float y_offset, float z_offset) {
         static if(side == Side.LEFT) {
-            add_template_vertices(BLOCK_VERTICES_LEFT[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_LEFT[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.RIGHT) {
-            add_template_vertices(BLOCK_VERTICES_RIGHT[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_RIGHT[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.NEAR) {
-            add_template_vertices(BLOCK_VERTICES_NEAR[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_NEAR[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.FAR) {
-            add_template_vertices(BLOCK_VERTICES_FAR[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_FAR[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.TOP) {
-            add_template_vertices(BLOCK_VERTICES_TOP[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_TOP[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.BOTTOM) {
-            add_template_vertices(BLOCK_VERTICES_BOTTOM[block.id], x_offset, y_offset, z_offset, 0, 0);
+            add_template_vertices(BLOCK_VERTICES_BOTTOM[block.id], x_offset, y_offset, z_offset);
         } else static if(side == Side.ALL) {
             tessellate_simple_block!(Side.LEFT)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.RIGHT)(block, biome_data, x_offset, y_offset, z_offset);
@@ -361,7 +374,7 @@ mixin template BlockBuilder() {
 
 static string add_block_enum_vertices(string x, string y) {
     return `enum vertices = simple_block(s, TextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
-            add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);`;
+            add_template_vertices(vertices, x_offset, y_offset, z_offset);`;
 }
 
 static string add_slab_enum_vertices(Side s, string x, string y) {
@@ -376,9 +389,9 @@ static string add_slab_enum_vertices(Side s, string x, string y) {
     
     return  v ~ `
             if(upside_down) {
-                add_template_vertices(vertices_usd, x_offset, y_offset, z_offset, 0, 0);
+                add_template_vertices(vertices_usd, x_offset, y_offset, z_offset);
             } else {
-                add_template_vertices(vertices, x_offset, y_offset, z_offset, 0, 0);
+                add_template_vertices(vertices, x_offset, y_offset, z_offset);
             }`;
 }
 

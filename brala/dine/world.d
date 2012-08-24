@@ -313,16 +313,16 @@ class World {
         body {
             GLuint position = engine.current_shader.get_attrib_location("position");
             GLuint normal = engine.current_shader.get_attrib_location("normal");
+            GLuint color = engine.current_shader.get_attrib_location("color");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
             GLuint mask = engine.current_shader.get_attrib_location("mask");
-            GLuint palettecoord = engine.current_shader.get_attrib_location("palettecoord");
 
             uint stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
-            chunk.vbo.bind(texcoord, GL_BYTE, 2, 24, stride);
-            chunk.vbo.bind(mask, GL_BYTE, 2, 26, stride);
-            chunk.vbo.bind(palettecoord, GL_FLOAT, 2, 28, stride);
+            chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 24, stride, true); // normalize it
+            chunk.vbo.bind(texcoord, GL_BYTE, 2, 28, stride);
+            chunk.vbo.bind(mask, GL_BYTE, 2, 30, stride);
         }
     
     void draw(BraLaEngine engine) {

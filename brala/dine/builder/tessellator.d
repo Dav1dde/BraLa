@@ -23,12 +23,14 @@ struct Vertex {
     float nx;
     float ny;
     float nz;
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
     byte u_terrain;
     byte v_terrain;
     byte u_mask;
     byte v_mask;
-    float u_biome;
-    float v_biome;
 }
 
 
@@ -95,10 +97,6 @@ struct Tessellator {
     }
 
     void fill_vbo(Buffer vbo) {
-        //size_t prev = vbo.length;
-        //import std.stdio;
-        //writeln(elements);
         vbo.set_data(buffer.ptr, elements);
-        //return vbo.length - prev;
     }
 }
