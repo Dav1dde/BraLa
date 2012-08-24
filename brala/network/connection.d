@@ -25,9 +25,9 @@ private {
     import brala.network.packets.types : IPacket, Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
+    import brala.network.crypto : decode_public, encrypt, seed_prng, get_random;
     import brala.utils.queue : PacketQueue;
     import brala.utils.openssl.encrypt : AES128CFB8;
-    import brala.utils.crypto : decode_public, encrypt, seed_prng, get_random;
     import brala.utils.thread : Timer;
     
     debug import std.stdio : writefln;
