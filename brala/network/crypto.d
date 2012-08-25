@@ -75,7 +75,7 @@ class PBEWithMD5AndDES {
         auto des = new DESCBC(key, IV);
         ubyte[] decrypted = des.decrypt(cipher);
         decrypted ~= des.decrypt_finalize();
-        return decrypted[0..$-(decrypted[$-1])];
+        return decrypted;
     }
 
     ubyte[] generate_md5_key(ubyte[] key, size_t rounds) {
