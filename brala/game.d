@@ -75,7 +75,7 @@ class BraLaGame : BaseGLFWEventHandler {
             login();
         }
         connection.run();
-        
+
         engine.mainloop(&poll);
     }
     
@@ -148,7 +148,7 @@ class BraLaGame : BaseGLFWEventHandler {
 
                 engine.use_texture("terrain");
                 engine.current_shader.uniform1i("terrain", 0);
-                
+
                 current_world.draw(engine);
             }
         }
