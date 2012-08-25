@@ -91,7 +91,7 @@ BraLaEngine init_engine(void* window, int width, int height, GLVersion glv) {
     if(file.exists(path)) {
         try {
             Image mc_terrain = extract_minecraft_terrain(path);
-
+            
             engine.resmgr.remove!Image("terrain");
             engine.resmgr.add("terrain", mc_terrain);
         } catch(ZlibException e) {
