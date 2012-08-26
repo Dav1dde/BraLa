@@ -1,7 +1,7 @@
 module brala.utils.queue;
 
 private {
-    import std.array : empty, front, back, popFront, popBack;
+    import std.array : empty, front, back, popFront, popBack, save;
     
     import brala.network.packets.types : IPacket;
 }
@@ -14,6 +14,11 @@ class Queue(type) {
     this() {
         _lock = new Object();
     }
+
+    this(type[] data) {
+        _lock = new Object();
+        this.data = data;
+    }
     
     void put(type d) {
         synchronized(_lock) data ~= d;
@@ -23,26 +28,16 @@ class Queue(type) {
         return data.empty;
     }
     
-    type popFront() {
-        type p;
-        
+    void popFront() {
         synchronized(_lock) {
-            p = data.front;
             data.popFront();
         }
-        
-        return p;
     }
     
-    type popBack() {
-        type p;
-        
+    void popBack() {
         synchronized(_lock) {
-            p = data.back;
             data.popBack();
         }
-        
-        return p;
     }
 
     type front() {
@@ -52,16 +47,15 @@ class Queue(type) {
     type back() {
         return data.back;
     }
-    
-    int opApply(int delegate(type d) dg) {
-        int result;
 
-        while(!data.empty) {
-            result = dg(popFront());
-            if(result) break;
-        }
+    Queue save() {
+        type[] copy;
         
-        return result;
+        synchronized(_lock) {
+             copy = data.save();
+        }
+
+        return new Queue(copy);
     }
 }
 
