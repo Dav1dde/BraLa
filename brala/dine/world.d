@@ -16,6 +16,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
     import brala.utils.queue : Queue;
+    import brala.utils.thread : Event;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
 
@@ -26,7 +27,23 @@ struct TessellationBuffer {
     alias ptr this; 
     size_t length = 0;
 
+    private Event _event;
+    @property event() {
+        if(_event is null) {
+            _event = new Event();
+            _event.set();
+        }
+
+        return _event;
+    }
+
+    @property available() {
+        return !event.is_set();
+    }
+
     this(size_t size) {
+        _event = new Event();
+        _event.set();
         ptr = cast(void*)malloc(size);
         length = size;
     }
@@ -352,3 +369,14 @@ class World {
         }
     }
 }
+
+
+// class TessellationThread : Thread {
+//     this(World world, Queue!Chunk input, Queue!XXX output) {
+//     }
+// 
+//     void run() {
+//         while(true) {
+//         }
+//     }
+// }
