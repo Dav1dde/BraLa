@@ -2,20 +2,15 @@ module brala.utils.queue;
 
 private {
     import std.array : empty, front, back, popFront, popBack, save;
-    import std.range /+: RefRange, refRange+/;
-    
-    import brala.network.packets.types : IPacket;
 }
 
-struct Queue(type) {
+class Queue(type) {
     protected Object _lock;
 
     type[] data;
 
-    @disable this();
-
-    static Queue opCall() {
-        return Queue([]);
+    this() {
+        _lock = new Object();
     }
 
     this(type[] data) {
@@ -52,36 +47,7 @@ struct Queue(type) {
 
     @property Queue save() {
         synchronized(_lock) {
-             return Queue(data.save);
+             return new Queue(data.save);
         }
     }
 }
-
-struct RefQueue(type) {
-    alias Queue!type Q;
-    private Q* _queue;
-
-    @disable this();
-
-    static RefQueue opCall() {
-        return RefQueue([]);
-    }
-
-    this(type[] data) {
-        auto q = Q(data);
-        _queue = &q;
-    }
-
-    this(Q* q) {
-        _queue = q;
-    }
-
-    void put(type d) { return (*_queue).put(d); }
-    @property bool empty() { return (*_queue).empty; }
-    void popFront() { return (*_queue).popFront(); }
-    void popBack() { return (*_queue).popBack(); }
-    type front() { return (*_queue).front; }
-    type back() { return (*_queue).back; }
-}
-
-alias RefQueue!(IPacket) PacketQueue;

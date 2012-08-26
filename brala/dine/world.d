@@ -19,7 +19,7 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
-    import brala.utils.queue : RefQueue;
+    import brala.utils.queue : Queue;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
 
@@ -335,7 +335,7 @@ class World {
                      cycle(tesselation_buffer));
 
         alias void delegate() CB;
-        auto cb_queue = RefQueue!CB();
+        auto cb_queue = new Queue!CB();
 
         foreach(i; 0..cast(size_t)ceil(chunks.length/cast(float)tesselation_buffer.length)) {
             foreach(data; task_pool.parallel(r.take(tesselation_buffer.length), 2)) {

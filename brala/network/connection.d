@@ -26,7 +26,7 @@ private {
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.network.crypto : decode_public, encrypt, seed_prng, get_random;
-    import brala.utils.queue : PacketQueue;
+    import brala.utils.queue : Queue;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Timer;
     
@@ -38,7 +38,7 @@ class Connection {
     TcpSocket socket;
     SocketStream socketstream;
     EndianStream endianstream;
-    protected PacketQueue queue;
+    protected Queue!IPacket queue;
     protected bool _connected = false;
     protected Address connected_to;
     protected bool _logged_in = false;
@@ -61,7 +61,7 @@ class Connection {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
-        queue = PacketQueue();
+        queue = new Queue!IPacket();
         
         session = new Session(username, password);
 
