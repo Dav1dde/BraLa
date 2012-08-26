@@ -74,37 +74,29 @@ class Event {
 
     void set() {
         _mutex.lock();
+        scope(exit) _mutex.unlock();
 
-        try {
-            _flag = true;
-            _cond.notifyAll();
-        } finally {
-            _mutex.unlock();
-        }
+        _flag = true;
+        _cond.notifyAll();
+        _mutex.unlock();
     }
     
     void clear() {
         _mutex.lock();
+        scope(exit) _mutex.unlock();
 
-        try {
-            _flag = false;
-        } finally {
-            _mutex.unlock();
-        }
+        _flag = false;
     }
 
     bool wait(T...)(T timeout) if(T.length == 0 || (T.length == 1 && is(T[0] : Duration))) {
         _mutex.lock();
+        scope(exit) _mutex.unlock();
 
-        try {
-            bool notified = _flag;
-            if(!notified) {
-                notified = _cond.wait(timeout);
-            }
-            return notified;
-        } finally {
-            _mutex.unlock();
+        bool notified = _flag;
+        if(!notified) {
+            notified = _cond.wait(timeout);
         }
+        return notified;
     }
 }
     
