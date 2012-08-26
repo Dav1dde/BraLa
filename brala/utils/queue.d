@@ -46,7 +46,7 @@ class Queue(type) {
                     throw new Full("full queue");
                 }
             } else if(timeout.get!("seconds") < 0) {
-                throw new QueueException("negativ timeout");
+                throw new QueueException("negative timeout");
             } else if(timeout.get!("seconds") == 0) {
                 if(full) {
                     not_full.wait();
