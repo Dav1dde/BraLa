@@ -6,11 +6,7 @@ private {
     
     import gl3n.linalg : vec3i, mat4;
 
-    import std.parallelism : TaskPool;
-    import std.range : cycle, zip, take, popFrontN;
-    import std.algorithm : filter;
-    import std.typecons : Tuple;
-    import std.math : ceil;
+    import core.thread : Thread;
 
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
@@ -66,7 +62,6 @@ class World {
     BiomeSet biome_set;
 
     protected TessellationBuffer[] tesselation_buffer;
-    protected TaskPool task_pool;
     
     this(ResourceManager resmgr, size_t threads) {
         biome_set.update_colors(resmgr);
@@ -75,9 +70,6 @@ class World {
         foreach(i; 0..threads) {
             tesselation_buffer ~= TessellationBuffer(default_tessellation_bufer_size);
         }
-
-        task_pool = new TaskPool(threads);
-        task_pool.isDaemon = true;
     }
     
     this(ResourceManager resmgr, vec3i spawn, size_t threads) {
@@ -87,8 +79,6 @@ class World {
     
     ~this() {
         remove_all_chunks();
-
-        task_pool.stop();
         
         foreach(ref tb; tesselation_buffer) {
             tb.free();
@@ -331,50 +321,28 @@ class World {
         }
     
     void draw(BraLaEngine engine) {
-        auto r = zip(zip(chunks.byKey, chunks.byValue).filter!("a[1].dirty"),
-                     cycle(tesselation_buffer));
-
-        alias void delegate() CB;
-        auto cb_queue = new Queue!CB();
-
-        foreach(i; 0..cast(size_t)ceil(chunks.length/cast(float)tesselation_buffer.length)) {
-            foreach(data; task_pool.parallel(r.take(tesselation_buffer.length), 2)) {
-                vec3i chunkc = data[0][0];
-                Chunk chunk = data[0][1];
-                auto buffer = data[1];
-
+        foreach(chunkc, chunk; chunks) {
+            if(chunk.dirty) {
+                auto buffer = tesselation_buffer[0];
                 size_t elements = tessellate(chunk, chunkc, &buffer);
-                cb_queue.put(delegate void() {
-                    if(chunk.vbo is null) {
-                        chunk.vbo = new Buffer();
+                if(chunk.vbo is null) {
+                    chunk.vbo = new Buffer();
+                }
+
+                debug size_t prev = chunk.vbo.length;
+
+                chunk.vbo.set_data(buffer.ptr, elements);
+                chunk.dirty = false;
+
+                debug {
+                    if(prev == 0 && chunk.vbo.length) {
+                        vram.add(chunk.vbo.length);
+                    } else {
+                        vram.adjust(chunk.vbo.length - prev);
                     }
-
-                    debug size_t prev = chunk.vbo.length;
-
-                    chunk.vbo.set_data(buffer.ptr, elements);
-                    chunk.dirty = false;
-
-                    debug {
-                        if(prev == 0 && chunk.vbo.length) {
-                            vram.add(chunk.vbo.length);
-                        } else {
-                            vram.adjust(chunk.vbo.length - prev);
-                        }
-                    }
-                });
-            }
-            r.popFrontN(tesselation_buffer.length);
-
-            foreach(cb; cb_queue) {
-                cb();
+                }
             }
             
-            if(r.empty) {
-                break;
-            }
-        }
-
-        foreach(chunkc, chunk; chunks) {
             bind(engine, chunk);
  
             engine.model = mat4.translation(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
