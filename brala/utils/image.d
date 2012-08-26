@@ -9,7 +9,7 @@ private {
     import std.range : chunks;
     import std.array : array;
 
-    import brala.exception : ImageError;
+    import brala.utils.exception : ImageException;
 }
 
 
@@ -30,7 +30,7 @@ class Image {
         } else if(comp == RGBA) {
             return GL_RGBA;
         } else {
-            throw new ImageError("Unknown/Unsupported stbi image format");
+            throw new ImageException("Unknown/Unsupported stbi image format");
         }
     }
     
@@ -54,13 +54,13 @@ class Image {
         ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
 
         if(data is null) {
-            throw new ImageError("Unable to load image: " ~ filename);
+            throw new ImageException("Unable to load image: " ~ filename);
         }
 
         scope(exit) stbi_image_free(data);
 
         if(!(comp == RGB || comp == RGBA)) {
-            throw new ImageError("Unknown/Unsupported stbi image format");
+            throw new ImageException("Unknown/Unsupported stbi image format");
         }
         
         return new Image(data[0..x*y*comp].dup, x, y, comp);

@@ -6,6 +6,9 @@ private {
     import core.sync.condition : Condition;
 }
 
+public import brala.utils.exception : QueueException, Full, Empty;
+
+
 private enum Duration DUR_0 = dur!("seconds")(0);
 
 class Queue(type) {
@@ -39,10 +42,10 @@ class Queue(type) {
         if(maxsize > 0) {
             if(!block) {
                 if(queue.length >= maxsize) {
-                    throw new Exception("Full queue");
+                    throw new Full("full queue");
                 }
             } else if(timeout.get!("seconds") < 0) {
-                throw new Exception("negativ timeout");
+                throw new QueueException("negativ timeout");
             } else if(timeout.get!("seconds") == 0) {
                 not_full.wait();
             } else {
@@ -61,10 +64,10 @@ class Queue(type) {
 
         if(!block) {
             if(queue.length == 0) {
-                throw new Exception("queue is empty");
+                throw new Empty("queue is empty");
             }
         } else if(timeout.get!("seconds") < 0) {
-            throw new Exception("negativ timeout");
+            throw new QueueException("negativ timeout");
         } else if(timeout.get!("seconds") == 0) {
             not_empty.wait();
         } else {
@@ -83,7 +86,7 @@ class Queue(type) {
 
         size_t u = unfinished_taks - 1;
         if(u < 0) {
-            throw new Exception("task_done called to many times");
+            throw new QueueException("task_done called to many times");
         } else if(u == 0) {
             all_done.notifyAll();
         }

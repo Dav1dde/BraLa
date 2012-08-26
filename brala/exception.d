@@ -19,12 +19,6 @@ class ResmgrError : BraLaException {
     }
 }
 
-class ImageError : BraLaException {
-    this(string msg) {
-        super(msg);
-    }
-}
-
 class InitError : BraLaException {
     this(string msg) {
         super(msg);

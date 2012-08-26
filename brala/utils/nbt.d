@@ -7,13 +7,8 @@ private {
     import std.conv : to;
     
     import nbt.nbt;
-}
 
-
-class NbtException : Exception {
-    this(string msg) {
-        super(msg);
-    }
+    import brala.utils.exception : NbtException;
 }
 
 class NbtTree {
