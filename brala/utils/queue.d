@@ -2,44 +2,46 @@ module brala.utils.queue;
 
 private {
     import std.array : empty, front, back, popFront, popBack, save;
+    import std.range /+: RefRange, refRange+/;
     
     import brala.network.packets.types : IPacket;
 }
 
-class Queue(type) {
+struct Queue(type) {
     protected Object _lock;
-    
+
     type[] data;
-    
-    this() {
-        _lock = new Object();
+
+    @disable this();
+
+    static Queue opCall() {
+        return Queue([]);
     }
 
     this(type[] data) {
         _lock = new Object();
         this.data = data;
     }
-    
+
     void put(type d) {
         synchronized(_lock) data ~= d;
     }
-    
-    bool empty() {
+
+    @property bool empty() {
         return data.empty;
     }
-    
+
     void popFront() {
         synchronized(_lock) {
             data.popFront();
         }
     }
-    
+
     void popBack() {
         synchronized(_lock) {
             data.popBack();
         }
     }
-
     type front() {
         return data.front;
     }
@@ -48,15 +50,38 @@ class Queue(type) {
         return data.back;
     }
 
-    Queue save() {
-        type[] copy;
-        
+    @property Queue save() {
         synchronized(_lock) {
-             copy = data.save();
+             return Queue(data.save);
         }
-
-        return new Queue(copy);
     }
 }
 
-alias Queue!(IPacket) PacketQueue;
+struct RefQueue(type) {
+    alias Queue!type Q;
+    private Q* _queue;
+
+    @disable this();
+
+    static RefQueue opCall() {
+        return RefQueue([]);
+    }
+
+    this(type[] data) {
+        auto q = Q(data);
+        _queue = &q;
+    }
+
+    this(Q* q) {
+        _queue = q;
+    }
+
+    void put(type d) { return (*_queue).put(d); }
+    @property bool empty() { return (*_queue).empty; }
+    void popFront() { return (*_queue).popFront(); }
+    void popBack() { return (*_queue).popBack(); }
+    type front() { return (*_queue).front; }
+    type back() { return (*_queue).back; }
+}
+
+alias RefQueue!(IPacket) PacketQueue;

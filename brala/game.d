@@ -25,7 +25,7 @@ private {
     import brala.gfx.text : parse_chat;
     import brala.util : clear;
     import brala.utils.defaultaa : DefaultAA;
-    import brala.utils.queue : Queue;
+    import brala.utils.queue : RefQueue;
     import brala.config;
     
     debug import std.stdio;
@@ -38,7 +38,7 @@ class BraLaGame : BaseGLFWEventHandler {
     BraLaEngine engine;
     ThreadedConnection connection;
     
-    protected Queue!vec3i chunk_removal_queue;
+    protected RefQueue!vec3i chunk_removal_queue;
     
     Character character;
     protected World _current_world;    
@@ -57,7 +57,7 @@ class BraLaGame : BaseGLFWEventHandler {
         this.tessellation_threads = app_args.tessellation_threads;
     
         _world_lock = new Object();
-        chunk_removal_queue = new Queue!vec3i();
+        chunk_removal_queue = RefQueue!vec3i();
 
         this.engine = engine;
         connection = new ThreadedConnection(username, password, !app_args.no_snoop);
