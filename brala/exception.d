@@ -5,58 +5,55 @@ private {
 
 
 class BraLaException : Exception {
-    string message;
-    
-    this(string msg) {
-        super(msg);
-        message = msg;
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class ResmgrError : BraLaException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class InitError : BraLaException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class ConnectionError : BraLaException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class ServerError : ConnectionError {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class SessionError : BraLaException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class WorldError : BraLaException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class FatalException : Exception {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 
 class AllocationError : FatalException {
-    this(string msg) {
-        super(msg);
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }

@@ -69,7 +69,7 @@ class Connection {
             session.login();
             this.minecraft_username = session.minecraft_username;
         } catch(SessionError e) {
-            debug writefln("%s", e.message);
+            debug writefln("%s", e.msg);
             this.minecraft_username = username;
         }
 
