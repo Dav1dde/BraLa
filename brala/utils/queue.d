@@ -19,7 +19,8 @@ class Queue(type) {
 
     protected type[] queue;
     protected size_t unfinished_taks;
-    protected size_t maxsize = 0;
+    protected size_t _maxsize = 0;
+    @property size_t maxsize() { return _maxsize; }
 
     this() {
         mutex = new Mutex();
@@ -32,10 +33,10 @@ class Queue(type) {
 
     this(size_t maxsize) {
         this();
-        maxsize = maxsize;
+        _maxsize = maxsize;
     }
 
-    void put(type item, bool block=false, Duration timeout=DUR_0) {
+    void put(type item, bool block=true, Duration timeout=DUR_0) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
@@ -47,9 +48,15 @@ class Queue(type) {
             } else if(timeout.get!("seconds") < 0) {
                 throw new QueueException("negativ timeout");
             } else if(timeout.get!("seconds") == 0) {
-                not_full.wait();
+                if(full) {
+                    not_full.wait();
+                }
             } else {
-                not_full.wait(timeout);
+                if(full) {
+                    if(!not_full.wait(timeout)) {
+                        throw new Full("queue after timeout still full");
+                    }
+                }
             }
         }
 
@@ -58,7 +65,7 @@ class Queue(type) {
         not_empty.notify();
     }
 
-    type get(bool block=false, Duration timeout=DUR_0) {
+    type get(bool block=true, Duration timeout=DUR_0) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
@@ -69,9 +76,15 @@ class Queue(type) {
         } else if(timeout.get!("seconds") < 0) {
             throw new QueueException("negativ timeout");
         } else if(timeout.get!("seconds") == 0) {
-            not_empty.wait();
+            if(empty) {
+                not_empty.wait();
+            }
         } else {
-            not_empty.wait(timeout);
+            if(empty) {
+                if(!not_empty.wait(timeout)) {
+                    throw new Empty("queue after timeout still empty");
+                }
+            }
         }
 
         type item = queue[0];
@@ -113,7 +126,14 @@ class Queue(type) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
-        return (0 < maxsize) && (maxsize > queue.length);
+        return (0 < maxsize) && (maxsize <= queue.length);
+    }
+
+    @property qsize() {
+        mutex.lock();
+        scope(exit) mutex.unlock();
+
+        return queue.length;
     }
 
     int opApply(int delegate(type item) dg) {
@@ -127,4 +147,37 @@ class Queue(type) {
 
         return result;
     }
+}
+
+unittest {
+    import std.exception : assertThrown;
+
+    alias Queue!int Q;
+    Q q = new Q(10);
+
+    assertThrown!Empty(q.get(false));
+
+    q.put(0, true);
+    q.put(1, true);
+    assert(q.qsize == 2);
+    assert(q.get(false) == 0);
+    assert(!q.empty);
+    assert(!q.full);
+    assert(q.qsize == 1);
+    assert(q.get(false) == 1);
+    assert(q.empty);
+    assert(!q.full);
+    assert(q.qsize == 0);
+
+    foreach(i; 0..10) {
+        q.put(i, true, dur!("seconds")(1));
+        assert(q.qsize == i+1);
+    }
+
+    //assertThrown!Full(q.put(11, true, dur!("seconds")(1)));
+    assert(q.full);
+    assert(!q.empty);
+    assert(q.qsize == 10);
+    assertThrown!Full(q.put(11, false));
+
 }
