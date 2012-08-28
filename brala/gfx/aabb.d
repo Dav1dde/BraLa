@@ -54,13 +54,17 @@ struct AABBT(T) {
                (min.z < box.max.z && max.z > box.min.z);
     }
 
-    @property vec3 size() const {
-        return max-min;
+    @property vec3 extent() const {
+        return max - min;
+    }
+
+    @property vec3 half_extent() const {
+        return 0.5 * (max - min);
     }
 
     @property T area() const {
-        vec3 s = size;
-        return 2.0 * (s.x * s.y + s.x * s.z + s.y * s.z);
+        vec3 e = extent;
+        return 2.0 * (e.x * e.y + e.x * e.z + e.y * e.z);
     }
 
     @property center() const {

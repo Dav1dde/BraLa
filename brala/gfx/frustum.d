@@ -2,7 +2,9 @@ module brala.gfx.frustum;
 
 private {
     import gl3n.linalg;
+    import gl3n.math : abs;
 
+    import brala.gfx.aabb : AABB;
 }
 
 struct Frustum {
@@ -45,6 +47,24 @@ struct Frustum {
                     mvp[3][3] - mvp[3][2]).normalized;
     }
 
-    // TODO: contains chunk / contains AABB - maybe contains sphere
+    bool opBinaryRight(string s : "in")(AABB aabb) {
+        vec3 hextent = aabb.half_extent;
+        vec3 center = aabb.center;
 
+        foreach(plane; [left, right, bottom, top, near, far]) {
+            float d = dot(center, plane);
+            float r = dot(extent, abs(plane));
+
+            if(d + r < -plane.w) {
+                // outside
+                return false;
+            }
+            if(d - r < -plane.w) {
+                // partially outside
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
