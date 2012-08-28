@@ -15,6 +15,8 @@ struct Frustum {
     vec4 near;
     vec4 far;
 
+    @safe pure nothrow:
+
     this(mat4 mvp) {
         left = vec4(mvp[0][3] + mvp[0][0],
                     mvp[1][3] + mvp[1][0],
