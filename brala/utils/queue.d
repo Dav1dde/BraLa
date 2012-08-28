@@ -140,7 +140,11 @@ class Queue(type) {
         int result;
 
         while(!empty) {
-            result = dg(get(false));
+            try {
+                result = dg(get(false));
+            } catch(Empty) { // should not be the case, but it's possible
+                return result;
+            }
             task_done();
             if(result) break;
         }
