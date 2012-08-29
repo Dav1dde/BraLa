@@ -5,6 +5,7 @@ private {
     import gl3n.math : abs, cradians;
 
     import brala.gfx.aabb : AABB;
+    import brala.gfx.plane : Plane;
 }
 
 enum {
@@ -14,45 +15,58 @@ enum {
 }
 
 struct Frustum {
-    vec4 left;
-    vec4 right;
-    vec4 bottom;
-    vec4 top;
-    vec4 near;
-    vec4 far;
+    enum {
+        LEFT,
+        RIGHT,
+        BOTTOM,
+        TOP,
+        NEAR,
+        FAR
+    }
+
+    Plane[6] planes;
 
     @safe pure nothrow:
 
     this(mat4 mvp) {       
-        left = vec4(mvp[0][3] + mvp[0][0],
-                    mvp[1][3] + mvp[1][0],
-                    mvp[2][3] + mvp[2][0],
-                    mvp[3][3] + mvp[3][0]).normalized;
-                    
-        right = vec4(mvp[0][3] - mvp[0][0],
-                     mvp[1][3] - mvp[1][0],
-                     mvp[2][3] - mvp[2][0],
-                     mvp[3][3] - mvp[3][0]).normalized;
+        planes = [
+            // left
+            Plane(mvp[0][3] + mvp[0][0],
+                  mvp[1][3] + mvp[1][0],
+                  mvp[2][3] + mvp[2][0],
+                  mvp[3][3] + mvp[3][0]),
 
-        bottom = vec4(mvp[0][3] + mvp[0][1],
-                      mvp[1][3] + mvp[1][1],
-                      mvp[2][3] + mvp[2][1],
-                      mvp[3][3] + mvp[3][1]).normalized;
-                      
-        top = vec4(mvp[0][3] - mvp[0][1],
-                   mvp[1][3] - mvp[1][1],
-                   mvp[2][3] - mvp[2][1],
-                   mvp[3][3] - mvp[3][1]).normalized;
+            // right
+            Plane(mvp[0][3] - mvp[0][0],
+                  mvp[1][3] - mvp[1][0],
+                  mvp[2][3] - mvp[2][0],
+                  mvp[3][3] - mvp[3][0]),
 
-        near = vec4(mvp[0][3] + mvp[0][2],
-                    mvp[1][3] + mvp[1][2],
-                    mvp[2][3] + mvp[2][2],
-                    mvp[3][3] + mvp[3][2]).normalized;
+            // bottom
+            Plane(mvp[0][3] + mvp[0][1],
+                  mvp[1][3] + mvp[1][1],
+                  mvp[2][3] + mvp[2][1],
+                  mvp[3][3] + mvp[3][1]),
+            // top
+            Plane(mvp[0][3] - mvp[0][1],
+                  mvp[1][3] - mvp[1][1],
+                  mvp[2][3] - mvp[2][1],
+                  mvp[3][3] - mvp[3][1]),
+            // near
+            Plane(mvp[0][3] + mvp[0][2],
+                  mvp[1][3] + mvp[1][2],
+                  mvp[2][3] + mvp[2][2],
+                  mvp[3][3] + mvp[3][2]),
+            // far
+            Plane(mvp[0][3] - mvp[0][2],
+                  mvp[1][3] - mvp[1][2],
+                  mvp[2][3] - mvp[2][2],
+                  mvp[3][3] - mvp[3][2])
+        ];
 
-        far = vec4(mvp[0][3] - mvp[0][2],
-                   mvp[1][3] - mvp[1][2],
-                   mvp[2][3] - mvp[2][2],
-                   mvp[3][3] - mvp[3][2]).normalized;
+        foreach(ref e; planes) {
+            e.normalize();
+        }
     }
 
     auto intersects(AABB aabb) {
@@ -60,15 +74,15 @@ struct Frustum {
         vec3 center = aabb.center;
 
         int result = INSIDE;
-        foreach(plane; [left, right, bottom, top, near, far]) {
-            float d = dot(center, vec3(plane));
-            float r = dot(hextent, abs(vec3(plane)));
+        foreach(plane; planes) {
+            float d = dot(center, plane.normal);
+            float r = dot(hextent, abs(plane.normal));
 
-            if(d + r < -plane.w) {
+            if(d + r < -plane.d) {
                 // outside
                 return OUTSIDE;
             }
-            if(d - r < -plane.w) {
+            if(d - r < -plane.d) {
                result = INTERSECT;
             }
         }

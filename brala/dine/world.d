@@ -340,7 +340,7 @@ class World {
         }
     
     void draw(BraLaEngine engine) {       
-        //Frustum frustum = Frustum(engine.proj * engine.view);
+//         Frustum frustum = Frustum(engine.proj * engine.view);
 
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
@@ -366,15 +366,15 @@ class World {
 
             vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
-            //AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-            //if(aabb in frustum) {
+//             AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+//             if(aabb in frustum) {
                 bind(engine, chunk);
 
                 engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
                 engine.flush_uniforms();
 
                 glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
-            //}
+//             }
         }
     }
 }
