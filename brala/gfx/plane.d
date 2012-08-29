@@ -37,6 +37,7 @@ struct PlaneT(T) {
     void normalize() {
         T det = 1.0 / normal.length;
         normal *= det;
+        d *= det;
     }
 
     @property PlaneT normalized() const {
