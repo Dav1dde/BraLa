@@ -44,15 +44,15 @@ struct Frustum {
                    mvp[2][3] - mvp[2][1],
                    mvp[3][3] - mvp[3][1]).normalized;
 
-        far = vec4(mvp[0][3] + mvp[0][2],
-                   mvp[1][3] + mvp[1][2],
-                   mvp[2][3] + mvp[2][2],
-                   mvp[3][3] + mvp[3][2]).normalized;
+        near = vec4(mvp[0][3] + mvp[0][2],
+                    mvp[1][3] + mvp[1][2],
+                    mvp[2][3] + mvp[2][2],
+                    mvp[3][3] + mvp[3][2]).normalized;
 
-        near = vec4(mvp[0][3] - mvp[0][2],
-                    mvp[1][3] - mvp[1][2],
-                    mvp[2][3] - mvp[2][2],
-                    mvp[3][3] - mvp[3][2]).normalized;
+        far = vec4(mvp[0][3] - mvp[0][2],
+                   mvp[1][3] - mvp[1][2],
+                   mvp[2][3] - mvp[2][2],
+                   mvp[3][3] - mvp[3][2]).normalized;
     }
 
     auto intersects(AABB aabb) {
