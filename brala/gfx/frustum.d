@@ -7,6 +7,12 @@ private {
     import brala.gfx.aabb : AABB;
 }
 
+enum {
+    INSIDE = 0,
+    OUTSIDE,
+    PARTIALLY_OUTSIDE
+}
+
 struct Frustum {
     vec4 left;
     vec4 right;
@@ -49,24 +55,28 @@ struct Frustum {
                     mvp[3][3] - mvp[3][2]).normalized;
     }
 
-    bool opBinaryRight(string s : "in")(AABB aabb) {
+    auto intersects(AABB aabb) {
         vec3 hextent = aabb.half_extent;
         vec3 center = aabb.center;
 
         foreach(plane; [left, right, bottom, top, near, far]) {
-            float d = dot(center, plane);
-            float r = dot(extent, abs(plane));
+            float d = dot(center, vec3(plane));
+            float r = dot(hextent, abs(vec3(plane)));
 
             if(d + r < -plane.w) {
                 // outside
-                return false;
+                return OUTSIDE;
             }
             if(d - r < -plane.w) {
                 // partially outside
-                return false;
+                return PARTIALLY_OUTSIDE;
             }
         }
 
-        return true;
+        return INSIDE;
+    }
+
+    bool opBinaryRight(string s : "in")(AABB aabb) {
+        return intersects(aabb) != OUTSIDE;
     }
 }
