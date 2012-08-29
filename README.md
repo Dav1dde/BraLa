@@ -8,11 +8,11 @@ BraLa is an opensource minecraft (S)MP Client:
 ![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_02.png)
 
 This screenshot was taken with the original 16x16 minecraft texture. This texture pack does *not* come with BraLa!
-If you have minecraft installed, BraLa will try to extract the texture from minecraft.
+If you have minecraft installed, BraLa will try to extract the texture from minecraft
+(when started with the `--default-tp=true` argument.
 
-BraLa comes with an ugly and outdated 8x8 texture. I would like to redistribute a higher resolution texture pack
-with BraLa, but unfortunatly I don't have the permission to do so.
-If you have a texture pack, which I am allowed to use, please contact me.
+BraLa comes with an awesome 128x128 texture, called [R3D-Craft](http://www.minecraftforum.net/topic/1182714-13112),
+made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia).
 
 ## Features ##
 
@@ -114,7 +114,9 @@ BraLa supports a few commandline options:
 --tesselation-threads       specifies the number of threads used to tessellate the terrain, defaults to 3.
                             More threads: more used memory (each thread needs his own tessellation-buffer),
                             more CPU usage, but faster terrain tessellation.
-                            
+
+--default-tp                try to extract the minecraft terrain.png from the installed minecraft.jar
+                        
 --width                     specifies the width of the window
 --height                    specifies the height of the window
 ```

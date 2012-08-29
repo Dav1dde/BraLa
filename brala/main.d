@@ -82,13 +82,13 @@ GLVersion init_opengl() {
     return DerelictGL3.reload();
 }
 
-BraLaEngine init_engine(void* window, int width, int height, GLVersion glv) {
-    auto engine = new BraLaEngine(window, width, height, glv);
+BraLaEngine init_engine(void* window, AppArguments args, GLVersion glv) {
+    auto engine = new BraLaEngine(window, args.width, args.height, glv);
 
-    engine.resmgr.load_default_resources(); // I like! ~15mb in 837ms
+    engine.resmgr.load_default_resources();
 
     string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
-    if(file.exists(path)) {
+    if(args.default_tp && file.exists(path)) {
         try {
             Image mc_terrain = extract_minecraft_terrain(path);
             
@@ -142,6 +142,8 @@ struct AppArguments {
     bool no_snoop = false;
     size_t tessellation_threads = 3;
 
+    bool default_tp = false;
+
     void help(string[] args, string[][] p) {
         string[] help_strings = [
             "specifies the username, which will be used to auth with the login servers,\n" ~
@@ -167,6 +169,8 @@ struct AppArguments {
             "specifies the number of threads used to tessellate the terrain, defaults to 3.\n" ~ 
             "\t\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
             "\t\t\t\tmore CPU usage, but faster terrain tessellation",
+
+            "\ttry to extract the minecraft terrain.png from the installed minecraft.jar"
 
             "\t\tshows this help"
         ];
@@ -208,7 +212,7 @@ int main() {
         }
     }
 
-    auto engine = init_engine(win, args.width, args.height, glv);
+    auto engine = init_engine(win, args, glv);
 
     auto game = new BraLaGame(engine, win, username, password, args);
     game.start(args.host, args.port);
