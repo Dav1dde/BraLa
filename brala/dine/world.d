@@ -339,7 +339,7 @@ class World {
             chunk.vbo.bind(mask, GL_BYTE, 2, 30, stride);
         }
     
-    void draw(BraLaEngine engine) {
+    void draw(BraLaEngine engine) {       
         Frustum frustum = Frustum(engine.mvp);
         
         foreach(chunkc, chunk; chunks) {

@@ -8,9 +8,9 @@ private {
 }
 
 enum {
-    INSIDE = 0,
-    OUTSIDE,
-    PARTIALLY_OUTSIDE
+    OUTSIDE = 0,
+    INSIDE,
+    INTERSECT
 }
 
 struct Frustum {
@@ -68,8 +68,8 @@ struct Frustum {
                 return OUTSIDE;
             }
             if(d - r < -plane.w) {
-                // partially outside
-                return PARTIALLY_OUTSIDE;
+                // partially inside
+                return INTERSECT;
             }
         }
 
@@ -77,6 +77,6 @@ struct Frustum {
     }
 
     bool opBinaryRight(string s : "in")(AABB aabb) {
-        return intersects(aabb) != OUTSIDE;
+        return intersects(aabb) > 0;
     }
 }
