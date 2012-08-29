@@ -29,9 +29,9 @@ class BraLaEngine {
     
     immutable GLVersion opengl_version;
     
-    mat4 model;
-    mat4 view;
-    mat4 proj;
+    mat4 model = mat4.identity;
+    mat4 view = mat4.identity;
+    mat4 proj = mat4.identity;
     
     @property mat4 mvp() {
         return proj * view * model;

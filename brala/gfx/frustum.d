@@ -2,7 +2,7 @@ module brala.gfx.frustum;
 
 private {
     import gl3n.linalg;
-    import gl3n.math : abs;
+    import gl3n.math : abs, cradians;
 
     import brala.gfx.aabb : AABB;
 }
@@ -23,7 +23,7 @@ struct Frustum {
 
     @safe pure nothrow:
 
-    this(mat4 mvp) {
+    this(mat4 mvp) {       
         left = vec4(mvp[0][3] + mvp[0][0],
                     mvp[1][3] + mvp[1][0],
                     mvp[2][3] + mvp[2][0],
@@ -59,6 +59,7 @@ struct Frustum {
         vec3 hextent = aabb.half_extent;
         vec3 center = aabb.center;
 
+        int result = INSIDE;
         foreach(plane; [left, right, bottom, top, near, far]) {
             float d = dot(center, vec3(plane));
             float r = dot(hextent, abs(vec3(plane)));
@@ -68,12 +69,11 @@ struct Frustum {
                 return OUTSIDE;
             }
             if(d - r < -plane.w) {
-                // partially inside
-                return INTERSECT;
+               result = INTERSECT;
             }
         }
 
-        return INSIDE;
+        return result;
     }
 
     bool opBinaryRight(string s : "in")(AABB aabb) {
