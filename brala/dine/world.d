@@ -15,7 +15,6 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
-    import brala.gfx.frustum : Frustum;
     import brala.gfx.aabb : AABB;
     import brala.utils.queue : Queue;
     import brala.utils.thread : Event;
@@ -340,8 +339,6 @@ class World {
         }
     
     void draw(BraLaEngine engine) {       
-//         Frustum frustum = Frustum(engine.proj * engine.view);
-
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
                 auto buffer = tesselation_buffer[0];
@@ -366,15 +363,16 @@ class World {
 
             vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
-//             AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-//             if(aabb in frustum) {
+            engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
+
+            AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+            if(aabb in engine.frustum) {
                 bind(engine, chunk);
 
-                engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
                 engine.flush_uniforms();
 
                 glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
-//             }
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ private {
     
     import brala.timer : Timer, TickDuration;
     import brala.resmgr : ResourceManager;
+    import brala.gfx.frustum : Frustum;
     
     debug import std.stdio : writefln;
 }
@@ -39,6 +40,10 @@ class BraLaEngine {
     
     @property mat4 mv() {
         return view * model;
+    }
+
+    @property Frustum frustum() {
+        return Frustum(mvp);
     }
     
     protected Shader _current_shader = null;
