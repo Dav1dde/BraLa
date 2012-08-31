@@ -9,10 +9,10 @@ private {
     import derelict.glfw3.glfw3;
     
     import gl3n.linalg;
+    import gl3n.frustum : Frustum;
     
     import brala.timer : Timer, TickDuration;
     import brala.resmgr : ResourceManager;
-    import brala.gfx.frustum : Frustum;
     
     debug import std.stdio : writefln;
 }

@@ -4,7 +4,8 @@ private {
     import glamour.gl;
     import glamour.vbo : Buffer;
     
-    import gl3n.linalg : vec3i, vec3, mat4;
+    import gl3n.linalg;
+    import gl3n.aabb : AABB;
 
     import core.thread : Thread;
 
@@ -15,7 +16,6 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
-    import brala.gfx.aabb : AABB;
     import brala.utils.queue : Queue;
     import brala.utils.thread : Event;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
