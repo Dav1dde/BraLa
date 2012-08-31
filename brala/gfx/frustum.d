@@ -28,7 +28,14 @@ struct Frustum {
 
     @safe pure nothrow:
 
-    this(mat4 mvp) {       
+    @property ref Plane left() { return planes[LEFT]; }
+    @property ref Plane right() { return planes[RIGHT]; }
+    @property ref Plane bottom() { return planes[BOTTOM]; }
+    @property ref Plane top() { return planes[TOP]; }
+    @property ref Plane near() { return planes[NEAR]; }
+    @property ref Plane far() { return planes[FAR]; }
+
+    this(mat4 mvp) {
         planes = [
             // left
             Plane(mvp[0][3] + mvp[0][0],
