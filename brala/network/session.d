@@ -28,11 +28,11 @@ private {
 
 
 class Session {
-    static const int launcher_version = 1337;
-    static const string login_url = "https://login.minecraft.net";
-    static const string join_server_url = "http://session.minecraft.net/game/joinserver.jsp";
-    static const string check_session_url = "http://session.minecraft.net/game/checkserver.jsp";
-    static const string snoop_url = "http://snoop.minecraft.net/client";
+    static const int LAUNCHER_VERSION = 1337;
+    static const string LOGIN_URL = "https://login.minecraft.net";
+    static const string JOIN_SERVER_URL = "http://session.minecraft.net/game/joinserver.jsp";
+    static const string CHECK_SESSION_URL = "http://session.minecraft.net/game/checkserver.jsp";
+    static const string SNOOP_URL = "http://snoop.minecraft.net/client";
     
     private SysTime _last_login;
     @property last_login() { return _last_login; }
@@ -49,9 +49,9 @@ class Session {
     }
     
     void login() {
-        auto res = login_url.post(["user" : username,
+        auto res = LOGIN_URL.post(["user" : username,
                                    "password" : password,
-                                   "version" : to!string(launcher_version)]);
+                                   "version" : to!string(LAUNCHER_VERSION)]);
 
         if(res.count(":") == 4) {
             string[] s = res.idup.split(":");
@@ -80,7 +80,7 @@ class Session {
     void join(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
         login_if_needed();
 
-        auto res = get(join_server_url ~ "?" ~
+        auto res = get(JOIN_SERVER_URL ~ "?" ~
                        urlencode(["user" : minecraft_username,
                                   "sessionId" : session_id,
                                   "serverId" : login_hash(server_id, shared_secret, public_key)]));
@@ -127,7 +127,7 @@ class Session {
         }
 
         try {
-            snoop_url.post(["version": version_,
+            SNOOP_URL.post(["version": version_,
                             "os_name": os_name,
                             "os_version": os_version,
                             "os_architecture": os_arch,
