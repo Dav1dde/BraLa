@@ -72,6 +72,7 @@ class Chunk {
     }
     
     bool dirty;
+    bool tessellated = false;
 
     bool empty;
     Block* blocks;

@@ -8,6 +8,7 @@ private {
     import gl3n.aabb : AABB;
 
     import core.thread : Thread;
+    import std.typecons : Tuple;
 
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
@@ -19,6 +20,8 @@ private {
     import brala.utils.queue : Queue;
     import brala.utils.thread : Event;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
+
+    debug import std.stdio : writefln;
 }
 
 private const Block AIR_BLOCK = Block(0);
@@ -61,6 +64,8 @@ struct TessellationBuffer {
     }
 }
 
+alias Tuple!(Chunk, "chunk", void*, "buffer", size_t, "elements") TessOut;
+alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
 class World {
     static const default_tessellation_bufer_size = width*height*depth*80;
@@ -79,14 +84,21 @@ class World {
 
     BiomeSet biome_set;
 
-    protected TessellationBuffer[] tesselation_buffer;
+    protected Queue!ChunkData input;
+    protected Queue!TessOut output;
+    protected TessellationThread[] tessellation_threads;
     
     this(ResourceManager resmgr, size_t threads) {
         biome_set.update_colors(resmgr);
+
+        input = new Queue!ChunkData();
+        output = new Queue!TessOut();
         
         threads = threads ? threads : 1;
         foreach(i; 0..threads) {
-            tesselation_buffer ~= TessellationBuffer(default_tessellation_bufer_size);
+            auto t = new TessellationThread(this, input, output);
+            t.start();
+            tessellation_threads ~= t;
         }
     }
     
@@ -97,9 +109,9 @@ class World {
     
     ~this() {
         remove_all_chunks();
-        
-        foreach(ref tb; tesselation_buffer) {
-            tb.free();
+
+        foreach(t; tessellation_threads) {
+            clear(t);
         }
     }
     
@@ -338,52 +350,94 @@ class World {
             chunk.vbo.bind(mask, GL_BYTE, 2, 30, stride);
         }
     
-    void draw(BraLaEngine engine) {       
-        foreach(chunkc, chunk; chunks) {
-            if(chunk.dirty) {
-                auto buffer = tesselation_buffer[0];
-                size_t elements = tessellate(chunk, chunkc, &buffer);
-                if(chunk.vbo is null) {
-                    chunk.vbo = new Buffer();
-                }
-
-                debug size_t prev = chunk.vbo.length;
-
-                chunk.vbo.set_data(buffer.ptr, elements);
-                chunk.dirty = false;
-
-                debug {
-                    if(prev == 0 && chunk.vbo.length) {
-                        vram.add(chunk.vbo.length);
-                    } else {
-                        vram.adjust(chunk.vbo.length - prev);
-                    }
-                }
+    void draw(BraLaEngine engine) {
+        foreach(tess_out; output) {
+            if(tess_out.chunk.vbo is null) {
+                tess_out.chunk.vbo = new Buffer();
             }
 
-            vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
+            debug size_t prev = tess_out.chunk.vbo.length;
 
-            engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
+            tess_out.chunk.vbo.set_data(tess_out.buffer, tess_out.elements);
+            tess_out.chunk.tessellated = true;
 
-            AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-            if(aabb in engine.frustum) {
-                bind(engine, chunk);
+            debug {
+                if(prev == 0 && tess_out.chunk.vbo.length) {
+                    vram.add(tess_out.chunk.vbo.length);
+                } else {
+                    vram.adjust(tess_out.chunk.vbo.length - prev);
+                }
+            }
+        }
+    
+        foreach(chunkc, chunk; chunks) {
+            if(chunk.dirty) {
+                chunk.dirty = false;
+                chunk.tessellated = false;
+                input.put(ChunkData(chunk, chunkc));
+                continue;
+            } else if(chunk.tessellated) {
+                //writefln("chunk is tessellated! %s", chunkc);
+                
+                vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
-                engine.flush_uniforms();
+                engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
 
-                glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
+                AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+                if(aabb in engine.frustum) {
+                    bind(engine, chunk);
+
+                    engine.flush_uniforms();
+
+                    glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
+                }
             }
         }
     }
 }
 
 
-// class TessellationThread : Thread {
-//     this(World world, Queue!Chunk input, Queue!XXX output) {
-//     }
-// 
-//     void run() {
-//         while(true) {
-//         }
-//     }
-// }
+class TessellationThread : Thread {
+    protected TessellationBuffer buffer;
+    protected World world;
+    protected Queue!ChunkData input;
+    protected Queue!TessOut output;
+
+    bool running = false;
+
+    this(World world, Queue!ChunkData input, Queue!TessOut output) {
+        super(&run);
+        this.isDaemon = true;
+
+        this.world = world;
+        this.buffer = TessellationBuffer(world.default_tessellation_bufer_size);
+        this.input = input;
+        this.output = output;
+    }
+
+    ~this() {
+        buffer.free();
+    }
+    
+    void run() {
+        running = true;
+        while(running) {
+            auto chunk_data = input.get(true); // this will pause the thread if there is no input
+            Chunk chunk = chunk_data.chunk;
+            vec3i chunkc = chunk_data.position;
+
+            if(chunk.tessellated) {
+                debug writefln("Chunk is already tessellated! %s", chunkc);
+                
+                input.task_done();
+                continue;
+            }
+            
+            size_t elements = world.tessellate(chunk, chunkc, &buffer);
+
+            output.put(TessOut(chunk, buffer.ptr, elements));
+
+            input.task_done();
+        }
+    }
+}

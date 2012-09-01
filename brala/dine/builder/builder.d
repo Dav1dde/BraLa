@@ -34,6 +34,7 @@ protected {
 }
 
 mixin template BlockBuilder() {
+    #line 30000
     void add_vertex(float x, float y, float z,
                     float nx, float ny, float nz,
                     ubyte r, ubyte g, ubyte b, ubyte a,
