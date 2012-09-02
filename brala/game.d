@@ -23,7 +23,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.input : BaseGLFWEventHandler;
     import brala.gfx.text : parse_chat;
-    import brala.util : clear;
+    import brala.gfx.gl : clear;
     import brala.utils.defaultaa : DefaultAA;
     import brala.utils.queue : Queue;
     import brala.config;

@@ -1,10 +1,11 @@
-module brala.util;
+module brala.gfx.gl;
 
 private {
-    import derelict.opengl3.gl3;
-    
+    import glamour.gl;
+
     import gl3n.linalg : vec3;
 }
+
 
 void clear(vec3 color = vec3(0.0f, 0.0f, 0.0f)) {
     glClearColor(color.r, color.g, color.b, 1.0f);
