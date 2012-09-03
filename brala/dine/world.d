@@ -76,7 +76,7 @@ struct TessellationBuffer {
     }
 }
 
-alias Tuple!(Chunk, "chunk", TessellationBuffer, "buffer", size_t, "elements") TessOut;
+alias Tuple!(Chunk, "chunk", TessellationBuffer*, "buffer", size_t, "elements") TessOut;
 alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
 class World {
@@ -440,23 +440,22 @@ class TessellationThread : Thread {
             if(!buffer.available) {
                 buffer.wait_available();
             }
+            buffer.available = false;
             
             auto chunk_data = input.get(true); // this will pause the thread if there is no input
-            Chunk chunk = chunk_data.chunk;
-            vec3i chunkc = chunk_data.position;
 
-            if(chunk.tessellated) {
-                debug writefln("Chunk is already tessellated! %s", chunkc);
+            with(chunk_data) {
+                if(chunk.tessellated) {
+                    debug writefln("Chunk is already tessellated! %s", position);
                 
-                input.task_done();
-                continue;
-            }
+                    input.task_done();
+                    continue;
+                }
             
-            size_t elements = world.tessellate(chunk, chunkc, &buffer);
+                size_t elements = world.tessellate(chunk, position, &buffer);
 
-            output.put(TessOut(chunk, buffer, elements));
-
-            buffer.available = false;
+                output.put(TessOut(chunk, &buffer, elements));
+            }
 
             input.task_done();
         }
