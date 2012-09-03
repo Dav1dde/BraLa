@@ -78,7 +78,6 @@ class Event {
 
         _flag = true;
         _cond.notifyAll();
-        _mutex.unlock();
     }
     
     void clear() {
@@ -94,7 +93,12 @@ class Event {
 
         bool notified = _flag;
         if(!notified) {
-            notified = _cond.wait(timeout);
+            static if(T.length == 0) {
+                _cond.wait();
+                notified = true;
+            } else {
+                notified = _cond.wait(timeout);
+            }
         }
         return notified;
     }

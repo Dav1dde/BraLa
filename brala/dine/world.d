@@ -41,13 +41,25 @@ struct TessellationBuffer {
         return _event;
     }
 
-    @property available() {
+    @property bool available() {
         return !event.is_set();
     }
 
+    @property void available(bool yn) {
+        if(yn) {
+            event.clear();
+        } else {
+            event.set();
+        }
+    }
+
+    void wait_available() {
+        event.wait();
+    }
+
     this(size_t size) {
-//         _event = new Event();
-//         _event.set();
+        _event = new Event();
+        _event.set();
         ptr = cast(void*)malloc(size);
         length = size;
     }
@@ -64,7 +76,7 @@ struct TessellationBuffer {
     }
 }
 
-alias Tuple!(Chunk, "chunk", void*, "buffer", size_t, "elements") TessOut;
+alias Tuple!(Chunk, "chunk", TessellationBuffer, "buffer", size_t, "elements") TessOut;
 alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
 class World {
@@ -352,30 +364,33 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(tess_out; output) {
-            if(tess_out.chunk.vbo is null) {
-                tess_out.chunk.vbo = new Buffer();
-            }
-
-            debug size_t prev = tess_out.chunk.vbo.length;
-
-            tess_out.chunk.vbo.set_data(tess_out.buffer, tess_out.elements);
-            tess_out.chunk.tessellated = true;
-
-            debug {
-                if(prev == 0 && tess_out.chunk.vbo.length) {
-                    vram.add(tess_out.chunk.vbo.length);
-                } else {
-                    vram.adjust(tess_out.chunk.vbo.length - prev);
+            with(tess_out) {
+                if(chunk.vbo is null) {
+                    chunk.vbo = new Buffer();
                 }
+
+                debug size_t prev = chunk.vbo.length;
+
+                chunk.vbo.set_data(buffer.ptr, elements);
+                chunk.tessellated = true;
+
+                debug {
+                    if(prev == 0 && chunk.vbo.length) {
+                        vram.add(chunk.vbo.length);
+                    } else {
+                        vram.adjust(chunk.vbo.length - prev);
+                    }
+                }
+
+                buffer.available = true;
             }
         }
-    
+        
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
                 chunk.dirty = false;
                 chunk.tessellated = false;
                 input.put(ChunkData(chunk, chunkc));
-                continue;
             } else if(chunk.tessellated) {
                 //writefln("chunk is tessellated! %s", chunkc);
                 
@@ -384,7 +399,7 @@ class World {
                 engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
 
                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-                if(aabb in engine.frustum) {
+                if(aabb in engine.frustum || true) {
                     bind(engine, chunk);
 
                     engine.flush_uniforms();
@@ -422,6 +437,10 @@ class TessellationThread : Thread {
     void run() {
         running = true;
         while(running) {
+            if(!buffer.available) {
+                buffer.wait_available();
+            }
+            
             auto chunk_data = input.get(true); // this will pause the thread if there is no input
             Chunk chunk = chunk_data.chunk;
             vec3i chunkc = chunk_data.position;
@@ -435,7 +454,9 @@ class TessellationThread : Thread {
             
             size_t elements = world.tessellate(chunk, chunkc, &buffer);
 
-            output.put(TessOut(chunk, buffer.ptr, elements));
+            output.put(TessOut(chunk, buffer, elements));
+
+            buffer.available = false;
 
             input.task_done();
         }
