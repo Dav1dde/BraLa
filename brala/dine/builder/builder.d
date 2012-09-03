@@ -25,12 +25,6 @@ protected {
         enum x = xi;
         enum y = yi;
     }
-
-    template isUbyte(T) {
-        enum isUbyte = is(T : ubyte);
-    }
-
-    enum byte BYTE_0 = cast(byte)0;
 }
 
 mixin template BlockBuilder() {
