@@ -35,29 +35,6 @@ protected {
 
 mixin template BlockBuilder() {
     #line 30000
-    void add_vertex(float x, float y, float z,
-                    float nx, float ny, float nz,
-                    ubyte r, ubyte g, ubyte b, ubyte a,
-                    byte u_terrain, byte v_terrain,
-                    byte u_mask, byte v_mask)
-        in { assert(elements+1 <= buffer.length, "not enough allocated memory for tessellator"); }
-        body {
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&x)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&y)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&z)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&nx)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&ny)[0..4];
-            buffer.ptr[elements..(elements+=4)] = (cast(void*)&nz)[0..4];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&r)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&g)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&b)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&a)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_terrain)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_terrain)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&u_mask)[0..1];
-            buffer.ptr[elements..(elements+=1)] = (cast(void*)&v_mask)[0..1];
-        }
-
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
