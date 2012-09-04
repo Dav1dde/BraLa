@@ -35,7 +35,6 @@ struct TessellationBuffer {
     @property event() {
         if(_event is null) {
             _event = new Event();
-            available = true;
         }
 
         return _event;

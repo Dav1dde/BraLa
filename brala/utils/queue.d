@@ -45,7 +45,7 @@ class Queue(type) {
                 if(queue.length >= maxsize) {
                     throw new Full("full queue");
                 }
-            } else if(timeout.get!("seconds") < 0) {
+            } else if(timeout.isNegative) {
                 throw new QueueException("negative timeout");
             } else if(timeout.get!("seconds") == 0) {
                 if(full) {
@@ -73,7 +73,7 @@ class Queue(type) {
             if(queue.length == 0) {
                 throw new Empty("queue is empty");
             }
-        } else if(timeout.get!("seconds") < 0) {
+        } else if(timeout.isNegative) {
             throw new QueueException("negativ timeout");
         } else if(timeout.get!("seconds") == 0) {
             if(empty) {
