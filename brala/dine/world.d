@@ -35,7 +35,7 @@ struct TessellationBuffer {
     @property event() {
         if(_event is null) {
             _event = new Event();
-            _event.set();
+            available = true;
         }
 
         return _event;
@@ -58,8 +58,6 @@ struct TessellationBuffer {
     }
 
     this(size_t size) {
-        _event = new Event();
-        _event.set();
         ptr = cast(void*)malloc(size);
         length = size;
     }
@@ -103,10 +101,11 @@ class World {
     this(ResourceManager resmgr, size_t threads) {
         biome_set.update_colors(resmgr);
 
-        input = new Queue!ChunkData();
-        output = new Queue!TessOut();
-        
         threads = threads ? threads : 1;
+
+        input = new Queue!ChunkData();
+        output = new Queue!TessOut(threads);
+        
         foreach(i; 0..threads) {
             auto t = new TessellationThread(this, input, output);
             t.start();
@@ -381,7 +380,6 @@ class World {
                         vram.adjust(chunk.vbo.length - prev);
                     }
                 }
-
                 buffer.available = true;
             }
         }
@@ -440,7 +438,6 @@ class TessellationThread : Thread {
             if(!buffer.available) {
                 buffer.wait_available();
             }
-            buffer.available = false;
             
             auto chunk_data = input.get(true); // this will pause the thread if there is no input
 
@@ -450,10 +447,12 @@ class TessellationThread : Thread {
                 
                     input.task_done();
                     continue;
+                } else {
+                    buffer.available = false;
                 }
             
                 size_t elements = world.tessellate(chunk, position, &buffer);
-
+                
                 output.put(TessOut(chunk, &buffer, elements));
             }
 
