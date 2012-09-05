@@ -4,6 +4,8 @@ private {
     import core.time : Duration, dur;
     import core.sync.mutex : Mutex;
     import core.sync.condition : Condition;
+
+    import std.algorithm : canFind;
 }
 
 public import brala.utils.exception : QueueException, Full, Empty;
@@ -150,6 +152,13 @@ class Queue(type) {
         }
 
         return result;
+    }
+
+    bool opBinaryRight(string s : "in")(type item) {
+        mutex.lock();
+        scope(exit) mutex.unlock();
+
+        return queue.canFind(item);
     }
 }
 

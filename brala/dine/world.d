@@ -35,6 +35,7 @@ struct TessellationBuffer {
     @property event() {
         if(_event is null) {
             _event = new Event();
+            available = true;
         }
 
         return _event;
@@ -46,9 +47,9 @@ struct TessellationBuffer {
 
     @property void available(bool yn) {
         if(yn) {
-            event.clear();
-        } else {
             event.set();
+        } else {
+            event.clear();
         }
     }
 
@@ -362,7 +363,7 @@ class World {
     
     void draw(BraLaEngine engine) {
         foreach(tess_out; output) {
-            with(tess_out) {
+            with(tess_out) {                
                 if(chunk.vbo is null) {
                     chunk.vbo = new Buffer();
                 }
@@ -386,6 +387,7 @@ class World {
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
                 chunk.dirty = false;
+
                 chunk.tessellated = false;
                 input.put(ChunkData(chunk, chunkc));
             } else if(chunk.tessellated) {
@@ -396,7 +398,7 @@ class World {
                 engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
 
                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-                if(aabb in engine.frustum || true) {
+                if(aabb in engine.frustum) {
                     bind(engine, chunk);
 
                     engine.flush_uniforms();
@@ -434,11 +436,10 @@ class TessellationThread : Thread {
     void run() {
         running = true;
         while(running) {
-            if(!buffer.available) {
-                buffer.wait_available();
-            }
+            // waits only if the buffer is not available
+            buffer.wait_available();
             
-            auto chunk_data = input.get(true); // this will pause the thread if there is no input
+            auto chunk_data = input.get(); // this will pause the thread if there is no input
 
             with(chunk_data) {
                 if(chunk.tessellated) {
@@ -451,7 +452,7 @@ class TessellationThread : Thread {
                 }
             
                 size_t elements = world.tessellate(chunk, position, &buffer);
-                
+
                 output.put(TessOut(chunk, &buffer, elements));
             }
 
