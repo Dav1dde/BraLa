@@ -380,6 +380,7 @@ class World {
                         vram.adjust(chunk.vbo.length - prev);
                     }
                 }
+                
                 buffer.available = true;
             }
         }
@@ -387,12 +388,11 @@ class World {
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
                 chunk.dirty = false;
-
                 chunk.tessellated = false;
                 input.put(ChunkData(chunk, chunkc));
-            } else if(chunk.tessellated) {
-                //writefln("chunk is tessellated! %s", chunkc);
-                
+            }
+
+            if(chunk.vbo !is null) {
                 vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
                 engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
