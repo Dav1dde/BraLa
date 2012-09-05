@@ -5,10 +5,11 @@ private {
     import glamour.vbo : Buffer;
     
     import std.bitmanip : bitfields;
-    import std.string : format;
+    import std.string : format, capitalize;
     
     import gl3n.linalg : vec3i;
     import brala.dine.util : log2_ub;
+    import brala.dine.builder.blocks : BLOCKS;
     import brala.dine.builder.biomes : DEFAULT_BIOMES, Biome;
     import brala.utils.memory : calloc, free;
 }
@@ -39,8 +40,8 @@ struct Block {
     }
 
     string toString() {
-        return `Block(id : %s, metadata : %s, block_light : %s, sky_light : %s)`
-                .format(id, metadata, block_light, sky_light);
+        return `Block(id : %s (%s), metadata : %s, block_light : %s, sky_light : %s)`
+                .format(id, BLOCKS[id].name.capitalize(), metadata, block_light, sky_light);
     }
 }
 
