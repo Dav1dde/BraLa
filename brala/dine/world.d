@@ -345,7 +345,8 @@ class World {
     }
 
     void bind(BraLaEngine engine, Chunk chunk)
-        in { assert(chunk.vbo !is null); assert(engine.current_shader !is null, "no current shader"); }
+        in { assert(chunk.vbo !is null, "chunk vbos is null");
+             assert(engine.current_shader !is null, "no current shader"); }
         body {
             GLuint position = engine.current_shader.get_attrib_location("position");
             GLuint normal = engine.current_shader.get_attrib_location("normal");
@@ -389,7 +390,8 @@ class World {
             if(chunk.dirty) {
                 chunk.dirty = false;
                 chunk.tessellated = false;
-                input.put(ChunkData(chunk, chunkc));
+                // this queue is never full and we don't wanna waste time waiting
+                input.put(ChunkData(chunk, chunkc), false);
             }
 
             if(chunk.vbo !is null) {
