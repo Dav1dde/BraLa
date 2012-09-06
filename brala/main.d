@@ -67,12 +67,12 @@ void glfw_error_cb(int errno, string error) {
     }
 }
 
-void glamour_error_cb(GLenum errno, string func) {
+void glamour_error_cb(GLenum errno, string func, string args) {
     static GLenum last_errno = GL_NO_ERROR;
     static string last_func = "";
 
     if(last_errno != errno && last_func != func) {
-        stderr.writefln(`OpenGL function "%s" failed: "%s."`, func, gl_error_string(errno));
+        stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`, func, args, gl_error_string(errno));
         last_errno = errno;
         last_func = func;
     }

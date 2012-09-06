@@ -91,7 +91,7 @@ extern(C) {
         ae.on_mouse_pos(x, y);
     }
 
-    void scroll_callback(void* window, int xoffset, int yoffset) {
+    void scroll_callback(void* window, double xoffset, double yoffset) {
         AEventHandler ae = cast_userptr(window);
     
         ae.on_scroll(xoffset, yoffset);
@@ -118,7 +118,7 @@ abstract class AEventHandler {
     void on_mouse_button_down(int button) {}
     void on_mouse_button_up(int button) {}
     void on_mouse_pos(int x, int y) {}
-    void on_scroll(int xoffset, int yoffset) {}
+    void on_scroll(double xoffset, double yoffset) {}
     
     // used for generating sdl callbacks?
     void poll() {}
