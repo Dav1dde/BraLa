@@ -49,13 +49,13 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
 package string mk_stair_vertex(string v, string m) pure {
     return `
         final switch(face) {
-            case Facing.SOUTH: cbsd = rotate_90(` ~ v ~ `); break;
-            case Facing.WEST: cbsd = rotate_180(` ~ v ~ `); break;
-            case Facing.NORTH: cbsd = rotate_270(` ~ v ~ `); break;
+            case Facing.SOUTH: cbsd = ` ~ v ~ `.rotate_90(); break;
+            case Facing.WEST:  cbsd = ` ~ v ~ `.rotate_180(); break;
+            case Facing.NORTH: cbsd = ` ~ v ~ `.rotate_270(); break;
             case Facing.EAST: cbsd = ` ~ v ~ `; break;
         }
         if(upside_down) {
-            cbsd = make_upsidedown(cbsd);
+            cbsd = cbsd.make_upsidedown();
             positions = to_triangles_other_winding(cbsd.positions);
             texcoords = to_triangles_other_winding(texture_slice.` ~ m ~ `_upsidedown);
         } else {
@@ -73,7 +73,9 @@ package string mk_stair_vertex(string v, string m) pure {
         }`;
 }
 
-CubeSideData rotate_90()(CubeSideData cbsd) pure {
+// can't make arguments `ref`, because cbsd is most likely immutable
+// like this, it will be passed as mutable copy
+CubeSideData rotate_90(CubeSideData cbsd) pure {
     foreach(ref vertex; cbsd.positions) {
         auto x = vertex[0];
         vertex[0] = -vertex[2];
