@@ -103,9 +103,16 @@ CubeSideData rotate_270(CubeSideData cbsd) pure {
 }
 
 CubeSideData make_upsidedown(CubeSideData cbsd) pure {
-    foreach(ref vertex; cbsd.positions) {
-        vertex[1] = -vertex[1];
-    }
+//     foreach(ref vertex; cbsd.positions) {
+//         vertex[1] = -vertex[1];
+//     }
+
+    // Another strange bug, the foreach above, doesn't modify the vertex
+    cbsd.positions[0][1] *= -1;
+    cbsd.positions[1][1] *= -1;
+    cbsd.positions[2][1] *= -1;
+    cbsd.positions[3][1] *= -1;
+    
     cbsd.normal = -cbsd.normal[];
 
     return cbsd;

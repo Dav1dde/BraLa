@@ -265,7 +265,7 @@ mixin template BlockBuilder() {
 
         Facing f = fs[block.metadata & 0x3];
         bool upside_down = (block.metadata & 0x4) != 0;
-        
+
         add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
     }
 
