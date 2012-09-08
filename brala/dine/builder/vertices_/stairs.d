@@ -56,11 +56,19 @@ struct StairTextureSlice {
     }
 
     @property byte[2][4] texcoords_step_side_front() {
-        return transform([[+1, +1], [0, +1], [0, 0], [+1, 0]]);
+        return transform([[-1, +1], [0, +1], [0, 0], [-1, 0]]);
     }
 
     @property byte[2][4] texcoords_step_side_back() {
         return transform([[0,  +1], [+1, +1], [+1, -1], [0, -1]]);
+    }
+
+    @property byte[2][4] texcoords_step_side_front2() {
+        return transform([[0, +1], [+1, +1], [+1, 0], [0, 0]]);
+    }
+
+    @property byte[2][4] texcoords_step_side_back2() {
+        return transform([[-1,  +1], [0, +1], [0, -1], [-1, -1]]);
     }
 
 
@@ -89,6 +97,14 @@ struct StairTextureSlice {
     }
 
     @property byte[2][4] texcoords_step_side_back_upsidedown() {
+        return transform([[0,  -1], [+1, -1], [+1, +1], [0,  +1]]);
+    }
+
+    @property byte[2][4] texcoords_step_side_front2_upsidedown() {
+        return transform([[-1, -1], [0,  -1], [0,  0], [-1, 0]]);
+    }
+
+    @property byte[2][4] texcoords_step_side_back2_upsidedown() {
         return transform([[0,  -1], [+1, -1], [+1, +1], [0,  +1]]);
     }
 
@@ -149,7 +165,7 @@ immutable CubeSideData[1] STAIR_VERTICES_FAR = [
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
-    { [[-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.0f], [-0.5f, -0.5f, 0.0f], [-0.5f, -0.5f, 0.5f]], // small, front
+    { [[-0.5f, -0.5f, 0.0f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.0f]], // small, front
       [-1.0f, 0.0f, 0.0f] },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.0f], [-0.5f, 0.5f, 0.0f], [-0.5f, 0.5f, -0.5f]],
@@ -195,8 +211,8 @@ Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice t
             break;
         }
         case Side.LEFT: {
-            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[0]", "texcoords_step_side_front"));
-            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[1]", "texcoords_step_side_back"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[0]", "texcoords_step_side_front2"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_LEFT[1]", "texcoords_step_side_back2"));
 
             break;
         }
