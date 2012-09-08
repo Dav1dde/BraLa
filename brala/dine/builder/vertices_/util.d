@@ -51,9 +51,9 @@ package string mk_stair_vertex(string v, string m) pure {
         cbsd = ` ~ v ~ `;
 
         final switch(face) {
-            case Facing.WEST: cbsd = cbsd.rotate_90();  texture_slice.rotate_90(); break;
-            case Facing.NORTH:  cbsd = cbsd.rotate_180(); texture_slice.rotate_180(); break;
-            case Facing.EAST: cbsd = cbsd.rotate_270(); texture_slice.rotate_270(); break;
+            case Facing.WEST:  cbsd = cbsd.rotate_90();  texture_slice.rotate_90(); break;
+            case Facing.NORTH: cbsd = cbsd.rotate_180(); texture_slice.rotate_180(); break;
+            case Facing.EAST:  cbsd = cbsd.rotate_270(); texture_slice.rotate_270(); break;
             case Facing.SOUTH: break;
         }
 
