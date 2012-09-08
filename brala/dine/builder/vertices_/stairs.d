@@ -15,74 +15,52 @@ struct StairTextureSlice {
     byte x2;
     byte y2;
 
+    private int rotation;
+
     alias texcoords this;
 
     this(byte lower_left_x, byte lower_left_y, byte lower_left_x2, byte lower_left_y2)
         in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max);
              assert(abs(lower_left_x2*2) <= byte.max && abs(lower_left_y2*2) <= byte.max); }
         body {
-            x = cast(byte)(lower_left_x*2);
-            y = cast(byte)(lower_left_y*2);
+            x = cast(byte)(lower_left_x*2+1);
+            y = cast(byte)(lower_left_y*2-1);
 
-            x2 = cast(byte)(lower_left_x2*2);
-            y2 = cast(byte)(lower_left_y2*2);
+            x2 = cast(byte)(lower_left_x2*2+1);
+            y2 = cast(byte)(lower_left_y2*2-1);
         }
 
     pure:
     @property byte[2][4] texcoords() {
-        return [[cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)x,     cast(byte)(y-2)]];
+        return transform([[-1, +1], [+1, +1], [+1, -1], [-1, -1]]);
     }
 
     @property byte[2][4] texcoords2() {
-        return [[cast(byte)x2,     cast(byte)y2],
-                [cast(byte)(x2+2), cast(byte)y2],
-                [cast(byte)(x2+2), cast(byte)(y2-2)],
-                [cast(byte)x2,     cast(byte)(y2-2)]];
+        return transform([[-1, +1], [+1, +1], [+1, -1], [-1, -1]], true);
     }
 
     @property byte[2][4] texcoords_step_lower() {
-        return [[cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+        return transform([[-1, +1], [+1, +1], [+1, 0], [-1, 0]]);
     }
 
     @property byte[2][4] texcoords_step_upper() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)x,     cast(byte)(y-2)]];
-    }
-
-    @property byte[2][4] texcoords_step_top_front() {
-        return [[cast(byte)x2,     cast(byte)y2],
-                [cast(byte)(x2+2), cast(byte)y2],
-                [cast(byte)(x2+2), cast(byte)(y2-1)],
-                [cast(byte)x2,     cast(byte)(y2-1)]];
+        return transform([[-1, 0], [+1, 0], [+1, -1], [-1, -1]]);
     }
 
     @property byte[2][4] texcoords_step_top_back() {
-        return [[cast(byte)x2,     cast(byte)(y2-1)],
-                [cast(byte)(x2+2), cast(byte)(y2-1)],
-                [cast(byte)(x2+2), cast(byte)(y2-2)],
-                [cast(byte)x2,     cast(byte)(y2-2)]];
+        return transform([[-1, 0], [+1, 0], [+1, -1], [-1, -1]], true);
+    }
+
+    @property byte[2][4] texcoords_step_top_front() {
+        return transform([[-1, +1], [+1, +1], [+1, 0], [-1, 0]], true);
     }
 
     @property byte[2][4] texcoords_step_side_front() {
-        return [[cast(byte)(x),   cast(byte)y],
-                [cast(byte)(x+1), cast(byte)y],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)(x),   cast(byte)(y-1)]];
+        return transform([[+1, +1], [0, +1], [0, 0], [+1, 0]]);
     }
 
     @property byte[2][4] texcoords_step_side_back() {
-        return [[cast(byte)(x+1), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)(x+1), cast(byte)(y-2)]];
+        return transform([[0,  +1], [+1, +1], [+1, -1], [0, -1]]);
     }
 
 
@@ -91,45 +69,63 @@ struct StairTextureSlice {
     alias texcoords2 texcoords_upsidedown;
 
     @property byte[2][4] texcoords_step_lower_upsidedown() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)x,     cast(byte)y]];
+        return transform([[-1, 0], [+1, 0], [+1, +1], [-1, +1]]);
     }
 
     @property byte[2][4] texcoords_step_upper_upsidedown() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)x,     cast(byte)(y-2)]];
+        return transform([[-1, 0], [+1, 0], [+1, -1], [-1, -1]]);
     }
 
     @property byte[2][4] texcoords_step_top_front_upsidedown() {
-        return [[cast(byte)x,     cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)x,     cast(byte)y]];
+        return transform([[-1, 0], [+1, 0], [+1, +1], [-1, +1]]);
     }
 
     @property byte[2][4] texcoords_step_top_back_upsidedown() {
-        return [[cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+        return transform([[-1, +1], [+1, +1], [+1, 0], [-1, 0]]);
     }
 
     @property byte[2][4] texcoords_step_side_front_upsidedown() {
-        return [[cast(byte)x,     cast(byte)(y-2)],
-                [cast(byte)(x+1), cast(byte)(y-2)],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+        return transform([[-1, -1], [0,  -1], [0,  0], [-1, 0]]);
     }
 
     @property byte[2][4] texcoords_step_side_back_upsidedown() {
-        return [[cast(byte)(x+1), cast(byte)(y-2)],
-                [cast(byte)(x+2), cast(byte)(y-2)],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+1), cast(byte)y]];
+        return transform([[0,  -1], [+1, -1], [+1, +1], [0,  +1]]);
+    }
+
+    private byte[2][4] transform(byte[2][4] templ, bool s2 = false) {
+        if(rotation == 90) {
+            .rotate_90(templ);
+        } else if(rotation == 180) {
+            .rotate_180(templ);
+        } else if(rotation == 270) {
+            .rotate_270(templ);
+        }
+
+        byte x = this.x;
+        byte y = this.y;
+        if(s2) {
+            x = this.x2;
+            y = this.y2;
+        }
+            
+        foreach(ref t; templ) {
+            t[0] += x;
+            t[1] += y;
+        }
+
+        return templ;
+    }
+
+    void rotate_90() {
+        rotation = 90;
+    }
+
+    void rotate_180() {
+        rotation = 180;
+    }
+
+    void rotate_270() {
+        rotation = 270;
     }
 }
 
@@ -137,44 +133,44 @@ struct StairTextureSlice {
 
 // TODO: check normals
 immutable CubeSideData[3] STAIR_VERTICES_NEAR = [
-    { [[0.0f, 0.0f, -0.5f], [0.0f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f]], // y+
+    { [[-0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.0f], [-0.5f, 0.0f, 0.0f]], // y+
       [0.0f, 1.0f, 0.0f] },
 
-    { [[0.0f, 0.0f, 0.5f], [0.0f, 0.0f, -0.5f], [0.0f, 0.5f, -0.5f], [0.0f, 0.5f, 0.5f]], // upper
+    { [[-0.5f, 0.0f, 0.0f], [0.5f, 0.0f, 0.0f], [0.5f, 0.5f, 0.0f], [-0.5f, 0.5f, 0.0f]], // upper
       [0.0f, 0.0f, 1.0f] },
 
-    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // lower
+    { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // lower
       [0.0f, 0.0f, 1.0f] }
 ];
 
 immutable CubeSideData[1] STAIR_VERTICES_FAR = [
-    { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]],
+    { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]],
       [0.0f, -1.0f, 0.0f] }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
-    { [[0.5f, 0.0f, 0.5f], [0.0f, 0.0f, 0.5f], [0.0f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f]], // small, front
+    { [[-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.0f], [-0.5f, -0.5f, 0.0f], [-0.5f, -0.5f, 0.5f]], // small, front
       [-1.0f, 0.0f, 0.0f] },
 
-    { [[-0.5f, -0.5f, 0.5f], [0.0f, -0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]],
+    { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.0f], [-0.5f, 0.5f, 0.0f], [-0.5f, 0.5f, -0.5f]],
       [-1.0f, 0.0f, 0.0f] }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_RIGHT = [
-    { [[0.5f, -0.5f, -0.5f], [0.0f, -0.5f, -0.5f], [0.0f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // small, front
+    { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.0f], [0.5f, 0.0f, 0.0f], [0.5f, 0.0f, 0.5f]], // small, front
       [1.0f, 0.0f, 0.0f] },
 
-    { [[0.0f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.0f, 0.5f, -0.5f]],
+    { [[0.5f, -0.5f, 0.0f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.0f]],
       [1.0f, 0.0f, 0.0f] }
 ];
 
 immutable CubeSideData[1] STAIR_VERTICES_TOP = [
-    { [[-0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, 0.5f], [0.0f, 0.5f, 0.5f], [0.0f, 0.5f, -0.5f]],
+    { [[-0.5f, 0.5f, 0.0f], [0.5f, 0.5f, 0.0f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]],
       [0.0f, 1.0f, 0.0f] }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
-    { [[-0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f]],
+    { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]],
       [0.0f, -1.0f, 0.0f] }
 ];
 
@@ -182,11 +178,12 @@ immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
 //     return simple_stair(s, face, upside_down, texture_slice, nslice);
 // }
 
-Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice) pure { // well not so simple
+Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice) { // well not so simple
     Vertex[] ret;
 
     CubeSideData cbsd;
     float[3][6] positions;
+    byte[2][4] t;
     byte[2][6] texcoords;
     byte[2][6] mask;
 

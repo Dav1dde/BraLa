@@ -48,12 +48,15 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
 
 package string mk_stair_vertex(string v, string m) pure {
     return `
+        cbsd = ` ~ v ~ `;
+
         final switch(face) {
-            case Facing.SOUTH: cbsd = ` ~ v ~ `.rotate_90(); break;
-            case Facing.WEST:  cbsd = ` ~ v ~ `.rotate_180(); break;
-            case Facing.NORTH: cbsd = ` ~ v ~ `.rotate_270(); break;
-            case Facing.EAST: cbsd = ` ~ v ~ `; break;
+            case Facing.WEST: cbsd = cbsd.rotate_90();  texture_slice.rotate_90(); break;
+            case Facing.NORTH:  cbsd = cbsd.rotate_180(); texture_slice.rotate_180(); break;
+            case Facing.EAST: cbsd = cbsd.rotate_270(); texture_slice.rotate_270(); break;
+            case Facing.SOUTH: break;
         }
+
         if(upside_down) {
             cbsd = cbsd.make_upsidedown();
             positions = to_triangles_other_winding(cbsd.positions);
@@ -62,7 +65,6 @@ package string mk_stair_vertex(string v, string m) pure {
             positions = to_triangles(cbsd.positions);
             texcoords = to_triangles(texture_slice.` ~ m ~ `);
         }
-
 
         foreach(i; 0..6) {
             ret ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
@@ -86,10 +88,23 @@ CubeSideData rotate_90(CubeSideData cbsd) pure {
 }
 
 CubeSideData rotate_180(CubeSideData cbsd) pure {
-    foreach(ref vertex; cbsd.positions) {
-        vertex[0] = -vertex[0];
-        vertex[2] = -vertex[2];
-    }
+//     foreach(ref vertex; cbsd.positions) {
+//         vertex[0] = -vertex[0];
+//         vertex[2] = -vertex[2];
+//     }
+
+    // same bug as with make_upsidedown
+    cbsd.positions[0][0] *= -1;
+    cbsd.positions[0][2] *= -1;
+
+    cbsd.positions[1][0] *= -1;
+    cbsd.positions[1][2] *= -1;
+
+    cbsd.positions[2][0] *= -1;
+    cbsd.positions[2][2] *= -1;
+
+    cbsd.positions[3][0] *= -1;
+    cbsd.positions[3][2] *= -1;
 
     return cbsd;
 }
@@ -118,4 +133,27 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     cbsd.normal = -cbsd.normal[];
 
     return cbsd;
+}
+
+void rotate_90(ref byte[2][4] inp) pure {
+    foreach(ref t; inp) {
+        byte x = t[0];
+        t[0] = -t[1];
+        t[1] = x;
+    }
+}
+
+void rotate_180(ref byte[2][4] inp) pure {
+    foreach(ref t; inp) {
+        t[0] = -t[0];
+        t[1] = -t[1];
+    }
+}
+
+void rotate_270(ref byte[2][4] inp) pure {
+    foreach(ref t; inp) {
+        byte x = t[0];
+        t[0] = t[1];
+        t[1] = -x;
+    }
 }
