@@ -18,8 +18,9 @@ endif
 
 include command.make
 
-OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala $(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d \
-		       $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c $(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
+OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
+			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP){arsd,derelict3,gl3n,glamour,openssl,std} \
+			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
 
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
