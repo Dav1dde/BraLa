@@ -55,6 +55,8 @@ class Connection {
     /+immutable+/ string password;
     /+immutable+/ string minecraft_username;
     /+immutable+/ string hostname;
+
+    protected ubyte[] shared_secret;
     
     immutable byte protocol_version = 39;
     
@@ -125,62 +127,25 @@ class Connection {
     }
     
     void login() {
-        assert(callback !is null);
-        
         auto handshake = new c.Handshake(protocol_version,
                                          minecraft_username,
                                          hostname,
                                          to!int(connected_to.toPortString()));
+        writefln("handshake");
         handshake.send(endianstream);
-        debug writefln("%s", handshake);
-
-        ubyte repl_byte = read!ubyte(endianstream);
-        if(repl_byte == s.Disconnect.id) {
-            throw new ServerError(s.Disconnect.recv(endianstream).reason);
-        } else if(repl_byte != s.EncryptionKeyRequest.id) { // assume encryption is disabled
-            debug writefln("Assuming server doesn't support encryption, skipping it.");
-            dispatch_packet(repl_byte);
-            return;
-        }
-        
-        auto enc_request = s.EncryptionKeyRequest.recv(endianstream);
-        callback(enc_request.id, cast(void*)enc_request);
-        
-        auto rsa = decode_public(enc_request.public_key.arr);
-
-        ubyte[] enc_verify_token = rsa.encrypt(enc_request.verify_token.arr);
-        seed_prng();
-        ubyte[] shared_secret = get_random(16);
-        ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
-
-        if(enc_request.server_id != "-") {
-            enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ username ~ `". `);
-            session.join(enc_request.server_id, shared_secret, enc_request.public_key.arr);
-        }
-
-        auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
-                                                   Array!(short, ubyte)(enc_verify_token));
-        enc_key.send(endianstream);
-
-        repl_byte = read!ubyte(endianstream);
-        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id,
-                              "Server didn't respond with a EncryptionKeyResponse (Got 0x%02x).".format(repl_byte));
-        auto enc_response = s.EncryptionKeyResponse.recv(endianstream);
-        enforceEx!ServerError(enc_response.verify_token.length == 0 && enc_response.shared_secret.length == 0,
-                              "Expected empty payload in EncryptionKeyResponse.");
-        callback(enc_response.id, cast(void*)enc_response);
-
-        auto aes_stream = new AESStream!AES128CFB8(socketstream, new AES128CFB8(shared_secret, shared_secret));
-        endianstream = new EndianStream(aes_stream, Endian.bigEndian);
-
-        (new c.ClientStatuses(cast(byte)0)).send(endianstream);
-        endianstream.flush();
+        writefln("handshaked");
     }
-
     
     void poll() {
         try {
-            _poll();
+            ubyte packet_id = read!ubyte(endianstream);
+
+            foreach(packet; queue) {
+                packet.send(endianstream);
+            }
+            endianstream.flush();
+
+            dispatch_packet(packet_id);
         } catch(Exception e) {
             _connected = false;
             errored = true;
@@ -188,17 +153,6 @@ class Connection {
         }
     }
     
-    void _poll() {
-        ubyte packet_id = read!ubyte(endianstream);
-
-        foreach(packet; queue) {
-            packet.send(endianstream);
-        }
-        endianstream.flush();
-
-        dispatch_packet(packet_id);
-    }
-
     void dispatch_packet(ubyte packet_id) {
         assert(callback !is null);
         switch(packet_id) {
@@ -215,6 +169,35 @@ class Connection {
         while(_connected) {
             poll();
         }
+    }
+
+    protected void on_packet(T : s.EncryptionKeyRequest)(T packet) {
+        auto rsa = decode_public(packet.public_key.arr);
+
+        ubyte[] enc_verify_token = rsa.encrypt(packet.verify_token.arr);
+        seed_prng();
+        this.shared_secret = get_random(16);
+        ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
+
+        if(packet.server_id != "-") {
+            enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ username ~ `". `);
+            session.join(packet.server_id, shared_secret, packet.public_key.arr);
+        }
+
+        auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
+                                                   Array!(short, ubyte)(enc_verify_token));
+        enc_key.send(endianstream);
+    }
+
+    protected void on_packet(T : s.EncryptionKeyResponse)(T packet) {        
+        enforceEx!ServerError(packet.verify_token.length == 0 && packet.shared_secret.length == 0,
+                              "Expected empty payload in EncryptionKeyResponse.");
+
+        auto aes_stream = new AESStream!AES128CFB8(socketstream, new AES128CFB8(shared_secret, shared_secret));
+        endianstream = new EndianStream(aes_stream, Endian.bigEndian);
+
+        (new c.ClientStatuses(cast(byte)0)).send(endianstream);
+        endianstream.flush();
     }
     
     protected void on_packet(T : s.KeepAlive)(T packet) {
