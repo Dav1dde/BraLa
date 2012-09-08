@@ -43,7 +43,8 @@ you to use the gdb debugger.
 * A C compiler (e.g. gcc)
 * [glfw3](https://github.com/elmindreda/glfw) (as dynamic library, e.g. available in the Archlinux AUR)
 * OpenGL
-* OpenSSL
+* [OpenSSL](http://www.openssl.org/)
+* [Zlib](http://www.zlib.net/)
 
 I recommend you to use/install [MingW](http://www.mingw.org/)/[Msys](http://www.mingw.org/wiki/msys/)
 on Windows to build BraLa. MingW/Msys allow you to use the Makefile which comes with BraLa.
