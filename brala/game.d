@@ -79,8 +79,8 @@ class BraLaGame : BaseGLFWEventHandler {
         engine.mainloop(&poll);
     }
     
-    void start(Address to) {
-        connect(to);
+    void start(Address to, string hostname) {
+        connect(to, hostname);
         start();
     }
     
@@ -162,8 +162,8 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     // Server/Connection
-    void connect(Address to) {
-        connection.connect(to);
+    void connect(Address to, string hostname) {
+        connection.connect(to, hostname);
     }
     
     void connect(string host, ushort port) {

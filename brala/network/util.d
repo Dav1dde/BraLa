@@ -39,7 +39,7 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool)))
                 write(s, cast(short)data.length);
             }
         }
-        
+
         foreach(d; data) {
             write(s, d);
         }

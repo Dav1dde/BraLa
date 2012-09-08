@@ -54,6 +54,7 @@ class Connection {
     /+immutable+/ string username;
     /+immutable+/ string password;
     /+immutable+/ string minecraft_username;
+    /+immutable+/ string hostname;
     
     immutable byte protocol_version = 39;
     
@@ -98,16 +99,18 @@ class Connection {
         this.password = password;
     }
     
-    void connect(Address to) {
+    void connect(Address to, string hostname) {
         socket.connect(to);
         _connected = true;
         connected_to = to;
+
+        this.hostname = hostname;
     }
     
     void connect(string host, ushort port) {
         Address[] to = getAddress(host, port);
-        
-        connect(to[0]);
+
+        connect(to[0], host);
     }
     
     void disconnect() {
@@ -124,10 +127,12 @@ class Connection {
     void login() {
         assert(callback !is null);
         
-        auto handshake = new c.Handshake(protocol_version, minecraft_username,
-                                         connected_to.toHostNameString(),
+        auto handshake = new c.Handshake(protocol_version,
+                                         minecraft_username,
+                                         hostname,
                                          to!int(connected_to.toPortString()));
         handshake.send(endianstream);
+        debug writefln("%s", handshake);
 
         ubyte repl_byte = read!ubyte(endianstream);
         if(repl_byte == s.Disconnect.id) {
@@ -158,7 +163,8 @@ class Connection {
         enc_key.send(endianstream);
 
         repl_byte = read!ubyte(endianstream);
-        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id, "Server didn't respond with a EncryptionKeyResponse.");
+        enforceEx!ServerError(repl_byte == s.EncryptionKeyResponse.id,
+                              "Server didn't respond with a EncryptionKeyResponse (Got 0x%02x).".format(repl_byte));
         auto enc_response = s.EncryptionKeyResponse.recv(endianstream);
         enforceEx!ServerError(enc_response.verify_token.length == 0 && enc_response.shared_secret.length == 0,
                               "Expected empty payload in EncryptionKeyResponse.");
