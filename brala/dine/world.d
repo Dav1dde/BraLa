@@ -400,7 +400,7 @@ class World {
                 engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
 
                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-                if(aabb in engine.frustum) {
+                if(aabb in engine.frustum || true) {
                     bind(engine, chunk);
 
                     engine.flush_uniforms();

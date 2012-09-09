@@ -46,24 +46,24 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
     }`;
 
 
-package string mk_stair_vertex(string v, string m) pure {
+package string mk_stair_vertex(string v, string m = "false") pure {
     return `
         cbsd = ` ~ v ~ `;
 
         final switch(face) {
-            case Facing.WEST:  cbsd = cbsd.rotate_90();  texture_slice.rotate_90(); break;
-            case Facing.NORTH: cbsd = cbsd.rotate_180(); texture_slice.rotate_180(); break;
-            case Facing.EAST:  cbsd = cbsd.rotate_270(); texture_slice.rotate_270(); break;
+            case Facing.WEST:  cbsd = cbsd.rotate_90();  break;
+            case Facing.NORTH: cbsd = cbsd.rotate_180(); break;
+            case Facing.EAST:  cbsd = cbsd.rotate_270(); break;
             case Facing.SOUTH: break;
         }
-
+        
         if(upside_down) {
             cbsd = cbsd.make_upsidedown();
             positions = to_triangles_other_winding(cbsd.positions);
-            texcoords = to_triangles_other_winding(texture_slice.` ~ m ~ `_upsidedown);
+            texcoords = to_triangles_other_winding(texture_slice.project_on_cbsd(cbsd, ` ~ m ~ `));
         } else {
             positions = to_triangles(cbsd.positions);
-            texcoords = to_triangles(texture_slice.` ~ m ~ `);
+            texcoords = to_triangles(texture_slice.project_on_cbsd(cbsd, ` ~ m ~ `));
         }
 
         foreach(i; 0..6) {
@@ -83,6 +83,10 @@ CubeSideData rotate_90(CubeSideData cbsd) pure {
         vertex[0] = -vertex[2];
         vertex[2] = x;
     }
+    
+    auto x = cbsd.normal[0];
+    cbsd.normal[0] = -cbsd.normal[2];
+    cbsd.normal[2] = x;
 
     return cbsd;
 }
@@ -106,6 +110,9 @@ CubeSideData rotate_180(CubeSideData cbsd) pure {
     cbsd.positions[3][0] *= -1;
     cbsd.positions[3][2] *= -1;
 
+    cbsd.normal[0] *= -1;
+    cbsd.normal[2] *= -1;
+
     return cbsd;
 }
 
@@ -115,6 +122,10 @@ CubeSideData rotate_270(CubeSideData cbsd) pure {
         vertex[0] = vertex[2];
         vertex[2] = -x;
     }
+
+    auto x = cbsd.normal[0];
+    cbsd.normal[0] = cbsd.normal[2];
+    cbsd.normal[2] = -x;
 
     return cbsd;
 }
@@ -129,7 +140,7 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     cbsd.positions[1][1] *= -1;
     cbsd.positions[2][1] *= -1;
     cbsd.positions[3][1] *= -1;
-    
+
     cbsd.normal = -cbsd.normal[];
 
     return cbsd;
