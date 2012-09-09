@@ -69,7 +69,7 @@ struct Metadata {
         assert(type >= 0 && type <= 6);
         
         string s;
-        switch(type) {
+        final switch(type) {
             foreach(m; members) {
                 case m.name: s = to!string(mixin("_" ~ toStringNow!(m.name)));
             }

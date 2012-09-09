@@ -81,7 +81,7 @@ endif
 
 # Define flag for gdc other
 ifeq ($(DC),gdc)
-    DCFLAGS    = -fdeprecated
+    DCFLAGS    = 
     LINKERFLAG= -Xlinker 
     OUTPUT    = -o
     HF        = -fintfc-file=
@@ -89,7 +89,7 @@ ifeq ($(DC),gdc)
     NO_OBJ    = -fsyntax-only
     DDOC_MACRO= -fdoc-inc=
 else
-    DCFLAGS    = -d
+    DCFLAGS    = 
     LINKERFLAG= -L
     OUTPUT    = -of
     HF        = -Hf

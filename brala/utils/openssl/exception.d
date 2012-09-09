@@ -15,11 +15,11 @@ string get_openssl_error() {
 
 
 class OpenSSLException : Exception {
-    this(string msg) {
-        super(msg);
+    this(string msg, string f=__FILE__, size_t l=__LINE__) {
+        super(msg, f, l);
     }
 
-    this() {
-        super(get_openssl_error());
+    this(string f=__FILE__, size_t l=__LINE__) {
+        super(get_openssl_error(), f, l);
     }
 }

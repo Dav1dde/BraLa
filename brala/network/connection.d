@@ -131,9 +131,8 @@ class Connection {
                                          minecraft_username,
                                          hostname,
                                          to!int(connected_to.toPortString()));
-        writefln("handshake");
+                                
         handshake.send(endianstream);
-        writefln("handshaked");
     }
     
     void poll() {
