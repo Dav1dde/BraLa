@@ -46,7 +46,7 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
     }`;
 
 
-package string mk_stair_vertex(string v, string m = "false") pure {
+package string mk_stair_vertex(string v) pure {
     return `
         cbsd = ` ~ v ~ `;
 
@@ -60,10 +60,10 @@ package string mk_stair_vertex(string v, string m = "false") pure {
         if(upside_down) {
             cbsd = cbsd.make_upsidedown();
             positions = to_triangles_other_winding(cbsd.positions);
-            texcoords = to_triangles_other_winding(texture_slice.project_on_cbsd(cbsd, ` ~ m ~ `));
+            texcoords = to_triangles_other_winding(texture_slice.project_on_cbsd(cbsd));
         } else {
             positions = to_triangles(cbsd.positions);
-            texcoords = to_triangles(texture_slice.project_on_cbsd(cbsd, ` ~ m ~ `));
+            texcoords = to_triangles(texture_slice.project_on_cbsd(cbsd));
         }
 
         foreach(i; 0..6) {

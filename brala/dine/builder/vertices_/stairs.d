@@ -8,12 +8,22 @@ private {
     import brala.dine.builder.vertices_.util;
 }
 
+enum UVSet {
+    FIRST,
+    SECOND,
+    THIRD
+}
+
+
 struct StairTextureSlice {
     byte x;
     byte y;
 
-    byte x2;
+    byte x2; // normal y+
     byte y2;
+    
+    byte x3; // normal y-
+    byte y3;
 
     private int rotation;
 
@@ -26,19 +36,28 @@ struct StairTextureSlice {
 
             x2 = cast(byte)(lower_left_x2*2+1);
             y2 = cast(byte)(lower_left_y2*2-1);
+            
+            x3 = x;
+            y3 = y;
+        }
+        
+    this(byte lower_left_x, byte lower_left_y, byte lower_left_x2, byte lower_left_y2,
+         byte lower_left_x3, byte lower_left_y3)
+        in { assert(abs(lower_left_x3*2) <= byte.max && abs(lower_left_y3*2) <= byte.max); }
+        body {
+            this(lower_left_x, lower_left_y, lower_left_x2, lower_left_y2);
+            
+            x3 = cast(byte)(lower_left_x3*2+1);
+            y3 = cast(byte)(lower_left_y3*2-1);
         }
 
-//     pure:    
-    byte[2][4] project_on_cbsd(CubeSideData cbsd, bool s2 = false) {
+    pure:
+    byte[2][4] project_on_cbsd(CubeSideData cbsd) {
         // an normale erkennbar welche koordinate fix ist
         // die koodinaten zu UVs umformen? cast(byte)(foo*2)?
         
         byte x = this.x;
         byte y = this.y;
-        if(s2) {
-            x = this.x2;
-            y = this.y2;
-        }
         
         size_t index_1;
         size_t index_2;
@@ -55,14 +74,24 @@ struct StairTextureSlice {
             index_2 = 1;
             s = -1.0f; // flip here
             
-            // I am not 100% sure why this is needed here, but without it
-            // the sides (left/right) are wrong
-            n = sign(-cbsd.normal[0]);
+            n = sign(cbsd.normal[0]);
+            
+            // this is strange, the above works fine, except for stairs with no rotation
+            // TODO: fix this
+            // n = sign(-cbsd.normal[0]);
         } else if(cbsd.normal[0] == 0.0f && cbsd.normal[2] == 0.0f) {
             // y
             index_1 = 0;
             index_2 = 2;
             n = sign(cbsd.normal[1]);
+            
+            if(n > 0) { // y+
+                x = x2;
+                y = y2;
+            } else if(n < 0) { // y-
+                x = x3;
+                y = y3;
+            }
         } else if(cbsd.normal[0] == 0.0f && cbsd.normal[1] == 0.0f) {
             // z
             index_1 = 0;
@@ -136,7 +165,6 @@ Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice t
 
     CubeSideData cbsd;
     float[3][6] positions;
-    byte[2][4] t;
     byte[2][6] texcoords;
     byte[2][6] mask;
 
@@ -163,13 +191,13 @@ Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice t
             break;
         }
         case Side.TOP: {
-            mixin(mk_stair_vertex("STAIR_VERTICES_TOP[0]", "true"));
-            mixin(mk_stair_vertex("STAIR_VERTICES_TOP[1]", "true"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_TOP[0]"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_TOP[1]"));
 
             break;
         }
         case Side.BOTTOM: {
-            mixin(mk_stair_vertex("STAIR_VERTICES_BOTTOM[0]", "true"));
+            mixin(mk_stair_vertex("STAIR_VERTICES_BOTTOM[0]"));
 
             break;
         }

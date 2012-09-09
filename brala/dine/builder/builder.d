@@ -293,7 +293,7 @@ mixin template BlockBuilder() {
                       biome_data, x_offset, y_offset, z_offset); break;
             case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
-            case 128: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 13, 0, 12), // sandstone stair
+            case 128: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 13, 0, 12, 0, 14), // sandstone stair
                       biome_data, x_offset, y_offset, z_offset); break;
             case 134: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 13, 6, 13), // spruce wood stair
                       biome_data, x_offset, y_offset, z_offset); break;
