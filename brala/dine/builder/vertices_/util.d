@@ -141,7 +141,7 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     cbsd.positions[2][1] *= -1;
     cbsd.positions[3][1] *= -1;
 
-    cbsd.normal = -cbsd.normal[];
+    cbsd.normal[1] *= -1;
 
     return cbsd;
 }
