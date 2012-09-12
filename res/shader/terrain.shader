@@ -44,8 +44,13 @@ fragment:
 
     void main() {
         vec4 color = texture(terrain, v_texcoord);
-        float alpha = texture(terrain, v_mask).a;
 
-        color_out = mix(color, color*v_color, alpha);
-        //color_out = vec4(v_normal, 1.0);
+        if(color.a < 0.1) {
+            discard;
+        } else {
+            float alpha = texture(terrain, v_mask).a;
+
+            color_out = mix(color, color*v_color, alpha);
+            //color_out = vec4(v_normal, 1.0);
+        }
     }
