@@ -284,8 +284,16 @@ mixin template BlockBuilder() {
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
+            case 30: dispatch_single_side!(plant, side)(block, TextureSlice(11, 1), // cobweb
+                     biome_data, x_offset, y_offset, z_offset); break;
             case 35: mixin(single_side("wool_block")); break; // wool
             case 37: dispatch_single_side!(plant, side)(block, TextureSlice(13, 1), // dandelion
+                     biome_data, x_offset, y_offset, z_offset); break;
+            case 38: dispatch_single_side!(plant, side)(block, TextureSlice(12, 1), // rose
+                     biome_data, x_offset, y_offset, z_offset); break;
+            case 39: dispatch_single_side!(plant, side)(block, TextureSlice(13, 2), // brown mushroom
+                     biome_data, x_offset, y_offset, z_offset); break;
+            case 40: dispatch_single_side!(plant, side)(block, TextureSlice(12, 2), // red mushroom
                      biome_data, x_offset, y_offset, z_offset); break;
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
@@ -293,6 +301,8 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 83: dispatch_single_side!(plant, side)(block, TextureSlice(9, 5), // reeds
+                     biome_data, x_offset, y_offset, z_offset); break;                    
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 108: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 1, 7, 1), // brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
