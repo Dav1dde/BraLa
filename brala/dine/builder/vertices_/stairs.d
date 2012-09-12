@@ -74,11 +74,8 @@ struct StairTextureSlice {
             index_2 = 1;
             s = -1.0f; // flip here
             
-            n = sign(cbsd.normal[0]);
-            
-            // this is strange, the above works fine, except for stairs with no rotation
-            // TODO: fix this
-            // n = sign(-cbsd.normal[0]);
+            //n = sign(cbsd.normal[0]);
+            n = sign(-cbsd.normal[0]);
         } else if(cbsd.normal[0] == 0.0f && cbsd.normal[2] == 0.0f) {
             // y
             index_1 = 0;
