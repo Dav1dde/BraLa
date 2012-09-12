@@ -16,7 +16,7 @@ public {
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
                                          get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
-                                         simple_block, simple_slab, simple_stair;
+                                         simple_block, simple_slab, simple_stair, simple_plant;
 }
 
 
@@ -28,7 +28,7 @@ protected {
 }
 
 mixin template BlockBuilder() {
-    #line 30000
+    #line 30032
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
@@ -269,6 +269,13 @@ mixin template BlockBuilder() {
         add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
     }
 
+    void plant(Side s)(const ref Block block, byte[2][4] tex, const ref BiomeData biome_data,
+                       float x_offset, float y_offset, float z_offset) {
+        auto v = simple_plant(tex);
+
+        add_template_vertices(v, x_offset, y_offset, z_offset);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -278,6 +285,8 @@ mixin template BlockBuilder() {
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 35: mixin(single_side("wool_block")); break; // wool
+            case 37: dispatch_single_side!(plant, side)(block, TextureSlice(13, 1), // dandelion
+                     biome_data, x_offset, y_offset, z_offset); break;
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
@@ -315,6 +324,12 @@ mixin template BlockBuilder() {
             func!(Side.BOTTOM)(args);
         } else {
             func!(s)(args);
+        }
+    }
+
+    void dispatch_once(alias func, Side s, Args...)(Args args) {
+        static if(s == Side.ALL || s == Side.RIGHT) {
+            func!(Side.ALL)(args);
         }
     }
 

@@ -25,14 +25,17 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
                                        [cast(byte)-1, cast(byte)1]];
 
 // stuipid dmd bug ...
-/+package+/ enum mk_vertices = `
-    float[3][6] positions = to_triangles(cbsd.positions);
-    byte[2][6] texcoords = to_triangles(texture_slice);
+/+package+/ enum mk_vertices = mk_vertices_adv(`to_triangles`);
+
+package string mk_vertices_adv(string tri_func) pure {
+    return `
+    float[3][6] positions = ` ~ tri_func ~ `(cbsd.positions);
+    byte[2][6] texcoords = ` ~ tri_func ~ `(texture_slice);
     byte[2][6] mask;
     if(mask_slice == nslice) {
         mask = texcoords;
     } else {
-        mask = to_triangles(mask_slice);
+        mask = ` ~ tri_func ~ `(mask_slice);
     }
 
     Vertex[6] data;
@@ -44,6 +47,7 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
                          texcoords[i][0], texcoords[i][1],
                          mask[i][0], mask[i][1]);
     }`;
+}
 
 
 package string mk_stair_vertex(string v) pure {
