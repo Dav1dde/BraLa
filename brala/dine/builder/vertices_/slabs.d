@@ -18,16 +18,16 @@ struct SlabTextureSlice {
     this(byte lower_left_x, byte lower_left_y)
         in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max); }
         body {
-            x = cast(byte)(lower_left_x*2);
-            y = cast(byte)(lower_left_y*2);
+            x = cast(byte)(lower_left_x*2+1);
+            y = cast(byte)(lower_left_y*2-1);
         }
 
     pure:
     @property byte[2][4] texcoords() {
-        return [[cast(byte)x,     cast(byte)y],
-                [cast(byte)(x+2), cast(byte)y],
-                [cast(byte)(x+2), cast(byte)(y-1)],
-                [cast(byte)x,     cast(byte)(y-1)]];
+        return [[cast(byte)(x-1), cast(byte)(y+1)],
+                [cast(byte)(x+1), cast(byte)(y+1)],
+                [cast(byte)(x+1), cast(byte)(y)],
+                [cast(byte)(x-1), cast(byte)(y)]];
     }
 }
 
