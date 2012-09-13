@@ -61,8 +61,8 @@ struct BiomeData {
     Color color;
 
     Pixel to_pixel(int width, int height) const {       
-        int x = cast(int)(width*(temperature/2.0f));
-        int y = cast(int)(height*(rainfall/2.0f));
+        int x = cast(int)(width*(1-temperature/2.0f));
+        int y = cast(int)(height*(1-rainfall/2.0f));
 
         x = x == width ? x-1 : x;
         y = y == height ? y-1 : y;
