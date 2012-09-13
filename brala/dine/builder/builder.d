@@ -12,7 +12,7 @@ public {
     import std.functional : memoize;
     import std.typetuple : TypeTuple;
     
-    import brala.dine.builder.biomes : BiomeData;
+    import brala.dine.builder.biomes : BiomeData, Color4;
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
                                          get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
@@ -271,9 +271,36 @@ mixin template BlockBuilder() {
 
     void plant(Side s)(const ref Block block, byte[2][4] tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
-        auto v = simple_plant(tex);
+        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
+    }
 
-        add_template_vertices(v, x_offset, y_offset, z_offset);
+    void saplings(Side s)(const ref Block block, const ref BiomeData biome_data,
+                          float x_offset, float y_offset, float z_offset) {
+        byte[2][4] tex;
+
+        final switch(block.metadata & 0x3) {
+            case 0: tex = TextureSlice(15, 1); break;
+            case 1: tex = TextureSlice(15, 4); break;
+            case 2: tex = TextureSlice(15, 5); break;
+            case 3: tex = TextureSlice(14, 2); break;
+        }
+
+        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
+    }
+
+    void tall_grass(Side s)(const ref Block block, const ref BiomeData biome_data,
+                            float x_offset, float y_offset, float z_offset) {
+        byte[2][4] tex;
+        Color4 color = Color4(cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff);
+
+        final switch(block.metadata & 0x3) {
+            case 0: tex = TextureSlice(7, 4); break;
+            case 1: tex = TextureSlice(7, 3); color = biome_data.color.grass; break;
+            case 2: tex = TextureSlice(8, 4); color = biome_data.color.grass; break;
+            case 3: tex = TextureSlice(7, 3); color = biome_data.color.grass; break;
+        }
+
+        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset, color.field);
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -281,19 +308,21 @@ mixin template BlockBuilder() {
         switch(block.id) {
             case 2: mixin(single_side("grass_block")); break; // grass
             case 5: mixin(single_side("plank_block")); break; // planks
+            case 6: dispatch_once!(saplings, side)(block, biome_data, x_offset, y_offset, z_offset); break; // saplings
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
-            case 30: dispatch_single_side!(plant, side)(block, TextureSlice(11, 1), // cobweb
+            case 30: dispatch_once!(plant, side)(block, TextureSlice(11, 1), // cobweb
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 31: dispatch_once!(tall_grass, side)(block, biome_data, x_offset, y_offset, z_offset); break; // tall grass
             case 35: mixin(single_side("wool_block")); break; // wool
-            case 37: dispatch_single_side!(plant, side)(block, TextureSlice(13, 1), // dandelion
+            case 37: dispatch_once!(plant, side)(block, TextureSlice(13, 1), // dandelion
                      biome_data, x_offset, y_offset, z_offset); break;
-            case 38: dispatch_single_side!(plant, side)(block, TextureSlice(12, 1), // rose
+            case 38: dispatch_once!(plant, side)(block, TextureSlice(12, 1), // rose
                      biome_data, x_offset, y_offset, z_offset); break;
-            case 39: dispatch_single_side!(plant, side)(block, TextureSlice(13, 2), // brown mushroom
+            case 39: dispatch_once!(plant, side)(block, TextureSlice(13, 2), // brown mushroom
                      biome_data, x_offset, y_offset, z_offset); break;
-            case 40: dispatch_single_side!(plant, side)(block, TextureSlice(12, 2), // red mushroom
+            case 40: dispatch_once!(plant, side)(block, TextureSlice(12, 2), // red mushroom
                      biome_data, x_offset, y_offset, z_offset); break;
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
@@ -301,7 +330,7 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
-            case 83: dispatch_single_side!(plant, side)(block, TextureSlice(9, 5), // reeds
+            case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds
                      biome_data, x_offset, y_offset, z_offset); break;                    
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 108: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 1, 7, 1), // brick stair
