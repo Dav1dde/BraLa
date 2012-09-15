@@ -281,6 +281,29 @@ mixin template BlockBuilder() {
         }
     }
 
+    void furnace(Side s, string tex = "TextureSlice(12, 3)")(const ref Block block, const ref BiomeData biome_data,
+                                                                 float x_offset, float y_offset, float z_offset) {
+        enum fs = [Facing.WEST, Facing.EAST, Facing.NORTH, Facing.SOUTH];
+
+        Facing f = fs[block.metadata & 0x3];
+
+        if(cast(Side)f == s) { // special side
+            add_template_vertices(simple_block(s, mixin(tex)), x_offset, y_offset, z_offset);
+        } else {
+            tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
+        }
+    }
+
+    void burning_furnace(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                 float x_offset, float y_offset, float z_offset) {
+        furnace!(s, "TextureSlice(13, 4)")(block, biome_data, x_offset, y_offset, z_offset);
+    }
+
+    void dispenser(Side s)(const ref Block block, const ref BiomeData biome_data,
+                           float x_offset, float y_offset, float z_offset) {
+        furnace!(s, "TextureSlice(14, 3)")(block, biome_data, x_offset, y_offset, z_offset);
+    }
+
     void pumpkin(Side s, bool is_jako = false)(const ref Block block, const ref BiomeData biome_data,
                          float x_offset, float y_offset, float z_offset) {
         enum fs = [Facing.SOUTH, Facing.WEST, Facing.NORTH, Facing.EAST];
@@ -390,6 +413,7 @@ mixin template BlockBuilder() {
             case 6: dispatch_once!(saplings, side)(block, biome_data, x_offset, y_offset, z_offset); break; // saplings
             case 17: mixin(single_side("wood_block")); break; // wood
             case 18: mixin(single_side("leave_block")); break; // leaves
+            case 23: mixin(single_side("dispenser")); break; // dispenser
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 30: dispatch_once!(plant, side)(block, TextureSlice(11, 1), // cobweb
                      biome_data, x_offset, y_offset, z_offset); break;
@@ -408,6 +432,8 @@ mixin template BlockBuilder() {
             case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 60: mixin(single_side("farmland")); break; // farmland
+            case 61: mixin(single_side("furnace")); break; // furnace
+            case 62: mixin(single_side("burning_furnace")); break; // burning furnace
             case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds

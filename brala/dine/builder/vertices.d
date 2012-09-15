@@ -346,7 +346,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     simple_block_(Side.NEAR, t(1, 4)), // glass
     simple_block_(Side.NEAR, t(0, 11)), // lapis lazuli ore
     simple_block_(Side.NEAR, t(0, 10)), // lapis lazuli block
-    simple_block_(Side.NEAR, t(14, 3)), // dispenser
+    simple_block_(Side.NEAR, t(13, 3)), // dispenser
     simple_block_(Side.NEAR, t(0, 13)), // sandstone
     simple_block_(Side.NEAR, t(2, 10)), // noteblock
     [], // bed
@@ -384,8 +384,8 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     simple_block_(Side.NEAR, t(12, 4)), // crafting table
     [], // wheat
     simple_block_(Side.NEAR, t(2, 1)), // farmland
-    simple_block_(Side.NEAR, t(12, 3)),  // furnace
-    simple_block_(Side.NEAR, t(13, 4)),  // burning furnace
+    simple_block_(Side.NEAR, t(13, 3)),  // furnace
+    simple_block_(Side.NEAR, t(13, 3)),  // burning furnace
     [], // sign post
     [], // wooden door
     [], // ladder
@@ -772,7 +772,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     simple_block_(Side.BOTTOM, t(1, 4)), // glass
     simple_block_(Side.BOTTOM, t(0, 11)), // lapis lazuli ore
     simple_block_(Side.BOTTOM, t(0, 10)), // lapis lazuli block
-    simple_block_(Side.BOTTOM, t(13, 3)), // dispenser
+    simple_block_(Side.BOTTOM, t(14, 4)), // dispenser
     simple_block_(Side.BOTTOM, t(0, 14)), // sandstone
     simple_block_(Side.BOTTOM, t(2, 10)), // noteblock
     [], // bed
