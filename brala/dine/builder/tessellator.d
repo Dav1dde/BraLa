@@ -67,33 +67,33 @@ struct Tessellator {
 
        
         if(BLOCKS[value.id].empty) { // render neighbours
-            if(!BLOCKS[right.id].empty) dispatch!(Side.LEFT)(right, biome_data, x_offset_r, y_offset, z_offset);
-            if(!BLOCKS[top.id].empty)   dispatch!(Side.BOTTOM)(top, biome_data, x_offset, y_offset_t, z_offset);
-            if(!BLOCKS[front.id].empty) dispatch!(Side.FAR)(front, biome_data, x_offset, y_offset, z_offset_n);
+            if(!BLOCKS[right.id].empty) dispatch!(Side.LEFT)(right, biome_data, world_coords, x_offset_r, y_offset, z_offset);
+            if(!BLOCKS[top.id].empty)   dispatch!(Side.BOTTOM)(top, biome_data, world_coords, x_offset, y_offset_t, z_offset);
+            if(!BLOCKS[front.id].empty) dispatch!(Side.FAR)(front, biome_data, world_coords, x_offset, y_offset, z_offset_n);
 
             if(value.id != 0) {
-                dispatch!(Side.ALL)(value, biome_data, x_offset, y_offset, z_offset);
+                dispatch!(Side.ALL)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
         } else {
-            if(BLOCKS[right.id].empty) dispatch!(Side.RIGHT)(value, biome_data, x_offset, y_offset, z_offset);
-            if(BLOCKS[top.id].empty)   dispatch!(Side.TOP)(value, biome_data, x_offset, y_offset, z_offset);
-            if(BLOCKS[front.id].empty) dispatch!(Side.NEAR)(value, biome_data, x_offset, y_offset, z_offset);
+            if(BLOCKS[right.id].empty) dispatch!(Side.RIGHT)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
+            if(BLOCKS[top.id].empty)   dispatch!(Side.TOP)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
+            if(BLOCKS[front.id].empty) dispatch!(Side.NEAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
 
             if(x == 0) {
                 Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
 
-                if(BLOCKS[left.id].empty) dispatch!(Side.LEFT)(value, biome_data, x_offset, y_offset, z_offset);
+                if(BLOCKS[left.id].empty) dispatch!(Side.LEFT)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
 
             if(y == 0) {
                 // always render this, it's the lowest bedrock level
-                dispatch!(Side.BOTTOM)(value, biome_data, x_offset, y_offset, z_offset);
+                dispatch!(Side.BOTTOM)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
 
             if(z == 0) {
                 Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
 
-                if(BLOCKS[back.id].empty) dispatch!(Side.FAR)(value, biome_data, x_offset, y_offset, z_offset);
+                if(BLOCKS[back.id].empty) dispatch!(Side.FAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
         }
     }

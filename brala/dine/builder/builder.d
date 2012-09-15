@@ -16,7 +16,7 @@ public {
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
                                          get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
-                                         simple_block, simple_slab, simple_stair, simple_plant;
+                                         simple_block, simple_slab, simple_stair, simple_plant, side_stem;
 }
 
 
@@ -28,7 +28,6 @@ protected {
 }
 
 mixin template BlockBuilder() {
-    #line 30032
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
@@ -269,6 +268,19 @@ mixin template BlockBuilder() {
         add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
     }
 
+    void farmland(Side s)(const ref Block block, const ref BiomeData biome_data,
+                          float x_offset, float y_offset, float z_offset) {
+        static if(s == Side.TOP) {
+            if(block.metadata == 0) { // dry
+                add_template_vertices(simple_block(s, TextureSlice(7, 6)), x_offset, y_offset, z_offset);
+            } else { // wet
+                add_template_vertices(simple_block(s, TextureSlice(6, 6)), x_offset, y_offset, z_offset);
+            }
+        } else {
+            tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset); 
+        }
+    }
+
     void plant(Side s)(const ref Block block, byte[2][4] tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
         add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
@@ -303,8 +315,49 @@ mixin template BlockBuilder() {
         add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset, color.field);
     }
 
+    void stem(Side s)(const ref Block block, const ref BiomeData biome_data,
+                      vec3i world_coords, float x_offset, float y_offset, float z_offset) {
+
+        enum stem = TextureSlice(15, 7);
+        Color4 color = Color4(cast(ubyte)0x0, cast(ubyte)0xad, cast(ubyte)0x17, cast(ubyte)0xff);
+
+        enum stem2 = TextureSlice(15, 8);
+        bool render_stem2 = false;
+        
+        int id = 86; // pumpkin
+        if(block.id == 105) {
+            id = 103; // melon
+        }
+
+        Facing face = Facing.SOUTH;
+
+        if((block.metadata & 0x7) == 0x7) { // fully grown
+            color = Color4(cast(ubyte)0x8a, cast(ubyte)0x77, cast(ubyte)0x11, cast(ubyte)0xff);
+
+            if(world.get_block_safe(vec3i(world_coords.x+1, world_coords.y, world_coords.z)).id == id) {
+                face = Facing.EAST; render_stem2 = true;
+            } else if(world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z)).id == id) {
+                face = Facing.WEST; render_stem2 = true;
+            } else if(world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z+1)).id == id) {
+                face = Facing.SOUTH; render_stem2 = true;
+            } else if(world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1)).id == id) {
+                face = Facing.NORTH; render_stem2 = true;
+            }
+        }
+
+        if(render_stem2) {
+            add_template_vertices(side_stem(face, stem2), x_offset, y_offset, z_offset, color.field);
+            y_offset -= 0.4f;
+        }
+
+        y_offset -= 0.1f;
+        y_offset -= (7-block.metadata)/10.0f;
+
+        add_template_vertices(simple_plant(stem, face), x_offset, y_offset, z_offset, color.field);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
-                             float x_offset, float y_offset, float z_offset) {
+                             vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
             case 2: mixin(single_side("grass_block")); break; // grass
             case 5: mixin(single_side("plank_block")); break; // planks
@@ -328,11 +381,14 @@ mixin template BlockBuilder() {
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 60: mixin(single_side("farmland")); break; // farmland
             case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds
                      biome_data, x_offset, y_offset, z_offset); break;                    
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
+            case 104: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // pumpkin stem
+            case 105: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // melon stem
             case 108: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 1, 7, 1), // brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
             case 109: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 4, 6, 4), // stone brick stair

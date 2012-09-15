@@ -27,8 +27,19 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
 // stuipid dmd bug ...
 /+package+/ enum mk_vertices = mk_vertices_adv(`to_triangles`);
 
-package string mk_vertices_adv(string tri_func) pure {
-    return `
+package string mk_vertices_adv(string tri_func, bool rotate = false) pure {
+    string r = "";
+
+    if(rotate) {
+        r = `final switch(face) {
+                case Facing.WEST:  cbsd = cbsd.rotate_90();  break;
+                case Facing.NORTH: cbsd = cbsd.rotate_180(); break;
+                case Facing.EAST:  cbsd = cbsd.rotate_270(); break;
+                case Facing.SOUTH: break;
+            }`;
+    }
+
+    return r ~ `
     float[3][6] positions = ` ~ tri_func ~ `(cbsd.positions);
     byte[2][6] texcoords = ` ~ tri_func ~ `(texture_slice);
     byte[2][6] mask;

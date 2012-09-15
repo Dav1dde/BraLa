@@ -99,7 +99,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     simple_block_(Side.LEFT, t(8, 2)), // diamond block
     simple_block_(Side.LEFT, t(12, 4)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.LEFT, t(2, 1)), // farmland
     simple_block_(Side.LEFT, t(13, 3)),  // furnace
     simple_block_(Side.LEFT, t(13, 3)),  // burning furnace
     [], // sign post
@@ -241,7 +241,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     simple_block_(Side.RIGHT, t(8, 2)), // diamond block
     simple_block_(Side.RIGHT, t(12, 4)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.RIGHT, t(2, 1)), // farmland
     simple_block_(Side.RIGHT, t(13, 3)),  // furnace
     simple_block_(Side.RIGHT, t(13, 3)),  // burning furnace
     [], // sign post
@@ -383,7 +383,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     simple_block_(Side.NEAR, t(8, 2)), // diamond block
     simple_block_(Side.NEAR, t(12, 4)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.NEAR, t(2, 1)), // farmland
     simple_block_(Side.NEAR, t(12, 3)),  // furnace
     simple_block_(Side.NEAR, t(13, 4)),  // burning furnace
     [], // sign post
@@ -525,7 +525,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     simple_block_(Side.FAR, t(8, 2)), // diamond block
     simple_block_(Side.FAR, t(12, 4)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.FAR, t(2, 1)), // farmland
     simple_block_(Side.FAR, t(13, 3)),  // furnace
     simple_block_(Side.FAR, t(13, 3)),  // burning furnace
     [], // sign post
@@ -667,7 +667,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     simple_block_(Side.TOP, t(8, 2)), // diamond block
     simple_block_(Side.TOP, t(4, 1)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.TOP, t(6, 6)), // farmland
     simple_block_(Side.TOP, t(14, 4)),  // furnace
     simple_block_(Side.TOP, t(14, 4)),  // burning furnace
     [], // sign post
@@ -809,7 +809,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     simple_block_(Side.BOTTOM, t(8, 2)), // diamond block
     simple_block_(Side.BOTTOM, t(4, 1)), // crafting table
     [], // wheat
-    [], // farmland
+    simple_block_(Side.BOTTOM, t(2, 1)), // farmland
     simple_block_(Side.BOTTOM, t(14, 4)),  // furnace
     simple_block_(Side.BOTTOM, t(14, 4)),  // burning furnace
     [], // sign post
