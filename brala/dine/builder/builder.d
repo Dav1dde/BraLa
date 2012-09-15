@@ -16,7 +16,8 @@ public {
     import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
                                          get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
-                                         simple_block, simple_slab, simple_stair, simple_plant, side_stem;
+                                         simple_block, simple_slab, simple_stair, simple_plant, side_stem,
+                                         simple_food_plant;
 }
 
 
@@ -268,6 +269,16 @@ mixin template BlockBuilder() {
         add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
     }
 
+    void wheat(Side s)(const ref Block block, const ref BiomeData biome_data,
+                       float x_offset, float y_offset, float z_offset) {
+        byte x = cast(byte)8;
+
+        x += block.metadata & 0x7;
+        //y_offset -= 0.0625f; // 1/16.0
+
+        add_template_vertices(simple_food_plant(TextureSlice(x, 6)), x_offset, y_offset, z_offset);
+    }
+
     void farmland(Side s)(const ref Block block, const ref BiomeData biome_data,
                           float x_offset, float y_offset, float z_offset) {
         static if(s == Side.TOP) {
@@ -405,6 +416,15 @@ mixin template BlockBuilder() {
         add_template_vertices(simple_plant(stem, face), x_offset, y_offset, z_offset, color.field);
     }
 
+    void nether_wart(Side s)(const ref Block block, const ref BiomeData biome_data,
+                             float x_offset, float y_offset, float z_offset) {
+        enum stages = [0, 1, 1, 2];
+
+        byte x = cast(byte)(2 + stages[block.metadata & 0x3]);
+
+        return add_template_vertices(simple_food_plant(TextureSlice(x, 15)), x_offset, y_offset, z_offset);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -431,6 +451,7 @@ mixin template BlockBuilder() {
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 59: dispatch_once!(wheat, side)(block, biome_data, x_offset, y_offset, z_offset); break; // wheat
             case 60: mixin(single_side("farmland")); break; // farmland
             case 61: mixin(single_side("furnace")); break; // furnace
             case 62: mixin(single_side("burning_furnace")); break; // burning furnace
@@ -449,6 +470,7 @@ mixin template BlockBuilder() {
                       biome_data, x_offset, y_offset, z_offset); break;
             case 114: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 15, 0, 15), // nether brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
+            case 115: dispatch_once!(nether_wart, side)(block, biome_data, x_offset, y_offset, z_offset); break; // nether wart
             case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
             case 128: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 13, 0, 12, 0, 14), // sandstone stair
