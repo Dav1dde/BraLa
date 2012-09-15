@@ -75,12 +75,16 @@ immutable CubeSideData[6] CUBE_VERTICES = [
 
 
 Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
-    return simple_block(side, texture_slice, nslice);
+    return simple_block(side, texture_slice, nslice, Facing.SOUTH);
 }
 
-Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+Vertex[] simple_block(Side side, byte[2][4] texture_slice, Facing face) pure {
+    return simple_block(side, texture_slice, nslice, face);
+}
+
+Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice, Facing face) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
-    mixin(mk_vertices);
+    mixin(mk_vertices_adv("to_triangles", true));
     return data.dup;
 }

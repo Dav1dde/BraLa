@@ -409,12 +409,12 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // sugar cane
     simple_block_(Side.NEAR, t(10, 5)), // jukebox
     [], // fence
-    simple_block_(Side.NEAR, t(7, 8)), // pumpkin
+    simple_block_(Side.NEAR, t(6, 8)), // pumpkin
     simple_block_(Side.NEAR, t(7, 7)), // netherrack
     simple_block_(Side.NEAR, t(8, 7)), // soul sand
     simple_block_(Side.NEAR, t(9, 7)), // glowstone block
     [], // portal
-    simple_block_(Side.NEAR, t(8, 8)), // jack-o-lantern
+    simple_block_(Side.NEAR, t(6, 8)), // jack-o-lantern
     [], // cake block
     [], // redstone repeater
     [], // redstone repeater on
@@ -693,12 +693,12 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // sugar cane
     simple_block_(Side.TOP, t(11, 5)), // jukebox
     [], // fence
-    simple_block_(Side.TOP, t(6, 8)), // pumpkin
+    simple_block_(Side.TOP, t(6, 7)), // pumpkin
     simple_block_(Side.TOP, t(7, 7)), // netherrack
     simple_block_(Side.TOP, t(8, 7)), // soul sand
     simple_block_(Side.TOP, t(9, 7)), // glowstone block
     [], // portal
-    simple_block_(Side.TOP, t(6, 8)), // jack-o-lantern
+    simple_block_(Side.TOP, t(6, 7)), // jack-o-lantern
     [], // cake block
     [], // redstone repeater
     [], // redstone repeater on

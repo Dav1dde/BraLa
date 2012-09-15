@@ -281,6 +281,32 @@ mixin template BlockBuilder() {
         }
     }
 
+    void pumpkin(Side s, bool is_jako = false)(const ref Block block, const ref BiomeData biome_data,
+                         float x_offset, float y_offset, float z_offset) {
+        enum fs = [Facing.SOUTH, Facing.WEST, Facing.NORTH, Facing.EAST];
+
+        Facing f = fs[block.metadata & 0x3];
+
+        static if(s == Side.TOP) {
+            add_template_vertices(simple_block(s, TextureSlice(6, 7), f), x_offset, y_offset, z_offset);
+        } else {
+            if(cast(Side)f == s) { // side with the face
+                static if(is_jako) { // it's a jako lantern
+                    add_template_vertices(simple_block(s, TextureSlice(8, 8)), x_offset, y_offset, z_offset);
+                } else {
+                    add_template_vertices(simple_block(s, TextureSlice(7, 8)), x_offset, y_offset, z_offset);
+                }
+            } else {
+                tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
+            }
+        }
+    }
+
+    void jack_o_lantern(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                float x_offset, float y_offset, float z_offset) {
+        pumpkin!(s, true)(block, biome_data, x_offset, y_offset, z_offset);
+    }
+
     void plant(Side s)(const ref Block block, byte[2][4] tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
         add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
@@ -385,7 +411,9 @@ mixin template BlockBuilder() {
             case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds
-                     biome_data, x_offset, y_offset, z_offset); break;                    
+                     biome_data, x_offset, y_offset, z_offset); break;
+            case 86: mixin(single_side("pumpkin")); break;
+            case 91: mixin(single_side("jack_o_lantern")); break;
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 104: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // pumpkin stem
             case 105: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // melon stem
