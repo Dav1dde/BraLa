@@ -237,8 +237,8 @@ class BraLaGame : BaseGLFWEventHandler {
     void on_packet(T : s.MapChunkBulk)(T packet) {
         debug writefln("%s", packet);
 
-        foreach(cc; packet.chunk_bulk.chunks) {
-            synchronized(_world_lock) {
+        synchronized(_world_lock) {
+            foreach(cc; packet.chunk_bulk.chunks) {
                 if(cc.chunk.primary_bitmask != 0) {
                     _current_world.add_chunk(cc.chunk, cc.coords);
                 } else if(cc.chunk.add_bitmask == 0) {
