@@ -283,12 +283,15 @@ mixin template BlockBuilder() {
                           float x_offset, float y_offset, float z_offset) {
         static if(s == Side.TOP) {
             if(block.metadata == 0) { // dry
-                add_template_vertices(simple_block(s, TextureSlice(7, 6)), x_offset, y_offset, z_offset);
+                enum fb = farmland_block(s, ProjTextureSlice(7, 6));
+                add_template_vertices(fb, x_offset, y_offset, z_offset);
             } else { // wet
-                add_template_vertices(simple_block(s, TextureSlice(6, 6)), x_offset, y_offset, z_offset);
+                enum fb = farmland_block(s, ProjTextureSlice(6, 6));
+                add_template_vertices(fb, x_offset, y_offset, z_offset);
             }
         } else {
-            tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset); 
+            enum fb = farmland_block(s, ProjTextureSlice(2, 1));
+            add_template_vertices(fb, x_offset, y_offset, z_offset);
         }
     }
 
