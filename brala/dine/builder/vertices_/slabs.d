@@ -10,24 +10,27 @@ private {
 
 
 struct SlabTextureSlice {
-    byte x;
-    byte y;
+    enum byte FB = 16;
+    enum byte HB = 8;
+    
+    ubyte x;
+    ubyte y;
 
     alias texcoords this;
 
-    this(byte lower_left_x, byte lower_left_y)
-        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max); }
+    this(ubyte lower_left_x, ubyte lower_left_y)
+        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
         body {
-            x = cast(byte)(lower_left_x*2+1);
-            y = cast(byte)(lower_left_y*2-1);
+            x = cast(byte)(lower_left_x*FB+HB);
+            y = cast(byte)(lower_left_y*FB-HB);
         }
 
     pure:
-    @property byte[2][4] texcoords() {
-        return [[cast(byte)(x-1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y)],
-                [cast(byte)(x-1), cast(byte)(y)]];
+    @property ubyte[2][4] texcoords() {
+        return [[cast(ubyte)(x-HB), cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y)],
+                [cast(ubyte)(x-HB), cast(ubyte)(y)]];
     }
 }
 
@@ -66,11 +69,11 @@ private CubeSideData[6] upside_down_slabs() {
     return ret;
 }
 
-Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice) pure {
+Vertex[] simple_slab(Side side, bool upside_down, ubyte[2][4] texture_slice) pure {
     return simple_slab(side, upside_down, texture_slice, nslice);
 }
 
-Vertex[] simple_slab(Side side, bool upside_down, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+Vertex[] simple_slab(Side side, bool upside_down, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice) pure {
     CubeSideData cbsd;
     if(upside_down) {
         cbsd = SLAB_VERTICES_UPSIDEDOWN[side];

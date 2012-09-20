@@ -91,7 +91,7 @@ mixin template BlockBuilder() {
         ```;
         
         TextureSlice tex;
-        byte[2][4] texcoords;
+        ubyte[2][4] texcoords;
         // TODO: rewrite it/think of something better, I don't like it
         static if(s == Side.NEAR || s == Side.FAR) { // south and north
             if((block.metadata & 0xc) == 0) {
@@ -341,14 +341,14 @@ mixin template BlockBuilder() {
         pumpkin!(s, true)(block, biome_data, x_offset, y_offset, z_offset);
     }
 
-    void plant(Side s)(const ref Block block, byte[2][4] tex, const ref BiomeData biome_data,
+    void plant(Side s)(const ref Block block, ubyte[2][4] tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
         add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
     }
 
     void saplings(Side s)(const ref Block block, const ref BiomeData biome_data,
                           float x_offset, float y_offset, float z_offset) {
-        byte[2][4] tex;
+        ubyte[2][4] tex;
 
         final switch(block.metadata & 0x3) {
             case 0: tex = TextureSlice(15, 1); break;
@@ -362,7 +362,7 @@ mixin template BlockBuilder() {
 
     void tall_grass(Side s)(const ref Block block, const ref BiomeData biome_data,
                             float x_offset, float y_offset, float z_offset) {
-        byte[2][4] tex;
+        ubyte[2][4] tex;
         Color4 color = Color4(cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff);
 
         final switch(block.metadata & 0x3) {

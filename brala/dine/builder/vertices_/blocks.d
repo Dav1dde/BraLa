@@ -10,45 +10,48 @@ private {
 
 
 struct TextureSlice {
-    byte x;
-    byte y;
+    enum ubyte FB = 16;
+    enum ubyte HB = 8;
+    
+    ubyte x;
+    ubyte y;
 
     alias texcoords this;
 
-    this(byte lower_left_x, byte lower_left_y)
-        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max); }
+    this(ubyte lower_left_x, ubyte lower_left_y)
+        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
         body {
-            x = cast(byte)(lower_left_x*2+1);
-            y = cast(byte)(lower_left_y*2-1);
+            x = cast(ubyte)(lower_left_x*FB+HB);
+            y = cast(ubyte)(lower_left_y*FB-HB);
         }
 
     pure:
-    @property byte[2][4] texcoords() {
-        return [[cast(byte)(x-1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y-1)]];
+    @property ubyte[2][4] texcoords() {
+        return [[cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)]];
     }
 
-    @property byte[2][4] texcoords_90() {
-        return [[cast(byte)(x+1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y+1)]];
+    @property ubyte[2][4] texcoords_90() {
+        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)]];
     }
 
-    @property byte[2][4] texcoords_180() {
-        return [[cast(byte)(x+1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y+1)]];
+    @property ubyte[2][4] texcoords_180() {
+        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)]];
     }
 
-    @property byte[2][4] texcoords_270() {
-        return [[cast(byte)(x-1), cast(byte)(y-1)],
-                [cast(byte)(x-1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y+1)],
-                [cast(byte)(x+1), cast(byte)(y-1)]];
+    @property ubyte[2][4] texcoords_270() {
+        return [[cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
+                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
+                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)]];
     }
 }
 
@@ -74,15 +77,15 @@ immutable CubeSideData[6] CUBE_VERTICES = [
 ];
 
 
-Vertex[] simple_block(Side side, byte[2][4] texture_slice) pure {
+Vertex[] simple_block(Side side, ubyte[2][4] texture_slice) pure {
     return simple_block(side, texture_slice, nslice, Facing.SOUTH);
 }
 
-Vertex[] simple_block(Side side, byte[2][4] texture_slice, Facing face) pure {
+Vertex[] simple_block(Side side, ubyte[2][4] texture_slice, Facing face) pure {
     return simple_block(side, texture_slice, nslice, face);
 }
 
-Vertex[] simple_block(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice, Facing face) pure {
+Vertex[] simple_block(Side side, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice, Facing face) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     mixin(mk_vertices_adv("to_triangles", true));

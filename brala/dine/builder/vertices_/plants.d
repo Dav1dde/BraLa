@@ -16,11 +16,11 @@ immutable CubeSideData[4] PLANT_VERTICES = [
       [0.707107f, 0.0f, 0.707107f] }
 ];
 
-Vertex[] simple_plant(byte[2][4] texture_slice, Facing face = cast(Facing)0) pure {
+Vertex[] simple_plant(ubyte[2][4] texture_slice, Facing face = cast(Facing)0) pure {
     return simple_plant(texture_slice, nslice, face);
 }
 
-Vertex[] simple_plant(byte[2][4] texture_slice, byte[2][4] mask_slice, Facing face = cast(Facing)0) pure {
+Vertex[] simple_plant(ubyte[2][4] texture_slice, ubyte[2][4] mask_slice, Facing face = cast(Facing)0) pure {
     Vertex[] ret;
 
     foreach(CubeSideData cbsd; PLANT_VERTICES) {
@@ -44,11 +44,11 @@ immutable CubeSideData SIDE_STEM_VERTICES = {
     [1.0f, 0.0f, 0.0f]
 };
 
-Vertex[] side_stem(Facing face, byte[2][4] texture_slice) pure {
+Vertex[] side_stem(Facing face, ubyte[2][4] texture_slice) pure {
     return side_stem(face, texture_slice, nslice);
 }
 
-Vertex[] side_stem(Facing face, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+Vertex[] side_stem(Facing face, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice) pure {
     Vertex[] ret;
 
     CubeSideData cbsd = SIDE_STEM_VERTICES;
@@ -81,11 +81,11 @@ immutable CubeSideData[] FOOD_PLANT_VERTICES = [
       [1.0f, 0.0f, 0.0f] }
 ];
 
-Vertex[] simple_food_plant(byte[2][4] texture_slice) pure {
+Vertex[] simple_food_plant(ubyte[2][4] texture_slice) pure {
     return simple_food_plant(texture_slice, nslice);
 }
 
-Vertex[] simple_food_plant(byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+Vertex[] simple_food_plant(ubyte[2][4] texture_slice, ubyte[2][4] mask_slice) pure {
     Vertex[] ret;
 
     foreach(CubeSideData cbsd; FOOD_PLANT_VERTICES) {

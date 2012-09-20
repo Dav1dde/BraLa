@@ -24,13 +24,13 @@ enum size_t BLOCK_IDS = 139;
 private {
     import brala.dine.builder.vertices_.util;
     
-    byte[2][4] t(byte x, byte y) { return TextureSlice(x, y).texcoords; }
+    ubyte[2][4] t(ubyte x, ubyte y) { return TextureSlice(x, y).texcoords; }
 
-    Vertex[] simple_block_(Side side, byte[2][4] texture_slice) pure {
+    Vertex[] simple_block_(Side side, ubyte[2][4] texture_slice) pure {
         return simple_block_(side, texture_slice, nslice);
     }
 
-    Vertex[] simple_block_(Side side, byte[2][4] texture_slice, byte[2][4] mask_slice) pure {
+    Vertex[] simple_block_(Side side, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice) pure {
         CubeSideData cbsd = CUBE_VERTICES[side];
 
         mixin(mk_vertices);

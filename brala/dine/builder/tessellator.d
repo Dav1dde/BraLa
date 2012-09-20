@@ -28,10 +28,10 @@ align(1) struct Vertex {
     ubyte g;
     ubyte b;
     ubyte a;
-    byte u_terrain;
-    byte v_terrain;
-    byte u_mask;
-    byte v_mask;
+    ubyte u_terrain;
+    ubyte v_terrain;
+    ubyte u_mask;
+    ubyte v_mask;
     float pad; // I have no idea why you need that padding
 }
 

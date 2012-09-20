@@ -25,8 +25,8 @@ vertex:
         v_normal = v * normal;
         
         v_color = color;
-        v_texcoord = texcoord/32.0;
-        v_mask = mask/32.0;
+        v_texcoord = texcoord/256;
+        v_mask = mask/256;
         
         gl_Position = proj * view_pos;
     }

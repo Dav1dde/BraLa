@@ -16,48 +16,51 @@ enum UVSet {
 
 
 struct StairTextureSlice {
-    byte x;
-    byte y;
-
-    byte x2; // normal y+
-    byte y2;
+    enum ubyte FB = 16;
+    enum ubyte HB = 8;
     
-    byte x3; // normal y-
-    byte y3;
+    ubyte x;
+    ubyte y;
+
+    ubyte x2; // normal y+
+    ubyte y2;
+    
+    ubyte x3; // normal y-
+    ubyte y3;
 
     private int rotation;
 
-    this(byte lower_left_x, byte lower_left_y, byte lower_left_x2, byte lower_left_y2)
-        in { assert(abs(lower_left_x*2) <= byte.max && abs(lower_left_y*2) <= byte.max);
-             assert(abs(lower_left_x2*2) <= byte.max && abs(lower_left_y2*2) <= byte.max); }
+    this(ubyte lower_left_x, ubyte lower_left_y, ubyte lower_left_x2, ubyte lower_left_y2)
+        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max);
+             assert(abs(lower_left_x2*FB) <= ubyte.max && abs(lower_left_y2*FB) <= ubyte.max); }
         body {
-            x = cast(byte)(lower_left_x*2+1);
-            y = cast(byte)(lower_left_y*2-1);
+            x = cast(ubyte)(lower_left_x*FB+HB);
+            y = cast(ubyte)(lower_left_y*FB-HB);
 
-            x2 = cast(byte)(lower_left_x2*2+1);
-            y2 = cast(byte)(lower_left_y2*2-1);
+            x2 = cast(ubyte)(lower_left_x2*FB+HB);
+            y2 = cast(ubyte)(lower_left_y2*FB-HB);
             
             x3 = x;
             y3 = y;
         }
         
-    this(byte lower_left_x, byte lower_left_y, byte lower_left_x2, byte lower_left_y2,
-         byte lower_left_x3, byte lower_left_y3)
-        in { assert(abs(lower_left_x3*2) <= byte.max && abs(lower_left_y3*2) <= byte.max); }
+    this(ubyte lower_left_x, ubyte lower_left_y, ubyte lower_left_x2, ubyte lower_left_y2,
+         ubyte lower_left_x3, ubyte lower_left_y3)
+        in { assert(abs(lower_left_x3*FB) <= ubyte.max && abs(lower_left_y3*FB) <= ubyte.max); }
         body {
             this(lower_left_x, lower_left_y, lower_left_x2, lower_left_y2);
             
-            x3 = cast(byte)(lower_left_x3*2+1);
-            y3 = cast(byte)(lower_left_y3*2-1);
+            x3 = cast(ubyte)(lower_left_x3*FB+HB);
+            y3 = cast(ubyte)(lower_left_y3*FB-HB);
         }
 
     pure:
-    byte[2][4] project_on_cbsd(CubeSideData cbsd) {
+    ubyte[2][4] project_on_cbsd(CubeSideData cbsd) {
         // an normale erkennbar welche koordinate fix ist
-        // die koodinaten zu UVs umformen? cast(byte)(foo*2)?
+        // die koodinaten zu UVs umformen? cast(ubyte)(foo*2)?
         
-        byte x = this.x;
-        byte y = this.y;
+        ubyte x = this.x;
+        ubyte y = this.y;
         
         size_t index_1;
         size_t index_2;
@@ -99,11 +102,11 @@ struct StairTextureSlice {
             assert(false, "normal not supported");
         }
         
-        byte[2][4] ret;
+        ubyte[2][4] ret;
         
         foreach(i, ref vertex; cbsd.positions) {
-            ret[i][0] = cast(byte)(x + vertex[index_1]*2*n);
-            ret[i][1] = cast(byte)(y + vertex[index_2]*2*s);
+            ret[i][0] = cast(ubyte)(x + vertex[index_1]*FB*n);
+            ret[i][1] = cast(ubyte)(y + vertex[index_2]*FB*s);
         }
         
         return ret;
@@ -162,8 +165,8 @@ Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice t
 
     CubeSideData cbsd;
     float[3][6] positions;
-    byte[2][6] texcoords;
-    byte[2][6] mask;
+    ubyte[2][6] texcoords;
+    ubyte[2][6] mask;
 
     final switch(s) {
         case Side.NEAR: {
