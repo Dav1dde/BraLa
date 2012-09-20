@@ -280,8 +280,8 @@ class World {
         vec3i wcoords = wcoords_orig;
 
         foreach(z; 0..depth) {
-            z_offset = z + 0.5f;
-            z_offset_n = z + 1.5f;
+            z_offset = wcoords_orig.z + z + 0.5f;
+            z_offset_n = z_offset + 1.0f;
 
             wcoords.z = wcoords_orig.z + z;
 
@@ -291,8 +291,8 @@ class World {
                 foreach(y_; 0..hds) {
                     y = b*hds + y_;
 
-                    y_offset = y+0.5f;
-                    y_offset_t = y+1.5f;
+                    y_offset = wcoords_orig.y + y + 0.5f;
+                    y_offset_t = y_offset + 1.0f;
 
                     wcoords.x = wcoords_orig.x;
                     wcoords.y = wcoords_orig.y + y;
@@ -302,8 +302,8 @@ class World {
                     tessellator.realloc_buffer_if_needed(1024*(depth-z));
 
                     foreach(x; 0..width) {
-                        x_offset = x+0.5f;
-                        x_offset_r = x+1.5f;
+                        x_offset = wcoords_orig.x + x + 0.5f;
+                        x_offset_r = x_offset + 1.0f;
                         wcoords.x = wcoords_orig.x + x;
 
                         index = x+y*width+z*zstep;
@@ -385,6 +385,8 @@ class World {
                 buffer.available = true;
             }
         }
+
+//         auto frustum = engine.frustum;
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
@@ -397,16 +399,14 @@ class World {
             if(chunk.vbo !is null) {
                 vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
-                engine.model = mat4.translation(w_chunkc.x, w_chunkc.y, w_chunkc.z);
-
-                AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-                if(aabb in engine.frustum || true) {
+//                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+//                 if(aabb in frustum) {
                     bind(engine, chunk);
 
                     engine.flush_uniforms();
 
                     glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
-                }
+//                 }
             }
         }
     }
