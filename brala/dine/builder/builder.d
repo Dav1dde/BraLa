@@ -13,11 +13,11 @@ public {
     import std.typetuple : TypeTuple;
     
     import brala.dine.builder.biomes : BiomeData, Color4;
-    import brala.dine.builder.vertices : BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
+    import brala.dine.builder.vertices /+: BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
-                                         get_vertices, TextureSlice, SlabTextureSlice, StairTextureSlice,
+                                         get_vertices, TextureSlice, SlabTextureSlice, ProjTextureSlice,
                                          simple_block, simple_slab, simple_stair, simple_plant, side_stem,
-                                         simple_food_plant;
+                                         simple_food_plant+/;
 }
 
 
@@ -259,7 +259,7 @@ mixin template BlockBuilder() {
         }
     }
 
-    void stair(Side s)(const ref Block block, StairTextureSlice tex, const ref BiomeData biome_data,
+    void stair(Side s)(const ref Block block, ProjTextureSlice tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
         enum fs = [Facing.WEST, Facing.EAST, Facing.NORTH, Facing.SOUTH];
 
@@ -449,13 +449,13 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
-            case 53: dispatch_single_side!(stair, side)(block, StairTextureSlice(4, 1, 4, 1), // oak wood stair
+            case 53: dispatch_single_side!(stair, side)(block, ProjTextureSlice(4, 1, 4, 1), // oak wood stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 59: dispatch_once!(wheat, side)(block, biome_data, x_offset, y_offset, z_offset); break; // wheat
             case 60: mixin(single_side("farmland")); break; // farmland
             case 61: mixin(single_side("furnace")); break; // furnace
             case 62: mixin(single_side("burning_furnace")); break; // burning furnace
-            case 67: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 2, 0, 2), // cobblestone stair
+            case 67: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds
                      biome_data, x_offset, y_offset, z_offset); break;
@@ -464,22 +464,22 @@ mixin template BlockBuilder() {
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 104: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // pumpkin stem
             case 105: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // melon stem
-            case 108: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 1, 7, 1), // brick stair
+            case 108: dispatch_single_side!(stair, side)(block, ProjTextureSlice(7, 1, 7, 1), // brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
-            case 109: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 4, 6, 4), // stone brick stair
+            case 109: dispatch_single_side!(stair, side)(block, ProjTextureSlice(6, 4, 6, 4), // stone brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
-            case 114: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 15, 0, 15), // nether brick stair
+            case 114: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 15, 0, 15), // nether brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
             case 115: dispatch_once!(nether_wart, side)(block, biome_data, x_offset, y_offset, z_offset); break; // nether wart
             case 125: mixin(single_side("wooden_double_slab")); break; // wooden double slab
             case 126: mixin(single_side("wooden_slab")); break; // wooden slab
-            case 128: dispatch_single_side!(stair, side)(block, StairTextureSlice(0, 13, 0, 12, 0, 14), // sandstone stair
+            case 128: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 13, 0, 12, 0, 14), // sandstone stair
                       biome_data, x_offset, y_offset, z_offset); break;
-            case 134: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 13, 6, 13), // spruce wood stair
+            case 134: dispatch_single_side!(stair, side)(block, ProjTextureSlice(6, 13, 6, 13), // spruce wood stair
                       biome_data, x_offset, y_offset, z_offset); break;
-            case 135: dispatch_single_side!(stair, side)(block, StairTextureSlice(6, 14, 6, 14), // birch wood stair
+            case 135: dispatch_single_side!(stair, side)(block, ProjTextureSlice(6, 14, 6, 14), // birch wood stair
                       biome_data, x_offset, y_offset, z_offset); break;
-            case 136: dispatch_single_side!(stair, side)(block, StairTextureSlice(7, 13, 7, 13), // jungle wood stair
+            case 136: dispatch_single_side!(stair, side)(block, ProjTextureSlice(7, 13, 7, 13), // jungle wood stair
                       biome_data, x_offset, y_offset, z_offset); break;
             default: tessellate_simple_block!(side)(block, biome_data, x_offset, y_offset, z_offset);
         }

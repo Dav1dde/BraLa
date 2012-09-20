@@ -1,39 +1,10 @@
 module brala.dine.builder.vertices_.slabs;
 
 private {
-    import std.math : abs;
-
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.util;
 }
-
-
-struct SlabTextureSlice {
-    enum byte FB = 16;
-    enum byte HB = 8;
-    
-    ubyte x;
-    ubyte y;
-
-    alias texcoords this;
-
-    this(ubyte lower_left_x, ubyte lower_left_y)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
-        body {
-            x = cast(byte)(lower_left_x*FB+HB);
-            y = cast(byte)(lower_left_y*FB-HB);
-        }
-
-    pure:
-    @property ubyte[2][4] texcoords() {
-        return [[cast(ubyte)(x-HB), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y)],
-                [cast(ubyte)(x-HB), cast(ubyte)(y)]];
-    }
-}
-
 
 immutable CubeSideData[6] SLAB_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // near

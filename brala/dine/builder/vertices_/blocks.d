@@ -1,60 +1,10 @@
 module brala.dine.builder.vertices_.blocks;
 
 private {
-    import std.math : abs;
-    
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.util;
 }
-
-
-struct TextureSlice {
-    enum ubyte FB = 16;
-    enum ubyte HB = 8;
-    
-    ubyte x;
-    ubyte y;
-
-    alias texcoords this;
-
-    this(ubyte lower_left_x, ubyte lower_left_y)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
-        body {
-            x = cast(ubyte)(lower_left_x*FB+HB);
-            y = cast(ubyte)(lower_left_y*FB-HB);
-        }
-
-    pure:
-    @property ubyte[2][4] texcoords() {
-        return [[cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)]];
-    }
-
-    @property ubyte[2][4] texcoords_90() {
-        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)]];
-    }
-
-    @property ubyte[2][4] texcoords_180() {
-        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)]];
-    }
-
-    @property ubyte[2][4] texcoords_270() {
-        return [[cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)]];
-    }
-}
-
 
 immutable CubeSideData[6] CUBE_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // near
