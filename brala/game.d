@@ -107,9 +107,10 @@ class BraLaGame : BaseGLFWEventHandler {
         
         display();
         
-        if((engine.timer.get_time() - last_notchian_tick).to!("msecs", int) >= 50) {
+        TickDuration now = engine.timer.get_time();
+        if((now - last_notchian_tick).to!("msecs", int) >= 50) {
             on_notchian_tick();
-            last_notchian_tick = engine.timer.get_time();
+            last_notchian_tick = now;
         }
         
         if(quit || keymap[GLFW_KEY_ESCAPE]) {
