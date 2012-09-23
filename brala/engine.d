@@ -94,11 +94,12 @@ class BraLaEngine {
         bool stop = false;
         timer.start();
         
-        TickDuration last;
+        TickDuration now, last;
         debug TickDuration lastfps = TickDuration(0);
         
         while(!stop) {
-            TickDuration delta_ticks = (timer.get_time() - last);
+            now = timer.get_time();
+            TickDuration delta_ticks = (now - last);
 
             stop = callback(delta_ticks);
         
@@ -110,7 +111,7 @@ class BraLaEngine {
                 }
             }
             
-            last = timer.get_time();
+            last = now;
 
 //             if(void* win = glfwGetCurrentContext()) {
 //                 glfwSwapBuffers(win);
