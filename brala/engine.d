@@ -98,7 +98,7 @@ class BraLaEngine {
         debug TickDuration lastfps = TickDuration(0);
         
         while(!stop) {
-        	now = timer.get_time();
+            now = timer.get_time();
             TickDuration delta_ticks = (now - last);
 
             stop = callback(delta_ticks);
