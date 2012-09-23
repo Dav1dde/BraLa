@@ -22,6 +22,8 @@ class Character { // the one you're playing
     
     int entity_id;
     bool activated;
+
+    float moving_speed = 4.35f; // creative speed
     
     this(int entity_id) {
         cam = new BraLaCamera();

@@ -121,16 +121,16 @@ class BraLaGame : BaseGLFWEventHandler {
     }
     
     bool move(TickDuration delta_t) {
-        float factor_time = delta_t.to!("msecs", float) * 0.02;
+        float movement = delta_t.to!("seconds", float) * character.moving_speed;
 
         bool moved = false;
 
-        if(keymap[MOVE_FORWARD])  character.move_forward( factor_time); moved = true;
-        if(keymap[MOVE_BACKWARD]) character.move_backward(factor_time); moved = true;
-        if(keymap[STRAFE_LEFT])  character.strafe_left( factor_time); moved = true;
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(factor_time); moved = true;
-        if(mouse_offset.x != 0) character.rotatex(-factor_time * mouse_offset.x); moved = true;
-        if(mouse_offset.y != 0) character.rotatey(factor_time * mouse_offset.y); moved = true;
+        if(keymap[MOVE_FORWARD])  character.move_forward(movement); moved = true;
+        if(keymap[MOVE_BACKWARD]) character.move_backward(movement); moved = true;
+        if(keymap[STRAFE_LEFT])  character.strafe_left(movement); moved = true;
+        if(keymap[STRAFE_RIGHT]) character.strafe_right(movement); moved = true;
+        if(mouse_offset.x != 0) character.rotatex(-movement * mouse_offset.x); moved = true;
+        if(mouse_offset.y != 0) character.rotatey(movement * mouse_offset.y); moved = true;
         mouse_offset.x = 0;
         mouse_offset.y = 0;
         
