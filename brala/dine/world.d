@@ -354,7 +354,7 @@ class World {
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
             GLuint mask = engine.current_shader.get_attrib_location("mask");
 
-            uint stride = Vertex.sizeof;
+            enum stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
             chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 24, stride, true); // normalize it
