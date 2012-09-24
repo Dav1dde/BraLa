@@ -2,7 +2,7 @@
 
 vertex:
     in vec3 position;
-    in vec3 normal;
+//     in vec3 normal;
     in vec4 color;
     in vec2 texcoord;
     in vec2 mask;
@@ -21,8 +21,8 @@ vertex:
         vec4 view_pos = view * model * vec4(position, 1.0);
         v_position = view_pos.xyz;
         
-        mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
-        v_normal = v * normal;
+//         mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
+//         v_normal = v * normal;
         
         v_color = color;
         v_texcoord = texcoord/256;
@@ -32,7 +32,7 @@ vertex:
     }
 
 fragment:
-    in vec3 v_normal;
+//     in vec3 v_normal;
     in vec3 v_position;
     in vec4 v_color;
     in vec2 v_texcoord;

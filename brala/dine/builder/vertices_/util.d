@@ -53,7 +53,7 @@ package string mk_vertices_adv(string tri_func, bool rotate = false) pure {
 
     foreach(i; 0..6) {
         data[i] = Vertex(positions[i][0], positions[i][1], positions[i][2],
-                         cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+//                          cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
                          0, 0, 0, 0,
                          texcoords[i][0], texcoords[i][1],
                          mask[i][0], mask[i][1]);
@@ -83,7 +83,7 @@ package string mk_stair_vertex(string v) pure {
 
         foreach(i; 0..6) {
             ret ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
-                          cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+//                           cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
                           0, 0, 0, 0,
                           texcoords[i][0], texcoords[i][1],
                           mask[i][0], mask[i][1]);

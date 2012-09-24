@@ -74,7 +74,7 @@ Vertex[] farmland_block(Side side, ProjTextureSlice texture_slice) pure {
 
     foreach(i; 0..6) {
         data[i] = Vertex(positions[i][0], positions[i][1], positions[i][2],
-                         cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
+//                          cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
                          0, 0, 0, 0,
                          texcoords[i][0], texcoords[i][1],
                          texcoords[i][0], texcoords[i][1]);

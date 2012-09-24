@@ -356,10 +356,10 @@ class World {
 
             enum stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
-            chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
-            chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 24, stride, true); // normalize it
-            chunk.vbo.bind(texcoord, GL_SHORT, 2, 28, stride);
-            chunk.vbo.bind(mask, GL_SHORT, 2, 32, stride);
+//             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
+            chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 12, stride, true); // normalize it
+            chunk.vbo.bind(texcoord, GL_SHORT, 2, 16, stride);
+            chunk.vbo.bind(mask, GL_SHORT, 2, 20, stride);
         }
     
     void draw(BraLaEngine engine) {
