@@ -359,7 +359,7 @@ class World {
             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
             chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 24, stride, true); // normalize it
             chunk.vbo.bind(texcoord, GL_SHORT, 2, 28, stride);
-            chunk.vbo.bind(mask, GL_SHORT, 2, 30, stride);
+            chunk.vbo.bind(mask, GL_SHORT, 2, 32, stride);
         }
     
     void draw(BraLaEngine engine) {
