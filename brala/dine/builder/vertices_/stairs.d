@@ -59,8 +59,8 @@ Vertex[] simple_stair(Side s, Facing face, bool upside_down, ProjTextureSlice te
 
     CubeSideData cbsd;
     float[3][6] positions;
-    ubyte[2][6] texcoords;
-    ubyte[2][6] mask;
+    short[2][6] texcoords;
+    short[2][6] mask;
 
     final switch(s) {
         case Side.NEAR: {

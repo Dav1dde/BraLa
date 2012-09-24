@@ -40,11 +40,11 @@ private CubeSideData[6] upside_down_slabs() {
     return ret;
 }
 
-Vertex[] simple_slab(Side side, bool upside_down, ubyte[2][4] texture_slice) pure {
+Vertex[] simple_slab(Side side, bool upside_down, short[2][4] texture_slice) pure {
     return simple_slab(side, upside_down, texture_slice, nslice);
 }
 
-Vertex[] simple_slab(Side side, bool upside_down, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice) pure {
+Vertex[] simple_slab(Side side, bool upside_down, short[2][4] texture_slice, short[2][4] mask_slice) pure {
     CubeSideData cbsd;
     if(upside_down) {
         cbsd = SLAB_VERTICES_UPSIDEDOWN[side];

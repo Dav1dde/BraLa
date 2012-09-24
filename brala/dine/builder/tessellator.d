@@ -16,8 +16,7 @@ private {
 }
 
 
-align(1) struct Vertex {
-    align(1):
+struct Vertex {
     float x;
     float y;
     float z;
@@ -28,12 +27,13 @@ align(1) struct Vertex {
     ubyte g;
     ubyte b;
     ubyte a;
-    ubyte u_terrain;
-    ubyte v_terrain;
-    ubyte u_mask;
-    ubyte v_mask;
-    float pad; // I have no idea why you need that padding
+    short u_terrain;
+    short v_terrain;
+    short u_mask;
+    short v_mask;
 }
+
+static assert(Vertex.sizeof % 4 == 0, "Vertex size must be multiple of 4");
 
 
 struct Tessellator {

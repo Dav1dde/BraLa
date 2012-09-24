@@ -7,98 +7,98 @@ private {
 }
 
 struct TextureSlice {
-    enum ubyte FB = 16;
-    enum ubyte HB = 8;
+    enum short FB = 16;
+    enum short HB = 8;
 
-    ubyte x;
-    ubyte y;
+    short x;
+    short y;
 
     alias texcoords this;
 
-    this(ubyte lower_left_x, ubyte lower_left_y)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
+    this(short lower_left_x, short lower_left_y)
+        in { assert(abs(lower_left_x*FB) <= short.max && abs(lower_left_y*FB) <= short.max); }
         body {
-            x = cast(ubyte)(lower_left_x*FB+HB);
-            y = cast(ubyte)(lower_left_y*FB-HB);
+            x = cast(short)(lower_left_x*FB+HB);
+            y = cast(short)(lower_left_y*FB-HB);
         }
 
     pure:
-    @property ubyte[2][4] texcoords() {
-        return [[cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)]];
+    @property short[2][4] texcoords() {
+        return [[cast(short)(x-HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y-HB)]];
     }
 
-    @property ubyte[2][4] texcoords_90() {
-        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)]];
+    @property short[2][4] texcoords_90() {
+        return [[cast(short)(x+HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y+HB)]];
     }
 
-    @property ubyte[2][4] texcoords_180() {
-        return [[cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)]];
+    @property short[2][4] texcoords_180() {
+        return [[cast(short)(x+HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y+HB)]];
     }
 
-    @property ubyte[2][4] texcoords_270() {
-        return [[cast(ubyte)(x-HB),   cast(ubyte)(y-HB)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y-HB)]];
+    @property short[2][4] texcoords_270() {
+        return [[cast(short)(x-HB), cast(short)(y-HB)],
+                [cast(short)(x-HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y-HB)]];
     }
 }
 
 
 struct SlabTextureSlice {
-    enum byte FB = 16;
-    enum byte HB = 8;
+    enum short FB = 16;
+    enum short HB = 8;
 
-    ubyte x;
-    ubyte y;
+    short x;
+    short y;
 
     alias texcoords this;
 
-    this(ubyte lower_left_x, ubyte lower_left_y)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
+    this(short lower_left_x, short lower_left_y)
+        in { assert(abs(lower_left_x*FB) <= short.max && abs(lower_left_y*FB) <= short.max); }
         body {
             x = cast(byte)(lower_left_x*FB+HB);
             y = cast(byte)(lower_left_y*FB-HB);
         }
 
     pure:
-    @property ubyte[2][4] texcoords() {
-        return [[cast(ubyte)(x-HB),   cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y+HB-1)],
-                [cast(ubyte)(x+HB-1), cast(ubyte)(y)],
-                [cast(ubyte)(x-HB),   cast(ubyte)(y)]];
+    @property short[2][4] texcoords() {
+        return [[cast(short)(x-HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y+HB)],
+                [cast(short)(x+HB), cast(short)(y)],
+                [cast(short)(x-HB), cast(short)(y)]];
     }
 }
 
 
 struct ProjTextureSlice {
-    enum ubyte FB = 16;
-    enum ubyte HB = 8;
+    enum short FB = 16;
+    enum short HB = 8;
 
-    ubyte x;
-    ubyte y;
+    short x;
+    short y;
 
-    ubyte x2; // normal y+
-    ubyte y2;
+    short x2; // normal y+
+    short y2;
 
-    ubyte x3; // normal y-
-    ubyte y3;
+    short x3; // normal y-
+    short y3;
 
     private int rotation;
 
-    this(ubyte lower_left_x, ubyte lower_left_y)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max); }
+    this(short lower_left_x, short lower_left_y)
+        in { assert(abs(lower_left_x*FB) <= short.max && abs(lower_left_y*FB) <= short.max); }
         body {
-            x = cast(ubyte)(lower_left_x*FB+HB);
-            y = cast(ubyte)(lower_left_y*FB-HB);
+            x = cast(short)(lower_left_x*FB+HB);
+            y = cast(short)(lower_left_y*FB-HB);
 
             x2 = x;
             y2 = y;
@@ -107,37 +107,37 @@ struct ProjTextureSlice {
             y3 = y;
         }
 
-    this(ubyte lower_left_x, ubyte lower_left_y, ubyte lower_left_x2, ubyte lower_left_y2)
-        in { assert(abs(lower_left_x*FB) <= ubyte.max && abs(lower_left_y*FB) <= ubyte.max);
-             assert(abs(lower_left_x2*FB) <= ubyte.max && abs(lower_left_y2*FB) <= ubyte.max); }
+    this(short lower_left_x, short lower_left_y, short lower_left_x2, short lower_left_y2)
+        in { assert(abs(lower_left_x*FB) <= short.max && abs(lower_left_y*FB) <= short.max);
+             assert(abs(lower_left_x2*FB) <= short.max && abs(lower_left_y2*FB) <= short.max); }
         body {
-            x = cast(ubyte)(lower_left_x*FB+HB);
-            y = cast(ubyte)(lower_left_y*FB-HB);
+            x = cast(short)(lower_left_x*FB+HB);
+            y = cast(short)(lower_left_y*FB-HB);
 
-            x2 = cast(ubyte)(lower_left_x2*FB+HB);
-            y2 = cast(ubyte)(lower_left_y2*FB-HB);
+            x2 = cast(short)(lower_left_x2*FB+HB);
+            y2 = cast(short)(lower_left_y2*FB-HB);
 
             x3 = x;
             y3 = y;
         }
 
-    this(ubyte lower_left_x, ubyte lower_left_y, ubyte lower_left_x2, ubyte lower_left_y2,
-         ubyte lower_left_x3, ubyte lower_left_y3)
-        in { assert(abs(lower_left_x3*FB) <= ubyte.max && abs(lower_left_y3*FB) <= ubyte.max); }
+    this(short lower_left_x, short lower_left_y, short lower_left_x2, short lower_left_y2,
+         short lower_left_x3, short lower_left_y3)
+        in { assert(abs(lower_left_x3*FB) <= short.max && abs(lower_left_y3*FB) <= short.max); }
         body {
             this(lower_left_x, lower_left_y, lower_left_x2, lower_left_y2);
 
-            x3 = cast(ubyte)(lower_left_x3*FB+HB);
-            y3 = cast(ubyte)(lower_left_y3*FB-HB);
+            x3 = cast(short)(lower_left_x3*FB+HB);
+            y3 = cast(short)(lower_left_y3*FB-HB);
         }
 
     pure:
-    ubyte[2][4] project_on_cbsd(CubeSideData cbsd) {
+    short[2][4] project_on_cbsd(CubeSideData cbsd) {
         // an normale erkennbar welche koordinate fix ist
-        // die koodinaten zu UVs umformen? cast(ubyte)(foo*2)?
+        // die koodinaten zu UVs umformen? cast(short)(foo*2)?
 
-        ubyte x = this.x;
-        ubyte y = this.y;
+        short x = this.x;
+        short y = this.y;
 
         size_t index_1;
         size_t index_2;
@@ -179,11 +179,11 @@ struct ProjTextureSlice {
             assert(false, "normal not supported");
         }
 
-        ubyte[2][4] ret;
+        short[2][4] ret;
 
         foreach(i, ref vertex; cbsd.positions) {
-            ret[i][0] = cast(ubyte)(x + vertex[index_1]*FB*n);
-            ret[i][1] = cast(ubyte)(y + vertex[index_2]*FB*s);
+            ret[i][0] = cast(short)(x + vertex[index_1]*FB*n);
+            ret[i][1] = cast(short)(y + vertex[index_2]*FB*s);
         }
 
         return ret;

@@ -19,10 +19,10 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
 
 
 // stuipid dmd bug ...
-/+package+/ const ubyte[2][4] nslice = [[cast(ubyte)-1, cast(ubyte)-1],
-                                        [cast(ubyte)-1, cast(ubyte)-1],
-                                        [cast(ubyte)-1, cast(ubyte)-1],
-                                        [cast(ubyte)-1, cast(ubyte)-1]];
+/+package+/ const short[2][4] nslice = [[cast(short)-1, cast(short)-1],
+                                        [cast(short)-1, cast(short)-1],
+                                        [cast(short)-1, cast(short)-1],
+                                        [cast(short)-1, cast(short)-1]];
 
 // stuipid dmd bug ...
 /+package+/ enum mk_vertices = mk_vertices_adv(`to_triangles`);
@@ -41,8 +41,8 @@ package string mk_vertices_adv(string tri_func, bool rotate = false) pure {
 
     return r ~ `
     float[3][6] positions = ` ~ tri_func ~ `(cbsd.positions);
-    ubyte[2][6] texcoords = ` ~ tri_func ~ `(texture_slice);
-    ubyte[2][6] mask;
+    short[2][6] texcoords = ` ~ tri_func ~ `(texture_slice);
+    short[2][6] mask;
     if(mask_slice == nslice) {
         mask = texcoords;
     } else {
@@ -161,24 +161,24 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     return cbsd;
 }
 
-void rotate_90(ref byte[2][4] inp) pure {
+void rotate_90(ref short[2][4] inp) pure {
     foreach(ref t; inp) {
-        byte x = t[0];
+        short x = t[0];
         t[0] = -t[1];
         t[1] = x;
     }
 }
 
-void rotate_180(ref byte[2][4] inp) pure {
+void rotate_180(ref short[2][4] inp) pure {
     foreach(ref t; inp) {
         t[0] = -t[0];
         t[1] = -t[1];
     }
 }
 
-void rotate_270(ref byte[2][4] inp) pure {
+void rotate_270(ref short[2][4] inp) pure {
     foreach(ref t; inp) {
-        byte x = t[0];
+        short x = t[0];
         t[0] = t[1];
         t[1] = -x;
     }

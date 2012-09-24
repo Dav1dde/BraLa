@@ -28,15 +28,15 @@ immutable CubeSideData[6] CUBE_VERTICES = [
 ];
 
 
-Vertex[] simple_block(Side side, ubyte[2][4] texture_slice) pure {
+Vertex[] simple_block(Side side, short[2][4] texture_slice) pure {
     return simple_block(side, texture_slice, nslice, Facing.SOUTH);
 }
 
-Vertex[] simple_block(Side side, ubyte[2][4] texture_slice, Facing face) pure {
+Vertex[] simple_block(Side side, short[2][4] texture_slice, Facing face) pure {
     return simple_block(side, texture_slice, nslice, face);
 }
 
-Vertex[] simple_block(Side side, ubyte[2][4] texture_slice, ubyte[2][4] mask_slice, Facing face) pure {
+Vertex[] simple_block(Side side, short[2][4] texture_slice, short[2][4] mask_slice, Facing face) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 
     mixin(mk_vertices_adv("to_triangles", true));
@@ -68,7 +68,7 @@ Vertex[] farmland_block(Side side, ProjTextureSlice texture_slice) pure {
     CubeSideData cbsd = CUBE_VERTICES_FARMLAND[side];
     
     float[3][6] positions = to_triangles(cbsd.positions);
-    ubyte[2][6] texcoords = to_triangles(texture_slice.project_on_cbsd(cbsd));
+    short[2][6] texcoords = to_triangles(texture_slice.project_on_cbsd(cbsd));
 
     Vertex[6] data;
 
