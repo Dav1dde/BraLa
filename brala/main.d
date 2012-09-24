@@ -53,6 +53,7 @@ GLFWwindow open_glfw_win(int width, int height) {
     glfwMakeContextCurrent(_window);
 
     glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    glfwSetInputMode(_window, GLFW_SYSTEM_KEYS, 1);
 
     glfwSwapInterval(0); // change this to 1?
 
