@@ -7,6 +7,9 @@ vertex:
     in vec2 texcoord;
     in vec2 mask;
 
+    in float sky_light;
+    in float block_light;
+
     out vec3 v_position;
     out vec3 v_normal;
     out vec4 v_color;

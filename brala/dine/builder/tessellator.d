@@ -31,6 +31,9 @@ struct Vertex {
     short v_terrain;
     short u_mask;
     short v_mask;
+    byte sky_light;
+    byte block_light;
+    short pad;
 }
 
 static assert(Vertex.sizeof % 4 == 0, "Vertex size must be multiple of 4");

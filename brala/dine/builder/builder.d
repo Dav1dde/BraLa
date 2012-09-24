@@ -30,6 +30,7 @@ protected {
 
 mixin template BlockBuilder() {
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
+                               const ref Block block,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
         in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
@@ -47,6 +48,8 @@ mixin template BlockBuilder() {
                 vertex.g = g;
                 vertex.b = b;
                 vertex.a = a;
+                vertex.sky_light = block.sky_light;
+                vertex.block_light = block.block_light;
             }
         }
 
@@ -61,7 +64,7 @@ mixin template BlockBuilder() {
                              float x_offset, float y_offset, float z_offset) {
         Vertex[] vertices = get_vertices!(s)(block.id);
 
-        add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.grass.field);
+        add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.grass.field);
     }
 
     void plank_block(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -128,7 +131,7 @@ mixin template BlockBuilder() {
         }
         
         auto sb = memoize!(simple_block, 16)(s, texcoords); // memoize is faster!
-        add_template_vertices(sb, x_offset, y_offset, z_offset);
+        add_template_vertices(sb, block, x_offset, y_offset, z_offset);
     }
         
     void leave_block(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -136,14 +139,14 @@ mixin template BlockBuilder() {
 
         final switch(block.metadata & 0x03) {
             case 0: enum vertices = simple_block(s, TextureSlice(5, 4)); // oak
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
+                    add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 1: enum vertices = simple_block(s, TextureSlice(5, 9)); // spruce
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
+                    add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 2: enum vertices = simple_block(s, TextureSlice(5, 4)); // birch, uses oak texture
                     // birch trees have a different biome color?
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
+                    add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
             case 3: enum vertices = simple_block(s, TextureSlice(5, 13)); // jungle
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
+                    add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.leave.field); break;
         }
     }
 
@@ -171,7 +174,7 @@ mixin template BlockBuilder() {
         static string wool_vertices() {
                     // no enum possible due to CTFE bug?
             return `auto vertices = memoize!(simple_block, 16)(s, TextureSlice(slice.x, slice.y).texcoords);
-                    add_template_vertices(vertices, x_offset, y_offset, z_offset);`;
+                    add_template_vertices(vertices, block, x_offset, y_offset, z_offset);`;
         }
 
         alias WoolPair t;
@@ -266,7 +269,7 @@ mixin template BlockBuilder() {
         Facing f = fs[block.metadata & 0x3];
         bool upside_down = (block.metadata & 0x4) != 0;
 
-        add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), x_offset, y_offset, z_offset);
+        add_template_vertices(memoize!(simple_stair, 72)(s, f, upside_down, tex), block, x_offset, y_offset, z_offset);
     }
 
     void wheat(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -276,7 +279,7 @@ mixin template BlockBuilder() {
         x += block.metadata & 0x7;
         //y_offset -= 0.0625f; // 1/16.0
 
-        add_template_vertices(simple_food_plant(TextureSlice(x, 6)), x_offset, y_offset, z_offset);
+        add_template_vertices(simple_food_plant(TextureSlice(x, 6)), block, x_offset, y_offset, z_offset);
     }
 
     void farmland(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -284,14 +287,14 @@ mixin template BlockBuilder() {
         static if(s == Side.TOP) {
             if(block.metadata == 0) { // dry
                 enum fb = farmland_block(s, ProjTextureSlice(7, 6));
-                add_template_vertices(fb, x_offset, y_offset, z_offset);
+                add_template_vertices(fb, block, x_offset, y_offset, z_offset);
             } else { // wet
                 enum fb = farmland_block(s, ProjTextureSlice(6, 6));
-                add_template_vertices(fb, x_offset, y_offset, z_offset);
+                add_template_vertices(fb, block, x_offset, y_offset, z_offset);
             }
         } else {
             enum fb = farmland_block(s, ProjTextureSlice(2, 1));
-            add_template_vertices(fb, x_offset, y_offset, z_offset);
+            add_template_vertices(fb, block, x_offset, y_offset, z_offset);
         }
     }
 
@@ -302,7 +305,7 @@ mixin template BlockBuilder() {
         Facing f = fs[block.metadata & 0x3];
 
         if(cast(Side)f == s) { // special side
-            add_template_vertices(simple_block(s, mixin(tex)), x_offset, y_offset, z_offset);
+            add_template_vertices(simple_block(s, mixin(tex)), block, x_offset, y_offset, z_offset);
         } else {
             tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
         }
@@ -325,13 +328,13 @@ mixin template BlockBuilder() {
         Facing f = fs[block.metadata & 0x3];
 
         static if(s == Side.TOP) {
-            add_template_vertices(simple_block(s, TextureSlice(6, 7), f), x_offset, y_offset, z_offset);
+            add_template_vertices(simple_block(s, TextureSlice(6, 7), f), block, x_offset, y_offset, z_offset);
         } else {
             if(cast(Side)f == s) { // side with the face
                 static if(is_jako) { // it's a jako lantern
-                    add_template_vertices(simple_block(s, TextureSlice(8, 8)), x_offset, y_offset, z_offset);
+                    add_template_vertices(simple_block(s, TextureSlice(8, 8)), block, x_offset, y_offset, z_offset);
                 } else {
-                    add_template_vertices(simple_block(s, TextureSlice(7, 8)), x_offset, y_offset, z_offset);
+                    add_template_vertices(simple_block(s, TextureSlice(7, 8)), block, x_offset, y_offset, z_offset);
                 }
             } else {
                 tessellate_simple_block!(s)(block, biome_data, x_offset, y_offset, z_offset);
@@ -346,7 +349,7 @@ mixin template BlockBuilder() {
 
     void plant(Side s)(const ref Block block, short[2][4] tex, const ref BiomeData biome_data,
                        float x_offset, float y_offset, float z_offset) {
-        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
+        add_template_vertices(simple_plant(tex), block, x_offset, y_offset, z_offset);
     }
 
     void saplings(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -360,7 +363,7 @@ mixin template BlockBuilder() {
             case 3: tex = TextureSlice(14, 2); break;
         }
 
-        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset);
+        add_template_vertices(simple_plant(tex), block, x_offset, y_offset, z_offset);
     }
 
     void tall_grass(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -375,7 +378,7 @@ mixin template BlockBuilder() {
             case 3: tex = TextureSlice(7, 3); color = biome_data.color.grass; break;
         }
 
-        add_template_vertices(simple_plant(tex), x_offset, y_offset, z_offset, color.field);
+        add_template_vertices(simple_plant(tex), block, x_offset, y_offset, z_offset, color.field);
     }
 
     void stem(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -409,14 +412,14 @@ mixin template BlockBuilder() {
         }
 
         if(render_stem2) {
-            add_template_vertices(side_stem(face, stem2), x_offset, y_offset, z_offset, color.field);
+            add_template_vertices(side_stem(face, stem2), block, x_offset, y_offset, z_offset, color.field);
             y_offset -= 0.4f;
         }
 
         y_offset -= 0.1f;
         y_offset -= (7-block.metadata)/10.0f;
 
-        add_template_vertices(simple_plant(stem, face), x_offset, y_offset, z_offset, color.field);
+        add_template_vertices(simple_plant(stem, face), block, x_offset, y_offset, z_offset, color.field);
     }
 
     void nether_wart(Side s)(const ref Block block, const ref BiomeData biome_data,
@@ -425,7 +428,7 @@ mixin template BlockBuilder() {
 
         byte x = cast(byte)(2 + stages[block.metadata & 0x3]);
 
-        return add_template_vertices(simple_food_plant(TextureSlice(x, 15)), x_offset, y_offset, z_offset);
+        return add_template_vertices(simple_food_plant(TextureSlice(x, 15)), block, x_offset, y_offset, z_offset);
     }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -510,17 +513,17 @@ mixin template BlockBuilder() {
     void tessellate_simple_block(Side side)(const ref Block block, const ref BiomeData biome_data,
                                             float x_offset, float y_offset, float z_offset) {
         static if(side == Side.LEFT) {
-            add_template_vertices(BLOCK_VERTICES_LEFT[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_LEFT[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.RIGHT) {
-            add_template_vertices(BLOCK_VERTICES_RIGHT[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_RIGHT[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.NEAR) {
-            add_template_vertices(BLOCK_VERTICES_NEAR[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_NEAR[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.FAR) {
-            add_template_vertices(BLOCK_VERTICES_FAR[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_FAR[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.TOP) {
-            add_template_vertices(BLOCK_VERTICES_TOP[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_TOP[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.BOTTOM) {
-            add_template_vertices(BLOCK_VERTICES_BOTTOM[block.id], x_offset, y_offset, z_offset);
+            add_template_vertices(BLOCK_VERTICES_BOTTOM[block.id], block, x_offset, y_offset, z_offset);
         } else static if(side == Side.ALL) {
             tessellate_simple_block!(Side.LEFT)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.RIGHT)(block, biome_data, x_offset, y_offset, z_offset);
@@ -534,7 +537,7 @@ mixin template BlockBuilder() {
 
 static string add_block_enum_vertices(string x, string y) {
     return `enum vertices = simple_block(s, TextureSlice(` ~ x ~ `, ` ~ y ~ `).texcoords);
-            add_template_vertices(vertices, x_offset, y_offset, z_offset);`;
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset);`;
 }
 
 static string add_slab_enum_vertices(Side s, string x, string y) {
@@ -549,9 +552,9 @@ static string add_slab_enum_vertices(Side s, string x, string y) {
     
     return  v ~ `
             if(upside_down) {
-                add_template_vertices(vertices_usd, x_offset, y_offset, z_offset);
+                add_template_vertices(vertices_usd, block, x_offset, y_offset, z_offset);
             } else {
-                add_template_vertices(vertices, x_offset, y_offset, z_offset);
+                add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
             }`;
 }
 
