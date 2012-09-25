@@ -390,7 +390,7 @@ class World {
             }
         }
 
-//         auto frustum = engine.frustum;
+        auto frustum = engine.frustum;
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {

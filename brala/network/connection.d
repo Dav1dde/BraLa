@@ -195,8 +195,6 @@ class Connection {
         auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
                                                    Array!(short, ubyte)(enc_verify_token));
         enc_key.send(endianstream);
-
-        assert(false);
     }
 
     protected void on_packet(T : s.EncryptionKeyResponse)(T packet) {        
