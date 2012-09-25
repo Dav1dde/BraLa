@@ -65,7 +65,7 @@ class Connection {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
-        endianstream = new EndianStream(new LoggingStream(socketstream, stderr), Endian.bigEndian);
+//         endianstream = new EndianStream(new LoggingStream(socketstream, stderr), Endian.bigEndian);
         queue = new Queue!IPacket();
         
         session = new Session(username, password);
