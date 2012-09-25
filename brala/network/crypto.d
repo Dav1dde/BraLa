@@ -48,6 +48,18 @@ ubyte[] get_random(size_t size) {
     return rand;
 }
 
+ubyte[] get_random_max(size_t size, ubyte max) {
+    ubyte[] random = get_random(size);
+
+    foreach(ref b; random) {
+        if(b >= max) {
+            b = cast(ubyte)(max-1);
+        }
+    }
+
+    return random;
+}
+
 class PBEWithMD5AndDES {
     protected ubyte[] key;
     protected ubyte[] IV;

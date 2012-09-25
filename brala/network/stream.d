@@ -2,6 +2,9 @@ module brala.network.stream;
 
 private {
     import std.stream : Stream, FilterStream, BufferedStream;
+    import std.stdio : File;
+
+    import brala.network.util : hexdump;
 }
 
 class AESStream(AES) : FilterStream {
@@ -92,3 +95,35 @@ class AESStream(AES) : FilterStream {
     }
 }
 
+
+class LoggingStream : FilterStream {
+    bool log_read = true;
+    bool log_write = true;
+    File logger;
+    
+    this(Stream stream, File logger) {
+        super(stream);
+
+        this.logger = logger;
+    }
+
+    override size_t readBlock(void* result, size_t size) {
+        size_t r = super.readBlock(result, size);
+
+        if(log_read) {
+            logger.write(hexdump((cast(ubyte*)result)[0..r]));
+        }
+
+        return r;
+    }
+
+    override size_t writeBlock(const void* buffer, size_t size) {
+        size_t r = super.writeBlock(buffer, size);
+        
+        if(log_write) {
+            logger.write(hexdump((cast(ubyte*)buffer)[0..r]));
+        }
+
+        return r;
+    }
+}

@@ -7,6 +7,9 @@ private {
     import std.traits : isArray, isStaticArray, isDynamicArray;
     import std.algorithm : map;
     import std.format : formattedWrite;
+    import std.string : format;
+    import std.range : repeat;
+    import std.conv : to;
     import std.array : join, appender;
     import std.range : ElementEncodingType;
     import std.utf : toUTF16, toUTF8;
@@ -144,6 +147,33 @@ string to_hexdigest(ubyte[] inp) {
 
     foreach(b; inp) {
         formattedWrite(app, "%02x", b);
+    }
+
+    return app.data;
+}
+
+
+string hexdump(ubyte[] src, size_t length=8) {
+    size_t N = 0;
+    auto app = appender!string();
+
+    size_t length_ = length;
+    while(src.length) {
+        if(src.length < length_) {
+            length_ = src.length;
+        }
+        
+        ubyte[] s = src[0..length_]; // length inside a slice is deprecated...
+        src = src[length_..$];
+
+        auto hex = s.map!(x => "%02X".format(x))().join(" ");
+        auto dec = s.map!(x => "%03d".format(cast(byte)x))().join(" ");
+        auto text = s.map!(x => to!string(x > 47 && x < 128 ? cast(char)x : '.'))().join(" ");
+        auto filler1 = " ".repeat((length-length_)*2).join("");
+        auto filler2 = " ".repeat((length-length_)*3).join("");
+
+        app.put("%04X   %s%s   %s%s   %s\n".format(N, dec, filler2, hex, filler1, text));
+        N += length_;
     }
 
     return app.data;

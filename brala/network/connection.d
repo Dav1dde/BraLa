@@ -17,15 +17,16 @@ private {
     import std.conv : to;
     import std.typecons : tuple;
     import std.system : os;
+    import std.stdio : stderr;
 
     import brala.exception : ConnectionError, ServerError, SessionError;
     import brala.network.session : Session;
-    import brala.network.stream : AESStream;
+    import brala.network.stream : AESStream, LoggingStream;
     import brala.network.util : read, write;
     import brala.network.packets.types : IPacket, Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
-    import brala.network.crypto : decode_public, encrypt, seed_prng, get_random;
+    import brala.network.crypto : decode_public, encrypt, seed_prng, get_random, get_random_max;
     import brala.utils.queue : Queue;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Timer;
@@ -64,6 +65,7 @@ class Connection {
         socket = new TcpSocket();
         socketstream = new SocketStream(socket);
         endianstream = new EndianStream(socketstream, Endian.bigEndian);
+        endianstream = new EndianStream(new LoggingStream(socketstream, stderr), Endian.bigEndian);
         queue = new Queue!IPacket();
         
         session = new Session(username, password);
@@ -175,7 +177,14 @@ class Connection {
 
         ubyte[] enc_verify_token = rsa.encrypt(packet.verify_token.arr);
         seed_prng();
+        
         this.shared_secret = get_random(16);
+//         this.shared_secret = [cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
+//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
+//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
+//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0];
+//         this.shared_secret = get_random_max(16, 12);
+
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
 
         if(packet.server_id != "-") {
@@ -186,6 +195,8 @@ class Connection {
         auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
                                                    Array!(short, ubyte)(enc_verify_token));
         enc_key.send(endianstream);
+
+        assert(false);
     }
 
     protected void on_packet(T : s.EncryptionKeyResponse)(T packet) {        
