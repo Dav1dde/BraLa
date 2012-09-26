@@ -388,7 +388,7 @@ class World {
             }
         }
 
-//         auto frustum = engine.frustum;
+        auto frustum = engine.frustum;
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
@@ -401,14 +401,14 @@ class World {
             if(chunk.vbo !is null) {
                 vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
-//                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-//                 if(aabb in frustum) {
+                AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+                if(aabb in frustum) {
                     bind(engine, chunk);
 
                     engine.flush_uniforms();
 
                     glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
-//                 }
+                }
             }
         }
     }
