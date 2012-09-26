@@ -14,6 +14,7 @@ public import brala.dine.builder.vertices_.stairs;
 public import brala.dine.builder.vertices_.plants;
 
 
+
 struct CubeSideData {
     float[3][4] positions; // 3*4, it's a cube!
     float[3] normal;
@@ -121,7 +122,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_LEFT = [
     [], // snow
     simple_block_(Side.LEFT, t(3, 5)), // ice
     simple_block_(Side.LEFT, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.LEFT, t(6, 5)), // cactus
     simple_block_(Side.LEFT, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.LEFT, t(10, 5)), // jukebox
@@ -263,7 +264,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_RIGHT = [
     [], // snow
     simple_block_(Side.RIGHT, t(3, 5)), // ice
     simple_block_(Side.RIGHT, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.RIGHT, t(6, 5)), // cactus
     simple_block_(Side.RIGHT, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.RIGHT, t(10, 5)), // jukebox
@@ -405,7 +406,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_NEAR = [
     [], // snow
     simple_block_(Side.NEAR, t(3, 5)), // ice
     simple_block_(Side.NEAR, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.NEAR, t(6, 5)), // cactus
     simple_block_(Side.NEAR, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.NEAR, t(10, 5)), // jukebox
@@ -547,7 +548,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_FAR = [
     [], // snow
     simple_block_(Side.FAR, t(3, 5)), // ice
     simple_block_(Side.FAR, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.FAR, t(6, 5)), // cactus
     simple_block_(Side.FAR, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.FAR, t(10, 5)), // jukebox
@@ -689,7 +690,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // snow
     simple_block_(Side.TOP, t(3, 5)), // ice
     simple_block_(Side.TOP, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.TOP, t(5, 5)), // cactus
     simple_block_(Side.TOP, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.TOP, t(11, 5)), // jukebox
@@ -831,7 +832,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // snow
     simple_block_(Side.BOTTOM, t(3, 5)), // ice
     simple_block_(Side.BOTTOM, t(2, 5)), // snow block
-    [], // cactus
+    cactus_block(Side.BOTTOM, t(7, 5)), // cactus
     simple_block_(Side.BOTTOM, t(8, 5)), // clay block
     [], // sugar cane
     simple_block_(Side.BOTTOM, t(10, 5)), // jukebox

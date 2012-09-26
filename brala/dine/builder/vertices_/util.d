@@ -4,8 +4,7 @@ private {
     import brala.dine.builder.vertices : CubeSideData;
 }
 
-public import brala.dine.builder.constants : Side, Facing;
-
+public import brala.dine.builder.constants;
 
 T[6] to_triangles(T)(T[4] quad) {
     return [quad[0], quad[1], quad[2],
@@ -19,10 +18,10 @@ T[6] to_triangles_other_winding(T)(T[4] quad) {
 
 
 // stuipid dmd bug ...
-/+package+/ const short[2][4] nslice = [[cast(short)-1, cast(short)-1],
-                                        [cast(short)-1, cast(short)-1],
-                                        [cast(short)-1, cast(short)-1],
-                                        [cast(short)-1, cast(short)-1]];
+/+package+/ enum short[2][4] nslice = [[cast(short)-1, cast(short)-1],
+                                       [cast(short)-1, cast(short)-1],
+                                       [cast(short)-1, cast(short)-1],
+                                       [cast(short)-1, cast(short)-1]];
 
 // stuipid dmd bug ...
 /+package+/ enum mk_vertices = mk_vertices_adv(`to_triangles`);

@@ -82,3 +82,32 @@ Vertex[] farmland_block(Side side, ProjTextureSlice texture_slice) pure {
 
     return data.dup;
 }
+
+immutable CubeSideData[6] CUBE_VERTICES_CACTUS = [
+    { [[-0.5f, -0.5f, 0.4375f], [0.5f, -0.5f, 0.4375f], [0.5f, 0.5f, 0.4375f], [-0.5f, 0.5f, 0.4375f]], // near
+       [0.0f, 0.0f, 1.0f] },
+
+    { [[-0.4375f, -0.5f, -0.5f], [-0.4375f, -0.5f, 0.5f], [-0.4375f, 0.5f, 0.5f], [-0.4375f, 0.5f, -0.5f]], // left
+       [-1.0f, 0.0f, 0.0f] },
+
+    { [[0.5f, -0.5f, -0.4375f], [-0.5f, -0.5f, -0.4375f], [-0.5f, 0.5f, -0.4375f], [0.5f, 0.5f, -0.4375f]], // far
+       [0.0f, 0.0f, -1.0f] },
+
+    { [[0.4375f, -0.5f, 0.5f], [0.4375f, -0.5f, -0.5f], [0.4375f, 0.5f, -0.5f], [0.4375f, 0.5f, 0.5f]], // right
+       [1.0f, 0.0f, 0.0f] },
+
+    { [[-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]], // top
+       [0.0f, 1.0f, 0.0f]  },
+
+    { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
+       [0.0f, -1.0f, 0.0f] }
+];
+
+
+Vertex[] cactus_block(Side side, short[2][4] texture_slice) pure {
+    CubeSideData cbsd = CUBE_VERTICES_CACTUS[side];
+    short[2][4] mask_slice = texture_slice;
+
+    mixin(mk_vertices_adv("to_triangles", false));
+    return data.dup;
+}
