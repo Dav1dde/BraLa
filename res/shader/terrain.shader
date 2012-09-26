@@ -7,8 +7,7 @@ vertex:
     in vec2 texcoord;
     in vec2 mask;
 
-    in float sky_light;
-    in float block_light;
+    in vec2 light;
 
     out vec3 v_position;
     out vec3 v_normal;
@@ -16,8 +15,7 @@ vertex:
     out vec2 v_texcoord;
     out vec2 v_mask;
 
-    out float v_sky_light;
-    out float v_block_light;
+    out float v_light;
 
     uniform mat4 model;
     uniform mat4 view;
@@ -34,8 +32,7 @@ vertex:
         v_texcoord = texcoord/256;
         v_mask = mask/256;
 
-        v_sky_light = sky_light;
-        v_block_light = block_light;
+        //v_light = clamp(light.x+light.y, 0, 15)/15;
         
         gl_Position = proj * view_pos;
     }
@@ -47,8 +44,7 @@ fragment:
     in vec2 v_texcoord;
     in vec2 v_mask;
 
-    in float v_sky_light;
-    in float v_block_light;
+    in float v_light;
 
     uniform sampler2D terrain;
 
@@ -57,14 +53,12 @@ fragment:
     void main() {
         vec4 color = texture(terrain, v_texcoord);
 
-        float rl = (v_sky_light + v_block_light)/30;
-
         if(color.a < 0.1) {
             discard;
         } else {
             float alpha = texture(terrain, v_mask).a;
 
-            color_out = mix(color, color*v_color, alpha) * vec4(1, 1, 1, rl);
+            color_out = mix(color, color*v_color, alpha)/* * vec4(v_light)*/;
             //color_out = mix(color, color*v_color, alpha); // haha, this is slower than the line above
             //color_out = vec4(v_normal, 1.0);
         }

@@ -353,17 +353,15 @@ class World {
             GLuint color = engine.current_shader.get_attrib_location("color");
             GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
             GLuint mask = engine.current_shader.get_attrib_location("mask");
-            GLuint sky_light = engine.current_shader.get_attrib_location("sky_light");
-            GLuint block_light = engine.current_shader.get_attrib_location("block_light");
-
+            GLuint light = engine.current_shader.get_attrib_location("light");
+            
             enum stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
 //             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
             chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 12, stride, true); // normalize it
             chunk.vbo.bind(texcoord, GL_SHORT, 2, 16, stride);
             chunk.vbo.bind(mask, GL_SHORT, 2, 20, stride);
-            chunk.vbo.bind(sky_light, GL_BYTE, 1, 22, stride);
-            chunk.vbo.bind(block_light, GL_BYTE, 1, 23, stride);
+            chunk.vbo.bind(light, GL_UNSIGNED_BYTE, 2, 22, stride);
         }
     
     void draw(BraLaEngine engine) {
@@ -390,7 +388,7 @@ class World {
             }
         }
 
-        auto frustum = engine.frustum;
+//         auto frustum = engine.frustum;
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {

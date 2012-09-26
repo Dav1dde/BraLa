@@ -39,7 +39,7 @@ struct Block {
         return id == this.id;
     }
 
-    string toString() {
+    string toString() const {
         return `Block(id : %s (%s), metadata : %s, block_light : %s, sky_light : %s)`
                 .format(id, BLOCKS[id].name.capitalize(), metadata, block_light, sky_light);
     }
