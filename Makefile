@@ -5,9 +5,16 @@ export VERSION          =
 export LICENSE          = GPLv3
 
 DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/
-DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-		      $(LINKERFLAG)-Lbuild/glfw/src \
-		      `env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
+
+ifeq ($(OS),"Windows")
+	DCFLAGS_LINK =	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
+			$(LINKERFLAG)-Lbuild/glfw/src \
+			$(LINKERFLAG)-lglfw3.lib $(LINKERFLAG)-lopengl32.lib $(LINKERFLAG)-luser32.lib
+else
+	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
+			$(LINKERFLAG)-Lbuild/glfw/src \
+			`env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
+endif
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc
