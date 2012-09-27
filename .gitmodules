@@ -10,3 +10,6 @@
 [submodule "src/d/derelict3"]
 	path = src/d/derelict3
 	url = git://github.com/aldacron/Derelict3.git
+[submodule "src/c/glfw"]
+	path = src/c/glfw
+	url = git://github.com/elmindreda/glfw.git
