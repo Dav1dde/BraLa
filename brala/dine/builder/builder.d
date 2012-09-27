@@ -477,6 +477,22 @@ mixin template BlockBuilder() {
 
         add_template_vertices(simple_ladder(TextureSlice(3, 6), fs[block.metadata & 0x3]), block, x_offset, y_offset, z_offset);
     }
+
+    void vines(Side s)(const ref Block block, const ref BiomeData biome_data, vec3i world_coords,
+                       float x_offset, float y_offset, float z_offset) {
+        enum fs = [Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST];
+
+        foreach(shift; 0..4) {
+            if(block.metadata & (1 << shift)) {
+                add_template_vertices(simple_vine(TextureSlice(15, 9), fs[shift]), block,
+                                      x_offset, y_offset, z_offset, biome_data.color.grass.field);
+            }
+        }
+
+        if(block.metadata == 0 || BLOCKS[world.get_block_safe(vec3i(world_coords.x, world_coords.y+1, world_coords.z)).id].opaque) {
+            add_template_vertices(top_vine(TextureSlice(15, 9)), block, x_offset, y_offset, z_offset, biome_data.color.grass.field);
+        }
+    }
     
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -522,6 +538,7 @@ mixin template BlockBuilder() {
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 104: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // pumpkin stem
             case 105: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // melon stem
+            case 106: dispatch_once!(vines, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // vines
             case 108: dispatch_single_side!(stair, side)(block, ProjTextureSlice(7, 1, 7, 1), // brick stair
                       biome_data, x_offset, y_offset, z_offset); break;
             case 109: dispatch_single_side!(stair, side)(block, ProjTextureSlice(6, 4, 6, 4), // stone brick stair

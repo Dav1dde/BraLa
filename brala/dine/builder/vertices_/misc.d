@@ -8,19 +8,57 @@ private {
 
 
 CubeSideData LADDER_VERTEX = {
-    [[-0.5f, -0.5f, -0.495f], [0.5f, -0.5f, -0.495f], [0.5f, 0.5f, -0.495f], [-0.5f, 0.5f, -0.495f]],
+    [[-0.5f, -0.5f, -0.49f], [0.5f, -0.5f, -0.49f], [0.5f, 0.5f, -0.49f], [-0.5f, 0.5f, -0.49f]],
      [0.0f, 0.0f, 1.0f]
 };
 
 
-Vertex[] simple_ladder(short[2][4] texture_slice, Facing face) {
-    return simple_ladder(texture_slice, nslice, face);
-}
+// Vertex[] simple_ladder(short[2][4] texture_slice, Facing face) {
+//     return simple_ladder(texture_slice, nslice, face);
+// }
 
-Vertex[] simple_ladder(short[2][4] texture_slice, short[2][4] mask_slice, Facing face) {
+Vertex[] simple_ladder(short[2][4] texture_slice, /+short[2][4] mask_slice,+/ Facing face) {
     CubeSideData cbsd = LADDER_VERTEX;
 
+    alias texture_slice mask_slice;
+
     mixin(mk_vertices_adv("to_triangles", true));
+
+    return data.dup;
+}
+
+Vertex[] simple_vine(short[2][4] texture_slice, /+short[2][4] mask_slice,+/ Facing face) {
+    Vertex[] ret;
+
+    CubeSideData cbsd = LADDER_VERTEX;
+
+    alias texture_slice mask_slice;
+
+    {
+        mixin(mk_vertices_adv("to_triangles", true));
+        ret ~= data;
+    }
+
+    {
+        mixin(mk_vertices_adv("to_triangles_other_winding", false));
+        ret ~= data;
+    }
+
+    return ret;
+}
+
+CubeSideData TOP_VINE_VERTEX = {
+    [[-0.5f, 0.49f, 0.5f], [0.5f, 0.49f, 0.5f], [0.5f, 0.49f, -0.5f], [-0.5f, 0.49f, -0.5f]],
+     [0.0f, 1.0f, 0.0f]
+};
+
+
+Vertex[] top_vine(short[2][4] texture_slice) {
+    CubeSideData cbsd = TOP_VINE_VERTEX;
+
+    alias texture_slice mask_slice;
+
+    mixin(mk_vertices_adv("to_triangles_other_winding", false));
 
     return data.dup;
 }
