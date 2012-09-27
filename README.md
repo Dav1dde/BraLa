@@ -86,10 +86,10 @@ make DC=ldc2
 
 #### GDC ####
 
-To build with GDC you have to specify the `gdmd` wrapper script as D compiler:
+To build with GDC you have to specify `gdc` as D compiler:
 
 ```
-make DC=gdmd
+make DC=gdc
 ```
 
 ### Running ###
