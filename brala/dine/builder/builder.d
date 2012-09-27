@@ -431,6 +431,48 @@ mixin template BlockBuilder() {
         return add_template_vertices(simple_food_plant(TextureSlice(x, 15)), block, x_offset, y_offset, z_offset);
     }
 
+    void rail(Side s)(const ref Block block, float x_offset, float y_offset, float z_offset) {
+        short[2][4] tex = TextureSlice(0, 9);
+        
+        if(block.metadata < 2) {
+            enum fs = [Facing.SOUTH, Facing.WEST];
+
+            add_template_vertices(simple_rail(tex, fs[block.metadata]), block, x_offset, y_offset, z_offset);
+        } else if(block.metadata < 6) {
+            enum fs = [Facing.EAST, Facing.WEST, Facing.NORTH, Facing.SOUTH];
+
+            add_template_vertices(simple_ascending_rail(tex, fs[block.metadata-2]), block, x_offset, y_offset, z_offset);
+        } else { // curved
+            enum fs = [Facing.SOUTH, Facing.WEST, Facing.NORTH, Facing.EAST];
+            tex = TextureSlice(0, 8);
+
+            add_template_vertices(simple_rail(tex, fs[block.metadata-6]), block, x_offset, y_offset, z_offset);
+        }
+
+    }
+
+    void special_rail(Side s)(const ref Block block, float x_offset, float y_offset, float z_offset) {
+        short[2][4] tex = TextureSlice(3, 13);
+
+        if(block.id == 27) { // powered rail
+            if(block.metadata & 0x8) { // powered
+                tex = TextureSlice(3, 12);
+            } else {
+                tex = TextureSlice(3, 11);
+            }
+        }
+
+        final switch(block.metadata & 0x07) {
+            case 0: add_template_vertices(simple_rail(tex, Facing.SOUTH), block, x_offset, y_offset, z_offset); break;
+            case 1: add_template_vertices(simple_rail(tex, Facing.WEST), block, x_offset, y_offset, z_offset); break;
+            case 2: add_template_vertices(simple_ascending_rail(tex, Facing.EAST), block, x_offset, y_offset, z_offset); break;
+            case 3: add_template_vertices(simple_ascending_rail(tex, Facing.WEST), block, x_offset, y_offset, z_offset); break;
+            case 4: add_template_vertices(simple_ascending_rail(tex, Facing.NORTH), block, x_offset, y_offset, z_offset); break;
+            case 5: add_template_vertices(simple_ascending_rail(tex, Facing.SOUTH), block, x_offset, y_offset, z_offset); break;
+        }
+    }
+    
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -441,6 +483,8 @@ mixin template BlockBuilder() {
             case 18: mixin(single_side("leave_block")); break; // leaves
             case 23: mixin(single_side("dispenser")); break; // dispenser
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
+            case 27: dispatch_once!(special_rail, side)(block, x_offset, y_offset, z_offset); break; // powered rail
+            case 28: dispatch_once!(special_rail, side)(block, x_offset, y_offset, z_offset); break; // detector rail
             case 30: dispatch_once!(plant, side)(block, TextureSlice(11, 1), // cobweb
                      biome_data, x_offset, y_offset, z_offset); break;
             case 31: dispatch_once!(tall_grass, side)(block, biome_data, x_offset, y_offset, z_offset); break; // tall grass
@@ -461,6 +505,7 @@ mixin template BlockBuilder() {
             case 60: mixin(single_side("farmland")); break; // farmland
             case 61: mixin(single_side("furnace")); break; // furnace
             case 62: mixin(single_side("burning_furnace")); break; // burning furnace
+            case 66: dispatch_once!(rail, side)(block, x_offset, y_offset, z_offset); break; // rail
             case 67: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds

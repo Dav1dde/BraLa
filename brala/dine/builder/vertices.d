@@ -12,7 +12,7 @@ public import brala.dine.builder.vertices_.blocks;
 public import brala.dine.builder.vertices_.slabs;
 public import brala.dine.builder.vertices_.stairs;
 public import brala.dine.builder.vertices_.plants;
-
+public import brala.dine.builder.vertices_.rails;
 
 
 struct CubeSideData {
