@@ -471,6 +471,12 @@ mixin template BlockBuilder() {
             case 5: add_template_vertices(simple_ascending_rail(tex, Facing.SOUTH), block, x_offset, y_offset, z_offset); break;
         }
     }
+
+    void ladder(Side s)(const ref Block block, float x_offset, float y_offset, float z_offset) {
+        enum fs = [Facing.WEST, Facing.EAST, Facing.NORTH, Facing.SOUTH];
+
+        add_template_vertices(simple_ladder(TextureSlice(3, 6), fs[block.metadata & 0x3]), block, x_offset, y_offset, z_offset);
+    }
     
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
@@ -505,6 +511,7 @@ mixin template BlockBuilder() {
             case 60: mixin(single_side("farmland")); break; // farmland
             case 61: mixin(single_side("furnace")); break; // furnace
             case 62: mixin(single_side("burning_furnace")); break; // burning furnace
+            case 65: dispatch_once!(ladder, side)(block, x_offset, y_offset, z_offset); break; // ladder
             case 66: dispatch_once!(rail, side)(block, x_offset, y_offset, z_offset); break; // rail
             case 67: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
