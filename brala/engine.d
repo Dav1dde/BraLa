@@ -6,7 +6,7 @@ private {
     import glamour.texture : ITexture;
     import glamour.sampler : Sampler;
     
-    import derelict.glfw3.glfw3;
+    import deimos.glfw.glfw3;
     
     import gl3n.linalg;
     import gl3n.frustum : Frustum;

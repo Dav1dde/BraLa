@@ -6,7 +6,7 @@ private {
     import glamour.sampler : Sampler;
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
-    import derelict.glfw3.glfw3;
+    import deimos.glfw.glfw3;
 
     import std.conv : to;
     import std.path : buildPath;
@@ -32,7 +32,6 @@ private {
 }
 
 static this() {
-    DerelictGLFW3.load();
     DerelictGL3.load();
 
     if(!glfwInit()) {
@@ -43,7 +42,7 @@ static this() {
 GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {
-    glfwWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
 

@@ -4,8 +4,10 @@ export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
 export LICENSE          = GPLv3
 
-DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/
-DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto $(LINKERFLAG)-L./build/glfw/src/libglfw.a
+DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/
+DCFLAGS_LINK        = $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
+		      $(LINKERFLAG)-Lbuild/glfw/src \
+		      `env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc
@@ -30,7 +32,7 @@ DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES
 DSOURCES_GL3N	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
 DOBJECTS_GL3N	     = $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%.o,   $(DSOURCES_GL3N))
 
-DSOURCES_DERELICT    = $(call getSource,$(DERELICT_DIR)$(PATH_SEP)glfw3,d) \
+DSOURCES_DERELICT    =  \
 		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)opengl3,d) \
 		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)util,d)
 DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_DERELICT))
@@ -45,8 +47,8 @@ CSOURCES             = $(call getSource,src$(PATH_SEP)c$(PATH_SEP)nbt,c) src$(PA
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%.o,   $(CSOURCES))
 
 
-#all: glfw brala
-all: brala
+all: glfw brala
+#all: brala
 
 .PHONY: clean
 
@@ -55,9 +57,9 @@ brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(
 
 glfw:
 	$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw; \
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw; $(MAKE) $(MFLAGS)
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
 	
 # create object files
 $(DBUILD_PATH)$(PATH_SEP)%.o : %.d

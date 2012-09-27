@@ -2,7 +2,7 @@ module brala.input;
 
 
 private {
-    import derelict.glfw3.glfw3;
+    import deimos.glfw.glfw3;
     import std.conv : to;
     
     import brala.exception : FatalException;
