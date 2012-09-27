@@ -485,12 +485,12 @@ mixin template BlockBuilder() {
         foreach(shift; 0..4) {
             if(block.metadata & (1 << shift)) {
                 add_template_vertices(simple_vine(TextureSlice(15, 9), fs[shift]), block,
-                                      x_offset, y_offset, z_offset, biome_data.color.grass.field);
+                                      x_offset, y_offset, z_offset, biome_data.color.leave.field);
             }
         }
 
         if(block.metadata == 0 || BLOCKS[world.get_block_safe(vec3i(world_coords.x, world_coords.y+1, world_coords.z)).id].opaque) {
-            add_template_vertices(top_vine(TextureSlice(15, 9)), block, x_offset, y_offset, z_offset, biome_data.color.grass.field);
+            add_template_vertices(top_vine(TextureSlice(15, 9)), block, x_offset, y_offset, z_offset, biome_data.color.leave.field);
         }
     }
     
