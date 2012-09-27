@@ -41,7 +41,6 @@ BraLa brings most of the dependencies as gitsubmodules, but there are still a fe
 * A D compiler, if you want to help developing BraLa I recommend you to use DMD or GDC since these allow
 you to use the gdb debugger.
 * A C compiler (e.g. gcc)
-* [glfw3](https://github.com/elmindreda/glfw) (as dynamic library, e.g. available in the Archlinux AUR)
 * OpenGL
 * [OpenSSL](http://www.openssl.org/)
 * [Zlib](http://www.zlib.net/)
