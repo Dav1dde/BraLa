@@ -3,10 +3,10 @@
 	url = git://github.com/D-Programming-Deimos/openssl.git
 [submodule "src/d/gl3n"]
 	path = src/d/gl3n
-	url = https://github.com/Dav1dde/gl3n.git
+	url = git://github.com/Dav1dde/gl3n.git
 [submodule "src/d/glamour"]
 	path = src/d/glamour
-	url = https://github.com/Dav1dde/glamour.git
+	url = git://github.com/Dav1dde/glamour.git
 [submodule "src/d/derelict3"]
 	path = src/d/derelict3
 	url = git://github.com/aldacron/Derelict3.git
