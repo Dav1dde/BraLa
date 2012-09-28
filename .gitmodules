@@ -15,4 +15,4 @@
 	url = git://github.com/elmindreda/glfw.git
 [submodule "src/d/glfw"]
 	path = src/d/glfw
-	url = git@github.com:Dav1dde/glfw3.git
+	url = git://github.com/Dav1dde/glfw3.git
