@@ -24,6 +24,10 @@ private {
     import arsd.http : HttpException, post, get;
     
     debug import std.stdio : writefln;
+
+    version(Windows) {
+        import std.process : getenv;
+    }
 }
 
 
