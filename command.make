@@ -1,6 +1,5 @@
 ifdef SystemRoot
     OS              ="Windows"
-    CC              =dmc
     STATIC_LIB_EXT  =.lib
     DYNAMIC_LIB_EXT =.dll
     PATH_SEP        =\
@@ -13,10 +12,9 @@ else
     SHELL           = sh
     PATH_SEP        =/
     getSource       =$(shell find $1 -name "*.$2")
-    EXT                         =.o
+    EXT             =.o
     ifneq (,$(findstring /mingw/,$(PATH)))
         OS              ="MinGW"
-        DMC                         =dmc
         STATIC_LIB_EXT  =.lib
         DYNAMIC_LIB_EXT =.dll
         message         =@(echo \033[31m $1 \033[0;0m1)
@@ -251,7 +249,12 @@ ifndef PKGCONFIG_DIR
 endif
 
 ifndef CC
-    CC = gcc
+    ifeq ($(OS),"Windows")
+        CC = dmc
+    else ifeq ($(OS),"MinGW")
+        CC = dmc
+    else
+        CC = gcc
 endif
 
 DLIB_PATH           = ./lib
