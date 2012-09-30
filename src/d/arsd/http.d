@@ -2,9 +2,6 @@
 
 module arsd.http;
 
-pragma(lib, "crypto");
-pragma(lib, "ssl");
-
 class HttpException : Exception {
     this(string msg) {
         super(msg);
