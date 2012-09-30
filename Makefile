@@ -6,10 +6,14 @@ export LICENSE          = GPLv3
 
 DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/
 
+include command.make
+
 ifeq ($(OS),"Windows")
 	DCFLAGS_LINK =	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-			$(LINKERFLAG)-Lbuild/glfw/src \
+			$(LINKERFLAG)-Lbuild$(PATH_SEP)glfw$(PATH_SEP)src \
 			$(LINKERFLAG)-lglfw3.lib $(LINKERFLAG)-lopengl32.lib $(LINKERFLAG)-luser32.lib
+else ifeq ($(OS),"MinGW")
+	DCFLAGS_LINK =  $(LDCFLAGS) libssl32.lib ssleay32.lib libeay32.lib lib$(PATH_SEP)zlib.lib glfw3.lib
 else
 	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 			$(LINKERFLAG)-Lbuild/glfw/src \
@@ -24,8 +28,8 @@ else
 	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -g -gc
 endif
 
-
-include command.make
+MKDIR   = mkdir -p
+RM      = rm -rf
 
 DERELICT_DIR = src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
 
@@ -34,24 +38,24 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
 			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
 
 DSOURCES             = $(call getSource,brala,d)
-DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%.o,   $(DSOURCES))
+DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
 
 DSOURCES_GL3N	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
-DOBJECTS_GL3N	     = $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%.o,   $(DSOURCES_GL3N))
+DOBJECTS_GL3N	     = $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT),   $(DSOURCES_GL3N))
 
 DSOURCES_DERELICT    =  \
 		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)opengl3,d) \
 		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)util,d)
-DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_DERELICT))
+DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_DERELICT))
 
 DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
-DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o,   $(DSOURCES_GLAMOUR))
+DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
 
 DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)std,d)
-DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%.o,   $(DSOURCES_OTHER))
+DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
-CSOURCES             = $(call getSource,src$(PATH_SEP)c$(PATH_SEP)nbt,c) src$(PATH_SEP)c$(PATH_SEP)stb_image.c
-COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%.o,   $(CSOURCES))
+CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c $(call getSource,src$(PATH_SEP)c$(PATH_SEP)nbt,c)
+COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 
 all: glfw brala
@@ -60,32 +64,42 @@ all: glfw brala
 .PHONY: clean
 
 brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
-	$(DC) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) $(DOBJECTS_OTHER) $(DCFLAGS) $(DCFLAGS_LINK) $(OUTPUT)bralad
+	$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) $(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bralad
 
 glfw:
 	$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
+ifeq ($(OS),"MinGW")
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
+	cmake -G "MSYS Makefiles" -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
+else
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
+endif
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
-	
+
+
 # create object files
-$(DBUILD_PATH)$(PATH_SEP)%.o : %.d
+$(DBUILD_PATH)$(PATH_SEP)%$(EXT) : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_GL3N)$(PATH_SEP)%.o : %.d
+$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT) : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_DERELICT)$(PATH_SEP)%.o: %.d
+$(DBUILD_PATH_DERELICT)$(PATH_SEP)%$(EXT): %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%.o : %.d
+$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT) : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_OTHER)$(PATH_SEP)%.o : %.d
+$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(CBUILD_PATH)$(PATH_SEP)%.o : %.c
-	$(CC) -c -std=c99 -lz $< -o $@
+$(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
+ifeq ($(OS),"MinGW")
+	$(CC) -c -A99 -Iinclude $< -o$@
+else
+	$(CC) -c -std=c99 $< -o $@
+endif
 
 buildDir: $(OBJDIRS)
 
@@ -94,6 +108,6 @@ $(OBJDIRS) :
 
 clean:
 	$(RM) build$(PATH_SEP)brala
-	
+
 clean-all:
 	$(RM) build

@@ -1,40 +1,51 @@
 ifdef SystemRoot
-    OS              = "Windows"
-    STATIC_LIB_EXT  = .lib
-    DYNAMIC_LIB_EXT = .dll
+    OS              ="Windows"
+    CC                          =dmc
+    STATIC_LIB_EXT  =.lib
+    DYNAMIC_LIB_EXT =.dll
     PATH_SEP        =\
-    message         = @(echo $1)
-    SHELL           = cmd.exe
-    Filter          = %/linux/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
+    message         =@(echo $1)
+    SHELL           =cmd.exe
+    Filter          =%/linux/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
     getSource       =$(shell dir $1 /s /b)
+    EXT                         =.obj
 else
     SHELL           = sh
     PATH_SEP        =/
     getSource       =$(shell find $1 -name "*.$2")
-    ifeq ($(shell uname), Linux)
-        OS              = "Linux"
-        STATIC_LIB_EXT  = .a
-        DYNAMIC_LIB_EXT = .so
-        message         = @(echo \033[31m $1 \033[0;0m1)
-        Filter          = %/win32/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
+    EXT                         =.o
+    ifneq (,$(findstring /mingw/,$(PATH)))
+        OS              ="MinGW"
+        DMC                         =dmc
+        STATIC_LIB_EXT  =.lib
+        DYNAMIC_LIB_EXT =.dll
+        message         =@(echo \033[31m $1 \033[0;0m1)
+        Filter          =%/win32/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
+        EXT                       =.obj
+    else ifeq ($(shell uname), Linux)
+        OS              ="Linux"
+        STATIC_LIB_EXT  =.a
+        DYNAMIC_LIB_EXT =.so
+        message         =@(echo \033[31m $1 \033[0;0m1)
+        Filter          =%/win32/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
     else ifeq ($(shell uname), Solaris)
-        STATIC_LIB_EXT  = .a
-        DYNAMIC_LIB_EXT = .so
-        OS              = "Solaris"
-        message         = @(echo \033[31m $1 \033[0;0m1)
-        Filter          = %/win32/%.d %/linux/%.d %/darwin/%.d %/freebsd/%.d
+        STATIC_LIB_EXT  =.a
+        DYNAMIC_LIB_EXT =.so
+        OS              ="Solaris"
+        message         =@(echo \033[31m $1 \033[0;0m1)
+        Filter          =%/win32/%.d %/linux/%.d %/darwin/%.d %/freebsd/%.d
     else ifeq ($(shell uname),Freebsd)
-        STATIC_LIB_EXT  = .a
-        DYNAMIC_LIB_EXT = .so
-        OS              = "Freebsd"
-        message         = @(echo \033[31m $1 \033[0;0m1)
-        Filter          = %/win32/%.d %/linux/%.d %/darwin/%.d %/solaris/%.d
+        STATIC_LIB_EXT  =.a
+        DYNAMIC_LIB_EXT =.so
+        OS              ="Freebsd"
+        message         =@(echo \033[31m $1 \033[0;0m1)
+        Filter          =%/win32/%.d %/linux/%.d %/darwin/%.d %/solaris/%.d
     else ifeq ($(shell uname),Darwin)
-        STATIC_LIB_EXT  = .a
-        DYNAMIC_LIB_EXT = .so
-        OS              = "Darwin"
-        message         = @(echo \033[31m $1 \033[0;0m1)
-        Filter          = %/win32/%.d %/linux/%.d %/freebsd/%.d %/solaris/%.d
+        STATIC_LIB_EXT  =.a
+        DYNAMIC_LIB_EXT =.so
+        OS              ="Darwin"
+        message         =@(echo \033[31m $1 \033[0;0m1)
+        Filter          =%/win32/%.d %/linux/%.d %/freebsd/%.d %/solaris/%.d
     endif
 endif
 
@@ -81,15 +92,15 @@ endif
 
 # Define flag for gdc other
 ifeq ($(DC),gdc)
-    DCFLAGS    = 
-    LINKERFLAG= -Xlinker 
+    DCFLAGS    =
+    LINKERFLAG= -Xlinker
     OUTPUT    = -o
     HF        = -fintfc-file=
     DF        = -fdoc-file=
     NO_OBJ    = -fsyntax-only
     DDOC_MACRO= -fdoc-inc=
 else
-    DCFLAGS    = 
+    DCFLAGS    =
     LINKERFLAG= -L
     OUTPUT    = -of
     HF        = -Hf
@@ -277,6 +288,7 @@ export DLIB_PATH
 export DOC_PATH
 export DDOC_PATH
 export DYNAMIC_LIB_EXT
+export EXT
 export FixPath
 export HF
 export INCLUDE_DIR
