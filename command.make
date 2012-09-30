@@ -1,6 +1,6 @@
 ifdef SystemRoot
     OS              ="Windows"
-    CC                          =dmc
+    CC              =dmc
     STATIC_LIB_EXT  =.lib
     DYNAMIC_LIB_EXT =.dll
     PATH_SEP        =\
@@ -55,6 +55,11 @@ ifeq ($(OS),"Windows")
     CP    = copy /Y
     MKDIR = mkdir
     MV    = move
+else ifeq ($(OS),"MinGW")
+    RM    = rm -fr
+    CP    = cp -fr
+    MKDIR = mkdir -p
+    MV    = mv
 else ifeq ($(OS),"Linux")
     RM    = rm -fr
     CP    = cp -fr

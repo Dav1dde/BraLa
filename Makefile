@@ -10,10 +10,11 @@ include command.make
 
 ifeq ($(OS),"Windows")
 	DCFLAGS_LINK =	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-			$(LINKERFLAG)-Lbuild$(PATH_SEP)glfw$(PATH_SEP)src \
+			$(LINKERFLAG)-L$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src \
 			$(LINKERFLAG)-lglfw3.lib $(LINKERFLAG)-lopengl32.lib $(LINKERFLAG)-luser32.lib
 else ifeq ($(OS),"MinGW")
-	DCFLAGS_LINK =  $(LDCFLAGS) libssl32.lib ssleay32.lib libeay32.lib lib$(PATH_SEP)zlib.lib glfw3.lib
+	DCFLAGS_LINK =  $(LDCFLAGS) libssl32.lib ssleay32.lib libeay32.lib zlib.lib \
+			$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src$(PATH_SEP)glfw3.lib
 else
 	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 			$(LINKERFLAG)-Lbuild/glfw/src \
@@ -28,8 +29,6 @@ else
 	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -g -gc
 endif
 
-MKDIR   = mkdir -p
-RM      = rm -rf
 
 DERELICT_DIR = src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
 
@@ -71,11 +70,13 @@ glfw:
 ifeq ($(OS),"MinGW")
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -G "MSYS Makefiles" -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src && echo -e "glfw3.lib\nglfw3.dll" | sh -c implib /s
 else
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
-endif
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
+endif
 
 
 # create object files
@@ -96,9 +97,9 @@ $(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
 
 $(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
 ifeq ($(OS),"MinGW")
-	$(CC) -c -A99 -Iinclude $< -o$@
+	$(CC) $(CFLAGS) -c -A99 $< -o$@
 else
-	$(CC) -c -std=c99 $< -o $@
+	$(CC) $(CFLAGS) -c -std=c99 $< -o $@
 endif
 
 buildDir: $(OBJDIRS)
