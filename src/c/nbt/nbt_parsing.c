@@ -179,7 +179,7 @@ parse_error:
 static nbt_type list_is_homogenous(const struct nbt_list* list)
 {
     nbt_type type = TAG_INVALID;
-    
+
     const struct list_head* pos;
     list_for_each(pos, &list->entry)
     {
@@ -197,7 +197,7 @@ static nbt_type list_is_homogenous(const struct nbt_list* list)
         if(type != cur->data->type)
             return TAG_INVALID;
     }
-    
+
     /* if the list was empty, use the sentinel type */
     if(type == TAG_INVALID && list->data != NULL)
         type = list->data->type;
@@ -240,7 +240,7 @@ static struct nbt_list* read_list(const char** memory, size_t* length)
 
         list_add_tail(&new->entry, &ret->entry);
     }
-    
+
     return ret;
 
 parse_error:
@@ -577,12 +577,12 @@ static nbt_status __dump_binary(const nbt_node*, bool, struct buffer*);
 static nbt_status dump_list_binary(const struct nbt_list* list, struct buffer* b)
 {
     nbt_type type = list_is_homogenous(list);
-    
+
     size_t len = list_length(&list->entry);
 
     if(len > 2147483647 /* INT_MAX */)
         return NBT_ERR;
-    
+
     assert(type != TAG_INVALID);
     if(type == TAG_INVALID)
         return NBT_ERR;
@@ -692,7 +692,7 @@ struct buffer nbt_dump_binary(const nbt_node* tree)
 {
     errno = NBT_OK;
 
-    if(tree == NULL) return BUFFER_INIT;
+    if(tree == NULL) { struct buffer init; return init; }
 
     struct buffer ret = BUFFER_INIT;
 

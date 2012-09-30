@@ -36,18 +36,19 @@
 static struct buffer read_file(FILE* fp)
 {
     struct buffer ret = BUFFER_INIT;
+    struct buffer i = BUFFER_INIT;
 
     size_t bytes_read;
 
     do {
         if(buffer_reserve(&ret, ret.len + CHUNK_SIZE))
-            return (errno = NBT_EMEM), buffer_free(&ret), BUFFER_INIT;
+            return (errno = NBT_EMEM), buffer_free(&ret), i;
 
         bytes_read = fread(ret.data + ret.len, 1, CHUNK_SIZE, fp);
         ret.len += bytes_read;
 
         if(ferror(fp))
-            return (errno = NBT_EIO), buffer_free(&ret), BUFFER_INIT;
+            return (errno = NBT_EIO), buffer_free(&ret), i;
 
     } while(!feof(fp));
 
@@ -88,10 +89,11 @@ static struct buffer __compress(const void* mem,
     z_stream stream = {
         .zalloc   = Z_NULL,
         .zfree    = Z_NULL,
-        .opaque   = Z_NULL,
-        .next_in  = (void*)mem,
-        .avail_in = len
+        .opaque   = Z_NULL
     };
+
+    stream.next_in  = (void*)mem;
+    stream.avail_in = len;
 
     /* "The default value is 15"... */
     int windowbits = 15;
@@ -110,7 +112,8 @@ static struct buffer __compress(const void* mem,
                    ) != Z_OK)
     {
         errno = NBT_EZ;
-        return BUFFER_INIT;
+        struct buffer init;
+        return init;
     }
 
     assert(stream.avail_in == len); /* I'm not sure if zlib will clobber this */
@@ -141,7 +144,8 @@ compression_error:
 
     (void)deflateEnd(&stream);
     buffer_free(&ret);
-    return BUFFER_INIT;
+    struct buffer init;
+    return init;
 }
 
 /*
@@ -157,17 +161,19 @@ static struct buffer __decompress(const void* mem, size_t len)
     z_stream stream = {
         .zalloc   = Z_NULL,
         .zfree    = Z_NULL,
-        .opaque   = Z_NULL,
-        .next_in  = (void*)mem,
-        .avail_in = len
-    };
+        .opaque   = Z_NULL
+        };
+
+    stream.next_in  = (void*)mem;
+    stream.avail_in = len;
 
     /* "Add 32 to windowBits to enable zlib and gzip decoding with automatic
      * header detection" */
     if(inflateInit2(&stream, 15 + 32) != Z_OK)
     {
         errno = NBT_EZ;
-        return BUFFER_INIT;
+        struct buffer init;
+        return init;
     }
 
     int zlib_ret;
@@ -214,7 +220,8 @@ decompression_error:
     (void)inflateEnd(&stream);
 
     buffer_free(&ret);
-    return BUFFER_INIT;
+    struct buffer init;
+    return init;
 }
 
 /*
@@ -285,8 +292,10 @@ struct buffer nbt_dump_compressed(const nbt_node* tree, nbt_compression_strategy
 {
     struct buffer uncompressed = nbt_dump_binary(tree);
 
-    if(uncompressed.data == NULL)
-        return BUFFER_INIT;
+    if(uncompressed.data == NULL) {
+        struct buffer init;
+        return init;
+    }
 
     struct buffer compressed = __compress(uncompressed.data, uncompressed.len, strat);
 
