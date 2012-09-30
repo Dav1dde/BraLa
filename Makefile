@@ -13,7 +13,9 @@ ifeq ($(OS),"Windows")
 			$(LINKERFLAG)-L$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src \
 			$(LINKERFLAG)-lglfw3.lib $(LINKERFLAG)-lopengl32.lib $(LINKERFLAG)-luser32.lib
 else ifeq ($(OS),"MinGW")
-	DCFLAGS_LINK =  $(LDCFLAGS) libssl32.lib ssleay32.lib libeay32.lib zlib.lib \
+	DCFLAGS_LINK =  $(LDCFLAGS) $(LIB_PREFIX)$(PATH_SEP)libssl.lib \
+			$(LIB_PREFIX)$(PATH_SEP)libcrypto.lib \
+			$(LIB_PREFIX)$(PATH_SEP)zlib.lib \
 			$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src$(PATH_SEP)glfw3.lib
 else
 	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
