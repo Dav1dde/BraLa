@@ -255,6 +255,7 @@ ifndef CC
         CC = dmc
     else
         CC = gcc
+    endif
 endif
 
 DLIB_PATH           = ./lib
