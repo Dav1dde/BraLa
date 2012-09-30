@@ -32,7 +32,7 @@ struct buffer {
  *   struct buffer b;
  *   b = BUFFER_INIT;
  */
-#define BUFFER_INIT (struct buffer) { NULL, 0, 0 }
+#define BUFFER_INIT { NULL, 0, 0 }
 
 /*
  * Frees all memory associated with the buffer. The same buffer may be freed
