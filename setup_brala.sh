@@ -47,7 +47,7 @@ wget http://www.agner.org/optimize/objconv.zip
 unzip -o objconv.zip
 mv objconv.exe dm/bin/
 
-PATH=$PATH:dm/bin
+PATH=$PATH:`pwd`/dm/bin
 
 # libs
 
@@ -71,7 +71,11 @@ cp /lib/libz.a .
 #echo "implib /s opengl32.lib opengl32.dll && exit" | cmd
 #rm opengl32.lib
 
-openssl=$(ls /c/ | tr ' ' '\n' | grep -i openssl | head -n 1)
+if [ -f /c/windows/system32/libssl32.dll ] && [ -f /c/windows/system32/libeay32.dll ] ; then
+    openssl="windows/system32/"
+else 
+    openssl=$(ls /c/ | tr ' ' '\n' | grep -i openssl | head -n 1)
+fi
 
 if [ "$openssl" == "" ] ; then
     echo you have to install openssl
