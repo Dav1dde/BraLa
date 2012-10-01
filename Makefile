@@ -73,7 +73,7 @@ ifeq ($(OS),"MinGW")
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -G "MSYS Makefiles" -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src && echo "implib /s glfw3.lib glfw3.dll && exit;" | cmd
+	cd $(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src && echo "..\..\..\$(IMPLIB) /s glfw3.lib glfw3.dll && exit;" | cmd
 else
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw

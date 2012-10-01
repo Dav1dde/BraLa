@@ -80,6 +80,10 @@ else ifeq ($(OS),"Darwin")
     MV    = mv
 endif
 
+ifndef IMPLIB
+    IMPLIB = implib
+endif
+
 # If compiler is not define try to find it
 ifndef DC
     ifneq ($(strip $(shell which dmd 2>/dev/null)),)
@@ -301,6 +305,7 @@ export EXT
 export FixPath
 export HF
 export INCLUDE_DIR
+export IMPLIB
 export IMPORT_PATH
 export LDCFLAGS
 export FPIC

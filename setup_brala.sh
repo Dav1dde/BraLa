@@ -95,8 +95,9 @@ objconv -fomf -nu libcrypto.a
 cd ../..
 
 echo "#!/bin/sh" > recompile.sh
-echo "make glfw" >> recompile.sh
-echo 'env "PATH=$PATH:tools/dm/bin:tools/lib" make $* CC=dmc LIB_PREFIX=tools/lib CFLAGS="-Itools/include" brala' >> recompile.sh
+echo 'PATH="$PATH:tools/dm/bin"' >> recompile.sh
+echo 'make IMPLIB="tools\\dm\\bin\\implib" glfw" >> recompile.sh
+echo 'make $* CC=dmc LIB_PREFIX=tools/lib CFLAGS="-Itools/include" brala' >> recompile.sh
 
 echo "#!/bin/sh" > launch.sh
 echo 'env "PATH=$PATH:tools/lib:build/glfw/src" ./bralad $*' >> launch.sh
@@ -104,7 +105,7 @@ echo 'env "PATH=$PATH:tools/lib:build/glfw/src" ./bralad $*' >> launch.sh
 echo "#!/bin/sh" > pack.sh
 echo "./recompile.sh" >> pack.sh
 echo "rm -r packed 2>nul" >> pack.sh
-echo "mkdir packed"
+echo "mkdir packed" >> pack.sh
 echo "cp tools/bin/libssl32.dll packed/" >> pack.sh
 echo "cp tools/bin/libeay32.dll packed/" >> pack.sh
 echo "cp build/glfw/src/glfw3.dll packed/" >> pack.sh
