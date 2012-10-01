@@ -93,12 +93,12 @@ To setup BraLa you need a few things first. I will guide you throught the needed
 
 ### Basic Setup ###
 
-Download the latest [MinGW Installer][http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst/] and
+Download the latest [MinGW Installer](http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst/) and
 select the C and C++ compiler together with the `MSYS Basic System`. After installing MinGW/Msys you have to add
 `C:\MinGW\bin` to `$PATH` (replace the path according to your installation).
 
 Next step is to get `git`, if you already have git installed, omit this step. I for myself use
-[msysgit](http://code.google.com/p/msysgit/) but any git should work. Installing [msysgit] will take quite a while.
+[msysgit](http://code.google.com/p/msysgit/) but any git should work. Installing `msysgit` will take quite a while.
 
 Now get the latest **DMD** compiler **.zip** (Important: not the installer, it seems to be broken). Extract it e.g.
 to `C:\D` and add `C:\D\dmd2\windows\bin` to `$PATH`.
