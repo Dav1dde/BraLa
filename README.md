@@ -105,9 +105,9 @@ to `C:\D` and add `C:\D\dmd2\windows\bin` to `$PATH`.
 
 Download [cmake](http://www.cmake.org/cmake/resources/software.html) and install it.
 
-After cmake, you need OpenSSL dlls `libssl32.dll` and `libeay32.dll` and put them somewhere in `C:\OpenSSL-Win32` or
-`C:\OpenSSL-Win64` (the folder really doesn't matter, the script searches for an `OpenSSL*` folder), if you don't have
-these DLLs, you can download a setup from:
+After cmake, you need OpenSSL dlls `libssl32.dll` and `libeay32.dll`, they have to be in `C:\WINDOWS\system32` (default
+installation folder) or in `C:\OpenSSL-Win32`/`C:\OpenSSL-Win64` (the script searches for an `C:\OpenSSL*` folder).
+if you don't have these DLLs, you can download a setup from:
 [http://slproweb.com/products/Win32OpenSSL.html](http://slproweb.com/products/Win32OpenSSL.html).
 
 That's it with the basic setup.
