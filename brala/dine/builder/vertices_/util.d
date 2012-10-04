@@ -30,14 +30,26 @@ package string mk_vertices_adv(string tri_func, bool rotate = false) pure {
     string r = "";
 
     if(rotate) {
-        r = `final switch(face) {
-                case Facing.WEST:  cbsd = cbsd.rotate_90();  break;
-                case Facing.NORTH: cbsd = cbsd.rotate_180(); break;
-                case Facing.EAST:  cbsd = cbsd.rotate_270(); break;
-                case Facing.SOUTH: break;
+        r = `static if(is(typeof(face) == Facing)) {
+                final switch(face) {
+                    case Facing.WEST:  cbsd = cbsd.rotate_90();  break;
+                    case Facing.NORTH: cbsd = cbsd.rotate_180(); break;
+                    case Facing.EAST:  cbsd = cbsd.rotate_270(); break;
+                    case Facing.SOUTH: break;
+                }
+            } else {
+                final switch(face) {
+                    case Side.NEAR:   break; // south
+                    case Side.LEFT:   cbsd = cbsd.rotate_90(); break;
+                    case Side.FAR:    cbsd = cbsd.rotate_180(); break;
+                    case Side.RIGHT:  cbsd = cbsd.rotate_270(); break;
+                    case Side.TOP:    cbsd = cbsd.rotate_y270(); break;
+                    case Side.BOTTOM: cbsd = cbsd.rotate_y90(); break;
+                    case Side.ALL: assert(false, "Side.ALL not supported"); break;
+                }
             }`;
     }
-
+    
     return r ~ `
     float[3][6] positions = ` ~ tri_func ~ `(cbsd.positions);
     short[2][6] texcoords = ` ~ tri_func ~ `(texture_slice);
@@ -143,6 +155,40 @@ CubeSideData rotate_270(CubeSideData cbsd) pure {
 
     return cbsd;
 }
+
+
+CubeSideData rotate_y90(CubeSideData cbsd) pure {
+    float x;
+
+    for(size_t i = 0; i < 4; i++) {
+        x = cbsd.positions[i][1];
+        cbsd.positions[i][1] = -cbsd.positions[i][2];
+        cbsd.positions[i][2] = x;
+    }
+
+    x = cbsd.normal[1];
+    cbsd.normal[1] = -cbsd.normal[2];
+    cbsd.normal[2] = x;
+
+    return cbsd;
+}
+
+CubeSideData rotate_y270(CubeSideData cbsd) pure {
+    float x;
+
+    for(size_t i = 0; i < 4; i++) {
+        x = cbsd.positions[i][1];
+        cbsd.positions[i][1] = cbsd.positions[i][2];
+        cbsd.positions[i][2] = -x;
+    }
+
+    x = cbsd.normal[1];
+    cbsd.normal[1] = cbsd.normal[2];
+    cbsd.normal[2] = -x;
+
+    return cbsd;
+}
+
 
 CubeSideData make_upsidedown(CubeSideData cbsd) pure {
 //     foreach(ref vertex; cbsd.positions) {

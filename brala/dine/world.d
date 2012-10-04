@@ -9,6 +9,7 @@ private {
 
     import core.thread : Thread;
     import std.typecons : Tuple;
+    import std.stdio : stderr;
 
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;

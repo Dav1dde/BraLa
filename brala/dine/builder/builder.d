@@ -493,7 +493,47 @@ mixin template BlockBuilder() {
             add_template_vertices(top_vine(TextureSlice(15, 9)), block, x_offset, y_offset, z_offset, biome_data.color.leave.field);
         }
     }
+
     
+    void piston_block_sticky(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                     float x_offset, float y_offset, float z_offset) {
+        piston_block!(s, true)(block, biome_data, x_offset, y_offset, z_offset);
+    }
+
+    void piston_block(Side s, bool sticky = false)(const ref Block block, const ref BiomeData biome_data,
+                                                   float x_offset, float y_offset, float z_offset) {
+        static assert(s != Side.ALL);
+
+        static if(sticky) {
+            enum front_tex = TextureSlice(10, 7);
+        } else {
+            enum front_tex = TextureSlice(11, 7);
+        }
+
+        enum side_tex = TextureSlice(12, 7);
+        enum far_tex = TextureSlice(13, 7);
+        enum textures = [front_tex.texcoords,
+                         side_tex.texcoords_90,
+                         far_tex.texcoords,
+                         side_tex.texcoords_270,
+                         side_tex.texcoords_180, // top
+                         side_tex.texcoords, // bottom
+                         side_tex]; // dummy
+        enum tex = textures[s];
+
+        enum fs = [Side.BOTTOM, Side.TOP, Side.FAR, Side.NEAR, Side.LEFT, Side.RIGHT];
+        
+        if(block.metadata & 0x8) { // extended
+        } else { // retracted
+            size_t m = block.metadata;
+            if(m > 5) {
+                m = 5;
+            }
+        
+            auto vertices = retracted_piston(s, fs[(m & 0x7)], tex);
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset);            
+        }
+    }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
@@ -507,9 +547,11 @@ mixin template BlockBuilder() {
             case 24: mixin(single_side("sandstone_block")); break; // sandstone
             case 27: dispatch_once!(special_rail, side)(block, x_offset, y_offset, z_offset); break; // powered rail
             case 28: dispatch_once!(special_rail, side)(block, x_offset, y_offset, z_offset); break; // detector rail
+            case 29: mixin(single_side("piston_block_sticky")); break; // sticky-piston
             case 30: dispatch_once!(plant, side)(block, TextureSlice(11, 1), // cobweb
                      biome_data, x_offset, y_offset, z_offset); break;
             case 31: dispatch_once!(tall_grass, side)(block, biome_data, x_offset, y_offset, z_offset); break; // tall grass
+            case 33: mixin(single_side("piston_block")); break; // normal piston
             case 35: mixin(single_side("wool_block")); break; // wool
             case 37: dispatch_once!(plant, side)(block, TextureSlice(13, 1), // dandelion
                      biome_data, x_offset, y_offset, z_offset); break;
