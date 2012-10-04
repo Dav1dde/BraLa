@@ -549,6 +549,39 @@ mixin template BlockBuilder() {
         }
     }
 
+    void piston_arm(Side s)(const ref Block block, const ref BiomeData biome_data,
+                            float x_offset, float y_offset, float z_offset) {
+        TextureSlice front_tex;
+        if(block.metadata & 0x8) { // sticky
+            front_tex = TextureSlice(10, 7);
+        } else {
+            front_tex = TextureSlice(11, 7);
+        }
+
+        enum side_tex = TextureSlice(12, 7, 8, 8, 8, -4);
+
+        auto textures = [front_tex.texcoords,
+                         side_tex.texcoords_90,
+                         front_tex.texcoords,
+                         side_tex.texcoords_270,
+                         side_tex.texcoords_180, // top
+                         side_tex.texcoords, // bottom
+                         side_tex]; // dummy
+        short[2][4] tex = textures[s];
+
+        static if(s == Side.LEFT || s == Side.RIGHT) {
+            enum arm_tex = side_tex.texcoords;
+        } else {
+            enum arm_tex = side_tex.texcoords_90;
+        }
+
+        enum fs = [Side.BOTTOM, Side.TOP, Side.FAR, Side.NEAR, Side.LEFT, Side.RIGHT];
+        
+        size_t m = (block.metadata & 0x7) > 5 ? 5 : block.metadata;
+        auto vertices = .piston_arm(s, fs[(m & 0x7)], tex, arm_tex);
+        add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -566,6 +599,7 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 31: dispatch_once!(tall_grass, side)(block, biome_data, x_offset, y_offset, z_offset); break; // tall grass
             case 33: mixin(single_side("piston_block")); break; // normal piston
+            case 34: mixin(single_side("piston_arm")); break; // piston arm/extension
             case 35: mixin(single_side("wool_block")); break; // wool
             case 37: dispatch_once!(plant, side)(block, TextureSlice(13, 1), // dandelion
                      biome_data, x_offset, y_offset, z_offset); break;
