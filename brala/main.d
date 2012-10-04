@@ -44,7 +44,7 @@ GLFWwindow _window;
 GLFWwindow open_glfw_win(int width, int height) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a higher level", null);
+    _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level", null);
 
     if(!_window) {
         throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
