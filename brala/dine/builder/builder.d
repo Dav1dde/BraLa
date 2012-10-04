@@ -504,34 +504,48 @@ mixin template BlockBuilder() {
                                                    float x_offset, float y_offset, float z_offset) {
         static assert(s != Side.ALL);
 
-        static if(sticky) {
-            enum front_tex = TextureSlice(10, 7);
-        } else {
-            enum front_tex = TextureSlice(11, 7);
-        }
-
-        enum side_tex = TextureSlice(12, 7);
-        enum far_tex = TextureSlice(13, 7);
-        enum textures = [front_tex.texcoords,
-                         side_tex.texcoords_90,
-                         far_tex.texcoords,
-                         side_tex.texcoords_270,
-                         side_tex.texcoords_180, // top
-                         side_tex.texcoords, // bottom
-                         side_tex]; // dummy
-        enum tex = textures[s];
-
         enum fs = [Side.BOTTOM, Side.TOP, Side.FAR, Side.NEAR, Side.LEFT, Side.RIGHT];
-        
-        if(block.metadata & 0x8) { // extended
-        } else { // retracted
-            size_t m = block.metadata;
-            if(m > 5) {
-                m = 5;
+       
+        if(block.metadata & 0x8) {
+            enum front_tex = TextureSlice(14, 7);
+
+            enum side_tex = TextureSlice(12, 7, 8, 8, 4, 8);
+            enum far_tex = TextureSlice(13, 7);
+            enum textures = [front_tex.texcoords,
+                            side_tex.texcoords_90,
+                            far_tex.texcoords,
+                            side_tex.texcoords_270,
+                            side_tex.texcoords_180, // top
+                            side_tex.texcoords, // bottom
+                            side_tex]; // dummy
+            enum tex = textures[s];
+
+            size_t m = (block.metadata & 0x7) > 5 ? 5 : block.metadata;
+
+            auto vertices = extended_piston(s, fs[(m & 0x7)], tex);
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset); 
+        } else {
+            static if(sticky) {
+                enum front_tex = TextureSlice(10, 7);
+            } else {
+                enum front_tex = TextureSlice(11, 7);
             }
-        
+
+            enum side_tex = TextureSlice(12, 7);
+            enum far_tex = TextureSlice(13, 7);
+            enum textures = [front_tex.texcoords,
+                            side_tex.texcoords_90,
+                            far_tex.texcoords,
+                            side_tex.texcoords_270,
+                            side_tex.texcoords_180, // top
+                            side_tex.texcoords, // bottom
+                            side_tex]; // dummy
+            enum tex = textures[s];
+
+            size_t m = (block.metadata & 0x7) > 5 ? 5 : block.metadata;
+
             auto vertices = retracted_piston(s, fs[(m & 0x7)], tex);
-            add_template_vertices(vertices, block, x_offset, y_offset, z_offset);            
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset); 
         }
     }
 

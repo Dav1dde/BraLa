@@ -6,12 +6,18 @@ private {
     import brala.dine.builder.vertices : CubeSideData;
 }
 
+
 struct TextureSlice {
     enum short FB = 16;
     enum short HB = 8;
 
     short x;
     short y;
+
+    short left = HB;
+    short right = HB;
+    short top = HB;
+    short bottom = HB;
 
     alias texcoords this;
 
@@ -22,33 +28,42 @@ struct TextureSlice {
             y = cast(short)(lower_left_y*FB-HB);
         }
 
+    this(short lower_left_x, short lower_left_y, short left, short right, short top, short bottom) {
+        this(lower_left_x, lower_left_y);
+
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+    }
+
     pure:
     @property short[2][4] texcoords() {
-        return [[cast(short)(x-HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y-HB)]];
+        return [[cast(short)(x-left), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y-top)]];
     }
 
     @property short[2][4] texcoords_90() {
-        return [[cast(short)(x+HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y+HB)]];
+        return [[cast(short)(x+right), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y+bottom)]];
     }
 
     @property short[2][4] texcoords_180() {
-        return [[cast(short)(x+HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y+HB)]];
+        return [[cast(short)(x+right), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y+bottom)]];
     }
 
     @property short[2][4] texcoords_270() {
-        return [[cast(short)(x-HB), cast(short)(y-HB)],
-                [cast(short)(x-HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y+HB)],
-                [cast(short)(x+HB), cast(short)(y-HB)]];
+        return [[cast(short)(x-left), cast(short)(y-top)],
+                [cast(short)(x-left), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y+bottom)],
+                [cast(short)(x+right), cast(short)(y-top)]];
     }
 }
 
