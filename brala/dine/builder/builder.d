@@ -582,6 +582,33 @@ mixin template BlockBuilder() {
         add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
     }
 
+    void torch(Side s)(const ref Block block, TextureSlice tex,
+                       float x_offset, float y_offset, float z_offset) {
+
+
+        static if(s == Side.TOP) {
+            tex.left = 1;
+            tex.right = 1;
+            tex.top = 2;
+            tex.bottom = 0;
+        } else static if(s == Side.BOTTOM) {
+            tex.left = 1;
+            tex.right = 1;
+            tex.top = -6;
+            tex.bottom = 8;
+        } else {
+            tex.left = 2;
+            tex.right = 2;
+            tex.top = 2;
+            tex.bottom = 8;
+        }
+
+        enum fs = [Facing.EAST, Facing.WEST, Facing.SOUTH, Facing.NORTH];
+
+        auto vertices = simple_torch(s, fs[block.metadata > 0x4 ? 3 : block.metadata-1], block.metadata > 0x4, tex);
+        add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
+    }
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -609,6 +636,7 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 40: dispatch_once!(plant, side)(block, TextureSlice(12, 2), // red mushroom
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 50: dispatch_single_side!(torch, side)(block, TextureSlice(0, 6), x_offset, y_offset, z_offset); break; // torch
             case 43: mixin(single_side("stone_double_slab")); break; // stone double slaps
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 53: dispatch_single_side!(stair, side)(block, ProjTextureSlice(4, 1, 4, 1), // oak wood stair
@@ -621,6 +649,8 @@ mixin template BlockBuilder() {
             case 66: dispatch_once!(rail, side)(block, x_offset, y_offset, z_offset); break; // rail
             case 67: dispatch_single_side!(stair, side)(block, ProjTextureSlice(0, 2, 0, 2), // cobblestone stair
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 75: dispatch_single_side!(torch, side)(block, TextureSlice(3, 8), x_offset, y_offset, z_offset); break; // rs-torch inactive
+            case 76: dispatch_single_side!(torch, side)(block, TextureSlice(3, 7), x_offset, y_offset, z_offset); break; // rs-torch active
             case 83: dispatch_once!(plant, side)(block, TextureSlice(9, 5), // reeds
                      biome_data, x_offset, y_offset, z_offset); break;
             case 86: mixin(single_side("pumpkin")); break;
