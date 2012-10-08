@@ -16,7 +16,6 @@ ifeq ($(OS),"Windows")
 else ifeq ($(OS),"MinGW")
 	DCFLAGS_LINK =  $(LDCFLAGS) $(LIB_PREFIX)$(PATH_SEP)libssl.lib \
 			$(LIB_PREFIX)$(PATH_SEP)libcrypto.lib \
-			$(LIB_PREFIX)$(PATH_SEP)libz.lib \
 			$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src$(PATH_SEP)glfw3.lib
 else
 	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \

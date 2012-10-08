@@ -22,7 +22,7 @@ else
 fi
 
 # setup
-mingw-get install mingw32-make msys-unzip msys-wget msys-zlib 2> nul
+mingw-get install mingw32-make msys-unzip msys-wget 2> nul
 
 if [ -d tools ] ; then
     rm -rf tools
@@ -56,15 +56,8 @@ PATH=$PATH:`pwd`/dm/bin
 #unzip -o openssl.zip
 
 # downloads complete, now COFF -> OMV and other setups
-mkdir include
-cp /include/zconf.h include/zconf.h
-cp /include/zlib.h include/zlib.h
-sed -i -e "s/if 1/if 0/g" include/zconf.h
-
 mkdir lib
 cd lib/
-
-cp /lib/libz.a .
 
 #cp C:/WINDOWS/system32/opengl32.dll .
 # yay workarounds
@@ -87,8 +80,6 @@ cp /c/${openssl}/libeay32.dll .
 echo "implib /s libssl.lib libssl32.dll && exit" | cmd
 echo "implib /s libcrypto.lib libeay32.dll && exit" | cmd
 
-
-objconv -fomf -nu libz.a
 objconv -fomf -nu libssl.a
 objconv -fomf -nu libcrypto.a
 
