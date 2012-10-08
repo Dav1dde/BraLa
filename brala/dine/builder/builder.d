@@ -609,6 +609,38 @@ mixin template BlockBuilder() {
         add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
     }
 
+    void redstone_repeater_active(Side s)(const ref Block block, const ref BiomeData biome_data,
+                                          float x_offset, float y_offset, float z_offset) {
+        redstone_repeater!(s, true)(block, biome_data, x_offset, y_offset, z_offset);
+    }
+
+    void redstone_repeater(Side s, bool powered = false)(const ref Block block, const ref BiomeData biome_data,
+                                                         float x_offset, float y_offset, float z_offset) {
+        static if(s == Side.TOP || s == Side.BOTTOM) {
+            static if(powered) {
+                enum tex = TextureSlice(3, 10);
+                enum torch_tex = TextureSlice(3, 7, 1, 1, 2, 0);
+            } else {
+                enum tex = TextureSlice(3, 9);
+                enum torch_tex = TextureSlice(3, 8, 1, 1, 2, 0);
+            }
+        } else static if(s != Side.TOP && s != Side.BOTTOM) {
+            enum tex = TextureSlice(5, 1, 8, 8, -6, 8); // double slab texture
+            static if(powered) {
+                enum torch_tex = TextureSlice(3, 7, 2, 2, 2, 8);
+            } else {
+                enum torch_tex = TextureSlice(3, 8, 2, 2, 2, 8);
+            }
+        }
+
+        enum fs = [Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST];
+
+        float offset = -0.0625f + ((block.metadata >> 2) & 0x3) * 0.125f;
+
+        alias memoize!(.redstone_repeater, 16) rr;
+        add_template_vertices(rr(s, fs[block.metadata & 0x3], offset, tex, torch_tex), block, x_offset, y_offset, z_offset);
+    }    
+
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
         switch(block.id) {
@@ -655,6 +687,8 @@ mixin template BlockBuilder() {
                      biome_data, x_offset, y_offset, z_offset); break;
             case 86: mixin(single_side("pumpkin")); break;
             case 91: mixin(single_side("jack_o_lantern")); break;
+            case 93: mixin(single_side("redstone_repeater")); break; // redstone repeater inactive
+            case 94: mixin(single_side("redstone_repeater_active")); break; // redstone repeater active
             case 98: mixin(single_side("stonebrick_block")); break; // stone brick
             case 104: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // pumpkin stem
             case 105: dispatch_once!(stem, side)(block, biome_data, world_coords, x_offset, y_offset, z_offset); break; // melon stem
