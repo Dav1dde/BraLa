@@ -40,10 +40,9 @@ Not a whole lot, but a start.
 BraLa brings most of the dependencies as gitsubmodules, but there are still a few things you need:
 * A D compiler, if you want to help developing BraLa I recommend you to use DMD or GDC since these allow
 you to use the gdb debugger.
-* A C compiler (e.g. gcc)
+* A C compiler (gcc and dmc on windows, or any C compiler on linux)
 * OpenGL
 * [OpenSSL](http://www.openssl.org/)
-* [Zlib](http://www.zlib.net/)
 
 ### Cloning ###
 
