@@ -4,7 +4,8 @@ export DESCRIPTION      = A Minecraft SMP Client written in D
 export VERSION          =
 export LICENSE          = GPLv3
 
-DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ -Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/
+DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ \
+			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/
 
 include command.make
 
@@ -35,8 +36,8 @@ endif
 DERELICT_DIR = src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
 
 OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP){arsd,derelict3,gl3n,glamour,openssl,std} \
-			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)nbt
+			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP){arsd,derelict3,gl3n,glamour,openssl,std,nbd} \
+			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)
 
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
@@ -52,7 +53,8 @@ DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT), 
 DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
 DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
 
-DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)std,d)
+DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)std,d) \
+			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d
 DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
 CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c $(call getSource,src$(PATH_SEP)c$(PATH_SEP)nbt,c)

@@ -16,3 +16,6 @@
 [submodule "src/d/glfw"]
 	path = src/d/glfw
 	url = git://github.com/D-Programming-Deimos/glfw.git
+[submodule "src/d/nbd"]
+	path = src/d/nbd
+	url = git://github.com/Dav1dde/nbd.git

@@ -7,18 +7,18 @@ private {
     import std.metastrings : toStringNow;
     import std.algorithm : canFind;
     import std.string : format;
-    import std.array : join, appender;
+    import std.array : join, appender, replace;
     import std.conv : to;
     import std.zlib : uncompress;
     import std.exception : enforceEx;
     import core.stdc.errno;
     
     import gl3n.linalg : vec3i;
+    import nbt : NBTFile;
     
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read, write;
-    import brala.utils.nbt : NbtTree;
     import brala.exception : ServerError;
 }
 
@@ -126,7 +126,7 @@ struct Slot {
     short item;
     byte item_count = 0;
     short metadata = 0;
-    NbtTree nbt_tree;
+    NBTFile nbt;
     
     private size_t _slot;
     private bool has_array_position;
@@ -154,8 +154,12 @@ struct Slot {
                 debug assert(len >= 0);
                 ubyte[] compressed_data = new ubyte[len];
                 s.readExact(compressed_data.ptr, len); 
-                ret.nbt_tree = NbtTree.parse_compressed(compressed_data.ptr, len);
+                ret.nbt = new NBTFile(compressed_data, NBTFile.Compression.AUTO);
             }
+        }
+
+        if(ret.nbt is null) {
+            ret.nbt = new NBTFile(); // having ret.nbt null makes things only harder
         }
             
         return ret;
@@ -163,9 +167,11 @@ struct Slot {
     
     string toString() {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
+
+        string pnbt = nbt.toString().replace("}\n", "}").replace("{\n", "{").replace("\n", ";").replace("  ", "");
         
-        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", NbtTree nbt_tree : "%s"`,
-                       s, item, item_count, metadata, nbt_tree);
+        return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", NBTFile nbt : "%s"`,
+                       s, item, item_count, metadata, pnbt);
     }
 }
 
