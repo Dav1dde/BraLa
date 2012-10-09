@@ -634,7 +634,7 @@ mixin template BlockBuilder() {
             }
         }
 
-        enum fs = [Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST];
+        enum fs = [Facing.SOUTH, Facing.EAST, Facing.NORTH, Facing.WEST];
 
         float offset = -0.0625f + ((block.metadata >> 2) & 0x3) * 0.125f;
 
