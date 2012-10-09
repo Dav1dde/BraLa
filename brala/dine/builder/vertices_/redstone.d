@@ -1,9 +1,14 @@
 module brala.dine.builder.vertices_.redstone;
 
 private {
+    import std.typetuple : TypeTuple;
+
+    import gl3n.math : sign;
+    
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.blocks : CUBE_VERTICES;
+    import brala.dine.builder.vertices_.tex : TextureSlice;
     import brala.dine.builder.vertices_.util;
 }
 
@@ -221,4 +226,20 @@ Vertex[] redstone_repeater(Side side, Facing face, float offset, short[2][4] tex
 
     mixin(mk_vertices_adv("to_triangles", true));
     return data ~ cut_torch(side, face, 0.125f, offset, torch_tex);
+}
+
+
+Vertex[] redstone_wire(Side side, Facing face, TextureSlice texture_slice) {
+    CubeSideData cbsd;
+    alias texture_slice mask_slice;
+
+    cbsd.positions = [[texture_slice.left*0.0625f, -0.49f, -texture_slice.bottom*0.0625f],
+                      [-texture_slice.right*0.0625f, -0.49f, -texture_slice.bottom*0.0625f],
+                      [-texture_slice.right*0.0625f, -0.49f, texture_slice.top*0.0625f],
+                      [texture_slice.left*0.0625f, -0.49f, texture_slice.top*0.0625f]];
+    cbsd.normal = [0.0f, 1.0f, 0.0f];
+    
+
+    mixin(mk_vertices_adv("to_triangles", true));
+    return data.dup;
 }

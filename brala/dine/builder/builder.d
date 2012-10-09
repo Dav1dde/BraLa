@@ -639,7 +639,75 @@ mixin template BlockBuilder() {
 
         alias memoize!(.redstone_repeater, 16) rr;
         add_template_vertices(rr(s, fs[block.metadata & 0x3], offset, tex, torch_tex), block, x_offset, y_offset, z_offset);
-    }    
+    }
+
+    void redstone(Side s)(const ref Block block, vec3i world_coords, float x_offset, float y_offset, float z_offset) {
+        enum rs_id = 55;
+        enum color = Color4(cast(ubyte)0xfd, cast(ubyte)0x00, cast(ubyte)0x00, cast(ubyte)0xff);
+        
+
+        enum {
+            FRONT =     0b00000001,
+            BACK =      0b00000010,
+            LEFT =      0b00000100,
+            RIGHT =     0b00001000,
+            FRONT_TOP = 0b00010000,
+            BACK_TOP =  0b00100000,
+            LEFT_TOP =  0b01000000,
+            RIGHT_TOP = 0b10000000
+        }
+
+        ubyte data = 0;
+        ubyte sides = 0;
+
+        Block b = world.get_block_safe(vec3i(world_coords.x , world_coords.y+1, world_coords.z));
+        bool can_travel_up = !BLOCKS[b.id].opaque;
+
+        static string make_check(string x, string z, string flag) {
+            return `b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y, world_coords.z+` ~ z ~ `));
+                    if(b.id == rs_id) {
+                        data |= ` ~ flag ~ `;
+                        sides++;
+                    } else if(can_travel_up && BLOCKS[b.id].opaque) {
+                        b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y+1, world_coords.z+` ~ z ~ `));
+                        if(b.id == rs_id) {
+                            data |= ` ~ flag ~ `;
+                            data |= ` ~ flag ~ `_TOP;
+                            sides++;
+                        }
+                    }`;
+        }
+
+        mixin(make_check("0", "1", "FRONT"));
+        mixin(make_check("0", "-1", "BACK"));
+        mixin(make_check("1", "0", "RIGHT"));
+        mixin(make_check("-1", "0", "LEFT"));
+
+        if(sides == 0) {
+            enum vertices = redstone_wire(s, Facing.SOUTH, TextureSlice(4, 11, 3, 3, 3, 3));
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+        } else if(sides == 1 || (data & 0b1111) == 0b1100 || (data & 0b1111) == 0b0011) {
+            if(data & 0b1100) {
+                enum vertices = redstone_wire(s, Facing.SOUTH, TextureSlice(5, 11));
+                add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+            } else if(data & 0b0011) {
+                enum vertices = redstone_wire(s, Facing.EAST, TextureSlice(5, 11));
+                add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+            }
+        } else {
+            TextureSlice tex = TextureSlice(4, 11, 3, 3, 3, 3);
+
+            foreach(i; TypeTuple!(0, 1, 2, 3)) {
+                if(data & (1 << i)) {
+                    enum s = ["top", "bottom", "right", "left"];
+                    mixin("tex." ~ s[i] ~ " = 8;");
+                }
+            }
+
+            auto vertices = memoize!(redstone_wire, 8)(s, Facing.SOUTH, tex);
+            add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+        }
+    }
 
     void dispatch(Side side)(const ref Block block, const ref BiomeData biome_data,
                              vec3i world_coords, float x_offset, float y_offset, float z_offset) {
@@ -673,6 +741,7 @@ mixin template BlockBuilder() {
             case 44: mixin(single_side("stone_slab")); break; // stone slabs - stone, sandstone, wooden stone, cobblestone, brick, stone brick
             case 53: dispatch_single_side!(stair, side)(block, ProjTextureSlice(4, 1, 4, 1), // oak wood stair
                      biome_data, x_offset, y_offset, z_offset); break;
+            case 55: dispatch_once!(redstone, side)(block, world_coords, x_offset, y_offset, z_offset); break; // redstone wire
             case 59: dispatch_once!(wheat, side)(block, biome_data, x_offset, y_offset, z_offset); break; // wheat
             case 60: mixin(single_side("farmland")); break; // farmland
             case 61: mixin(single_side("furnace")); break; // furnace
