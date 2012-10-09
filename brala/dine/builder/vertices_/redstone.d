@@ -229,7 +229,7 @@ Vertex[] redstone_repeater(Side side, Facing face, float offset, short[2][4] tex
 }
 
 
-Vertex[] redstone_wire(Side side, Facing face, TextureSlice texture_slice) {
+Vertex[] redstone_wire(Facing face, TextureSlice texture_slice) {
     CubeSideData cbsd;
     alias texture_slice mask_slice;
 
@@ -241,5 +241,18 @@ Vertex[] redstone_wire(Side side, Facing face, TextureSlice texture_slice) {
     
 
     mixin(mk_vertices_adv("to_triangles", true));
+    return data.dup;
+}
+
+immutable CubeSideData REDSTONE_WIRE_SIDE_VERTEX = {
+    [[-0.5f, -0.5f, 0.49f], [0.5f, -0.5f, 0.49f], [0.5f, 0.5f, 0.49f], [-0.5f, 0.5f, 0.49f]],
+     [0.0f, 0.0f, 1.0f]
+};
+
+Vertex[] redstone_wire_side(Facing face, short[2][4] texture_slice) {
+    CubeSideData cbsd = REDSTONE_WIRE_SIDE_VERTEX;
+    alias texture_slice mask_slice;
+
+    mixin(mk_vertices_adv("to_triangles_other_winding", true));
     return data.dup;
 }

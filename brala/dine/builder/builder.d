@@ -11,7 +11,8 @@ public {
     import std.algorithm : map, canFind;
     import std.functional : memoize;
     import std.typetuple : TypeTuple;
-    
+
+    import brala.dine.builder.blocks : BLOCKS, BlockDescriptor;
     import brala.dine.builder.biomes : BiomeData, Color4;
     import brala.dine.builder.vertices /+: BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
                                          BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
@@ -642,7 +643,8 @@ mixin template BlockBuilder() {
     }
 
     void redstone(Side s)(const ref Block block, vec3i world_coords, float x_offset, float y_offset, float z_offset) {
-        enum redstone_devices = [55, 69, 70, 75, 76, 77, 131, 143];
+        enum rs_id = 55;
+        enum redstone_devices = [rs_id, 69, 70, 75, 76, 77, 131, 143];
         enum special_redstone_devices = [93, 94];
 
         static bool connects_to(string side, const ref Block other) {
@@ -659,7 +661,7 @@ mixin template BlockBuilder() {
             return false;
         }
 
-        enum color = Color4(cast(ubyte)0xfd, cast(ubyte)0x00, cast(ubyte)0x00, cast(ubyte)0xff);
+        auto color = Color4(cast(ubyte)(0x5a+block.metadata*10), cast(ubyte)0x00, cast(ubyte)0x00, cast(ubyte)0xff);
         
         enum {
             FRONT =     0b00000001,
@@ -675,22 +677,38 @@ mixin template BlockBuilder() {
         ubyte data = 0;
         ubyte sides = 0;
 
+        
         Block b = world.get_block_safe(vec3i(world_coords.x , world_coords.y+1, world_coords.z));
+        BlockDescriptor orig_block_desc;
+        
         bool can_travel_up = !BLOCKS[b.id].opaque;
 
         static string make_check(string x, string z, string flag) {
             return `b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y, world_coords.z+` ~ z ~ `));
+                    orig_block_desc = BLOCKS[b.id];
+
                     if(connects_to("` ~ flag ~ `", b)) {
                         data |= ` ~ flag ~ `;
                         sides++;
-                    } else if(can_travel_up && BLOCKS[b.id].opaque) {
+                    } else if(can_travel_up && orig_block_desc.opaque) {
                         b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y+1, world_coords.z+` ~ z ~ `));
-                        if(connects_to("` ~ flag ~ `", b)) {
+                        if(b.id == rs_id) {
                             data |= ` ~ flag ~ `;
                             data |= ` ~ flag ~ `_TOP;
                             sides++;
                         }
-                    }`;
+                    }
+
+                    if(!orig_block_desc.opaque) {
+                        b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y-1, world_coords.z+` ~ z ~ `));
+                        if(b.id == rs_id) {
+                            if((data & ` ~ flag ~ `) == 0) {
+                                data |= ` ~ flag ~ `;
+                                sides++;
+                            }
+                        }
+                    }
+                    `;
         }
 
         mixin(make_check("0", "1", "FRONT"));
@@ -699,14 +717,14 @@ mixin template BlockBuilder() {
         mixin(make_check("-1", "0", "LEFT"));
 
         if(sides == 0) {
-            enum vertices = redstone_wire(s, Facing.SOUTH, TextureSlice(4, 11, 3, 3, 3, 3));
+            enum vertices = redstone_wire(Facing.SOUTH, TextureSlice(4, 11, 3, 3, 3, 3));
             add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
         } else if(sides == 1 || (data & 0b1111) == 0b1100 || (data & 0b1111) == 0b0011) {
             if(data & 0b1100) {
-                enum vertices = redstone_wire(s, Facing.SOUTH, TextureSlice(5, 11));
+                enum vertices = redstone_wire(Facing.SOUTH, TextureSlice(5, 11));
                 add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
             } else if(data & 0b0011) {
-                enum vertices = redstone_wire(s, Facing.EAST, TextureSlice(5, 11));
+                enum vertices = redstone_wire(Facing.EAST, TextureSlice(5, 11));
                 add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
             }
         } else {
@@ -719,8 +737,16 @@ mixin template BlockBuilder() {
                 }
             }
 
-            auto vertices = memoize!(redstone_wire, 8)(s, Facing.SOUTH, tex);
+            auto vertices = memoize!(redstone_wire, 8)(Facing.SOUTH, tex);
             add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+        }
+
+        foreach(i; TypeTuple!(4, 5, 6, 7)) {
+            if(data & (1 << i)) {
+                enum s = [Facing.SOUTH, Facing.NORTH, Facing.WEST, Facing.EAST];
+                enum vertices = redstone_wire_side(s[i-4], TextureSlice(5, 11).texcoords_90);
+                add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
+            }
         }
     }
 
