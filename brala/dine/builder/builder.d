@@ -8,7 +8,7 @@ private {
 
 public {
     import std.array : array, join;
-    import std.algorithm : map;
+    import std.algorithm : map, canFind;
     import std.functional : memoize;
     import std.typetuple : TypeTuple;
     
@@ -642,10 +642,25 @@ mixin template BlockBuilder() {
     }
 
     void redstone(Side s)(const ref Block block, vec3i world_coords, float x_offset, float y_offset, float z_offset) {
-        enum rs_id = 55;
+        enum redstone_devices = [55, 69, 70, 75, 76, 77, 131, 143];
+        enum special_redstone_devices = [93, 94];
+
+        static bool connects_to(string side, const ref Block other) {
+            if(redstone_devices.canFind(other.id)) {
+                return true;
+            } else if(other.id == 93 || other.id == 94) {
+                if(side == "FRONT" || side == "BACK") {
+                    return (other.metadata & 0x3) % 2 == 0;
+                } else {
+                    return (other.metadata & 0x3) % 2 == 1;
+                }
+            }
+            
+            return false;
+        }
+
         enum color = Color4(cast(ubyte)0xfd, cast(ubyte)0x00, cast(ubyte)0x00, cast(ubyte)0xff);
         
-
         enum {
             FRONT =     0b00000001,
             BACK =      0b00000010,
@@ -665,12 +680,12 @@ mixin template BlockBuilder() {
 
         static string make_check(string x, string z, string flag) {
             return `b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y, world_coords.z+` ~ z ~ `));
-                    if(b.id == rs_id) {
+                    if(connects_to("` ~ flag ~ `", b)) {
                         data |= ` ~ flag ~ `;
                         sides++;
                     } else if(can_travel_up && BLOCKS[b.id].opaque) {
                         b = world.get_block_safe(vec3i(world_coords.x+` ~ x ~ ` , world_coords.y+1, world_coords.z+` ~ z ~ `));
-                        if(b.id == rs_id) {
+                        if(connects_to("` ~ flag ~ `", b)) {
                             data |= ` ~ flag ~ `;
                             data |= ` ~ flag ~ `_TOP;
                             sides++;
