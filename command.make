@@ -2,7 +2,7 @@ ifdef SystemRoot
     OS              ="Windows"
     STATIC_LIB_EXT  =.lib
     DYNAMIC_LIB_EXT =.dll
-    PATH_SEP        =\
+    PATH_SEP        =\\
     message         =@(echo $1)
     SHELL           =cmd.exe
     Filter          =%/linux/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
@@ -262,16 +262,16 @@ ifndef CC
     endif
 endif
 
-DLIB_PATH           = ./lib
-IMPORT_PATH         = ./import
-DOC_PATH            = ./doc
-DDOC_PATH           = ./ddoc
-DBUILD_PATH         = ./build
-DBUILD_PATH_GL3N    = ./build
-DBUILD_PATH_GLAMOUR = ./build
-DBUILD_PATH_DERELICT = ./build
-DBUILD_PATH_OTHER   = ./build
-CBUILD_PATH         = ./build
+DLIB_PATH           = .$(PATH_SEP)lib
+IMPORT_PATH         = .$(PATH_SEP)import
+DOC_PATH            = .$(PATH_SEP)doc
+DDOC_PATH           = .$(PATH_SEP)ddoc
+DBUILD_PATH         = .$(PATH_SEP)build
+DBUILD_PATH_GL3N    = .$(PATH_SEP)build
+DBUILD_PATH_GLAMOUR = .$(PATH_SEP)build
+DBUILD_PATH_DERELICT = .$(PATH_SEP)build
+DBUILD_PATH_OTHER   = .$(PATH_SEP)build
+CBUILD_PATH         = .$(PATH_SEP)build
 
 LIBNAME             = lib$(PROJECT_NAME)-$(COMPILER)$(STATIC_LIB_EXT)
 SONAME              = lib$(PROJECT_NAME)-$(COMPILER)$(DYNAMIC_LIB_EXT)
