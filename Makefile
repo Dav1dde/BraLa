@@ -42,7 +42,7 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)openssl \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)std \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)nbd \
-			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)
+			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c
 
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
