@@ -86,7 +86,36 @@ To build with GDC you have to specify `gdc` as D compiler:
 make DC=gdc
 ```
 
-## Getting Started/Windows ##
+## Getting Started/Windows Easy ##
+
+The setup on Windows is relatively easy now (assuming you have [git]([http://windows.github.com/](http://windows.github.com/)
+already installed).
+
+Download [DMD2](http://dlang.org/download.html) (if you don't have dmd installed)
+with the D-Installer, make sure you checked the dmc  option when installing.
+Furthermore the [DigitalMars Utilities](ftp://ftp.digitalmars.com/dmc.zip) are needed, extract these into your
+`.\dm` folder, which was created by the D-Setup.
+
+Since BraLa depends on OpenSSL you have to install the OpenSSL dlls, too:
+[http://slproweb.com/products/Win32OpenSSL.html](http://slproweb.com/products/Win32OpenSSL.html),
+just grab the installer for your Windows version. You also need a recent DLL of
+[glfw3](https://github.com/elmindreda/glfw), I will provide such a version soon.
+
+To clone and compile BraLa open your terminal and run the commands:
+
+```
+git clone git://github.com/Dav1dde/BraLa.git
+cd BraLa
+git submodule init
+git submodule update
+rdmd build_brala.d
+```
+
+The current working directory is important (you have to be in the repos root directory)!
+
+
+
+## Getting Started/Windows MinGW ##
 
 To setup BraLa you need a few things first. I will guide you throught the needed steps.
 
