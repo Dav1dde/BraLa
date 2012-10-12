@@ -105,7 +105,7 @@ Furthermore the [DigitalMars Utilities](ftp://ftp.digitalmars.com/dmc.zip) are n
 
 Since BraLa depends on OpenSSL you have to install the OpenSSL dlls, too:
 [http://slproweb.com/products/Win32OpenSSL.html](http://slproweb.com/products/Win32OpenSSL.html),
-just grab the installer for your Windows version. You also need a recent DLL of
+just grab the installer for your Windows version and install it. You also need a recent DLL of
 [glfw3](https://github.com/elmindreda/glfw), I will provide such a version soon.
 
 To clone and compile BraLa open your terminal and run the commands:
