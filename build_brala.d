@@ -5,10 +5,11 @@ private {
     import std.path : std_buildPath = buildPath, extension, setExtension, dirName;
     import std.array : join, split, appender;
     import std.process : shell, environment;
-    import std.file : dirEntries, SpanMode, mkdirRecurse, FileException;
+    import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove;
     import std.stdio : writeln;
     import std.string : format;
     import std.parallelism : parallel;
+    import std.exception : enforce;
 }
 
 
@@ -118,8 +119,9 @@ string make_d_flags() {
 
 string make_dcflags_link() {
     version(Windows) {
-        // TODO
-        string[] DCFLAGS_LINK_RAW = [LDCFLAGS];
+        setup_openssl();
+        
+        return ["libssl32.lib", "libeay32.lib"].join(" ");
     } else {
         string pkg_cfg_path = environment.get("PKG_CONFIG_PATH", "");
         environment["PKG_CONFIG_PATH"] = buildPath(".", "build", "glfw", "src");
@@ -129,9 +131,40 @@ string make_dcflags_link() {
         environment["PKG_CONFIG_PATH"] = pkg_cfg_path;
 
         string[] DCFLAGS_LINK_RAW = [LDCFLAGS, "-lssl", "-lcrypto", "-Lbuild/glfw/src"] ~ glfw_link;
+        return DCFLAGS_LINK_RAW.map!(x => LINKERFLAG ~ x).join(" ");
     }
 
-    return DCFLAGS_LINK_RAW.map!(x => LINKERFLAG ~ x).join(" ");
+    
+}
+
+void setup_openssl() {
+    string drive = environment["SystemDrive"];
+    string system_root = environment["SystemRoot"];
+
+    string openssl_path = buildPath(drive, "OpenSSL-Win32");
+    if(!openssl_path.exists()) {
+        openssl_path = buildPath(system_root, "system32");
+    }
+
+    string libssl = buildPath(openssl_path, "libssl32.dll");
+    string libeay = buildPath(openssl_path, "libeay32.dll");
+
+    enforce(libssl.exists(), "can't find libssl, install openssl");
+    enforce(libeay.exists(), "can't find libeay, install openssl");
+
+    // access denied: LOL
+//     copy(libssl, "."); 
+//     copy(libeay, ".");
+
+    // crazy windows
+    shell("copy %s .".format(libssl));
+    shell("copy %s .".format(libeay));
+
+    shell("implib /s libssl32.lib libssl32.dll");
+    shell("implib /s libeay32.lib libeay32.dll");
+
+    //remove("libssl32.dll");
+    //remove("libeay32.dll");    
 }
 
 string make_dcflags_import() {
@@ -172,8 +205,8 @@ void make_folders(string prefix, string[] paths) {
 string[] d_compile(string prefix, string[] files) {
     auto app = appender!(string[])();
     
-    //foreach(file; parallel(files)) {
-    foreach(file; files) {
+    foreach(file; parallel(files)) {
+//     foreach(file; files) {
         string build_path = buildPath(prefix, file).setExtension(OBJ);
 
         string cmd = "%s %s %s -c %s %s%s".format(DC, DFLAGS, DCFLAGS_IMPORT, file, OUTPUT, build_path);
@@ -190,8 +223,8 @@ string[] d_compile(string prefix, string[] files) {
 string[] c_compile(string prefix, string[] files) {
     auto app = appender!(string[])();
 
-    //foreach(file; parallel(files)) {
-    foreach(file; files) {
+    foreach(file; parallel(files)) {
+//     foreach(file; files) {
         string build_path = buildPath(prefix, file).setExtension(OBJ);
 
         string cmd = "%s %s -c %s %s%s".format(CC, CFLAGS, file, C_OUTPUT, build_path);
