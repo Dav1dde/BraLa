@@ -88,7 +88,7 @@ make DC=gdc
 
 ## Getting Started/Windows Easy ##
 
-The setup on Windows is relatively easy now (assuming you have [git]([http://windows.github.com/](http://windows.github.com/)
+The setup on Windows is relatively easy now (assuming you have [git](http://windows.github.com/)
 already installed).
 
 Download [DMD2](http://dlang.org/download.html) (if you don't have dmd installed)
