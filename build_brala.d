@@ -172,7 +172,8 @@ void make_folders(string prefix, string[] paths) {
 string[] d_compile(string prefix, string[] files) {
     auto app = appender!(string[])();
     
-    foreach(file; parallel(files)) {
+    //foreach(file; parallel(files)) {
+    foreach(file; files) {
         string build_path = buildPath(prefix, file).setExtension(OBJ);
 
         string cmd = "%s %s %s -c %s %s%s".format(DC, DFLAGS, DCFLAGS_IMPORT, file, OUTPUT, build_path);
@@ -189,7 +190,8 @@ string[] d_compile(string prefix, string[] files) {
 string[] c_compile(string prefix, string[] files) {
     auto app = appender!(string[])();
 
-    foreach(file; parallel(files)) {
+    //foreach(file; parallel(files)) {
+    foreach(file; files) {
         string build_path = buildPath(prefix, file).setExtension(OBJ);
 
         string cmd = "%s %s -c %s %s%s".format(CC, CFLAGS, file, C_OUTPUT, build_path);
