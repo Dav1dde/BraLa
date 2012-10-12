@@ -106,9 +106,9 @@ $(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
 
 $(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
 ifeq ($(OS),"MinGW")
-	$(CC) $(CFLAGS) -c -A99 $< -o$@
+	$(CC) $(CFLAGS) -c $< -o$@
 else
-	$(CC) $(CFLAGS) -c -std=c99 $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 endif
 
 buildDir: $(OBJDIRS)
