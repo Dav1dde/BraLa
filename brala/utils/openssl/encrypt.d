@@ -1,4 +1,4 @@
-module brala.utils.openssl.enrypt;
+module brala.utils.openssl.encrypt;
 
 private {
     import std.range : ElementEncodingType;

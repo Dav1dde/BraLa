@@ -7,7 +7,7 @@ ifdef SystemRoot
     SHELL           =cmd.exe
     Filter          =%/linux/%.d %/darwin/%.d %/freebsd/%.d %/solaris/%.d
     getSource       =$(shell dir $1 /s /b)
-    EXT                         =.obj
+    EXT             =.obj
 else
     SHELL           = sh
     PATH_SEP        =/
