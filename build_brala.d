@@ -163,7 +163,7 @@ void make_folders(string prefix, string[] paths) {
         try {
             mkdirRecurse(buildPath(prefix, path.dirName()));
         } catch(FileException e) {
-            assert(e.msg.endsWith("File exists"), e.msg);
+            //assert(e.msg.endsWith("File exists"), e.msg);
         }
     }
 }
