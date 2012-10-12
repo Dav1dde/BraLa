@@ -108,7 +108,11 @@ enum BuildPath[] C_PATHS = [{buildPath(".", "src", "c"), SpanMode.shallow}];
 
 
 string make_d_flags() {
-    enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
+    version(Windows) {
+        enum DFLAGS = [ver("Derelict3", "DynamicGLFW", "gl3n", "stb"), DEBUG].join(" ");
+    } else {
+        enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
+    }
     return DFLAGS;
 }
 

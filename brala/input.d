@@ -2,7 +2,7 @@ module brala.input;
 
 
 private {
-    import deimos.glfw.glfw3;
+    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
     import std.conv : to;
     
     import brala.exception : FatalException;

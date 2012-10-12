@@ -6,7 +6,7 @@ private {
     import glamour.texture : ITexture;
     import glamour.sampler : Sampler;
     
-    import deimos.glfw.glfw3;
+    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
     
     import gl3n.linalg;
     import gl3n.frustum : Frustum;

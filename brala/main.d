@@ -6,7 +6,7 @@ private {
     import glamour.sampler : Sampler;
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
-    import deimos.glfw.glfw3;
+    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
 
     import std.conv : to;
     import std.path : buildPath;
@@ -34,6 +34,10 @@ private {
 static this() {
     DerelictGL3.load();
 
+    version(DynamicGLFW) {
+        DerelictGLFW3.load();
+    }
+
     if(!glfwInit()) {
         throw new InitError("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
     }
@@ -42,7 +46,11 @@ static this() {
 GLFWwindow _window;
 
 GLFWwindow open_glfw_win(int width, int height) {
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    version(DynamicGLFW) {
+        glfwWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+    } else {
+        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    }
 
     _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level", null);
 
