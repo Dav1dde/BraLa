@@ -46,7 +46,14 @@ you to use the gdb debugger.
 
 ### Cloning ###
 
-Since BraLa makes use of git submodules, it's a few commands more to successfully clone BraLa.
+Since BraLa makes use of git submodules, you need the `--recursive` flag, when cloning:
+
+```
+git clone --recursive git://github.com/Dav1dde/BraLa.git
+cd BraLa
+```
+
+Or you setup the submodules on your own:
 
 ```
 git clone git://github.com/Dav1dde/BraLa.git
@@ -104,10 +111,8 @@ just grab the installer for your Windows version. You also need a recent DLL of
 To clone and compile BraLa open your terminal and run the commands:
 
 ```
-git clone git://github.com/Dav1dde/BraLa.git
+git clone --recursive git://github.com/Dav1dde/BraLa.git
 cd BraLa
-git submodule init
-git submodule update
 rdmd build_brala.d
 ```
 
