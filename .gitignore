@@ -9,4 +9,5 @@ bralad
 build/
 bin/
 tools/
+.build_cache
 *.sh

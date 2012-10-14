@@ -5,11 +5,12 @@ private {
     import std.path : std_buildPath = buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender, array;
     import std.process : shell, environment;
-    import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove;
-    import std.stdio : writeln;
-    import std.string : format;
+    import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove, readText, write;
+    import std.stdio : writeln, File;
+    import std.string : format, stripRight;
     import std.parallelism : parallel;
     import std.exception : enforce;
+    import std.md5;
 }
 
 
@@ -73,6 +74,9 @@ string C_OUTPUT;
 string DFLAGS;
 string DCFLAGS_LINK;
 string DCFLAGS_IMPORT;
+
+enum CACHE_FILE = ".build_cache";
+
 
 static this() {
     CC = environment.get("CC", DEFAULT_CC);
@@ -198,37 +202,104 @@ void setup_bin(string prefix = "") {
     }
 }
 
+string[string] get_build_cache(string file) {
+    if(file.exists()) {
+        File f = File(file, "r");
+        scope(exit) f.close();
+        return get_build_cache(f);
+    }
 
-string[] d_compile(string prefix, string[] files) {
+    string[string] s;
+    return s;
+}
+
+string[string] get_build_cache(File file) {
+    string[string] cache;
+
+    foreach(cline; file.byLine()) {
+        string line = cline.idup;
+
+        string hash = line.split()[$-1];
+        string path = line[0..$-hash.length].stripRight();
+
+        cache[path] = hash;
+    }
+
+    return cache;
+}
+
+string md5_file(string filename) {
+    ubyte[16] digest;
+    MD5_CTX context;
+    context.start();
+
+    foreach(buffer; File(filename).byChunk(64 * 1024)) {
+        context.update(buffer);
+    }
+
+    context.finish(digest);
+
+    return digestToString(digest);
+}
+
+
+void save_build_cache(string file, string[string] cache) {
+    File f = File(file, "w");
+    scope(exit) f.close();
+    return save_build_cache(f, cache);
+}
+
+void save_build_cache(File file, string[string] cache) {
+    foreach(k, v; cache) {
+        file.writefln("%s %s", k, v);
+    }
+}
+
+
+string[] d_compile(string prefix, string[] files, ref string[string] cache) {
     auto app = appender!(string[])();
 
     foreach(file; parallel(files)) {
 //     foreach(file; files) {
+        string md5 = md5_file(file);
+
         string build_path = buildPath(prefix, file).setExtension(OBJ);
+        app.put(build_path);
+
+        if(build_path.exists() && cache.get(file, "") == md5) {
+            continue;
+        }
 
         string cmd = "%s %s %s -c %s %s%s".format(DC, DFLAGS, DCFLAGS_IMPORT, file, OUTPUT, build_path);
         writeln(cmd);
         shell(cmd);
 
-        app.put(build_path);
+        cache[file] = md5;
     }
 
     return app.data;
 }
 
 
-string[] c_compile(string prefix, string[] files) {
+string[] c_compile(string prefix, string[] files, ref string[string] cache) {
     auto app = appender!(string[])();
 
     foreach(file; parallel(files)) {
 //     foreach(file; files) {
-        string build_path = buildPath(prefix, file).setExtension(OBJ);
+        string md5 = md5_file(file);
 
+        string build_path = buildPath(prefix, file).setExtension(OBJ);
+        app.put(build_path);
+
+        if(build_path.exists() && cache.get(file, "") == md5) {
+            continue;
+        }
+        
         string cmd = "%s %s -c %s %s%s".format(CC, CFLAGS, file, C_OUTPUT, build_path);
         writeln(cmd);
         shell(cmd);
 
-        app.put(build_path);
+        cache[file] = md5;
     }
 
     return app.data;
@@ -244,16 +315,20 @@ void link(string[] d_files, string[] c_files, string exe) {
 
 
 void main() {
+    string[string] cache = get_build_cache(CACHE_FILE);
+    
     string[] d_files = find_files(D_PATHS, ".d");
     string[] c_files = find_files(C_PATHS, ".c");
 
     make_folders(DBUILD_PATH, d_files);
     make_folders(CBUILD_PATH, c_files);
 
-    string[] d_obj = d_compile(DBUILD_PATH, d_files);
-    string[] c_obj = c_compile(CBUILD_PATH, c_files);
+    string[] d_obj = d_compile(DBUILD_PATH, d_files, cache);
+    string[] c_obj = c_compile(CBUILD_PATH, c_files, cache);
 
     setup_bin();
 
     link(d_obj, c_obj, buildPath("bin", "bralad"));
+
+    save_build_cache(CACHE_FILE, cache);
 }
