@@ -15,6 +15,7 @@ private {
     import std.process : getenv;
     import std.range : zip;
     import std.array : join;
+    import std.exception : enforceEx;
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -38,9 +39,7 @@ static this() {
         DerelictGLFW3.load();
     }
 
-    if(!glfwInit()) {
-        throw new InitError("glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
-    }
+    enforceEx!InitError(glfwInit(), "glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
 }
 
 GLFWwindow _window;
@@ -53,10 +52,8 @@ GLFWwindow open_glfw_win(int width, int height) {
     }
 
     _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level", null);
+    enforceEx!InitError(_window !is null, "Unable to initialize an OpenGL context");
 
-    if(!_window) {
-        throw new InitError("I am sorry man, I am not able to initialize a window/create an OpenGL context :/.");
-    }
     glfwMakeContextCurrent(_window);
 
     glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
@@ -206,6 +203,8 @@ int main() {
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
+
+    enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
     string username = args.username;
     string password = args.password;
