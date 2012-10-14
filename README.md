@@ -93,7 +93,7 @@ To build with GDC you have to specify `gdc` as D compiler:
 make DC=gdc
 ```
 
-## Getting Started/Windows Easy ##
+## Getting Started/Windows ##
 
 These steps assume, that you have [git](http://windows.github.com/) already installed.
 
@@ -109,46 +109,6 @@ rdmd build_brala.d
 ```
 
 The current working directory is important (you have to be in the repos root directory)!
-
-
-## Getting Started/Windows MinGW ##
-
-To setup BraLa you need a few things first. I will guide you throught the needed steps.
-
-### Basic Setup ###
-
-Download the latest [MinGW Installer](http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst/) and
-select the C and C++ compiler together with the `MSYS Basic System`. After installing MinGW/Msys you have to add
-`C:\MinGW\bin` to `$PATH` (replace the path according to your installation).
-
-Next step is to get `git`, if you already have git installed, omit this step. I for myself use
-[msysgit](http://code.google.com/p/msysgit/) but any git should work. Installing `msysgit` will take quite a while.
-
-Now get the latest **DMD** compiler **.zip** (Important: not the installer, it seems to be broken). Extract it e.g.
-to `C:\D` and add `C:\D\dmd2\windows\bin` to `$PATH`.
-
-Download [cmake](http://www.cmake.org/cmake/resources/software.html) and install it.
-
-After cmake, you need OpenSSL dlls `libssl32.dll` and `libeay32.dll`, they have to be in `C:\WINDOWS\system32` (default
-installation folder) or in `C:\OpenSSL-Win32`/`C:\OpenSSL-Win64` (the script searches for an `C:\OpenSSL*` folder).
-if you don't have these DLLs, you can download a setup from:
-[http://slproweb.com/products/Win32OpenSSL.html](http://slproweb.com/products/Win32OpenSSL.html).
-
-That's it with the basic setup.
-
-### Compilation/Running ###
-
-Download [setup_brala.sh](https://github.com/Dav1dde/BraLa/blob/master/setup_brala.sh) and run it from any directory
-(through the MinGW-Shell), just make sure that no folder named `BraLa` exists. This will clone BraLa into `./BraLa`
-and setup a few tools and libraries needed for Windows in `./BraLa/tools/`
-
-It also creates three shell scripts in `./BraLa`:
-
-* `recompile.sh`: launch this if you want to recompile BraLa (e.g. after pulling the latest changes)
-* `launch.sh`: this will start BraLa (`./launch.sh -c -hlocalhost`, see section "Running" for commandline arguments)
-* `pack.sh`: this will "pack" all .dlls needed for BraLa and the executable itself into the folder `./BraLa/packed`, so
-you can start BraLa from the normal `cmd.exe` without adjusting the `$PATH`
-
 
 ## Running ##
 
