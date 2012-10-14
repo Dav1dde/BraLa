@@ -2,7 +2,7 @@
 
 private {
     import std.algorithm : map, filter, endsWith;
-    import std.path : std_buildPath = buildPath, extension, setExtension, dirName;
+    import std.path : std_buildPath = buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender;
     import std.process : shell, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove;
@@ -105,12 +105,12 @@ enum BuildPath[] D_PATHS = [{buildPath("brala"),                                
                             {buildPath("src", "d", "std"),                                        SpanMode.breadth},
                             {buildPath("src", "d", "nbd"),                                        SpanMode.shallow}];
 
-enum BuildPath[] C_PATHS = [{buildPath(".", "src", "c"), SpanMode.shallow}];
+enum BuildPath[] C_PATHS = [{buildPath("src", "c"), SpanMode.shallow}];
 
 
 string make_d_flags() {
     version(Windows) {
-        enum DFLAGS = [ver("Derelict3", "DynamicGLFW", "gl3n", "stb"), DEBUG].join(" ");
+        enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
     } else {
         enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
     }
@@ -119,12 +119,14 @@ string make_d_flags() {
 
 string make_dcflags_link() {
     version(Windows) {
-        setup_openssl();
+        string libssl = buildPath("lib", "windows", "libssl32.lib");
+        string libeay = buildPath("lib", "windows", "libeay32.lib");
+        string glfw = buildPath("lib", "windows", "glfw3.lib");
         
-        return ["libssl32.lib", "libeay32.lib"].join(" ");
+        return [libssl, libeay, glfw].join(" ");
     } else {
         string pkg_cfg_path = environment.get("PKG_CONFIG_PATH", "");
-        environment["PKG_CONFIG_PATH"] = buildPath(".", "build", "glfw", "src");
+        environment["PKG_CONFIG_PATH"] = buildPath("build", "glfw", "src");
 
         string[] glfw_link = shell(`pkg-config --static --libs glfw3`).split();
 
@@ -137,35 +139,6 @@ string make_dcflags_link() {
     
 }
 
-void setup_openssl() {
-    string drive = environment["SystemDrive"];
-    string system_root = environment["SystemRoot"];
-
-    string openssl_path = buildPath(drive, "OpenSSL-Win32");
-    if(!openssl_path.exists()) {
-        openssl_path = buildPath(system_root, "system32");
-    }
-
-    string libssl = buildPath(openssl_path, "libssl32.dll");
-    string libeay = buildPath(openssl_path, "libeay32.dll");
-
-    enforce(libssl.exists(), "can't find libssl, install openssl");
-    enforce(libeay.exists(), "can't find libeay, install openssl");
-
-    // access denied: LOL
-//     copy(libssl, "."); 
-//     copy(libeay, ".");
-
-    // crazy windows
-    shell("copy %s .".format(libssl));
-    shell("copy %s .".format(libeay));
-
-    shell("implib /s libssl32.lib libssl32.dll");
-    shell("implib /s libeay32.lib libeay32.dll");
-
-    //remove("libssl32.dll");
-    //remove("libeay32.dll");    
-}
 
 string make_dcflags_import() {
     immutable string[] paths = [buildPath("brala"),
@@ -191,12 +164,32 @@ string[] find_files(BuildPath[] paths, string ext) {
     return app.data;
 }
 
+
 void make_folders(string prefix, string[] paths) {
     foreach(path; paths) {
         try {
             mkdirRecurse(buildPath(prefix, path.dirName()));
         } catch(FileException e) {
             //assert(e.msg.endsWith("File exists"), e.msg);
+        }
+    }
+}
+
+
+void setup_bin(string prefix = "") {
+    string bin = buildPath(prefix, "bin");
+    
+    try {
+        mkdirRecurse(bin);
+    } catch(FileException e) {}
+
+    version(Windows) {
+        string[] dlls = find_files(buildPath("lib", "windows"), ".dll");
+
+        foreach(dll; dlls) {
+            string dest = buildPath(bin, dll.baseName());
+            
+            copy(dll, dest);
         }
     }
 }
@@ -256,5 +249,7 @@ void main() {
     string[] d_obj = d_compile(DBUILD_PATH, d_files);
     string[] c_obj = c_compile(CBUILD_PATH, c_files);
 
-    link(d_obj, c_obj, "bralad");
+    setup_bin();
+
+    link(d_obj, c_obj, buildPath("bin", "bralad"));
 }
