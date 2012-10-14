@@ -62,10 +62,6 @@ class Connection {
     immutable byte protocol_version = 39;
     
     this(string username, string password, bool snoop) {
-        socket = new TcpSocket();
-        socketstream = new SocketStream(socket);
-        endianstream = new EndianStream(socketstream, Endian.bigEndian);
-//         endianstream = new EndianStream(new LoggingStream(socketstream, stderr), Endian.bigEndian);
         queue = new Queue!IPacket();
         
         session = new Session(username, password);
@@ -104,6 +100,10 @@ class Connection {
     }
     
     void connect(Address to, string hostname) {
+        socket = new TcpSocket(to.addressFamily);
+        socketstream = new SocketStream(socket);
+        endianstream = new EndianStream(socketstream, Endian.bigEndian);
+
         socket.connect(to);
         _connected = true;
         connected_to = to;
