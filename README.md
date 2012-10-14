@@ -100,7 +100,7 @@ These steps assume, that you have [git](http://windows.github.com/) already inst
 Download [DMD2](http://dlang.org/download.html) (if you don't have dmd installed)
 with the D-Installer, make sure you checked the dmc option when installing.
 
-To clone and compile BraLa open your terminal and run the commands:
+To clone and compile BraLa open your terminal and run the following commands:
 
 ```
 git clone --recursive git://github.com/Dav1dde/BraLa.git
