@@ -74,7 +74,7 @@ Building BraLa with DMD is easy:
 
 ```
 make # builds BraLa, this may take a while, to speed things up you can use the -j switch
-./bralad -c -h"localhost" # starts brala
+./bin/bralad -c -h"localhost" # starts brala
 ```
 
 #### LDC ####
@@ -107,8 +107,12 @@ git clone --recursive git://github.com/Dav1dde/BraLa.git
 cd BraLa
 rdmd build_brala.d
 ```
-
 The current working directory is important (you have to be in the repos root directory)!
+
+To run BraLa:
+```
+bin\bralad.exe -c -h"localhost"
+```
 
 ## Running ##
 
