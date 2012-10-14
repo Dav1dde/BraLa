@@ -3,7 +3,7 @@
 private {
     import std.algorithm : map, filter, endsWith;
     import std.path : std_buildPath = buildPath, extension, setExtension, dirName, baseName;
-    import std.array : join, split, appender;
+    import std.array : join, split, appender, array;
     import std.process : shell, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove;
     import std.stdio : writeln;
@@ -43,7 +43,7 @@ version(Windows) {
     enum LDCFLAGS = "";
     enum OBJ = ".obj";
     enum DEFAULT_CC = "dmc";
-    
+
 } else {
     enum PATH_SEP = `/`;
     enum LDCFLAGS = "-ldl";
@@ -78,7 +78,7 @@ static this() {
     CC = environment.get("CC", DEFAULT_CC);
     CFLAGS = environment.get("CFLAGS", "");
     C_OUTPUT = CC == "dmc" ? "-o" : "-o ";
-    
+
     DFLAGS = make_d_flags();
     DCFLAGS_LINK = make_dcflags_link();
     DCFLAGS_IMPORT = make_dcflags_import();
@@ -122,7 +122,7 @@ string make_dcflags_link() {
         string libssl = buildPath("lib", "windows", "libssl32.lib");
         string libeay = buildPath("lib", "windows", "libeay32.lib");
         string glfw = buildPath("lib", "windows", "glfw3.lib");
-        
+
         return [libssl, libeay, glfw].join(" ");
     } else {
         string pkg_cfg_path = environment.get("PKG_CONFIG_PATH", "");
@@ -136,7 +136,7 @@ string make_dcflags_link() {
         return DCFLAGS_LINK_RAW.map!(x => LINKERFLAG ~ x).join(" ");
     }
 
-    
+
 }
 
 
@@ -158,10 +158,14 @@ string[] find_files(BuildPath[] paths, string ext) {
     auto app = appender!(string[])();
 
     foreach(path; paths) {
-        app.put(dirEntries(path, path.mode).filter!(e => e.name.extension == ext));
+        app.put(find_files(path, ext));
     }
 
     return app.data;
+}
+
+string[] find_files(BuildPath path, string ext) {
+    return dirEntries(path, path.mode).filter!(e => e.name.extension == ext).map!(x => x.name).array();
 }
 
 
@@ -178,17 +182,17 @@ void make_folders(string prefix, string[] paths) {
 
 void setup_bin(string prefix = "") {
     string bin = buildPath(prefix, "bin");
-    
+
     try {
         mkdirRecurse(bin);
     } catch(FileException e) {}
 
     version(Windows) {
-        string[] dlls = find_files(buildPath("lib", "windows"), ".dll");
+        string[] dlls = find_files(BuildPath(buildPath("lib", "windows"), SpanMode.breadth), ".dll");
 
         foreach(dll; dlls) {
             string dest = buildPath(bin, dll.baseName());
-            
+
             copy(dll, dest);
         }
     }
@@ -197,7 +201,7 @@ void setup_bin(string prefix = "") {
 
 string[] d_compile(string prefix, string[] files) {
     auto app = appender!(string[])();
-    
+
     foreach(file; parallel(files)) {
 //     foreach(file; files) {
         string build_path = buildPath(prefix, file).setExtension(OBJ);
@@ -242,7 +246,7 @@ void link(string[] d_files, string[] c_files, string exe) {
 void main() {
     string[] d_files = find_files(D_PATHS, ".d");
     string[] c_files = find_files(C_PATHS, ".c");
-    
+
     make_folders(DBUILD_PATH, d_files);
     make_folders(CBUILD_PATH, c_files);
 
