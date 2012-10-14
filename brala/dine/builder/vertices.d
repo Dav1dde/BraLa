@@ -658,7 +658,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_TOP = [
     [], // slab
     simple_block_(Side.TOP, t(7, 1)), // brick
     simple_block_(Side.TOP, t(9, 1)), // tnt
-    simple_block_(Side.TOP, t(1, 4)), // bookshelf
+    simple_block_(Side.TOP, t(4, 1)), // bookshelf
     simple_block_(Side.TOP, t(4, 3)), // mossy stone
     simple_block_(Side.TOP, t(5, 3)), // obsidian
     [], // torch
@@ -800,7 +800,7 @@ Vertex[][BLOCK_IDS] BLOCK_VERTICES_BOTTOM = [
     [], // slab
     simple_block_(Side.BOTTOM, t(7, 1)), // brick
     simple_block_(Side.BOTTOM, t(10, 1)), // tnt
-    simple_block_(Side.BOTTOM, t(1, 4)), // bookshelf
+    simple_block_(Side.BOTTOM, t(4, 1)), // bookshelf
     simple_block_(Side.BOTTOM, t(4, 3)), // mossy stone
     simple_block_(Side.BOTTOM, t(5, 3)), // obsidian
     [], // torch
