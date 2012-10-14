@@ -259,8 +259,8 @@ void save_build_cache(File file, string[string] cache) {
 string[] d_compile(string prefix, string[] files, ref string[string] cache) {
     auto app = appender!(string[])();
 
-    foreach(file; parallel(files)) {
-//     foreach(file; files) {
+//     foreach(file; parallel(files)) {
+    foreach(file; files) {
         string md5 = md5_file(file);
 
         string build_path = buildPath(prefix, file).setExtension(OBJ);
@@ -284,8 +284,8 @@ string[] d_compile(string prefix, string[] files, ref string[string] cache) {
 string[] c_compile(string prefix, string[] files, ref string[string] cache) {
     auto app = appender!(string[])();
 
-    foreach(file; parallel(files)) {
-//     foreach(file; files) {
+//     foreach(file; parallel(files)) {
+    foreach(file; files) {
         string md5 = md5_file(file);
 
         string build_path = buildPath(prefix, file).setExtension(OBJ);
