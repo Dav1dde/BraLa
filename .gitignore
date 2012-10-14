@@ -7,5 +7,6 @@ perf.*
 terrain*.png
 bralad
 build/
+bin/
 tools/
 *.sh
