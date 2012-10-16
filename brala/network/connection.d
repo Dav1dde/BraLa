@@ -19,6 +19,8 @@ private {
     import std.system : os;
     import std.stdio : stderr;
 
+    import deimos.openssl.rsa : RSA, RSA_free;
+
     import brala.exception : ConnectionError, ServerError, SessionError;
     import brala.network.session : Session;
     import brala.network.stream : AESStream, LoggingStream;
@@ -173,7 +175,8 @@ class Connection {
     }
 
     protected void on_packet(T : s.EncryptionKeyRequest)(T packet) {
-        auto rsa = decode_public(packet.public_key.arr);
+        RSA* rsa = decode_public(packet.public_key.arr);
+        scope(exit) RSA_free(rsa);
 
         ubyte[] enc_verify_token = rsa.encrypt(packet.verify_token.arr);
         seed_prng();
