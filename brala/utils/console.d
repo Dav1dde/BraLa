@@ -107,7 +107,7 @@ version(Posix) {
     }
 
     bool set_attribute(File f, Attribute attr) {
-        if(color_terminal(f) || true) {
+        if(color_terminal(f)) {
             if(attr & Attribute.RESET) {
                 f.write("\033[%sm".format(_styles[Attribute.RESET]));
             } else if(!(attr & Attribute.NONE)) {
