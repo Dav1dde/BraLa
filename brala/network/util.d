@@ -14,8 +14,6 @@ private {
     import std.range : ElementEncodingType;
     import std.utf : toUTF16, toUTF8;
     import std.uri : encodeComponent;
-    
-    debug import std.stdio : writefln;
 }
 
 void write(Args...)(Stream s, Args data) {

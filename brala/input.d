@@ -6,8 +6,6 @@ private {
     import std.conv : to;
     
     import brala.exception : FatalException;
-    
-    debug import std.stdio : writefln;
 }
 
 AEventHandler cast_userptr(void* window)

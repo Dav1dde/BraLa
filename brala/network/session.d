@@ -14,7 +14,6 @@ private {
     import file = std.file;
     import std.typecons : Tuple, tuple;
     import std.system : os;
-    import std.stdio : stderr;
 
     import brala.exception : SessionError;
     import brala.utils.openssl.hash : SHA1;
@@ -23,7 +22,7 @@ private {
 
     import arsd.http : HttpException, post, get;
     
-    debug import std.stdio : writefln;
+    debug import brala.utils.stdio : stderr, writefln;
 
     version(Windows) {
         import std.process : getenv;
@@ -145,7 +144,7 @@ class Session {
                             "opengl_version": opengl_version,
                             "opengl_vendor": opengl_vendor]);
         } catch(HttpException e) {
-            stderr.writefln(`Unable to snoop: "%s"`, e.msg);
+            debug stderr.writefln(`Unable to snoop: "%s"`, e.msg);
         }
     }
 }

@@ -10,7 +10,7 @@ private {
 
     import brala.exception : AllocationError;
 
-    debug import std.stdio : writef;
+    debug import brala.utils.stdio : writef;
 }
 
 

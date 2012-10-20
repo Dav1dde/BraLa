@@ -9,7 +9,6 @@ private {
 
     import core.thread : Thread;
     import std.typecons : Tuple;
-    import std.stdio : stderr;
 
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
@@ -22,7 +21,7 @@ private {
     import brala.utils.thread : Event;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 
-    debug import std.stdio : writefln;
+    debug import brala.utils.stdio : stderr;
 }
 
 private const Block AIR_BLOCK = Block(0);
@@ -448,7 +447,7 @@ class TessellationThread : Thread {
 
             with(chunk_data) {
                 if(chunk.tessellated) {
-                    debug writefln("Chunk is already tessellated! %s", position);
+                    debug stderr.writefln("Chunk is already tessellated! %s", position);
                 
                     input.task_done();
                     continue;

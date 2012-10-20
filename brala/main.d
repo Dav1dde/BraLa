@@ -26,7 +26,7 @@ private {
     import brala.exception : InitError;
     import brala.utils.image : Image;
 
-    import std.stdio : stderr, writefln;
+    import brala.utils.stdio : stderr, writefln;
 }
 
 static this() {

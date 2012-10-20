@@ -4,8 +4,8 @@ private {
     import std.typecons : Tuple;
     import std.regex : Regex, regex, match;
     import std.array : appender;
-    import std.stdio : File;
-    
+
+    import brala.utils.stdio : File;
     import c = brala.utils.console;
 }
 

@@ -17,7 +17,6 @@ private {
     import std.conv : to;
     import std.typecons : tuple;
     import std.system : os;
-    import std.stdio : stderr;
 
     import deimos.openssl.rsa : RSA, RSA_free;
 
@@ -33,7 +32,7 @@ private {
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Timer;
     
-    debug import std.stdio : writefln;
+    debug import brala.utils.stdio : stderr;
 }
 
 
@@ -72,7 +71,7 @@ class Connection {
             session.login();
             this.minecraft_username = session.minecraft_username;
         } catch(SessionError e) {
-            debug writefln("%s", e.msg);
+            debug stderr.writefln("%s", e.msg);
             this.minecraft_username = username;
         }
 

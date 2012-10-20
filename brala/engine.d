@@ -14,7 +14,7 @@ private {
     import brala.timer : Timer, TickDuration;
     import brala.resmgr : ResourceManager;
     
-    debug import std.stdio : writefln;
+    debug import brala.utils.stdio : writefln;
 }
 
 
