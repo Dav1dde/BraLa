@@ -4,7 +4,6 @@ module brala.network.connection;
 private {
     import glamour.gl : glGetString, GL_VERSION, GL_VENDOR;
     
-    import core.thread : Thread;
     import core.time : dur;
     import core.cpuid : isX86_64;
     import std.socket : SocketException, SocketShutdown, TcpSocket, Address, getAddress;
@@ -30,7 +29,7 @@ private {
     import brala.network.crypto : decode_public, encrypt, seed_prng, get_random, get_random_max;
     import brala.utils.queue : Queue;
     import brala.utils.openssl.encrypt : AES128CFB8;
-    import brala.utils.thread : Timer;
+    import brala.utils.thread : Thread, VerboseThread, Timer;
     
     debug import brala.utils.stdio : stderr;
 }
@@ -231,7 +230,7 @@ class ThreadedConnection : Connection {
     
     void run() {
         if(_thread is null) {
-            _thread = new Thread(&(super.run));
+            _thread = new VerboseThread(&(super.run));
             _thread.isDaemon = true;
         }
 

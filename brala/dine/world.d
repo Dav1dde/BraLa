@@ -7,7 +7,6 @@ private {
     import gl3n.linalg;
     import gl3n.aabb : AABB;
 
-    import core.thread : Thread;
     import std.typecons : Tuple;
 
     import brala.dine.chunk : Chunk, Block;
@@ -18,7 +17,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
     import brala.utils.queue : Queue;
-    import brala.utils.thread : Event;
+    import brala.utils.thread : Thread, VerboseThread, Event;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 
     debug import brala.utils.stdio : stderr;
@@ -415,7 +414,7 @@ class World {
 }
 
 
-class TessellationThread : Thread {
+class TessellationThread : VerboseThread {
     protected TessellationBuffer buffer;
     protected World world;
     protected Queue!ChunkData input;

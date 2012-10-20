@@ -3,14 +3,41 @@ module brala.utils.thread;
 private {
     import std.traits : ParameterTypeTuple, isCallable;
     import core.time : Duration;
-    import core.thread : Thread;
     import core.sync.mutex : Mutex;
     import core.sync.condition : Condition;
     import core.sync.exception : SyncException;
+
+    import brala.utils.stdio : stderr;
 }
 
+public import core.thread;
 
-class TTimer(T...) : Thread {
+
+class VerboseThread : Thread {
+    this(void function() fn, size_t sz = 0) {
+        super(delegate void() {
+            try {
+                fn();
+            } catch(Throwable e) {
+                stderr.writeln(e.toString());
+                throw e;
+            }
+        }, sz);
+    }
+
+    this(void delegate() dg, size_t sz = 0) {
+        super(delegate void() {
+            try {
+                dg();
+            } catch(Throwable e) {
+                stderr.writeln(e.toString());
+                throw e;
+            }
+        }, sz);
+    }
+}
+
+class TTimer(T...) : VerboseThread {
     static assert(T.length <= 1);
     static if(T.length == 1) {
         static assert(isCallable!(T[0]));
