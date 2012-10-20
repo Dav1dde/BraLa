@@ -13,21 +13,18 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.process : getenv;
-    import std.range : zip;
-    import std.array : join;
     import std.exception : enforceEx;
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.input : register_glfw_error_callback;
-    import brala.config : load_default_resources;
+    import brala.config : app_arguments, AppArguments, load_default_resources;
     import brala.network.session : minecraft_folder, minecraft_credentials;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
-    import brala.utils.dargs : get_options, Alias;
 
     import std.stdio : stderr, writefln;
 }
@@ -127,78 +124,15 @@ BraLaEngine init_engine(void* window, AppArguments args, GLVersion glv) {
     return engine;
 }
 
-struct AppArguments {
-    string username;
-    Alias!("username") u;
-
-    string password;
-    Alias!("password") p;
-
-    bool credentials;
-    Alias!("credentials") c;
-
-    uint width = 1024;
-    uint height = 800;
-
-    string host;
-    Alias!("host") h;
-    ushort port = 25565;
-
-    bool no_snoop = false;
-    size_t tessellation_threads = 3;
-
-    bool default_tp = false;
-
-    void help(string[] args, string[][] p) {
-        string[] help_strings = [
-            "specifies the username, which will be used to auth with the login servers,\n" ~
-            "\t\t\t\tif this is not possible and the server is in offline mode, it will be used\n" ~
-            "\t\t\t\tas playername",
-
-            "the password which is used to authenticate with the login servers, set this\n" ~
-            "\t\t\t\tto a random value if you don't want to authenticate with the servers",
-
-            "uses minecrafts lastlogin file for authentication and logging in,\n" ~
-            "\t\t\t\t--username and --password are used as fallback",
-
-            "\t\tspecifies the width of the window",
-
-            "\tspecifies the height of the window",
-
-            "\tthe IP/adress of the minecraft server",
-
-            "\t\tthe port of the minecraft server, defaults to 25565",
-
-            "\tdisables \"snooping\" (= sending completly anonym information to mojang)",
-
-            "specifies the number of threads used to tessellate the terrain, defaults to 3.\n" ~ 
-            "\t\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
-            "\t\t\t\tmore CPU usage, but faster terrain tessellation",
-
-            "\ttry to extract the minecraft terrain.png from the installed minecraft.jar"
-
-            "\t\tshows this help"
-        ];
-
-        writefln("%s [options]", args[0]);
-
-        foreach(d; zip(p, help_strings)) {
-            writefln("\t--%s\t%s", d[0].join("\t-"), d[1]);
-        }
-    }
-}
-
 
 int main() {
     scope(exit) glfwTerminate();
 
-    auto args = get_options!AppArguments();
-
     debug register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
 
-    debug writefln("init: %dx%d", args.width, args.height);
-    GLFWwindow win = open_glfw_win(args.width, args.height);
+    debug writefln("init: %dx%d", app_arguments.width, app_arguments.height);
+    GLFWwindow win = open_glfw_win(app_arguments.width, app_arguments.height);
 
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
@@ -206,9 +140,9 @@ int main() {
 
     enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
-    string username = args.username;
-    string password = args.password;
-    if(args.credentials) {
+    string username = app_arguments.username;
+    string password = app_arguments.password;
+    if(app_arguments.credentials) {
         auto credentials = minecraft_credentials();
 
         if(credentials.username.length) {
@@ -219,10 +153,10 @@ int main() {
         }
     }
 
-    auto engine = init_engine(win, args, glv);
+    auto engine = init_engine(win, app_arguments, glv);
 
-    auto game = new BraLaGame(engine, win, username, password, args);
-    game.start(args.host, args.port);
+    auto game = new BraLaGame(engine, win, username, password, app_arguments);
+    game.start(app_arguments.host, app_arguments.port);
 
     return 0;
 }

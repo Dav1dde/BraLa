@@ -12,7 +12,7 @@ private {
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
 
-    import brala.main : AppArguments;
+    import brala.config : AppArguments;
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
