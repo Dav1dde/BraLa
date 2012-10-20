@@ -156,7 +156,12 @@ int main() {
     auto engine = init_engine(win, app_arguments, glv);
 
     auto game = new BraLaGame(engine, win, username, password, app_arguments);
-    game.start(app_arguments.host, app_arguments.port);
+
+    try {
+        game.start(app_arguments.host, app_arguments.port);
+    } catch(Exception e) {
+        stderr.writeln(e.toString());
+    }
 
     return 0;
 }
