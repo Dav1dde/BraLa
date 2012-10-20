@@ -6,6 +6,8 @@ private {
     import std.typecons : Tuple;
     import std.string : toLower;
     import std.format : format;
+    import std.traits : isIterable;
+    import std.range : ElementType;
     
     import glamour.shader : Shader;
     import glamour.texture : ITexture, Texture2D;
@@ -148,7 +150,7 @@ class ResourceManager {
         }
     }
     
-    void add_many(const Resource[] resources) {
+    void add_many(T)(T resources) if(isIterable!(T) && is(ElementType!T :  Resource)) {
         foreach(res; resources) {
             int type = res.type == AUTO_TYPE ? guess_type(res.filename) : res.type;
             switch(type) {
