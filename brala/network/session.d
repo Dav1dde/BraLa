@@ -12,7 +12,7 @@ private {
     import std.datetime : SysTime, Clock;
     import std.path : buildPath, expandTilde;
     import file = std.file;
-    import std.typecons : Tuple;
+    import std.typecons : Tuple, tuple;
     import std.system : os;
     import std.stdio : stderr;
 
@@ -112,10 +112,14 @@ class Session {
         return hexdigest;
     }
 
+    @property static auto snoop_args() {
+        return tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
+                     "D Compiler: " ~ to!string(__VERSION__),
+                     to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
+    }
+
     static void snoop() {        
-        snoop("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
-              "D Compiler: " ~ to!string(__VERSION__), to!string(glGetString(GL_VERSION)),
-              to!string(glGetString(GL_VENDOR)));
+        snoop(typeof(this).snoop_args.expand);
     }
 
     static void snoop(string version_, string os_name, string os_version, string os_arch,

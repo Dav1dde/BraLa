@@ -77,9 +77,8 @@ class Connection {
         }
 
         if(snoop) {
-            auto snoop_args = tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit",
-                                    "-1", "-1", "D Compiler: " ~ to!string(__VERSION__),
-                                    to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
+            // we need to call that in the main thread, since OpenGL functions are executed
+            auto snoop_args = Session.snoop_args;
 
             void snoop_timer() {
                 auto timer = new Timer(dur!"minutes"(11), delegate void() {
