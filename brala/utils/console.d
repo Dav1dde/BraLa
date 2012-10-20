@@ -99,8 +99,20 @@ version(Posix) {
                 _styles[key] = value;
             }
         }
-        
     }
+
+    string build_color(Attribute attr, bool ignore_term = true) {
+        if(ignore_term || color_terminal()) {
+            if(attr & Attribute.RESET) {
+                return "\033[%sm".format(_styles[Attribute.RESET]);
+            } else if(!(attr & Attribute.NONE)) {
+                return "\033[%sm".format(_styles.byKey().map!(k => attr & k ? _styles[k] : "").filter!(x => x.length).join(";"));
+            }
+        }
+
+        return "";
+    }
+
 
     bool set_attribute(Attribute attr) {
         return stdout.set_attribute(attr);
@@ -108,12 +120,7 @@ version(Posix) {
 
     bool set_attribute(File f, Attribute attr) {
         if(color_terminal(f)) {
-            if(attr & Attribute.RESET) {
-                f.write("\033[%sm".format(_styles[Attribute.RESET]));
-            } else if(!(attr & Attribute.NONE)) {
-                f.write("\033[%sm".format(_styles.byKey().map!(k => attr & k ? _styles[k] : "").filter!(x => x.length).join(";")));
-            }   
-
+            f.write(build_color(attr));
             return true;
         }
         
@@ -174,6 +181,10 @@ version(Posix) {
 } else { // VERSION not POSIX
     bool color_terminal(File f=stdout) {
         return false;
+    }
+
+    string build_color(Attribute attr) {
+        return "";
     }
 
     bool set_attribute(Attribute attr) {
