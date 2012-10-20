@@ -87,7 +87,7 @@ GLVersion init_opengl() {
 BraLaEngine init_engine(void* window, AppArguments args, GLVersion glv) {
     auto engine = new BraLaEngine(window, args.width, args.height, glv);
 
-    engine.resmgr.load_default_resources();
+    engine.resmgr.load_default_resources(args.res);
 
     string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
     if(args.default_tp && file.exists(path)) {

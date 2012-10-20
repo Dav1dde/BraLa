@@ -36,6 +36,8 @@ struct AppArguments {
     Alias!("host") h;
     ushort port = 25565;
 
+    string res = "";
+
     bool no_snoop = false;
     size_t tessellation_threads = 3;
 
@@ -60,6 +62,8 @@ struct AppArguments {
             "\tthe IP/adress of the minecraft server",
 
             "\t\tthe port of the minecraft server, defaults to 25565",
+
+            "\t\tpath to the resources folder, named \"res\"",
 
             "\tdisables \"snooping\" (= sending completly anonym information to mojang)",
 
