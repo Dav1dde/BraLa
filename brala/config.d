@@ -1,7 +1,7 @@
 module brala.config;
 
 private {
-    import derelict.glfw3.types;
+    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
     
     import brala.resmgr;
 }
