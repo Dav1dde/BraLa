@@ -4,7 +4,7 @@ private {
     import std.stdio : File, stdout, stderr;
     import std.array : appender, join;
     import std.string : format;
-    import std.algorithm : canFind, map;
+    import std.algorithm : canFind, map, filter;
     import std.process : environment;
     import std.typecons : TypeTuple;
 }
@@ -101,6 +101,24 @@ version(Posix) {
         }
         
     }
+
+    bool set_attribute(Attribute attr) {
+        return stdout.set_attribute(attr);
+    }
+
+    bool set_attribute(File f, Attribute attr) {
+        if(color_terminal(f) || true) {
+            if(attr & Attribute.RESET) {
+                f.write("\033[%sm".format(_styles[Attribute.RESET]));
+            } else if(!(attr & Attribute.NONE)) {
+                f.write("\033[%sm".format(_styles.byKey().map!(k => attr & k ? _styles[k] : "").filter!(x => x.length).join(";")));
+            }   
+
+            return true;
+        }
+        
+        return false;
+    }
     
     string colorize(T, S)(T[] input, int[S] mapping, bool reset_color=true)
         if(__traits(hasMember, T, "attribute") && __traits(hasMember, T, "text")) {
@@ -155,6 +173,14 @@ version(Posix) {
     }
 } else { // VERSION not POSIX
     bool color_terminal(File f=stdout) {
+        return false;
+    }
+
+    bool set_attribute(Attribute attr) {
+        return false;
+    }
+
+    bool set_attribute(File f, Attribute attr) {
         return false;
     }
 
