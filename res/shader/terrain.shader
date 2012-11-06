@@ -53,13 +53,16 @@ fragment:
     void main() {
         vec4 color = texture(terrain, v_texcoord);
 
-        if(color.a < 0.1) {
+        // ugly:
+        if(color.a < 0.15) {
             discard;
         } else {
-            float alpha = texture(terrain, v_mask).a;
+            if(v_mask == v_texcoord) {
+                color_out = color*v_color;
+            } else {
+                float alpha = texture(terrain, v_mask).a;
 
-            color_out = mix(color, color*v_color, alpha)/* * vec4(v_light)*/;
-            //color_out = mix(color, color*v_color, alpha); // haha, this is slower than the line above
-            //color_out = vec4(v_normal, 1.0);
+                color_out = mix(color, color*v_color, alpha);
+            }
         }
     }
