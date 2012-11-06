@@ -59,7 +59,7 @@ class Connection {
 
     protected ubyte[] shared_secret;
     
-    immutable byte protocol_version = 39;
+    immutable byte protocol_version = 47;
     
     this(string username, string password, bool snoop) {
         queue = new Queue!IPacket();

@@ -32,7 +32,7 @@ class ChatMessage : IPacket {
 }
 
 class TimeUpdate : IPacket {
-    mixin Packet!(0x04, long, "time");
+    mixin Packet!(0x04, long, "age", long, "time");
 }
 
 class EntityEquipment : IPacket {
@@ -69,7 +69,7 @@ class NamedEntitySpawn : IPacket {
 }
 
 class PickupSpawn : IPacket {
-    mixin Packet!(0x15, int, "entity_id", short, "item_id", byte, "count", short, "damage",
+    mixin Packet!(0x15, int, "entity_id", Slot, "slot",
                         int, "x", int, "y", int, "z", byte, "rotation", byte, "pitch", byte, "roll");
 }
 
@@ -229,7 +229,7 @@ class Explosion : IPacket {
 }
 
 class SoundParticleEffect : IPacket {
-    mixin Packet!(0x3D, int, "effect_id", int, "x", byte, "y", int, "z", int, "data");
+    mixin Packet!(0x3D, int, "effect_id", int, "x", byte, "y", int, "z", int, "data", bool, "no_volume_decrease");
 }
 
 class NamedSoundEffect : IPacket {

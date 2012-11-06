@@ -70,7 +70,7 @@ class EntityAction : IPacket {
 public alias server.PickupSpawn PickupSpawn;
 
 class WindowClick : IPacket {
-    mixin Packet!(0x66, byte, "window_id", short, "slot", bool, "right_click", short, "action_number", bool, "shift", Slot, "clicked_item");
+    mixin Packet!(0x66, byte, "window_id", short, "slot", byte, "mouse_button", short, "action_number", bool, "shift", Slot, "clicked_item");
 }
 
 public alias server.Transaction Transaction;
@@ -85,8 +85,8 @@ public alias server.PlayerAbilities PlayerAbilities;
 public alias server.PluginMessage PluginMessage;
 public alias server.TabComplete TabComplete;
 
-class LocaleViewDistance : IPacket {
-    mixin Packet!(0xCC, string, "locale", byte, "view_distance", byte, "chat_flags", byte, "difficulty");
+class ClientSettings : IPacket {
+    mixin Packet!(0xCC, string, "locale", byte, "view_distance", byte, "chat_flags", byte, "difficulty", bool, "show_cape");
 }
 
 class ClientStatuses : IPacket {
