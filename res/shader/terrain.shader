@@ -1,4 +1,4 @@
-#version 330
+#version 130
 
 vertex:
     in vec3 position;
@@ -29,8 +29,8 @@ vertex:
 //         v_normal = v * normal;
         
         v_color = color;
-        v_texcoord = texcoord/256;
-        v_mask = mask/256;
+        v_texcoord = texcoord/256.0;
+        v_mask = mask/256.0;
 
         //v_light = clamp(light.x+light.y, 0, 15)/15;
         
