@@ -101,7 +101,7 @@ class Queue(type) {
 
         size_t u = unfinished_taks - 1;
         if(u < 0) {
-            throw new QueueException("task_done called to many times");
+            throw new QueueException("task_done called too many times");
         } else if(u == 0) {
             all_done.notifyAll();
         }
