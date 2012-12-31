@@ -22,13 +22,13 @@ BraLa also doesn't have any kind of physics (to use BraLa you must set the clien
 creative mod or allow to fly).
 
 What BraLa *can* do:
-* Connect to 1.3 servers (with encryption)
-* Supports the whole 1.3 protocol
+* Connect to 1.4.6 servers (with encryption)
+* Supports the whole 1.4.6 protocol
 * Authenticate with the official login servers
 * Read the lastlogin file
 * Send "snoop" requests
 * Display biome colors, based on rainfall/temperature
-* Display all solid blocks (including stairs and half slabs)
+* Display nearly all blocks
 
 Not a whole lot, but a start.
 
