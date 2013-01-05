@@ -174,6 +174,37 @@ struct Slot {
     }
 }
 
+struct ObjectData {
+    int data;
+    short speed_x;
+    short speed_y;
+    short speed_z;
+
+    static ObjectData recv(Stream s) {
+        ObjectData ret;
+
+        ret.data = read!int(s);
+
+        if(ret.data) {
+            ret.speed_x = read!short(s);
+            ret.speed_y = read!short(s);
+            ret.speed_z = read!short(s);
+        }
+
+        return ret;
+    }
+
+    void send(Stream s) {
+        write(s, data);
+
+        if(data) {
+            write(s, speed_x, speed_y, speed_z);
+        }
+    }
+}
+
+        
+
 struct Array(T, S) {
     alias T LenType;
     S[] arr;
@@ -304,6 +335,7 @@ struct MapChunkBulkS {
         ret.chunk_count = read!short(s);
 
         uint len = read!uint(s);
+        read!bool(s); // unknown
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);

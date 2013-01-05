@@ -12,7 +12,7 @@ public {
 
     import gl3n.linalg : vec3i;
 
-    import brala.utils.ctfe : staticJoin;    
+    import brala.utils.ctfe : staticJoin;
     import brala.network.util : read, write;
 }
 
@@ -21,19 +21,21 @@ immutable byte NULL_BYTE = 0;
 immutable ubyte NULL_UBYTE = 0;
 
 
-mixin template get_packets_mixin(alias Module) {
+mixin template get_packets_mixin(Members...) {
     template get_packets() {
-        alias NoDuplicates!(get_packets_impl!(__traits(allMembers, Module))) get_packets;
+        alias NoDuplicates!(get_packets_impl!(Members)) get_packets;
     }
         
-    private template get_packets_impl(T...) {
-        static if(T.length == 0) {
-            alias TypeTuple!() get_packets_impl;
-        } else static if(__traits(compiles, mixin(T[0]).id)) {
+    template get_packets_impl(T...) {
+        static if(__traits(compiles, mixin(T[0]).id)) {
             alias TypeTuple!(PacketTuple!(mixin(T[0]), mixin(T[0]).id), get_packets_impl!(T[1..$])) get_packets_impl;
         } else {
-            alias get_packets_impl!(T[1..$]) get_packets_impl;
+            alias TypeTuple!(get_packets_impl!(T[1..$])) get_packets_impl;
         }
+    }
+
+    template get_packets_impl() {
+        alias TypeTuple!() get_packets_impl;
     }
     
     template PacketTuple(T, ubyte b) {
@@ -51,7 +53,7 @@ mixin template get_packets_mixin(alias Module) {
     }
 }
 
-private template extract_id(alias P) { alias P.id extract_id; }
+template extract_id(alias P) { alias P.id extract_id; }
 
 mixin template Packet(ubyte id_, Vars...) {    
     static assert(Vars.length % 2 == 0);

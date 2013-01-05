@@ -10,7 +10,7 @@ private {
 }
 
 
-mixin get_packets_mixin!(brala.network.packets.client);
+mixin get_packets_mixin!(__traits(allMembers, brala.network.packets.client));
 
 
 alias server.KeepAlive KeepAlive;
@@ -66,8 +66,6 @@ class HoldingChange : IPacket {
 class EntityAction : IPacket {
     mixin Packet!(0x13, int, "entity_id", byte, "action_id");
 }
-
-public alias server.PickupSpawn PickupSpawn;
 
 class WindowClick : IPacket {
     mixin Packet!(0x66, byte, "window_id", short, "slot", byte, "mouse_button", short, "action_number", bool, "shift", Slot, "clicked_item");

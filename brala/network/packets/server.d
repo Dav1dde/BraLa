@@ -6,12 +6,12 @@ private {
     import std.string : format;
     
     import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray,
-                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData;
+                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData, ObjectData;
     import brala.network.packets.util;
 }
 
 
-mixin get_packets_mixin!(brala.network.packets.server);
+mixin get_packets_mixin!(__traits(allMembers, brala.network.packets.server));
 
 
 class KeepAlive : IPacket {
@@ -51,6 +51,10 @@ class Respawn : IPacket {
     mixin Packet!(0x09, int, "dimension", byte, "difficulty", byte, "mode", short, "world_height", string, "level_type");
 }
 
+class HeldItemChange : IPacket {
+    mixin Packet!(0x10, short, "slot_id");
+}
+
 class PlayerPositionLook : IPacket {
     mixin Packet!(0x0D, double, "x", double, "stance", double, "y", double, "z", float, "yaw", float, "pitch", bool, "on_ground");
 }
@@ -68,62 +72,13 @@ class NamedEntitySpawn : IPacket {
                         byte, "yaw", byte, "pitch", short, "current_item", EntityMetadataS, "metadata");
 }
 
-class PickupSpawn : IPacket {
-    mixin Packet!(0x15, int, "entity_id", Slot, "slot",
-                        int, "x", int, "y", int, "z", byte, "rotation", byte, "pitch", byte, "roll");
-}
-
 class CollectItem : IPacket {
     mixin Packet!(0x16, int, "collected_eid", int, "collector_eid");
 }
 
-class AddObject : IPacket {
-    const ubyte id = 0x17;
-    
-    int entity_id;
-    byte type;
-    int x;
-    int y;
-    int z;
-    int thrower_eid = 0;
-    short speed_x;
-    short speed_y;
-    short speed_z;
-
-    this(int entity_id, byte type, int x, int y, int z) {
-        this.entity_id = entity_id;
-        this.type = type;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    
-    this(int entity_id, byte type, int x, int y, int z, int thrower_eid, short speed_x, short speed_y, short speed_z) {
-        this(entity_id, type, x, y, z);
-        this.thrower_eid = thrower_eid;
-        this.speed_x = speed_x;
-        this.speed_y = speed_y;
-        this.speed_z = speed_z;
-    }
-    
-    override void send(Stream s) {
-        if(thrower_eid == 0) {
-            write(s, id, entity_id, type, x, y, z);
-        } else {
-            write(s, id, entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
-        }
-    }
-    
-    static AddObject recv(Stream s) {
-        return new AddObject(read!(int, byte, int, int, int, int, short, short, short)(s).field);
-    }
-    
-    override string toString() {
-        return .stringof[7..$] ~ format(`.AddObject(int entity_id : "%d", byte type : "%s", int x : "%d", int y : "%d", int z : "%d" ,`
-                                        `int thrower_eid : "%d", short speed_x : "%d", short speed_y : "%d", short speed_z : "%d"`,
-                                        entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);
-                                        
-    }
+class SpawnObject : IPacket {
+    mixin Packet!(0x17, int, "entity_id", byte, "type", int, "x", int, "y", int, "z", byte, "yaw", byte, "pitch",
+                        ObjectData, "object_data");
 }
 
 class MobSpawn : IPacket {
