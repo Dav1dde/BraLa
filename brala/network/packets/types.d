@@ -167,7 +167,10 @@ struct Slot {
     string toString() {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
 
-        string pnbt = nbt.toString().replace("}\n", "}").replace("{\n", "{").replace("\n", ";").replace("  ", "");
+        string pnbt = "null";
+        if(nbt !is null) {
+            pnbt = nbt.toString().replace("}\n", "}").replace("{\n", "{").replace("\n", ";").replace("  ", "");
+        }
 
         return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", NBTFile nbt : "%s"`,
                        s, item, item_count, metadata, pnbt);
