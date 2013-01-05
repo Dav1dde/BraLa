@@ -232,7 +232,7 @@ class UpdateSign : IPacket {
 }
 
 class ItemData : IPacket {
-    mixin Packet!(0x83, short, "item_type", short, "item_id", Array!(ubyte, byte), "text");
+    mixin Packet!(0x83, short, "item_type", short, "item_id", Array!(short, byte), "text");
 }
 
 class UpdateTileEntity : IPacket {
