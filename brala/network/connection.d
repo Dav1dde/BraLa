@@ -139,7 +139,7 @@ class Connection {
     void poll() {
         try {
             ubyte packet_id = read!ubyte(endianstream);
-
+            
             foreach(packet; queue) {
                 packet.send(endianstream);
             }
@@ -177,7 +177,7 @@ class Connection {
 
         ubyte[] enc_verify_token = rsa.encrypt(packet.verify_token.arr);
         seed_prng();
-        
+
         this.shared_secret = get_random(16);
 //         this.shared_secret = [cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
 //                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
@@ -195,6 +195,7 @@ class Connection {
         auto enc_key = new c.EncryptionKeyResponse(Array!(short, ubyte)(enc_shared_secret),
                                                    Array!(short, ubyte)(enc_verify_token));
         enc_key.send(endianstream);
+        endianstream.flush();
     }
 
     protected void on_packet(T : s.EncryptionKeyResponse)(T packet) {        
@@ -230,7 +231,8 @@ class ThreadedConnection : Connection {
     
     override void run() {
         if(_thread is null) {
-            _thread = new VerboseThread(&(super.run));
+            //_thread = new VerboseThread(&(super.run));
+            _thread = new Thread(&super.run);
             _thread.isDaemon = true;
         }
 

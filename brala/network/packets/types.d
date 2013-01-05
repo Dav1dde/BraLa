@@ -44,7 +44,7 @@ struct Metadata {
     private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ toStringNow!(T.name) ~ ";"; }
 
     alias TypeTuple!(Pair!(byte, 0), Pair!(short, 1), Pair!(int, 2), Pair!(float, 3),
-                     Pair!(string, 4), Pair!(Tup5, 5), Pair!(Tup6, 6)) members;
+                     Pair!(string, 4), Pair!(Slot, 5), Pair!(Tup6, 6)) members;
 
     private static string make_union() {
         alias staticJoin!("\n", staticMap!(make_decl, members)) s;
@@ -98,9 +98,9 @@ struct EntityMetadataS {
                 case 2: m._2 = read!int(s); break;
                 case 3: m._3 = read!float(s); break;
                 case 4: m._4 = read!string(s); break;
-                case 5: m._5 = read!(short, byte, short)(s); break;
+                case 5: m._5 = read!(Slot)(s); break;
                 case 6: m._6 = read!(int, int, int)(s); break;
-                default: throw new ServerError("Invalid type in entity metadata.");
+                default: throw new ServerError(`Invalid type in entity metadata "%s".`.format(m.type));
             }
 
             ret.metadata[index] = m;

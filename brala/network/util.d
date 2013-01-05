@@ -35,7 +35,21 @@ private void write_impl(T : string)(Stream s, T data) {
 
 private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {
     static if(isArray!T) {
-        static if(isDynamicArray!T) {
+        enum is_array = true;
+        enum is_static_array = isStaticArray!T;
+    } else static if(T.stringof.length > 5 && T.stringof[0..5] == "Array") {
+        enum is_array = true;
+        enum is_static_array = false;
+    } else static if(T.stringof.length > 11 && T.stringof[0..11] == "StaticArray") {
+        enum is_array = true;
+        enum is_static_array = true;
+    } else {
+        enum is_array = false;
+        enum is_static_array = false;
+    }
+    
+    static if(is_array) {
+        static if(!is_static_array) {
             static if(__traits(hasMember, T, "LenType")) {
                 write(s, cast(T.LenType)data.length);
             } else {
@@ -49,7 +63,8 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool)))
     } else static if(__traits(compiles, s.write(data))) {
         s.write(data);
     } else {
-        s.writeBlock(&data, T.sizeof); // TODO: implement .send for MapChunkS, EntityMetadataS, Slot
+        // TODO: implement .send for MapChunkS, EntityMetadataS, Slot
+        assert(false, "write not implemented for %s".format(T.stringof));
     }
 }
 

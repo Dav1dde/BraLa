@@ -126,6 +126,19 @@ BraLaEngine init_engine(void* window, AppArguments args, GLVersion glv) {
 
 
 int main() {
+    string username = app_arguments.username;
+    string password = app_arguments.password;
+    if(app_arguments.credentials) {
+        auto credentials = minecraft_credentials();
+
+        if(credentials.username.length) {
+            username = credentials.username;
+        }
+        if(credentials.password.length) {
+            password = credentials.password;
+        }
+    }
+
     scope(exit) glfwTerminate();
 
     debug register_glfw_error_callback(&glfw_error_cb);
@@ -140,19 +153,6 @@ int main() {
 
     enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
-    string username = app_arguments.username;
-    string password = app_arguments.password;
-    if(app_arguments.credentials) {
-        auto credentials = minecraft_credentials();
-
-        if(credentials.username.length) {
-            username = credentials.username;
-        }
-        if(credentials.password.length) {
-            password = credentials.password;
-        }
-    }
-
     auto engine = init_engine(win, app_arguments, glv);
 
     auto game = new BraLaGame(engine, win, username, password, app_arguments);
@@ -164,4 +164,22 @@ int main() {
     }
 
     return 0;
+}
+
+void test_connection(string username, string password) {
+    import brala.network.connection;
+    import brala.utils.stdio;
+
+    void dispatch(ubyte id, void* packet) {
+        writefln("id: %s", id);
+    }
+
+    auto c = new Connection(username, password, false);
+    c.callback = &dispatch;
+    
+    c.connect(app_arguments.host, app_arguments.port);
+    c.login();
+
+    c.run();
+
 }
