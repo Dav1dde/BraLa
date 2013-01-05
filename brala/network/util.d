@@ -1,10 +1,12 @@
 module brala.network.util;
 
 private {
+    import brala.network.packets.types : Array, StaticArray;
+    
     import std.stream : Endian, Stream, EndianStream;
     import std.typecons : TypeTuple;
     import std.typecons : Tuple;
-    import std.traits : isArray, isStaticArray, isDynamicArray;
+    import std.traits : isArray, isStaticArray, isDynamicArray, isInstanceOf;
     import std.algorithm : map;
     import std.format : formattedWrite;
     import std.string : format;
@@ -88,9 +90,23 @@ private auto read_impl(T)(Stream s) if(__traits(compiles, mixin("T.recv(s)"))) {
 
 private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits(compiles, mixin("T.recv(s)")))) {
     T ret;
-    
+
     static if(isArray!T) {
-        static if(isStaticArray!T) {
+        enum is_array = true;
+        enum is_static_array = isStaticArray!T;
+    } else static if(T.stringof.length > 5 && T.stringof[0..5] == "Array") {
+        enum is_array = true;
+        enum is_static_array = false;
+    } else static if(T.stringof.length > 11 && T.stringof[0..11] == "StaticArray") {
+        enum is_array = true;
+        enum is_static_array = true;
+    } else {
+        enum is_array = false;
+        enum is_static_array = false;
+    }
+    
+    static if(is_array) {
+        static if(is_static_array) {
             foreach(i; 0..T.length) {
                 ret[i] = read!(ElementEncodingType!T)(s);
                 static if(__traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;

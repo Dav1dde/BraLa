@@ -228,7 +228,7 @@ class ThreadedConnection : Connection {
     
     this(string username, string password, bool snoop) { super(username, password, snoop); }
     
-    void run() {
+    override void run() {
         if(_thread is null) {
             _thread = new VerboseThread(&(super.run));
             _thread.isDaemon = true;

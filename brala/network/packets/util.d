@@ -110,7 +110,7 @@ mixin template Packet(ubyte id_, Vars...) {
                     `~ctor_body~`
                 }
                        
-                void send(Stream s) {
+                override void send(Stream s) {
                     write(s, id, `~snames~`);
                 }
                        
@@ -118,7 +118,7 @@ mixin template Packet(ubyte id_, Vars...) {
                     return new typeof(this)(`~newargs~`);
                 }
                 
-                string toString() {
+                override string toString() {
                     return .stringof[7..$] ~ "." ~ typeof(this).stringof ~ "("~`~tostring~`~")";
                 }`);
     }

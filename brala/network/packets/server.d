@@ -106,7 +106,7 @@ class AddObject : IPacket {
         this.speed_z = speed_z;
     }
     
-    void send(Stream s) {
+    override void send(Stream s) {
         if(thrower_eid == 0) {
             write(s, id, entity_id, type, x, y, z);
         } else {
@@ -118,7 +118,7 @@ class AddObject : IPacket {
         return new AddObject(read!(int, byte, int, int, int, int, short, short, short)(s).field);
     }
     
-    string toString() {
+    override string toString() {
         return .stringof[7..$] ~ format(`.AddObject(int entity_id : "%d", byte type : "%s", int x : "%d", int y : "%d", int z : "%d" ,`
                                         `int thrower_eid : "%d", short speed_x : "%d", short speed_y : "%d", short speed_z : "%d"`,
                                         entity_id, type, x, y, z, thrower_eid, speed_x, speed_y, speed_z);

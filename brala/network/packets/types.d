@@ -27,7 +27,6 @@ abstract class IPacket {
     const ubyte id;
     void send(Stream s);
     static typeof(this) recv(Stream s);
-    string toString();
 }
 
 
@@ -39,23 +38,23 @@ struct Metadata {
         alias T type;
         alias n name;
     }
-    
-    private template extract_type(alias T) { alias T.type extract_type; } 
+
+    private template extract_type(alias T) { alias T.type extract_type; }
     private template extract_name(alias T) { alias T.name extract_name; }
     private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ toStringNow!(T.name) ~ ";"; }
-    
+
     alias TypeTuple!(Pair!(byte, 0), Pair!(short, 1), Pair!(int, 2), Pair!(float, 3),
                      Pair!(string, 4), Pair!(Tup5, 5), Pair!(Tup6, 6)) members;
-    
+
     private static string make_union() {
         alias staticJoin!("\n", staticMap!(make_decl, members)) s;
         return "union {" ~ s ~ "}";
     }
-    
+
     byte type;
-    
+
     mixin(make_union());
-    
+
     auto get(T)() {
         alias staticIndexOf!(T, staticMap!(extract_type, members)) type_index;
         static if(type_index < 0) {
@@ -67,14 +66,14 @@ struct Metadata {
     
     string toString() {
         assert(type >= 0 && type <= 6);
-        
+
         string s;
         final switch(type) {
             foreach(m; members) {
                 case m.name: s = to!string(mixin("_" ~ toStringNow!(m.name)));
             }
         }
-        
+
         return s;
     }
 }
@@ -86,10 +85,10 @@ struct EntityMetadataS {
         EntityMetadataS ret;
         
         ubyte x = read!ubyte(s);
-    
+
         while(x != 127) {
             Metadata m;
-            
+
             byte index = x & 0x1f;
             m.type = x >> 5;
 
@@ -103,9 +102,9 @@ struct EntityMetadataS {
                 case 6: m._6 = read!(int, int, int)(s); break;
                 default: throw new ServerError("Invalid type in entity metadata.");
             }
-            
+
             ret.metadata[index] = m;
-            
+
             x = read!ubyte(s);
         }
         
@@ -117,7 +116,7 @@ struct EntityMetadataS {
         foreach(byte key, Metadata value; metadata) {
             s ~= format("%d : %s", key, value.toString());
         }
-        
+
         return format("EntityMetadataS(%s)", s.join(", "));
     }
 }
@@ -127,7 +126,7 @@ struct Slot {
     byte item_count = 0;
     short metadata = 0;
     NBTFile nbt;
-    
+
     private size_t _slot;
     private bool has_array_position;
     @property void array_position(size_t n) {
@@ -137,13 +136,13 @@ struct Slot {
         }
     }
     @property size_t slot() { return _slot; }
-    
-    
+
+
     static Slot recv(Stream s) {
         Slot ret;
-        
+
         ret.item = read!short(s);
-        
+
         if(ret.item != -1) {
             ret.item_count = read!byte(s);
             ret.metadata = read!short(s);
@@ -153,7 +152,7 @@ struct Slot {
             if(len != -1) {
                 debug assert(len >= 0);
                 ubyte[] compressed_data = new ubyte[len];
-                s.readExact(compressed_data.ptr, len); 
+                s.readExact(compressed_data.ptr, len);
                 ret.nbt = new NBTFile(compressed_data, NBTFile.Compression.AUTO);
             }
         }
@@ -161,15 +160,15 @@ struct Slot {
         if(ret.nbt is null) {
             ret.nbt = new NBTFile(); // having ret.nbt null makes things only harder
         }
-            
+
         return ret;
     }
-    
+
     string toString() {
         string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
 
         string pnbt = nbt.toString().replace("}\n", "}").replace("{\n", "{").replace("\n", ";").replace("  ", "");
-        
+
         return format(`%s(short block : "%s", byte item_count : "%s", short metadata : "%s", NBTFile nbt : "%s"`,
                        s, item, item_count, metadata, pnbt);
     }
@@ -200,24 +199,24 @@ struct MapChunkS { // TODO: implement send
     static MapChunkS recv(Stream s) {
         MapChunkS ret;
         ret.chunk = new Chunk();
-        
+
         ret.x = read!int(s);
         ret.z = read!int(s);
         ret.contiguous = read!bool(s);
-        
+
         ret.chunk.primary_bitmask = read!ushort(s);
         ret.chunk.add_bitmask = read!ushort(s);
-        
+
         int len = read!int(s);
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
-        
+
         ret.chunk.fill_chunk_with_nothing();
 
         // if ret.contiguous, there is biome data
         parse_raw_chunk(ret.chunk, unc_data, ret.contiguous);
-                
+
         return ret;
     }
 
@@ -263,7 +262,7 @@ struct MapChunkS { // TODO: implement send
 
         return offset;
     }
-    
+
     string toString() {
         return format(`ChunkS(int x : "%d", int z : "%d", bool contiguous : "%s", ushort primary_bitmask : "%016b", `
                              `ushort add_bitmask : "%016b", Chunk chunk : "%s")`,
@@ -289,7 +288,7 @@ struct MapChunkBulkS {
             this.primary_bitmask = primary_bitmask;
             this.add_bitmask = add_bitmask;
         }
-        
+
         static MetaInformation recv(Stream s) {
             return MetaInformation(read!(int, int, short, short)(s).field);
         }
@@ -326,7 +325,7 @@ struct MapChunkBulkS {
         size_t offset = 0;
         foreach(cc; ret.chunks) {
             cc.chunk.fill_chunk_with_nothing();
-            
+
             offset += MapChunkS.parse_raw_chunk(cc.chunk, unc_data[offset..$], true);
         }
 
@@ -340,7 +339,7 @@ struct MapChunkBulkS {
             app.put(`%d: CoordChunkTuple : [vec3i coords : %s, Chunk chunk : "%s"]`.format(i+1, cc.coords, cc.chunk));
         }
         app.put("\n");
-        
+
         return `MapChunkBulkS(short chunk_count : "%s", CoordChunkTuple[] chunks : [%s]`.format(chunk_count, app.data);
     }
 }
@@ -351,7 +350,7 @@ struct MultiBlockChangeData {
 
     static MultiBlockChangeData recv(Stream s) {
         MultiBlockChangeData ret;
-        
+
         int length = read!int(s);
 
         auto app = appender!(uint[])();
