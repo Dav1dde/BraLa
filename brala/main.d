@@ -6,7 +6,7 @@ private {
     import glamour.sampler : Sampler;
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
-    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
+    import glwtf.glfw;
 
     import std.conv : to;
     import std.path : buildPath;

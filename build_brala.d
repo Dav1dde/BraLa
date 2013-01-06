@@ -107,7 +107,8 @@ enum BuildPath[] D_PATHS = [{buildPath("brala"),                                
                             {buildPath("src", "d", "glamour", "glamour"),                         SpanMode.breadth},
                             {buildPath("src", "d", "openssl"),                                    SpanMode.breadth},
                             {buildPath("src", "d", "std"),                                        SpanMode.breadth},
-                            {buildPath("src", "d", "nbd"),                                        SpanMode.shallow}];
+                            {buildPath("src", "d", "nbd"),                                        SpanMode.shallow},
+                            {buildPath("src", "d", "glwtf", "glwtf"),                             SpanMode.breadth}];
 
 enum BuildPath[] C_PATHS = [{buildPath("src", "c"), SpanMode.shallow}];
 
@@ -152,7 +153,8 @@ string make_dcflags_import() {
                                 buildPath("src", "d"),
                                 buildPath("src", "d", "openssl"),
                                 buildPath("src", "d", "glfw"),
-                                buildPath("src", "d", "nbd")];
+                                buildPath("src", "d", "nbd"),
+                                buildPath("src", "d", "glwtf")];
 
     return paths.map!(x => "-I" ~ x).join(" ");
 }

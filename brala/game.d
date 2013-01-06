@@ -2,7 +2,7 @@ module brala.game;
 
 private {
     import glamour.gl;
-    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
+    import glwtf.glfw;
     
     import std.socket : Address;
     import std.conv : to;
