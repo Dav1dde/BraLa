@@ -16,8 +16,8 @@ made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia).
 
 ## Features ##
 
-BraLa is at this state just a minecraft (S)MP viewer, it is able to connect to 1.3 servers
-and display the world (only solid blocks) and has no transparency or light.
+BraLa is at this state just a minecraft (S)MP viewer, it is able to connect to 1.4.6 servers
+and display the world.
 BraLa also doesn't have any kind of physics (to use BraLa you must set the client into
 creative mod or allow to fly).
 
