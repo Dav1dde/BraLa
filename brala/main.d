@@ -37,24 +37,18 @@ static this() {
         DerelictGLFW3.load();
     }
 
-    enforceEx!InitError(glfwInit(), "glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
+    enforceEx!InitError(glfwInit(), "glfwInit failure");
 }
 
 Window _window;
 
 Window open_glfw_win(int width, int height) {
     _window = new Window();
+    _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
 
-    version(DynamicGLFW) {
-        _window.set_hint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
-    } else {
-        _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
-    }
-
-    _window.create(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level");
+    _window.create(width, height, "BraLa - Minecraft on a lower level");
     _window.make_context_current();
     _window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-    _window.set_input_mode(GLFW_SYSTEM_KEYS, 1);
 
     glfwSwapInterval(0); // change this to 1?
 

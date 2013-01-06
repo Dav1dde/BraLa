@@ -13,12 +13,12 @@
 [submodule "src/c/glfw"]
 	path = src/c/glfw
 	url = git://github.com/elmindreda/glfw.git
-[submodule "src/d/glfw"]
-	path = src/d/glfw
-	url = git://github.com/D-Programming-Deimos/glfw.git
 [submodule "src/d/nbd"]
 	path = src/d/nbd
 	url = git://github.com/Dav1dde/nbd.git
 [submodule "src/d/glwtf"]
 	path = src/d/glwtf
 	url = git://github.com/Dav1dde/glwtf.git
+[submodule "src/d/glfw"]
+	path = src/d/glfw
+	url = git://github.com/Dav1dde/glfw.git
