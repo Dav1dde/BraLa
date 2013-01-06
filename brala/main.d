@@ -7,6 +7,8 @@ private {
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import glwtf.glfw;
+    import glwtf.window;
+    import glwtf.input : register_glfw_error_callback;
 
     import std.conv : to;
     import std.path : buildPath;
@@ -17,7 +19,6 @@ private {
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
-    import brala.input : register_glfw_error_callback;
     import brala.config : app_arguments, AppArguments, load_default_resources;
     import brala.network.session : minecraft_folder, minecraft_credentials;
     import brala.network.packets.types : IPacket;
@@ -39,22 +40,21 @@ static this() {
     enforceEx!InitError(glfwInit(), "glfwInit failure: " ~ to!string(glfwErrorString(glfwGetError())));
 }
 
-GLFWwindow _window;
+Window _window;
 
-GLFWwindow open_glfw_win(int width, int height) {
+Window open_glfw_win(int width, int height) {
+    _window = new Window();
+
     version(DynamicGLFW) {
-        glfwWindowHint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
+        _window.set_hint(GLFW_WINDOW_RESIZABLE, GL_FALSE);
     } else {
-        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+        _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
     }
 
-    _window = glfwCreateWindow(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level", null);
-    enforceEx!InitError(_window !is null, "Unable to initialize an OpenGL context");
-
-    glfwMakeContextCurrent(_window);
-
-    glfwSetInputMode(_window, GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-    glfwSetInputMode(_window, GLFW_SYSTEM_KEYS, 1);
+    _window.create(width, height, GLFW_WINDOWED, "BraLa - Minecraft on a lower level");
+    _window.make_context_current();
+    _window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    _window.set_input_mode(GLFW_SYSTEM_KEYS, 1);
 
     glfwSwapInterval(0); // change this to 1?
 
@@ -84,7 +84,7 @@ GLVersion init_opengl() {
     return DerelictGL3.reload();
 }
 
-BraLaEngine init_engine(void* window, AppArguments args, GLVersion glv) {
+BraLaEngine init_engine(Window window, AppArguments args, GLVersion glv) {
     auto engine = new BraLaEngine(window, args.width, args.height, glv);
 
     engine.resmgr.load_default_resources(args.res);
@@ -145,7 +145,7 @@ int main() {
     debug glamour_set_error_callback(&glamour_error_cb);
 
     debug writefln("init: %dx%d", app_arguments.width, app_arguments.height);
-    GLFWwindow win = open_glfw_win(app_arguments.width, app_arguments.height);
+    Window win = open_glfw_win(app_arguments.width, app_arguments.height);
 
     GLVersion glv = init_opengl();
     debug writefln("Supported OpenGL version: %s\n"
@@ -155,7 +155,7 @@ int main() {
 
     auto engine = init_engine(win, app_arguments, glv);
 
-    auto game = new BraLaGame(engine, win, username, password, app_arguments);
+    auto game = new BraLaGame(engine, username, password, app_arguments);
 
     try {
         game.start(app_arguments.host, app_arguments.port);

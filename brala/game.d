@@ -21,7 +21,6 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.character : Character;
     import brala.engine : BraLaEngine;
-    import brala.input : BaseGLFWEventHandler;
     import brala.gfx.text : parse_chat;
     import brala.gfx.gl : clear;
     import brala.utils.defaultaa : DefaultAA;
@@ -32,7 +31,7 @@ private {
 }
 
 
-class BraLaGame : BaseGLFWEventHandler {
+class BraLaGame {
     protected Object _world_lock;
     
     BraLaEngine engine;
@@ -44,7 +43,6 @@ class BraLaGame : BaseGLFWEventHandler {
     protected World _current_world;    
     @property current_world() { return _current_world; }
     
-    protected DefaultAA!(bool, int, false) keymap;
     protected vec2i mouse_offset = vec2i(0, 0);
     
     bool quit = false;
@@ -53,7 +51,7 @@ class BraLaGame : BaseGLFWEventHandler {
 
     size_t tessellation_threads = 3;
     
-    this(BraLaEngine engine, void* window, string username, string password, AppArguments app_args) {
+    this(BraLaEngine engine, string username, string password, AppArguments app_args) {
         this.tessellation_threads = app_args.tessellation_threads;
     
         _world_lock = new Object();
@@ -64,8 +62,9 @@ class BraLaGame : BaseGLFWEventHandler {
         connection.callback = &dispatch_packets;
 
         character = new Character(0);
-        
-        super(window); // call this at the end or have a life with segfaults!
+
+        engine.window.on_mouse_pos.connect(&on_mouse_pos);
+        engine.window.on_close = &on_window_close;
     }
     
     // rendering
@@ -113,7 +112,7 @@ class BraLaGame : BaseGLFWEventHandler {
             last_notchian_tick = now;
         }
         
-        if(quit || keymap[GLFW_KEY_ESCAPE]) {
+        if(quit || engine.window.is_key_down(GLFW_KEY_ESCAPE)) {
             if(connection.connected) disconnect("Goodboy from BraLa.");
             return true;
         } else {
@@ -126,10 +125,10 @@ class BraLaGame : BaseGLFWEventHandler {
 
         bool moved = false;
 
-        if(keymap[MOVE_FORWARD])  character.move_forward(movement); moved = true;
-        if(keymap[MOVE_BACKWARD]) character.move_backward(movement); moved = true;
-        if(keymap[STRAFE_LEFT])  character.strafe_left(movement); moved = true;
-        if(keymap[STRAFE_RIGHT]) character.strafe_right(movement); moved = true;
+        if(engine.window.is_key_down(MOVE_FORWARD))  character.move_forward(movement); moved = true;
+        if(engine.window.is_key_down(MOVE_BACKWARD)) character.move_backward(movement); moved = true;
+        if(engine.window.is_key_down(STRAFE_LEFT))  character.strafe_left(movement); moved = true;
+        if(engine.window.is_key_down(STRAFE_RIGHT)) character.strafe_right(movement); moved = true;
         if(mouse_offset.x != 0) character.rotatex(-movement * mouse_offset.x); moved = true;
         if(mouse_offset.y != 0) character.rotatey(movement * mouse_offset.y); moved = true;
         mouse_offset.x = 0;
@@ -292,16 +291,8 @@ class BraLaGame : BaseGLFWEventHandler {
         debug writefln("Unhandled packet: %s", packet);
     }
     
-    // UI-Events
-    override void on_key_down(int key) {
-        keymap[key] = true;
-    }
-    
-    override void on_key_up(int key) {
-        keymap[key] = false;
-    }
-    
-    override void on_mouse_pos(int x, int y) {
+    // UI-Events   
+    void on_mouse_pos(int x, int y) {
         static int last_x = 0;
         static int last_y = 0;
         
@@ -312,7 +303,7 @@ class BraLaGame : BaseGLFWEventHandler {
         last_y = y;
     }
     
-    override bool on_window_close() {
+    bool on_window_close() {
         quit = true;
         return true;
     }

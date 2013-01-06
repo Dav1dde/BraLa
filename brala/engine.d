@@ -7,6 +7,7 @@ private {
     import glamour.sampler : Sampler;
     
     import glwtf.glfw;
+    import glwtf.window;
     
     import gl3n.linalg;
     import gl3n.frustum : Frustum;
@@ -22,7 +23,7 @@ class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
     Timer timer;
     ResourceManager resmgr;
-    void* window;
+    Window window;
 
     @property vec2i viewport() {
         return _viewport;
@@ -69,7 +70,7 @@ class BraLaEngine {
         }
     }
     
-    this(void* window, int width, int height, GLVersion glv) {
+    this(Window window, int width, int height, GLVersion glv) {
         this.window = window;
         
         timer = new Timer();
@@ -118,7 +119,7 @@ class BraLaEngine {
 //                 glfwPollEvents();
 //             }
 
-            glfwSwapBuffers(window);
+            window.swap_buffers();
             glfwPollEvents();
         }
         
