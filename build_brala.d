@@ -256,7 +256,7 @@ class Builder {
 }
 
 
-/+string[]+/auto glfw_libraries() {
+string[] glfw_libraries() {
     version(Windows) {
         return [];
     } else {
