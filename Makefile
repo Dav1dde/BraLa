@@ -9,19 +9,9 @@ DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/
 
 include command.make
 
-ifeq ($(OS),"Windows")
-	DCFLAGS_LINK =	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-			$(LINKERFLAG)-L$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src \
-			$(LINKERFLAG)-lglfw3.lib $(LINKERFLAG)-lopengl32.lib $(LINKERFLAG)-luser32.lib
-else ifeq ($(OS),"MinGW")
-	DCFLAGS_LINK =  $(LDCFLAGS) $(LIB_PREFIX)$(PATH_SEP)libssl.lib \
-			$(LIB_PREFIX)$(PATH_SEP)libcrypto.lib \
-			$(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src$(PATH_SEP)glfw3.lib
-else
-	DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-			$(LINKERFLAG)-Lbuild/glfw/src \
-			`env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
-endif
+DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
+		$(LINKERFLAG)-Lbuild/glfw/src \
+		`env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc
@@ -79,16 +69,9 @@ brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(
 
 glfw:
 	$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
-ifeq ($(OS),"MinGW")
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
-	cmake -G "MSYS Makefiles" -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw$(PATH_SEP)src && echo "..\..\..\$(IMPLIB) /s glfw3.lib glfw3.dll && exit;" | cmd
-else
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
 	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
-endif
 
 
 # create object files
@@ -108,11 +91,7 @@ $(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
 	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
-ifeq ($(OS),"MinGW")
-	$(CC) $(CFLAGS) -c $< -o$@
-else
 	$(CC) $(CFLAGS) -c $< -o $@
-endif
 
 buildDir: $(OBJDIRS)
 
