@@ -1,8 +1,8 @@
 #!rdmd
 
 private {
-    import std.algorithm : map, filter, endsWith;
-    import std.path : std_buildPath = buildPath, extension, setExtension, dirName, baseName;
+    import std.algorithm : map, filter, endsWith, canFind;
+    import std.path : buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender, array;
     import std.process : shell, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove, readText, write;
@@ -13,324 +13,309 @@ private {
     import std.md5;
 }
 
-
-// general stuff
-version(DigitalMars) {
-    enum LINKERFLAG = "-L";
-    enum OUTPUT = "-of";
-    enum VERSION = "-version=";
-    enum DEBUG = "-debug -g -gc";
-    enum DC = "dmd";
-} else version(GNU) {
-    enum LINKERFLAG = "-Xlinker ";
-    enum OUTPUT = "-o ";
-    enum VERSION = "-fversion=";
-    enum DEBUG = "-fdebug -g";
-    enum DC = "gdc";
-} else version(LDC) {
-    enum LINKERFLAG = "-L";
-    enum OUTPUT = "-of";
-    enum VERSION = "-d-version=";
-    enum DEBUG = "-debug -g -gc";
-    enum DC="ldc2";
-} else version(SDC) {
-    static assert(false, "This compiler is too awesome to compile BraLa");
-} else {
-    static assert(false, "Unsupported compiler");
-}
-
 version(Windows) {
-    enum PATH_SEP = `\`;
-    enum LDCFLAGS = "";
     enum OBJ = ".obj";
-    enum DEFAULT_CC = "dmc";
-
 } else {
-    enum PATH_SEP = `/`;
-    enum LDCFLAGS = "-ldl";
     enum OBJ = ".o";
-    enum DEFAULT_CC = "gcc";
 }
 
-string ver(string[] names...) {
-    return names.map!(x => VERSION ~ x).join(" ");
-}
+alias filter!("a.length > 0") filter0;
 
-string buildPath(string[] paths...) {
-    if(__ctfe) {
-        return paths.join(PATH_SEP);
+bool is32bit() {
+    return is(uint == size_t);
+}
+unittest {
+    if(is32bit()) {
+        assert(!is(ulong == size_t));
     } else {
-        return std_buildPath(paths);
+        assert(is(ulong == size_t));
     }
 }
 
-// BraLa specific stuff
+abstract class Compiler {
+    string build_prefix;
+    string[] import_paths;
+    string[] additional_flags;
 
+    @property string import_flags() {
+        return filter0(import_paths).map!(x => "-I" ~ x).join(" ");
+    }
 
-string CC;
-string CFLAGS;
-string C_OUTPUT;
+    @property string compiling_ext() { throw new Exception("Not Implemented"); }
+    string compile(string prefix, string file) { throw new Exception("Not Implemented"); }
 
-string DFLAGS;
-string DCFLAGS_LINK;
-string DCFLAGS_IMPORT;
+    string version_(string ver) { throw new Exception("Not Implemented"); }
+    @property string debug_() { throw new Exception("Not Implemented"); }
+    @property string debug_info() { throw new Exception("Not Implemented"); }
+}
 
-enum CACHE_FILE = ".build_cache";
+class DCompiler : Compiler {
+    override @property string compiling_ext() {
+        return ".d";
+    }
+}
 
-
-static this() {
-    CC = environment.get("CC", DEFAULT_CC);
-    CFLAGS = environment.get("CFLAGS", "");
-    C_OUTPUT = CC == "dmc" ? "-o" : "-o ";
-
-    DFLAGS = make_d_flags();
-    DCFLAGS_LINK = make_dcflags_link();
-    DCFLAGS_IMPORT = make_dcflags_import();
+class CCompiler : Compiler {
+    override @property string compiling_ext() {
+        return ".c";
+    }
 }
 
 
-enum DBUILD_PATH = buildPath("build");
-enum CBUILD_PATH = buildPath("build");
+interface Linker {
+    void link(string, string[], string[], string[]);
+}
 
-struct BuildPath {
+class DMD : DCompiler, Linker {
+    override string version_(string ver) {
+        return "-version=" ~ ver;
+    }
+    override @property string debug_() { return "-debug"; }
+    override @property string debug_info() { return "-g -gc"; }
+    
+    override string compile(string prefix, string file) {
+        string out_path = buildPath(prefix, file).setExtension(OBJ);
+        
+        string cmd = "dmd %s %s -c %s -of%s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+        writeln(cmd);
+        shell(cmd);
+
+        return out_path;
+    }
+
+    void link(string out_path, string[] object_files, string[] libraries, string[] options) {
+        string cmd = "dmd %s %s %s -of%s".format(
+                        object_files.join(" "),
+                        filter0(libraries).map!(x => "-L-l" ~ x).join(" "),
+                        filter0(options).map!(x => "-L" ~ x).join(" "),
+                        out_path);
+
+        writeln(cmd);
+        shell(cmd);
+    }
+}
+
+// GDC: "-fdebug -g";
+// LDC: "-debug -g -gc";
+
+class GDC : DCompiler {
+}
+
+class LDC : DCompiler {
+}
+
+class DMC : DCompiler {
+}
+
+class GCC : CCompiler {
+    override string compile(string prefix, string file) {
+        string out_path = buildPath(prefix, file).setExtension(OBJ);
+
+        string cmd = "gcc %s %s -c %s -o %s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+        writeln(cmd);
+        shell(cmd);
+
+        return out_path;
+    }
+}
+
+
+
+struct ScanPath {
     string path;
     alias path this;
     SpanMode mode;
 }
 
-enum BuildPath[] D_PATHS = [{buildPath("brala"),                                                  SpanMode.breadth},
-                            {buildPath("src", "d", "arsd"),                                       SpanMode.breadth},
-                            {buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"), SpanMode.breadth},
-                            {buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"),   SpanMode.breadth},
-                            {buildPath("src", "d", "derelict3", "import", "derelict", "util"),    SpanMode.breadth},
-                            {buildPath("src", "d", "gl3n", "gl3n"),                               SpanMode.breadth},
-                            {buildPath("src", "d", "glamour", "glamour"),                         SpanMode.breadth},
-                            {buildPath("src", "d", "openssl"),                                    SpanMode.breadth},
-                            {buildPath("src", "d", "std"),                                        SpanMode.breadth},
-                            {buildPath("src", "d", "nbd"),                                        SpanMode.shallow},
-                            {buildPath("src", "d", "glwtf", "glwtf"),                             SpanMode.breadth}];
+class Builder {
+    ScanPath[] scan_paths;
+    protected string[] _object_files;
+    @property string[] object_files() { return _object_files; }
 
-enum BuildPath[] C_PATHS = [{buildPath("src", "c"), SpanMode.shallow}];
-
-
-string make_d_flags() {
-    version(Windows) {
-        enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
-    } else {
-        enum DFLAGS = [ver("Derelict3", "gl3n", "stb"), DEBUG].join(" ");
+    protected Compiler[string] compiler;
+    Linker linker;
+    
+    @property string lib_path() {
+        version(Windows) {
+            return lib_path_windows;
+        } else version(linux) {
+            return lib_path_linux;
+        } else version(OSX) {
+            return lib_path_osx;
+        }
     }
-    return DFLAGS;
+
+    @property string lib_path_windows() {
+        return buildPath("lib", "win32");
+    }
+
+    @property string lib_path_linux() {
+        return buildPath("lib", "linux%s".format(is32bit() ? "32" : "64"));
+    }
+
+    @property string lib_path_osx() {
+        return buildPath("lib", "osx32");
+    }
+
+    string out_path;
+
+    string[] libraries_win;
+    string[] libraries_win32;
+    string[] libraries_win64;
+    string[] libraries_linux;
+    string[] libraries_linux32;
+    string[] libraries_linux64;
+    string[] libraries_osx;
+    string[] libraries_osx32;
+    string[] libraries_osx64;
+
+    @property string[] libraries() {
+        version(Windows) {
+            static if(is32bit()) {
+                return libraries_win ~ libraries_win32;
+            } else {
+                return libraries_win ~ libraries_win64;
+            }
+        } else version(linux) {
+            static if(is32bit()) {
+                return libraries_linux ~ libraries_linux32;
+            } else {
+                return libraries_linux ~ libraries_linux64;
+            }
+        } else version(OSX) {
+            static if(is32bit()) {
+                return libraries_osx ~ libraries_osx32;
+            } else {
+                return libraries_osx ~ libraries_osx64;
+            }
+        }
+    }
+
+    string[] linker_options_win;
+    string[] linker_options_linux;
+    string[] linker_options_osx;
+
+    @property string[] linker_options() {
+        version(Windows) {
+            return linker_options_win;
+        } else version(linux) {
+            return linker_options_linux;
+        } else version(OSX) {
+            return linker_options_osx;
+        }
+    }
+
+    string build_prefix;
+
+    this() {
+        // TODO: implement find_compiler
+        version(Windows) {
+            auto dc = new DMD();
+            auto cc = new DMC();
+            this(dc, dc, cc);
+        } else {
+            auto dc = new DMD();
+            auto cc = new GCC();
+            this(dc, dc, cc);
+        }
+    }
+
+    this(Linker linker, Compiler[] compiler...) {
+        this.linker = linker;
+
+        foreach(c; compiler) {
+            this.compiler[c.compiling_ext] = c;
+        }
+    }
+
+    void add_scan_path(string path, SpanMode mode = SpanMode.breadth) {
+        scan_paths ~= ScanPath(path, mode);
+    }
+    void add_scan_path(ScanPath scan_path) {
+        scan_paths ~= scan_path;
+    }
+
+    void compile() {
+        foreach(path; scan_paths) {
+            auto files = map!(x => x.name)(filter!(e => compiler.keys.canFind(e.name.extension))(dirEntries(path, path.mode)));
+            foreach(file; files) {
+                try {
+                    mkdirRecurse(buildPath(build_prefix, file.dirName()));
+                } catch(FileException e) {}
+                
+                Compiler compiler = this.compiler[file.extension];
+
+                _object_files ~= compiler.compile(build_prefix, file);
+            }
+        }
+    }
+
+    void link() {
+        linker.link(out_path, _object_files, libraries, linker_options);
+    }
 }
 
-string make_dcflags_link() {
-    version(Windows) {
-        string libssl = buildPath("lib", "windows", "libssl32.lib");
-        string libeay = buildPath("lib", "windows", "libeay32.lib");
-        string glfw = buildPath("lib", "windows", "glfw3.lib");
 
-        return [libssl, libeay, glfw].join(" ");
+/+string[]+/auto glfw_libraries() {
+    version(Windows) {
+        return [];
     } else {
         string pkg_cfg_path = environment.get("PKG_CONFIG_PATH", "");
         environment["PKG_CONFIG_PATH"] = buildPath("build", "glfw", "src");
+        scope(exit) environment["PKG_CONFIG_PATH"] = pkg_cfg_path;
 
-        string[] glfw_link = shell(`pkg-config --static --libs glfw3`).split();
-
-        environment["PKG_CONFIG_PATH"] = pkg_cfg_path;
-
-        string[] DCFLAGS_LINK_RAW = [LDCFLAGS, "-lssl", "-lcrypto", "-Lbuild/glfw/src"] ~ glfw_link;
-        return DCFLAGS_LINK_RAW.map!(x => LINKERFLAG ~ x).join(" ");
+        return shell(`pkg-config --static --libs glfw3`).split();
     }
-
-
-}
-
-
-string make_dcflags_import() {
-    immutable string[] paths = [buildPath("brala"),
-                                buildPath("src", "d", "derelict3", "import"),
-                                buildPath("src", "d", "glamour"),
-                                buildPath("src", "d", "gl3n"),
-                                buildPath("src", "d"),
-                                buildPath("src", "d", "openssl"),
-                                buildPath("src", "d", "glfw"),
-                                buildPath("src", "d", "nbd"),
-                                buildPath("src", "d", "glwtf")];
-
-    return paths.map!(x => "-I" ~ x).join(" ");
-}
-
-
-string[] find_files(BuildPath[] paths, string ext) {
-    auto app = appender!(string[])();
-
-    foreach(path; paths) {
-        app.put(find_files(path, ext));
-    }
-
-    return app.data;
-}
-
-string[] find_files(BuildPath path, string ext) {
-    return dirEntries(path, path.mode).filter!(e => e.name.extension == ext).map!(x => x.name).array();
-}
-
-
-void make_folders(string prefix, string[] paths) {
-    foreach(path; paths) {
-        try {
-            mkdirRecurse(buildPath(prefix, path.dirName()));
-        } catch(FileException e) {
-            //assert(e.msg.endsWith("File exists"), e.msg);
-        }
-    }
-}
-
-
-void setup_bin(string prefix = "") {
-    string bin = buildPath(prefix, "bin");
-
-    try {
-        mkdirRecurse(bin);
-    } catch(FileException e) {}
-
-    version(Windows) {
-        string[] dlls = find_files(BuildPath(buildPath("lib", "windows"), SpanMode.breadth), ".dll");
-
-        foreach(dll; dlls) {
-            string dest = buildPath(bin, dll.baseName());
-
-            copy(dll, dest);
-        }
-    }
-}
-
-string[string] get_build_cache(string file) {
-    if(file.exists()) {
-        File f = File(file, "r");
-        scope(exit) f.close();
-        return get_build_cache(f);
-    }
-
-    string[string] s;
-    return s;
-}
-
-string[string] get_build_cache(File file) {
-    string[string] cache;
-
-    foreach(cline; file.byLine()) {
-        string line = cline.idup;
-
-        string hash = line.split()[$-1];
-        string path = line[0..$-hash.length].stripRight();
-
-        cache[path] = hash;
-    }
-
-    return cache;
-}
-
-string md5_file(string filename) {
-    ubyte[16] digest;
-    MD5_CTX context;
-    context.start();
-
-    foreach(buffer; File(filename).byChunk(64 * 1024)) {
-        context.update(buffer);
-    }
-
-    context.finish(digest);
-
-    return digestToString(digest);
-}
-
-
-void save_build_cache(string file, string[string] cache) {
-    File f = File(file, "w");
-    scope(exit) f.close();
-    return save_build_cache(f, cache);
-}
-
-void save_build_cache(File file, string[string] cache) {
-    foreach(k, v; cache) {
-        file.writefln("%s %s", k, v);
-    }
-}
-
-
-string[] d_compile(string prefix, string[] files, ref string[string] cache) {
-    auto app = appender!(string[])();
-
-//     foreach(file; parallel(files)) {
-    foreach(file; files) {
-        string md5 = md5_file(file);
-
-        string build_path = buildPath(prefix, file).setExtension(OBJ);
-        app.put(build_path);
-
-        if(build_path.exists() && cache.get(file, "") == md5) {
-            continue;
-        }
-
-        string cmd = "%s %s %s -c %s %s%s".format(DC, DFLAGS, DCFLAGS_IMPORT, file, OUTPUT, build_path);
-        writeln(cmd);
-        shell(cmd);
-
-        cache[file] = md5;
-    }
-
-    return app.data;
-}
-
-
-string[] c_compile(string prefix, string[] files, ref string[string] cache) {
-    auto app = appender!(string[])();
-
-//     foreach(file; parallel(files)) {
-    foreach(file; files) {
-        string md5 = md5_file(file);
-
-        string build_path = buildPath(prefix, file).setExtension(OBJ);
-        app.put(build_path);
-
-        if(build_path.exists() && cache.get(file, "") == md5) {
-            continue;
-        }
-        
-        string cmd = "%s %s -c %s %s%s".format(CC, CFLAGS, file, C_OUTPUT, build_path);
-        writeln(cmd);
-        shell(cmd);
-
-        cache[file] = md5;
-    }
-
-    return app.data;
-}
-
-void link(string[] d_files, string[] c_files, string exe) {
-    string[] all_files = d_files ~ c_files;
-
-    string cmd = "%s %s %s %s%s".format(DC, DCFLAGS_LINK, all_files.join(" "), OUTPUT, exe);
-    writeln(cmd);
-    shell(cmd);
 }
 
 
 void main() {
-    string[string] cache = get_build_cache(CACHE_FILE);
+    auto cc = new GCC();
+    auto dc = new DMD();
+
+    dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
+                           dc.debug_, dc.debug_info];
     
-    string[] d_files = find_files(D_PATHS, ".d");
-    string[] c_files = find_files(C_PATHS, ".c");
+    dc.import_paths = [buildPath("brala"),
+                       buildPath("src", "d", "derelict3", "import"),
+                       buildPath("src", "d", "glamour"),
+                       buildPath("src", "d", "gl3n"),
+                       buildPath("src", "d"),
+                       buildPath("src", "d", "openssl"),
+                       buildPath("src", "d", "glfw"),
+                       buildPath("src", "d", "nbd"),
+                       buildPath("src", "d", "glwtf")];
 
-    make_folders(DBUILD_PATH, d_files);
-    make_folders(CBUILD_PATH, c_files);
+    auto builder = new Builder(dc, dc, cc);
 
-    string[] d_obj = d_compile(DBUILD_PATH, d_files, cache);
-    string[] c_obj = c_compile(CBUILD_PATH, c_files, cache);
+    builder.out_path = buildPath("bin", "brala");
+    builder.build_prefix = buildPath("build");
+    
+    builder.add_scan_path(buildPath("brala"));
+    builder.add_scan_path(buildPath("src", "d", "arsd"));
+    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"));
+    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"));
+    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "util"));
+    builder.add_scan_path(buildPath("src", "d", "gl3n", "gl3n"));
+    builder.add_scan_path(buildPath("src", "d", "glamour", "glamour"));
+    builder.add_scan_path(buildPath("src", "d", "openssl"));
+    builder.add_scan_path(buildPath("src", "d", "std"));
+    builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
+    builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
+    builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
-    setup_bin();
+    builder.libraries_win = [buildPath("lib", "windows", "libssl32.lib"),
+                             buildPath("lib", "windows", "libeay32.lib"),
+                             buildPath("lib", "windows", "glfw3.lib")];
+    builder.linker_options_win = [];
 
-    link(d_obj, c_obj, buildPath("bin", "bralad"));
+    builder.libraries_linux = ["ssl", "crypto"];
+    builder.linker_options_linux = ["-Lbuild/glfw/src"];
+    builder.linker_options_linux ~= glfw_libraries();
 
-    save_build_cache(CACHE_FILE, cache);
+    builder.libraries_osx = builder.libraries_linux;
+    builder.linker_options_osx = builder.linker_options_linux;
+
+    builder.compile();
+    builder.link();
 }
