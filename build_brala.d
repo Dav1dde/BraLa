@@ -151,28 +151,6 @@ class Builder {
     protected Compiler[string] compiler;
     Linker linker;
     
-    @property string lib_path() {
-        version(Windows) {
-            return lib_path_windows;
-        } else version(linux) {
-            return lib_path_linux;
-        } else version(OSX) {
-            return lib_path_osx;
-        }
-    }
-
-    @property string lib_path_windows() {
-        return buildPath("lib", "win32");
-    }
-
-    @property string lib_path_linux() {
-        return buildPath("lib", "linux%s".format(is32bit() ? "32" : "64"));
-    }
-
-    @property string lib_path_osx() {
-        return buildPath("lib", "osx32");
-    }
-
     string out_path;
 
     string[] libraries_win;
@@ -324,9 +302,9 @@ void main() {
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
-    builder.libraries_win = [buildPath("lib", "windows", "libssl32.lib"),
-                             buildPath("lib", "windows", "libeay32.lib"),
-                             buildPath("lib", "windows", "glfw3.lib")];
+    builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
+                             buildPath("lib", "win", "libeay32.lib"),
+                             buildPath("lib", "win", "glfw3.lib")];
     builder.linker_options_win = [];
 
     builder.libraries_linux = ["ssl", "crypto"];
