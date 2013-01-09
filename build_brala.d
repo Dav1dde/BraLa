@@ -105,6 +105,15 @@ class LDC : DCompiler {
 }
 
 class DMC : DCompiler {
+    override string compile(string prefix, string file) {
+        string out_path = buildPath(prefix, file).setExtension(OBJ);
+
+        string cmd = "dmc %s %s -c %s -o%s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+        writeln(cmd);
+        shell(cmd);
+
+        return out_path;
+    }
 }
 
 class GCC : CCompiler {
@@ -270,7 +279,11 @@ string[] glfw_libraries() {
 
 
 void main() {
-    auto cc = new GCC();
+    version(Windows) {
+        auto cc = new DMC();
+    } else {
+        auto cc = new GCC();
+    }
     auto dc = new DMD();
 
     dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
