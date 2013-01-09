@@ -4,7 +4,7 @@ private {
     import std.algorithm : map, filter, endsWith, canFind;
     import std.path : buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender, array;
-    import std.process : shell, environment;
+    import std.process : shell, system, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove, readText, write;
     import std.stdio : writeln, File;
     import std.string : format, stripRight;
@@ -47,6 +47,12 @@ abstract class Compiler {
     string version_(string ver) { throw new Exception("Not Implemented"); }
     @property string debug_() { throw new Exception("Not Implemented"); }
     @property string debug_info() { throw new Exception("Not Implemented"); }
+
+    @property string compiler() { throw new Exception("Not Implemented"); }
+
+    bool is_available() {
+        return system("%s -v".format(compiler)) == 0;
+    }
 }
 
 class DCompiler : Compiler {
@@ -72,6 +78,7 @@ class DMD : DCompiler, Linker {
     }
     override @property string debug_() { return "-debug"; }
     override @property string debug_info() { return "-g -gc"; }
+    override @property string compiler() { return "dmd"; }
     
     override string compile(string prefix, string file) {
         string out_path = buildPath(prefix, file).setExtension(OBJ);
@@ -112,6 +119,7 @@ class LDC : DCompiler {
 }
 
 class DMC : CCompiler {
+    override @property string compiler() { return "dmc"; }
     override string compile(string prefix, string file) {
         string out_path = buildPath(prefix, file).setExtension(OBJ);
 
@@ -124,6 +132,7 @@ class DMC : CCompiler {
 }
 
 class GCC : CCompiler {
+    override @property string compiler() { return "gcc"; }
     override string compile(string prefix, string file) {
         string out_path = buildPath(prefix, file).setExtension(OBJ);
 
@@ -269,7 +278,18 @@ void main() {
     } else {
         auto cc = new GCC();
     }
-    auto dc = new DMD();
+
+    version(DigitalMars) {
+        auto dc = new DMD();
+    } else version(GNU) {
+        auto dc = new GDC();
+    } else version(LDC) {
+        auto dc = new LDC();
+    } else version(SDC) {
+        static assert(false, "This compiler is too awesome to compile BraLa at the moment");
+    } else {
+        static assert(false, "Unsupported compiler");
+    }
 
     dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
                            dc.debug_, dc.debug_info];
