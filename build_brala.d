@@ -84,10 +84,17 @@ class DMD : DCompiler, Linker {
     }
 
     void link(string out_path, string[] object_files, string[] libraries, string[] options) {
+        enum LF = "-L";
+        version(Windows) {
+            enum LLF = "";
+        } else {
+            enum LLF = "-L-l";
+        }
+        
         string cmd = "dmd %s %s %s -of%s".format(
                         object_files.join(" "),
-                        filter0(libraries).map!(x => "-L-l" ~ x).join(" "),
-                        filter0(options).map!(x => "-L" ~ x).join(" "),
+                        filter0(libraries).map!(x => LLF ~ x).join(" "),
+                        filter0(options).map!(x => LF ~ x).join(" "),
                         out_path);
 
         writeln(cmd);
@@ -104,7 +111,7 @@ class GDC : DCompiler {
 class LDC : DCompiler {
 }
 
-class DMC : DCompiler {
+class DMC : CCompiler {
     override string compile(string prefix, string file) {
         string out_path = buildPath(prefix, file).setExtension(OBJ);
 
