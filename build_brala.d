@@ -5,7 +5,7 @@ private {
     import std.path : buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender, array;
     import std.process : shell, system, environment;
-    import std.file : dirEntries, SpanMode, mkdirRecurse, FileException, exists, copy, remove, readText, write;
+    import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse, FileException, exists, copy, remove, readText, write;
     import std.stdio : writeln, File;
     import std.string : format, stripRight;
     import std.parallelism : parallel;
@@ -15,9 +15,18 @@ private {
 
 version(Windows) {
     enum OBJ = ".obj";
-} else {
+    enum SO = ".dll";
+    enum SO_LINK = ".lib";
+} else version(linux) {
     enum OBJ = ".o";
+    enum SO = ".so";
+    enum SO_LINK = "";
+} else version(OSX) {
+    enum OBJ = ".o";
+    enum SO = ".dylib";
+    enum SO_LINK = "";
 }
+
 
 alias filter!("a.length > 0") filter0;
 
@@ -161,6 +170,17 @@ class Builder {
     Linker linker;
     
     string out_path;
+    string out_file;
+
+    @property string[] library_paths() {
+        version(Windows) {
+            return [buildPath("lib", "win"), buildPath("lib", "win%s".format(is32bit() ? "32" : "64"))];
+        } else version(linux) {
+            return [buildPath("lib", "linux"), buildPath("lib", "linux%s".format(is32bit() ? "32" : "64"))];
+        } else version(OSX) {
+            return [buildPath("lib", "osx"), buildPath("lib", "osx%s".format(is32bit() ? "32" : "64"))];
+        }
+    }
 
     string[] libraries_win;
     string[] libraries_win32;
@@ -254,7 +274,7 @@ class Builder {
     }
 
     void link() {
-        linker.link(out_path, _object_files, libraries, linker_options);
+        linker.link(buildPath(out_path, out_file), _object_files, libraries, linker_options);
     }
 }
 
@@ -306,7 +326,8 @@ void main() {
 
     auto builder = new Builder(dc, dc, cc);
 
-    builder.out_path = buildPath("bin", "brala");
+    builder.out_path = buildPath("bin");
+    builder.out_file = "bralad";
     builder.build_prefix = buildPath("build");
     
     builder.add_scan_path(buildPath("brala"));
@@ -334,6 +355,17 @@ void main() {
     builder.libraries_osx = builder.libraries_linux;
     builder.linker_options_osx = builder.linker_options_linux;
 
+    rmdirRecurse(builder.out_path); // we don't want leftover files in bin/
+
     builder.compile();
     builder.link();
+
+    // executable is linked, now copy the .dll/.so over to the executable
+    foreach(path; builder.library_paths) {
+        if(!path.exists) continue;
+        
+        foreach(file; filter!(x => x.extension == SO)(dirEntries(path, SpanMode.depth))) {
+            copy(file, buildPath("bin", file.baseName));
+        }
+    }    
 }
