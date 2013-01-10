@@ -14,6 +14,7 @@ private {
     import std.path : buildPath;
     import std.zlib : ZlibException;
     import file = std.file;
+    import std.string : format;
     import std.process : getenv;
     import std.exception : enforceEx;
 
@@ -41,11 +42,7 @@ static this() {
     debug glamour_set_error_callback(&glamour_error_cb);
 
     auto err = glfwInit();
-
-    if(!err) {
-        glfwWaitEvents();
-        throw new InitError("glfwInit failure");
-    }
+    enforceEx!InitError(err, "glfwInit failure, returned: %s".format(err));
 }
 
 void glfw_error_cb(int errno, string error) {
