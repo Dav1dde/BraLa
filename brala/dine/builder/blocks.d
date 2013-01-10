@@ -46,7 +46,7 @@ BlockDescriptor[256] BLOCKS = [
     { false, true,  DataBlock, "wood" },
     { true,  false, DataBlock, "leave" },
     { false, true,  Block,     "sponge" },
-    { false, false, Block,     "glass" },
+    { true, false, Block,     "glass" },
     { false, true,  Block,     "lapis lazuli ore" },
     { false, true,  Block,     "lapis lazuli block" },
     { false, true,  DataBlock, "dispenser" },
