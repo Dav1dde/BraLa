@@ -9,7 +9,8 @@ private {
     import std.stdio : writeln, File;
     import std.string : format, stripRight;
     import std.parallelism : parallel;
-    import std.exception : enforce;
+    import std.exception : enforce, collectException;
+    import std.getopt;
     import std.md5;
 }
 
@@ -258,10 +259,14 @@ class Builder {
         scan_paths ~= scan_path;
     }
 
-    void compile() {
+    void compile(int jobs=1) {
         foreach(path; scan_paths) {
-            auto files = map!(x => x.name)(filter!(e => compiler.keys.canFind(e.name.extension))(dirEntries(path, path.mode)));
-            foreach(file; files) {
+            auto files = map!(x => x.name)(filter!(e => compiler.keys.canFind(e.name.extension))(dirEntries(path, path.mode))).array();
+
+            size_t work_unit_size = files.length/jobs;
+            work_unit_size = work_unit_size > 0 ? work_unit_size : 1;
+
+            foreach(file; parallel(files, )) {
                 try {
                     mkdirRecurse(buildPath(build_prefix, file.dirName()));
                 } catch(FileException e) {}
@@ -292,7 +297,15 @@ string[] glfw_libraries() {
 }
 
 
-void main() {
+int main(string[] args) {
+
+    int jobs = 1;
+    getopt(args,
+            "jobs", &jobs,
+            "j", &jobs);
+
+    enforce(jobs >= 1, "Jobs can't be 0 or negative");
+
     version(Windows) {
         auto cc = new DMC();
     } else {
@@ -355,9 +368,9 @@ void main() {
     builder.libraries_osx = builder.libraries_linux;
     builder.linker_options_osx = builder.linker_options_linux;
 
-    rmdirRecurse(builder.out_path); // we don't want leftover files in bin/
+    collectException(rmdirRecurse(builder.out_path)); // we don't want leftover files in bin/
 
-    builder.compile();
+    builder.compile(jobs);
     builder.link();
 
     // executable is linked, now copy the .dll/.so over to the executable
@@ -367,5 +380,7 @@ void main() {
         foreach(file; filter!(x => x.extension == SO)(dirEntries(path, SpanMode.depth))) {
             copy(file, buildPath("bin", file.baseName));
         }
-    }    
+    }
+
+    return 0;
 }
