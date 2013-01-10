@@ -212,6 +212,10 @@ struct Array(T, S) {
     alias T LenType;
     S[] arr;
     alias arr this;
+
+    string toString() {
+        return "%s(%s, %s)".format(typeof(this).stringof, cast(LenType)arr.length, arr);
+    }
 }
 
 struct StaticArray(T, size_t length) {

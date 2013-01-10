@@ -179,11 +179,6 @@ class Connection {
         seed_prng();
 
         this.shared_secret = get_random(16);
-//         this.shared_secret = [cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
-//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
-//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0,
-//                               cast(ubyte)0, cast(ubyte)0, cast(ubyte)0, cast(ubyte)0];
-//         this.shared_secret = get_random_max(16, 12);
 
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
 

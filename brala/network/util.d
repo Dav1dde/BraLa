@@ -196,7 +196,7 @@ string hexdump(ubyte[] src, size_t length=8) {
         src = src[length_..$];
 
         auto hex = s.map!(x => "%02X".format(x))().join(" ");
-        auto dec = s.map!(x => "%03d".format(cast(byte)x))().join(" ");
+        auto dec = s.map!(x => "%03d".format(cast(ubyte)x))().join(" ");
         auto text = s.map!(x => to!string(x > 47 && x < 128 ? cast(char)x : '.'))().join(" ");
         auto filler1 = " ".repeat((length-length_)*2).join("");
         auto filler2 = " ".repeat((length-length_)*3).join("");

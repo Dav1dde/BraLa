@@ -133,6 +133,8 @@ int main() {
         }
     }
 
+//     return test_connection(username, password);
+
     scope(exit) glfwTerminate();
 
     debug register_glfw_error_callback(&glfw_error_cb);
@@ -160,20 +162,28 @@ int main() {
     return 0;
 }
 
-void test_connection(string username, string password) {
+int test_connection(string username, string password) {
     import brala.network.connection;
     import brala.utils.stdio;
 
-    void dispatch(ubyte id, void* packet) {
-        writefln("id: %s", id);
-    }
+    int exit_status = 13;
 
     auto c = new Connection(username, password, false);
+        
+    void dispatch(ubyte id, void* packet) {
+//         writefln("id: %s", id);
+        if(id == 4) {
+            c.disconnect();
+            exit_status = 0;
+        }
+    }
+
     c.callback = &dispatch;
-    
+
     c.connect(app_arguments.host, app_arguments.port);
     c.login();
 
     c.run();
 
+    return exit_status;
 }
