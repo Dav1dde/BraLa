@@ -37,22 +37,10 @@ static this() {
         DerelictGLFW3.load();
     }
 
+    debug register_glfw_error_callback(&glfw_error_cb);
+    debug glamour_set_error_callback(&glamour_error_cb);
+
     enforceEx!InitError(glfwInit(), "glfwInit failure");
-}
-
-Window _window;
-
-Window open_glfw_win(int width, int height) {
-    _window = new Window();
-    _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
-
-    _window.create(width, height, "BraLa - Minecraft on a lower level");
-    _window.make_context_current();
-    _window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-
-    glfwSwapInterval(0); // change this to 1?
-
-    return _window;
 }
 
 void glfw_error_cb(int errno, string error) {
@@ -72,6 +60,23 @@ void glamour_error_cb(GLenum errno, string func, string args) {
         last_errno = errno;
         last_func = func;
     }
+}
+
+
+
+Window _window;
+
+Window open_glfw_win(int width, int height) {
+    _window = new Window();
+    _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
+
+    _window.create(width, height, "BraLa - Minecraft on a lower level");
+    _window.make_context_current();
+    _window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+
+    glfwSwapInterval(0); // change this to 1?
+
+    return _window;
 }
 
 GLVersion init_opengl() {
@@ -136,9 +141,6 @@ int main() {
 //     return test_connection(username, password);
 
     scope(exit) glfwTerminate();
-
-    debug register_glfw_error_callback(&glfw_error_cb);
-    debug glamour_set_error_callback(&glamour_error_cb);
 
     debug writefln("init: %dx%d", app_arguments.width, app_arguments.height);
     Window win = open_glfw_win(app_arguments.width, app_arguments.height);
