@@ -54,7 +54,7 @@ DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call 
 			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
 DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
-CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c $(call getSource,src$(PATH_SEP)c$(PATH_SEP)nbt,c)
+CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 
