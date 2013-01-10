@@ -40,7 +40,12 @@ static this() {
     debug register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
 
-    enforceEx!InitError(glfwInit(), "glfwInit failure");
+    auto err = glfwInit();
+
+    if(!err) {
+        glfwWaitEvents();
+        throw new InitError("glfwInit failure");
+    }
 }
 
 void glfw_error_cb(int errno, string error) {
