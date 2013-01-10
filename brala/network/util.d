@@ -108,10 +108,15 @@ private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits
             } else {
                 short len = read!short(s);
             }
-            
-            foreach(i; 0..len) {
-                ret ~= read!(EncodingType)(s);
-                static if(!__traits(hasMember, T, "LenType") && __traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
+
+            static if(EncodingType.sizeof == 1 && !__traits(hasMember, T, "array_position")) {
+                ret.length = len;
+                s.readExact(ret.ptr, ret.length);
+            } else {
+                foreach(i; 0..len) {
+                    ret ~= read!(EncodingType)(s);
+                    static if(!__traits(hasMember, T, "LenType") && __traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
+                }
             }
         }
     } else {
