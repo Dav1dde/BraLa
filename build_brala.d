@@ -1,14 +1,14 @@
 #!rdmd
 
 private {
-    import std.algorithm : map, filter, endsWith, canFind;
+    import std.algorithm : max, map, filter, endsWith, canFind;
     import std.path : buildPath, extension, setExtension, dirName, baseName;
     import std.array : join, split, appender, array;
     import std.process : shell, system, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse, FileException, exists, copy, remove, readText, write;
     import std.stdio : writeln, File;
     import std.string : format, stripRight;
-    import std.parallelism : parallel;
+    import std.parallelism : TaskPool;
     import std.exception : enforce, collectException;
     import std.getopt;
     import std.md5;
@@ -259,21 +259,25 @@ class Builder {
         scan_paths ~= scan_path;
     }
 
-    void compile(int jobs=1) {
+    void compile(TaskPool task_pool=null) {
         foreach(path; scan_paths) {
             auto files = map!(x => x.name)(filter!(e => compiler.keys.canFind(e.name.extension))(dirEntries(path, path.mode))).array();
 
-            size_t work_unit_size = files.length/jobs;
-            work_unit_size = work_unit_size > 0 ? work_unit_size : 1;
+            enum foreach_body = "collectException(mkdirRecurse(buildPath(build_prefix, file.dirName())));
+                                 Compiler compiler = this.compiler[file.extension];
+                                 _object_files ~= compiler.compile(build_prefix, file);";
 
-            foreach(file; parallel(files, )) {
-                try {
-                    mkdirRecurse(buildPath(build_prefix, file.dirName()));
-                } catch(FileException e) {}
+
+            if(task_pool is null) {
+                foreach(file; files) {
+                    mixin(foreach_body);
+                }
+            } else {
+                size_t work_units = max(files.length / task_pool.size, 1);
                 
-                Compiler compiler = this.compiler[file.extension];
-
-                _object_files ~= compiler.compile(build_prefix, file);
+                foreach(file; task_pool.parallel(files, work_units)) {
+                    mixin(foreach_body);
+                }
             }
         }
     }
@@ -296,15 +300,16 @@ string[] glfw_libraries() {
     }
 }
 
-
 int main(string[] args) {
-
-    int jobs = 1;
-    getopt(args,
-            "jobs", &jobs,
-            "j", &jobs);
-
+    size_t jobs = 1;
+    getopt(args, "jobs|j", &jobs);
     enforce(jobs >= 1, "Jobs can't be 0 or negative");
+
+    TaskPool task_pool;
+    if(jobs > 1) {
+        task_pool = new TaskPool(jobs);
+    }
+    scope(exit) { if(task_pool !is null) task_pool.finish(); }
 
     version(Windows) {
         auto cc = new DMC();
@@ -370,7 +375,7 @@ int main(string[] args) {
 
     collectException(rmdirRecurse(builder.out_path)); // we don't want leftover files in bin/
 
-    builder.compile(jobs);
+    builder.compile(task_pool);
     builder.link();
 
     // executable is linked, now copy the .dll/.so over to the executable
