@@ -33,23 +33,9 @@ private void write_impl(T : string)(Stream s, T data) {
     s.writeStringW(toUTF16(data));
 }
 
-private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {
-    static if(isArray!T) {
-        enum is_array = true;
-        enum is_static_array = isStaticArray!T;
-    } else static if(T.stringof.length > 5 && T.stringof[0..5] == "Array") {
-        enum is_array = true;
-        enum is_static_array = false;
-    } else static if(T.stringof.length > 11 && T.stringof[0..11] == "StaticArray") {
-        enum is_array = true;
-        enum is_static_array = true;
-    } else {
-        enum is_array = false;
-        enum is_static_array = false;
-    }
-    
-    static if(is_array) {
-        static if(!is_static_array) {
+private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {  
+    static if(is(T Array : EncodingType[], EncodingType)) { // isArray
+        static if(!is(T _ : S[n], S, size_t n)) { // !isStaticArray
             static if(__traits(hasMember, T, "LenType")) {
                 write(s, cast(T.LenType)data.length);
             } else {
@@ -57,8 +43,12 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool)))
             }
         }
 
-        foreach(d; data) {
-            write(s, d);
+        static if(EncodingType.sizeof == 1) {
+            s.writeExact(data.ptr, data.length);
+        } else {
+            foreach(d; data) {
+                write(s, d);
+            }
         }
     } else static if(__traits(compiles, s.write(data))) {
         s.write(data);
@@ -105,25 +95,11 @@ private auto read_impl(T)(Stream s) if(__traits(compiles, mixin("T.recv(s)"))) {
 
 private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits(compiles, mixin("T.recv(s)")))) {
     T ret;
-
-    static if(isArray!T) {
-        enum is_array = true;
-        enum is_static_array = isStaticArray!T;
-    } else static if(T.stringof.length > 5 && T.stringof[0..5] == "Array") {
-        enum is_array = true;
-        enum is_static_array = false;
-    } else static if(T.stringof.length > 11 && T.stringof[0..11] == "StaticArray") {
-        enum is_array = true;
-        enum is_static_array = true;
-    } else {
-        enum is_array = false;
-        enum is_static_array = false;
-    }
-    
-    static if(is_array) {
-        static if(is_static_array) {
+   
+    static if(is(T Array : EncodingType[], EncodingType)) { // isArray
+        static if(is(T _ : S[n], S, size_t n)) { // isStaticArray
             foreach(i; 0..T.length) {
-                ret[i] = read!(ElementEncodingType!T)(s);
+                ret[i] = read!(EncodingType)(s);
                 static if(__traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
             }
         } else {
@@ -134,7 +110,7 @@ private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits
             }
             
             foreach(i; 0..len) {
-                ret ~= read!(ElementEncodingType!T)(s);
+                ret ~= read!(EncodingType)(s);
                 static if(!__traits(hasMember, T, "LenType") && __traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
             }
         }
