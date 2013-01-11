@@ -11,7 +11,8 @@ private {
     import std.parallelism : TaskPool;
     import std.exception : enforce, collectException;
     import std.getopt;
-    import std.md5;
+    import std.digest.md;
+    import std.digest.digest;
 }
 
 version(Windows) {
@@ -52,7 +53,7 @@ abstract class Compiler {
     }
 
     @property string compiling_ext() { throw new Exception("Not Implemented"); }
-    string compile(string prefix, string file) { throw new Exception("Not Implemented"); }
+    void compile(string prefix, string file) { throw new Exception("Not Implemented"); }
 
     string version_(string ver) { throw new Exception("Not Implemented"); }
     @property string debug_() { throw new Exception("Not Implemented"); }
@@ -90,14 +91,10 @@ class DMD : DCompiler, Linker {
     override @property string debug_info() { return "-g -gc"; }
     override @property string compiler() { return "dmd"; }
     
-    override string compile(string prefix, string file) {
-        string out_path = buildPath(prefix, file).setExtension(OBJ);
-        
-        string cmd = "dmd %s %s -c %s -of%s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+    override void compile(string src, string dest) {
+        string cmd = "dmd %s %s -c %s -of%s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
         writeln(cmd);
         shell(cmd);
-
-        return out_path;
     }
 
     void link(string out_path, string[] object_files, string[] libraries, string[] options) {
@@ -130,30 +127,116 @@ class LDC : DCompiler {
 
 class DMC : CCompiler {
     override @property string compiler() { return "dmc"; }
-    override string compile(string prefix, string file) {
-        string out_path = buildPath(prefix, file).setExtension(OBJ);
-
-        string cmd = "dmc %s %s -c %s -o%s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+    override void compile(string src, string dest) {
+        string cmd = "dmc %s %s -c %s -o%s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
         writeln(cmd);
         shell(cmd);
-
-        return out_path;
     }
 }
 
 class GCC : CCompiler {
     override @property string compiler() { return "gcc"; }
-    override string compile(string prefix, string file) {
-        string out_path = buildPath(prefix, file).setExtension(OBJ);
-
-        string cmd = "gcc %s %s -c %s -o %s".format(import_flags, filter0(additional_flags).join(" "), file, out_path);
+    override void compile(string src, string dest) {
+        string cmd = "gcc %s %s -c %s -o %s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
         writeln(cmd);
         shell(cmd);
-
-        return out_path;
     }
 }
 
+interface Cache {
+    bool is_cached(string src, string dest);
+    void add_file_to_cache(string file);
+}
+
+class NoCache : Cache {
+    bool is_cached(string src, string dest) { return false; }
+    void add_file_to_cache(string file) {}
+}
+
+class MD5Cache : Cache {
+    string[string] cache;
+
+    this()() {}
+
+    this(T)(T c) if(is(T : string) || is(T : File) || is(T : string[])) {
+        load(c);
+    }
+
+    void load(string cache_file) {
+        if(cache_file.exists()) {
+            File f = File(cache_file, "r");
+            scope(exit) f.close();
+
+            load(f);
+        }
+    }
+
+    void load(File cache_file) {
+        _add_to_cache(cache_file.byLine());
+    }
+
+    void load(string[] cache_file) {
+        _add_to_cache(cache_file);
+    }
+
+    private void _add_to_cache(T)(T iter) {
+        foreach(raw_line; iter) {
+            if(!raw_line.length) {
+                continue;
+            }
+
+            static if(!is(typeof(line) : string)) {
+                string line = raw_line.idup;
+            } else {
+                alias raw_line line;
+            }
+            
+            string hash = line.split()[$-1];
+            string file = line[0..$-hash.length].stripRight();
+
+            cache[file] = hash;
+        }
+    }
+
+    void add_file_to_cache(string file) {
+        cache[file] = MD5Cache.hexdigest_from_file(file);
+    }
+
+    bool is_cached(string src, string dest) {
+        if(src in cache && dest.exists()) {
+            string hexdigest = MD5Cache.hexdigest_from_file(src);
+
+            return cache[src] == hexdigest;
+        }
+
+        return false;
+    }
+
+    void save(string file) {
+        File f = File(file, "w");
+        scope(exit) f.close();
+
+        save(f);
+    }
+
+    void save(File file) {
+        foreach(k, v; cache) {
+            file.writefln("%s %s", k, v);
+        }
+    }
+
+    static string hexdigest_from_file(Hash = MD5)(string file) {
+        File f = File(file, "r");
+        scope(exit) f.close();
+
+        return hexdigest_from_file!(Hash)(f);
+    }
+
+    static string hexdigest_from_file(Hash = MD5)(File file) {
+        auto b = file.byChunk(4096 * 1024);
+        return hexDigest!Hash(b).idup;
+    }
+}
 
 
 struct ScanPath {
@@ -169,6 +252,7 @@ class Builder {
 
     protected Compiler[string] compiler;
     Linker linker;
+    Cache cache;
     
     string out_path;
     string out_file;
@@ -236,15 +320,16 @@ class Builder {
         version(Windows) {
             auto dc = new DMD();
             auto cc = new DMC();
-            this(dc, dc, cc);
+            this(new NoCache(), dc, dc, cc);
         } else {
             auto dc = new DMD();
             auto cc = new GCC();
-            this(dc, dc, cc);
+            this(new NoCache(), dc, dc, cc);
         }
     }
 
-    this(Linker linker, Compiler[] compiler...) {
+    this(Cache cache, Linker linker, Compiler[] compiler...) {
+        this.cache = cache;
         this.linker = linker;
 
         foreach(c; compiler) {
@@ -265,8 +350,12 @@ class Builder {
 
             enum foreach_body = "collectException(mkdirRecurse(buildPath(build_prefix, file.dirName())));
                                  Compiler compiler = this.compiler[file.extension];
-                                 _object_files ~= compiler.compile(build_prefix, file);";
-
+                                 string dest = buildPath(build_prefix, file).setExtension(OBJ);
+                                 if(!cache.is_cached(file, dest)) {
+                                     compiler.compile(file, dest);
+                                     cache.add_file_to_cache(file);
+                                 }
+                                 _object_files ~= dest;";
 
             if(task_pool is null) {
                 foreach(file; files) {
@@ -302,7 +391,13 @@ string[] glfw_libraries() {
 
 int main(string[] args) {
     size_t jobs = 1;
-    getopt(args, "jobs|j", &jobs);
+    string cache_file = ".build_cache";
+    bool no_cache = false;
+    bool override_cache = false;
+    getopt(args, "jobs|j", &jobs,
+                 "cache|c", &cache_file,
+                 "no-cache", &no_cache,
+                 "override-cache|o", &override_cache);
     enforce(jobs >= 1, "Jobs can't be 0 or negative");
 
     TaskPool task_pool;
@@ -310,6 +405,19 @@ int main(string[] args) {
         task_pool = new TaskPool(jobs);
     }
     scope(exit) { if(task_pool !is null) task_pool.finish(); }
+
+
+    MD5Cache md5_cache = new MD5Cache();
+    if(!override_cache) {
+        md5_cache.load(cache_file);
+    }
+    
+    Cache cache;
+    if(no_cache) {
+        cache = new NoCache();
+    } else {
+        cache = md5_cache;
+    }
 
     version(Windows) {
         auto cc = new DMC();
@@ -342,7 +450,7 @@ int main(string[] args) {
                        buildPath("src", "d", "nbd"),
                        buildPath("src", "d", "glwtf")];
 
-    auto builder = new Builder(dc, dc, cc);
+    auto builder = new Builder(cache, dc, dc, cc);
 
     builder.out_path = buildPath("bin");
     builder.out_file = "bralad";
@@ -377,6 +485,8 @@ int main(string[] args) {
 
     builder.compile(task_pool);
     builder.link();
+
+    md5_cache.save(cache_file);
 
     // executable is linked, now copy the .dll/.so over to the executable
     foreach(path; builder.library_paths) {
