@@ -38,7 +38,7 @@ static this() {
         DerelictGLFW3.load();
     }
 
-    debug register_glfw_error_callback(&glfw_error_cb);
+    register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
 
     auto err = glfwInit();
