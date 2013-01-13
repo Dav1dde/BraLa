@@ -11,7 +11,7 @@ include command.make
 
 DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 		$(LINKERFLAG)-Lbuild/glfw/src \
-		`env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | sed -e "s/-L/-L-L/g;s/-l/-L-l/g"`
+		`env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3 | perl -e "@a = split(' ', <STDIN>); foreach(@a) { print \"-L\\$$_ \"; }"`
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=stb -d-debug -unittest -g -gc
