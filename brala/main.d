@@ -73,26 +73,24 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 
 
 
-Window _window;
-
 Window open_glfw_win(int width, int height) {
-    _window = new Window();
-    _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
+    Window window = new Window();
+    window.set_hint(GLFW_RESIZABLE, GL_FALSE);
 
     static if(use_core_profile) {
-        _window.set_hint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        _window.set_hint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        _window.set_hint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        _window.set_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        window.set_hint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        window.set_hint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        window.set_hint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        window.set_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     }
 
-    _window.create(width, height, "BraLa - Minecraft on a lower level");
-    _window.make_context_current();
-    _window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+    window.create(width, height, "BraLa - Minecraft on a lower level");
+    window.make_context_current();
+    window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
     glfwSwapInterval(0); // change this to 1?
 
-    return _window;
+    return window;
 }
 
 GLVersion init_opengl() {
