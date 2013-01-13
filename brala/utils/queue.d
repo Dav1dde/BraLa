@@ -78,11 +78,11 @@ class Queue(type) {
         } else if(timeout.isNegative) {
             throw new QueueException("negativ timeout");
         } else if(timeout.get!("seconds") == 0) {
-            if(empty) {
+            if(queue.length == 0) {
                 not_empty.wait();
             }
         } else {
-            if(empty) {
+            if(queue.length == 0) {
                 if(!not_empty.wait(timeout)) {
                     throw new Empty("queue after timeout still empty");
                 }
