@@ -1,5 +1,3 @@
-#version 130
-
 vertex:
     in vec3 position;
 //     in vec3 normal;
