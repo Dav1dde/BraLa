@@ -31,6 +31,13 @@ private {
     import brala.utils.stdio : stderr, writefln;
 }
 
+
+version(OSX) {
+    enum use_core_profile = true;
+} else {
+    enum use_core_profile = false;
+}
+
 static this() {
     DerelictGL3.load();
 
@@ -71,6 +78,13 @@ Window _window;
 Window open_glfw_win(int width, int height) {
     _window = new Window();
     _window.set_hint(GLFW_RESIZABLE, GL_FALSE);
+
+    static if(use_core_profile) {
+        _window.set_hint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        _window.set_hint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        _window.set_hint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        _window.set_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    }
 
     _window.create(width, height, "BraLa - Minecraft on a lower level");
     _window.make_context_current();
@@ -153,9 +167,9 @@ int main() {
 
     enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
-    if(glv <= 32) {
+    static if(use_core_profile) {
         uint vao;
-        glGenVertexArrays(1,&vao);
+        glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
     }
 
