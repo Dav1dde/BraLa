@@ -153,6 +153,12 @@ int main() {
 
     enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
+    if(glv <= 32) {
+        uint vao;
+        glGenVertexArrays(1,&vao);
+        glBindVertexArray(vao);
+    }
+
     auto engine = init_engine(win, app_arguments, glv);
 
     auto game = new BraLaGame(engine, username, password, app_arguments);
