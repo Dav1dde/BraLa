@@ -53,11 +53,11 @@ class Chunk {
     const int height = 256;
     const int depth = 16;
 
-    const int zstep = width*height;
+    const int ystep = width*depth;
     const int log2width = log2_ub(width);
     const int log2height = log2_ub(height);
     const int log2depth = log2_ub(depth);
-    const int log2heightwidth = log2_ub(height*width);
+    const int log2depthwidth = log2_ub(depth*width);
     
     const int block_count = width*height*depth;
     const int data_size = block_count*Block.sizeof;
@@ -225,7 +225,7 @@ class Chunk {
         in { assert(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth); }
         out (result) { assert(result < block_count); }
         body {
-            return x + y*width + z*zstep;
+            return x + z*depth + y*ystep;
         }
     
     static vec3i from_flat(int flat)
@@ -233,7 +233,7 @@ class Chunk {
         out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth); }
         body {
             return vec3i(flat & (width-1), // x: flat % width
-                        (flat >> log2width) & (height-1), // y: (flat / width) % height
-                         flat >> log2heightwidth); // z: flat / (height*width)
+                        (flat >> log2width) & (depth-1), // y: (flat / width) % depth
+                         flat >> log2depthwidth); // z: flat / (depth*width)
         }
 }

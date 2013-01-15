@@ -82,7 +82,7 @@ class World {
     const int width = 16;
     const int height = 256;
     const int depth = 16;
-    const int zstep = width*height;
+    const int ystep = width*depth;
     const int min_height = 0;
     const int max_height = height;    
     
@@ -306,7 +306,7 @@ class World {
                         x_offset_r = x_offset + 1.0f;
                         wcoords.x = wcoords_orig.x + x;
 
-                        index = x+y*width+z*zstep;
+                        index = x+z*depth+y*ystep;
 
                         if(x == width-1) {
                             right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
@@ -317,13 +317,13 @@ class World {
                         if(z == depth-1) {
                             front_block = get_block_safe(vec3i(wcoords.x,  wcoords.y,   wcoords.z+1), AIR_BLOCK);
                         } else {
-                            front_block = chunk.blocks[index+zstep];
+                            front_block = chunk.blocks[index+width];
                         }
 
                         if(y == height-1) {
                             top_block = AIR_BLOCK;
                         } else {
-                            top_block = chunk.blocks[index+width];
+                            top_block = chunk.blocks[index+ystep];
                         }
 
                         tessellator.feed(wcoords, x, y, z,
