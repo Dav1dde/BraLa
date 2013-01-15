@@ -278,27 +278,28 @@ class World {
         vec3i wcoords_orig = vec3i(chunkc.x*chunk.width, chunkc.y*chunk.height, chunkc.z*chunk.depth);
         vec3i wcoords = wcoords_orig;
 
-        foreach(z; 0..depth) {
-            z_offset = wcoords_orig.z + z + 0.5f;
-            z_offset_n = z_offset + 1.0f;
 
-            wcoords.z = wcoords_orig.z + z;
+        foreach(b; 0..hds) {
+            if((chunk.primary_bitmask >> b) & 1 ^ 1) continue;
+            foreach(y_; 0..hds) {
+                y = b*hds + y_;
 
-            foreach(b; 0..hds) {
-                if((chunk.primary_bitmask >> b) & 1 ^ 1) continue;
+                y_offset = wcoords_orig.y + y + 0.5f;
+                y_offset_t = y_offset + 1.0f;
 
-                foreach(y_; 0..hds) {
-                    y = b*hds + y_;
+                wcoords.y = wcoords_orig.y + y;
+                wcoords.z = wcoords_orig.z;
 
-                    y_offset = wcoords_orig.y + y + 0.5f;
-                    y_offset_t = y_offset + 1.0f;
+                tessellator.realloc_buffer_if_needed(256*(hds-y));
+
+                foreach(z; 0..depth) {
+                    z_offset = wcoords_orig.z + z + 0.5f;
+                    z_offset_n = z_offset + 1.0f;
 
                     wcoords.x = wcoords_orig.x;
-                    wcoords.y = wcoords_orig.y + y;
+                    wcoords.z = wcoords_orig.z + z;
 
                     value = get_block_safe(wcoords);
-
-                    tessellator.realloc_buffer_if_needed(1024*(depth-z));
 
                     foreach(x; 0..width) {
                         x_offset = wcoords_orig.x + x + 0.5f;
