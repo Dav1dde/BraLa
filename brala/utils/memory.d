@@ -54,12 +54,12 @@ struct MemoryCounter {
 }
 
 
-void* malloc(size_t size) {
+void* malloc(size_t size, string file=__FILE__, uint line=__LINE__) {
     debug writef("(m)allocating %d bytes. ", size);
 
     void* ptr = clib.malloc(size);
 
-    debug writefln("Pointer: 0x%08x.", ptr);
+    debug writefln("Pointer: 0x%08x. %s:%s", ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to allocate memory with malloc(%d) (out of memory?).", size));
@@ -68,12 +68,12 @@ void* malloc(size_t size) {
     return ptr;
 }
 
-void* calloc(size_t num, size_t size) {
+void* calloc(size_t num, size_t size, string file=__FILE__, uint line=__LINE__) {
     debug writef("(c)allocating %d times %d bytes. ", num, size);
 
     void* ptr = clib.calloc(num, size);
 
-    debug writefln("Pointer: 0x%08x.", ptr);
+    debug writefln("Pointer: 0x%08x. %s:%s", ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to allocate memory with calloc(%d, %d) (out of memory?).", num, size));
@@ -82,12 +82,12 @@ void* calloc(size_t num, size_t size) {
     return ptr;
 }
 
-void* realloc(void* ptr, size_t size) {
+void* realloc(void* ptr, size_t size, string file=__FILE__, uint line=__LINE__) {
     debug writef("(re)allocating pointer 0x%08x to %d bytes. ", ptr, size);
 
     void* ret_ptr = clib.realloc(ptr, size);
 
-    debug writefln("Pointer: 0x%08x.", ret_ptr);
+    debug writefln("Pointer: 0x%08x. %s:%s", ret_ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to reallocate memory (realloc(ptr, %d)) (out of memory?).", size));
@@ -96,8 +96,8 @@ void* realloc(void* ptr, size_t size) {
     return ret_ptr;
 }
 
-void free(void* ptr) {
-    debug writefln("Freeing 0x%08x.", ptr);
+void free(void* ptr, string file=__FILE__, uint line=__LINE__) {
+    debug writefln("Freeing 0x%08x. %s:%s", ptr, file, line);
 
     clib.free(ptr);
 }
