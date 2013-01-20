@@ -36,8 +36,10 @@ class BraLaGame {
     
     BraLaEngine engine;
     ThreadedConnection connection;
+
+    alias void delegate() CallBack;
     
-    protected Queue!vec3i chunk_removal_queue;
+    protected Queue!CallBack callback_queue;
     
     Character character;
     protected World _current_world;    
@@ -55,7 +57,7 @@ class BraLaGame {
         this.tessellation_threads = app_args.tessellation_threads;
     
         _world_lock = new Object();
-        chunk_removal_queue = new Queue!vec3i();
+        callback_queue = new Queue!CallBack();
 
         this.engine = engine;
         connection = new ThreadedConnection(username, password, !app_args.no_snoop);
@@ -93,13 +95,8 @@ class BraLaGame {
             connection.thread.join(); // let's rethrow the exception for now!
         }
 
-        foreach(chunkc; chunk_removal_queue) {
-            synchronized(_world_lock) {
-                if(Chunk* chunk = chunkc in _current_world.chunks) {
-                    _current_world.remove_chunk(chunkc);
-                    debug _current_world.vram.print();
-                }
-            }
+        foreach(cb; callback_queue) {
+            cb();
         }
         
         moved = move(delta_t) || moved;
@@ -223,14 +220,24 @@ class BraLaGame {
             }
         }
     }
+
+    enum chunk_removal_cb = "
+    delegate void() {
+         synchronized(_world_lock) {
+              if(Chunk* chunk = coords in _current_world.chunks) {
+                  _current_world.remove_chunk(coords);
+                  debug _current_world.vram.print();
+              }
+         }
+    }";
     
     void on_packet(T : s.MapChunk)(T packet) {
+        vec3i coords = vec3i(packet.chunk.x, 0, packet.chunk.z);
+        
         if(packet.chunk.chunk.primary_bitmask != 0) {
-            debug writefln("adding chunk: %s", packet);
-            synchronized(_world_lock) _current_world.add_chunk(packet.chunk, vec3i(packet.chunk.x, 0, packet.chunk.z));
-            debug _current_world.vram.print();
+            synchronized(_world_lock) _current_world.add_chunk(packet.chunk, coords);
         } else if(packet.chunk.chunk.add_bitmask == 0) {
-            chunk_removal_queue.put(vec3i(packet.chunk.x, 0, packet.chunk.z));
+            callback_queue.put(mixin(chunk_removal_cb));
         }
     }
 
@@ -239,10 +246,12 @@ class BraLaGame {
 
         synchronized(_world_lock) {
             foreach(cc; packet.chunk_bulk.chunks) {
-                if(cc.chunk.primary_bitmask != 0) {
-                    _current_world.add_chunk(cc.chunk, cc.coords);
-                } else if(cc.chunk.add_bitmask == 0) {
-                    chunk_removal_queue.put(cc.coords);
+                with(cc) {
+                    if(chunk.primary_bitmask != 0) {
+                        _current_world.add_chunk(chunk, coords);
+                    } else if(chunk.add_bitmask == 0) {
+                        callback_queue.put(mixin(chunk_removal_cb));
+                    }
                 }
             }
         }

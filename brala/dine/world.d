@@ -3,6 +3,7 @@ module brala.dine.world;
 private {
     import glamour.gl;
     import glamour.vbo : Buffer;
+    import glamour.vao : VAO;
     
     import gl3n.linalg;
     import gl3n.aabb : AABB;
@@ -85,7 +86,8 @@ class World {
     const int ystep = width*depth;
     const int min_height = 0;
     const int max_height = height;    
-    
+
+    VAO vao;
     Chunk[vec3i] chunks;
     vec3i spawn;
 
