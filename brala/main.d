@@ -75,13 +75,13 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 
 Window open_glfw_win(int width, int height) {
     Window window = new Window();
-    window.set_hint(GLFW_RESIZABLE, GL_FALSE);
+    window.resizable = false;
 
     static if(use_core_profile) {
-        window.set_hint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        window.set_hint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        window.set_hint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        window.set_hint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        window.context_version_major = 3;
+        window.context_version_minor = 2;
+        window.opengl_profile = GLFW_OPENGL_CORE_PROFILE;
+        window.opengl_forward_compat = true;
     }
 
     window.create(width, height, "BraLa - Minecraft on a lower level");
