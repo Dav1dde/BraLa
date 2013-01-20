@@ -93,10 +93,6 @@ Window open_glfw_win(int width, int height) {
     return window;
 }
 
-GLVersion init_opengl() {
-    return DerelictGL3.reload();
-}
-
 BraLaEngine init_engine(Window window, AppArguments args, GLVersion glv) {
     auto engine = new BraLaEngine(window, args.width, args.height, glv);
 
@@ -159,7 +155,7 @@ int main() {
     debug writefln("init: %dx%d", app_arguments.width, app_arguments.height);
     Window win = open_glfw_win(app_arguments.width, app_arguments.height);
 
-    GLVersion glv = init_opengl();
+    GLVersion glv = DerelictGL3.reload();
     debug writefln("Supported OpenGL version: %s\n"
                    "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
 
