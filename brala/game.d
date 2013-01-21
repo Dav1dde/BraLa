@@ -199,7 +199,7 @@ class BraLaGame {
         
         synchronized(_world_lock) {
             if(_current_world !is null) {
-                _current_world.remove_all_chunks();
+                callback_queue.put(&_current_world.remove_all_chunks);
             }
             
             _current_world = new World(engine.resmgr, tessellation_threads);
