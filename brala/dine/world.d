@@ -79,7 +79,7 @@ alias Tuple!(Chunk, "chunk", TessellationBuffer*, "buffer", size_t, "elements") 
 alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
 class World {
-    static const default_tessellation_bufer_size = width*height*depth*80;
+    static const default_tessellation_bufer_size = width*height*depth*100;
     
     const int width = 16;
     const int height = 256;
