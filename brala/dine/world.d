@@ -25,7 +25,7 @@ private {
     debug import brala.utils.stdio : stderr;
 }
 
-private const Block AIR_BLOCK = Block(0);
+private enum Block AIR_BLOCK = Block(0);
 
 struct TessellationBuffer {
     void* ptr = null;
