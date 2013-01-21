@@ -83,13 +83,13 @@ Window open_glfw_win(int width, int height) {
 
         window.create(width, height, "BraLa - Minecraft on a lower level");
 
-        if(window.window !is null) {
+        if(window.has_window) {
             debug writefln("Created OpenGL %s.%s compatible context", oglvt.major, oglvt.minor);
             break;
         }
     }
 
-    if(window.window is null) {
+    if(!window.has_window) {
         throw new InitError("Unable to initialize OpenGL forward compatible context (Version >= 3.0).");
     }
     
