@@ -145,6 +145,17 @@ BraLa supports a few commandline options:
 --height                    specifies the height of the window
 ```
 
+## Support ##
+
+Found a bug? Submit it to the [issue-tracker](https://github.com/Dav1dde/BraLa/issues?state=open).
+
+You need support on getting BraLa to run on your computer or just want to talk me?
+Drop me an [E-Mail](https://github.com/Dav1dde) or contact me over IRC, I am a lot on [#mcdevs](http://mcdevs.org/).
+
+Or do you want me help out with the development? Simply fork BraLa and submit a Pull-Request. If you don't know [D](http://dlang.org),
+but you still want to improve BraLa, feel free to improve the [Wiki](https://github.com/Dav1dde/BraLa/wiki/_pages).
+
+
 ## License ##
 
 See [COPYING](https://github.com/Dav1dde/BraLa/blob/master/COPYING) for the GNU GENERAL PUBLIC LICENSE v3
