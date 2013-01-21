@@ -153,6 +153,10 @@ class World {
                 vram.remove(chunk.vbo.length);
                 chunk.vbo.remove();
             }
+
+            if(chunk.vao !is null) {
+                chunk.vao.remove();
+            }
             
             chunks.remove(chunkc);
 
