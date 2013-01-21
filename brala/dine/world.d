@@ -403,6 +403,7 @@ class World {
         }
 
         auto frustum = engine.frustum;
+        engine.flush_uniforms();
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty) {
@@ -412,15 +413,12 @@ class World {
                 input.put(ChunkData(chunk, chunkc), false);
             }
 
-            if(chunk.vbo !is null) {
+            if(chunk.vbo !is null && chunk.vao !is null) {
                 vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
 
                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
                 if(aabb in frustum) {
                     chunk.vao.bind();
-
-                    engine.flush_uniforms();
-
                     glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
                 }
             }
