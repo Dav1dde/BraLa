@@ -22,7 +22,7 @@ struct CubeSideData {
     float[3] normal;
 }
 
-enum size_t BLOCK_IDS = 139;
+enum size_t BLOCK_IDS = 140;
 
 // stuipid dmd bug
 private {
