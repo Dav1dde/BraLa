@@ -3,6 +3,7 @@ module brala.dine.chunk;
 private {
     import glamour.gl : GLuint, GLenum;
     import glamour.vbo : Buffer;
+    import glamour.vao : VAO;
     
     import std.bitmanip : bitfields;
     import std.string : format, capitalize;
@@ -45,7 +46,7 @@ struct Block {
     }
 }
 
-// NOTE to prgrammer, ctor will maybe called from a seperate thread
+// NOTE to programmer, ctor will maybe called from a seperate thread
 // => dont do opengl stuff in the ctor
 class Chunk {
     // width, height, depth must be a power of two
@@ -82,6 +83,7 @@ class Chunk {
     ushort add_bitmask;
     
     Buffer vbo;
+    VAO vao;
     size_t vbo_vcount;
     
     protected void free_chunk() {

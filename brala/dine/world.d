@@ -3,6 +3,8 @@ module brala.dine.world;
 private {
     import glamour.gl;
     import glamour.vbo : Buffer;
+    import glamour.vao : VAO;
+    import glamour.shader : Shader;
     
     import gl3n.linalg;
     import gl3n.aabb : AABB;
@@ -344,16 +346,16 @@ class World {
         return tessellator.elements;
     }
 
-    void bind(BraLaEngine engine, Chunk chunk)
+    void bind(Shader shader, Chunk chunk)
         in { assert(chunk.vbo !is null, "chunk vbos is null");
-             assert(engine.current_shader !is null, "no current shader"); }
+             assert(shader !is null, "no current shader"); }
         body {
-            GLuint position = engine.current_shader.get_attrib_location("position");
-            GLuint normal = engine.current_shader.get_attrib_location("normal");
-            GLuint color = engine.current_shader.get_attrib_location("color");
-            GLuint texcoord = engine.current_shader.get_attrib_location("texcoord");
-            GLuint mask = engine.current_shader.get_attrib_location("mask");
-            GLuint light = engine.current_shader.get_attrib_location("light");
+            GLuint position = shader.get_attrib_location("position");
+            GLuint normal = shader.get_attrib_location("normal");
+            GLuint color = shader.get_attrib_location("color");
+            GLuint texcoord = shader.get_attrib_location("texcoord");
+            GLuint mask = shader.get_attrib_location("mask");
+            GLuint light = shader.get_attrib_location("light");
             
             enum stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
@@ -368,12 +370,20 @@ class World {
         foreach(tess_out; output) {
             with(tess_out) {                
                 if(chunk.vbo is null) {
+                    chunk.vao = new VAO();
                     chunk.vbo = new Buffer();
                 }
+
+                chunk.vao.bind();
+                chunk.vbo.bind();
 
                 debug size_t prev = chunk.vbo.length;
 
                 chunk.vbo.set_data(buffer.ptr, elements);
+                bind(engine.current_shader, chunk);
+
+                chunk.vao.unbind();
+
                 chunk.tessellated = true;
 
                 debug {
@@ -403,7 +413,7 @@ class World {
 
                 AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
                 if(aabb in frustum) {
-                    bind(engine, chunk);
+                    chunk.vao.bind();
 
                     engine.flush_uniforms();
 
