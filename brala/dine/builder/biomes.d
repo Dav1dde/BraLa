@@ -60,10 +60,14 @@ struct BiomeData {
 
     Color color;
 
-    Pixel to_pixel(int width, int height) const {       
-        int x = cast(int)((width-1)*(1-temperature/2.0f));
-        int y = cast(int)((height-1)*(1-rainfall/2.0f));
-        
+    Pixel to_pixel(int width, int height) const {
+        // ColorizerGrass.java
+        float temperature = this.temperature / 2.0f;
+        float rainfall = this.rainfall * temperature;
+
+        int x = cast(int)((1 - temperature) * (width-1));
+        int y = cast(int)((1 - rainfall) * (height-1));
+
         return Pixel(x, y);
     }
 }
