@@ -15,7 +15,7 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.string : format;
-    import std.process : getenv;
+    import std.typecons : Tuple;
     import std.exception : enforceEx;
 
     import brala.engine : BraLaEngine;
@@ -31,12 +31,6 @@ private {
     import brala.utils.stdio : stderr, writefln;
 }
 
-
-version(OSX) {
-    enum use_core_profile = true;
-} else {
-    enum use_core_profile = false;
-}
 
 static this() {
     DerelictGL3.load();
@@ -73,18 +67,32 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 
 
 
+alias Tuple!(int, "major", int, "minor") OGLVT;
+immutable OGLVT[] OGLVTS = [OGLVT(4, 3), OGLVT(4, 2), OGLVT(4, 1), OGLVT(4, 0),
+                            OGLVT(3, 3), OGLVT(3, 2), OGLVT(3, 1), OGLVT(3, 0)];
+
 Window open_glfw_win(int width, int height) {
     Window window = new Window();
     window.resizable = false;
 
-    static if(use_core_profile) {
-        window.context_version_major = 3;
-        window.context_version_minor = 2;
+    foreach(oglvt; OGLVTS) {
+        window.context_version_major = oglvt.major;
+        window.context_version_minor = oglvt.minor;
         window.opengl_profile = GLFW_OPENGL_CORE_PROFILE;
         window.opengl_forward_compat = true;
+
+        window.create(width, height, "BraLa - Minecraft on a lower level");
+
+        if(window.window !is null) {
+            debug writefln("Created OpenGL %s.%s compatible context", oglvt.major, oglvt.minor);
+            break;
+        }
     }
 
-    window.create(width, height, "BraLa - Minecraft on a lower level");
+    if(window.window is null) {
+        throw new InitError("Unable to initialize OpenGL forward compatible context (Version >= 3.0).");
+    }
+    
     window.make_context_current();
     window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
