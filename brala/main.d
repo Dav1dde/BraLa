@@ -7,7 +7,7 @@ private {
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import glwtf.glfw;
-    import glwtf.window;
+    import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
 
     import std.conv : to;
@@ -15,7 +15,6 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.string : format;
-    import std.typecons : Tuple;
     import std.exception : enforceEx;
 
     import brala.engine : BraLaEngine;
@@ -66,37 +65,17 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 }
 
 
-
-alias Tuple!(int, "major", int, "minor") OGLVT;
-immutable OGLVT[] OGLVTS = [OGLVT(4, 3), OGLVT(4, 2), OGLVT(4, 1), OGLVT(4, 0),
-                            OGLVT(3, 3), OGLVT(3, 2), OGLVT(3, 1), OGLVT(3, 0)];
-
 Window open_glfw_win(int width, int height) {
     Window window = new Window();
     window.resizable = false;
 
-    foreach(oglvt; OGLVTS) {
-        window.context_version_major = oglvt.major;
-        window.context_version_minor = oglvt.minor;
-        window.opengl_profile = GLFW_OPENGL_CORE_PROFILE;
-        window.opengl_forward_compat = true;
+    // Creates a window with the highest available context with the CORE profile.
+    // throws WindowError if it fails to create the window
+    auto context_version = window.create_highest_available_context(width, height, "BraLa - Minecraft on a lower level");
+    debug writefln("Initialized Window with context version: %s.%s", context_version.major, context_version.minor);
 
-        window.create(width, height, "BraLa - Minecraft on a lower level");
-
-        if(window.has_window) {
-            debug writefln("Created OpenGL %s.%s compatible context", oglvt.major, oglvt.minor);
-            break;
-        }
-    }
-
-    if(!window.has_window) {
-        throw new InitError("Unable to initialize OpenGL forward compatible context (Version >= 3.0).");
-    }
-    
     window.make_context_current();
     window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-
-    glfwSwapInterval(0); // change this to 1?
 
     return window;
 }
