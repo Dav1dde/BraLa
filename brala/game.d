@@ -2,6 +2,8 @@ module brala.game;
 
 private {
     import glamour.gl;
+    import glamour.shader : Shader;
+    
     import glwtf.glfw;
     
     import std.socket : Address;
@@ -201,6 +203,7 @@ class BraLaGame {
             }
             
             _current_world = new World(engine.resmgr, tessellation_threads);
+            callback_queue.put(() => _current_world.initialize(engine.resmgr.get!Shader("terrain")));
         }
         
         character = new Character(packet.entity_id);

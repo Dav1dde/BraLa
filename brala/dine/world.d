@@ -4,6 +4,7 @@ private {
     import glamour.gl;
     import glamour.vbo : Buffer;
     import glamour.vao : VAO;
+    import glamour.shader : Shader;
     
     import gl3n.linalg;
     import gl3n.aabb : AABB;
@@ -18,7 +19,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
     import brala.utils.queue : Queue;
-    import brala.utils.thread : Thread, VerboseThread, Event;
+    import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 
     debug import brala.utils.stdio : stderr;
@@ -99,7 +100,7 @@ class World {
     protected Queue!TessOut output;
     protected TessellationThread[] tessellation_threads;
     
-    this(ResourceManager resmgr, size_t threads) {
+    this(ResourceManager resmgr, size_t threads, Shader shader=null) {
         biome_set.update_colors(resmgr);
 
         threads = threads ? threads : 1;
@@ -112,11 +113,15 @@ class World {
             t.start();
             tessellation_threads ~= t;
         }
+
+        if(shader !is null && thread_isMainThread()) {
+            initialize(shader);
+        }
     }
     
-    this(ResourceManager resmgr, vec3i spawn, size_t threads) {
+    this(ResourceManager resmgr, vec3i spawn, size_t threads, Shader shader=null) {
         this.spawn = spawn;
-        this(resmgr, threads);
+        this(resmgr, threads, shader);
     }
     
     ~this() {
@@ -126,6 +131,32 @@ class World {
             clear(t);
         }
     }
+
+    /// Call this function *only* from the main thread! There is no need
+    /// to call it if the ctor was called from the main thread.
+    void initialize(Shader shader)
+        in { assert(thread_isMainThread(), "World.initialize called not from the main thread");
+             assert(shader !is null, "shader is null"); }
+        body {
+            if(vao is null) {
+                vao = new VAO();
+
+                GLuint position = shader.get_attrib_location("position");
+                GLuint normal = shader.get_attrib_location("normal");
+                GLuint color = shader.get_attrib_location("color");
+                GLuint texcoord = shader.get_attrib_location("texcoord");
+                GLuint mask = shader.get_attrib_location("mask");
+                GLuint light = shader.get_attrib_location("light");
+
+                enum stride = Vertex.sizeof;
+                vao.set_attrib(position, GL_FLOAT, 3, 0, stride);
+    //             vao.set_attrib(normal, GL_FLOAT, 3, 12, stride);
+                vao.set_attrib(color, GL_UNSIGNED_BYTE, 4, 12, stride, true); // normalize it
+                vao.set_attrib(texcoord, GL_SHORT, 2, 16, stride);
+                vao.set_attrib(mask, GL_SHORT, 2, 20, stride);
+                vao.set_attrib(light, GL_UNSIGNED_BYTE, 2, 22, stride);
+            }
+        }
     
     // when a chunk is passed to this method, the world will take care of it's memory
     // you should also lose all other references to this chunk
