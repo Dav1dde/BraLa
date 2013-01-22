@@ -3,20 +3,24 @@ module brala.utils.config;
 private {
     import brala.utils.ctfe : matches_overload, hasAttribute;
     import brala.utils.exception : InvalidConfig, NoKey, InvalidKey;
+    import brala.utils.defaultaa : DefaultAA;
     
     import std.stdio : File;
     import std.conv : ConvException, to;
-    import std.traits : moduleName, ReturnType;
+    import std.traits : moduleName, ReturnType, isArray;
     import std.exception : enforceEx;
     import std.string : format, strip;
     import std.array : split, join;
     import std.algorithm : canFind;
     import std.path : baseName;
+    import std.regex : regex, match;
+    import std.range : ElementEncodingType;
 }
 
 
 class Config {
     protected string[string] db;
+    protected string[][string] db_arrays;
 
     string name = "<?Config?>";
     
@@ -32,18 +36,43 @@ class Config {
 
     void readfp(File file, string name="<?Config?>") {
         this.name = name;
+
+        auto array_re = regex(`(.+)\[(\d*)\]$`, "g");
         
         size_t line_num = 0;
         foreach(line; file.byLine()) {
             line_num++;
             
-            char[][] t = line.split("=");
+            char[][] t = line.strip().split("=");
             enforceEx!InvalidConfig(t.length >= 2, "Config %s: Syntax Error in line: %s".format(name, line_num));
             
-            string key = t[0].idup;
+            string key = t[0].idup.strip();
             string value = t[1..$].join("=").idup.strip();
 
-            db[key] = value;
+            if(auto m = key.match(array_re)) {
+                key = m.captures[1];
+                int index = m.captures[2] ? to!int(m.captures[2]) : -1;
+
+                if(auto v = key in db_arrays) {
+                    if(index < 0) {
+                        (*v) ~= value;
+                    } else {
+                        if(index >= v.length) v.length = index+1;
+
+                        (*v)[index] = value;
+                    }
+                } else {
+                    if(index <= 0) {
+                        db_arrays[key] = [value];
+                    } else {
+                        db_arrays[key] = [];
+                        db_arrays[key].length = index+1;
+                        db_arrays[key][index] = value;
+                    }
+                }
+            } else {
+                db[key] = value;
+            }
         }
     }
 
@@ -66,7 +95,7 @@ class Config {
         return default_;
     }
 
-    T get(T)(string key) {
+    T get(T)(string key) if(!isArray!T) {
         if(auto value = key in db) {
             return deserializer!T(*value);
         }
@@ -74,14 +103,46 @@ class Config {
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
     }
 
-    void set(T)(string key, T value) {
+    T get(T)(string key) if(isArray!T) {
+        if(auto value = key in db_arrays) {
+            T ret;
+            ret.length = value.length;
+
+            foreach(i, v; (*value)) {
+                ret[i] = deserializer!(ElementEncodingType!T)(v);
+            }
+
+            return ret;
+        }
+
+        throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
+    }
+
+    void set(T)(string key, T value) if(!isArray!T) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
         
         db[key] = serializer!(T)(value);
     }
 
-    bool remove(string key) {
-        return db.remove(key);
+    void set(T)(string key, T value) if(isArray!T) {
+        enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
+
+        string[] t;
+        t.length = value.length;
+
+        foreach(i, v; value) {
+            t[i] = serializer!(ElementEncodingType!T)(v);
+        }
+
+        db_arrays[key] = t;
+    }
+
+    bool remove(string key, bool is_array=false) {
+        if(!is_array) {
+            return db.remove(key);
+        }
+
+        return false;
     }
 }
 
