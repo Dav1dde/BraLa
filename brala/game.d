@@ -96,6 +96,8 @@ class BraLaGame {
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
         }
+        assert(connection.thread.isRunning, "Connection thread died");
+
 
         foreach(cb; callback_queue) {
             cb();
