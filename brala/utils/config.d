@@ -10,10 +10,10 @@ private {
     import std.traits : moduleName, ReturnType, isArray;
     import std.exception : enforceEx;
     import std.string : format, strip;
-    import std.array : split, join;
+    import std.array : split, join, replace;
     import std.algorithm : canFind, startsWith;
-    import std.path : baseName;
-    import std.regex : regex, replace, match;
+    import std.path : baseName, buildNormalizedPath;
+    import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
 }
 
@@ -51,7 +51,7 @@ class Config {
             enforceEx!InvalidConfig(t.length >= 2, "Config %s: Syntax Error in line: %s".format(name, line_num));
             
             string key = t[0].idup.strip();
-            string value = t[1..$].join("=").replace!(x => "")(comment_re).idup.strip();
+            string value = t[1..$].join("=").reReplace!(x => "")(comment_re).idup.strip();
 
             if(auto m = key.match(array_re)) {                
                 key = m.captures[1];
@@ -181,6 +181,19 @@ private mixin template std_serializer(T) {
     }");
 }
 
+struct Path {
+    string path;
+    alias path this;
+
+    static string serialize(Path inp) {
+        return inp.path.replace(`\`, `/`);
+    }
+
+    static Path deserialize(string inp) {
+        return Path(inp.buildNormalizedPath()); // this replaces / with \ on Windows
+    }
+}
+
 template serializer(T) {
     alias get_serializer!(Serializer, T) serializer;
 }
@@ -197,9 +210,9 @@ private template resolve(alias T) { alias T resolve; }
 
 private template get_serializer_impl(Attrib, Type, T...) {
     static if(is(Attrib == Serializer) && __traits(hasMember, Type, "serialize")) {
-        alias T.serialize get_serializer_impl;
-    } else static if(is(Attrib == Serializer) && __traits(hasMember, Type, "deserialize") {
-        alias T.deserialize get_serializer_impl;
+        alias Type.serialize get_serializer_impl;
+    } else static if(is(Attrib == Deserializer) && __traits(hasMember, Type, "deserialize")) {
+        alias Type.deserialize get_serializer_impl;
     } else static if(T.length == 0) {
         static assert(false, "No serializer for type " ~ Type.stringof);
     } else {
