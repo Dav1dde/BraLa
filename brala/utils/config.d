@@ -11,9 +11,9 @@ private {
     import std.exception : enforceEx;
     import std.string : format, strip;
     import std.array : split, join;
-    import std.algorithm : canFind;
+    import std.algorithm : canFind, startsWith;
     import std.path : baseName;
-    import std.regex : regex, match;
+    import std.regex : regex, replace, match;
     import std.range : ElementEncodingType;
 }
 
@@ -38,19 +38,20 @@ class Config {
         this.name = name;
 
         auto array_re = regex(`(.+)\[(\d*)\]$`, "g");
+        auto comment_re = regex(`[^\\]#.*`, "g");
         
         size_t line_num = 0;
         foreach(line; file.byLine()) {
             line_num++;
 
             auto sline = line.strip();
-            if(!sline.length) continue;
+            if(!sline.length || sline.startsWith("#")) continue;
             
             char[][] t = sline.split("=");
             enforceEx!InvalidConfig(t.length >= 2, "Config %s: Syntax Error in line: %s".format(name, line_num));
             
             string key = t[0].idup.strip();
-            string value = t[1..$].join("=").idup.strip();
+            string value = t[1..$].join("=").replace!(x => "")(comment_re).idup.strip();
 
             if(auto m = key.match(array_re)) {                
                 key = m.captures[1];
@@ -98,7 +99,7 @@ class Config {
         return default_;
     }
 
-    T get(T)(string key) if(!isArray!T) {
+    T get(T)(string key) if(!isArray!T || is(T == string)) {
         if(auto value = key in db) {
             return deserializer!T(*value);
         }
@@ -106,7 +107,7 @@ class Config {
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
     }
 
-    T get(T)(string key) if(isArray!T) {
+    T get(T)(string key) if(isArray!T && !is(T == string)) {
         if(auto value = key in db_arrays) {
             T ret;
             ret.length = value.length;
