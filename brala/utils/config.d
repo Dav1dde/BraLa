@@ -42,16 +42,19 @@ class Config {
         size_t line_num = 0;
         foreach(line; file.byLine()) {
             line_num++;
+
+            auto sline = line.strip();
+            if(!sline.length) continue;
             
-            char[][] t = line.strip().split("=");
+            char[][] t = sline.split("=");
             enforceEx!InvalidConfig(t.length >= 2, "Config %s: Syntax Error in line: %s".format(name, line_num));
             
             string key = t[0].idup.strip();
             string value = t[1..$].join("=").idup.strip();
 
-            if(auto m = key.match(array_re)) {
+            if(auto m = key.match(array_re)) {                
                 key = m.captures[1];
-                int index = m.captures[2] ? to!int(m.captures[2]) : -1;
+                int index = m.captures[2].length > 0 ? to!int(m.captures[2]) : -1;
 
                 if(auto v = key in db_arrays) {
                     if(index < 0) {
@@ -109,7 +112,11 @@ class Config {
             ret.length = value.length;
 
             foreach(i, v; (*value)) {
-                ret[i] = deserializer!(ElementEncodingType!T)(v);
+                try {
+                    ret[i] = deserializer!(ElementEncodingType!T)(v);
+                } catch(ConvException e) {
+                    ret[i] = (ElementEncodingType!T).init;
+                }
             }
 
             return ret;
@@ -163,13 +170,14 @@ mixin std_serializer!(double);
 mixin std_serializer!(string);
 
 private mixin template std_serializer(T) {
-    @Serializer string serialize_double(T inp) {
+    mixin(
+    "@Serializer string serialize_" ~ T.stringof ~ "(T inp) {
         return to!string(inp);
     }
 
-    @Deserializer T serialize_double(string inp) {
+    @Deserializer T deserialize_" ~ T.stringof ~"(string inp) {
         return to!T(inp);
-    }
+    }");
 }
 
 template serializer(T) {
@@ -188,7 +196,7 @@ private template resolve(alias T) { alias T resolve; }
 
 private template get_serializer_impl(Attrib, Type, T...) {
     static if(T.length == 0) {
-        static assert(false, "No serializer for type " ~ T.stringof);
+        static assert(false, "No serializer for type " ~ Type.stringof);
     } else {
         static if(__traits(compiles, hasAttribute!(mixin(T[0]), Attrib)) && hasAttribute!(mixin(T[0]), Attrib)) {
             static if(is(Attrib == Deserializer)) {
