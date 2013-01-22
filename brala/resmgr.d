@@ -1,13 +1,14 @@
 module brala.resmgr;
 
 private {
-    import std.path : extension;
+    import std.path : extension, baseName;
     import std.file : exists;
     import std.typecons : Tuple;
     import std.string : toLower;
     import std.format : format;
     import std.traits : isIterable;
     import std.range : ElementType;
+    import std.algorithm : map;
     
     import glamour.shader : Shader;
     import glamour.texture : ITexture, Texture2D;
@@ -150,7 +151,7 @@ class ResourceManager {
         }
     }
     
-    void add_many(T)(T resources) if(isIterable!(T) && is(ElementType!T :  Resource)) {
+    void add_many(T)(T resources) if(isIterable!(T) && is(ElementType!T : Resource)) {
         foreach(res; resources) {
             int type = res.type == AUTO_TYPE ? guess_type(res.filename) : res.type;
             switch(type) {
@@ -160,6 +161,10 @@ class ResourceManager {
                 default: throw new ResmgrError("Unknown resource-type.");
             }
         }
+    }
+
+    void add_many()(string[] paths) {
+        add_many(paths.map!(ResourceManager.guess_resource));
     }
     
     void remove(T)(string id) if(is_loadable!T) {
@@ -198,6 +203,10 @@ class ResourceManager {
             case ".texture2d": return TEXTURE_TYPE;
             default: throw new ResmgrError("Unable to guess resource-type.");
         }
+    }
+
+    static Resource guess_resource(string path) {
+        return Resource(path.baseName(), path, guess_type(path.baseName()));
     }
     
     protected void done_loading(T)(T res, string id) if(is_loadable!T){
