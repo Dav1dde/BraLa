@@ -11,7 +11,7 @@ private {
     import std.exception : enforceEx;
     import std.string : format, strip;
     import std.array : split, join, replace;
-    import std.algorithm : canFind, startsWith;
+    import std.algorithm : canFind, startsWith, sort;
     import std.path : baseName, buildNormalizedPath;
     import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
@@ -23,8 +23,13 @@ class Config {
     protected string[][string] db_arrays;
 
     string name = "<?Config?>";
+
+    string[] dont_save;
     
-    this() {
+    this() {}
+
+    this(string[] dont_save) {
+        this.dont_save = dont_save;
     }
 
     void read(string path) {
@@ -84,10 +89,25 @@ class Config {
         File fp = File(path, "w");
         scope(exit) fp.close();
 
-        foreach(key; db.byKey()) {
+        foreach(key; sort(db.keys)) {
+            if(dont_save.canFind(key)) continue;
+            
             string value = db[key];
 
-            fp.writef("%s = %s", key, value);
+            fp.writef("%s = %s\n", key, value);
+        }
+
+        fp.writef("\n");
+
+        foreach(key; sort(db_arrays.keys)) {
+            if(dont_save.canFind(key)) continue;
+            
+            string[] value = db_arrays[key];
+
+            foreach(i, v; value) {
+                fp.writef("%s[%s] = %s\n", key, i, v);
+            }
+            fp.writef("\n\n");
         }
     }
 

@@ -124,6 +124,7 @@ BraLaEngine init_engine(Window window, Config config, GLVersion glv) {
 
 int main() {
     auto config = new Config();
+    config.dont_save = ["account.password"];
     config.read(app_arguments.brala_conf);
 
     config.set_default("path.res", "");
