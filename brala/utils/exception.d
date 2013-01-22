@@ -30,3 +30,27 @@ class Full : QueueException {
         super(s, f, l);
     }
 }
+
+class ConfigException : Exception {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
+
+class InvalidConfig : ConfigException {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
+
+class NoKey : ConfigException {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
+
+class InvalidKey : ConfigException {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
