@@ -79,6 +79,10 @@ class Config {
         
         db[key] = serializer!(T)(value);
     }
+
+    bool remove(string key) {
+        return db.remove(key);
+    }
 }
 
 struct Serializer {}
