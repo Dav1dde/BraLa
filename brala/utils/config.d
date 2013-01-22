@@ -196,7 +196,11 @@ private template get_serializer(Attrib, Type) {
 private template resolve(alias T) { alias T resolve; }
 
 private template get_serializer_impl(Attrib, Type, T...) {
-    static if(T.length == 0) {
+    static if(is(Attrib == Serializer) && __traits(hasMember, Type, "serialize")) {
+        alias T.serialize get_serializer_impl;
+    } else static if(is(Attrib == Serializer) && __traits(hasMember, Type, "deserialize") {
+        alias T.deserialize get_serializer_impl;
+    } else static if(T.length == 0) {
         static assert(false, "No serializer for type " ~ Type.stringof);
     } else {
         static if(__traits(compiles, hasAttribute!(mixin(T[0]), Attrib)) && hasAttribute!(mixin(T[0]), Attrib)) {
