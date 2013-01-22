@@ -54,3 +54,9 @@ class InvalidKey : ConfigException {
         super(s, f, l);
     }
 }
+
+class InvalidValue : ConfigException {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}

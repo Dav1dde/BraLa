@@ -14,6 +14,7 @@ private {
     
     import brala.timer : Timer, TickDuration;
     import brala.resmgr : ResourceManager;
+    import brala.utils.config : Config;
     
     debug import brala.utils.stdio : writefln;
 }
@@ -24,6 +25,7 @@ class BraLaEngine {
     Timer timer;
     ResourceManager resmgr;
     Window window;
+    Config config;
 
     @property vec2i viewport() {
         return _viewport;
@@ -70,14 +72,16 @@ class BraLaEngine {
         }
     }
     
-    this(Window window, int width, int height, GLVersion glv) {
+    this(Window window, Config config, GLVersion glv) {
         this.window = window;
+        this.config = config;
         
         timer = new Timer();
         resmgr = new ResourceManager();
         
         opengl_version = glv;
-        _viewport = vec2i(width, height);
+        _viewport = vec2i(config.get!int("window.width"),
+                          config.get!int("window.height"));
         
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);

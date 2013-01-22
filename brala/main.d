@@ -26,6 +26,7 @@ private {
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
+    import brala.utils.config : Config, Path;
 
     import brala.utils.stdio : stderr, writefln;
 }
@@ -80,13 +81,13 @@ Window open_glfw_win(int width, int height) {
     return window;
 }
 
-BraLaEngine init_engine(Window window, AppArguments args, GLVersion glv) {
-    auto engine = new BraLaEngine(window, args.width, args.height, glv);
+BraLaEngine init_engine(Window window, Config config, GLVersion glv) {
+    auto engine = new BraLaEngine(window, config, glv);
 
-    engine.resmgr.load_default_resources(args.res);
+    engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
 
     string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
-    if(args.default_tp && file.exists(path)) {
+    if(config.get!bool("brala.default_tp") && file.exists(path)) {
         try {
             Image mc_terrain = extract_minecraft_terrain(path);
             
@@ -122,25 +123,50 @@ BraLaEngine init_engine(Window window, AppArguments args, GLVersion glv) {
 
 
 int main() {
-    string username = app_arguments.username;
-    string password = app_arguments.password;
-    if(app_arguments.credentials) {
+    auto config = new Config();
+    config.read(app_arguments.brala_conf);
+
+    config.set_default("path.res", "");
+    config.set_if("path.res", app_arguments.res);
+
+    config.set_if("account.credentials", app_arguments.credentials);
+    config.set_if("account.username", app_arguments.username);
+    config.set_if("account.password", app_arguments.password);
+
+    if(config.get!bool("account.credentials")) {
         auto credentials = minecraft_credentials();
 
-        if(credentials.username.length) {
-            username = credentials.username;
-        }
-        if(credentials.password.length) {
-            password = credentials.password;
-        }
+        config.set_if("account.username", credentials.username);
+        config.set_if("account.password", credentials.password);
     }
+
+    config.set_default("window.width", 1024);
+    config.set_default("window.height", 800);
+    config.set_if("window.width", app_arguments.width);
+    config.set_if("window.height", app_arguments.height);
+
+    config.set_assert("connection.host", app_arguments.host);
+
+    config.set_default("connection.port", 25565);
+    config.set_if("connection.port", app_arguments.port);
+
+    config.set_default("brala.no_snoop", false);
+    config.set_if("brala.no_snoop", app_arguments.no_snoop);
+
+    config.set_default("brala.tessellation_threads", 3);
+    config.set_if("brala.tessellation_threads", app_arguments.tessellation_threads);
+
+    config.set_default("brala.default_tp", false);
+    config.set_if("brala.default_tp", app_arguments.default_tp);
+    
 
 //     return test_connection(username, password);
 
     scope(exit) glfwTerminate();
 
-    debug writefln("init: %dx%d", app_arguments.width, app_arguments.height);
-    Window win = open_glfw_win(app_arguments.width, app_arguments.height);
+    debug writefln("init: %dx%d", config.get!int("window.width"),
+                                  config.get!int("window.height"));
+    Window win = open_glfw_win(config.get!int("window.width"), config.get!int("window.height"));
 
     GLVersion glv = DerelictGL3.reload();
     debug writefln("Supported OpenGL version: %s\n"
@@ -148,12 +174,12 @@ int main() {
 
     enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
 
-    auto engine = init_engine(win, app_arguments, glv);
+    auto engine = init_engine(win, config, glv);
 
-    auto game = new BraLaGame(engine, username, password, app_arguments);
+    auto game = new BraLaGame(engine, config);
 
     try {
-        game.start(app_arguments.host, app_arguments.port);
+        game.start(config.get!string("connection.host"), config.get!short("connection.port"));
     } catch(Exception e) {
         stderr.writeln(e.toString());
     }

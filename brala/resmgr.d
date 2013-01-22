@@ -1,7 +1,7 @@
 module brala.resmgr;
 
 private {
-    import std.path : extension, baseName;
+    import std.path : extension, baseName, stripExtension;
     import std.file : exists;
     import std.typecons : Tuple;
     import std.string : toLower;
@@ -163,7 +163,7 @@ class ResourceManager {
         }
     }
 
-    void add_many()(string[] paths) {
+    void add_many(T)(T paths) if(isIterable!(T) && is(ElementType!T : string)) {
         add_many(paths.map!(ResourceManager.guess_resource));
     }
     
@@ -201,12 +201,12 @@ class ResourceManager {
             case ".glsl": return SHADER_TYPE;
             case ".texture": return TEXTURE_TYPE;
             case ".texture2d": return TEXTURE_TYPE;
-            default: throw new ResmgrError("Unable to guess resource-type.");
+            default: throw new ResmgrError(`Unable to guess resource-type for "%s"`.format(filename));
         }
     }
 
     static Resource guess_resource(string path) {
-        return Resource(path.baseName(), path, guess_type(path.baseName()));
+        return Resource(path.baseName().stripExtension(), path, guess_type(path));
     }
     
     protected void done_loading(T)(T res, string id) if(is_loadable!T){

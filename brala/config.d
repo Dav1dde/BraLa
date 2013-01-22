@@ -21,6 +21,12 @@ enum {
 }
 
 struct AppArguments {
+    version(Windows) {
+        string brala_conf = `res\brala.conf`;
+    } else {
+        string brala_conf = `res/brala.conf`;
+    }
+    
     string username;
     Alias!("username") u;
 
@@ -30,22 +36,24 @@ struct AppArguments {
     bool credentials;
     Alias!("credentials") c;
 
-    uint width = 1024;
-    uint height = 800;
+    uint width = 0;
+    uint height = 0;
 
     string host;
     Alias!("host") h;
-    ushort port = 25565;
+    ushort port = 0;
 
     string res = "";
 
     bool no_snoop = false;
-    size_t tessellation_threads = 3;
+    size_t tessellation_threads = 0;
 
     bool default_tp = false;
 
     void help(string[] args, string[][] p) {
         string[] help_strings = [
+            "the path to brala.conf",
+            
             "specifies the username, which will be used to auth with the login servers,\n" ~
             "\t\t\t\tif this is not possible and the server is in offline mode, it will be used\n" ~
             "\t\t\t\tas playername",

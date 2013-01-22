@@ -2,7 +2,7 @@ module brala.utils.config;
 
 private {
     import brala.utils.ctfe : matches_overload, hasAttribute;
-    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey;
+    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
     import brala.utils.defaultaa : DefaultAA;
     
     import std.stdio : File;
@@ -126,13 +126,13 @@ class Config {
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
     }
 
-    void set(T)(string key, T value) if(!isArray!T) {
+    void set(T)(string key, T value) if(!isArray!T || is(T == string)) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
         
         db[key] = serializer!(T)(value);
     }
 
-    void set(T)(string key, T value) if(isArray!T) {
+    void set(T)(string key, T value) if(isArray!T && !is(T == string)) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
 
         string[] t;
@@ -143,6 +143,37 @@ class Config {
         }
 
         db_arrays[key] = t;
+    }
+
+    bool set_if(T)(string key, T value) {
+        static if(__traits(hasMember, T, "length")) {
+            bool s = cast(bool)value.length;
+        } else {
+            bool s = cast(bool)value;
+        }
+
+        if(s) {
+            set(key, value);
+            return true;
+        }
+
+        return false;
+    }
+
+    void set_assert(T, Ex = InvalidValue)(string key, T value) {
+        enforceEx!Ex(set_if(key, value), `Value must evaluate to true for key: "%s"`.format(key));
+    }
+
+    void set_default(T)(string key, T value) {
+        static if(!isArray!T || is(T == string)) {
+            alias db cdb;
+        } else {
+            alias db_arrays cdb;
+        }
+
+        if(key !in cdb) {
+            set(key, value);
+        }
     }
 
     bool remove(string key, bool is_array=false) {
