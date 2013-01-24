@@ -89,7 +89,10 @@ awesomium:
 	wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) || true
 ifeq ($(OS),"Linux")
 	# if the symlink already exists, ln fails
-	cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 || true 
+	cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 || true
+	mkdir -p bin/locales
+	wget -nc -O "bin/chrome.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1" || true
+	wget -nc -O "bin/locales/en-US.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1" || trze
 endif
 
 
