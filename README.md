@@ -64,6 +64,16 @@ sudo apt-get install libssl-dev
 sudo apt-get install libjpeg62
 ```
 
+The following commands might depend on your current graphics driver, for mesa this would be:
+
+```
+sudo apt-get install libgl1-mesa-dev
+sudo apt-get install libxrandr-dev
+```
+
+In general, the OpenGL and XrandR development headers are needed.
+
+
 ### Cloning ###
 
 Since BraLa makes use of git submodules, you need the `--recursive` flag, when cloning:
