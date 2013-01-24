@@ -130,6 +130,7 @@ int main() {
     config.set_default("path.res", "");
     config.set_if("path.res", app_arguments.res);
 
+    config.set_default("account.credentials", false);
     config.set_if("account.credentials", app_arguments.credentials);
     config.set_if("account.username", app_arguments.username);
     config.set_if("account.password", app_arguments.password);
