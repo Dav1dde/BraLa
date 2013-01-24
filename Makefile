@@ -22,6 +22,22 @@ else
 	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=stb -debug -g -gc
 endif
 
+ifeq ($(OS),"Linux")
+	ifeq ($(MODEL),32)
+		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so
+		LIBAWESOMIUM_PATH = lib/linux32/libawesomium-1.6.5.so
+		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/ $(LINKERFLAG)-lawesomium-1.6.5
+	else
+		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so
+		LIBAWESOMIUM_PATH = lib/linux64/libawesomium-1.6.5.so
+		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/ $(LINKERFLAG)-lawesomium-1.6.5
+	endif
+else ifeq ($(OS),"Darwin")
+	LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib
+	LIBAWESOMIUM_PATH = lib/osx/libawesomium.dylib
+	DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/osx/" $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
+endif
+
 
 DERELICT_DIR = src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
 
@@ -35,7 +51,10 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)nbd \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)glwtf \
 			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c \
-			bin
+			bin \
+			lib$(PATH_SEP)osx \
+			lib$(PATH_SEP)linux32 \
+			lib$(PATH_SEP)linux64 \
 
 DSOURCES             = $(call getSource,brala,d)
 DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
@@ -60,10 +79,19 @@ CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 
-all: glfw brala
+all: buildDir awesomium glfw brala
 #all: brala
 
 .PHONY: clean
+
+awesomium:
+	# wget exists with $? of 2 if file already exists
+	wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) || true
+ifeq ($(OS),"Linux")
+	# if the symlink already exists, ln fails
+	cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 || true 
+endif
+
 
 brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
 	$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
