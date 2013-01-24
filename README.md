@@ -62,6 +62,7 @@ And to install the rest of the dependencies:
 ```
 sudo apt-get install libssl-dev
 sudo apt-get install libjpeg62
+sudo apt-get install libxss-dev
 ```
 
 The following commands might depend on your current graphics driver, for mesa this would be:
