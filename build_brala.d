@@ -448,7 +448,9 @@ int main(string[] args) {
                        buildPath("src", "d", "openssl"),
                        buildPath("src", "d", "glfw"),
                        buildPath("src", "d", "nbd"),
-                       buildPath("src", "d", "glwtf")];
+                       buildPath("src", "d", "glwtf"),
+                       buildPath("src", "d", "awesomium"),
+                       buildPath("src", "d", "wonne")];
 
     auto builder = new Builder(cache, dc, dc, cc);
 
@@ -458,15 +460,17 @@ int main(string[] args) {
     
     builder.add_scan_path(buildPath("brala"));
     builder.add_scan_path(buildPath("src", "d", "arsd"));
+    builder.add_scan_path(buildPath("src", "d", "awesomium", "deimos"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "util"));
     builder.add_scan_path(buildPath("src", "d", "gl3n", "gl3n"));
     builder.add_scan_path(buildPath("src", "d", "glamour", "glamour"));
+    builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
+    builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
     builder.add_scan_path(buildPath("src", "d", "std"));
-    builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
-    builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
+    builder.add_scan_path(buildPath("src", "d", "wonne", "wonne"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
