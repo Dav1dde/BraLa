@@ -13,6 +13,12 @@ private {
     import std.getopt;
     import std.digest.md;
     import std.digest.digest;
+
+    version(NoDownload) {
+    } else {
+        pragma(lib, "curl");
+        import std.net.curl : download;
+    }
 }
 
 version(Windows) {
@@ -300,16 +306,34 @@ class Builder {
     }
 
     string[] linker_options_win;
+    string[] linker_options_win32;
+    string[] linker_options_win64;
     string[] linker_options_linux;
+    string[] linker_options_linux32;
+    string[] linker_options_linux64;
     string[] linker_options_osx;
+    string[] linker_options_osx32;
+    string[] linker_options_osx64;
 
     @property string[] linker_options() {
         version(Windows) {
-            return linker_options_win;
+            static if(is32bit()) {
+                return linker_options_win ~ linker_options_win32;
+            } else {
+                return linker_options_win ~ linker_options_win64;
+            }
         } else version(linux) {
-            return linker_options_linux;
+            static if(is32bit()) {
+                return linker_options_linux ~ linker_options_linux32;
+            } else {
+                return linker_options_linux ~ linker_options_linux64;
+            }
         } else version(OSX) {
-            return linker_options_osx;
+            static if(is32bit()) {
+                return linker_options_osx ~ linker_options_osx32;
+            } else {
+                return linker_options_osx ~ linker_options_osx64;
+            }
         }
     }
 
@@ -475,15 +499,19 @@ int main(string[] args) {
 
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
                              buildPath("lib", "win", "libeay32.lib"),
-                             buildPath("lib", "win", "glfw3.lib")];
+                             buildPath("lib", "win", "glfw3.lib"),
+                             buildPath("lib", "win", "Awesomium.lib")];
     builder.linker_options_win = [];
 
-    builder.libraries_linux = ["ssl", "crypto"];
+    builder.libraries_linux = ["ssl", "crypto", "awesomium-1.6.5"];
     builder.linker_options_linux = ["-Lbuild/glfw/src"];
     builder.linker_options_linux ~= glfw_libraries();
+    builder.linker_options_linux32 ~= ["-Llib/linux32", "-rpath=\\$ORIGIN/../lib/linux32/"];
+    builder.linker_options_linux64 ~= ["-Llib/linux64", "-rpath=\\$ORIGIN/../lib/linux64/"];
 
     builder.libraries_osx = builder.libraries_linux;
     builder.linker_options_osx = builder.linker_options_linux;
+    builder.linker_options_osx ~= ["-Llib/osx", "-rpath=\\$ORIGIN/../lib/osx/"]; 
 
     collectException(rmdirRecurse(builder.out_path)); // we don't want leftover files in bin/
 
@@ -493,11 +521,14 @@ int main(string[] args) {
     md5_cache.save(cache_file);
 
     // executable is linked, now copy the .dll/.so over to the executable
-    foreach(path; builder.library_paths) {
-        if(!path.exists) continue;
-        
-        foreach(file; filter!(x => x.extension == SO)(dirEntries(path, SpanMode.depth))) {
-            copy(file, buildPath("bin", file.baseName));
+    // using -rpath on linux/osx, no need for copying
+    version(Windows) {
+        foreach(path; builder.library_paths) {
+            if(!path.exists) continue;
+
+            foreach(file; filter!(x => x.extension == SO)(dirEntries(path, SpanMode.depth))) {
+                copy(file, buildPath("bin", file.baseName));
+            }
         }
     }
 
