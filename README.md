@@ -60,6 +60,8 @@ sudo apt-get install dmd
 And to install the rest of the dependencies:
 
 ```
+sudo apt-get install git
+sudo apt-get install cmake
 sudo apt-get install libssl-dev
 sudo apt-get install libjpeg62
 sudo apt-get install libxss-dev
@@ -74,6 +76,7 @@ sudo apt-get install libxrandr-dev
 
 In general, the OpenGL and XrandR development headers are needed.
 
+Now you're ready to proceed with Cloning!
 
 ### Cloning ###
 
