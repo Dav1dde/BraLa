@@ -2,22 +2,27 @@
 
 private {
     import std.algorithm : max, map, filter, endsWith, canFind;
-    import std.path : buildPath, extension, setExtension, dirName, baseName;
+    import std.path : buildPath, extension, setExtension, dirName, baseName, getcwd, chdir;
     import std.array : join, split, appender, array;
     import std.process : shell, system, environment;
     import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse, FileException, exists, copy, remove, readText, write;
-    import std.stdio : writeln, File;
+    import std.stdio : writeln, writefln, File;
     import std.string : format, stripRight;
     import std.parallelism : TaskPool;
     import std.exception : enforce, collectException;
     import std.getopt;
     import std.digest.md;
     import std.digest.digest;
+    import core.time : dur;
 
     version(NoDownload) {
     } else {
         pragma(lib, "curl");
-        import std.net.curl : download;
+        import std.net.curl : download, HTTP;
+    }
+
+    version(linux) {
+        import std.path : symlink;
     }
 }
 
@@ -413,6 +418,67 @@ string[] glfw_libraries() {
     }
 }
 
+version(NoDownload) {
+} else {
+void setup_awesomium() {
+    version(Windows) {
+        enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/0R18DmqYiN/lib/win32/Awesomium.dll?dl=1",
+                      "https://www.dropbox.com/sh/95wwklnkdp8em1w/FCRW34s7pj/lib/win32/Awesomium.lib?dl=1",
+                      "https://www.dropbox.com/sh/95wwklnkdp8em1w/pQp1o17eB2/lib/win32/icudt42.dll?dl=1"];
+    } else version(linux) {
+        static if(is32bit()) {
+            enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux64/libawesomium-1.6.5.so?dl=1"];
+        } else {
+            enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1"];
+        }
+    } else version(OSX) {
+        enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1"];
+    }
+
+    HTTP http = HTTP();
+    http.dataTimeout = dur!("minutes")(0);
+    http.operationTimeout = dur!("minutes")(0);
+
+    foreach(file; FILES) {
+        auto path = buildPath("lib", file.split("lib/")[1].split("?")[0]);
+        collectException(mkdirRecurse(path.dirName()));
+
+        if(!path.exists()) {
+            writefln("Downloading (might take a while): %s", path.baseName());
+            download(file, path, http);
+        } else {
+            writefln("Skipping download of: %s", path.baseName());
+        }
+
+        version(linux) {
+            if(!(path ~ ".0").exists()) {
+                string cwd = getcwd();
+                symlink(path.baseName(), path.baseName() ~ ".0");
+                chdir(cwd);
+            }
+        }
+    }
+
+    version(linux) {
+        collectException(mkdirRecurse("bin/locales"));
+
+        if(!"bin/chrome.pak".exists()) {
+            writeln("Downloading: chrome.pak");
+            download("https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1",
+                     "bin/chrome.pak");
+        }
+
+        if(!"bin/locales/en-US.pak".exists()) {
+            writeln("Downloading: locales/en-US.pak");
+            download("https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1",
+                     "bin/locales/en-US.pak");
+        }
+    }
+
+    
+}
+} // end version(NoDownload)
+
 int main(string[] args) {
     size_t jobs = 1;
     string cache_file = ".build_cache";
@@ -429,6 +495,13 @@ int main(string[] args) {
         task_pool = new TaskPool(jobs);
     }
     scope(exit) { if(task_pool !is null) task_pool.finish(); }
+
+
+    version(NoDownload) {
+        writeln("Assuming awesomium is downloaded and correctly setup!");
+    } else {
+        setup_awesomium();
+    }
 
 
     MD5Cache md5_cache = new MD5Cache();
@@ -513,7 +586,7 @@ int main(string[] args) {
     builder.linker_options_osx = builder.linker_options_linux;
     builder.linker_options_osx ~= ["-Llib/osx", "-rpath=\\$ORIGIN/../lib/osx/"]; 
 
-    collectException(rmdirRecurse(builder.out_path)); // we don't want leftover files in bin/
+    collectException(rmdirRecurse(builder.out_file));
 
     builder.compile(task_pool);
     builder.link();
