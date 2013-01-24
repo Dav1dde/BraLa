@@ -43,6 +43,26 @@ you to use the gdb debugger.
 * A C compiler (gcc and dmc on windows, or any C compiler on linux)
 * OpenGL
 * [OpenSSL](http://www.openssl.org/)
+* [CMake](http://www.cmake.org/) - Used to compile glfw, a dependency of BraLa
+* libjpeg62
+
+#### Ubuntu/Debian based systems ####
+
+To install the latest dmd compiler, best choice is the [d-apt](http://code.google.com/p/d-apt/wiki/APT_Repository)
+repository:
+
+```
+sudo wget https://d-apt.googlecode.com/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
+sudo apt-get update && sudo apt-get --yes --allow-unauthenticated install d-apt-keyring && sudo apt-get update
+sudo apt-get install dmd
+```
+
+And to install the rest of the dependencies:
+
+```
+sudo apt-get install libssl-dev
+sudo apt-get install libjpeg62
+```
 
 ### Cloning ###
 
