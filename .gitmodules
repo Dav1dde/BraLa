@@ -22,3 +22,9 @@
 [submodule "src/d/glfw"]
 	path = src/d/glfw
 	url = git://github.com/Dav1dde/glfw.git
+[submodule "src/d/wonne"]
+	path = src/d/wonne
+	url = git://github.com/Dav1dde/wonne.git
+[submodule "src/d/awesomium"]
+	path = src/d/awesomium
+	url = git://github.com/D-Programming-Deimos/awesomium.git
