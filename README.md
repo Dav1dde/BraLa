@@ -60,18 +60,13 @@ sudo apt-get install dmd
 And to install the rest of the dependencies:
 
 ```
-sudo apt-get install git
-sudo apt-get install cmake
-sudo apt-get install libssl-dev
-sudo apt-get install libjpeg62
-sudo apt-get install libxss-dev
+sudo apt-get install git cmake libssl-dev libjpeg62 libxss-dev
 ```
 
 The following commands might depend on your current graphics driver, for mesa this would be:
 
 ```
-sudo apt-get install libgl1-mesa-dev
-sudo apt-get install libxrandr-dev
+sudo apt-get install libgl1-mesa-dev libxrandr-dev
 ```
 
 In general, the OpenGL and XrandR development headers are needed.
