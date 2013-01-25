@@ -35,7 +35,7 @@ ifeq ($(OS),"Linux")
 else ifeq ($(OS),"Darwin")
 	LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib
 	LIBAWESOMIUM_PATH = lib/osx/libawesomium.dylib
-	DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/osx/" $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
+	DCFLAGS_LINK += $(LINKERFLAG)"-rpath=../lib/osx/" $(LINKERFLAG)"-rpath=./lib/osx/" $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
 endif
 
 
