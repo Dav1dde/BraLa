@@ -102,7 +102,7 @@ Since BraLa is written mostly in D, you need a D2 compiler. BraLa compiles with 
 Building BraLa with DMD is easy:
 
 ```
-make # builds BraLa, this may take a while, to speed things up you can use the -j switch
+make
 ./bin/bralad -c -h"localhost" # starts brala
 ```
 
