@@ -186,6 +186,16 @@ ifndef MODEL
     endif
 endif
 
+ifeq ($(MODEL), 64)
+    CFLAGS   += -m64
+    DCFLAGS  += -m64
+    LDCFLAGS += -m64
+else
+    CFLAGS   += -m32
+    DCFLAGS  += -m32
+    LDCFLAGS += -m32
+endif
+
 ifndef DESTDIR
     DESTDIR =
 endif
@@ -282,6 +292,7 @@ export BIN_DIR
 export DBUILD_PATH
 export CBUILD_PATH
 export CC
+export CFLAGS
 export COMPILER
 export CP
 export DATA_DIR

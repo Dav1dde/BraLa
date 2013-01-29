@@ -8,6 +8,10 @@ DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/
 			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/ \
 			-Isrc/d/wonne/ -Isrc/d/awesomium/
 
+ifeq ($(shell uname),Darwin)
+	MODEL = 32
+endif
+
 include command.make
 
 DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
@@ -25,24 +29,19 @@ endif
 
 ifeq ($(OS),"Linux")
 	ifeq ($(MODEL),32)
-		DCFLAGS  += -m32
-		LDCFLAGS += -m32
-		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so?dl=1
-		LIBAWESOMIUM_PATH = lib/linux32/libawesomium-1.6.5.so
-		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/ $(LINKERFLAG)-lawesomium-1.6.5
+		LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so?dl=1
+		LIBAWESOMIUM_PATH  = lib/linux32/libawesomium-1.6.5.so
+		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/ $(LINKERFLAG)-lawesomium-1.6.5
 	else
-		DCFLAGS  += -m64
-		LDCFLAGS += -m64
-		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1
-		LIBAWESOMIUM_PATH = lib/linux64/libawesomium-1.6.5.so
-		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/ $(LINKERFLAG)-lawesomium-1.6.5
+		LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1
+		LIBAWESOMIUM_PATH  = lib/linux64/libawesomium-1.6.5.so
+		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/ $(LINKERFLAG)-lawesomium-1.6.5
 	endif
 else ifeq ($(OS),"Darwin")
-	DCFLAGS  += -m32
-	LDCFLAGS += -m32
-	LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1
-	LIBAWESOMIUM_PATH = lib/osx/libawesomium.dylib
-	DCFLAGS_LINK += $(LINKERFLAG)"-rpath=../lib/osx/" $(LINKERFLAG)"-rpath=./lib/osx/" $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
+	POST_BUILD_CMD     = install_name_tool -change '@loader_path/../Frameworks/Awesomium.framework/Versions/A/Awesomium' '@loader_path/../lib/osx/libawesomium.dylib' bin$(PATH_SEP)bralad
+	LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1
+	LIBAWESOMIUM_PATH  = lib/osx/libawesomium.dylib
+	DCFLAGS_LINK      += $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
 endif
 
 
@@ -110,6 +109,7 @@ endif
 brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
 	$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad
+	$(POST_BUILD_CMD)
 
 glfw:
 	$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
