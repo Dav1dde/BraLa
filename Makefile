@@ -24,16 +24,16 @@ endif
 
 ifeq ($(OS),"Linux")
 	ifeq ($(MODEL),32)
-		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so
+		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so?dl=1
 		LIBAWESOMIUM_PATH = lib/linux32/libawesomium-1.6.5.so
 		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/ $(LINKERFLAG)-lawesomium-1.6.5
 	else
-		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so
+		LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1
 		LIBAWESOMIUM_PATH = lib/linux64/libawesomium-1.6.5.so
 		DCFLAGS_LINK += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/ $(LINKERFLAG)-lawesomium-1.6.5
 	endif
 else ifeq ($(OS),"Darwin")
-	LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib
+	LIBAWESOMIUM = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1
 	LIBAWESOMIUM_PATH = lib/osx/libawesomium.dylib
 	DCFLAGS_LINK += $(LINKERFLAG)"-rpath=../lib/osx/" $(LINKERFLAG)"-rpath=./lib/osx/" $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
 endif
@@ -85,14 +85,18 @@ all: buildDir awesomium glfw brala
 .PHONY: clean
 
 awesomium:
+ifeq ($(OS),"Linux")
 	# wget exists with $? of 2 if file already exists
 	wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) || true
-ifeq ($(OS),"Linux")
 	# if the symlink already exists, ln fails
 	cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 || true
 	mkdir -p bin/locales
 	wget -nc -O "bin/chrome.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1" || true
 	wget -nc -O "bin/locales/en-US.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1" || true
+else ifeq ($(OS),"Darwin")
+	if ! [ -f $(LIBAWESOMIUM_PATH) ]; then \
+		curl -L -o $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM); \
+	fi
 endif
 
 
