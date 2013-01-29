@@ -186,14 +186,6 @@ ifndef MODEL
     endif
 endif
 
-ifeq ($(MODEL), 64)
-    DCFLAGS  += -m64
-    LDCFLAGS += -m64
-else
-    DCFLAGS  += -m32
-    LDCFLAGS += -m32
-endif
-
 ifndef DESTDIR
     DESTDIR =
 endif
