@@ -106,10 +106,14 @@ class World {
 
         input = new Queue!ChunkData();
         output = new Queue!TessOut(threads);
+
+        version(NoThreads) {
+            threads = 1;
+        }
         
         foreach(i; 0..threads) {
             auto t = new TessellationThread(this, input, output);
-            t.start();
+            version(NoThreads) {} else { t.start(); }
             tessellation_threads ~= t;
         }
     }
@@ -402,6 +406,14 @@ class World {
             }
         }
 
+        version(NoThreads) {
+            if(!input.empty) {
+                import std.stdio;
+                debug writefln("polling");
+                tessellation_threads[0].poll();
+            }
+        }
+
         auto frustum = engine.frustum;
         engine.flush_uniforms();
         
@@ -452,27 +464,31 @@ class TessellationThread : VerboseThread {
     void run() {
         running = true;
         while(running) {
-            // waits only if the buffer is not available
-            buffer.wait_available();
+            poll();
+        }
+    }
             
-            auto chunk_data = input.get(); // this will pause the thread if there is no input
+    void poll() {
+        // waits only if the buffer is not available
+        buffer.wait_available();
 
-            with(chunk_data) {
-                if(chunk.tessellated) {
-                    debug stderr.writefln("Chunk is already tessellated! %s", position);
-                
-                    input.task_done();
-                    continue;
-                } else {
-                    buffer.available = false;
-                }
-            
-                size_t elements = world.tessellate(chunk, position, &buffer);
+        auto chunk_data = input.get(); // this will pause the thread if there is no input
 
-                output.put(TessOut(chunk, &buffer, elements));
+        with(chunk_data) {
+            if(chunk.tessellated) {
+                debug stderr.writefln("Chunk is already tessellated! %s", position);
+
+                input.task_done();
+                return;
+            } else {
+                buffer.available = false;
             }
 
-            input.task_done();
+            size_t elements = world.tessellate(chunk, position, &buffer);
+
+            output.put(TessOut(chunk, &buffer, elements));
         }
+
+        input.task_done();
     }
 }

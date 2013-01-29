@@ -74,6 +74,8 @@ class Connection {
             this.minecraft_username = username;
         }
 
+        version(NoThreads) { snoop = false; }
+
         if(snoop) {
             // we need to call that in the main thread, since OpenGL functions are executed
             auto snoop_args = Session.snoop_args;
