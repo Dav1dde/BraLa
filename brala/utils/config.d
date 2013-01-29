@@ -180,8 +180,8 @@ class Config {
         return false;
     }
 
-    void set_assert(T, Ex = InvalidValue)(string key, T value) {
-        enforceEx!Ex(set_if(key, value), `Value must evaluate to true for key: "%s"`.format(key));
+    void set_assert(T, Ex = InvalidValue)(string key, T value, string message="No value specified") {
+        enforceEx!Ex(set_if(key, value), message);
     }
 
     void set_default(T)(string key, T value) {

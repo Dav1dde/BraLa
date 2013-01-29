@@ -147,7 +147,7 @@ int main() {
     config.set_if("window.width", app_arguments.width);
     config.set_if("window.height", app_arguments.height);
 
-    config.set_assert("connection.host", app_arguments.host);
+    config.set_assert("connection.host", app_arguments.host, "You have to specify a host to connect to!");
 
     config.set_default("connection.port", 25565);
     config.set_if("connection.port", app_arguments.port);
