@@ -28,7 +28,7 @@ private {
     import brala.utils.image : Image;
     import brala.utils.config : Config, Path;
 
-    import brala.utils.stdio : stderr, writefln;
+    import std.stdio : stderr, writefln;
 }
 
 
@@ -191,7 +191,7 @@ int main() {
 
 int test_connection(string username, string password) {
     import brala.network.connection;
-    import brala.utils.stdio;
+    import std.stdio;
 
     int exit_status = 13;
 

@@ -22,7 +22,7 @@ private {
 
     import arsd.http : HttpException, post, get;
     
-    debug import brala.utils.stdio : stderr, writefln;
+    debug import std.stdio : stderr, writefln;
 
     version(Windows) {
         import std.process : getenv;

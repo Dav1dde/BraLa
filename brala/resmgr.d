@@ -16,7 +16,7 @@ private {
     import brala.utils.image : Image;
     import brala.exception : ResmgrError;
     
-    debug import brala.utils.stdio : writefln;
+    debug import std.stdio : writefln;
 }
 
 

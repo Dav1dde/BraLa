@@ -29,7 +29,7 @@ private {
     import brala.utils.queue : Queue;
     import brala.utils.config : Config;
     
-    debug import brala.utils.stdio;
+    debug import std.stdio;
 }
 
 

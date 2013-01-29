@@ -3,7 +3,7 @@ module brala.network.stream;
 private {
     import std.stream : Stream, FilterStream, BufferedStream;
 
-    import brala.utils.stdio : File;
+    import std.stdio : File;
     import brala.network.util : hexdump;
 }
 

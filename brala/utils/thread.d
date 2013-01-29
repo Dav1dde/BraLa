@@ -7,7 +7,7 @@ private {
     import core.sync.condition : Condition;
     import core.sync.exception : SyncException;
 
-    import brala.utils.stdio : stderr;
+    import std.stdio : stderr;
 }
 
 public import core.thread;

@@ -31,7 +31,7 @@ private {
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Thread, VerboseThread, Timer;
     
-    debug import brala.utils.stdio : stderr;
+    debug import std.stdio : stderr;
 }
 
 

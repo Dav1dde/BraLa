@@ -5,7 +5,7 @@ private {
     import std.regex : Regex, regex, match;
     import std.array : appender;
 
-    import brala.utils.stdio : File;
+    import std.stdio : File;
     import c = brala.utils.console;
 }
 

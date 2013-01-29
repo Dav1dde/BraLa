@@ -22,7 +22,7 @@ private {
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 
-    debug import brala.utils.stdio : stderr;
+    debug import std.stdio : stderr;
 }
 
 private enum Block AIR_BLOCK = Block(0);

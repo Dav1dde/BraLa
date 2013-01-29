@@ -10,7 +10,7 @@ private {
     
     import brala.resmgr;
     import brala.utils.dargs : get_options, Alias;
-    import brala.utils.stdio : writefln;
+    import std.stdio : writefln;
 }
 
 enum {

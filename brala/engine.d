@@ -16,7 +16,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.utils.config : Config;
     
-    debug import brala.utils.stdio : writefln;
+    debug import std.stdio : writefln;
 }
 
 
