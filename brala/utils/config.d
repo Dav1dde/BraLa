@@ -39,7 +39,7 @@ class Config {
         readfp(fp, path.baseName);
     }
 
-    void readfp(File file, string name="<?Config?>") {
+    void readfp(T)(T file, string name="<?Config?>") if(__traits(hasMember, T, "byLine")) {
         this.name = name;
 
         auto array_re = regex(`(.+)\[(\d*)\]$`, "g");
