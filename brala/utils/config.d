@@ -9,7 +9,7 @@ private {
     import std.conv : ConvException, to;
     import std.traits : moduleName, ReturnType, isArray;
     import std.exception : enforceEx;
-    import std.string : format, strip;
+    import std.string : format, strip, splitLines;
     import std.array : split, join, replace;
     import std.algorithm : canFind, startsWith, sort;
     import std.path : baseName, buildNormalizedPath;
@@ -37,6 +37,22 @@ class Config {
         scope(exit) fp.close();
 
         readfp(fp, path.baseName);
+    }
+
+    static Config from_string(Args...)(const(char)[] contents, Args args) {
+        auto config = new Config(args);
+
+        struct FakeFP {
+            const(char)[] c;
+        
+            char[][] byLine() {
+                return c.dup.splitLines();
+            }
+        }
+
+        config.readfp(FakeFP(contents));
+
+        return config;
     }
 
     void readfp(T)(T file, string name="<?Config?>") if(__traits(hasMember, T, "byLine")) {
