@@ -116,7 +116,7 @@ class BraLaGame {
             last_notchian_tick = now;
         }
         
-        if(quit || engine.window.is_key_down(GLFW_KEY_ESCAPE)) {
+        if(quit) {
             if(connection.connected) disconnect("Goodboy from BraLa.");
             return true;
         } else {
