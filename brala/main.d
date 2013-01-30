@@ -31,21 +31,6 @@ private {
     import std.stdio : stderr, writefln;
 }
 
-
-static this() {
-    DerelictGL3.load();
-
-    version(DynamicGLFW) {
-        DerelictGLFW3.load();
-    }
-
-    register_glfw_error_callback(&glfw_error_cb);
-    debug glamour_set_error_callback(&glamour_error_cb);
-
-    auto err = glfwInit();
-    enforceEx!InitError(err, "glfwInit failure, returned: %s".format(err));
-}
-
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {
@@ -64,88 +49,95 @@ void glamour_error_cb(GLenum errno, string func, string args) {
         last_func = func;
     }
 }
+    
+static this() {
+    DerelictGL3.load();
 
-
-Window open_glfw_win(int width, int height) {
-    Window window = new Window();
-    window.resizable = false;
-
-    // Creates a window with the highest available context with the CORE profile.
-    // throws WindowError if it fails to create the window
-    auto context_version = window.create_highest_available_context(width, height, "BraLa - Minecraft on a lower level");
-    debug writefln("Initialized Window with context version: %s.%s", context_version.major, context_version.minor);
-
-    window.make_context_current();
-    window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-
-    return window;
-}
-
-BraLaEngine init_engine(Window window, Config config, GLVersion glv) {
-    auto engine = new BraLaEngine(window, config, glv);
-
-    engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
-
-    string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
-    if(config.get!bool("brala.default_tp") && file.exists(path)) {
-        try {
-            Image mc_terrain = extract_minecraft_terrain(path);
-            
-            engine.resmgr.remove!Image("terrain");
-            engine.resmgr.add("terrain", mc_terrain);
-        } catch(ZlibException e) {
-            stderr.writefln(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
-        }
+    version(DynamicGLFW) {
+        DerelictGLFW3.load();
     }
 
-    Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
-    engine.resmgr.add("terrain", terrain.to_texture());
+    register_glfw_error_callback(&glfw_error_cb);
+    debug glamour_set_error_callback(&glamour_error_cb);
 
-//     Image palette = palette_atlas(engine.resmgr.get!Image("grasscolor"),
-//                                   engine.resmgr.get!Image("leavecolor"),
-//                                   engine.resmgr.get!Image("watercolor"));
-//     engine.resmgr.add("palette", palette);
+    auto err = glfwInit();
+    enforceEx!InitError(err, "glfwInit failure, returned: %s".format(err));
+}
 
-    Sampler terrain_sampler = new Sampler();
-    terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-    terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-    terrain_sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+static ~this() {
+    glfwTerminate();
+}
 
-//     float max_aniso = 0.0f;
-//     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &max_aniso);
-//     terrain_sampler.set_parameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, max_aniso >= 8 ? 8.0f : max_aniso);
 
-    engine.set_sampler("terrain", terrain_sampler);
+class BraLa {
+    Config config;
+    Window window;
+    
+    BraLaEngine engine;
+    BraLaGame game;
 
-    return engine;
+    this() {
+        config = initialize_config();
+        window = new Window();
+
+        open_glfw_win();
+        init_engine();
+
+        game = new BraLaGame(engine, config);
+        game.start(config.get!string("connection.host"),
+                   config.get!short("connection.port"));
+    }
+
+    void open_glfw_win() {
+        window.resizable = false;
+
+        // Creates a window with the highest available context with the CORE profile.
+        // throws WindowError if it fails to create the window
+        auto cv = window.create_highest_available_context(config.get!int("window.width"),
+                                                          config.get!int("window.height"),
+                                                          "BraLa - Minecraft on a lower level");
+        
+        debug writefln("Initialized Window with context version: %s.%s", cv.major, cv.minor);
+
+        window.make_context_current();
+        window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+
+        DerelictGL3.reload();
+    }
+
+    void init_engine() {
+        engine = new BraLaEngine(window, config);
+
+        engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
+
+        string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
+        if(config.get!bool("brala.default_tp") && file.exists(path)) {
+            try {
+                Image mc_terrain = extract_minecraft_terrain(path);
+
+                engine.resmgr.remove!Image("terrain");
+                engine.resmgr.add("terrain", mc_terrain);
+            } catch(ZlibException e) {
+                stderr.writefln(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
+            }
+        }
+
+        Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
+        engine.resmgr.add("terrain", terrain.to_texture());
+
+        Sampler terrain_sampler = new Sampler();
+        terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+        terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+        terrain_sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+        engine.set_sampler("terrain", terrain_sampler);
+    }
 }
 
 
 int main() {
-    scope(exit) glfwTerminate();
-
-    auto config = initialize_config();
-
-    debug writefln("init: %dx%d", config.get!int("window.width"),
-                                  config.get!int("window.height"));
-    Window win = open_glfw_win(config.get!int("window.width"), config.get!int("window.height"));
-
-    GLVersion glv = DerelictGL3.reload();
-    debug writefln("Supported OpenGL version: %s\n"
-                   "Loaded OpenGL version: %d", to!string(glGetString(GL_VERSION)), glv);
-
-    enforceEx!InitError(glv >= 30, "Loaded OpenGL version too low, need at least OpenGL 3.0");
-
-    auto engine = init_engine(win, config, glv);
-
-    auto game = new BraLaGame(engine, config);
-
-    try {
-        game.start(config.get!string("connection.host"), config.get!short("connection.port"));
-    } catch(Exception e) {
-        stderr.writeln(e.toString());
-    }
+    new BraLa();
 
     return 0;
 }

@@ -31,8 +31,6 @@ class BraLaEngine {
         return _viewport;
     }
     
-    immutable GLVersion opengl_version;
-    
     mat4 model = mat4.identity;
     mat4 view = mat4.identity;
     mat4 proj = mat4.identity;
@@ -72,14 +70,13 @@ class BraLaEngine {
         }
     }
     
-    this(Window window, Config config, GLVersion glv) {
+    this(Window window, Config config) {
         this.window = window;
         this.config = config;
         
         timer = new Timer();
         resmgr = new ResourceManager();
         
-        opengl_version = glv;
         _viewport = vec2i(config.get!int("window.width"),
                           config.get!int("window.height"));
         
