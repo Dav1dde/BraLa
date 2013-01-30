@@ -93,7 +93,7 @@ struct AppArguments {
     }
 }
 
-private AppArguments _app_arguments;
+private static AppArguments _app_arguments;
 @property AppArguments app_arguments() {
     static bool parsed = false;
 
@@ -102,20 +102,4 @@ private AppArguments _app_arguments;
     }
 
     return _app_arguments;
-}
-
-
-immutable Resource[] resources;
-
-static this() {
-    resources = [Resource("terrain",    buildPath("res", "shader", "terrain.shader"),  SHADER_TYPE),
-                 Resource("terrain",    buildPath("res", "texture", "terrain.png"),    IMAGE_TYPE),
-                 Resource("grasscolor", buildPath("res", "texture", "grasscolor.png"), IMAGE_TYPE),
-                 Resource("leavecolor", buildPath("res", "texture", "leavecolor.png"), IMAGE_TYPE),
-                 Resource("watercolor", buildPath("res", "texture", "watercolor.png"), IMAGE_TYPE)];
-
-}
-
-void load_default_resources(ResourceManager rsmg, string prefix = "") {
-    rsmg.add_many(resources.map!(x => Resource(x.id, buildPath(prefix, x.filename), x.type)));
 }

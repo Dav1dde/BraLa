@@ -19,7 +19,7 @@ private {
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
-    import brala.config : app_arguments, AppArguments, load_default_resources;
+    import brala.config : app_arguments, AppArguments;
     import brala.network.session : minecraft_folder, minecraft_credentials;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
