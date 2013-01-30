@@ -34,6 +34,8 @@ struct AppArguments {
     uint width = 0;
     uint height = 0;
 
+    bool not_resizable = false;
+
     string host;
     Alias!("host") h;
     ushort port = 0;
@@ -62,6 +64,8 @@ struct AppArguments {
             "\t\tspecifies the width of the window",
 
             "\tspecifies the height of the window",
+
+            "\twindow should not be resizable",
 
             "\tthe IP/adress of the minecraft server",
 
@@ -124,6 +128,9 @@ Config initialize_config() {
     config.set_default("window.height", 800);
     config.set_if("window.width", app_arguments.width);
     config.set_if("window.height", app_arguments.height);
+
+    config.set_default("window.resizable", true);
+    config.set("window.resizable", !app_arguments.not_resizable);
 
     config.set_assert("connection.host", app_arguments.host, "You have to specify a host to connect to!");
 

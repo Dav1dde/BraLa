@@ -74,7 +74,7 @@ class BraLa {
     }
 
     void initialize_context() {
-//         window.resizable = false;
+        window.resizable = config.get!bool("window.resizable");
 
         auto cv = window.create_highest_available_context(config.get!int("window.width"),
                                                           config.get!int("window.height"),
