@@ -101,6 +101,7 @@ class BraLa {
         window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
         DerelictGL3.reload();
+        glViewport(0, 0, config.get!int("window.width"), config.get!int("window.height"));
     }
 
     void initialize_engine() {
