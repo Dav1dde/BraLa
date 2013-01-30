@@ -71,6 +71,7 @@ class BraLaGame {
         character = new Character(0);
 
         engine.window.on_mouse_pos.connect(&on_mouse_pos);
+        engine.window.on_resize.connect(&on_resize);
     }
 
     void quit() {
@@ -78,6 +79,11 @@ class BraLaGame {
         if(connection.connected) {
             disconnect("Goodboy from BraLa.");
         }
+    }
+
+    void on_resize(int width, int height) {
+        engine.resize(width, height);
+        character.apply(engine);
     }
     
     // rendering

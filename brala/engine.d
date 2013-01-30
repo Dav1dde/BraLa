@@ -77,10 +77,7 @@ class BraLaEngine {
         timer = new Timer();
         resmgr = new ResourceManager();
         
-        _viewport = vec2i(config.get!int("window.width"),
-                          config.get!int("window.height"));
-        glViewport(0, 0, config.get!int("window.width"),
-                         config.get!int("window.height"));
+        resize(config.get!int("window.width"), config.get!int("window.height"));
         
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
@@ -92,6 +89,11 @@ class BraLaEngine {
 
         // wireframe mode, for debugging
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    void resize(int width, int height) {
+        _viewport = vec2i(width, height);
+        glViewport(0, 0, width, height);
     }
     
     void mainloop(bool delegate(TickDuration) callback) {
