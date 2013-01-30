@@ -50,24 +50,6 @@ void glamour_error_cb(GLenum errno, string func, string args) {
     }
 }
     
-static this() {
-    DerelictGL3.load();
-
-    version(DynamicGLFW) {
-        DerelictGLFW3.load();
-    }
-
-    register_glfw_error_callback(&glfw_error_cb);
-    debug glamour_set_error_callback(&glamour_error_cb);
-
-    auto err = glfwInit();
-    enforceEx!InitError(err, "glfwInit failure, returned: %s".format(err));
-}
-
-static ~this() {
-    glfwTerminate();
-}
-
 
 class BraLa {
     Config config;
@@ -82,6 +64,9 @@ class BraLa {
 
         initialize_context();
         initialize_engine();
+
+        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
+        window.on_close = &on_close;
 
         game = new BraLaGame(engine, config);
         game.start(config.get!string("connection.host"),
@@ -98,10 +83,9 @@ class BraLa {
         debug writefln("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
         window.make_context_current();
-        window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+//         window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
         DerelictGL3.reload();
-        glViewport(0, 0, config.get!int("window.width"), config.get!int("window.height"));
     }
 
     void initialize_engine() {
@@ -132,10 +116,29 @@ class BraLa {
 
         engine.set_sampler("terrain", terrain_sampler);
     }
+
+    void exit() {
+        game.quit();
+    }
+
+    bool on_close() {
+        return true;
+    }
 }
 
 
 int main() {
+    DerelictGL3.load();
+    version(DynamicGLFW) { DerelictGLFW3.load(); }
+
+    register_glfw_error_callback(&glfw_error_cb);
+    debug glamour_set_error_callback(&glamour_error_cb);
+
+    enforceEx!InitError(glfwInit(), "glfwInit failed!");
+
+    scope(exit) glfwTerminate();
+
+    
     new BraLa();
 
     return 0;

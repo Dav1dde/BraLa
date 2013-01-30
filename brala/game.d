@@ -49,7 +49,7 @@ class BraLaGame {
     
     protected vec2i mouse_offset = vec2i(0, 0);
     
-    bool quit = false;
+    protected bool _quit = false;
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
 
@@ -71,7 +71,13 @@ class BraLaGame {
         character = new Character(0);
 
         engine.window.on_mouse_pos.connect(&on_mouse_pos);
-        engine.window.on_close = &on_window_close;
+    }
+
+    void quit() {
+        _quit = true;
+        if(connection.connected) {
+            disconnect("Goodboy from BraLa.");
+        }
     }
     
     // rendering
@@ -96,6 +102,8 @@ class BraLaGame {
     }
 
     bool poll(TickDuration delta_t) {
+        if(_quit) return true;
+        
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
         }
@@ -116,12 +124,7 @@ class BraLaGame {
             last_notchian_tick = now;
         }
         
-        if(quit) {
-            if(connection.connected) disconnect("Goodboy from BraLa.");
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
     
     bool move(TickDuration delta_t) {
@@ -305,7 +308,7 @@ class BraLaGame {
 
     void on_packet(T : s.Disconnect)(T packet) {
         debug writefln("%s", packet);
-        quit = true;
+        quit();
     }
 
     void on_packet(T)(T packet) {
@@ -322,10 +325,5 @@ class BraLaGame {
                 
         last_x = x;
         last_y = y;
-    }
-    
-    bool on_window_close() {
-        quit = true;
-        return true;
     }
 }

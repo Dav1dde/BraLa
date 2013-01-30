@@ -79,6 +79,8 @@ class BraLaEngine {
         
         _viewport = vec2i(config.get!int("window.width"),
                           config.get!int("window.height"));
+        glViewport(0, 0, config.get!int("window.width"),
+                         config.get!int("window.height"));
         
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
@@ -99,11 +101,13 @@ class BraLaEngine {
         TickDuration now, last;
         debug TickDuration lastfps = TickDuration(0);
         
-        while(!stop) {
+        while(true) {
             now = timer.get_time();
             TickDuration delta_ticks = (now - last);
 
-            stop = callback(delta_ticks);
+            if(callback(delta_ticks)) {
+                break;
+            }
         
             debug {
                 TickDuration t = timer.get_time();
@@ -114,11 +118,6 @@ class BraLaEngine {
             }
             
             last = now;
-
-//             if(void* win = glfwGetCurrentContext()) {
-//                 glfwSwapBuffers(win);
-//                 glfwPollEvents();
-//             }
 
             window.swap_buffers();
             glfwPollEvents();
