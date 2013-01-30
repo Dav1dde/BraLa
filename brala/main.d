@@ -80,19 +80,17 @@ class BraLa {
         config = initialize_config();
         window = new Window();
 
-        open_glfw_win();
-        init_engine();
+        initialize_context();
+        initialize_engine();
 
         game = new BraLaGame(engine, config);
         game.start(config.get!string("connection.host"),
                    config.get!short("connection.port"));
     }
 
-    void open_glfw_win() {
+    void initialize_context() {
         window.resizable = false;
 
-        // Creates a window with the highest available context with the CORE profile.
-        // throws WindowError if it fails to create the window
         auto cv = window.create_highest_available_context(config.get!int("window.width"),
                                                           config.get!int("window.height"),
                                                           "BraLa - Minecraft on a lower level");
@@ -105,7 +103,7 @@ class BraLa {
         DerelictGL3.reload();
     }
 
-    void init_engine() {
+    void initialize_engine() {
         engine = new BraLaEngine(window, config);
 
         engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
