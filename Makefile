@@ -8,13 +8,12 @@ DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/
 			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/ \
 			-Isrc/d/wonne/ -Isrc/d/awesomium/
 
+# libawesomium does only exist as 32bit library, so we have to build a 32 bit executable
 ifeq ($(shell uname),Darwin)
 	MODEL = 32
 endif
 
 include command.make
-
-PKG_CONFIG_CMD = $(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3)
 
 DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 		$(LINKERFLAG)-Lbuild/glfw/src \
