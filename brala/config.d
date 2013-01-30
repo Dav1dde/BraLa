@@ -1,15 +1,17 @@
 module brala.config;
 
 private {
-    version(DynamicGLFW) { import derelict.glfw3.glfw3; } else { import deimos.glfw.glfw3; }
+    import glwtf.glfw;
 
     import std.algorithm : map;
     import std.path : buildPath;
     import std.range : zip;
     import std.array : join;
     
-    import brala.resmgr;
+    import brala.network.session : minecraft_credentials;
     import brala.utils.dargs : get_options, Alias;
+    import brala.utils.config : Config, Path;
+    
     import std.stdio : writefln;
 }
 
@@ -95,4 +97,47 @@ private static AppArguments _app_arguments;
     }
 
     return _app_arguments;
+}
+
+Config initialize_config() {
+    auto config = new Config();
+    
+    config.dont_save = ["account.password"];
+    config.read(app_arguments.brala_conf);
+
+    config.set_default("path.res", "");
+    config.set_if("path.res", app_arguments.res);
+
+    config.set_default("account.credentials", false);
+    config.set_if("account.credentials", app_arguments.credentials);
+    config.set_if("account.username", app_arguments.username);
+    config.set_if("account.password", app_arguments.password);
+
+    if(config.get!bool("account.credentials")) {
+        auto credentials = minecraft_credentials();
+
+        config.set_if("account.username", credentials.username);
+        config.set_if("account.password", credentials.password);
+    }
+
+    config.set_default("window.width", 1024);
+    config.set_default("window.height", 800);
+    config.set_if("window.width", app_arguments.width);
+    config.set_if("window.height", app_arguments.height);
+
+    config.set_assert("connection.host", app_arguments.host, "You have to specify a host to connect to!");
+
+    config.set_default("connection.port", 25565);
+    config.set_if("connection.port", app_arguments.port);
+
+    config.set_default("brala.no_snoop", false);
+    config.set_if("brala.no_snoop", app_arguments.no_snoop);
+
+    config.set_default("brala.tessellation_threads", 3);
+    config.set_if("brala.tessellation_threads", app_arguments.tessellation_threads);
+
+    config.set_default("brala.default_tp", false);
+    config.set_if("brala.default_tp", app_arguments.default_tp);
+
+    return config;
 }
