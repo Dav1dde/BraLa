@@ -87,7 +87,7 @@ CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 
-all: buildDir awesomium glfw brala
+all: brala
 #all: brala
 
 .PHONY: clean
@@ -108,7 +108,7 @@ else ifeq ($(OS),"Darwin")
 endif
 
 
-brala: buildDir $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
+brala: buildDir awesomium glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
 	$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad
 	$(POST_BUILD_CMD)
