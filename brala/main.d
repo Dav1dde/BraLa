@@ -161,9 +161,6 @@ int main() {
     config.set_default("brala.default_tp", false);
     config.set_if("brala.default_tp", app_arguments.default_tp);
     
-
-//     return test_connection(username, password);
-
     scope(exit) glfwTerminate();
 
     debug writefln("init: %dx%d", config.get!int("window.width"),
@@ -187,30 +184,4 @@ int main() {
     }
 
     return 0;
-}
-
-int test_connection(string username, string password) {
-    import brala.network.connection;
-    import std.stdio;
-
-    int exit_status = 13;
-
-    auto c = new Connection(username, password, false);
-        
-    void dispatch(ubyte id, void* packet) {
-//         writefln("id: %s", id);
-        if(id == 4) {
-            c.disconnect();
-            exit_status = 0;
-        }
-    }
-
-    c.callback = &dispatch;
-
-    c.connect(app_arguments.host, app_arguments.port);
-    c.login();
-
-    c.run();
-
-    return exit_status;
 }
