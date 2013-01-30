@@ -14,7 +14,6 @@ private {
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
 
-    import brala.config : MOVE_FORWARD, MOVE_BACKWARD, STRAFE_LEFT, STRAFE_RIGHT;
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
@@ -37,6 +36,7 @@ class BraLaGame {
     protected Object _world_lock;
     
     BraLaEngine engine;
+    Config config;
     ThreadedConnection connection;
 
     alias void delegate() CallBack;
@@ -56,6 +56,7 @@ class BraLaGame {
     size_t tessellation_threads = 3;
     
     this(BraLaEngine engine, Config config) {
+        this.config = config;
         this.tessellation_threads = config.get!int("brala.tessellation_threads");
     
         _world_lock = new Object();
@@ -127,6 +128,11 @@ class BraLaGame {
         float movement = delta_t.to!("seconds", float) * character.moving_speed;
 
         bool moved = false;
+
+        auto MOVE_FORWARD = cast(int)config.get!char("game.key.movement.forward");
+        auto MOVE_BACKWARD = cast(int)config.get!char("game.key.movement.backward");
+        auto STRAFE_LEFT = cast(int)config.get!char("game.key.movement.left");
+        auto STRAFE_RIGHT = cast(int)config.get!char("game.key.movement.right");
 
         if(engine.window.is_key_down(MOVE_FORWARD))  character.move_forward(movement); moved = true;
         if(engine.window.is_key_down(MOVE_BACKWARD)) character.move_backward(movement); moved = true;

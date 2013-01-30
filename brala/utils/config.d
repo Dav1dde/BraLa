@@ -208,6 +208,7 @@ class Config {
 struct Serializer {}
 struct Deserializer {}
 
+mixin std_serializer!(char);
 mixin std_serializer!(bool);
 mixin std_serializer!(byte);
 mixin std_serializer!(ubyte);
