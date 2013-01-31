@@ -535,6 +535,7 @@ int main(string[] args) {
     }
 
     dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
+                           dc.version_("glamour"), dc.version_("GLFWAWEBridge"),
                            dc.debug_, dc.debug_info];
     
     dc.import_paths = [buildPath("brala"),
