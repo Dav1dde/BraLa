@@ -9,6 +9,7 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
+    import wonne.wonne;
 
     import std.conv : to;
     import std.path : buildPath;
@@ -126,8 +127,7 @@ class BraLa {
     }
 }
 
-
-int main() {
+int Main() {
     DerelictGL3.load();
     version(DynamicGLFW) { DerelictGLFW3.load(); }
 
@@ -143,3 +143,5 @@ int main() {
 
     return 0;
 }
+
+mixin AWESingleProcessMain!(Main);
