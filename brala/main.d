@@ -9,10 +9,10 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
-    import wonne.wonne;
+    import wonne.all;
 
     import std.conv : to;
-    import std.path : buildPath;
+    import std.path : buildPath, dirName, absolutePath;
     import std.zlib : ZlibException;
     import file = std.file;
     import std.string : format;
@@ -127,7 +127,7 @@ class BraLa {
     }
 }
 
-int Main() {
+int Main(string[] args) {
     DerelictGL3.load();
     version(DynamicGLFW) { DerelictGLFW3.load(); }
 
@@ -135,8 +135,35 @@ int Main() {
     debug glamour_set_error_callback(&glamour_error_cb);
 
     enforceEx!InitError(glfwInit(), "glfwInit failed!");
-
     scope(exit) glfwTerminate();
+
+
+    string exedir = (args[0].dirName().absolutePath());
+
+    webcore.initialize(true, // enable plugins
+                       false, // enable javascript
+                       false, // enable databases
+                       exedir, // package path
+                       exedir, // locale path
+                       exedir, // user-data path
+                       exedir, // plugin path
+                       exedir, // log path
+                       awe_loglevel.AWE_LL_VERBOSE, // loglevel
+                       false, // force single process
+                       "self", // child process path (if "self", requires AWESingleProcessMain!())
+                       true, // enable auto detect encoding
+                       "", // accept language override
+                       "", // default charset override
+                       "", // user-agent override
+                       "", // proxy-server
+                       "", // proxy-config script
+                       "", // auth-server whitelist
+                       false, // save cache and cookies
+                       0, // max cache size
+                       false, // disable same origin policy
+                       false, // disable win-message pump
+                       ""); // custom css
+    scope(exit) webcore.shutdown();
 
     
     new BraLa();
