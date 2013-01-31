@@ -163,7 +163,10 @@ int Main(string[] args) {
                        false, // disable same origin policy
                        false, // disable win-message pump
                        ""); // custom css
-    scope(exit) webcore.shutdown();
+    scope(exit) {
+        webcore.update();
+        webcore.shutdown();
+    }
 
     
     new BraLa();
