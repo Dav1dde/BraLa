@@ -106,23 +106,19 @@ class BraLaGame {
 
     bool poll(TickDuration delta_t) {
         if(_quit) {           
-            _current_world.shutdown();
-
-            if(connection.connected) {
+            if(connection.connected && connection.thread.isRunning) {
                 disconnect("Goodboy from BraLa.");
+                debug stderr.writefln("Waiting for connection thread to shutdown");
+                connection.thread.join(false);
+                debug stderr.writefln("Connection is done");
             }
-
-            debug stderr.writefln("Joining connection");
-            connection.thread.join(false);
+            
+            _current_world.shutdown();
 
             return true;
         }
         
-        if(connection.errored) {
-            connection.thread.join(); // let's rethrow the exception for now!
-        }
         assert(connection.thread.isRunning, "Connection thread died");
-
 
         foreach(cb; callback_queue) {
             cb();
@@ -226,7 +222,7 @@ class BraLaGame {
         
         synchronized(_world_lock) {
             if(_current_world !is null) {
-                callback_queue.put(&_current_world.remove_all_chunks);
+                callback_queue.put(&_current_world.shutdown);
             }
             
             _current_world = new World(engine.resmgr, tessellation_threads);

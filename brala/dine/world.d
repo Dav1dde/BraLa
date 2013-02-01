@@ -183,6 +183,14 @@ class World {
             t.stop();
         }
 
+        // threads wait on the buffer until it gets available,
+        // so tell them the buffer is free, so they actually reach
+        // the stop code, otherwise we'll wait for ever!
+        debug stderr.writefln("Marking all buffers as available");
+        foreach(tess_out; output) {
+            tess_out.buffer.available = true;
+        }
+
         foreach(t; tessellation_threads) {
             if(t.isRunning) {
                 debug stderr.writefln(`Waiting on thread: "%s"`, t.name);
@@ -466,7 +474,7 @@ class TessellationThread : VerboseThread {
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
 
-    protected bool running = false;
+    protected Event stop_event;
 
     this(World world, Queue!ChunkData input, Queue!TessOut output) {
         super(&run);
@@ -475,6 +483,8 @@ class TessellationThread : VerboseThread {
         this.buffer = TessellationBuffer(world.default_tessellation_bufer_size);
         this.input = input;
         this.output = output;
+
+        this.stop_event = new Event();
     }
 
     ~this() {
@@ -482,15 +492,14 @@ class TessellationThread : VerboseThread {
     }
     
     void run() {
-        running = true;
-        while(running) {
+        while(!stop_event.is_set) {
             poll();
         }
     }
 
     void stop() {
         debug stderr.writefln(`Setting stop for: "%s"`, this.name);
-        running = false;
+        stop_event.set();
     }
             
     void poll() {

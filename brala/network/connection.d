@@ -139,20 +139,14 @@ class Connection {
     }
     
     void poll() {
-        try {
-            ubyte packet_id = read!ubyte(endianstream);
-            
-            foreach(packet; queue) {
-                packet.send(endianstream);
-            }
-            endianstream.flush();
+        ubyte packet_id = read!ubyte(endianstream);
 
-            dispatch_packet(packet_id);
-        } catch(Exception e) {
-            _connected = false;
-            errored = true;
-            throw e;
+        foreach(packet; queue) {
+            packet.send(endianstream);
         }
+        endianstream.flush();
+
+        dispatch_packet(packet_id);
     }
     
     void dispatch_packet(ubyte packet_id) {

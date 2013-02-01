@@ -91,7 +91,7 @@ class Queue(type) {
 
         type item = queue[0];
         queue = queue[1..$];
-        not_full.notify();
+        scope(exit) not_full.notify();
         return item;
     }
 
