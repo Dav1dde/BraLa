@@ -49,7 +49,7 @@ class Queue(type) {
                 }
             } else if(timeout.isNegative) {
                 throw new QueueException("negative timeout");
-            } else if(timeout.get!("seconds") == 0) {
+            } else if(timeout.total!("msecs") == 0) {
                 if(full) {
                     not_full.wait();
                 }
@@ -77,7 +77,7 @@ class Queue(type) {
             }
         } else if(timeout.isNegative) {
             throw new QueueException("negativ timeout");
-        } else if(timeout.get!("seconds") == 0) {
+        } else if(timeout.total!("msecs") == 0) {
             if(queue.length == 0) {
                 not_empty.wait();
             }
@@ -91,7 +91,7 @@ class Queue(type) {
 
         type item = queue[0];
         queue = queue[1..$];
-        scope(exit) not_full.notify();
+        not_full.notify();
         return item;
     }
 

@@ -185,7 +185,7 @@ class World {
 
         // threads wait on the buffer until it gets available,
         // so tell them the buffer is free, so they actually reach
-        // the stop code, otherwise we'll wait for ever!
+        // the stop code, otherwise we'll wait for ever!        
         debug stderr.writefln("Marking all buffers as available");
         foreach(tess_out; output) {
             tess_out.buffer.available = true;
@@ -508,6 +508,7 @@ class TessellationThread : VerboseThread {
         try {
             // continue loop every 300ms to check if we should continue or exit
             chunk_data = input.get(true, dur!"msecs"(300));
+            scope(exit) input.task_done();
         } catch(Empty) {
             return;
         }
@@ -515,8 +516,6 @@ class TessellationThread : VerboseThread {
         with(chunk_data) {
             if(chunk.tessellated) {
                 debug stderr.writefln("Chunk is already tessellated! %s", position);
-
-                input.task_done();
                 return;
             } else {
                 buffer.available = false;
@@ -525,8 +524,6 @@ class TessellationThread : VerboseThread {
             size_t elements = world.tessellate(chunk, position, &buffer);
 
             output.put(TessOut(chunk, &buffer, elements));
-        }
-
-        input.task_done();
+        }       
     }
 }
