@@ -132,7 +132,7 @@ Config initialize_config() {
     config.set_default("window.resizable", true);
     config.set("window.resizable", !app_arguments.not_resizable);
 
-    config.set_assert("connection.host", app_arguments.host, "You have to specify a host to connect to!");
+    config.set_if("connection.host", app_arguments.host);
 
     config.set_default("connection.port", 25565);
     config.set_if("connection.port", app_arguments.port);

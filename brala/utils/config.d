@@ -201,13 +201,7 @@ class Config {
     }
 
     void set_default(T)(string key, T value) {
-        static if(!isArray!T || is(T == string)) {
-            alias db cdb;
-        } else {
-            alias db_arrays cdb;
-        }
-
-        if(key !in cdb) {
+        if(!has_key!(T)(key)) {
             set(key, value);
         }
     }
@@ -218,6 +212,16 @@ class Config {
         }
 
         return false;
+    }
+
+    bool has_key(T)(string key) {
+        static if(!isArray!T || is(T == string)) {
+            alias db cdb;
+        } else {
+            alias db_arrays cdb;
+        }
+
+        return (key in cdb) !is null;
     }
 }
 

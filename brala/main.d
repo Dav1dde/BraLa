@@ -73,9 +73,11 @@ class BraLa {
         window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
         window.on_close = &on_close;
 
-        game = new BraLaGame(engine, config);
-        game.start(config.get!string("connection.host"),
-                   config.get!short("connection.port"));
+
+        if(config.has_key!string("connection.host")) {
+            start_game(config.get!string("connection.host"),
+                       config.get!short("connection.port"));
+        }
     }
 
     void initialize_context() {
@@ -122,8 +124,15 @@ class BraLa {
         engine.set_sampler("terrain", terrain_sampler);
     }
 
+    void start_game(string host, short port) {
+        game = new BraLaGame(engine, config);
+        game.start(host, port);
+    }
+
     void exit() {
-        game.quit();
+        if(game !is null) {
+            game.quit();
+        }
     }
 
     bool on_close() {
