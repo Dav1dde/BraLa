@@ -25,4 +25,10 @@ version(Posix) {
         
         fclose(fd);
     }
+} else version(Windows) {
+    extern(System) bool IsDebuggerPresent();
+
+    shared static this() {
+        _is_debugged = IsDebuggerPresent();
+    }
 }
