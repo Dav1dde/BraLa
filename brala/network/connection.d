@@ -228,9 +228,8 @@ class ThreadedConnection : Connection {
     
     override void run() {
         if(_thread is null) {
-            //_thread = new VerboseThread(&(super.run));
-            _thread = new Thread(&super.run);
-            _thread.isDaemon = true;
+            _thread = new VerboseThread(&super.run);
+            _thread.name = "BraLa Connection Thread";
         }
 
         _thread.start();

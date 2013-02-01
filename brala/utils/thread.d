@@ -2,6 +2,7 @@ module brala.utils.thread;
 
 private {
     import std.traits : ParameterTypeTuple, isCallable;
+    import std.string : format;
     import core.time : Duration;
     import core.sync.mutex : Mutex;
     import core.sync.condition : Condition;
@@ -13,27 +14,26 @@ private {
 public import core.thread;
 
 
+private enum CATCH_DELEGATE = `
+    delegate void() {
+        try {
+            fun();
+        } catch(Exception e) {
+            stderr.writefln("--- Exception in Thread: \"%s\" ---".format(this.name));
+            stderr.writeln(e.toString());
+            stderr.writefln("--- End Exception in Thread \"%s\" ---".format(this.name));
+            throw e;
+        }
+    }
+`;
+    
 class VerboseThread : Thread {
-    this(void function() fn, size_t sz = 0) {
-        super(delegate void() {
-            try {
-                fn();
-            } catch(Throwable e) {
-                stderr.writeln(e.toString());
-                throw e;
-            }
-        }, sz);
+    this(void function() fun, size_t sz = 0) {
+        super(mixin(CATCH_DELEGATE), sz);
     }
 
-    this(void delegate() dg, size_t sz = 0) {
-        super(delegate void() {
-            try {
-                dg();
-            } catch(Throwable e) {
-                stderr.writeln(e.toString());
-                throw e;
-            }
-        }, sz);
+    this(void delegate() fun, size_t sz = 0) {
+        super(mixin(CATCH_DELEGATE), sz);
     }
 }
 

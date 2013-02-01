@@ -76,9 +76,6 @@ class BraLaGame {
 
     void quit() {
         _quit = true;
-        if(connection.connected) {
-            disconnect("Goodboy from BraLa.");
-        }
     }
 
     void on_resize(int width, int height) {
@@ -108,7 +105,18 @@ class BraLaGame {
     }
 
     bool poll(TickDuration delta_t) {
-        if(_quit) return true;
+        if(_quit) {           
+            _current_world.shutdown();
+
+            if(connection.connected) {
+                disconnect("Goodboy from BraLa.");
+            }
+
+            debug stderr.writefln("Joining connection");
+            connection.thread.join(false);
+
+            return true;
+        }
         
         if(connection.errored) {
             connection.thread.join(); // let's rethrow the exception for now!
@@ -189,7 +197,7 @@ class BraLaGame {
     }
     
     void disconnect(string message = "") {
-        if(connection.logged_in) {
+        if(connection.logged_in && connection.connected) {
             connection.send((new c.Disconnect(message)));
             connection.disconnect();
         }

@@ -90,7 +90,7 @@ class BraLa {
         debug writefln("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
         window.make_context_current();
-        window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+//         window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
         DerelictGL3.reload();
     }

@@ -10,6 +10,7 @@ private {
     import gl3n.aabb : AABB;
 
     import std.typecons : Tuple;
+    import core.time : dur;
 
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
@@ -18,7 +19,7 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
-    import brala.utils.queue : Queue;
+    import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 
@@ -113,6 +114,7 @@ class World {
         
         foreach(i; 0..threads) {
             auto t = new TessellationThread(this, input, output);
+            t.name = "BraLa Tessellation Thread %s/%s".format(i+1, threads);
             version(NoThreads) {} else { t.start(); }
             tessellation_threads ~= t;
         }
@@ -173,6 +175,25 @@ class World {
         foreach(key; chunks.keys()) {
             remove_chunk(key);
         }
+    }
+
+    void shutdown() {
+        debug stderr.writefln("Sending stop to all tessellation threads");
+        foreach(t; tessellation_threads) {
+            t.stop();
+        }
+
+        foreach(t; tessellation_threads) {
+            if(t.isRunning) {
+                debug stderr.writefln(`Waiting on thread: "%s"`, t.name);
+                t.join(false);
+            } else {
+                debug stderr.writefln(`Thread "%s" already terminated`, t.name);
+            }
+        }
+
+        debug stderr.writefln("Removing all chunks");
+        remove_all_chunks();
     }
     
     Chunk get_chunk(int x, int y, int z) {
@@ -445,11 +466,10 @@ class TessellationThread : VerboseThread {
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
 
-    bool running = false;
+    protected bool running = false;
 
     this(World world, Queue!ChunkData input, Queue!TessOut output) {
         super(&run);
-        this.isDaemon = true;
 
         this.world = world;
         this.buffer = TessellationBuffer(world.default_tessellation_bufer_size);
@@ -467,12 +487,23 @@ class TessellationThread : VerboseThread {
             poll();
         }
     }
+
+    void stop() {
+        debug stderr.writefln(`Setting stop for: "%s"`, this.name);
+        running = false;
+    }
             
     void poll() {
         // waits only if the buffer is not available
         buffer.wait_available();
 
-        auto chunk_data = input.get(); // this will pause the thread if there is no input
+        ChunkData chunk_data;
+        try {
+            // continue loop every 300ms to check if we should continue or exit
+            chunk_data = input.get(true, dur!"msecs"(300));
+        } catch(Empty) {
+            return;
+        }
 
         with(chunk_data) {
             if(chunk.tessellated) {
