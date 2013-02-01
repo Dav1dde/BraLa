@@ -60,8 +60,12 @@ class BraLa {
     BraLaGame game;
 
     this() {
-        config = initialize_config();
-        window = new Window();
+        this(initialize_config());
+    }
+
+    this(Config config) {
+        this.config = config;
+        this.window = new Window();
 
         initialize_context();
         initialize_engine();
@@ -138,11 +142,13 @@ int Main(string[] args) {
     scope(exit) glfwTerminate();
 
 
+    Config config = initialize_config();
+
     string exedir = (args[0].dirName().absolutePath());
 
-    webcore.initialize(true, // enable plugins
-                       false, // enable javascript
-                       false, // enable databases
+    webcore.initialize(config.get!bool("ui.webcore.enable_plugins", false), // enable plugins
+                       config.get!bool("ui.webcore.enable_javascript", true), // enable javascript
+                       config.get!bool("ui.webcore.enable_databases", false), // enable databases
                        exedir, // package path
                        exedir, // locale path
                        exedir, // user-data path
@@ -155,7 +161,7 @@ int Main(string[] args) {
                        "", // accept language override
                        "", // default charset override
                        "", // user-agent override
-                       "", // proxy-server
+                       config.get!string("ui.webcore.proxy_server", ""), // proxy-server
                        "", // proxy-config script
                        "", // auth-server whitelist
                        false, // save cache and cookies
@@ -169,7 +175,7 @@ int Main(string[] args) {
     }
 
     
-    new BraLa();
+    new BraLa(config);
 
     return 0;
 }
