@@ -437,8 +437,6 @@ class World {
 
         version(NoThreads) {
             if(!input.empty) {
-                import std.stdio;
-                debug writefln("polling");
                 tessellation_threads[0].poll();
             }
         }
