@@ -5,6 +5,7 @@ private {
 
     import core.cpuid : isX86_64;
     import core.time : Duration;
+    import core.thread : thread_isMainThread;
     import std.algorithm : count;
     import std.array : split;
     import std.conv : to;
@@ -12,6 +13,7 @@ private {
     import std.datetime : SysTime, Clock;
     import std.path : buildPath, expandTilde;
     import file = std.file;
+    import std.traits : ReturnType;
     import std.typecons : Tuple, tuple;
     import std.system : os;
 
@@ -37,7 +39,7 @@ class Session {
     static const string CHECK_SESSION_URL = "http://session.minecraft.net/game/checkserver.jsp";
     static const string SNOOP_URL = "http://snoop.minecraft.net/client";
     
-    private SysTime _last_login;
+    protected SysTime _last_login;
     @property last_login() { return _last_login; }
     
     long game_version;
@@ -45,10 +47,18 @@ class Session {
     string username;
     string password;
     string session_id;
+
+    protected ReturnType!(Session.snoop_args) _snoop_args_cache;
+    protected bool _snoop_is_cached = false;
     
     this(string username, string password) {
         this.username = username;
         this.password = password;
+
+        if(thread_isMainThread()) {
+            _snoop_args_cache = Session.snoop_args;
+            _snoop_is_cached = true;
+        }
     }
     
     void login() {
@@ -111,14 +121,14 @@ class Session {
         return hexdigest;
     }
 
-    @property static auto snoop_args() {
-        return tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
-                     "D Compiler: " ~ to!string(__VERSION__),
-                     to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
-    }
-
-    static void snoop() {        
-        snoop(typeof(this).snoop_args.expand);
+    void snoop() {
+        if(!_snoop_is_cached) {
+            debug assert(thread_isMainThread(), "need to call snoop from main-thread");
+            _snoop_args_cache = Session.snoop_args;
+            _snoop_is_cached = true;
+        }
+        
+        Session.snoop(_snoop_args_cache.expand);
     }
 
     static void snoop(string version_, string os_name, string os_version, string os_arch,
@@ -147,6 +157,19 @@ class Session {
             debug stderr.writefln(`Unable to snoop: "%s"`, e.msg);
         }
     }
+
+    @property static auto snoop_args()
+        in { assert(thread_isMainThread(), "snoop_args not called from main thread!"); }
+        body {
+            return tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
+                        "D Compiler: " ~ to!string(__VERSION__),
+                        to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
+        }
+
+    static void snoop_default() {
+        Session.snoop(Session.snoop_args.expand);
+    }
+       
 }
 
 

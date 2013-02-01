@@ -43,7 +43,6 @@ class Connection {
     protected bool _connected = false;
     protected Address connected_to;
     protected bool _logged_in = false;
-    bool errored = false;
     
     @property connected() { return _connected; }
     @property logged_in() { return _logged_in; }
@@ -56,6 +55,8 @@ class Connection {
     /+immutable+/ string password;
     /+immutable+/ string minecraft_username;
     /+immutable+/ string hostname;
+
+    bool snoop;
 
     protected ubyte[] shared_secret;
     
@@ -74,30 +75,9 @@ class Connection {
             this.minecraft_username = username;
         }
 
-        version(NoThreads) { snoop = false; }
-
-        if(snoop) {
-            // we need to call that in the main thread, since OpenGL functions are executed
-            auto snoop_args = Session.snoop_args;
-
-            void snoop_timer() {
-                auto timer = new Timer(dur!"minutes"(11), delegate void() {
-                    if(_connected) {
-                        Session.snoop(snoop_args.expand);
-                    }
-
-                    snoop_timer();
-                });
-                timer.isDaemon = true;
-                timer.start();
-            }
-
-            snoop_timer();
-            session.snoop();
-        }
-   
         this.username = username;
         this.password = password;
+        this.snoop = snoop;  // TODO: implement snoop
     }
     
     void connect(Address to, string hostname) {
