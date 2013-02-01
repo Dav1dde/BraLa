@@ -28,6 +28,7 @@ private {
     import brala.exception : InitError;
     import brala.utils.image : Image;
     import brala.utils.config : Config, Path;
+    import brala.utils.debugger : is_debugged;
 
     import std.stdio : stderr, writefln;
 }
@@ -90,7 +91,10 @@ class BraLa {
         debug writefln("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
         window.make_context_current();
-//         window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+
+        if(!is_debugged) {
+            window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+        }
 
         DerelictGL3.reload();
     }
