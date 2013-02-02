@@ -56,7 +56,8 @@ class Connection {
     /+immutable+/ string minecraft_username;
     /+immutable+/ string hostname;
 
-    bool snoop;
+    protected Timer snoop_timer;
+    protected bool snoop;
 
     protected ubyte[] shared_secret;
     
@@ -77,7 +78,20 @@ class Connection {
 
         this.username = username;
         this.password = password;
-        this.snoop = snoop;  // TODO: implement snoop
+        this.snoop = snoop;
+
+        if(snoop) {
+            void timed_snoop() {
+                snoop_timer = new Timer(dur!"minutes"(10), delegate void() {
+                    session.snoop();
+                    timed_snoop();
+                });
+                snoop_timer.start();
+            }
+
+            timed_snoop();
+        }
+        
     }
     
     void connect(Address to, string hostname) {
@@ -98,11 +112,35 @@ class Connection {
         connect(to[0], host);
     }
     
-    void disconnect() {
-        socket.shutdown(SocketShutdown.BOTH);
-        socket.close();
+    void shutdown() {
+        try {
+            socket.shutdown(SocketShutdown.BOTH);
+            socket.close();
+        } catch(Exception e) {
+            debug stderr.writefln("--- Exception during connection-shutdown ---");
+            debug stderr.writeln(e.toString());
+            debug stderr.writefln("--- End exception during connection-shutdown ---");
+        }
+        
         _connected = false;
         _logged_in = false;
+
+        if(snoop) {
+            debug stderr.writefln("Canceling snoop-timer and joining it");
+            snoop_timer.cancel();
+            snoop_timer.join(false);
+        }
+
+    }
+
+    void disconnect(string message = "") {
+        if(logged_in) {
+            send((new c.Disconnect(message)));
+        }
+
+        if(connected) {
+            shutdown();
+        }
     }
     
     void send(T : IPacket)(T packet) {
@@ -189,8 +227,7 @@ class Connection {
     }
     
     protected void on_packet(T : s.Disconnect)(T packet) {
-        socket.close();
-        _connected = false;
+        shutdown();
     }
 }
 

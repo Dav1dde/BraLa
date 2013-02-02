@@ -107,7 +107,7 @@ class BraLaGame {
     bool poll(TickDuration delta_t) {
         if(_quit) {           
             if(connection.connected && connection.thread.isRunning) {
-                disconnect("Goodboy from BraLa.");
+                connection.disconnect("The End");
                 debug stderr.writefln("Waiting for connection thread to shutdown");
                 connection.thread.join(false);
                 debug stderr.writefln("Connection is done");
@@ -193,10 +193,7 @@ class BraLaGame {
     }
     
     void disconnect(string message = "") {
-        if(connection.logged_in && connection.connected) {
-            connection.send((new c.Disconnect(message)));
-            connection.disconnect();
-        }
+        connection.disconnect(message);
     }
     
     void login() { // this is blocking
