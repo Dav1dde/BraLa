@@ -16,7 +16,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.utils.config : Config;
     
-    debug import std.stdio : writefln;
+    debug import std.stdio : stderr, writefln;
 }
 
 
@@ -89,6 +89,15 @@ class BraLaEngine {
 
         // wireframe mode, for debugging
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    void shutdown() {
+        debug stderr.writefln("Removing Samplers from Engine");
+        foreach(sampler; samplers.values) {
+            sampler.remove();
+        }
+        
+        resmgr.shutdown();
     }
 
     void resize(int width, int height) {

@@ -188,7 +188,8 @@ int Main(string[] args) {
     }
 
     
-    new BraLa(config);
+    auto brala = new BraLa(config);
+    scope(exit) brala.engine.shutdown();
 
     return 0;
 }

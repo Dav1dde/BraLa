@@ -9,6 +9,7 @@ private {
     import std.traits : isIterable;
     import std.range : ElementType;
     import std.algorithm : map;
+    import core.thread : thread_isMainThread;
     
     import glamour.shader : Shader;
     import glamour.texture : ITexture, Texture2D;
@@ -16,7 +17,7 @@ private {
     import brala.utils.image : Image;
     import brala.exception : ResmgrError;
     
-    debug import std.stdio : writefln;
+    debug import std.stdio : stderr, writefln;
 }
 
 
@@ -97,6 +98,25 @@ class ResourceManager {
     protected Image[string] images;
         
     this() {}
+
+    void shutdown()
+        in { assert(thread_isMainThread(), "ResourceManager.shutdown not called from main thread"); }
+        body {
+            debug stderr.writefln("Removing Shaders from ResourceManager");
+            foreach(shader; shaders.values) {
+                shader.remove();
+            }
+            shaders = shaders.init;
+
+            debug stderr.writefln("Removing Textures from ResourceManager");
+            foreach(texture; textures.values) {
+                texture.remove();
+            }
+            textures = textures.init;
+
+            debug stderr.writefln("Removing Images from ResourceManager");
+            images = images.init;
+        }
   
     protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
         debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
