@@ -4,7 +4,7 @@ private {
     import glwtf.glfw;
 
     import std.algorithm : map;
-    import std.path : buildPath, absolutePath;
+    import std.path : buildPath, absolutePath, buildNormalizedPath, isAbsolute;
     import std.range : zip;
     import std.array : join;
     
@@ -17,9 +17,9 @@ private {
 
 struct AppArguments {
     version(Windows) {
-        string brala_conf = `res\brala.conf`;
+        string brala_conf = `brala.conf`;
     } else {
-        string brala_conf = `res/brala.conf`;
+        string brala_conf = `brala.conf`;
     }
     
     string username;
@@ -40,7 +40,7 @@ struct AppArguments {
     Alias!("host") h;
     ushort port = 0;
 
-    string res = "";
+    string res = "./res";
 
     bool no_snoop = false;
     size_t tessellation_threads = 0;
@@ -49,7 +49,7 @@ struct AppArguments {
 
     void help(string[] args, string[][] p) {
         string[] help_strings = [
-            "the path to brala.conf",
+            "the path to brala.conf, relativ to \"res\" or absolute",
             
             "specifies the username, which will be used to auth with the login servers,\n" ~
             "\t\t\t\tif this is not possible and the server is in offline mode, it will be used\n" ~
@@ -105,12 +105,17 @@ private static AppArguments _app_arguments;
 
 Config initialize_config() {
     auto config = new Config();
-    
     config.dont_save = ["account.password"];
-    config.read(app_arguments.brala_conf);
 
-    config.set_default("path.res", "./".absolutePath());
-    config.set_if("path.res", app_arguments.res.absolutePath());
+    string config_path;
+    if(app_arguments.brala_conf.isAbsolute()) {
+        config_path = app_arguments.brala_conf;
+    } else {
+        config_path = buildPath(app_arguments.res, app_arguments.brala_conf);
+    }
+    config.read(config_path);
+
+    config.set_if("path.res", app_arguments.res.absolutePath().buildNormalizedPath());
 
     config.set_default("account.credentials", false);
     config.set_if("account.credentials", app_arguments.credentials);
