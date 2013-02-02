@@ -39,7 +39,6 @@ class Connection {
     TcpSocket socket;
     SocketStream socketstream;
     EndianStream endianstream;
-    protected Queue!IPacket queue;
     protected bool _connected = false;
     protected Address connected_to;
     protected bool _logged_in = false;
@@ -64,8 +63,6 @@ class Connection {
     immutable byte protocol_version = 51;
     
     this(string username, string password, bool snoop) {
-        queue = new Queue!IPacket();
-        
         session = new Session(username, password);
 
         try {
@@ -143,8 +140,11 @@ class Connection {
         }
     }
     
-    void send(T : IPacket)(T packet) {
-        queue.put(packet);
+    void send(IPacket[] packets...) {
+        foreach(packet; packets) {
+            packet.send(endianstream);
+        }
+        endianstream.flush();
     }
     
     void login() {
@@ -158,12 +158,6 @@ class Connection {
     
     void poll() {
         ubyte packet_id = read!ubyte(endianstream);
-
-        foreach(packet; queue) {
-            packet.send(endianstream);
-        }
-        endianstream.flush();
-
         dispatch_packet(packet_id);
     }
     
@@ -234,8 +228,28 @@ class Connection {
 class ThreadedConnection : Connection {
     protected Thread _thread = null;
     @property Thread thread() { return _thread; }    
+    protected Queue!IPacket queue;
     
-    this(string username, string password, bool snoop) { super(username, password, snoop); }
+    this(string username, string password, bool snoop) {
+        super(username, password, snoop);
+
+        queue = new Queue!IPacket();
+    }
+
+    override void send(IPacket[] packets...) {
+        foreach(packet; packets) {
+            queue.put(packet);
+        }
+    }
+
+    override void poll() {
+        foreach(packet; queue) {
+            packet.send(endianstream);
+        }
+        endianstream.flush();
+
+        super.poll();
+    }
     
     override void run() {
         if(_thread is null) {
