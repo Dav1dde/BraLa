@@ -208,6 +208,7 @@ int Main(string[] args) {
         webcore.shutdown();
     }
 
+    webcore.set_base_directory(config.get!Path("ui.path"));
     
     auto brala = new BraLa(config);
     scope(exit) brala.shutdown();
