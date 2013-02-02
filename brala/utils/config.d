@@ -1,10 +1,6 @@
 module brala.utils.config;
 
 private {
-    import brala.utils.ctfe : matches_overload, hasAttribute;
-    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
-    import brala.utils.defaultaa : DefaultAA;
-    
     import std.stdio : File;
     import std.conv : ConvException, to;
     import std.traits : moduleName, ReturnType, isArray;
@@ -15,6 +11,11 @@ private {
     import std.path : baseName, buildNormalizedPath;
     import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
+
+    import brala.utils.ctfe : matches_overload, hasAttribute;
+    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
+    import brala.utils.defaultaa : DefaultAA;
+    import brala.utils.string : expandVars;
 }
 
 
@@ -137,7 +138,13 @@ class Config {
 
     T get(T)(string key) if(!isArray!T || is(T == string)) {
         if(auto value = key in db) {
-            return deserializer!T(*value);
+            T ret = deserializer!T(*value);
+
+            static if(is(T == string)) {
+                ret = expandVars(ret, db);
+            }
+            
+            return ret;
         }
 
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
@@ -154,6 +161,11 @@ class Config {
                 } catch(ConvException e) {
                     ret[i] = (ElementEncodingType!T).init;
                 }
+
+                static if(is(ElementEncodingType!T == string)) {
+                    ret[i] = expandVars(ret[i], db);
+                }
+                
             }
 
             return ret;

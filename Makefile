@@ -24,7 +24,7 @@ ifeq ($(DC),ldc2)
 else ifeq ($(DC),gdc)
 	ADDITIONAL_FLAGS = -fversion=Derelict3 -fversion=gl3n -fversion=glamour -fversion=stb -version=GLFWAWEBridge -fdebug -g -fdebug-c
 else
-	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=glamour -version=stb -version=GLFWAWEBridge -debug -g -gc
+	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=glamour -version=stb -version=GLFWAWEBridge -debug -unittest -g -gc
 endif
 
 
