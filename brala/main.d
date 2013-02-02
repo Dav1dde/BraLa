@@ -24,6 +24,7 @@ private {
     import brala.config : initialize_config;
     import brala.network.session : minecraft_folder;
     import brala.network.packets.types : IPacket;
+    import brala.ui.ui : WebUI;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
@@ -61,6 +62,8 @@ class BraLa {
     BraLaEngine engine;
     BraLaGame game;
 
+    WebUI ui;
+
     this() {
         this(initialize_config());
     }
@@ -75,6 +78,7 @@ class BraLa {
         window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit_game);
         window.on_close = &on_close;
 
+        this.ui = new WebUI(config, window);
 
         if(config.has_key!string("connection.host")) {
             start_game(config.get!string("connection.host"),
@@ -85,6 +89,7 @@ class BraLa {
     void shutdown()
         in { assert(thread_isMainThread(), "BraLa.shutdown has to be called from main thread"); }
         body {
+            ui.shutdown();
             engine.shutdown();
         }
 
