@@ -83,6 +83,8 @@ class BraLa {
         if(config.has_key!string("connection.host")) {
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));
+        } else {
+            start_gui();
         }
     }
 
@@ -149,6 +151,13 @@ class BraLa {
         if(game !is null) {
             game.quit();
         }
+    }
+
+    void start_gui() {
+        ui.connect();
+
+        string entry = "login.html";
+        
     }
 
     bool on_close() {

@@ -13,7 +13,22 @@ private {
 
 
 class WebUI {
-    protected Window window;
+    protected bool _is_connected;
+    @property bool is_connected() { return _is_connected; }
+    protected Window _window;
+    @property Window window() { return _window; }
+    @property void window(Window window) {
+        bool was_connected = _is_connected;
+        if(_is_connected) {
+            disconnect();
+        }
+
+        _window = window;
+
+        if(was_connected) {
+            connect();
+        }
+    }
     
     Webview webview;
     alias webview this;
@@ -36,15 +51,23 @@ class WebUI {
     }
 
     void connect() {
-       input.connect_to_window(window);
-       webview.resize(window.width, window.height, true, 500);
+        if(!_is_connected) {
+            input.connect_to_window(window);
+            webview.resize(window.width, window.height, true, 500);
+        }
+        _is_connected = true;
     }
 
     void disconnect() {
         input.disconnect_from_window(window);
+        _is_connected = false;
     }
 
     void draw() {
         renderer.display();
+    }
+
+    static void update_uis() {
+        webcore.update();
     }
 }
