@@ -138,11 +138,7 @@ class Config {
 
     T get(T)(string key) if(!isArray!T || is(T == string)) {
         if(auto value = key in db) {
-            T ret = deserializer!T(*value);
-
-            static if(is(T == string)) {
-                ret = expandVars(ret, db);
-            }
+            T ret = deserializer!T((*value).expandVars(db));
             
             return ret;
         }
@@ -157,15 +153,10 @@ class Config {
 
             foreach(i, v; (*value)) {
                 try {
-                    ret[i] = deserializer!(ElementEncodingType!T)(v);
+                    ret[i] = deserializer!(ElementEncodingType!T)(v.expandVars(db));
                 } catch(ConvException e) {
                     ret[i] = (ElementEncodingType!T).init;
-                }
-
-                static if(is(ElementEncodingType!T == string)) {
-                    ret[i] = expandVars(ret[i], db);
-                }
-                
+                }               
             }
 
             return ret;

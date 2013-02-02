@@ -4,7 +4,7 @@ private {
     import glwtf.glfw;
 
     import std.algorithm : map;
-    import std.path : buildPath;
+    import std.path : buildPath, absolutePath;
     import std.range : zip;
     import std.array : join;
     
@@ -109,8 +109,8 @@ Config initialize_config() {
     config.dont_save = ["account.password"];
     config.read(app_arguments.brala_conf);
 
-    config.set_default("path.res", "");
-    config.set_if("path.res", app_arguments.res);
+    config.set_default("path.res", "./".absolutePath());
+    config.set_if("path.res", app_arguments.res.absolutePath());
 
     config.set_default("account.credentials", false);
     config.set_if("account.credentials", app_arguments.credentials);
