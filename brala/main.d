@@ -17,6 +17,7 @@ private {
     import file = std.file;
     import std.string : format;
     import std.exception : enforceEx;
+    import core.thread : thread_isMainThread;
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
@@ -71,7 +72,7 @@ class BraLa {
         initialize_context();
         initialize_engine();
 
-        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
+        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit_game);
         window.on_close = &on_close;
 
 
@@ -80,6 +81,12 @@ class BraLa {
                        config.get!short("connection.port"));
         }
     }
+
+    void shutdown()
+        in { assert(thread_isMainThread(), "BraLa.shutdown has to be called from main thread"); }
+        body {
+            engine.shutdown();
+        }
 
     void initialize_context() {
         window.resizable = config.get!bool("window.resizable");
@@ -133,7 +140,7 @@ class BraLa {
         game.start(host, port);
     }
 
-    void exit() {
+    void exit_game() {
         if(game !is null) {
             game.quit();
         }
@@ -189,7 +196,7 @@ int Main(string[] args) {
 
     
     auto brala = new BraLa(config);
-    scope(exit) brala.engine.shutdown();
+    scope(exit) brala.shutdown();
 
     return 0;
 }
