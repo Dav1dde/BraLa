@@ -4,6 +4,8 @@ private {
     import wonne.all;
     import wonne.ext.glfw;
     import wonne.ext.opengl;
+    import glamour.gl;
+    import glwtf.glfw;
     import glwtf.window : Window;
 
     import brala.utils.config : Config;
@@ -29,6 +31,8 @@ class WebUI {
             connect();
         }
     }
+
+    protected bool _running;
     
     Webview webview;
     alias webview this;
@@ -63,8 +67,36 @@ class WebUI {
         _is_connected = false;
     }
 
-    void draw() {
+    void display() {
         renderer.display();
+    }
+
+    void run(string file, bool is_url=false) {
+        connect();
+        scope(success) disconnect();
+        
+        if(is_url) {
+            webview.load_url(file);
+        } else {
+            webview.load_file(file);
+        }
+
+        _running = true;
+        while(_running) {
+            WebUI.update_uis();
+
+            glClearColor(0.117f, 0.490f, 0.745f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            display();
+
+            window.swap_buffers();
+            glfwPollEvents();
+        }
+    }
+
+    void stop() {
+        _running = false;
     }
 
     static void update_uis() {

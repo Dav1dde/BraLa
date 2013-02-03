@@ -77,15 +77,13 @@ class BraLaEngine {
         timer = new Timer();
         resmgr = new ResourceManager();
         
-        resize(config.get!int("window.width"), config.get!int("window.height"));
+        resize(window.width, window.height);
         
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
-        version(none) {
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        }
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // wireframe mode, for debugging
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

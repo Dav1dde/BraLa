@@ -75,7 +75,7 @@ class BraLa {
         initialize_context();
         initialize_engine();
 
-        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit_game);
+        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
         window.on_close = &on_close;
 
         this.ui = new WebUI(config, window);
@@ -84,7 +84,7 @@ class BraLa {
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));
         } else {
-            start_gui();
+            start_ui();
         }
     }
 
@@ -94,6 +94,12 @@ class BraLa {
             ui.shutdown();
             engine.shutdown();
         }
+
+    void exit() {
+        exit_game();
+        exit_ui();
+    }
+        
 
     void initialize_context() {
         window.resizable = config.get!bool("window.resizable");
@@ -153,11 +159,17 @@ class BraLa {
         }
     }
 
-    void start_gui() {
-        ui.connect();
+    void start_ui() {
+        window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_NORMAL);
+        scope(success) window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
 
         string entry = "login.html";
-        
+
+        ui.run(entry);
+    }
+
+    void exit_ui() {
+        ui.stop();
     }
 
     bool on_close() {
@@ -185,8 +197,8 @@ int Main(string[] args) {
                        config.get!bool("ui.webcore.enable_databases", false), // enable databases
                        exedir, // package path
                        exedir, // locale path
-                       exedir, // user-data path
-                       exedir, // plugin path
+                       "", // user-data path
+                       "", // plugin path
                        exedir, // log path
                        awe_loglevel.AWE_LL_VERBOSE, // loglevel
                        false, // force single process
@@ -199,10 +211,11 @@ int Main(string[] args) {
                        "", // proxy-config script
                        "", // auth-server whitelist
                        false, // save cache and cookies
-                       0, // max cache size
+                       4096, // max cache size
                        false, // disable same origin policy
                        false, // disable win-message pump
-                       ""); // custom css
+                       "body{font-size:12px}"); // custom css
+
     scope(exit) {
         webcore.update();
         webcore.shutdown();
