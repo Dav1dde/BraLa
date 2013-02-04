@@ -1,14 +1,37 @@
 module brala.utils.string;
 
 private {
+    import std.string : format;
     import std.array : appender;
     import std.algorithm : countUntil, canFind;
-    import std.traits : isSomeString;
+    import std.traits : isAssociativeArray, isCallable;
+    import core.exception : RangeError;
+
+    import brala.utils.exception;
 }
 
 
-string expandVars(T)(T str, T[T] lookup) if(isSomeString!T) {
-    enum varchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.";
+string expandVars(bool lax = false, T...)(string str, T t) if(isCallable!(T[0]) || __traits(compiles, mixin(`t[0][""]`))) {
+    alias t[0] Getter;
+
+    static string gg_code(string arg) {
+        if(isCallable!T) {
+            return "string repl = Getter(" ~ arg ~ ");";
+        } else {
+            return `
+            string repl;
+            try {
+                repl = Getter[` ~ arg ~ `];
+            } catch(RangeError) {
+                static if(lax) {} else {
+                    throw new NoKey("Key \"%s\" does not exist".format(` ~ arg ~ `));
+                }
+            }`;
+        }
+    }
+    
+    
+    enum varchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-.[]";
     size_t index = 0;
     size_t strlen = str.length;
     auto result = appender!string();
@@ -27,7 +50,7 @@ string expandVars(T)(T str, T[T] lookup) if(isSomeString!T) {
                 auto until = temp.countUntil('}');
 
                 if(until >= 0) {
-                    string repl = lookup.get(str[index..index+until], "");
+                    mixin(gg_code("str[index..index+until]"));
 
                     if(repl.length) {
                         result.put(repl);
@@ -52,7 +75,7 @@ string expandVars(T)(T str, T[T] lookup) if(isSomeString!T) {
                     }
                 }
 
-                string repl = lookup.get(var, "");
+                mixin(gg_code("var"));
                 if(repl.length) {
                     result.put(repl);
                 } else {
@@ -69,21 +92,31 @@ string expandVars(T)(T str, T[T] lookup) if(isSomeString!T) {
 }
 
 unittest {
+    import std.exception : assertThrown;
+    
     string[string] lookup;
     lookup["fake_key_dlang"] = "test";
     assert(expandVars("${fake_key_dlang}/bar", lookup) == "test/bar");
     assert(expandVars("${test/bar", lookup) == "${test/bar");
     assert(expandVars("$${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
-
     assert(expandVars("$fake_key_dlang/bar", lookup) == "test/bar");
-    assert(expandVars("$/bar", lookup) == "$/bar");
-
+    
     lookup.remove("fake_key_dlang");
-    assert(expandVars("${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
+    assertThrown!NoKey(expandVars("$/bar", lookup));
+    assertThrown!NoKey(expandVars("${fake_key_dlang}/bar", lookup));
+    assertThrown!NoKey(expandVars("$fake_key_dlang/bar", lookup));
 
-    assert(expandVars("$fake_key_dlang/bar", lookup) == "$fake_key_dlang/bar");
+    assert(expandVars!true("$/bar", lookup) == "$/bar");
+    assert(expandVars!true("${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
+    assert(expandVars!true("$fake_key_dlang/bar", lookup) == "$fake_key_dlang/bar");
 
     assert(expandVars("${", lookup) == "${");
     assert(expandVars("${foo", lookup) == "${foo");
     assert(expandVars("$", lookup) == "$");
+
+    string getter(string arg) {
+        return arg ~ "foo";
+    }
+
+    assert(expandVars("${foo}", &getter) == "foofoo");
 }
