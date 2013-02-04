@@ -105,9 +105,14 @@ class BraLaGame {
     }
 
     bool poll(TickDuration delta_t) {
+        if(!connection.thread.isRunning) {
+            debug stderr.writefln("Connection thread died");
+            _quit = true;
+        }
+        
         if(_quit) {           
             if(connection.connected && connection.thread.isRunning) {
-                connection.disconnect("The End");
+                connection.disconnect("Garbage collector went crazy, again");
                 debug stderr.writefln("Waiting for connection thread to shutdown");
                 connection.thread.join(false);
                 debug stderr.writefln("Connection is done");
@@ -117,8 +122,6 @@ class BraLaGame {
 
             return true;
         }
-        
-        assert(connection.thread.isRunning, "Connection thread died");
 
         foreach(cb; callback_queue) {
             cb();
