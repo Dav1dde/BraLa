@@ -7,7 +7,7 @@ private {
     import std.exception : enforceEx;
     import std.string : format, strip, splitLines;
     import std.array : split, join, replace;
-    import std.algorithm : canFind, startsWith, sort;
+    import std.algorithm : canFind, startsWith, sort, countUntil;
     import std.path : baseName, buildNormalizedPath;
     import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
@@ -138,7 +138,7 @@ class Config {
 
     T get(T)(string key) if(!isArray!T || is(T == string)) {
         if(auto value = key in db) {
-            T ret = deserializer!T((*value).expandVars(db));
+            T ret = deserializer!T((*value).expandVars(&get_string));
             
             return ret;
         }
@@ -153,7 +153,7 @@ class Config {
 
             foreach(i, v; (*value)) {
                 try {
-                    ret[i] = deserializer!(ElementEncodingType!T)(v.expandVars(db));
+                    ret[i] = deserializer!(ElementEncodingType!T)(v.expandVars(&get_string));
                 } catch(ConvException e) {
                     ret[i] = (ElementEncodingType!T).init;
                 }               
@@ -164,6 +164,28 @@ class Config {
 
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
     }
+
+    /// special method for expandVars call, only returns serialized, but expanded strings
+    /// and supports array[index] syntax
+    string get_string(string s) {
+        auto start = s.countUntil("[");
+        
+        if(start > 0) { // > 0 is intended
+            string key = s[0..start];
+
+            size_t index;
+            try {
+                index = to!size_t(s[start+1..$-1]);
+            } catch(ConvException) {
+                throw new InvalidKey(`Invalid Key "%s"`.format(s));
+            }
+
+            return db_arrays[key][index];
+        }
+
+        return db[s];
+    }
+    
 
     void set(T)(string key, T value) if(!isArray!T || is(T == string)) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
