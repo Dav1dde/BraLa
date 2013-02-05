@@ -129,9 +129,9 @@ class Config {
         }
     }
 
-    T get(T)(string key, T default_) {
+    T get(T, bool expand = true)(string key, T default_) {
         try {
-            return get!(T)(key);
+            return get!(T, expand)(key);
         } catch(NoKey e) {}
 
         return default_;

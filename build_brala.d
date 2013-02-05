@@ -18,7 +18,7 @@ private {
     version(NoDownload) {
     } else {
         pragma(lib, "curl");
-        import std.net.curl : download, HTTP;
+        import std.net.curl : download, HTTP, CurlOption;
     }
 
     version(linux) {
@@ -438,6 +438,7 @@ void setup_awesomium() {
     HTTP http = HTTP();
     http.dataTimeout = dur!("minutes")(0);
     http.operationTimeout = dur!("minutes")(0);
+    http.handle.set(CurlOption.ssl_verifypeer, false);
 
     foreach(file; FILES) {
         auto path = buildPath("lib", file.split("lib/")[1].split("?")[0]);
