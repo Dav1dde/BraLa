@@ -25,6 +25,7 @@ private {
     import brala.network.session : minecraft_folder;
     import brala.network.packets.types : IPacket;
     import brala.ui.ui : WebUI;
+    import brala.ui.api : UIApi;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
@@ -63,6 +64,7 @@ class BraLa {
     BraLaGame game;
 
     WebUI ui;
+    UIApi ui_api;
 
     this() {
         this(initialize_config());
@@ -79,6 +81,7 @@ class BraLa {
         window.on_close = &on_close;
 
         this.ui = new WebUI(config, window);
+        this.ui_api = new UIApi("api", this);
 
         if(config.has_key!string("connection.host")) {
             start_game(config.get!string("connection.host"),

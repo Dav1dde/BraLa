@@ -2,10 +2,22 @@ module brala.utils.defaultaa;
 
 private import std.traits : ReturnType, isCallable;
 
-struct DefaultAA(value_type, key_type, alias default__) {
+struct DefaultAA(value_type, key_type, Default...) if(Default.length < 2) {
     private value_type[key_type] _store;
     alias _store this;
-    alias default__ default_;
+
+    static if(Default.length == 1) {
+        static if(isCallable!(Default[0])) {
+            alias Default[0] default_;
+        } else {
+            value_type default_ = Default[0];
+        }
+    } else {
+        value_type default_() {
+            value_type t;
+            return t;
+        }
+    }
 
     static if(isCallable!default_) {
         static assert(is(ReturnType!(default_) : value_type), "callable returntype doesn't match value_type");
@@ -19,11 +31,13 @@ struct DefaultAA(value_type, key_type, alias default__) {
         }
     }
 
-    value_type opIndex(key_type key) {
+    ref value_type opIndex(key_type key) {
         if(value_type* value = key in _store) {
             return *value;
         } else {
-            return _get_default();
+            value_type d = _get_default();
+            _store[key] = d;
+            return _store[key];
         }
     }
 
