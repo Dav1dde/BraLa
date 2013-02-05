@@ -329,7 +329,7 @@ class World {
                 wcoords.y = wcoords_orig.y + y;
                 wcoords.z = wcoords_orig.z;
 
-                tessellator.realloc_buffer_if_needed(256*(hds-y));
+                tessellator.realloc_buffer_if_needed(1024*(16-hds));
 
                 foreach(z; 0..depth) {
                     z_offset = wcoords_orig.z + z + 0.5f;
