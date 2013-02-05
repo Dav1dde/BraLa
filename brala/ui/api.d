@@ -84,6 +84,13 @@ class UIApi {
         }
     }
 
+    void set_property(T)(string name, T value) {
+        JSValue js_value = JSValue(value);
+        scope(exit) js_value.destroy();
+
+        brala.ui.set_object_property(api_name, name, js_value);
+    }
+
     void dispatch_callback(Webview webview, string object_name, string callback_name, JSArray arguments) {
         debug writefln("Got JS callback: %s.%s with %s arguments", object_name, callback_name, arguments.size);
 
@@ -103,8 +110,10 @@ class UIApi {
         if(offline) {
             brala.session.username = username;
             brala.session.minecraft_username = username;
+            set_property("logged_in", true);
         } else {
             brala.session.login(username, password);
+            set_property("logged_in", brala.session.logged_in);
         }
     }
 }
