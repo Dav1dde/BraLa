@@ -46,12 +46,17 @@ class WebUI {
         this.renderer = new WebviewRenderer(webview);
 
         webview.transparent = true;
+        webview.on_js_console_message.connect(&log);
     }
 
     void shutdown() {
         debug writefln("Shutting down WebUI");
         renderer.remove();
         webview.destroy();
+    }
+
+    void log(Webview v, string message, int line, string source) {
+        writefln("JS Console Message: %s\t\t%s:%s", message, source, line);
     }
 
     void connect() {
