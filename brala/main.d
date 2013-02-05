@@ -92,7 +92,17 @@ class BraLa {
 
         this.ui = new WebUI(config, window);
         this.ui_api = new UIApi("api", this);
+    }
 
+    void shutdown()
+        in { assert(thread_isMainThread(), "BraLa.shutdown has to be called from main thread"); }
+        body {
+            ui.shutdown();
+            engine.shutdown();
+            snooper.stop();
+        }
+
+    void start() {
         if(config.has_key!string("connection.host")) {
             session.login(config.get!(string, false)("account.username"),
                           config.get!(string, false)("account.password"));
@@ -103,14 +113,6 @@ class BraLa {
             start_ui();
         }
     }
-
-    void shutdown()
-        in { assert(thread_isMainThread(), "BraLa.shutdown has to be called from main thread"); }
-        body {
-            ui.shutdown();
-            engine.shutdown();
-            snooper.stop();
-        }
 
     void exit() {
         exit_game();
@@ -241,8 +243,6 @@ int Main(string[] args) {
 
     webcore.set_base_directory(config.get!Path("ui.path"));
 
-    webcore.update();
-    
     auto brala = new BraLa(config);
 
     scope(exit) {
@@ -250,6 +250,8 @@ int Main(string[] args) {
         webcore.update();
         webcore.shutdown();
     }
+
+    brala.start();
 
     return 0;
 }
