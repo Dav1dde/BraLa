@@ -166,6 +166,8 @@ class BraLa {
     }
 
     void start_game(string host, short port) {
+        snooper.snoop();
+        
         game = new BraLaGame(engine, session, config);
         game.start(host, port);
     }
