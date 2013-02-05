@@ -42,6 +42,8 @@ struct AppArguments {
 
     string res = "./res";
 
+    string theme = "";
+
     bool no_snoop = false;
     size_t tessellation_threads = 0;
 
@@ -72,6 +74,8 @@ struct AppArguments {
             "\t\tthe port of the minecraft server, defaults to 25565",
 
             "\t\tpath to the resources folder, named \"res\"",
+
+            "\tsets UI theme"
 
             "\tdisables \"snooping\" (= sending completly anonym information to mojang)",
 
@@ -141,6 +145,9 @@ Config initialize_config() {
 
     config.set_default("connection.port", 25565);
     config.set_if("connection.port", app_arguments.port);
+
+    config.set_default("ui.theme", "default");
+    config.set_if("ui.theme", app_arguments.theme);
 
     config.set_default("brala.no_snoop", false);
     config.set_if("brala.no_snoop", app_arguments.no_snoop);
