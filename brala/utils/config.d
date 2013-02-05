@@ -4,13 +4,14 @@ private {
     import std.stdio : File;
     import std.conv : ConvException, to;
     import std.traits : moduleName, ReturnType, isArray;
-    import std.exception : enforceEx;
+    import std.exception : enforceEx, collectException;
     import std.string : format, strip, splitLines;
     import std.array : split, join, replace;
     import std.algorithm : canFind, startsWith, sort, countUntil;
     import std.path : baseName, buildNormalizedPath;
     import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
+    import core.exception : RangeError;
 
     import brala.utils.ctfe : matches_overload, hasAttribute;
     import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
@@ -180,10 +181,16 @@ class Config {
                 throw new InvalidKey(`Invalid Key "%s"`.format(s));
             }
 
-            return db_arrays[key][index];
+            try {
+                return db_arrays[key][index];
+            } catch(RangeError) {}
+        } else {
+            try {
+                return db[s];
+            } catch(RangeError) {}
         }
 
-        return db[s];
+        throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, s));
     }
     
 
