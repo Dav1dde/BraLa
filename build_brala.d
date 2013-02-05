@@ -574,7 +574,7 @@ int main(string[] args) {
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
                              buildPath("lib", "win", "libeay32.lib"),
                              buildPath("lib", "win", "glfw3.lib"),
-                             buildPath("lib", "win", "Awesomium.lib")];
+                             buildPath("lib", "win32", "Awesomium.lib")];
     builder.linker_options_win = [];
 
     builder.libraries_linux = ["ssl", "crypto", "awesomium-1.6.5"];
