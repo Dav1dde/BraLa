@@ -16,7 +16,7 @@ private {
     import std.zlib : ZlibException;
     import file = std.file;
     import std.string : format;
-    import std.exception : enforceEx;
+    import std.exception : enforceEx, collectException;
     import core.thread : thread_isMainThread;
     import core.time : dur;
 
@@ -166,7 +166,7 @@ class BraLa {
     }
 
     void start_game(string host, short port) {
-        snooper.snoop();
+        collectException(snooper.snoop());
         
         game = new BraLaGame(engine, session, config);
         game.start(host, port);
@@ -180,7 +180,11 @@ class BraLa {
 
     void start_ui() {
         window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_NORMAL);
-        scope(success) window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+        scope(success) {
+            if(!is_debugged) {
+                window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+            }
+        }
 
         string entry = "login.html";
 
@@ -236,12 +240,16 @@ int Main(string[] args) {
                        "body{font-size:12px}"); // custom css
 
     webcore.set_base_directory(config.get!Path("ui.path"));
-    
-    auto brala = new BraLa(config);
-    scope(exit) brala.shutdown();
 
     webcore.update();
-    webcore.shutdown();
+    
+    auto brala = new BraLa(config);
+
+    scope(exit) {
+        brala.shutdown();
+        webcore.update();
+        webcore.shutdown();
+    }
 
     return 0;
 }

@@ -4,6 +4,10 @@ private {
     import wonne.all;
 
     import std.signals;
+    import std.string : format;
+    import std.array : join;
+    import std.range : repeat;
+    import std.conv : to;
 
     import brala.main : BraLa;
     import brala.utils.ctfe : hasAttribute;
@@ -19,7 +23,6 @@ private struct SignalWrapper(Args...) {
 }
 
 private struct Callback {
-    size_t expects_arguments;
     string name;
 }
 
@@ -41,9 +44,10 @@ class UIApi {
     void init_callbacks() {
         foreach(member; __traits(allMembers, typeof(this))) {
             static if(__traits(compiles, hasAttribute!(mixin(member), Callback)) && hasAttribute!(mixin(member), Callback)) {
+                alias ParameterTypeTuple!(mixin(member)) Args;
+
                 static if(__traits(compiles, __traits(getAttributes, mixin(member))[0].name)) {
                     enum string n = __traits(getAttributes, mixin(member))[0].name;
-                    enum size_t expects_arguments = __traits(getAttributes, mixin(member))[0].expects_arguments;
 
                     static if(n.length) {
                         alias n name;
@@ -52,13 +56,31 @@ class UIApi {
                     }
                 } else {
                     alias member name;
-                    enum size_t expects_arguments = 0;
                 }
 
-                mixin(`callbacks["%s"].connect(&%s);`.xformat(name, member));
-                mixin(`callbacks["%s"].expects_arguments = %s;`.xformat(name, expects_arguments));
+                callbacks[name].connect(&(_wrapper!(mixin(member), member, Args)));
+                callbacks[name].expects_arguments = Args.length;
+
                 brala.ui.set_object_callback(api_name, name);
             }
+        }
+    }
+
+    private auto _wrapper(alias fun, string name, Args...)(JSArray array) {
+        Args new_args;
+
+        foreach(i, arg; new_args) {
+            new_args[i] = array[i].opCast!(typeof(arg))();
+        }
+
+        try {
+            return fun(new_args);
+        } catch(Exception e) {
+            string f = format("%s".repeat(Args.length).join(", "), new_args);
+            
+            debug stderr.writefln(`--- Exception during JS callback: "%s(%s)" ---`, name, f);
+            debug stderr.writeln(e.toString());
+            debug stderr.writefln(`--- End Exception during JS callback: "%s(%s)" ---`, name, f);
         }
     }
 
@@ -77,7 +99,12 @@ class UIApi {
     }
 
 
-    @Callback(3) void login(JSArray arguments) {
-        writefln("login called");
+    @Callback void login(string username, string password, bool offline) {
+        if(offline) {
+            brala.session.username = username;
+            brala.session.minecraft_username = username;
+        } else {
+            brala.session.login(username, password);
+        }
     }
 }
