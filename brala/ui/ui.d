@@ -81,6 +81,8 @@ class WebUI {
             webview.load_file(file);
         }
 
+        webview.focus();
+
         _running = true;
         while(_running) {
             WebUI.update_uis();
@@ -93,6 +95,8 @@ class WebUI {
             window.swap_buffers();
             glfwPollEvents();
         }
+
+        webview.unfocus();
     }
 
     void stop() {
