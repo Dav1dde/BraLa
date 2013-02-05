@@ -568,7 +568,6 @@ int main(string[] args) {
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
-    builder.add_scan_path(buildPath("src", "d", "std"));
     builder.add_scan_path(buildPath("src", "d", "wonne", "wonne"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
