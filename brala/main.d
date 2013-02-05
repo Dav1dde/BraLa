@@ -109,6 +109,7 @@ class BraLa {
         body {
             ui.shutdown();
             engine.shutdown();
+            snooper.stop();
         }
 
     void exit() {
@@ -232,15 +233,13 @@ int Main(string[] args) {
                        false, // disable win-message pump
                        "body{font-size:12px}"); // custom css
 
-    scope(exit) {
-        webcore.update();
-        webcore.shutdown();
-    }
-
     webcore.set_base_directory(config.get!Path("ui.path"));
     
     auto brala = new BraLa(config);
     scope(exit) brala.shutdown();
+
+    webcore.update();
+    webcore.shutdown();
 
     return 0;
 }

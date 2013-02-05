@@ -77,7 +77,7 @@ class UIApi {
     }
 
 
-    @Callback(2) void login(JSArray arguments) {
+    @Callback(3) void login(JSArray arguments) {
         writefln("login called");
     }
 }
