@@ -137,9 +137,9 @@ class Config {
         return default_;
     }
 
-    T get(T)(string key) if(!isArray!T || is(T == string)) {
+    T get(T, bool recursive = true)(string key) if(!isArray!T || is(T == string)) {
         if(auto value = key in db) {
-            T ret = deserializer!T((*value).expandVars(&get_string));
+            T ret = deserializer!T((*value).expandVars!(false, recursive)(&get_string));
             
             return ret;
         }
@@ -147,14 +147,14 @@ class Config {
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
     }
 
-    T get(T)(string key) if(isArray!T && !is(T == string)) {
+    T get(T, bool recursive = true)(string key) if(isArray!T && !is(T == string)) {
         if(auto value = key in db_arrays) {
             T ret;
             ret.length = value.length;
 
             foreach(i, v; (*value)) {
                 try {
-                    ret[i] = deserializer!(ElementEncodingType!T)(v.expandVars(&get_string));
+                    ret[i] = deserializer!(ElementEncodingType!T)(v.expandVars!(false, recursive)(&get_string));
                 } catch(ConvException e) {
                     ret[i] = (ElementEncodingType!T).init;
                 }               

@@ -94,8 +94,8 @@ class BraLa {
         this.ui_api = new UIApi("api", this);
 
         if(config.has_key!string("connection.host")) {
-            session.login(config.get!string("account.username"),
-                          config.get!string("account.password"));
+            session.login(config.get!(string, false)("account.username"),
+                          config.get!(string, false)("account.password"));
 
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));
