@@ -14,6 +14,7 @@ private {
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
 
+    import brala.network.session : Session;
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
@@ -55,7 +56,7 @@ class BraLaGame {
 
     size_t tessellation_threads = 3;
     
-    this(BraLaEngine engine, Config config) {
+    this(BraLaEngine engine, Session session, Config config) {
         this.config = config;
         this.tessellation_threads = config.get!int("brala.tessellation_threads");
     
@@ -63,9 +64,7 @@ class BraLaGame {
         callback_queue = new Queue!CallBack();
 
         this.engine = engine;
-        connection = new ThreadedConnection(config.get!string("account.username"),
-                                            config.get!string("account.password"),
-                                            !config.get!bool("brala.no_snoop"));
+        connection = new ThreadedConnection(session);
         connection.callback = &dispatch_packets;
 
         character = new Character(0);

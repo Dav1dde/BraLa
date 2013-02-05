@@ -50,9 +50,6 @@ class Connection {
     
     void delegate(ubyte, void*) callback;
     
-    /+immutable+/ string username;
-    /+immutable+/ string password;
-    /+immutable+/ string minecraft_username;
     /+immutable+/ string hostname;
 
     protected Timer snoop_timer;
@@ -62,33 +59,8 @@ class Connection {
     
     immutable byte protocol_version = 51;
     
-    this(string username, string password, bool snoop) {
-        session = new Session(username, password);
-
-        try {
-            session.login();
-            this.minecraft_username = session.minecraft_username;
-        } catch(SessionError e) {
-            debug stderr.writefln("%s", e.msg);
-            this.minecraft_username = username;
-        }
-
-        this.username = username;
-        this.password = password;
-        this.snoop = snoop;
-
-        if(snoop) {
-            void timed_snoop() {
-                snoop_timer = new Timer(dur!"minutes"(10), delegate void() {
-                    session.snoop();
-                    timed_snoop();
-                });
-                snoop_timer.start();
-            }
-
-            timed_snoop();
-        }
-        
+    this(Session session) {
+        this.session = session;        
     }
     
     void connect(Address to, string hostname) {
@@ -121,13 +93,6 @@ class Connection {
         
         _connected = false;
         _logged_in = false;
-
-        if(snoop) {
-            debug stderr.writefln("Canceling snoop-timer and joining it");
-            snoop_timer.cancel();
-            snoop_timer.join(false);
-        }
-
     }
 
     void disconnect(string message = "") {
@@ -149,10 +114,10 @@ class Connection {
     
     void login() {
         auto handshake = new c.Handshake(protocol_version,
-                                         minecraft_username,
+                                         session.minecraft_username,
                                          hostname,
                                          to!int(connected_to.toPortString()));
-                                
+        
         handshake.send(endianstream);
     }
     
@@ -191,7 +156,7 @@ class Connection {
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
 
         if(packet.server_id != "-") {
-            enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ username ~ `". `);
+            enforceEx!SessionError(session.logged_in, `Unable to login as user "` ~ session.minecraft_username ~ `". `);
             session.join(packet.server_id, shared_secret, packet.public_key.arr);
         }
 
@@ -230,8 +195,8 @@ class ThreadedConnection : Connection {
     @property Thread thread() { return _thread; }    
     protected Queue!IPacket queue;
     
-    this(string username, string password, bool snoop) {
-        super(username, password, snoop);
+    this(Session session) {
+        super(session);
 
         queue = new Queue!IPacket();
     }

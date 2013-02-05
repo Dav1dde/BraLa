@@ -18,11 +18,12 @@ private {
     import std.string : format;
     import std.exception : enforceEx;
     import core.thread : thread_isMainThread;
+    import core.time : dur;
 
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.config : initialize_config;
-    import brala.network.session : minecraft_folder;
+    import brala.network.session : Session, DelayedSnooper, minecraft_folder;
     import brala.network.packets.types : IPacket;
     import brala.ui.ui : WebUI;
     import brala.ui.api : UIApi;
@@ -59,7 +60,10 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 class BraLa {
     Config config;
     Window window;
-    
+
+    Session session;
+    DelayedSnooper snooper;
+   
     BraLaEngine engine;
     BraLaGame game;
 
@@ -72,6 +76,12 @@ class BraLa {
 
     this(Config config) {
         this.config = config;
+        this.session = new Session();
+        this.snooper = new DelayedSnooper();
+        if(!config.get!bool("brala.no_snoop")) {
+            snooper.start(dur!"minutes"(10));
+        }
+        
         this.window = new Window();
 
         initialize_context();
@@ -84,6 +94,9 @@ class BraLa {
         this.ui_api = new UIApi("api", this);
 
         if(config.has_key!string("connection.host")) {
+            session.login(config.get!string("account.username"),
+                          config.get!string("account.password"));
+
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));
         } else {
@@ -152,7 +165,7 @@ class BraLa {
     }
 
     void start_game(string host, short port) {
-        game = new BraLaGame(engine, config);
+        game = new BraLaGame(engine, session, config);
         game.start(host, port);
     }
 
