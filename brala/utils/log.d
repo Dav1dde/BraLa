@@ -5,6 +5,7 @@ private {
     import std.range : retro;
     import std.stdio : File, stdout, stderr;
     import std.exception : enforceEx;
+    import std.datetime : Clock;
 
     import brala.utils.exception : LoggerException;
 }
@@ -117,6 +118,8 @@ class FileWriter : IWriter {
 
     override void log(LogLevel level, Args...)(string name, auto ref Args args) {
         enum slevel = cloglevel2string!(level);
+
+        auto time = Clock.currTime().toISOExtString();
 
         file.writef("[%s] %s: %s: ", time, slevel, name);
         file.writefln(args);
