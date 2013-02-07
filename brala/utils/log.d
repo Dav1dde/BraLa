@@ -93,6 +93,15 @@ class MultiWriter : IWriter {
         this.children = writer;
     }
 
+    this(bool bubbles, IWriter[] writer...) {
+        this(writer);
+        _bubbles = bubbles;
+    }
+
+    static opCall(Args...)(Args args) {
+        return new MultiWriter(args);
+    }
+
     override void log(LogLevel level, Args...)(string name, auto ref Args args) {
         foreach(child; children) {
             child.log!(level)(name, args);
@@ -101,19 +110,36 @@ class MultiWriter : IWriter {
 }
 
 class FileWriter : IWriter {
+    protected static File[string] _files;
+    
     protected File file;
 
     mixin Bubbler!();
 
-    this(File file) {
+    this(File file, bool bubbles = false) {
         enforceEx!LoggerException(file.isOpen, "file not open");
         file.rawWrite(""); // check if we can write to file
         
         this.file = file;
+        _bubbles = bubbles;
     }
 
-    this(string path) {
+    this(string path, bool bubbles = false) {
         file = File(path, "w");
+        _bubbles = bubbles;
+        _files[path] = file;
+    }
+
+    static FileWriter opCall(string name, bool bubbles = false) {
+        if(auto f = name in _files) {
+            return new FileWriter(*f, bubbles);
+        }
+
+        return new FileWriter(name, bubbles);
+    }
+
+    static FileWriter opCall(File file, bool bubbles = false) {
+        return new FileWriter(file, bubbles);
     }
 
     override void log(LogLevel level, Args...)(string name, auto ref Args args) {
@@ -127,13 +153,32 @@ class FileWriter : IWriter {
     }
 }
 
-const __gshared FileWriter StdoutWriter;
-const __gshared FileWriter StderrWriter;
+private const __gshared FileWriter _StdoutWriter;
+private const __gshared FileWriter _StderrWriter;
 
 static this() {
-    StdoutWriter = new FileWriter(stdout);
-    StderrWriter = new FileWriter(stderr);
+    _StdoutWriter = new FileWriter(stdout);
+    _StderrWriter = new FileWriter(stderr);
 }
+
+private class _OutWriter(string fname) : IWriter {
+    mixin Bubbler!();
+
+    this(bool bubbles = false) {
+        _bubbles = bubbles;
+    }
+
+    static typeof(this) opCall(bool bubbles = false) {
+        return new typeof(this)(bubbles);
+    }
+
+    override void log(LogLevel level, Args...)(string name, auto ref Args args) {
+        mixin(fname).log!(level)(name, args);
+    }
+}
+
+alias _OutWriter!("_StdoutWriter") StdoutWriter;
+alias _OutWriter!("_StderrWriter") StderrWriter;
 
 
 class Logger {
