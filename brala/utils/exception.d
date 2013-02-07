@@ -60,3 +60,9 @@ class InvalidValue : ConfigException {
         super(s, f, l);
     }
 }
+
+class LoggerException : Exception {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
