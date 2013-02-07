@@ -147,9 +147,9 @@ class FileWriter : IWriter {
     override void log(LogLevel level, string name, string message) {
         string slevel = loglevel2string(level);
 
-        auto time = Clock.currTime().toISOExtString();
+        auto time = Clock.currTime().toString();
 
-        file.writefln("[%s] %s: %s: %s", time, slevel, name, message);
+        file.writefln("[%-28s] %s: %s: %s", time, slevel, name, message);
         file.flush();
     }
 }
