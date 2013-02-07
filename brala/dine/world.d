@@ -127,10 +127,6 @@ class World {
     
     ~this() {
         remove_all_chunks();
-
-        foreach(t; tessellation_threads) {
-            clear(t);
-        }
     }
    
     // when a chunk is passed to this method, the world will take care of it's memory

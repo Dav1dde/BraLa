@@ -20,7 +20,6 @@ class BraLaLogger : Logger {
             new StderrWriter(),
             new FileWriter(logfile)
         );
-
     }
 }
 
