@@ -12,6 +12,8 @@ private {
     import std.typecons : Tuple;
     import core.time : dur;
 
+    import brala.log : logger = world_logger;
+    import brala.utils.log;
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
@@ -22,8 +24,6 @@ private {
     import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
-
-    debug import std.stdio : stderr;
 }
 
 private enum Block AIR_BLOCK = Block(0);
@@ -178,7 +178,7 @@ class World {
     }
 
     void shutdown() {
-        debug stderr.writefln("Sending stop to all tessellation threads");
+        logger.log!Info("Sending stop to all tessellation threads");
         foreach(t; tessellation_threads) {
             t.stop();
         }
@@ -186,21 +186,21 @@ class World {
         // threads wait on the buffer until it gets available,
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
-        debug stderr.writefln("Marking all buffers as available");
+        logger.log!Info("Marking all buffers as available");
         foreach(tess_out; output) {
             tess_out.buffer.available = true;
         }
 
         foreach(t; tessellation_threads) {
             if(t.isRunning) {
-                debug stderr.writefln(`Waiting on thread: "%s"`, t.name);
+                logger.log!Info(`Waiting on thread: "%s"`, t.name);
                 t.join(false);
             } else {
-                debug stderr.writefln(`Thread "%s" already terminated`, t.name);
+                logger.log!Info(`Thread "%s" already terminated`, t.name);
             }
         }
 
-        debug stderr.writefln("Removing all chunks");
+        logger.log!Info("Removing all chunks");
         remove_all_chunks();
     }
     
@@ -496,7 +496,7 @@ class TessellationThread : VerboseThread {
     }
 
     void stop() {
-        debug stderr.writefln(`Setting stop for: "%s"`, this.name);
+        logger.log!Info(`Setting stop for: "%s"`, this.name);
         stop_event.set();
     }
             
@@ -515,7 +515,7 @@ class TessellationThread : VerboseThread {
 
         with(chunk_data) {
             if(chunk.tessellated) {
-                debug stderr.writefln("Chunk is already tessellated! %s", position);
+                logger.log!Debug("Chunk is already tessellated! %s", position);
                 return;
             } else {
                 buffer.available = false;

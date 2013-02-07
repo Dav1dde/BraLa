@@ -17,6 +17,8 @@ private {
     import std.typecons : Tuple, tuple;
     import std.system : os;
 
+    import brala.log : logger = session_logger;
+    import brala.utils.log;
     import brala.exception : SessionError;
     import brala.network.crypto : decode_public, PBEWithMD5AndDES;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
@@ -25,13 +27,10 @@ private {
 
     import arsd.http : HttpException, post, get;
     
-    debug import std.stdio : stderr, writefln;
-
     version(Windows) {
         import std.process : getenv;
     }
 }
-
 
 class Session {
     static const int LAUNCHER_VERSION = 1337;
@@ -135,14 +134,12 @@ class Snooper {
     void snoop(string version_, string os_name, string os_version, string os_arch,
                string memory_total, string memory_max, string java_version,
                string opengl_version, string opengl_vendor) {
-        debug {
-            writefln(`Snooping: version: "%s", os_name: "%s", os_version: "%s", `
-                     `os_architecture: "%s", memory_total: "%s", memory_max: "%s", `
-                     `java_version: "%s", opengl_version: "%s", opengl_vendor: "%s"`,
-                     version_, os_name, os_version,
-                     os_arch, memory_total, memory_max,
-                     java_version, opengl_version, opengl_vendor);
-        }
+        logger.log!Info(`Snooping: version: "%s", os_name: "%s", os_version: "%s", `
+                        `os_architecture: "%s", memory_total: "%s", memory_max: "%s", `
+                        `java_version: "%s", opengl_version: "%s", opengl_vendor: "%s"`,
+                        version_, os_name, os_version,
+                        os_arch, memory_total, memory_max,
+                        java_version, opengl_version, opengl_vendor);
 
         try {
             SNOOP_URL.post(["version": version_,
@@ -155,7 +152,7 @@ class Snooper {
                             "opengl_version": opengl_version,
                             "opengl_vendor": opengl_vendor]);
         } catch(HttpException e) {
-            debug stderr.writefln(`Unable to snoop: "%s"`, e.msg);
+            logger.log!Info(`Unable to snoop: "%s"`, e.msg);
         }
     }
 
@@ -198,7 +195,7 @@ class DelayedSnooper : Snooper {
     }
 
     void stop() {
-        debug stderr.writefln("Stopping DelayedSnooper and joining it");
+        logger.log!Info("Stopping DelayedSnooper and joining it");
         timer.cancel();
         timer.join(false);
         timer = null;

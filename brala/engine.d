@@ -11,14 +11,13 @@ private {
     
     import gl3n.linalg;
     import gl3n.frustum : Frustum;
-    
+
+    import brala.log : logger = engine_logger;
+    import brala.utils.log;
     import brala.timer : Timer, TickDuration;
     import brala.resmgr : ResourceManager;
     import brala.utils.config : Config;
-    
-    debug import std.stdio : stderr, writefln;
 }
-
 
 class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
@@ -90,7 +89,7 @@ class BraLaEngine {
     }
 
     void shutdown() {
-        debug stderr.writefln("Removing Samplers from Engine");
+        logger.log!Info("Removing Samplers from Engine");
         foreach(sampler; samplers.values) {
             sampler.remove();
         }
@@ -121,7 +120,7 @@ class BraLaEngine {
             debug {
                 TickDuration t = timer.get_time();
                 if((t-lastfps).to!("seconds", float) > 0.5) {
-                    writefln("Frame-Time: %s ms", (t-last).to!("msecs", float));
+                    logger.log!Info("Frame-Time: %s ms", (t-last).to!("msecs", float));
                     lastfps = t;
                 }
             }
@@ -133,7 +132,7 @@ class BraLaEngine {
         }
         
         TickDuration ts = timer.stop();
-        debug writefln("Mainloop ran %f seconds", ts.to!("seconds", float));
+        logger.log!Info("Mainloop ran %f seconds", ts.to!("seconds", float));
     }
     
     void use_shader(Shader shader) {

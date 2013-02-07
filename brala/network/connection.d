@@ -34,7 +34,6 @@ private {
     debug import std.stdio : stderr;
 }
 
-
 class Connection {
     TcpSocket socket;
     SocketStream socketstream;

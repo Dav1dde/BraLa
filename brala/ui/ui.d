@@ -8,11 +8,10 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
 
+    import brala.log : logger = ui_logger;
+    import brala.utils.log;
     import brala.utils.config : Config;
-
-    debug import std.stdio : writefln;
 }
-
 
 class WebUI {
     protected bool _is_connected;
@@ -50,13 +49,13 @@ class WebUI {
     }
 
     void shutdown() {
-        debug writefln("Shutting down WebUI");
+        logger.log!Info("Shutting down WebUI");
         renderer.remove();
         webview.destroy();
     }
 
     void log(Webview v, string message, int line, string source) {
-        writefln("JS Console Message: %s\t\t%s:%s", message, source, line);
+        logger.log!Info("JS Console Message: %s\t\t%s:%s", message, source, line);
     }
 
     void connect() {

@@ -9,13 +9,14 @@ private {
     import std.range : repeat;
     import std.conv : to;
 
+    import brala.log : logger = api_logger;
+    import brala.utils.log;
     import brala.main : BraLa;
     import brala.utils.ctfe : hasAttribute;
     import brala.utils.defaultaa : DefaultAA;
 
-    debug import std.stdio : stderr, writefln;
+    debug import std.stdio : stderr;
 }
-
 
 private struct SignalWrapper(Args...) {
     size_t expects_arguments;
@@ -92,15 +93,15 @@ class UIApi {
     }
 
     void dispatch_callback(Webview webview, string object_name, string callback_name, JSArray arguments) {
-        debug writefln("Got JS callback: %s.%s with %s arguments", object_name, callback_name, arguments.size);
+        logger.log!Debug("Got JS callback: %s.%s with %s arguments", object_name, callback_name, arguments.size);
 
         if(object_name == api_name) {
             if(callbacks[callback_name].expects_arguments == arguments.size) {
                 callbacks[callback_name].emit(arguments);
             } else {
-                debug stderr.writefln("Invalid api call: %s.%s, %s arguments expected, got %s",
-                                       object_name, callback_name, callbacks[callback_name].expects_arguments,
-                                       arguments.size);
+                logger.log!Debug("Invalid api call: %s.%s, %s arguments expected, got %s",
+                                  object_name, callback_name, callbacks[callback_name].expects_arguments,
+                                  arguments.size);
             }
         }
     }

@@ -13,13 +13,12 @@ private {
     
     import glamour.shader : Shader;
     import glamour.texture : ITexture, Texture2D;
-    
-    import brala.utils.image : Image;
-    import brala.exception : ResmgrError;
-    
-    debug import std.stdio : stderr, writefln;
-}
 
+    import brala.log : logger = resmgr_logger;
+    import brala.utils.log;
+    import brala.utils.image : Image;
+    import brala.exception : ResmgrError;    
+}
 
 Image load_image(ResourceManager rsmg, string id, string filename) {
     Image img = Image.from_file(filename);
@@ -102,24 +101,24 @@ class ResourceManager {
     void shutdown()
         in { assert(thread_isMainThread(), "ResourceManager.shutdown not called from main thread"); }
         body {
-            debug stderr.writefln("Removing Shaders from ResourceManager");
+            logger.log!Info("Removing Shaders from ResourceManager");
             foreach(shader; shaders.values) {
                 shader.remove();
             }
             shaders = shaders.init;
 
-            debug stderr.writefln("Removing Textures from ResourceManager");
+            logger.log!Info("Removing Textures from ResourceManager");
             foreach(texture; textures.values) {
                 texture.remove();
             }
             textures = textures.init;
 
-            debug stderr.writefln("Removing Images from ResourceManager");
+            logger.log!Info("Removing Images from ResourceManager");
             images = images.init;
         }
   
     protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
-        debug writefln("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
+        logger.log!Info("Requesting resource \"" ~ filename ~ "\" as \"" ~ id ~ "\", type: \"" ~ T.stringof ~ "\".");
         
         if(!filename.exists()) {
             throw new ResmgrError("Can not load file \"" ~ filename ~ "\", it does not exist!");
@@ -230,7 +229,7 @@ class ResourceManager {
     }
     
     protected void done_loading(T)(T res, string id) if(is_loadable!T){
-        debug writefln("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
+        logger.log!Info("Loaded resource \"" ~ id ~ "\" with type: \"" ~ T.stringof ~ "\".");
         
         static if(is(T : Image)) images[id] = res;
         else static if(is(T : Shader)) shaders[id] = res;

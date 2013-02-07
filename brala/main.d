@@ -20,6 +20,8 @@ private {
     import core.thread : thread_isMainThread;
     import core.time : dur;
 
+    import brala.log : logger = main_logger;
+    import brala.utils.log;
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.config : initialize_config;
@@ -34,13 +36,13 @@ private {
     import brala.utils.config : Config, Path;
     import brala.utils.debugger : is_debugged;
 
-    import std.stdio : stderr, writefln;
+    import std.stdio : writefln;
 }
 
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {
-        stderr.writefln("GLFW ERROR(%d): %s", errno, error);
+        logger.log!Warn("GLFW ERROR(%d): %s", errno, error);
         last_errno = errno;
     }
 }
@@ -50,7 +52,7 @@ void glamour_error_cb(GLenum errno, string func, string args) {
     static string last_func = "";
 
     if(last_errno != errno && last_func != func) {
-        stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`, func, args, gl_error_string(errno));
+        logger.log!Warn(`OpenGL function "%s(%s)" failed: "%s."`, func, args, gl_error_string(errno));
         last_errno = errno;
         last_func = func;
     }
@@ -127,7 +129,7 @@ class BraLa {
                                                           config.get!int("window.height"),
                                                           "BraLa - Minecraft on a lower level");
         
-        debug writefln("Initialized Window with context version: %s.%s", cv.major, cv.minor);
+        logger.log!Info("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
         window.make_context_current();
 
@@ -151,7 +153,7 @@ class BraLa {
                 engine.resmgr.remove!Image("terrain");
                 engine.resmgr.add("terrain", mc_terrain);
             } catch(ZlibException e) {
-                stderr.writefln(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
+                logger.log!Warn(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
             }
         }
 

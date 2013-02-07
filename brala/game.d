@@ -14,6 +14,8 @@ private {
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
 
+    import brala.log : logger = game_logger;
+    import brala.utils.log;
     import brala.network.session : Session;
     import brala.network.connection : Connection, ThreadedConnection;
     import brala.network.packets.types : IPacket;
@@ -31,7 +33,6 @@ private {
     
     debug import std.stdio;
 }
-
 
 class BraLaGame {
     protected Object _world_lock;
@@ -105,16 +106,16 @@ class BraLaGame {
 
     bool poll(TickDuration delta_t) {
         if(!connection.thread.isRunning) {
-            debug stderr.writefln("Connection thread died");
+            logger.log!Info("Connection thread died");
             _quit = true;
         }
         
         if(_quit) {           
             if(connection.connected && connection.thread.isRunning) {
                 connection.disconnect("Garbage collector went crazy, again");
-                debug stderr.writefln("Waiting for connection thread to shutdown");
+                logger.log!Info("Waiting for connection thread to shutdown");
                 connection.thread.join(false);
-                debug stderr.writefln("Connection is done");
+                logger.log!Info("Connection is done");
             }
             
             _current_world.shutdown();
@@ -213,11 +214,11 @@ class BraLaGame {
     }
     
     void on_packet(T : s.Handshake)(T packet) {
-        debug writefln("%s", packet);
+        logger.log!Info("%s", packet);
     }
     
     void on_packet(T : s.Login)(T packet) {
-        debug writefln("%s", packet);
+        logger.log!Info("%s", packet);
         
         synchronized(_world_lock) {
             if(_current_world !is null) {
@@ -236,8 +237,6 @@ class BraLaGame {
     }
     
     void on_packet(T : s.SpawnPosition)(T packet) {
-        debug writefln("%s", packet);
-        
         synchronized(_world_lock) {
             if(_current_world !is null) {
                 _current_world.spawn = vec3i(packet.x, packet.y, packet.z);
@@ -266,7 +265,7 @@ class BraLaGame {
     }
 
     void on_packet(T : s.MapChunkBulk)(T packet) {
-        debug writefln("%s", packet);
+        logger.log!Info("%d chunks incoming", packet.chunk_bulk.chunks.length);
 
         synchronized(_world_lock) {
             foreach(cc; packet.chunk_bulk.chunks) {
@@ -282,7 +281,6 @@ class BraLaGame {
     }
 
     void on_packet(T : s.BlockChange)(T packet) {
-        debug writefln("%s", packet);
         synchronized(_world_lock) _current_world.set_block(vec3i(packet.x, packet.y, packet.z), Block(packet.type, packet.metadata));
     }
 
@@ -302,8 +300,6 @@ class BraLaGame {
     void on_packet(T : s.PlayerPositionLook)(T packet)
         in { assert(!isNaN(packet.x) && !isNaN(packet.y) && !isNaN(packet.z)); }
         body {
-            debug writefln("%s", packet);
-            
             packet.yaw = isNaN(packet.yaw) ? 0:radians(packet.yaw);
             packet.pitch = isNaN(packet.pitch) ? 0:radians(packet.pitch);
             
@@ -316,7 +312,7 @@ class BraLaGame {
         }
 
     void on_packet(T : s.Disconnect)(T packet) {
-        debug writefln("%s", packet);
+        logger.log!Info("%s", packet);
         quit();
     }
 
