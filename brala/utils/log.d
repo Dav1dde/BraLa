@@ -52,7 +52,7 @@ unittest {
 }
 
 string loglevel2string(LogLevel inp) {
-    enum levels = ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"];
+    static immutable string[] levels = ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"];
     return levels[inp];
 }
 
@@ -62,7 +62,7 @@ template cloglevel2string(LogLevel inp) {
 
 
 interface IWriter {
-    void log(LogLevel level, Args...)(string name, auto ref Args args);
+    void log(LogLevel level, string name, string message);
     @property bool bubbles();
     @property void bubbles(bool);
 }
@@ -75,7 +75,7 @@ mixin template Bubbler() {
 
 
 class NullWriter : IWriter {
-    override void log(LogLevel level, Args...)(string name, auto ref Args args) {}
+    override void log(LogLevel level, string name, string message) {}
     override @property bool bubbles() { return false; }
     override @property void bubbles(bool b) {};
 }
@@ -102,9 +102,11 @@ class MultiWriter : IWriter {
         return new MultiWriter(args);
     }
 
-    override void log(LogLevel level, Args...)(string name, auto ref Args args) {
+    override void log(LogLevel level, string name, string message) {
         foreach(child; children) {
-            child.log!(level)(name, args);
+            if(child !is null) {
+                child.log(level, name, message);
+            }
         }
     }
 }
@@ -142,19 +144,18 @@ class FileWriter : IWriter {
         return new FileWriter(file, bubbles);
     }
 
-    override void log(LogLevel level, Args...)(string name, auto ref Args args) {
-        enum slevel = cloglevel2string!(level);
+    override void log(LogLevel level, string name, string message) {
+        string slevel = loglevel2string(level);
 
         auto time = Clock.currTime().toISOExtString();
 
-        file.writef("[%s] %s: %s: ", time, slevel, name);
-        file.writefln(args);
+        file.writefln("[%s] %s: %s: %s", time, slevel, name, message);
         file.flush();
     }
 }
 
-private const __gshared FileWriter _StdoutWriter;
-private const __gshared FileWriter _StderrWriter;
+private __gshared FileWriter _StdoutWriter;
+private __gshared FileWriter _StderrWriter;
 
 static this() {
     _StdoutWriter = new FileWriter(stdout);
@@ -172,8 +173,8 @@ private class _OutWriter(string fname) : IWriter {
         return new typeof(this)(bubbles);
     }
 
-    override void log(LogLevel level, Args...)(string name, auto ref Args args) {
-        mixin(fname).log!(level)(name, args);
+    override void log(LogLevel level, string name, string message) {
+        mixin(fname).log(level, name, message);
     }
 }
 
@@ -182,16 +183,14 @@ alias _OutWriter!("_StderrWriter") StderrWriter;
 
 
 class Logger {
-    enum DEFAULT_LOGLEVEL = LogLevel.Debug;
-    
     protected static Logger[string] _logger;
     
     immutable string name;
 
     IWriter[LogLevel.max+1] writer;
-    LogLevel loglevel = DEFAULT_LOGLEVEL;
+    LogLevel loglevel = LogLevel.Debug;
 
-    this(string name, LogLevel loglevel = DEFAULT_LOGLEVEL) {
+    this(string name, LogLevel loglevel = LogLevel.Debug) {
         enforceEx!LoggerException(name !in _logger, `There is already a logger named "%s"`.format(name));
         
         this.name = name;
@@ -206,7 +205,7 @@ class Logger {
         return _logger[name];
     }
 
-    static Logger if_exists(string name, LogLevel loglevel = DEFAULT_LOGLEVEL) {
+    static Logger if_exists(string name, LogLevel loglevel = LogLevel.Debug) {
         if(auto l = name in _logger) {
             return *l;
         }
@@ -222,15 +221,17 @@ class Logger {
         if(level < this.loglevel) {
             return;
         }
-        
-        IWriter[] writer = this.writer[this.loglevel..(level+1)];
 
-        foreach(w; retro(writer)) {
+        IWriter[] wr = this.writer[this.loglevel..$];
+        
+        string message = format(args);
+
+        foreach(w; wr) {
             if(w is null) {
                 continue;
             }
             
-            w.log!(level)(name, args);
+            w.log(level, name, message);
 
             if(w.bubbles) {
                 continue;

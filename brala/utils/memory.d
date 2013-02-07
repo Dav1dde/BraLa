@@ -9,10 +9,12 @@ private {
     import std.stdio : writefln;
 
     import brala.exception : AllocationError;
+    import brala.log;
 
     debug import std.stdio : writef;
 }
 
+mixin MakeBraLaLogger!("Memory");
 
 struct MemoryCounter {
     string name;
@@ -55,11 +57,9 @@ struct MemoryCounter {
 
 
 void* malloc(size_t size, string file=__FILE__, uint line=__LINE__) {
-    debug writef("(m)allocating %d bytes. ", size);
-
     void* ptr = clib.malloc(size);
-
-    debug writefln("Pointer: 0x%08x. %s:%s", ptr, file, line);
+    
+    logger.log!("DEBUG")("(m)allocated %d bytes. Pointer: 0x%08x. %s:%s", size, ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to allocate memory with malloc(%d) (out of memory?).", size));
@@ -69,11 +69,9 @@ void* malloc(size_t size, string file=__FILE__, uint line=__LINE__) {
 }
 
 void* calloc(size_t num, size_t size, string file=__FILE__, uint line=__LINE__) {
-    debug writef("(c)allocating %d times %d bytes. ", num, size);
-
     void* ptr = clib.calloc(num, size);
 
-    debug writefln("Pointer: 0x%08x. %s:%s", ptr, file, line);
+    logger.log!("DEBUG")("(c)allocated %d times %d bytes. Pointer: 0x%08x. %s:%s", num, size, ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to allocate memory with calloc(%d, %d) (out of memory?).", num, size));
@@ -83,11 +81,9 @@ void* calloc(size_t num, size_t size, string file=__FILE__, uint line=__LINE__) 
 }
 
 void* realloc(void* ptr, size_t size, string file=__FILE__, uint line=__LINE__) {
-    debug writef("(re)allocating pointer 0x%08x to %d bytes. ", ptr, size);
-
     void* ret_ptr = clib.realloc(ptr, size);
 
-    debug writefln("Pointer: 0x%08x. %s:%s", ret_ptr, file, line);
+    logger.log!("DEBUG")("(re)allocated pointer 0x%08x to %d bytes. Pointer: 0x%08x. %s:%s", ptr, size, ret_ptr, file, line);
 
     if(ptr is null) {
         throw new AllocationError(format("Unable to reallocate memory (realloc(ptr, %d)) (out of memory?).", size));
@@ -97,7 +93,7 @@ void* realloc(void* ptr, size_t size, string file=__FILE__, uint line=__LINE__) 
 }
 
 void free(void* ptr, string file=__FILE__, uint line=__LINE__) {
-    debug writefln("Freeing 0x%08x. %s:%s", ptr, file, line);
+    logger.log!("DEBUG")("Freeing 0x%08x. %s:%s", ptr, file, line);
 
     clib.free(ptr);
 }
