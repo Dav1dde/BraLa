@@ -1,11 +1,12 @@
 module brala.utils.log;
 
 private {
-    import std.string : toLower, format;
+    import std.string : format, icmp;
     import std.range : retro;
     import std.stdio : File, stdout, stderr;
     import std.exception : enforceEx;
     import std.datetime : Clock;
+    import core.exception : InvalidMemoryOperationError;
 
     import brala.utils.exception : LoggerException;
 }
@@ -27,16 +28,21 @@ alias LogLevel.Fatal Fatal;
 
 
 LogLevel string2loglevel(string inp) {
-    string ll = inp.toLower();
 
-    switch(ll) {
-        case "debug": return LogLevel.Debug;
-        case "info": return LogLevel.Info;
-        case "warn": return LogLevel.Warn;
-        case "error": return LogLevel.Error;
-        case "fatal": return LogLevel.Fatal;
-        default: throw new LoggerException(`"%s" is not a valid loglevel`.format(inp));
+
+    if(inp.icmp("debug") == 0) {
+        return LogLevel.Debug;
+    } else if(inp.icmp("info") == 0) {
+        return LogLevel.Info;
+    } else if(inp.icmp("warn") == 0) {
+        return LogLevel.Warn;
+    } else if(inp.icmp("error") == 0) {
+        return LogLevel.Error;
+    } else if(inp.icmp("fatal") == 0) {
+        return LogLevel.Fatal;
     }
+
+    assert(false);
 }
 
 template cstring2loglevel(string l) {
@@ -97,11 +103,7 @@ class MultiWriter : IWriter {
         this(writer);
         _bubbles = bubbles;
     }
-
-    static opCall(Args...)(Args args) {
-        return new MultiWriter(args);
-    }
-
+    
     override void log(LogLevel level, string name, string message) {
         foreach(child; children) {
             if(child !is null) {
@@ -112,8 +114,6 @@ class MultiWriter : IWriter {
 }
 
 class FileWriter : IWriter {
-    protected static File[string] _files;
-    
     protected File file;
 
     mixin Bubbler!();
@@ -129,19 +129,6 @@ class FileWriter : IWriter {
     this(string path, bool bubbles = false) {
         file = File(path, "w");
         _bubbles = bubbles;
-        _files[path] = file;
-    }
-
-    static FileWriter opCall(string name, bool bubbles = false) {
-        if(auto f = name in _files) {
-            return new FileWriter(*f, bubbles);
-        }
-
-        return new FileWriter(name, bubbles);
-    }
-
-    static FileWriter opCall(File file, bool bubbles = false) {
-        return new FileWriter(file, bubbles);
     }
 
     override void log(LogLevel level, string name, string message) {
@@ -169,10 +156,6 @@ private class _OutWriter(string fname) : IWriter {
 
     this(bool bubbles = false) {
         _bubbles = bubbles;
-    }
-
-    static typeof(this) opCall(bool bubbles = false) {
-        return new typeof(this)(bubbles);
     }
 
     override void log(LogLevel level, string name, string message) {
@@ -226,13 +209,25 @@ class Logger {
 
         IWriter[] wr = this.writer[this.loglevel..$];
         
-        string message = format(args);
+        string message;
+        try {
+            // format allocates, when runtime is shutting down or gc is running
+            // this throws an InvalidMemoryOperationError
+            message = format(args);
+        } catch(InvalidMemoryOperationError) {
+            // there is now way to detect if the gc is "running"
+            // this is the case when a dtor is called and the runtime
+            // is shutting down.
+            stderr.writef("NOT LOGGED: ");
+            stderr.writefln(args);
+            return;
+        }
 
         foreach(w; wr) {
             if(w is null) {
                 continue;
             }
-            
+
             w.log(level, name, message);
 
             if(w.bubbles) {

@@ -16,7 +16,7 @@ class BraLaLogger : Logger {
         string logfile = buildPath(exedir, "brala.log");
         
         this["INFO"] = new StdoutWriter(false);
-        this["FATAL"] = MultiWriter(false,
+        this["WARN"] = new MultiWriter(false,
             new StderrWriter(),
             new FileWriter(logfile)
         );
