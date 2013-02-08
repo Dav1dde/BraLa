@@ -187,13 +187,15 @@ class World {
             tess_out.buffer.available = true;
         }
 
-        foreach(t; tessellation_threads) {
+        foreach(ref t; tessellation_threads) {
             if(t.isRunning) {
                 logger.log!Info(`Waiting on thread: "%s"`, t.name);
                 t.join(false);
             } else {
                 logger.log!Info(`Thread "%s" already terminated`, t.name);
             }
+
+            destroy(t);
         }
 
         logger.log!Info("Removing all chunks");

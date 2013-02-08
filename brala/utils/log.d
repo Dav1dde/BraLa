@@ -1,12 +1,14 @@
 module brala.utils.log;
 
 private {
-    import std.string : format, icmp;
+    import std.string : sformat, format, icmp;
     import std.range : retro;
     import std.stdio : File, stdout, stderr;
     import std.exception : enforceEx;
     import std.datetime : Clock;
     import core.exception : InvalidMemoryOperationError;
+
+    import clib = std.c.stdlib;
 
     import brala.utils.exception : LoggerException;
 }
@@ -68,7 +70,7 @@ template cloglevel2string(LogLevel inp) {
 
 
 interface IWriter {
-    void log(LogLevel level, string name, string message);
+    void log(LogLevel level, string name, const(char)[] message);
     @property bool bubbles();
     @property void bubbles(bool);
 }
@@ -81,7 +83,7 @@ mixin template Bubbler() {
 
 
 class NullWriter : IWriter {
-    override void log(LogLevel level, string name, string message) {}
+    override void log(LogLevel level, string name, const(char)[] message) {}
     override @property bool bubbles() { return false; }
     override @property void bubbles(bool b) {};
 }
@@ -104,7 +106,7 @@ class MultiWriter : IWriter {
         _bubbles = bubbles;
     }
     
-    override void log(LogLevel level, string name, string message) {
+    override void log(LogLevel level, string name, const(char)[] message) {
         foreach(child; children) {
             if(child !is null) {
                 child.log(level, name, message);
@@ -131,14 +133,14 @@ class FileWriter : IWriter {
         _bubbles = bubbles;
     }
 
-    override void log(LogLevel level, string name, string message) {
-        string slevel = loglevel2string(level);
+    override void log(LogLevel level, string name, const(char)[] message) {
+//         string slevel = loglevel2string(level);
 
         auto time = Clock.currTime();
 
         file.writefln("[%02s:%02s:%02s.%03s] %s: %s: %s",
                       time.hour, time.minute, time.second, time.fracSec.msecs,
-                      name, slevel, message);
+                      name, "", message);
         file.flush();
     }
 }
@@ -158,7 +160,7 @@ private class _OutWriter(string fname) : IWriter {
         _bubbles = bubbles;
     }
 
-    override void log(LogLevel level, string name, string message) {
+    override void log(LogLevel level, string name, const(char)[] message) {
         mixin(fname).log(level, name, message);
     }
 }
@@ -174,6 +176,8 @@ class Logger {
 
     IWriter[LogLevel.max+1] writer;
     LogLevel loglevel = LogLevel.Debug;
+
+    protected void* format_buffer;
 
     this(string name, LogLevel loglevel = LogLevel.Debug) {
         enforceEx!LoggerException(name !in _logger, `There is already a logger named "%s"`.format(name));
@@ -208,8 +212,10 @@ class Logger {
         }
 
         IWriter[] wr = this.writer[this.loglevel..$];
+
+//         char[1024] stack;
         
-        string message;
+        const(char)[] message;
         try {
             // format allocates, when runtime is shutting down or gc is running
             // this throws an InvalidMemoryOperationError
@@ -218,9 +224,9 @@ class Logger {
             // there is now way to detect if the gc is "running"
             // this is the case when a dtor is called and the runtime
             // is shutting down.
+//             message = sformat(stack, args);
             stderr.writef("NOT LOGGED: ");
             stderr.writefln(args);
-            return;
         }
 
         foreach(w; wr) {
