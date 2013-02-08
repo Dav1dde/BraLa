@@ -50,8 +50,6 @@ class BraLaGame {
     protected World _current_world;    
     @property current_world() { return _current_world; }
     
-    protected vec2i mouse_offset = vec2i(0, 0);
-    
     protected bool _quit = false;
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
@@ -71,8 +69,6 @@ class BraLaGame {
         this.session = session;
         connection = new ThreadedConnection(session);
         connection.callback = &dispatch_packets;
-
-        engine.window.on_mouse_pos.connect(&on_mouse_pos);
     }
 
     void quit() {
@@ -198,6 +194,7 @@ class BraLaGame {
         }
         
         player = new Player(this, packet.entity_id);
+        player.update_keys(config);
     }
     
     void on_packet(T : s.ChatMessage)(T packet) {
@@ -272,9 +269,8 @@ class BraLaGame {
             packet.yaw = isNaN(packet.yaw) ? 0:radians(packet.yaw);
             packet.pitch = isNaN(packet.pitch) ? 0:radians(packet.pitch);
             
-//             character.activated = true;
-//             character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
-//             character.set_rotation(packet.yaw, packet.pitch);
+            player.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
+            player.set_rotation(packet.yaw, packet.pitch);
                     
             auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
             connection.send(repl);
@@ -287,17 +283,5 @@ class BraLaGame {
 
     void on_packet(T)(T packet) {
 //         debug writefln("Unhandled packet: %s", packet);
-    }
-    
-    // UI-Events   
-    void on_mouse_pos(int x, int y) {
-        static int last_x = 0;
-        static int last_y = 0;
-        
-        mouse_offset.x = x - last_x;
-        mouse_offset.y = y - last_y;
-                
-        last_x = x;
-        last_y = y;
     }
 }
