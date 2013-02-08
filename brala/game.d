@@ -10,6 +10,7 @@ private {
     import std.conv : to;
     import std.math : isNaN;
     import core.time : TickDuration;
+    import std.signals;
     
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
@@ -23,8 +24,8 @@ private {
     import c = brala.network.packets.client;
     import brala.dine.world : World;
     import brala.dine.chunk : Chunk, Block;
-    import brala.character : Character;
     import brala.engine : BraLaEngine;
+    import brala.entities.player : Player;
     import brala.gfx.text : parse_chat;
     import brala.gfx.gl : clear;
     import brala.utils.defaultaa : DefaultAA;
@@ -39,13 +40,13 @@ class BraLaGame {
     
     BraLaEngine engine;
     Config config;
+    Session session;
     ThreadedConnection connection;
 
     alias void delegate() CallBack;
-    
     protected Queue!CallBack callback_queue;
     
-    Character character;
+    Player player;
     protected World _current_world;    
     @property current_world() { return _current_world; }
     
@@ -54,6 +55,8 @@ class BraLaGame {
     protected bool _quit = false;
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
+
+    mixin Signal!() on_notchian_tick;
 
     size_t tessellation_threads = 3;
     
@@ -65,24 +68,17 @@ class BraLaGame {
         callback_queue = new Queue!CallBack();
 
         this.engine = engine;
+        this.session = session;
         connection = new ThreadedConnection(session);
         connection.callback = &dispatch_packets;
 
-        character = new Character(0);
-
         engine.window.on_mouse_pos.connect(&on_mouse_pos);
-        engine.window.on_resize.connect(&on_resize);
     }
 
     void quit() {
         _quit = true;
     }
 
-    void on_resize(int width, int height) {
-        engine.resize(width, height);
-        character.apply(engine);
-    }
-    
     // rendering
     void start() {
         assert(connection.connected);
@@ -126,42 +122,21 @@ class BraLaGame {
         foreach(cb; callback_queue) {
             cb();
         }
-        
-        moved = move(delta_t) || moved;
+
+
+        if(player !is null) {
+            player.update(delta_t);
+        }
         
         display();
         
         TickDuration now = engine.timer.get_time();
         if((now - last_notchian_tick).to!("msecs", int) >= 50) {
-            on_notchian_tick();
+            on_notchian_tick.emit();
             last_notchian_tick = now;
         }
         
         return false;
-    }
-    
-    bool move(TickDuration delta_t) {
-        float movement = delta_t.to!("seconds", float) * character.moving_speed;
-
-        bool moved = false;
-
-        auto MOVE_FORWARD = cast(int)config.get!char("game.key.movement.forward");
-        auto MOVE_BACKWARD = cast(int)config.get!char("game.key.movement.backward");
-        auto STRAFE_LEFT = cast(int)config.get!char("game.key.movement.left");
-        auto STRAFE_RIGHT = cast(int)config.get!char("game.key.movement.right");
-
-        if(engine.window.is_key_down(MOVE_FORWARD))  character.move_forward(movement); moved = true;
-        if(engine.window.is_key_down(MOVE_BACKWARD)) character.move_backward(movement); moved = true;
-        if(engine.window.is_key_down(STRAFE_LEFT))  character.strafe_left(movement); moved = true;
-        if(engine.window.is_key_down(STRAFE_RIGHT)) character.strafe_right(movement); moved = true;
-        if(mouse_offset.x != 0) character.rotatex(-movement * mouse_offset.x); moved = true;
-        if(mouse_offset.y != 0) character.rotatey(movement * mouse_offset.y); moved = true;
-        mouse_offset.x = 0;
-        mouse_offset.y = 0;
-        
-        if(moved) character.apply(engine);
-        
-        return moved;
     }
     
     void display() {
@@ -177,13 +152,6 @@ class BraLaGame {
 
                 current_world.draw(engine);
             }
-        }
-    }
-    
-    void on_notchian_tick() {
-        if(moved && connection.logged_in && character.activated) {
-            character.send_packet(connection);
-            moved = false;
         }
     }
     
@@ -229,7 +197,7 @@ class BraLaGame {
             _current_world = new World(engine.resmgr, tessellation_threads);
         }
         
-        character = new Character(packet.entity_id);
+        player = new Player(this, packet.entity_id);
     }
     
     void on_packet(T : s.ChatMessage)(T packet) {
@@ -304,9 +272,9 @@ class BraLaGame {
             packet.yaw = isNaN(packet.yaw) ? 0:radians(packet.yaw);
             packet.pitch = isNaN(packet.pitch) ? 0:radians(packet.pitch);
             
-            character.activated = true;
-            character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
-            character.set_rotation(packet.yaw, packet.pitch);
+//             character.activated = true;
+//             character.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
+//             character.set_rotation(packet.yaw, packet.pitch);
                     
             auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
             connection.send(repl);

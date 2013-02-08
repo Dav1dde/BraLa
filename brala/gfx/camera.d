@@ -1,4 +1,4 @@
-module brala.camera;
+module brala.gfx.camera;
 
 private {
     import std.conv : to;

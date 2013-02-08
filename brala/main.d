@@ -133,9 +133,9 @@ class BraLa {
 
         window.make_context_current();
 
-//         if(!is_debugged) {
+        if(!is_debugged) {
             window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-//         }
+        }
 
         DerelictGL3.reload();
     }

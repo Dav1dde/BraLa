@@ -77,6 +77,7 @@ class BraLaEngine {
         resmgr = new ResourceManager();
         
         resize(window.width, window.height);
+        window.on_resize.connect(&resize);
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
