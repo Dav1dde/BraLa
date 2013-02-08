@@ -85,6 +85,9 @@ DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   
 CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
+DC_UPPER	= `echo $(DC) | tr a-z A-Z`
+CC_UPPER	= `echo $(CC) | tr a-z A-Z`
+
 
 all: brala
 #all: brala
@@ -93,58 +96,73 @@ all: brala
 
 awesomium:
 ifeq ($(OS),"Linux")
-	# wget exists with $? of 2 if file already exists
-	wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) || true
-	# if the symlink already exists, ln fails
-	cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 || true
-	mkdir -p bin/locales
-	wget -nc -O "bin/chrome.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1" || true
-	wget -nc -O "bin/locales/en-US.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1" || true
+# wget exists with $? of 2 if file already exists
+	@wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) 2>/dev/null || true
+# if the symlink already exists, ln fails
+	@echo "  LN     $(notdir $(LIBAWESOMIUM_PATH)).0"
+	@cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 2>/dev/null || true
+	@mkdir -p bin/locales
+	@echo "  WGET   bin/chrome.pak"
+	@wget -nc -O "bin/chrome.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1" 2>/dev/null || true
+	@echo "  WGET   bin/locales/en-US.pak"
+	@wget -nc -O "bin/locales/en-US.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1" 2>/dev/null || true
 else ifeq ($(OS),"Darwin")
+	@echo "  CURL   $(LIBAWESOMIUM_PATH)"
 	if ! [ -f $(LIBAWESOMIUM_PATH) ]; then \
-		curl -L -o $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM); \
+		@curl -L -o $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM); \
 	fi
 endif
 
 
 brala: buildDir awesomium glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
-	$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
+	@echo "  LD     bin$(PATH_SEP)bralad"
+	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad
 	$(POST_BUILD_CMD)
 
 glfw:
-	$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
-	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw
-	cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) $(MFLAGS)
+	@$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
+	@echo "  CMAKE  src/c/glfw/*"
+	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
+	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw 2>&1 >/dev/null
+	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) --silent $(MFLAGS) >/dev/null
 
 
 # create object files
 $(DBUILD_PATH)$(PATH_SEP)%$(EXT) : %.d
-	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+	@echo "  $(DC_UPPER)    $<"
+	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT) : %.d
-	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+	@echo "  $(DC_UPPER)    $<"
+	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_DERELICT)$(PATH_SEP)%$(EXT): %.d
-	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+	@echo "  $(DC_UPPER)    $<"
+	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT) : %.d
-	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+	@echo "  $(DC_UPPER)    $<"
+	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
-	$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
+	@echo "  $(DC_UPPER)    $<"
+	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@echo "  $(CC_UPPER)    $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 buildDir: $(OBJDIRS)
 
 $(OBJDIRS) :
-	$(MKDIR) $@
+	@echo "  MKDIR  $@"
+	@$(MKDIR) $@
 
 clean:
-	$(RM) build$(PATH_SEP)brala
+	@echo "  RM     build$(PATH_SEP)brala"
+	@$(RM) build$(PATH_SEP)brala
 
 clean-all:
-	$(RM) build
+	@echo "  RM     build/"
+	@$(RM) build
