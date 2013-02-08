@@ -165,6 +165,7 @@ class BraLaGame {
     }
     
     void display() {
+        glDisable(GL_BLEND);
         clear(vec3(0.2f, 0.2f, 0.9f));
 
         synchronized(_world_lock) {
