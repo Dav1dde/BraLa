@@ -213,6 +213,7 @@ int Main(string[] args) {
 
     enforceEx!InitError(glfwInit(), "glfwInit failed!");
     scope(exit) glfwTerminate();
+    glfwSwapInterval(0);
 
 
     Config config = initialize_config();
