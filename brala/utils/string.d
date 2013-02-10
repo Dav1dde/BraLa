@@ -117,31 +117,31 @@ if((t.length == 1 || (t.length == 2 || is(T[1] == string[]))) && isCallable!(T[0
 }
 
 unittest {
-//     import std.exception : assertThrown;
-//     
-//     string[string] lookup;
-//     lookup["fake_key_dlang"] = "test";
-//     assert(expandVars("${fake_key_dlang}/bar", lookup) == "test/bar");
-//     assert(expandVars("${test/bar", lookup) == "${test/bar");
-//     assert(expandVars("$${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
-//     assert(expandVars("$fake_key_dlang/bar", lookup) == "test/bar");
-//     
-//     lookup.remove("fake_key_dlang");
-//     assertThrown!NoKey(expandVars("$/bar", lookup));
-//     assertThrown!NoKey(expandVars("${fake_key_dlang}/bar", lookup));
-//     assertThrown!NoKey(expandVars("$fake_key_dlang/bar", lookup));
-// 
-//     assert(expandVars!true("$/bar", lookup) == "$/bar");
-//     assert(expandVars!true("${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
-//     assert(expandVars!true("$fake_key_dlang/bar", lookup) == "$fake_key_dlang/bar");
-// 
-//     assert(expandVars("${", lookup) == "${");
-//     assert(expandVars("${foo", lookup) == "${foo");
-//     assert(expandVars("$", lookup) == "$");
-// 
-//     string getter(string arg) {
-//         return arg ~ "foo";
-//     }
-// 
-//     assert(expandVars("${foo}", &getter) == "foofoo");
+    import std.exception : assertThrown;
+    
+    string[string] lookup;
+    lookup["fake_key_dlang"] = "test";
+    assert(expandVars("${fake_key_dlang}/bar", lookup) == "test/bar");
+    assert(expandVars("${test/bar", lookup) == "${test/bar");
+    assert(expandVars("$${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
+    assert(expandVars("$fake_key_dlang/bar", lookup) == "test/bar");
+    
+    lookup.remove("fake_key_dlang");
+    assertThrown!NoKey(expandVars("$/bar", lookup));
+    assertThrown!NoKey(expandVars("${fake_key_dlang}/bar", lookup));
+    assertThrown!NoKey(expandVars("$fake_key_dlang/bar", lookup));
+
+    assert(expandVars!true("$/bar", lookup) == "$/bar");
+    assert(expandVars!true("${fake_key_dlang}/bar", lookup) == "${fake_key_dlang}/bar");
+    assert(expandVars!true("$fake_key_dlang/bar", lookup) == "$fake_key_dlang/bar");
+
+    assert(expandVars("${", lookup) == "${");
+    assert(expandVars("${foo", lookup) == "${foo");
+    assert(expandVars("$", lookup) == "$");
+
+    string getter(string arg) {
+        return arg ~ "foo";
+    }
+
+    assert(expandVars("${foo}", &getter) == "foofoo");
 }
