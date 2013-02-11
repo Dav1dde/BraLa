@@ -127,7 +127,8 @@ class BraLa {
 
         auto cv = window.create_highest_available_context(config.get!int("window.width"),
                                                           config.get!int("window.height"),
-                                                          "BraLa - Minecraft on a lower level");
+                                                          "BraLa - Minecraft on a lower level",
+                                                          null, null, GLFW_OPENGL_CORE_PROFILE, false);
         
         logger.log!Info("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
