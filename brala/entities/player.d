@@ -70,23 +70,26 @@ class Player : NamedEntity {
     }
 
     void update(TickDuration delta_t) {
-        float movement = delta_t.to!("seconds", float) * moving_speed;
+        float turning_speed = delta_t.to!("seconds", float) * 4;
+        
+        if(mouse_offset.x != 0) camera.rotatex(-turning_speed * mouse_offset.x); moved = true;
+        if(mouse_offset.y != 0) camera.rotatey(turning_speed * mouse_offset.y); moved = true;
+        mouse_offset.x = 0;
+        mouse_offset.y = 0;
+        
+        float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
 
         if(window.is_key_down(MOVE_FORWARD))  camera.move_forward(movement); moved = true;
         if(window.is_key_down(MOVE_BACKWARD)) camera.move_backward(movement); moved = true;
         if(window.is_key_down(STRAFE_LEFT))  camera.strafe_left(movement); moved = true;
         if(window.is_key_down(STRAFE_RIGHT)) camera.strafe_right(movement); moved = true;
-        if(mouse_offset.x != 0) camera.rotatex(-movement * mouse_offset.x); moved = true;
-        if(mouse_offset.y != 0) camera.rotatey(movement * mouse_offset.y); moved = true;
-        mouse_offset.x = 0;
-        mouse_offset.y = 0;
 
         if(moved) {
             camera.apply(engine);
         }
     }
 
-    void on_tick() {
+    void on_tick() {        
         if(moved && connection.logged_in) {
             send_packet();
             moved = false;
