@@ -134,13 +134,13 @@ class FileWriter : IWriter {
     }
 
     override void log(LogLevel level, string name, const(char)[] message) {
-//         string slevel = loglevel2string(level);
+        string slevel = loglevel2string(level);
 
         auto time = Clock.currTime();
 
         file.writefln("[%02s:%02s:%02s.%03s] %s: %s: %s",
                       time.hour, time.minute, time.second, time.fracSec.msecs,
-                      name, "", message);
+                      name, slevel, message);
         file.flush();
     }
 }
