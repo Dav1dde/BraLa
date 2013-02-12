@@ -22,7 +22,7 @@ DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=glamour -d-version=stb -d-version=GLFWAWEBridge -d-debug -unittest -g -gc
 else ifeq ($(DC),gdc)
-	ADDITIONAL_FLAGS = -fversion=Derelict3 -fversion=gl3n -fversion=glamour -fversion=stb -version=GLFWAWEBridge -fdebug -g -fdebug-c
+	ADDITIONAL_FLAGS = -fversion=Derelict3 -fversion=gl3n -fversion=glamour -fversion=stb -version=GLFWAWEBridge -fdebug -g
 else
 	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=glamour -version=stb -version=GLFWAWEBridge -debug -unittest -g -gc
 endif
