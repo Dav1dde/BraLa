@@ -1,11 +1,12 @@
 module brala.utils.log;
 
 private {
-    import std.string : sformat, format, icmp;
+    import std.string : sformat, format, icmp, leftJustify;
     import std.range : retro;
     import std.stdio : File, stdout, stderr;
     import std.exception : enforceEx;
     import std.datetime : Clock;
+    import std.array : replace;
     import core.exception : InvalidMemoryOperationError;
 
     import clib = std.c.stdlib;
@@ -138,9 +139,13 @@ class FileWriter : IWriter {
 
         auto time = Clock.currTime();
 
+        size_t whitespaces = 15;
+        whitespaces += name.length + 2; // +1 trailing colon and whitespace
+        whitespaces += slevel.length + 2;
+
         file.writefln("[%02s:%02s:%02s.%03s] %s: %s: %s",
                       time.hour, time.minute, time.second, time.fracSec.msecs,
-                      name, slevel, message);
+                      name, slevel, message.replace("\n", "\n".leftJustify(whitespaces+1)));
         file.flush();
     }
 }
@@ -227,6 +232,7 @@ class Logger {
 //             message = sformat(stack, args);
             stderr.writef("NOT LOGGED: ");
             stderr.writefln(args);
+            stderr.flush();
         }
 
         foreach(w; wr) {
