@@ -165,7 +165,7 @@ class BlockChange : IPacket {
 }
 
 class BlockAction : IPacket {
-    mixin Packet!(0x36, int, "x", short, "y", int, "z", byte, "byte1", byte, "byte2", byte, "block_id");
+    mixin Packet!(0x36, int, "x", short, "y", int, "z", byte, "byte1", byte, "byte2", short, "block_id");
 }
 
 class BlockBreakAnimation : IPacket {

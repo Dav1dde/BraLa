@@ -16,6 +16,9 @@ private {
     import std.range : ElementEncodingType;
     import std.utf : toUTF16, toUTF8;
     import std.uri : encodeComponent;
+    import std.exception : enforceEx;
+    
+    import brala.exception : ConnectionError;
 }
 
 void write(Args...)(Stream s, Args data) {
@@ -81,7 +84,8 @@ private bool read_impl(T)(Stream s) if(is(T : bool)) {
 }
 
 private string read_impl(T)(Stream s) if(is(T : string)) {
-    ushort length;
+    short length;
+    enforceEx!ConnectionError("Negative string length!");
     s.read(length);
     
     wchar[] ret_utf16 = s.readStringW(length);

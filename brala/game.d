@@ -282,6 +282,6 @@ class BraLaGame {
     }
 
     void on_packet(T)(T packet) {
-//         debug writefln("Unhandled packet: %s", packet);
+//         logger.log!Debug("Unhandled packet: %s", packet);
     }
 }
