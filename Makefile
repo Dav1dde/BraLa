@@ -19,12 +19,14 @@ DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 		$(LINKERFLAG)-Lbuild/glfw/src \
 		$(addprefix -L,$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
 
+VERSIONS = Derelict3 gl3n glamour stb GLFWAWEBridge BraLa
+
 ifeq ($(DC),ldc2)
-	ADDITIONAL_FLAGS = -d-version=Derelict3 -d-version=gl3n -d-version=glamour -d-version=stb -d-version=GLFWAWEBridge -d-debug -unittest -g -gc
+	ADDITIONAL_FLAGS = $(addprefix -d-version=,$(VERSIONS)) -d-debug -unittest -g -gc
 else ifeq ($(DC),gdc)
-	ADDITIONAL_FLAGS = -fversion=Derelict3 -fversion=gl3n -fversion=glamour -fversion=stb -version=GLFWAWEBridge -fdebug -g
+	ADDITIONAL_FLAGS = $(addprefix -fversion=,$(VERSIONS)) -fdebug -g
 else
-	ADDITIONAL_FLAGS = -version=Derelict3 -version=gl3n -version=glamour -version=stb -version=GLFWAWEBridge -debug -unittest -g -gc
+	ADDITIONAL_FLAGS = $(addprefix -version=,$(VERSIONS)) -debug -unittest -g -gc
 endif
 
 

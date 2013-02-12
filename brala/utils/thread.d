@@ -9,6 +9,11 @@ private {
     import core.sync.exception : SyncException;
 
     import std.stdio : stderr;
+    
+    version(BraLa) {
+        import brala.log : logger = thread_logger;
+        import brala.utils.log;
+    }
 }
 
 public import core.thread;
@@ -19,9 +24,16 @@ private enum CATCH_DELEGATE = `
         try {
             fun();
         } catch(Exception e) {
-            stderr.writefln("--- Exception in Thread: \"%s\" ---".format(this.name));
-            stderr.writeln(e.toString());
-            stderr.writefln("--- End Exception in Thread \"%s\" ---".format(this.name));
+            version(BraLa) {
+                logger.log!Error_("--- Exception in Thread: \"%s\" ---", this.name);
+                logger.log!Error_("%s", e.toString());
+                logger.log!Error_("--- End Exception in Thread: \"%s\" ---", this.name);
+            } else {
+                stderr.writefln("--- Exception in Thread: \"%s\" ---".format(this.name));
+                stderr.writeln(e.toString());
+                stderr.writefln("--- End Exception in Thread \"%s\" ---".format(this.name));
+            }
+            
             throw e;
         }
     }
