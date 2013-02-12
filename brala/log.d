@@ -17,11 +17,11 @@ class BraLaLogger : Logger {
         string exedir = (Runtime.args[0].dirName().absolutePath());
         string logfile = buildPath(exedir, "brala.log");
         
+        IWriter w1 = new StderrWriter();
+        IWriter w2 = new FileWriter(logfile);
+        
         this["INFO"] = new StdoutWriter(false);
-        this["WARN"] = new MultiWriter(false,
-            new StderrWriter(),
-            new FileWriter(logfile)
-        );
+        this["FATAL"] = new MultiWriter(false, [w1, w2]);
     }
 }
 

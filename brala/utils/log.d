@@ -98,11 +98,11 @@ class MultiWriter : IWriter {
 
     mixin Bubbler!();
 
-    this(IWriter[] writer...) {
+    this(IWriter[] writer) {
         this.children = writer;
     }
 
-    this(bool bubbles, IWriter[] writer...) {
+    this(bool bubbles, IWriter[] writer) {
         this(writer);
         _bubbles = bubbles;
     }
@@ -216,7 +216,7 @@ class Logger {
             return;
         }
 
-        IWriter[] wr = this.writer[this.loglevel..$];
+        IWriter[] wr = this.writer[level..$];
 
 //         char[1024] stack;
         
