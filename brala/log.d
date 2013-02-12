@@ -35,6 +35,7 @@ __gshared Logger ui_logger;
 __gshared Logger api_logger;
 __gshared Logger session_logger;
 __gshared Logger thread_logger;
+__gshared Logger connection_logger;
 
 shared static this() {
     // on linux this function relies on open file descriptors
@@ -51,4 +52,5 @@ shared static this() {
     api_logger = new BraLaLogger("API");
     session_logger = new BraLaLogger("Session");
     thread_logger = new BraLaLogger("Thread");
+    connection_logger = new BraLaLogger("Connection");
 }

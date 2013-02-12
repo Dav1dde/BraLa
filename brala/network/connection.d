@@ -19,6 +19,8 @@ private {
 
     import deimos.openssl.rsa : RSA, RSA_free;
 
+    import brala.log : logger = connection_logger;
+    import brala.utils.log;
     import brala.exception : ConnectionError, ServerError, SessionError;
     import brala.network.session : Session;
     import brala.network.stream : AESStream, LoggingStream;
@@ -30,8 +32,6 @@ private {
     import brala.utils.queue : Queue;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Thread, VerboseThread, Timer;
-    
-    debug import std.stdio : stderr;
 }
 
 class Connection {
@@ -85,9 +85,9 @@ class Connection {
             socket.shutdown(SocketShutdown.BOTH);
             socket.close();
         } catch(Exception e) {
-            debug stderr.writefln("--- Exception during connection-shutdown ---");
-            debug stderr.writeln(e.toString());
-            debug stderr.writefln("--- End exception during connection-shutdown ---");
+            logger.log!Info("--- Exception during connection-shutdown ---");
+            logger.log!Info(e.toString());
+            logger.log!Info("--- End exception during connection-shutdown ---");
         }
         
         _connected = false;
