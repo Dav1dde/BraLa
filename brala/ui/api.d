@@ -79,9 +79,9 @@ class UIApi {
         } catch(Exception e) {
             string f = format("%s".repeat(Args.length).join(", "), new_args);
             
-            debug stderr.writefln(`--- Exception during JS callback: "%s(%s)" ---`, name, f);
-            debug stderr.writeln(e.toString());
-            debug stderr.writefln(`--- End Exception during JS callback: "%s(%s)" ---`, name, f);
+            logger.log!Error_(`--- Exception during JS callback: "%s(%s)" ---`, name, f);
+            logger.log!Error_(e.toString());
+            logger.log!Error_(`--- End Exception during JS callback: "%s(%s)" ---`, name, f);
         }
     }
 
@@ -99,7 +99,7 @@ class UIApi {
             if(callbacks[callback_name].expects_arguments == arguments.size) {
                 callbacks[callback_name].emit(arguments);
             } else {
-                logger.log!Debug("Invalid api call: %s.%s, %s arguments expected, got %s",
+                logger.log!Error_("Invalid api call: %s.%s, %s arguments expected, got %s",
                                   object_name, callback_name, callbacks[callback_name].expects_arguments,
                                   arguments.size);
             }
