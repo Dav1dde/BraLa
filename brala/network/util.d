@@ -85,7 +85,7 @@ private bool read_impl(T)(Stream s) if(is(T : bool)) {
 
 private string read_impl(T)(Stream s) if(is(T : string)) {
     short length;
-    enforceEx!ConnectionError("Negative string length!");
+    enforceEx!ConnectionError(length >= 0, "Negative string length!");
     s.read(length);
     
     wchar[] ret_utf16 = s.readStringW(length);
