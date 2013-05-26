@@ -9,7 +9,6 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
-    import wonne.all;
 
     import std.conv : to;
     import std.path : buildPath, dirName, absolutePath;
@@ -27,8 +26,6 @@ private {
     import brala.config : initialize_config;
     import brala.network.session : Session, DelayedSnooper, minecraft_folder;
     import brala.network.packets.types : IPacket;
-    import brala.ui.ui : WebUI;
-    import brala.ui.api : UIApi;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
     import brala.exception : InitError;
@@ -69,9 +66,6 @@ class BraLa {
     BraLaEngine engine;
     BraLaGame game;
 
-    WebUI ui;
-    UIApi ui_api;
-
     this() {
         this(initialize_config());
     }
@@ -91,15 +85,11 @@ class BraLa {
 
         window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
         window.on_close = &on_close;
-
-        this.ui = new WebUI(config, window);
-        this.ui_api = new UIApi("api", this);
     }
 
     void shutdown()
         in { assert(thread_isMainThread(), "BraLa.shutdown has to be called from main thread"); }
         body {
-            ui.shutdown();
             engine.shutdown();
             snooper.stop();
         }
@@ -112,13 +102,12 @@ class BraLa {
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));
         } else {
-            start_ui();
+            writefln("No UI implemented");
         }
     }
 
     void exit() {
         exit_game();
-        exit_ui();
     }
         
 
@@ -183,29 +172,12 @@ class BraLa {
         }
     }
 
-    void start_ui() {
-        window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_NORMAL);
-        scope(success) {
-            if(!is_debugged) {
-                window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
-            }
-        }
-
-        string entry = "login.html";
-
-        ui.run(entry);
-    }
-
-    void exit_ui() {
-        ui.stop();
-    }
-
     bool on_close() {
         return true;
     }
 }
 
-int Main(string[] args) {
+int main(string[] args) {
     DerelictGL3.load();
     version(DynamicGLFW) { DerelictGLFW3.load(); }
 
@@ -221,43 +193,13 @@ int Main(string[] args) {
 
     string exedir = (args[0].dirName().absolutePath());
 
-    webcore.initialize(config.get!bool("ui.webcore.enable_plugins", false), // enable plugins
-                       config.get!bool("ui.webcore.enable_javascript", true), // enable javascript
-                       config.get!bool("ui.webcore.enable_databases", false), // enable databases
-                       exedir, // package path
-                       exedir, // locale path
-                       "", // user-data path
-                       "", // plugin path
-                       exedir, // log path
-                       awe_loglevel.AWE_LL_VERBOSE, // loglevel
-                       false, // force single process
-                       "self", // child process path (if "self", requires AWESingleProcessMain!())
-                       true, // enable auto detect encoding
-                       "", // accept language override
-                       "", // default charset override
-                       "", // user-agent override
-                       config.get!string("ui.webcore.proxy_server", ""), // proxy-server
-                       "", // proxy-config script
-                       "", // auth-server whitelist
-                       false, // save cache and cookies
-                       4096, // max cache size
-                       false, // disable same origin policy
-                       false, // disable win-message pump
-                       "body{font-size:12px}"); // custom css
-
-    webcore.set_base_directory(config.get!Path("ui.path"));
-
     auto brala = new BraLa(config);
 
     scope(exit) {
         brala.shutdown();
-        webcore.update();
-        webcore.shutdown();
     }
 
     brala.start();
 
     return 0;
 }
-
-mixin AWESingleProcessMain!(Main);

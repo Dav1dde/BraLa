@@ -5,13 +5,7 @@ export VERSION          =
 export LICENSE          = GPLv3
 
 DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ \
-			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/ \
-			-Isrc/d/wonne/ -Isrc/d/awesomium/
-
-# libawesomium does only exist as 32bit library, so we have to build a 32 bit executable
-ifeq ($(shell uname),Darwin)
-	MODEL = 32
-endif
+			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/
 
 include command.make
 
@@ -19,7 +13,7 @@ DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 		$(LINKERFLAG)-Lbuild/glfw/src \
 		$(addprefix -L,$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
 
-VERSIONS = Derelict3 gl3n glamour stb GLFWAWEBridge BraLa
+VERSIONS = Derelict3 gl3n glamour stb BraLa
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = $(addprefix -d-version=,$(VERSIONS)) -d-debug -unittest -g -gc
@@ -32,19 +26,12 @@ endif
 
 ifeq ($(OS),"Linux")
 	ifeq ($(MODEL),32)
-		LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux32/libawesomium-1.6.5.so?dl=1
-		LIBAWESOMIUM_PATH  = lib/linux32/libawesomium-1.6.5.so
-		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/ $(LINKERFLAG)-lawesomium-1.6.5
+		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/
 	else
-		LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1
-		LIBAWESOMIUM_PATH  = lib/linux64/libawesomium-1.6.5.so
-		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/ $(LINKERFLAG)-lawesomium-1.6.5
+		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/
 	endif
 else ifeq ($(OS),"Darwin")
-	POST_BUILD_CMD     = install_name_tool -change '@loader_path/../Frameworks/Awesomium.framework/Versions/A/Awesomium' '@loader_path/../lib/osx/libawesomium.dylib' bin$(PATH_SEP)bralad
-	LIBAWESOMIUM       = https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1
-	LIBAWESOMIUM_PATH  = lib/osx/libawesomium.dylib
-	DCFLAGS_LINK      += $(LINKERFLAG)-Llib/osx/ $(LINKERFLAG)-lawesomium
+	DCFLAGS_LINK      += $(LINKERFLAG)-Llib/osx/
 endif
 
 
@@ -80,8 +67,7 @@ DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_
 DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
 
 DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)std,d) \
-			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d) \
-			$(call getSource,src$(PATH_SEP)d$(PATH_SEP)wonne,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)awesomium,d)
+			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
 DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
 CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
@@ -96,27 +82,7 @@ all: brala
 
 .PHONY: clean
 
-awesomium:
-ifeq ($(OS),"Linux")
-# wget exists with $? of 2 if file already exists
-	@wget -nc -O $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM) 2>/dev/null || true
-# if the symlink already exists, ln fails
-	@echo "  LN     $(notdir $(LIBAWESOMIUM_PATH)).0"
-	@cd $(dir $(LIBAWESOMIUM_PATH)) && ln -s $(notdir $(LIBAWESOMIUM_PATH)) $(notdir $(LIBAWESOMIUM_PATH)).0 2>/dev/null || true
-	@mkdir -p bin/locales
-	@echo "  WGET   bin/chrome.pak"
-	@wget -nc -O "bin/chrome.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1" 2>/dev/null || true
-	@echo "  WGET   bin/locales/en-US.pak"
-	@wget -nc -O "bin/locales/en-US.pak" "https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1" 2>/dev/null || true
-else ifeq ($(OS),"Darwin")
-	@echo "  CURL   $(LIBAWESOMIUM_PATH)"
-	if ! [ -f $(LIBAWESOMIUM_PATH) ]; then \
-		@curl -L -o $(LIBAWESOMIUM_PATH) $(LIBAWESOMIUM); \
-	fi
-endif
-
-
-brala: buildDir awesomium glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
+brala: buildDir glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
 	@echo "  LD     bin$(PATH_SEP)bralad"
 	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad

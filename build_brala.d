@@ -412,73 +412,17 @@ string[] glfw_libraries() {
     } else {
         string pkg_cfg_path = environment.get("PKG_CONFIG_PATH", "");
         environment["PKG_CONFIG_PATH"] = buildPath("build", "glfw", "src");
-        scope(exit) environment["PKG_CONFIG_PATH"] = pkg_cfg_path;
 
-        return shell(`pkg-config --static --libs glfw3`).split();
+        string[] result;
+        try {
+            result = shell(`pkg-config --static --libs glfw3`).split();
+        } finally {
+            environment["PKG_CONFIG_PATH"] = pkg_cfg_path;
+        }
+
+        return result;
     }
 }
-
-version(NoDownload) {
-} else {
-void setup_awesomium() {
-    version(Windows) {
-        enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/0R18DmqYiN/lib/win32/Awesomium.dll?dl=1",
-                      "https://www.dropbox.com/sh/95wwklnkdp8em1w/FCRW34s7pj/lib/win32/Awesomium.lib?dl=1",
-                      "https://www.dropbox.com/sh/95wwklnkdp8em1w/pQp1o17eB2/lib/win32/icudt42.dll?dl=1"];
-    } else version(linux) {
-        static if(is32bit()) {
-            enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/tXk15uf14H/lib/linux64/libawesomium-1.6.5.so?dl=1"];
-        } else {
-            enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/qnjAYrvvX-/lib/linux64/libawesomium-1.6.5.so?dl=1"];
-        }
-    } else version(OSX) {
-        enum FILES = ["https://www.dropbox.com/sh/95wwklnkdp8em1w/8mLO7apE4s/lib/osx32/awesomium.dylib?dl=1"];
-    }
-
-    HTTP http = HTTP();
-    http.dataTimeout = dur!("minutes")(0);
-    http.operationTimeout = dur!("minutes")(0);
-    http.handle.set(CurlOption.ssl_verifypeer, false);
-
-    foreach(file; FILES) {
-        auto path = buildPath("lib", file.split("lib/")[1].split("?")[0]);
-        collectException(mkdirRecurse(path.dirName()));
-
-        if(!path.exists()) {
-            writefln("Downloading (might take a while): %s", path.baseName());
-            download(file, path, http);
-        } else {
-            writefln("Skipping download of: %s", path.baseName());
-        }
-
-        version(linux) {
-            if(!(path ~ ".0").exists()) {
-                string cwd = getcwd();
-                symlink(path.baseName(), path.baseName() ~ ".0");
-                chdir(cwd);
-            }
-        }
-    }
-
-    version(linux) {
-        collectException(mkdirRecurse("bin/locales"));
-
-        if(!"bin/chrome.pak".exists()) {
-            writeln("Downloading: chrome.pak");
-            download("https://dl.dropbox.com/sh/95wwklnkdp8em1w/cI4GWU2oyr/lib/linux64/chrome.pak?dl=1",
-                     "bin/chrome.pak");
-        }
-
-        if(!"bin/locales/en-US.pak".exists()) {
-            writeln("Downloading: locales/en-US.pak");
-            download("https://dl.dropbox.com/sh/95wwklnkdp8em1w/j2rzeo_1cK/lib/linux64/locales/en-US.pak?dl=1",
-                     "bin/locales/en-US.pak");
-        }
-    }
-
-    
-}
-} // end version(NoDownload)
 
 int main(string[] args) {
     size_t jobs = 1;
@@ -496,14 +440,6 @@ int main(string[] args) {
         task_pool = new TaskPool(jobs);
     }
     scope(exit) { if(task_pool !is null) task_pool.finish(); }
-
-
-    version(NoDownload) {
-        writeln("Assuming awesomium is downloaded and correctly setup!");
-    } else {
-        setup_awesomium();
-    }
-
 
     MD5Cache md5_cache = new MD5Cache();
     if(!override_cache) {
@@ -536,8 +472,7 @@ int main(string[] args) {
     }
 
     dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
-                           dc.version_("glamour"), dc.version_("GLFWAWEBridge"),
-                           dc.debug_, dc.debug_info];
+                           dc.version_("glamour"), dc.debug_, dc.debug_info];
     
     dc.import_paths = [buildPath("brala"),
                        buildPath("src", "d", "derelict3", "import"),
@@ -547,9 +482,7 @@ int main(string[] args) {
                        buildPath("src", "d", "openssl"),
                        buildPath("src", "d", "glfw"),
                        buildPath("src", "d", "nbd"),
-                       buildPath("src", "d", "glwtf"),
-                       buildPath("src", "d", "awesomium"),
-                       buildPath("src", "d", "wonne")];
+                       buildPath("src", "d", "glwtf")];
 
     auto builder = new Builder(cache, dc, dc, cc);
 
@@ -559,7 +492,6 @@ int main(string[] args) {
     
     builder.add_scan_path(buildPath("brala"));
     builder.add_scan_path(buildPath("src", "d", "arsd"));
-    builder.add_scan_path(buildPath("src", "d", "awesomium", "deimos"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "util"));
@@ -568,24 +500,22 @@ int main(string[] args) {
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
-    builder.add_scan_path(buildPath("src", "d", "wonne", "wonne"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
                              buildPath("lib", "win", "libeay32.lib"),
-                             buildPath("lib", "win", "glfw3.lib"),
-                             buildPath("lib", "win32", "Awesomium.lib")];
+                             buildPath("lib", "win", "glfw3.lib")];
     builder.linker_options_win = [];
 
-    builder.libraries_linux = ["ssl", "crypto", "awesomium-1.6.5"];
+    builder.libraries_linux = ["ssl", "crypto", "dl"];
     builder.linker_options_linux = ["-Lbuild/glfw/src"];
     builder.linker_options_linux ~= glfw_libraries();
-    builder.linker_options_linux32 ~= ["-Llib/linux32", "-rpath=\\$ORIGIN/../lib/linux32/"];
-    builder.linker_options_linux64 ~= ["-Llib/linux64", "-rpath=\\$ORIGIN/../lib/linux64/"];
+    builder.linker_options_linux32 ~= ["-Llib/linux32"];
+    builder.linker_options_linux64 ~= ["-Llib/linux64"];
 
     builder.libraries_osx = builder.libraries_linux;
     builder.linker_options_osx = builder.linker_options_linux;
-    builder.linker_options_osx ~= ["-Llib/osx", "-rpath=\\$ORIGIN/../lib/osx/"]; 
+    builder.linker_options_osx ~= ["-Llib/osx"];
 
     collectException(rmdirRecurse(builder.out_file));
 
