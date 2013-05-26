@@ -28,7 +28,7 @@ private {
     import brala.entities.player : Player;
     import brala.gfx.text : parse_chat;
     import brala.gfx.gl : clear;
-    import brala.utils.defaultaa : DefaultAA;
+    import brala.utils.aa : DefaultAA;
     import brala.utils.queue : Queue;
     import brala.utils.config : Config;
     
@@ -110,7 +110,7 @@ class BraLaGame {
                 logger.log!Info("Connection is done");
             }
             
-            _current_world.shutdown();
+            if(_current_world !is null) _current_world.shutdown();
 
             return true;
         }
