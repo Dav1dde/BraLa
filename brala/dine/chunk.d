@@ -102,7 +102,8 @@ class Chunk {
     }
     
     ~this() {
-        free_chunk();
+        // for some strange reason this causes segmentation faults
+//         free_chunk();
     }
     
     // Make sure you allocated *blocks with malloc,

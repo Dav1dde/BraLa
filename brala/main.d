@@ -188,9 +188,7 @@ int main(string[] args) {
     scope(exit) glfwTerminate();
     glfwSwapInterval(0);
 
-
     Config config = initialize_config();
-
     string exedir = (args[0].dirName().absolutePath());
 
     auto brala = new BraLa(config);

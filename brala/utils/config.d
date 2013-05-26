@@ -15,7 +15,7 @@ private {
 
     import brala.utils.ctfe : matches_overload, hasAttribute;
     import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
-    import brala.utils.defaultaa : DefaultAA;
+    import brala.utils.aa : DefaultAA;
     import brala.utils.string : expandVars;
 }
 

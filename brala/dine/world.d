@@ -21,6 +21,7 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
+    import brala.utils.aa : ThreadAA;
     import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
@@ -89,6 +90,7 @@ class World {
     const int min_height = 0;
     const int max_height = height;    
 
+    //ThreadAA!(Chunk, vec3i) chunks;
     Chunk[vec3i] chunks;
     vec3i spawn;
 
@@ -216,7 +218,7 @@ class World {
         }
         return null;
     }
-    
+
     void set_block(vec3i position, Block block)
         in { assert(position.y >= min_height && position.y <= max_height); }
         body {

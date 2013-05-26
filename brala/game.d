@@ -215,7 +215,7 @@ class BraLaGame {
     delegate void() {
         if(Chunk* chunk = coords in _current_world.chunks) {
             _current_world.remove_chunk(coords);
-            debug _current_world.vram.log();
+            //debug _current_world.vram.log();
         }
     }";
     

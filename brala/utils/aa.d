@@ -1,4 +1,4 @@
-module brala.utils.defaultaa;
+module brala.utils.aa;
 
 private import std.traits : ReturnType, isCallable;
 
@@ -74,4 +74,21 @@ unittest {
     assert(mydgaa["foo"] == 1);
     mydgaa["lulz"] -= 1;
     assert(mydgaa["lulz"] == 0);
+}
+
+
+struct ThreadAA(value_type, key_type) {
+    value_type[key_type] _store;
+    private value_type[key_type] _work;
+
+    alias _store this;
+
+    // just some testcode
+    version(none) {
+        void remove(key_type key) {
+            _work = _store.dup;
+            _work.remove(key);
+            _store = _work;
+        }
+    }
 }
