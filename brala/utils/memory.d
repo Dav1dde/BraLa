@@ -52,6 +52,14 @@ struct MemoryCounter {
             writefln("Memory Usage: %d\tAllocations: %d", _usage, _allocations);
         }
     }
+
+    void log() {
+        if(name.length) {
+            logger.log!Info("Memory Usage (%s): %d\tAllocations: %d", name, _usage, _allocations);
+        } else {
+            logger.log!Info("Memory Usage: %d\tAllocations: %d", _usage, _allocations);
+        }
+    }
 }
 
 

@@ -137,6 +137,10 @@ class World {
         if(Chunk* c = chunkc in chunks) {
             c.empty_chunk();
         } 
+
+        vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
+        AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+        chunk.aabb = aabb;
         
         chunks[chunkc] = chunk;
         if(mark_dirty) {
@@ -451,10 +455,7 @@ class World {
             }
 
             if(chunk.vbo !is null && chunk.vao !is null) {
-                vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
-
-                AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-                if(aabb in frustum) {
+                if(chunk.aabb in frustum) {
                     chunk.vao.bind();
                     glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
                 }
@@ -506,10 +507,10 @@ class TessellationThread : VerboseThread {
         try {
             // continue loop every 300ms to check if we should continue or exit
             chunk_data = input.get(true, dur!"msecs"(300));
-            scope(exit) input.task_done();
         } catch(Empty) {
             return;
         }
+        scope(exit) input.task_done();
 
         with(chunk_data) {
             if(chunk.tessellated) {

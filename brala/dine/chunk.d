@@ -9,6 +9,7 @@ private {
     import std.string : format, capitalize;
     
     import gl3n.linalg : vec3i;
+    import gl3n.aabb : AABB;
     import brala.dine.util : log2_ub;
     import brala.dine.builder.blocks : BLOCKS;
     import brala.dine.builder.biomes : DEFAULT_BIOMES, Biome;
@@ -86,6 +87,8 @@ class Chunk {
     VAO vao;
     size_t vbo_vcount;
     
+    AABB aabb;
+
     protected void free_chunk() {
         if(!empty) {
             free(blocks);

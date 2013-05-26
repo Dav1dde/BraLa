@@ -115,10 +115,11 @@ class BraLaGame {
             return true;
         }
 
-        foreach(cb; callback_queue) {
-            cb();
+        if(callback_queue.qsize()) synchronized(_world_lock) {
+            foreach(cb; callback_queue) {
+                cb();
+            }
         }
-
 
         if(player !is null) {
             player.update(delta_t);
@@ -212,12 +213,10 @@ class BraLaGame {
 
     enum chunk_removal_cb = "
     delegate void() {
-         synchronized(_world_lock) {
-              if(Chunk* chunk = coords in _current_world.chunks) {
-                  _current_world.remove_chunk(coords);
-                  debug _current_world.vram.print();
-              }
-         }
+        if(Chunk* chunk = coords in _current_world.chunks) {
+            _current_world.remove_chunk(coords);
+            debug _current_world.vram.log();
+        }
     }";
     
     void on_packet(T : s.MapChunk)(T packet) {
