@@ -342,7 +342,7 @@ class World {
                     wcoords.x = wcoords_orig.x;
                     wcoords.z = wcoords_orig.z + z;
 
-                    value = get_block_safe(wcoords);
+                    value = chunk.get_block_safe(0, y, z, AIR_BLOCK);
 
                     foreach(x; 0..width) {
                         x_offset = wcoords_orig.x + x + 0.5f;
@@ -352,13 +352,13 @@ class World {
                         index = x+z*depth+y*ystep;
 
                         if(x == width-1) {
-                            right_block = get_block_safe(vec3i(wcoords.x+1, wcoords.y,   wcoords.z),   AIR_BLOCK);
+                            right_block = chunk.get_block_safe(x+1, y, z, AIR_BLOCK);
                         } else {
                             right_block = chunk.blocks[index+1];
                         }
 
                         if(z == depth-1) {
-                            front_block = get_block_safe(vec3i(wcoords.x,  wcoords.y,   wcoords.z+1), AIR_BLOCK);
+                            front_block = chunk.get_block_safe(x, y, z+1, AIR_BLOCK);
                         } else {
                             front_block = chunk.blocks[index+width];
                         }
@@ -369,7 +369,7 @@ class World {
                             top_block = chunk.blocks[index+ystep];
                         }
 
-                        tessellator.feed(wcoords, x, y, z,
+                        tessellator.feed(chunk, wcoords, x, y, z,
                                         x_offset, x_offset_r, y_offset, y_offset_t, z_offset, z_offset_n,
                                         value, right_block, top_block, front_block,
                                         biome_set.biomes[chunk.biome_data[chunk.get_biome_safe(x+z*15)]]);

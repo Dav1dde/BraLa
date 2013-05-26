@@ -6,7 +6,7 @@ private {
     
     import gl3n.linalg : vec3i;
     
-    import brala.dine.chunk : Block;
+    import brala.dine.chunk : Block, Chunk;
     import brala.dine.world : World, TessellationBuffer;
     import brala.dine.builder.builder; // import everything
     import brala.dine.builder.blocks : BLOCKS;
@@ -64,11 +64,10 @@ struct Tessellator {
         }
     }
     
-    void feed(vec3i world_coords, int x, int y, int z,
+    void feed(Chunk chunk, vec3i world_coords, int x, int y, int z,
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
               const ref Block value, const ref Block right, const ref Block top, const ref Block front,
               const ref BiomeData biome_data) {
-
        
         if(BLOCKS[value.id].empty) { // render neighbours
             if(!BLOCKS[right.id].empty) dispatch!(Side.LEFT)(right, biome_data, world_coords, x_offset_r, y_offset, z_offset);
@@ -84,7 +83,7 @@ struct Tessellator {
             if(BLOCKS[front.id].empty) dispatch!(Side.NEAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
 
             if(x == 0) {
-                Block left = world.get_block_safe(vec3i(world_coords.x-1, world_coords.y, world_coords.z));
+                Block left = chunk.get_block_safe(x-1, y, z);
 
                 if(BLOCKS[left.id].empty) dispatch!(Side.LEFT)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
@@ -95,7 +94,7 @@ struct Tessellator {
             }
 
             if(z == 0) {
-                Block back = world.get_block_safe(vec3i(world_coords.x, world_coords.y, world_coords.z-1));
+                Block back = chunk.get_block_safe(x, y, z-1);
 
                 if(BLOCKS[back.id].empty) dispatch!(Side.FAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }

@@ -145,15 +145,15 @@ class Chunk {
             return blocks[flat];
         }
     
-    Block get_block_safe(vec3i position) {
-        return get_block_safe(position.x, position.y, position.z);
+    Block get_block_safe(vec3i position, Block default_ = Block(0, 0)) {
+        return get_block_safe(position.x, position.y, position.z, default_);
     }
     
-    Block get_block_safe(int x, int y, int z) {
+    Block get_block_safe(int x, int y, int z, Block default_ = Block(0, 0)) {
         if(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth) {
             return get_block(to_flat(x, y, z));
         } else {
-            return Block(0, 0);
+            return default_;
         }
     }
 
