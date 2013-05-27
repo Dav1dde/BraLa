@@ -38,13 +38,11 @@ Not a whole lot, but a start.
 ### Dependencies ###
 
 BraLa brings most of the dependencies as gitsubmodules, but there are still a few things you need:
-* A D compiler, if you want to help developing BraLa I recommend you to use DMD or GDC since these allow
-you to use the gdb debugger.
-* A C compiler (gcc and dmc on windows, or any C compiler on linux)
-* OpenGL
+* A D compiler (any of the major 3 should work, DMD, GDC or LDC)
+* A C compiler (dmc on windows and any C compiler on Linux/Mac, gcc recommended)
+* OpenGL 3.0+ support
 * [OpenSSL](http://www.openssl.org/)
-* [CMake](http://www.cmake.org/) - Used to compile glfw, a dependency of BraLa
-* libjpeg62
+* [CMake](http://www.cmake.org/) on Linux/Mac
 
 #### Ubuntu/Debian based systems ####
 
@@ -60,7 +58,7 @@ sudo apt-get install dmd
 And to install the rest of the dependencies:
 
 ```
-sudo apt-get install git cmake libssl-dev libjpeg62 libxss-dev
+sudo apt-get install git cmake libssl-dev libxss-dev
 ```
 
 The following commands might depend on your current graphics driver, for mesa this would be:
