@@ -5,14 +5,13 @@ BraLa
 
 BraLa is an opensource minecraft (S)MP Client:
 
-![Brala with default texture pack](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_03.png)
+![Brala Screenshot](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_03.png)
 
-This screenshot was taken with the original 16x16 minecraft texture. This texture pack does *not* come with BraLa!
-If you have minecraft installed, BraLa will try to extract the texture from minecraft
-(when started with the `--default-tp=true` argument.
+This screenshot was taken with an awesome 128x128 texture pack, called [R3D-Craft](http://www.minecraftforum.net/topic/1182714-13112),
+made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia) and the best thing, it comes with BraLa!
 
-BraLa comes with an awesome 128x128 texture, called [R3D-Craft](http://www.minecraftforum.net/topic/1182714-13112),
-made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia).
+You prefer the default texture pack? If you have minecraft installed,
+BraLa will try to extract the texture from minecraft (when started with the `--default-tp=true` argument.
 
 ## Features ##
 
