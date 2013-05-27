@@ -34,6 +34,7 @@ private {
     import brala.utils.thread : Thread, VerboseThread, Timer;
 }
 
+
 class Connection {
     TcpSocket socket;
     SocketStream socketstream;
@@ -189,15 +190,28 @@ class Connection {
     }
 }
 
+struct Packet {
+    ubyte id;
+    void* ptr;
+}
+
 class ThreadedConnection : Connection {
     protected Thread _thread = null;
     @property Thread thread() { return _thread; }    
     protected Queue!IPacket queue;
+
+    public Queue!Packet out_queue;
     
     this(Session session) {
         super(session);
 
         queue = new Queue!IPacket();
+        out_queue = new Queue!Packet();
+        callback = &add_to_queue;
+    }
+
+    protected void add_to_queue(ubyte id, void* packet) {
+        out_queue.put(Packet(id, packet));
     }
 
     override void send(IPacket[] packets...) {
@@ -222,5 +236,15 @@ class ThreadedConnection : Connection {
         }
 
         _thread.start();
+    }
+
+    int opApply(int delegate(Packet packet) dg) {
+        int result;
+
+        foreach(packet; out_queue) {
+            result = dg(packet);
+            if(result) break;
+        }
+        return result;
     }
 }

@@ -71,6 +71,11 @@ class Queue(type) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
+        return get_no_lock(block, timeout);
+    }
+
+
+    protected type get_no_lock(bool block=true, Duration timeout=DUR_0) {
         if(!block) {
             if(queue.length == 0) {
                 throw new Empty("queue is empty");
@@ -138,16 +143,18 @@ class Queue(type) {
         return queue.length;
     }
 
+    // This blocks the queue until you finished processing all items!
     int opApply(int delegate(type item) dg) {
+        mutex.lock();
+        scope(exit) mutex.unlock();
+
         int result;
 
-        while(!empty) {
-            try {
-                result = dg(get(false));
-            } catch(Empty) { // should not be the case, but it's possible
-                return result;
-            }
-            task_done();
+        while(queue.length > 0) {
+            type item = get_no_lock(false);
+            scope(exit) task_done();
+
+            result = dg(item);
             if(result) break;
         }
 

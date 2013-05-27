@@ -58,8 +58,8 @@ class Player : NamedEntity {
 
         this.camera = new BraLaCamera();
 
-        game.on_notchian_tick.connect(&on_tick);
         window.on_mouse_pos.connect(&on_mouse_pos);
+        game.on_notchian_tick.connect(&on_tick);
     }
 
     void update_keys(Config config) {

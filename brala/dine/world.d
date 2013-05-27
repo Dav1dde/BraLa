@@ -407,7 +407,8 @@ class World {
             chunk.vbo.bind(light, GL_UNSIGNED_BYTE, 2, 22, stride);
         }
     
-    void draw(BraLaEngine engine) {       
+    void draw(BraLaEngine engine) {
+        // NOTE queue opApply changed, eventual fix required
         foreach(tess_out; output) {
             with(tess_out) {                
                 if(chunk.vbo is null) {
