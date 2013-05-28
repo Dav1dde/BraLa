@@ -258,23 +258,39 @@ class World {
         }
 
     Block get_block_safe(vec3i position, Block def = AIR_BLOCK) {
-        Chunk chunk = get_chunk(py_div(position.x, width),
-                                py_div(position.y, height),
-                                py_div(position.z, depth));
+        return get_block_safe(position.x, position.y, position.z, def);
+    }
 
-        if(chunk is null) { return def; }
+    Block get_block_safe(int wx, int wy, int wz, Block def = AIR_BLOCK) {
+        Chunk chunk = get_chunk(py_div(wx, width),
+                                py_div(wy, height),
+                                py_div(wz, depth));
 
-        int x = py_mod(position.x, width);
-        int y = py_mod(position.y, height);
-        int z = py_mod(position.z, depth);
+        if(chunk is null/+ || chunk.empty+/) { return def; }
+
+        int x = py_mod(wx, width);
+        int y = py_mod(wy, height);
+        int z = py_mod(wz, depth);
         
-        if(x >= 0 && x < chunk.width && y >= 0 && y < chunk.height && z >= 0 && z < chunk.depth) {
+        if(x >= 0 && x < Chunk.width && y >= 0 && y < Chunk.height && z >= 0 && z < Chunk.depth) {
             return chunk[chunk.to_flat(x, y, z)];
         } else {
             return def;
         }
     }
-    
+
+    Block get_block_safe(Chunk chunk, vec3i chunkpos, vec3i position, Block def = AIR_BLOCK) {
+        return get_block_safe(chunk, chunkpos.x, chunkpos.y, chunkpos.z, position.x, position.y, position.z, def);
+    }
+
+    Block get_block_safe(Chunk chunk, int x, int y, int z, int wx, int wy, int wz, Block def = AIR_BLOCK) {
+        if(chunk !is null && !chunk.empty && x >= 0 && x < Chunk.width && y >= 0 && y < Chunk.height && z >= 0 && z < Chunk.depth) {
+            return chunk.blocks[chunk.to_flat(x, y, z)];
+        }
+
+        return get_block_safe(wx, wy, wz);
+    }
+
     void mark_surrounding_chunks_dirty(int x, int y, int z) {
         return mark_surrounding_chunks_dirty(vec3i(x, y, z));
     }
@@ -352,13 +368,13 @@ class World {
                         index = x+z*depth+y*ystep;
 
                         if(x == width-1) {
-                            right_block = chunk.get_block_safe(x+1, y, z, AIR_BLOCK);
+                            right_block = get_block_safe(wcoords.x+1, wcoords.y, wcoords.z, AIR_BLOCK);
                         } else {
                             right_block = chunk.blocks[index+1];
                         }
 
                         if(z == depth-1) {
-                            front_block = chunk.get_block_safe(x, y, z+1, AIR_BLOCK);
+                            front_block = get_block_safe(wcoords.x, wcoords.y, wcoords.z+1, AIR_BLOCK);
                         } else {
                             front_block = chunk.blocks[index+width];
                         }

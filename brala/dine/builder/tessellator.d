@@ -83,7 +83,7 @@ struct Tessellator {
             if(BLOCKS[front.id].empty) dispatch!(Side.NEAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
 
             if(x == 0) {
-                Block left = chunk.get_block_safe(x-1, y, z);
+                Block left = world.get_block_safe(world_coords.x-1, world_coords.y, world_coords.z);
 
                 if(BLOCKS[left.id].empty) dispatch!(Side.LEFT)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
@@ -94,7 +94,7 @@ struct Tessellator {
             }
 
             if(z == 0) {
-                Block back = chunk.get_block_safe(x, y, z-1);
+                Block back = world.get_block_safe(world_coords.x, world_coords.y, world_coords.z-1);
 
                 if(BLOCKS[back.id].empty) dispatch!(Side.FAR)(value, biome_data, world_coords, x_offset, y_offset, z_offset);
             }
