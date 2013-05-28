@@ -74,8 +74,8 @@ class Chunk {
         free(empty_blocks);
     }
     
-    bool dirty;
-    bool tessellated = false;
+    bool dirty = false;
+    bool tessellated = true;
 
     bool empty;
     Block* blocks;

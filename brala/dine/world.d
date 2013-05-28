@@ -450,7 +450,7 @@ class World {
         engine.flush_uniforms();
         
         foreach(chunkc, chunk; chunks) {
-            if(chunk.dirty) {
+            if(chunk.dirty && chunk.tessellated) {
                 chunk.dirty = false;
                 chunk.tessellated = false;
                 // this queue is never full and we don't wanna waste time waiting
