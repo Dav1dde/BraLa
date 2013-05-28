@@ -123,9 +123,6 @@ class Queue(type) {
     }
 
     @property bool empty() {
-        mutex.lock();
-        scope(exit) mutex.unlock();
-
         return queue.length == 0;
     }
 
