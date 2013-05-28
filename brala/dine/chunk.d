@@ -140,7 +140,8 @@ class Chunk {
     }
     
     Block get_block(uint flat)
-        in { assert(!empty); assert(flat < block_count); }
+        in { assert(!empty, "Chunk is empty");
+             assert(flat < block_count, "Flat exceeding blockount: %d >= %d".format(flat, block_count)); }
         body {
             return blocks[flat];
         }
@@ -150,7 +151,7 @@ class Chunk {
     }
     
     Block get_block_safe(int x, int y, int z, Block default_ = Block(0, 0)) {
-        if(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth) {
+        if(!empty && x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth) {
             return get_block(to_flat(x, y, z));
         } else {
             return default_;
@@ -171,33 +172,35 @@ class Chunk {
         
     // operator overloading
     Block opIndex(size_t flat)
-    in { assert(!empty); assert(flat < block_count); }
-    body {
-        return blocks[flat];
-    }
+        in { assert(!empty, "Chunk is empty");
+            assert(flat < block_count, "Flat exceeding blockount: %d >= %d".format(flat, block_count)); }
+        body {
+            return blocks[flat];
+        }
     
     Block opIndex(vec3i position)
-        in { assert(!empty); }
+        in { assert(!empty, "Chunk is empty"); }
         body {
             return blocks[to_flat(position)];
         }
     
     void opIndexAssign(Block value, size_t flat)
-        in { assert(!empty); assert(flat < block_count); }
+        in { assert(!empty, "Chunk is empty");
+             assert(flat < block_count, "Flat exceeding blockount: %d >= %d".format(flat, block_count)); }
         body {
-            blocks[flat] = value;
-            dirty = true;
-        }
+                blocks[flat] = value;
+                dirty = true;
+            }
         
     void opIndexAssign(Block value, vec3i position)
-        in { assert(!empty); }
+        in { assert(!empty, "Chunk is empty"); }
         body {
             blocks[to_flat(position)] = value;
             dirty = true;
         }
     
     int opApply(int delegate(const ref Block) dg)
-        in { assert(!empty); }
+        in { assert(!empty, "Chunk is empty"); }
         body {
             int result;
             
@@ -210,7 +213,7 @@ class Chunk {
         }
     
     int opApply(int delegate(size_t, const ref Block) dg)
-        in { assert(!empty); }
+        in { assert(!empty, "Chunk is empty"); }
         body {
             int result;
             
@@ -228,15 +231,15 @@ class Chunk {
     }
     
     static int to_flat(int x, int y, int z)
-        in { assert(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth); }
+        in { assert(x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth, "Invalid coordinates, exceeding range"); }
         out (result) { assert(result < block_count); }
         body {
             return x + z*depth + y*ystep;
         }
     
     static vec3i from_flat(int flat)
-        in { assert(flat < block_count); }
-        out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth); }
+        in { assert(flat < block_count, "Flat exceeding blockount: %d >= %d".format(flat, block_count)); }
+        out (result) { assert(result.vector[0] < width && result.vector[1] < height && result.vector[2] < depth, "Messed up from_flat"); }
         body {
             return vec3i(flat & (width-1), // x: flat % width
                         (flat >> log2width) & (depth-1), // y: (flat / width) % depth

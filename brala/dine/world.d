@@ -152,7 +152,7 @@ class World {
 
     /// only safe when called from mainthread
     void remove_chunk(vec3i chunkc, bool mark_dirty=true)
-        in { assert(chunkc in chunks); }
+        in { assert(chunkc in chunks, "Chunkc not in chunks: %s".format(chunkc)); }
         body {
             Chunk chunk = chunks[chunkc];
             chunk.empty_chunk();
@@ -220,7 +220,7 @@ class World {
     }
 
     void set_block(vec3i position, Block block)
-        in { assert(position.y >= min_height && position.y <= max_height); }
+        in { assert(position.y >= min_height && position.y <= max_height, "Invalid height"); }
         body {
             vec3i chunkc = vec3i(py_div(position.x, width),
                                  py_div(position.y, height),
@@ -242,7 +242,7 @@ class World {
         }
     
     Block get_block(vec3i position)
-        in { assert(position.y >= min_height && position.y <= max_height); }
+        in { assert(position.y >= min_height && position.y <= max_height, "Invalid height"); }
         body {
             Chunk chunk = get_chunk(py_div(position.x, width),
                                     py_div(position.y, height),
@@ -382,7 +382,11 @@ class World {
 
         chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
 
-        debug assert(cast(size_t)tb.ptr % 4 == 0); assert(tessellator.elements*40 % 4 == 0);
+        debug {
+            assert(cast(size_t)tb.ptr % 4 == 0, "whatever I did check here isn't true anylonger");
+            //assert(tessellator.elements*Vertex.sizeof % 4 == 0, "");
+            static assert(Vertex.sizeof % 4 == 0, "Vertex struct is not a multiple of 4");
+        }
 
         return tessellator.elements;
     }
