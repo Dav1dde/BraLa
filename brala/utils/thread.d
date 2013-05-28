@@ -23,18 +23,18 @@ private enum CATCH_DELEGATE = `
     delegate void() {
         try {
             fun();
-        } catch(Exception e) {
+        } catch(Throwable t) {
             version(BraLa) {
                 logger.log!Error_("--- Exception in Thread: \"%s\" ---", this.name);
-                logger.log!Error_("%s", e.toString());
+                logger.log!Error_("%s", t.toString());
                 logger.log!Error_("--- End Exception in Thread: \"%s\" ---", this.name);
             } else {
                 stderr.writefln("--- Exception in Thread: \"%s\" ---".format(this.name));
-                stderr.writeln(e.toString());
+                stderr.writeln(t.toString());
                 stderr.writefln("--- End Exception in Thread \"%s\" ---".format(this.name));
             }
             
-            throw e;
+            throw t;
         }
     }
 `;
