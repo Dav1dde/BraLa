@@ -206,6 +206,54 @@ struct ObjectData {
     }
 }
 
+struct TeamsS {
+    enum Mode : byte {
+        CREATE,
+        REMOVE,
+        UPDATE,
+        ADD_PLAYER,
+        REMOVE_PLAYER
+    }
+
+    Mode mode;
+    string display_name;
+    string prefix;
+    string suffix;
+    bool friendly_fire;
+    string[] players;
+
+    static TeamsS recv(Stream s) {
+        TeamsS teams;
+
+        teams.mode = cast(Mode)read!byte(s);
+
+        if(teams.mode == Mode.CREATE || teams.mode == Mode.UPDATE) {
+            teams.display_name = read!string(s);
+            teams.prefix = read!string(s);
+            teams.suffix = read!string(s);
+            teams.friendly_fire = read!bool(s);
+        }
+
+        if(teams.mode == Mode.CREATE ||
+           teams.mode == Mode.ADD_PLAYER || teams.mode == Mode.REMOVE_PLAYER) {
+            teams.players = read!(string[])(s);
+        }
+
+        return teams;
+    }
+
+    void send(Stream s) {
+        write(s, cast(byte)mode);
+
+        if(mode == Mode.CREATE || mode == Mode.UPDATE) {
+            write(s, display_name, prefix, suffix, friendly_fire);
+        }
+
+        if(mode == Mode.CREATE || mode == Mode.ADD_PLAYER || mode == Mode.REMOVE_PLAYER) {
+            write(s, players);
+        }
+    }
+}
         
 
 struct Array(T, S) {

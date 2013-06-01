@@ -57,7 +57,7 @@ class Connection {
 
     protected ubyte[] shared_secret;
     
-    immutable byte protocol_version = 51;
+    immutable byte protocol_version = 61;
     
     this(Session session) {
         this.session = session;        
@@ -186,6 +186,7 @@ class Connection {
     }
     
     protected void on_packet(T : s.Disconnect)(T packet) {
+        logger.log!Info("Got Kicked: `%s`", packet.reason);
         shutdown();
     }
 }

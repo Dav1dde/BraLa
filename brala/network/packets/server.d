@@ -6,7 +6,8 @@ private {
     import std.string : format;
     
     import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray,
-                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData, ObjectData;
+                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData,
+                                         ObjectData, TeamsS;
     import brala.network.packets.util;
 }
 
@@ -191,6 +192,11 @@ class NamedSoundEffect : IPacket {
     mixin Packet!(0x3E, string, "sound", int, "x", int, "y", int, "z", float, "volume", byte, "pitch");
 }
 
+class NamedParticle : IPacket {
+    mixin Packet!(0x3F, string, "name", float, "x", float, "y", float, "z",
+                  float, "offsetx", float, "offsety", float, "offsetz", float, "particle_speed", int, "count");
+}
+
 class ChangeGameState : IPacket {
     mixin Packet!(0x46, byte, "reason", byte, "gamemode");
 }
@@ -200,7 +206,7 @@ class ThunderBolt : IPacket {
 }
 
 class OpenWindow : IPacket {
-    mixin Packet!(0x64, byte, "window_id", byte, "inventory_type", string, "window_title", byte, "slots");
+    mixin Packet!(0x64, byte, "window_id", byte, "inventory_type", string, "window_title", byte, "slots", bool, "use_provided");
 }
 
 class CloseWindow : IPacket {
@@ -253,6 +259,22 @@ class PlayerAbilities : IPacket {
 
 class TabComplete : IPacket {
     mixin Packet!(0xCB, string, "text");
+}
+
+class CreateScoreboard : IPacket {
+    mixin Packet!(0xCE, string, "name", string, "text", bool, "remove");
+}
+
+class UpdateScore : IPacket {
+    mixin Packet!(0xCF, string, "item_name", bool, "remove", string, "score_name", int, "value");
+}
+
+class DisplayScoreboard : IPacket {
+    mixin Packet!(0xD0, byte, "position", string, "name");
+}
+
+class Teams : IPacket {
+    mixin Packet!(0xD1, string, "name", TeamsS, "team");
 }
 
 class PluginMessage : IPacket {
