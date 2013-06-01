@@ -2,8 +2,9 @@ module brala.network.packets.client;
 
 private {
     import std.stream : Stream;
-    
-    import brala.network.packets.types : Slot;
+
+    import brala.network.packets.types;
+    import t = brala.network.packets.types;
     import brala.network.packets.types : IPacket;
     import brala.network.packets.util;
     import server = brala.network.packets.server;
@@ -55,7 +56,7 @@ class PlayerDigging : IPacket {
 }
 
 class PlayerBlockPlacement : IPacket {
-    mixin Packet!(0x0F, int, "x", ubyte, "y", int, "z", byte, "direction", Slot, "item",
+    mixin Packet!(0x0F, int, "x", ubyte, "y", int, "z", byte, "direction", SlotType, "item",
                         byte, "cursor_x", byte, "cursor_y", byte, "cursor_z");
 }
 
@@ -68,7 +69,8 @@ class EntityAction : IPacket {
 }
 
 class WindowClick : IPacket {
-    mixin Packet!(0x66, byte, "window_id", short, "slot", byte, "mouse_button", short, "action_number", bool, "shift", Slot, "clicked_item");
+    mixin Packet!(0x66, byte, "window_id", short, "slot", byte, "mouse_button",
+                  short, "action_number", bool, "shift", SlotType, "clicked_item");
 }
 
 public alias server.Transaction Transaction;

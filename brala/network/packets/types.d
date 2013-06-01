@@ -44,7 +44,7 @@ struct Metadata {
     private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ toStringNow!(T.name) ~ ";"; }
 
     alias TypeTuple!(Pair!(byte, 0), Pair!(short, 1), Pair!(int, 2), Pair!(float, 3),
-                     Pair!(string, 4), Pair!(Slot, 5), Pair!(Tup6, 6)) members;
+                     Pair!(string, 4), Pair!(SlotType, 5), Pair!(Tup6, 6)) members;
 
     private static string make_union() {
         alias staticJoin!("\n", staticMap!(make_decl, members)) s;
@@ -78,11 +78,11 @@ struct Metadata {
     }
 }
 
-struct EntityMetadataS {   
+struct EntityMetadataType {
     Metadata[byte] metadata;
     
-    static EntityMetadataS recv(Stream s) {
-        EntityMetadataS ret;
+    static EntityMetadataType recv(Stream s) {
+        EntityMetadataType ret;
         
         ubyte x = read!ubyte(s);
 
@@ -98,7 +98,7 @@ struct EntityMetadataS {
                 case 2: m._2 = read!int(s); break;
                 case 3: m._3 = read!float(s); break;
                 case 4: m._4 = read!string(s); break;
-                case 5: m._5 = read!(Slot)(s); break;
+                case 5: m._5 = read!(SlotType)(s); break;
                 case 6: m._6 = read!(int, int, int)(s); break;
                 default: throw new ServerError(`Invalid type in entity metadata "%s".`.format(m.type));
             }
@@ -117,11 +117,11 @@ struct EntityMetadataS {
             s ~= format("%d : %s", key, value.toString());
         }
 
-        return format("EntityMetadataS(%s)", s.join(", "));
+        return format("EntityMetadataType(%s)", s.join(", "));
     }
 }
 
-struct Slot {
+struct SlotType {
     short item;
     byte item_count = 0;
     short metadata = 0;
@@ -138,8 +138,8 @@ struct Slot {
     @property size_t slot() { return _slot; }
 
 
-    static Slot recv(Stream s) {
-        Slot ret;
+    static SlotType recv(Stream s) {
+        SlotType ret;
 
         ret.item = read!short(s);
 
@@ -165,7 +165,7 @@ struct Slot {
     }
 
     string toString() {
-        string s = "Slot" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
+        string s = "SlotType" ~ (has_array_position ? "_" ~ to!string(_slot) : "");
 
         string pnbt = "null";
         if(nbt !is null) {
@@ -177,14 +177,14 @@ struct Slot {
     }
 }
 
-struct ObjectData {
+struct ObjectDataType {
     int data;
     short speed_x;
     short speed_y;
     short speed_z;
 
-    static ObjectData recv(Stream s) {
-        ObjectData ret;
+    static ObjectDataType recv(Stream s) {
+        ObjectDataType ret;
 
         ret.data = read!int(s);
 
@@ -206,7 +206,7 @@ struct ObjectData {
     }
 }
 
-struct TeamsS {
+struct TeamType {
     enum Mode : byte {
         CREATE,
         REMOVE,
@@ -222,8 +222,8 @@ struct TeamsS {
     bool friendly_fire;
     string[] players;
 
-    static TeamsS recv(Stream s) {
-        TeamsS teams;
+    static TeamType recv(Stream s) {
+        TeamType teams;
 
         teams.mode = cast(Mode)read!byte(s);
 
@@ -273,7 +273,7 @@ struct StaticArray(T, size_t length) {
 
 
 // Chunk stuff
-struct MapChunkS { // TODO: implement send
+struct MapChunkType { // TODO: implement send
     int x;
     int z;
     bool contiguous;
@@ -282,8 +282,8 @@ struct MapChunkS { // TODO: implement send
     Chunk chunk;
     alias chunk this;
     
-    static MapChunkS recv(Stream s) {
-        MapChunkS ret;
+    static MapChunkType recv(Stream s) {
+        MapChunkType ret;
         ret.chunk = new Chunk();
 
         ret.x = read!int(s);
@@ -350,13 +350,13 @@ struct MapChunkS { // TODO: implement send
     }
 
     string toString() {
-        return format(`ChunkS(int x : "%d", int z : "%d", bool contiguous : "%s", ushort primary_bitmask : "%016b", `
-                             `ushort add_bitmask : "%016b", Chunk chunk : "%s")`,
-                              x, z, contiguous, primary_bitmask, add_bitmask, chunk);
+        return format(`ChunkType(int x : "%d", int z : "%d", bool contiguous : "%s", ushort primary_bitmask : "%016b", `
+                                `ushort add_bitmask : "%016b", Chunk chunk : "%s")`,
+                                 x, z, contiguous, primary_bitmask, add_bitmask, chunk);
     } 
 }
 
-struct MapChunkBulkS {
+struct MapChunkBulkType {
     alias Tuple!(vec3i, "coords", Chunk, "chunk") CoordChunkTuple;
     
     short chunk_count;
@@ -384,8 +384,8 @@ struct MapChunkBulkS {
         }
     }
 
-    static MapChunkBulkS recv(Stream s) {
-        MapChunkBulkS ret;
+    static MapChunkBulkType recv(Stream s) {
+        MapChunkBulkType ret;
 
         ret.chunk_count = read!short(s);
 
@@ -413,7 +413,7 @@ struct MapChunkBulkS {
         foreach(cc; ret.chunks) {
             cc.chunk.fill_chunk_with_nothing();
 
-            offset += MapChunkS.parse_raw_chunk(cc.chunk, unc_data[offset..$], true);
+            offset += MapChunkType.parse_raw_chunk(cc.chunk, unc_data[offset..$], true);
         }
 
         return ret;
@@ -427,16 +427,16 @@ struct MapChunkBulkS {
         }
         app.put("\n");
 
-        return `MapChunkBulkS(short chunk_count : "%s", CoordChunkTuple[] chunks : [%s]`.format(chunk_count, app.data);
+        return `MapChunkBulkType(short chunk_count : "%s", CoordChunkTuple[] chunks : [%s]`.format(chunk_count, app.data);
     }
 }
 
-struct MultiBlockChangeData {
+struct MultiBlockChangeDataType {
     uint[] data;
     alias data this;
 
-    static MultiBlockChangeData recv(Stream s) {
-        MultiBlockChangeData ret;
+    static MultiBlockChangeDataType recv(Stream s) {
+        MultiBlockChangeDataType ret;
 
         int length = read!int(s);
 

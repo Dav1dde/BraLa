@@ -4,13 +4,12 @@ module brala.network.packets.server;
 private {
     import std.stream : Stream;
     import std.string : format;
-    
-    import brala.network.packets.types : IPacket, EntityMetadataS, Slot, Array, StaticArray,
-                                         MapChunkS, MapChunkBulkS, MultiBlockChangeData,
-                                         ObjectData, TeamsS;
+
+    import brala.network.packets.types;
+    import t = brala.network.packets.types;
+    import brala.network.packets.types : IPacket;
     import brala.network.packets.util;
 }
-
 
 mixin get_packets_mixin!(__traits(allMembers, brala.network.packets.server));
 
@@ -37,7 +36,7 @@ class TimeUpdate : IPacket {
 }
 
 class EntityEquipment : IPacket {
-    mixin Packet!(0x05, int, "entity_id", short, "slot_id", Slot, "item");
+    mixin Packet!(0x05, int, "entity_id", short, "slot_id", SlotType, "item");
 }
 
 class SpawnPosition : IPacket {
@@ -70,7 +69,7 @@ class Animation : IPacket {
 
 class NamedEntitySpawn : IPacket {
     mixin Packet!(0x14, int, "entity_id", string, "username", int, "x", int, "y", int, "z",
-                        byte, "yaw", byte, "pitch", short, "current_item", EntityMetadataS, "metadata");
+                        byte, "yaw", byte, "pitch", short, "current_item", EntityMetadataType, "metadata");
 }
 
 class CollectItem : IPacket {
@@ -79,14 +78,14 @@ class CollectItem : IPacket {
 
 class SpawnObject : IPacket {
     mixin Packet!(0x17, int, "entity_id", byte, "type", int, "x", int, "y", int, "z", byte, "yaw", byte, "pitch",
-                        ObjectData, "object_data");
+                        ObjectDataType, "object_data");
 }
 
 class MobSpawn : IPacket {
     mixin Packet!(0x18, int, "entity_id", byte, "type", int, "x", int, "y", int, "z",
                         byte, "yaw", byte, "pitch", byte, "head_yaw",
                         short, "velocity_x", short, "velocity_y", short, "velocity_z",
-                        EntityMetadataS, "metadata");
+                        EntityMetadataType, "metadata");
 }
 
 class Painting : IPacket {
@@ -138,7 +137,7 @@ class AttachEntity : IPacket {
 }
 
 class EntityMetadata : IPacket {
-    mixin Packet!(0x28, int, "entity_id", EntityMetadataS, "metadata");
+    mixin Packet!(0x28, int, "entity_id", EntityMetadataType, "metadata");
 }
 
 class EntityEffect : IPacket {
@@ -154,11 +153,11 @@ class Experience : IPacket {
 }
 
 class MapChunk : IPacket {
-    mixin Packet!(0x33, MapChunkS, "chunk");
+    mixin Packet!(0x33, MapChunkType, "chunk");
 }
 
 class MultiBlockChange : IPacket {
-    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", MultiBlockChangeData, "data");
+    mixin Packet!(0x34, int, "x", int, "z", short, "record_count", MultiBlockChangeDataType, "data");
 }
 
 class BlockChange : IPacket {
@@ -174,9 +173,9 @@ class BlockBreakAnimation : IPacket {
 }
 
 class MapChunkBulk : IPacket {
-    mixin Packet!(0x38, MapChunkBulkS, "chunk_bulk");
-    alias chunk_bulk.chunk_count chunk_count;
-    alias chunk_bulk.chunks chunks;
+    mixin Packet!(0x38, MapChunkBulkType, "chunk_bulk");
+//     alias chunk_bulk.chunk_count chunk_count;
+//     alias chunk_bulk.chunks chunks;
 }
 
 class Explosion : IPacket {
@@ -214,11 +213,11 @@ class CloseWindow : IPacket {
 }
 
 class SetSlot : IPacket {
-    mixin Packet!(0x67, byte, "window_id", short, "slot", Slot, "slot_data");
+    mixin Packet!(0x67, byte, "window_id", short, "slot", SlotType, "slot_data");
 }
 
 class WindowItems : IPacket {
-    mixin Packet!(0x68, byte, "window_id", Array!(short, Slot), "slots");
+    mixin Packet!(0x68, byte, "window_id", Array!(short, SlotType), "slots");
 }
 
 class UpdateWindowProperty : IPacket {
@@ -230,7 +229,7 @@ class Transaction : IPacket {
 }
 
 class CreativeInventoryAction : IPacket {
-    mixin Packet!(0x6B, short, "slot", Slot, "clicked_item");
+    mixin Packet!(0x6B, short, "slot", SlotType, "clicked_item");
 }
 
 class UpdateSign : IPacket {
@@ -274,7 +273,7 @@ class DisplayScoreboard : IPacket {
 }
 
 class Teams : IPacket {
-    mixin Packet!(0xD1, string, "name", TeamsS, "team");
+    mixin Packet!(0xD1, string, "name", TeamType, "team");
 }
 
 class PluginMessage : IPacket {
