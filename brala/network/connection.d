@@ -123,10 +123,7 @@ class Connection {
     
     void poll() {
         ubyte packet_id = read!ubyte(endianstream);
-        dispatch_packet(packet_id);
-    }
-    
-    void dispatch_packet(ubyte packet_id) {
+
         assert(callback !is null);
         switch(packet_id) {
             foreach(p; s.get_packets!()) { // p.cls = class, p.id = id
