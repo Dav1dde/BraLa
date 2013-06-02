@@ -155,6 +155,9 @@ BraLa supports a few commandline options:
 -c, --credentials           minecrafts lastlogin file will be used for authentication and logging in,
                             --username and --password are used as fallback
 
+--offline                   start in offline mode
+
+
 -h, --host                  the IP/adress of the minecraft server
 --port                      the port of the minecraft server, defaults to 25565
 

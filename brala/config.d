@@ -44,8 +44,6 @@ struct AppArguments {
 
     string res = "./res";
 
-    string theme = "";
-
     bool no_snoop = false;
     size_t tessellation_threads = 0;
 
@@ -53,7 +51,7 @@ struct AppArguments {
 
     void help(string[] args, string[][] p) {
         string[] help_strings = [
-            "the path to brala.conf, relativ to \"res\" or absolute",
+            "\tthe path to brala.conf, relativ to \"res\" or absolute",
             
             "specifies the username, which will be used to auth with the login servers,\n" ~
             "\t\t\t\tif this is not possible and the server is in offline mode, it will be used\n" ~
@@ -65,7 +63,7 @@ struct AppArguments {
             "uses minecrafts lastlogin file for authentication and logging in,\n" ~
             "\t\t\t\t--username and --password are used as fallback",
 
-            "start in offline mode",
+            "\tstart in offline mode",
 
             "\t\tspecifies the width of the window",
 
@@ -78,8 +76,6 @@ struct AppArguments {
             "\t\tthe port of the minecraft server, defaults to 25565",
 
             "\t\tpath to the resources folder, named \"res\"",
-
-            "\tsets UI theme"
 
             "\tdisables \"snooping\" (= sending completly anonym information to mojang)",
 
@@ -151,9 +147,6 @@ Config initialize_config() {
 
     config.set_default("connection.port", 25565);
     config.set_if("connection.port", app_arguments.port);
-
-    config.set_default("ui.theme", "default");
-    config.set_if("ui.theme", app_arguments.theme);
 
     config.set_default("brala.no_snoop", false);
     config.set_if("brala.no_snoop", app_arguments.no_snoop);
