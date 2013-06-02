@@ -27,7 +27,7 @@ private {
     import brala.network.session : Session, DelayedSnooper, minecraft_folder;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
-    import brala.gfx.terrain : extract_minecraft_terrain, preprocess_terrain;
+    import brala.gfx.terrain : extract_minecraft_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
     import brala.utils.config : Config, Path;
@@ -147,7 +147,7 @@ class BraLa {
             }
         }
 
-        Image terrain = preprocess_terrain(engine.resmgr.get!Image("terrain"));
+        Image terrain = engine.resmgr.get!Image("terrain");
         engine.resmgr.add("terrain", terrain.to_texture());
 
         Sampler terrain_sampler = new Sampler();

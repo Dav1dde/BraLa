@@ -50,17 +50,20 @@ fragment:
 
     void main() {
         vec4 color = texture(terrain, v_texcoord);
+        vec4 mask_color = texture(terrain, v_mask);
 
-        // ugly:
         if(color.a < 0.15) {
             discard;
         } else {
             if(v_mask == v_texcoord) {
                 color_out = color*v_color;
             } else {
-                float alpha = texture(terrain, v_mask).a;
+                float alpha = mask_color.a;
 
-                color_out = mix(color, color*v_color, alpha);
+                if(alpha < 0.15)
+                    color_out = mix(color, color*v_color, alpha);
+                else
+                    color_out = mask_color*v_color;
             }
         }
     }
