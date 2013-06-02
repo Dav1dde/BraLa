@@ -286,7 +286,7 @@ class MinecraftAtlas : Atlas {
     }
 
     protected void update_texture_coordinates() {
-        logger.log!Info("Updating texture coordinates");
+        logger.log!Info("Updating texture coordinates...");
 
         foreach(name; map.keys()) {
             long index = ORDER.countUntil(name);
@@ -295,8 +295,9 @@ class MinecraftAtlas : Atlas {
             }
 
             texture_coordinates[index] = TextureCoordinate(map[name].area);
-
         }
+
+        logger.log!Info("Done");
     }
 
     short[2][4] get(string s, int rotation = 0)() if(rotatation == 0 || rotatation == 90 ||

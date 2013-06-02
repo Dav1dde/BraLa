@@ -18,6 +18,7 @@ private {
     import brala.dine.builder.biomes : BiomeSet;
     import brala.dine.builder.tessellator : Tessellator, Vertex;
     import brala.dine.util : py_div, py_mod;
+    import brala.gfx.terrain : MinecraftAtlas;
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
@@ -96,13 +97,14 @@ class World {
 
     MemoryCounter vram = MemoryCounter("vram");
 
-    BiomeSet biome_set;
+    protected BiomeSet biome_set;
+    protected MinecraftAtlas atlas;
 
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
     protected TessellationThread[] tessellation_threads;
     
-    this(ResourceManager resmgr, size_t threads) {
+    this(ResourceManager resmgr, MinecraftAtlas atlas, size_t threads) {
         biome_set.update_colors(resmgr);
 
         threads = threads ? threads : 1;
@@ -122,9 +124,9 @@ class World {
         }
     }
     
-    this(ResourceManager resmgr, vec3i spawn, size_t threads) {
+    this(ResourceManager resmgr, MinecraftAtlas atlas, vec3i spawn, size_t threads) {
         this.spawn = spawn;
-        this(resmgr, threads);
+        this(resmgr, atlas, threads);
     }
     
     ~this() {
@@ -319,7 +321,7 @@ class World {
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
     size_t tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
-        Tessellator tessellator = Tessellator(this, tb);
+        Tessellator tessellator = Tessellator(this, atlas, tb);
 
         int index;
         int y;

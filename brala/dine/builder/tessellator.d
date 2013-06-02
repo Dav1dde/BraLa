@@ -11,7 +11,7 @@ private {
     import brala.dine.builder.builder; // import everything
     import brala.dine.builder.blocks : BLOCKS;
     import brala.dine.builder.biomes : BiomeData;
-    
+    import brala.gfx.terrain : MinecraftAtlas;
     import brala.utils.memory : realloc;
 }
 
@@ -42,14 +42,14 @@ static assert(Vertex.sizeof % 4 == 0, "Vertex size must be multiple of 4");
 
 struct Tessellator {
     World world;
-    
+    MinecraftAtlas atlas;
     TessellationBuffer* buffer;
 
     uint elements = 0;
 
     mixin BlockBuilder!();
     
-    this(World world, TessellationBuffer* tb) {
+    this(World world, MinecraftAtlas atlas, TessellationBuffer* tb) {
         this.world = world;
         buffer = tb;
     }

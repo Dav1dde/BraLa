@@ -27,7 +27,7 @@ private {
     import brala.network.session : Session, DelayedSnooper, minecraft_folder;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
-    import brala.gfx.terrain : extract_minecraft_terrain;
+    import brala.gfx.terrain : MinecraftAtlas, extract_minecraft_terrain;
     import brala.exception : InitError;
     import brala.utils.image : Image;
     import brala.utils.config : Config, Path;
@@ -135,18 +135,6 @@ class BraLa {
 
         engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
 
-        string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
-        if(config.get!bool("brala.default_tp") && file.exists(path)) {
-            try {
-                Image mc_terrain = extract_minecraft_terrain(path);
-
-                engine.resmgr.remove!Image("terrain");
-                engine.resmgr.add("terrain", mc_terrain);
-            } catch(ZlibException e) {
-                logger.log!Warn(`Failed to load minecraft terrain.png, Zlib Error: "%s"`, e.msg);
-            }
-        }
-
         Image terrain = engine.resmgr.get!Image("terrain");
         engine.resmgr.add("terrain", terrain.to_texture());
 
@@ -162,7 +150,11 @@ class BraLa {
     void start_game(string host, short port) {
         collectException(snooper.snoop());
         
-        game = new BraLaGame(engine, session, config);
+        string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
+        assert(file.exists(path));
+        auto atlas = new MinecraftAtlas(path);
+
+        game = new BraLaGame(engine, config, session, atlas);
         game.start(host, port);
     }
 

@@ -27,6 +27,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.engine : BraLaEngine;
     import brala.entities.player : Player;
+    import brala.gfx.terrain : MinecraftAtlas;
     import brala.gfx.text : parse_chat;
     import brala.gfx.gl : clear;
     import brala.utils.aa : DefaultAA;
@@ -39,6 +40,7 @@ class BraLaGame {
     BraLaEngine engine;
     Config config;
     Session session;
+    MinecraftAtlas atlas;
     ThreadedConnection connection;
     
     Player player;
@@ -53,12 +55,12 @@ class BraLaGame {
 
     size_t tessellation_threads = 3;
     
-    this(BraLaEngine engine, Session session, Config config) {
+    this(BraLaEngine engine, Config config, Session session, MinecraftAtlas atlas) {
+        this.engine = engine;
         this.config = config;
         this.tessellation_threads = config.get!int("brala.tessellation_threads");
-    
-        this.engine = engine;
         this.session = session;
+        this.atlas = atlas;
         connection = new ThreadedConnection(session);
     }
 
@@ -180,7 +182,7 @@ class BraLaGame {
         logger.log!Info("%s", packet);
 
         if(_current_world !is null) _current_world.shutdown();
-        _current_world = new World(engine.resmgr, tessellation_threads);
+        _current_world = new World(engine.resmgr, atlas, tessellation_threads);
         
         player = new Player(this, packet.entity_id);
         player.update_keys(config);
