@@ -96,8 +96,12 @@ class BraLa {
 
     void start() {
         if(config.has_key!string("connection.host")) {
-            session.login(config.get!(string, false)("account.username"),
-                          config.get!(string, false)("account.password"));
+            if(config.get!bool("connection.offline")) {
+                session.minecraft_username = config.get!(string, false)("account.username");
+            } else {
+                session.login(config.get!(string, false)("account.username"),
+                              config.get!(string, false)("account.password"));
+            }
 
             start_game(config.get!string("connection.host"),
                        config.get!short("connection.port"));

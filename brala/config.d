@@ -31,6 +31,8 @@ struct AppArguments {
     bool credentials;
     Alias!("credentials") c;
 
+    bool offline;
+
     uint width = 0;
     uint height = 0;
 
@@ -62,6 +64,8 @@ struct AppArguments {
 
             "uses minecrafts lastlogin file for authentication and logging in,\n" ~
             "\t\t\t\t--username and --password are used as fallback",
+
+            "start in offline mode",
 
             "\t\tspecifies the width of the window",
 
@@ -132,6 +136,8 @@ Config initialize_config() {
         config.set_if("account.username", credentials.username);
         config.set_if("account.password", credentials.password);
     }
+
+    config.set("connection.offline", app_arguments.offline);
 
     config.set_default("window.width", 1024);
     config.set_default("window.height", 800);
