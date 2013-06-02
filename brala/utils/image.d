@@ -175,6 +175,6 @@ class Image {
 
     void write(string path) {
         int result = stbi_write_png(path.toStringz(), width, height, comp, data.ptr, 0);
-        enforceEx!ImageException(result == 0, "Failed to write to disc");
+        enforceEx!ImageException(result == 1, "Failed to write to disc");
     }
 }
