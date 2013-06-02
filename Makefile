@@ -70,7 +70,7 @@ DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call 
 			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
 DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
-CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c
+CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c src$(PATH_SEP)c$(PATH_SEP)stb_image_write.c
 COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 DC_UPPER	= `echo $(DC) | tr a-z A-Z`

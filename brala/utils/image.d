@@ -1,13 +1,15 @@
 module brala.utils.image;
 
 private {
-    import stb_image : stbi_load, stbi_image_free;
+    import stb_image : stbi_load, stbi_image_free, stbi_load_from_memory, stbi_write_png;
     import glamour.gl : GL_RGB, GL_RGBA, GL_UNSIGNED_BYTE, GL_TEXTURE0;
     import glamour.texture : Texture2D;
 
     import std.string : toStringz, format;
     import std.range : chunks;
     import std.array : array;
+    import std.algorithm : min;
+    import std.exception : enforceEx;
 
     import brala.utils.exception : ImageException;
 }
@@ -53,16 +55,23 @@ class Image {
         int comp;
         ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
 
-        if(data is null) {
-            throw new ImageException("Unable to load image: " ~ filename);
-        }
-
+        enforceEx!ImageException(data !is null, "Unable to load image: " ~ filename);
         scope(exit) stbi_image_free(data);
-
-        if(!(comp == RGB || comp == RGBA)) {
-            throw new ImageException("Unknown/Unsupported stbi image format");
-        }
+        enforceEx!ImageException(comp == RGB || comp == RGBA, "Unknown/Unsupported stbi image format: " ~ filename);
         
+        return new Image(data[0..x*y*comp].dup, x, y, comp);
+    }
+
+    static Image from_memory(void[] content, string name="<unknown>") {
+        int x;
+        int y;
+        int comp;
+        ubyte* data = stbi_load_from_memory(cast(ubyte*)content.ptr, cast(uint)content.length, &x, &y, &comp, 0);
+
+        enforceEx!ImageException(data !is null, "Unable to load image from data: " ~ name);
+        scope(exit) stbi_image_free(data);
+        enforceEx!ImageException(comp == RGB || comp == RGBA, "Unknown/Unsupported stbi image format: " ~ name);
+
         return new Image(data[0..x*y*comp].dup, x, y, comp);
     }
 
@@ -73,7 +82,7 @@ class Image {
         }
 
     Image crop(int x1, int y1, int x2, int y2)
-        in { assert(x1 < x2 && x2 < width && y1 < y2 && y2 < height); }
+        in { assert(x1 < x2 && x2 <= width && y1 < y2 && y2 <= height); }
         body {
             ubyte[] res;
 
@@ -117,11 +126,20 @@ class Image {
     void resize(int new_width, int new_height) {
         ubyte[] new_data = new ubyte[new_width*new_height*comp];
 
-        new_data[0..width*height*comp] = data;
+        int width = min(this.width, new_width);
+        int height = min(this.height, new_height);
 
-        this.data = data;
+        foreach(y; 0..height) {
+            new_data[y*width*comp..y*width*comp+width*comp] = data[y*width*comp..y*width*comp+width*comp];
+        }
+
+        this.data = new_data;
         this.width = new_width;
         this.height = new_height;
+    }
+
+    void clear() {
+        data[] = 0;
     }
 
     Image copy() {
@@ -154,5 +172,9 @@ class Image {
         ret.set_data(data, dest_format, width, height, dest_format, dest_type);
         return ret;
     }
-        
+
+    void write(string path) {
+        int result = stbi_write_png(path.toStringz(), width, height, comp, data.ptr, 0);
+        enforceEx!ImageException(result == 0, "Failed to write to disc");
+    }
 }

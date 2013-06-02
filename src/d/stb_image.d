@@ -80,4 +80,10 @@ extern (C) {
 
     void stbi_install_idct(stbi_idct_8x8 func);
     void stbi_install_YCbCr_to_RGB(stbi_YCbCr_to_RGB_run func);
+
+    // stb_image_write
+
+    int stbi_write_png(const(char)* filename, int w, int h, int comp, const(void)* data, int stride_in_bytes);
+    int stbi_write_bmp(const(char)* filename, int w, int h, int comp, const(void)* data);
+    int stbi_write_tga(const(char)* filename, int w, int h, int comp, const(void)* data);
 }
