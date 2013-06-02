@@ -201,9 +201,11 @@ class MinecraftAtlas : Atlas {
     }
 
     void load(string path) {
+        logger.log!Info("Opening texturepack: %s", path);
         ZipArchive za = new ZipArchive(path);
 
         string[] files = za.list_dir("textures/blocks", false);
+        logger.log!Info("Processing ~%d textures", files.length);
         foreach(f; files) {
             string name = f.baseName();
 
@@ -281,6 +283,7 @@ class MinecraftAtlas : Atlas {
                 insert(atlas_image.image, name.stripExtension());
             }
         }
+        logger.log!Info("All files processed");
 
         update_texture_coordinates();
     }

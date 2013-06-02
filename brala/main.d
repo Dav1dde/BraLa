@@ -122,6 +122,7 @@ class BraLa {
         logger.log!Info("Initialized Window with context version: %s.%s", cv.major, cv.minor);
 
         window.make_context_current();
+        glfwSwapInterval(0);
 
         if(!is_debugged) {
             window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
@@ -178,7 +179,6 @@ int main(string[] args) {
 
     enforceEx!InitError(glfwInit(), "glfwInit failed!");
     scope(exit) glfwTerminate();
-    glfwSwapInterval(0);
 
     Config config = initialize_config();
     string exedir = (args[0].dirName().absolutePath());
