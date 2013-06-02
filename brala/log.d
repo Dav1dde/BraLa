@@ -36,6 +36,7 @@ __gshared Logger api_logger;
 __gshared Logger session_logger;
 __gshared Logger thread_logger;
 __gshared Logger connection_logger;
+__gshared Logger terrain_logger;
 
 shared static this() {
     // on linux this function relies on open file descriptors
@@ -53,4 +54,5 @@ shared static this() {
     session_logger = new BraLaLogger("Session");
     thread_logger = new BraLaLogger("Thread");
     connection_logger = new BraLaLogger("Connection");
+    terrain_logger = new BraLaLogger("Terrain");
 }

@@ -104,23 +104,13 @@ class Atlas {
         if(result is null) {
             // not enough space in atlas
             if(autoresize) {
-                root = Node();
-                atlas.clear();
-                atlas.resize(atlas.width*2, atlas.height*2);
-                root.area = Rectangle(0, 0, atlas.width, atlas.height);
-
-                typeof(map) old_map = map;
-                auto keys = map.keys();
-                map = map.init;
-
-                foreach(key; keys) {
-                    insert(old_map[key].image, name);
-                }
-
-                return insert(image, name);
+                resize(atlas.width*2, atlas.height*2);
+                insert(image, name);
             } else {
                 throw new AtlasException("Atlas too small");
             }
+
+            return;
         }
 
 
@@ -129,6 +119,21 @@ class Atlas {
 
         atlas.replace(result.area.x, result.area.y, result.image);
         map[name] = result;
+    }
+
+    void resize(int width, int height) {
+        root = Node();
+        atlas.clear();
+        atlas.resize(width, height);
+        root.area = Rectangle(0, 0, atlas.width, atlas.height);
+
+        typeof(map) old_map = map;
+        auto keys = map.keys();
+        map = map.init;
+
+        foreach(key; keys) {
+            insert(old_map[key].image, key);
+        }
     }
 
     Rectangle lookup(string name) {
