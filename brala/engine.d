@@ -170,4 +170,9 @@ class BraLaEngine {
     void set_sampler(string tex_id, Sampler s) {
         samplers[resmgr.get!ITexture(tex_id)] = s;
     }
+
+    void use_sampler(string tex_id) {
+        _current_sampler = samplers[resmgr.get!ITexture(tex_id)];
+        _current_sampler.bind(_current_texture);
+    }
 }

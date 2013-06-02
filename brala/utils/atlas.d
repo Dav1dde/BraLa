@@ -82,9 +82,10 @@ class Atlas {
             }
 
             _texture = atlas.to_texture();
+            _texture_dirty = false;
         }
 
-        return texture;
+        return _texture;
     }
 
     bool autoresize;
@@ -117,6 +118,7 @@ class Atlas {
         result.name = name;
         result.image = image;
 
+        _texture_dirty = true;
         atlas.replace(result.area.x, result.area.y, result.image);
         map[name] = result;
     }
