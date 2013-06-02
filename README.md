@@ -15,14 +15,14 @@ BraLa will try to extract the texture from minecraft (when started with the `--d
 
 ## Features ##
 
-BraLa is at this state just a minecraft (S)MP viewer, it is able to connect to 1.4.6/1.4.7 servers
+BraLa is at this state just a minecraft (S)MP viewer, it is able to connect to 1.5.2 servers
 and display the world.
 BraLa also doesn't have any kind of physics (to use BraLa you must set the client into
 creative mod or allow to fly).
 
 What BraLa *can* do:
-* Connect to 1.4.6/1.4.7 servers (with encryption)
-* Supports the whole 1.4.6/1.4.7 protocol
+* Connect to 1.5.2 servers (with encryption)
+* Supports the whole 1.5.2 protocol
 * Authenticate with the official login servers
 * Read the lastlogin file
 * Send "snoop" requests
