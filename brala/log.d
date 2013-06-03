@@ -11,8 +11,8 @@ public import brala.utils.log;
 
 
 class BraLaLogger : Logger {
-    this(string name) {
-        super(name, LogLevel.Debug);
+    this() {
+        super(LogLevel.Debug);
 
         string exedir = (Runtime.args[0].dirName().absolutePath());
         string logfile = buildPath(exedir, "brala.log");
@@ -25,34 +25,38 @@ class BraLaLogger : Logger {
     }
 }
 
-__gshared Logger main_logger;
-__gshared Logger memory_logger;
-__gshared Logger resmgr_logger;
-__gshared Logger world_logger;
-__gshared Logger engine_logger;
-__gshared Logger game_logger;
-__gshared Logger ui_logger;
-__gshared Logger api_logger;
-__gshared Logger session_logger;
-__gshared Logger thread_logger;
-__gshared Logger connection_logger;
-__gshared Logger terrain_logger;
+
+__gshared Logger brala_logger;
+__gshared NamedLogger main_logger;
+__gshared NamedLogger memory_logger;
+__gshared NamedLogger resmgr_logger;
+__gshared NamedLogger world_logger;
+__gshared NamedLogger engine_logger;
+__gshared NamedLogger game_logger;
+__gshared NamedLogger ui_logger;
+__gshared NamedLogger api_logger;
+__gshared NamedLogger session_logger;
+__gshared NamedLogger thread_logger;
+__gshared NamedLogger connection_logger;
+__gshared NamedLogger terrain_logger;
 
 shared static this() {
     // on linux this function relies on open file descriptors
     // so call it before we are opening FDs
     is_debugged();
-    
-    main_logger = new BraLaLogger("Main");
-    memory_logger = new BraLaLogger("Memory");
-    resmgr_logger = new BraLaLogger("Resmgr");
-    world_logger = new BraLaLogger("World");
-    engine_logger = new BraLaLogger("Engine");
-    game_logger = new BraLaLogger("Game");
-    ui_logger = new BraLaLogger("UI");
-    api_logger = new BraLaLogger("API");
-    session_logger = new BraLaLogger("Session");
-    thread_logger = new BraLaLogger("Thread");
-    connection_logger = new BraLaLogger("Connection");
-    terrain_logger = new BraLaLogger("Terrain");
+
+    brala_logger = new BraLaLogger();
+
+    main_logger = brala_logger.get("Main");
+    memory_logger = brala_logger.get("Memory");
+    resmgr_logger = brala_logger.get("Resmgr");
+    world_logger = brala_logger.get("World");
+    engine_logger = brala_logger.get("Engine");
+    game_logger = brala_logger.get("Game");
+    ui_logger = brala_logger.get("UI");
+    api_logger = brala_logger.get("API");
+    session_logger = brala_logger.get("Session");
+    thread_logger = brala_logger.get("Thread");
+    connection_logger = brala_logger.get("Connection");
+    terrain_logger = brala_logger.get("Terrain");
 }

@@ -153,7 +153,7 @@ class FileWriter : IWriter {
 private __gshared FileWriter _StdoutWriter;
 private __gshared FileWriter _StderrWriter;
 
-static this() {
+shared static this() {
     _StdoutWriter = new FileWriter(stdout);
     _StderrWriter = new FileWriter(stderr);
 }
@@ -173,38 +173,73 @@ private class _OutWriter(string fname) : IWriter {
 alias _OutWriter!("_StdoutWriter") StdoutWriter;
 alias _OutWriter!("_StderrWriter") StderrWriter;
 
+alias NamedLogger = Logger.NamedLogger;
 
 class Logger {
-    protected static Logger[string] _logger;
+    protected NamedLogger[string] _logger;
     
-    immutable string name;
-
     IWriter[LogLevel.max+1] writer;
     LogLevel loglevel = LogLevel.Debug;
 
     protected void* format_buffer;
 
-    this(string name, LogLevel loglevel = LogLevel.Debug) {
-        enforceEx!LoggerException(name !in _logger, `There is already a logger named "%s"`.format(name));
-        
-        this.name = name;
+    this(LogLevel loglevel = LogLevel.Debug) {
         this.loglevel = loglevel;
 
-        _logger[name] = this;
+        _logger["default"] = new NamedLogger("default");
     }
 
-    static Logger existing(string name) {
-        enforceEx!LoggerException(name in _logger, `There is no logger named "%s"`.format(name));
+    class NamedLogger {
+        immutable string name;
 
-        return _logger[name];
+        this(string name) {
+            this.name = name;
+        }
+
+        void log(string level, Args...)(auto ref Args args) if(__traits(compiles, cstring2loglevel!(level))) {
+            log!(cstring2loglevel!(level))(args);
+        }
+
+        void log(LogLevel level, Args...)(auto ref Args args) {
+            if(level < this.outer.loglevel) {
+                return;
+            }
+
+            IWriter[] wr = this.outer.writer[level..$];
+
+            const(char)[] message;
+            try {
+                message = format(args);
+            } catch(InvalidMemoryOperationError) {
+                stderr.writef("NOT LOGGED: ");
+                stderr.writefln(args);
+                stderr.flush();
+                return;
+            }
+
+            foreach(w; wr) {
+                if(w is null) {
+                    continue;
+                }
+
+                w.log(level, name, message);
+
+                if(w.bubbles) {
+                    continue;
+                }
+                break;
+            }
+        }
     }
 
-    static Logger if_exists(string name, LogLevel loglevel = LogLevel.Debug) {
+    NamedLogger get(string name) {
         if(auto l = name in _logger) {
             return *l;
         }
 
-        return new Logger(name, loglevel);
+        auto logger = new NamedLogger(name);
+        _logger[name] = logger;
+        return logger;
     }
 
     void log(string level, Args...)(auto ref Args args) if(__traits(compiles, cstring2loglevel!(level))) {
@@ -212,42 +247,9 @@ class Logger {
     }
 
     void log(LogLevel level, Args...)(auto ref Args args) {
-        if(level < this.loglevel) {
-            return;
-        }
-
-        IWriter[] wr = this.writer[level..$];
-
-//         char[1024] stack;
-        
-        const(char)[] message;
-        try {
-            // format allocates, when runtime is shutting down or gc is running
-            // this throws an InvalidMemoryOperationError
-            message = format(args);
-        } catch(InvalidMemoryOperationError) {
-            // there is now way to detect if the gc is "running"
-            // this is the case when a dtor is called and the runtime
-            // is shutting down.
-//             message = sformat(stack, args);
-            stderr.writef("NOT LOGGED: ");
-            stderr.writefln(args);
-            stderr.flush();
-        }
-
-        foreach(w; wr) {
-            if(w is null) {
-                continue;
-            }
-
-            w.log(level, name, message);
-
-            if(w.bubbles) {
-                continue;
-            }
-            break;
-        }
+        _logger["default"].log!(level)(args);
     }
+
 
     void opIndexAssign(IWriter writer, string level) {
         opIndexAssign(writer, string2loglevel(level));

@@ -275,7 +275,7 @@ class World {
         int z = py_mod(wz, depth);
         
         if(x >= 0 && x < Chunk.width && y >= 0 && y < Chunk.height && z >= 0 && z < Chunk.depth) {
-            return chunk[chunk.to_flat(x, y, z)];
+            return chunk.blocks[chunk.to_flat(x, y, z)];
         } else {
             return def;
         }
