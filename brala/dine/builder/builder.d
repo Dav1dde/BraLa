@@ -63,7 +63,7 @@ mixin template BlockBuilder() {
     // blocks
     void grass_block(Side s)(const Block block, const ref BiomeData biome_data,
                              float x_offset, float y_offset, float z_offset) {
-        Vertex[] vertices = get_vertices!(s)(block.id);
+        Vertex[] vertices = atlas.get_vertices!(s)(block.id);
 
         add_template_vertices(vertices, block, x_offset, y_offset, z_offset, biome_data.color.grass.field);
     }
@@ -845,25 +845,15 @@ mixin template BlockBuilder() {
 
     void tessellate_simple_block(Side side)(const Block block, const ref BiomeData biome_data,
                                             float x_offset, float y_offset, float z_offset) {
-        static if(side == Side.LEFT) {
-            add_template_vertices(BLOCK_VERTICES_LEFT[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.RIGHT) {
-            add_template_vertices(BLOCK_VERTICES_RIGHT[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.NEAR) {
-            add_template_vertices(BLOCK_VERTICES_NEAR[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.FAR) {
-            add_template_vertices(BLOCK_VERTICES_FAR[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.TOP) {
-            add_template_vertices(BLOCK_VERTICES_TOP[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.BOTTOM) {
-            add_template_vertices(BLOCK_VERTICES_BOTTOM[block.id], block, x_offset, y_offset, z_offset);
-        } else static if(side == Side.ALL) {
+        static if(side == Side.ALL) {
             tessellate_simple_block!(Side.LEFT)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.RIGHT)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.NEAR)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.FAR)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.TOP)(block, biome_data, x_offset, y_offset, z_offset);
             tessellate_simple_block!(Side.BOTTOM)(block, biome_data, x_offset, y_offset, z_offset);
+        } else {
+            add_template_vertices(atlas.get_vertices!(side)(block.id), block, x_offset, y_offset, z_offset);
         }
     }
 }

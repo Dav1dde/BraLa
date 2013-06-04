@@ -51,6 +51,7 @@ struct Tessellator {
     
     this(World world, MinecraftAtlas atlas, TessellationBuffer* tb) {
         this.world = world;
+        this.atlas = atlas;
         buffer = tb;
     }
 

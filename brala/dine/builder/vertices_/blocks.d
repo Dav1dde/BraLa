@@ -36,6 +36,13 @@ Vertex[] simple_block(Side side, short[2][4] texture_slice, Facing face) pure {
     return simple_block(side, texture_slice, nslice, face);
 }
 
+Vertex[] simple_block(Side side, short[2][4] texture_slice, short[2][4] mask_slice) pure {
+    CubeSideData cbsd = CUBE_VERTICES[side];
+
+    mixin(mk_vertices);
+    return data.dup;
+}
+
 Vertex[] simple_block(Side side, short[2][4] texture_slice, short[2][4] mask_slice, Facing face) pure {
     CubeSideData cbsd = CUBE_VERTICES[side];
 

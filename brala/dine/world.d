@@ -105,6 +105,7 @@ class World {
     protected TessellationThread[] tessellation_threads;
     
     this(ResourceManager resmgr, MinecraftAtlas atlas, size_t threads) {
+        this.atlas = atlas;
         biome_set.update_colors(resmgr);
 
         threads = threads ? threads : 1;

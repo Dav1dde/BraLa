@@ -16,15 +16,16 @@ private {
     
     import brala.log : logger = terrain_logger;
     import brala.engine : BraLaEngine;
-    import brala.resmgr : ResourceManager;
+    import brala.dine.builder.constants : Side;
+    import brala.dine.builder.tessellator : Vertex;
+    import brala.dine.builder.vertices : TEXTURE_INFORMATION, simple_block;
     import brala.utils.log;
+    import brala.utils.ctfe : TupleRange;
     import brala.utils.atlas : Atlas, Rectangle;
     import brala.utils.image : Image, RGB, RGBA;
     import brala.utils.exception : ImageException, AtlasException;
     import brala.utils.zip : ZipArchive, ArchiveMember;
 }
-
-
 
 struct AtlasImage {
     Image image;
@@ -264,10 +265,16 @@ enum string[] ORDER = ["activatorRail", "activatorRail_powered",
                        "vine", "water", "water", "water_flow", "water_flow", "waterlily", "web", "whiteStone", "wood", "wood_birch",
                        "wood_jungle", "wood_spruce", "workbench_front", "workbench_side", "workbench_top"];
 
+enum BLOCK_IDS = 200;
+
 class MinecraftAtlas : Atlas {
-    TextureCoordinate[ORDER.length] texture_coordinates;
     BraLaEngine engine;
     Sampler sampler;
+
+    TextureCoordinate[ORDER.length] texture_coordinates;
+
+    // Order matches Side.* brala.dine.builder.constants
+    Vertex[][BLOCK_IDS][6] vertices;
 
     this(BraLaEngine engine) {
         super(256, 256);
@@ -379,12 +386,12 @@ class MinecraftAtlas : Atlas {
 
         logger.log!Info("All files processed");
 
-        update_texture_coordinates();
+        update_everything();
 
         engine.set_texture("terrain", texture, sampler);
     }
 
-    protected void update_texture_coordinates() {
+    protected void update_everything() {
         logger.log!Info("Updating texture coordinates...");
 
         foreach(name; map.keys()) {
@@ -394,6 +401,30 @@ class MinecraftAtlas : Atlas {
             }
 
             texture_coordinates[index] = TextureCoordinate(map[name].area);
+        }
+
+        logger.log!Info("Done");
+        logger.log!Info("Updating Vertices");
+
+        foreach(side; 0..6) {
+            foreach(index, tex_info; TEXTURE_INFORMATION[side]) {
+                if(tex_info.name.length == 0) continue;
+
+                auto tex_index = ORDER.countUntil(tex_info.name);
+                if(tex_index < 0) {
+                    throw new Exception(tex_info.name);
+                }
+
+                short[2][4] tex = texture_coordinates[tex_index].def;
+                short[2][4] tex_overlay;
+                if(tex_info.name == tex_info.overlay || tex_info.overlay.length == 0) {
+                    tex_overlay = tex;
+                } else {
+                    tex_overlay = texture_coordinates[ORDER.countUntil(tex_info.overlay)].def;
+                }
+
+                vertices[side][index] = simple_block(cast(Side)side, tex, tex_overlay);
+            }
         }
 
         logger.log!Info("Done");
@@ -466,6 +497,12 @@ class MinecraftAtlas : Atlas {
         }
 
         return ProjectionTextureCoordinates(tex1.x, tex1.y, tex2.x, tex2.y, tex3.x, tex3.y);
+    }
+
+    Vertex[] get_vertices(Side side)(size_t id) {
+        static assert(side != Side.ALL, "Returning all sides at once is not supported for get_vertices");
+
+        return vertices[side][id];
     }
 }
 
