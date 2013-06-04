@@ -638,7 +638,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // slab
     {"brick"}, // brick
     {"tnt_bottom"}, // tnt
-    {"bookshelf"}, // bookshelf
+    {"wood"}, // bookshelf
     {"stoneMoss"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
@@ -780,7 +780,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // slab
     {"brick"}, // brick
     {"tnt_bottom"}, // tnt
-    {"bookshelf"}, // bookshelf
+    {"wood"}, // bookshelf
     {"stoneMoss"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
