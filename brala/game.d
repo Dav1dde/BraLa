@@ -215,15 +215,13 @@ class BraLaGame {
     void on_packet(T : s.MapChunkBulk)(T packet) {
         logger.log!Info("%d chunks incoming", packet.chunk_bulk.chunks.length);
 
-        foreach(cc; packet.chunk_bulk.chunks) {
-            with(cc) {
-                if(chunk.primary_bitmask != 0) {
-                    _current_world.add_chunk(chunk, coords);
-                } else if(chunk.add_bitmask == 0) {
-                    if(Chunk* chunk = coords in _current_world.chunks) {
-                        _current_world.remove_chunk(coords);
-                        //debug _current_world.vram.log();
-                    }
+        foreach(cc; packet.chunk_bulk.chunks) with(cc) {
+            if(chunk.primary_bitmask != 0) {
+                _current_world.add_chunk(chunk, coords);
+            } else if(chunk.add_bitmask == 0) {
+                if(Chunk* chunk = coords in _current_world.chunks) {
+                    _current_world.remove_chunk(coords);
+                    //debug _current_world.vram.log();
                 }
             }
         }

@@ -431,35 +431,33 @@ class World {
     
     void draw(BraLaEngine engine) {
         // NOTE queue opApply changed, eventual fix required
-        foreach(tess_out; output) {
-            with(tess_out) {                
-                if(chunk.vbo is null) {
-                    chunk.vao = new VAO();
-                    chunk.vbo = new Buffer();
-                }
-
-                chunk.vao.bind();
-                chunk.vbo.bind();
-
-                debug size_t prev = chunk.vbo.length;
-
-                chunk.vbo.set_data(buffer.ptr, elements);
-                bind(engine.current_shader, chunk);
-
-                chunk.vao.unbind();
-
-                chunk.tessellated = true;
-
-                debug {
-                    if(prev == 0 && chunk.vbo.length) {
-                        vram.add(chunk.vbo.length);
-                    } else {
-                        vram.adjust(chunk.vbo.length - prev);
-                    }
-                }
-                
-                buffer.available = true;
+        foreach(tess_out; output) with(tess_out) {
+            if(chunk.vbo is null) {
+                chunk.vao = new VAO();
+                chunk.vbo = new Buffer();
             }
+
+            chunk.vao.bind();
+            chunk.vbo.bind();
+
+            debug size_t prev = chunk.vbo.length;
+
+            chunk.vbo.set_data(buffer.ptr, elements);
+            bind(engine.current_shader, chunk);
+
+            chunk.vao.unbind();
+
+            chunk.tessellated = true;
+
+            debug {
+                if(prev == 0 && chunk.vbo.length) {
+                    vram.add(chunk.vbo.length);
+                } else {
+                    vram.adjust(chunk.vbo.length - prev);
+                }
+            }
+
+            buffer.available = true;
         }
 
         version(NoThreads) {
