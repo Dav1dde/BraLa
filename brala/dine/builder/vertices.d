@@ -15,12 +15,7 @@ public import brala.dine.builder.vertices_.plants;
 public import brala.dine.builder.vertices_.rails;
 public import brala.dine.builder.vertices_.misc;
 public import brala.dine.builder.vertices_.redstone;
-
-
-struct CubeSideData {
-    float[3][4] positions; // 3*4, it's a cube!
-    float[3] normal;
-}
+public import brala.gfx.terrain : CubeSideData;
 
 enum size_t BLOCK_IDS = 200;
 

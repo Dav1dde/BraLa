@@ -2,6 +2,7 @@ module brala.gfx.terrain;
 
 private {
     import stb_image : stbi_load_from_memory, stbi_image_free;
+    import gl3n.math : sign;
     
     import std.path : expandTilde, baseName, extension, stripExtension, setExtension;
     import std.algorithm : canFind, min, max, countUntil;
@@ -140,6 +141,84 @@ struct TextureCoordinate {
                 [cast(short)(x+right), cast(short)(y-top)]];
     }
 }
+
+struct CubeSideData {
+    float[3][4] positions;
+    float[3] normal;
+}
+
+struct ProjectionTextureCoordinates {
+    short x;
+    short y;
+
+    short x2; // texture for normal +y
+    short y2;
+
+    short x3; // texture for normal -y
+    short y3;
+
+    short width;
+    short height;
+
+    @safe nothrow const pure
+    short[2][4] project_on_cbsd(CubeSideData cbsd) {
+        // an normale erkennbar welche koordinate fix ist
+        // die koodinaten zu UVs umformen? cast(short)(foo*2)?
+
+        short x = this.x;
+        short y = this.y;
+
+        size_t index_1;
+        size_t index_2;
+
+        // n is the counterpart to s, it allows to midify the x coordinates
+        float n = 1.0f;
+        // used to flip the signs if normal doesn't point toward +y
+        // since in OpenGL +y goes up but in the texture atlas +y goes down
+        float s = 1.0f;
+
+        if(cbsd.normal[1] == 0.0f && cbsd.normal[2] == 0.0f) {
+            // x
+            index_1 = 2;
+            index_2 = 1;
+            s = -1.0f; // flip here
+
+            //n = sign(cbsd.normal[0]);
+            n = sign(-cbsd.normal[0]);
+        } else if(cbsd.normal[0] == 0.0f && cbsd.normal[2] == 0.0f) {
+            // y
+            index_1 = 0;
+            index_2 = 2;
+            n = sign(cbsd.normal[1]);
+
+            if(n > 0) { // y+
+                x = x2;
+                y = y2;
+            } else if(n < 0) { // y-
+                x = x3;
+                y = y3;
+            }
+        } else if(cbsd.normal[0] == 0.0f && cbsd.normal[1] == 0.0f) {
+            // z
+            index_1 = 0;
+            index_2 = 1;
+            s = -1.0f; // flip here
+            n = sign(cbsd.normal[2]);
+        } else {
+            assert(false, "normal not supported");
+        }
+
+        short[2][4] ret;
+
+        foreach(i, ref vertex; cbsd.positions) {
+            ret[i][0] = cast(short)(x + vertex[index_1]*width*n);
+            ret[i][1] = cast(short)(y + vertex[index_2]*height*s);
+        }
+
+        return ret;
+    }
+}
+
 
 // open("/tmp/l", 'w').write(str([p.rsplit('.', 1)[0] for p in sorted(os.listdir("/tmp/mmm/textures/blocks/"))]).replace("'", '"'))
 enum string[] ORDER = ["activatorRail", "activatorRail_powered",
@@ -345,6 +424,31 @@ class MinecraftAtlas : Atlas {
             return texture_coordinates[index].r270(leftc*tex.half_width, rightc*tex.half_width,
                                                    topc*tex.half_height, bottomc*tex.half_height);
         }
+    }
+
+    ProjectionTextureCoordinates get_proj(string s1, string s2="", string s3="")() {
+        static if(s3.length == 0) {
+            s3 = s1;
+        }
+
+        enum index1 = ORDER.countUntil(s1);
+        enum index2 = ORDER.countUntil(s2);
+        enum index3 = ORDER.countUntil(s3);
+        TextureCoordinate tex1 = texture_coordinates[index1];
+
+        static if(s2.length == 0) {
+            TextureCoordinate tex2 = tex1;
+        } else {
+            TextureCoordinate tex2 = texture_coordinates[index2];
+        }
+
+        static if(s3.length == 0) {
+            TextureCoordinate tex3 = tex1;
+        } else {
+            TextureCoordinate tex3 = texture_coordinates[index3];
+        }
+
+        return ProjectionTextureCoordinates(tex1.x, tex1.y, tex2.x, tex2.y, tex3.x, tex3.y);
     }
 }
 
