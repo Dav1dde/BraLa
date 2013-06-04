@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.stairs;
 
 private {
+    import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.tex : ProjTextureSlice;
@@ -54,7 +55,7 @@ immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
 //     return simple_stair(s, face, upside_down, texture_slice, nslice);
 // }
 
-Vertex[] simple_stair(Side s, Facing face, bool upside_down, ProjTextureSlice texture_slice) { // well not so simple
+Vertex[] simple_stair(Side s, Facing face, bool upside_down, ProjectionTextureCoordinates texture_slice) { // well not so simple
     Vertex[] ret;
 
     CubeSideData cbsd;

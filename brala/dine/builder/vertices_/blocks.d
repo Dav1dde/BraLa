@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.blocks;
 
 private {
+    import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.tex : ProjTextureSlice;
@@ -71,7 +72,7 @@ immutable CubeSideData[6] CUBE_VERTICES_FARMLAND = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-Vertex[] farmland_block(Side side, ProjTextureSlice texture_slice) pure {
+Vertex[] farmland_block(Side side, ProjectionTextureCoordinates texture_slice) pure {
     CubeSideData cbsd = CUBE_VERTICES_FARMLAND[side];
     
     float[3][6] positions = to_triangles(cbsd.positions);

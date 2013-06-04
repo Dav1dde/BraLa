@@ -615,7 +615,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {"oreLapis"}, // lapis lazuli ore
     {"blockLapis"}, // lapis lazuli block
     {"furnace_top"}, // dispenser
-    {"sandstone_bottom"}, // sandstone
+    {"sandstone_top"}, // sandstone
     {"musicBlock"}, // noteblock
     {""}, // bed
     {""}, // powered rail

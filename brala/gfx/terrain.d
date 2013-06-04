@@ -430,8 +430,8 @@ class MinecraftAtlas : Atlas {
         logger.log!Info("Done");
     }
 
-    short[2][4] get(string s, int rotation = 0)() if(rotatation == 0 || rotatation == 90 ||
-                                                     rotatation == 180 || rotation == 270) {
+    short[2][4] get(string s, int rotation = 0)() if(rotation == 0 || rotation == 90 ||
+                                                     rotation == 180 || rotation == 270) {
         enum index = ORDER.countUntil(s);
         static assert(index >= 0, "No valid texture name");
 
@@ -447,56 +447,64 @@ class MinecraftAtlas : Atlas {
     }
 
     short[2][4] get(string s, int rotation, short left, short right, short top, short bottom)()
-        if(rotatation == 0 || rotatation == 90 || rotatation == 180 || rotation == 270) {
+        if(rotation == 0 || rotation == 90 || rotation == 180 || rotation == 270) {
 
         enum index = ORDER.countUntil(s);
-        static assert(index >= 0, "No valid texture name");
+        static assert(index >= 0, "Unknown texture: " ~ s);
 
-        enum leftc = 16/left;
-        enum rightc = 16/right;
-        enum topc = 16/top;
-        enum bottomc = 16/bottom;
+        static if(left == 0) { enum leftc = 0; } else { enum leftc = 8/left; }
+        static if(right == 0) { enum rightc = 0; } else { enum rightc = 8/right; }
+        static if(top == 0) { enum topc = 0; } else { enum topc = 8/top; }
+        static if(bottom == 0) { enum bottomc = 0; } else { enum bottomc = 8/bottom; }
 
         auto tex = texture_coordinates[index];
 
         static if(rotation == 0) {
-            return texture_coordinates[index].r0(leftc*tex.half_width, rightc*tex.half_width,
-                                                 topc*tex.half_height, bottomc*tex.half_height);
+            return texture_coordinates[index].r0(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
+                                                 cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
         } else static if(rotation == 90) {
-            return texture_coordinates[index].r90(leftc*tex.half_width, rightc*tex.half_width,
-                                                  topc*tex.half_height, bottomc*tex.half_height);
+            return texture_coordinates[index].r90(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
+                                                  cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
         } else static if(rotation == 180) {
-            return texture_coordinates[index].r180(leftc*tex.half_width, rightc*tex.half_width,
-                                                   topc*tex.half_height, bottomc*tex.half_height);
+            return texture_coordinates[index].r180(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
+                                                   cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
         } else static if(rotation == 270) {
-            return texture_coordinates[index].r270(leftc*tex.half_width, rightc*tex.half_width,
-                                                   topc*tex.half_height, bottomc*tex.half_height);
+            return texture_coordinates[index].r270(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
+                                                   cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
         }
     }
 
-    ProjectionTextureCoordinates get_proj(string s1, string s2="", string s3="")() {
-        static if(s3.length == 0) {
-            s3 = s1;
-        }
+    TextureCoordinate get_tex(string s)() {
+        enum index = ORDER.countUntil(s);
+        static assert(index >= 0, "Unknown texture: " ~ s);
 
+        return texture_coordinates[index];
+    }
+
+    ProjectionTextureCoordinates get_proj(string s1, string s2="", string s3="")() {
         enum index1 = ORDER.countUntil(s1);
-        enum index2 = ORDER.countUntil(s2);
-        enum index3 = ORDER.countUntil(s3);
+        static assert(index1 >= 0, "Unknown texture: " ~ s1);
+
         TextureCoordinate tex1 = texture_coordinates[index1];
 
         static if(s2.length == 0) {
             TextureCoordinate tex2 = tex1;
         } else {
+            enum index2 = ORDER.countUntil(s2);
+            static assert(index2 >= 0, "Unknown texture: " ~ s2);
             TextureCoordinate tex2 = texture_coordinates[index2];
         }
 
         static if(s3.length == 0) {
             TextureCoordinate tex3 = tex1;
         } else {
+            enum index3 = ORDER.countUntil(s3);
+            static assert(index3 >= 0, "Unknown texture: " ~ s3);
             TextureCoordinate tex3 = texture_coordinates[index3];
         }
 
-        return ProjectionTextureCoordinates(tex1.x, tex1.y, tex2.x, tex2.y, tex3.x, tex3.y);
+        return ProjectionTextureCoordinates(tex1.x, tex1.y, tex2.x, tex2.y, tex3.x, tex3.y,
+                            cast(short)(tex1.half_width*2), cast(short)(tex1.half_height*2));
     }
 
     Vertex[] get_vertices(Side side)(size_t id) {
