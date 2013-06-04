@@ -66,7 +66,7 @@ struct Tessellator {
     
     void feed(Chunk chunk, vec3i world_coords, int x, int y, int z,
               float x_offset, float x_offset_r, float y_offset, float y_offset_t, float z_offset, float z_offset_n,
-              const ref Block value, const ref Block right, const ref Block top, const ref Block front,
+              const Block value, const Block right, const Block top, const Block front,
               const ref BiomeData biome_data) {
        
         if(BLOCKS[value.id].empty) { // render neighbours
