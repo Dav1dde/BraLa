@@ -12,6 +12,7 @@ private {
     import gl3n.linalg;
     import gl3n.frustum : Frustum;
 
+    import brala.exception : ResmgrError;
     import brala.log : logger = engine_logger;
     import brala.utils.log;
     import brala.timer : Timer, TickDuration;
@@ -59,15 +60,17 @@ class BraLaEngine {
     }
 
     @property ITexture current_texture() { return _current_texture; }
-    @property void current_texture(ITexture texture) {
-        _current_texture = texture;
-        _current_texture.activate();
-        _current_texture.bind();
-        if(Sampler* sampler = _current_texture in samplers) {
-            _current_sampler = *sampler;
-            _current_sampler.bind(_current_texture);
+    @property void current_texture(ITexture texture)
+        in { assert(texture !is null, "Current texture can not be set to null"); }
+        body {
+            _current_texture = texture;
+            _current_texture.activate();
+            _current_texture.bind();
+            if(Sampler* sampler = _current_texture in samplers) {
+                _current_sampler = *sampler;
+                _current_sampler.bind(_current_texture);
+            }
         }
-    }
     
     this(Window window, Config config) {
         this.window = window;
@@ -155,21 +158,50 @@ class BraLaEngine {
         shader.uniform("proj", proj);
     }
 
-    void use_texture(ITexture texture) {
-        current_texture = texture;
-    }
+    void set_texture(string tex_id, ITexture texture, Sampler new_sampler = null)
+        in { assert(texture !is null, "Can't set a null texture"); }
+        body {
+            ITexture old;
+            try {
+                old = resmgr.get!ITexture(tex_id);
+                resmgr.remove!ITexture(tex_id);
+            } catch(ResmgrError) {}
+
+            Sampler tex_sampler = new_sampler;
+            if(old !is null && tex_sampler is null) {
+                if(Sampler* sampler = old in samplers) {
+                    tex_sampler = *sampler;
+                }
+            }
+            samplers.remove(old);
+
+            resmgr.add(tex_id, texture);
+            if(tex_sampler !is null) {
+                set_sampler(texture, tex_sampler);
+            }
+        }
+
+    void use_texture(ITexture texture)
+        in { assert(texture !is null, "Tried to use null texture"); }
+        body {
+            current_texture = texture;
+        }
 
     void use_texture(string id) {
         current_texture = resmgr.get!ITexture(id);
     }
 
-    void set_sampler(ITexture tex, Sampler s) {
-        samplers[tex] = s;
-    }
+    void set_sampler(ITexture tex, Sampler s)
+        in { assert(s !is null, "Can't set a null sampler"); }
+        body {
+            samplers[tex] = s;
+        }
     
-    void set_sampler(string tex_id, Sampler s) {
-        samplers[resmgr.get!ITexture(tex_id)] = s;
-    }
+    void set_sampler(string tex_id, Sampler s)
+        in { assert(s !is null, "Can't set a null sampler"); }
+        body {
+            samplers[resmgr.get!ITexture(tex_id)] = s;
+        }
 
     void use_sampler(string tex_id) {
         _current_sampler = samplers[resmgr.get!ITexture(tex_id)];

@@ -3,7 +3,6 @@ module brala.main;
 
 private {
     import glamour.gl;
-    import glamour.sampler : Sampler;
     import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import glwtf.glfw;
@@ -139,17 +138,6 @@ class BraLa {
         engine = new BraLaEngine(window, config);
 
         engine.resmgr.add_many(config.get!(Path[])("engine.resources"));
-
-        Image terrain = engine.resmgr.get!Image("terrain");
-        engine.resmgr.add("terrain", terrain.to_texture());
-
-        Sampler terrain_sampler = new Sampler();
-        terrain_sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
-        terrain_sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
-        terrain_sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        terrain_sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-
-        engine.set_sampler("terrain", terrain_sampler);
     }
 
     void start_game(string host, short port) {
@@ -157,7 +145,7 @@ class BraLa {
         
         string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
         assert(file.exists(path));
-        auto atlas = new MinecraftAtlas(path);
+        auto atlas = new MinecraftAtlas(engine, path);
 
         game = new BraLaGame(engine, config, session, atlas);
         game.start(host, port);

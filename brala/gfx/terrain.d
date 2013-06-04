@@ -3,6 +3,8 @@ module brala.gfx.terrain;
 private {
     import stb_image : stbi_load_from_memory, stbi_image_free;
     import gl3n.math : sign;
+    import glamour.sampler : Sampler;
+    import glamour.gl;
     
     import std.path : expandTilde, baseName, extension, stripExtension, setExtension;
     import std.algorithm : canFind, min, max, countUntil;
@@ -13,6 +15,8 @@ private {
     import file = std.file;
     
     import brala.log : logger = terrain_logger;
+    import brala.engine : BraLaEngine;
+    import brala.resmgr : ResourceManager;
     import brala.utils.log;
     import brala.utils.atlas : Atlas, Rectangle;
     import brala.utils.image : Image, RGB, RGBA;
@@ -262,13 +266,23 @@ enum string[] ORDER = ["activatorRail", "activatorRail_powered",
 
 class MinecraftAtlas : Atlas {
     TextureCoordinate[ORDER.length] texture_coordinates;
+    BraLaEngine engine;
+    Sampler sampler;
 
-    this() {
+    this(BraLaEngine engine) {
         super(256, 256);
+
+        this.engine = engine;
+
+        sampler = new Sampler();
+        sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+        sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
+        sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     }
 
-    this(string path) {
-        this();
+    this(BraLaEngine engine, string path) {
+        this(engine);
 
         load(path);
     }
@@ -362,9 +376,12 @@ class MinecraftAtlas : Atlas {
                 insert(atlas_image.image, name.stripExtension());
             }
         }
+
         logger.log!Info("All files processed");
 
         update_texture_coordinates();
+
+        engine.set_texture("terrain", texture, sampler);
     }
 
     protected void update_texture_coordinates() {
