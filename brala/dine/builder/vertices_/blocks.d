@@ -4,7 +4,6 @@ private {
     import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
-    import brala.dine.builder.vertices_.tex : ProjTextureSlice;
     import brala.dine.builder.vertices_.util;
 }
 

@@ -7,7 +7,6 @@ private {
     import brala.dine.builder.constants : Side;
 }
 
-public import brala.dine.builder.vertices_.tex;
 public import brala.dine.builder.vertices_.blocks;
 public import brala.dine.builder.vertices_.slabs;
 public import brala.dine.builder.vertices_.stairs;

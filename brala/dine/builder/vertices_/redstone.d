@@ -8,7 +8,6 @@ private {
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.blocks : CUBE_VERTICES;
-    import brala.dine.builder.vertices_.tex : TextureSlice;
     import brala.dine.builder.vertices_.util;
 }
 
