@@ -138,6 +138,48 @@ class Image {
         this.height = new_height;
     }
 
+    void fill_empty_with_average() {
+        if(comp != RGBA) {
+            return;
+        }
+
+        size_t num;
+        double r = 0, g = 0, b = 0;
+
+        foreach(x; 0..width) {
+            foreach(y; 0..height) {
+                auto pixel = get_pixel(x, y);
+                if(pixel[3] == 0) { // empty
+                    continue;
+                }
+
+                r += pixel[0];
+                g += pixel[1];
+                b += pixel[2];
+                num++;
+            }
+        }
+
+        ubyte[] avrg = [0, 0, 0, 0];
+
+        if(num) {
+            avrg[0] = cast(ubyte)(r / num);
+            avrg[1] = cast(ubyte)(g / num);
+            avrg[2] = cast(ubyte)(b / num);
+        }
+
+        foreach(x; 0..width) {
+            foreach(y; 0..height) {
+                auto pixel = get_pixel(x, y);
+                if(pixel[3] != 0) { // not empty
+                    continue;
+                }
+
+                data[x*comp+y*width*comp..comp+x*comp+y*width*comp] = avrg;
+            }
+        }
+    }
+
     void clear() {
         data[] = 0;
     }

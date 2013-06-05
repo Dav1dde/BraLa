@@ -328,6 +328,8 @@ class MinecraftAtlas : Atlas {
                 if(image.comp != RGBA) {
                     image = image.convert(RGBA);
                 }
+                // Prf_Jakob o/
+                image.fill_empty_with_average();
 
                 AtlasImage atlas_image;
                 atlas_image.image = image;

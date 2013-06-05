@@ -62,7 +62,7 @@ fragment:
                 float alpha = mask_color.a;
 
                 if(alpha < 0.15)
-                    color_out = mix(color, color*v_color, alpha);
+                    color_out = color;
                 else
                     color_out = mask_color*v_color;
             }
