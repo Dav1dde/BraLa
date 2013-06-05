@@ -15,6 +15,7 @@ vertex:
 
     out float v_light;
 
+    uniform vec2 texture_size;
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 proj;
@@ -27,8 +28,8 @@ vertex:
 //         v_normal = v * normal;
         
         v_color = color;
-        v_texcoord = texcoord/256.0;
-        v_mask = mask/256.0;
+        v_texcoord = texcoord/texture_size.x;
+        v_mask = mask/texture_size.y;
 
         //v_light = clamp(light.x+light.y, 0, 15)/15;
         

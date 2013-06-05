@@ -2,6 +2,7 @@ module brala.gfx.terrain;
 
 private {
     import stb_image : stbi_load_from_memory, stbi_image_free;
+    import gl3n.linalg : vec2;
     import gl3n.math : sign;
     import glamour.sampler : Sampler;
     import glamour.gl;
@@ -11,6 +12,7 @@ private {
     import std.string : format, splitLines, strip;
     import std.array : split, replace;
     import std.exception : enforceEx;
+    import std.typecons : tuple;
     import std.conv : to;
     import file = std.file;
     
@@ -83,6 +85,12 @@ struct TextureCoordinate {
             [cast(short)(rect.x+rect.width), cast(short)(rect.y)],
             [cast(short)(rect.x), cast(short)(rect.y)]
         ];
+    }
+
+    @safe nothrow const pure
+    auto unify(short left, short right, short top, short bottom) {
+        return tuple(cast(short)((left/8.0)*half_width), cast(short)((right/8.0)*half_width),
+                     cast(short)((top/8.0)*half_height), cast(short)((bottom/8.0)*half_height));
     }
 
     @safe nothrow const pure
@@ -271,6 +279,8 @@ class MinecraftAtlas : Atlas {
     BraLaEngine engine;
     Sampler sampler;
 
+    vec2 dimensions;
+
     TextureCoordinate[ORDER.length] texture_coordinates;
 
     // Order matches Side.* brala.dine.builder.constants
@@ -279,6 +289,7 @@ class MinecraftAtlas : Atlas {
     this(BraLaEngine engine) {
         super(256, 256);
 
+        this.dimensions = vec2(atlas.width, atlas.height);
         this.engine = engine;
 
         sampler = new Sampler();
@@ -298,6 +309,7 @@ class MinecraftAtlas : Atlas {
     void resize(int width, int height) {
         logger.log!Info("Resizing atlas from %dx%d to %dx%d", atlas.width, atlas.height, width, height);
         super.resize(width, height);
+        dimensions = vec2(width, height);
     }
 
     void load(string path) {
@@ -452,15 +464,24 @@ class MinecraftAtlas : Atlas {
         enum index = ORDER.countUntil(s);
         static assert(index >= 0, "Unknown texture: " ~ s);
 
+        enum leftc = left/8.0;
+        enum rightc = right/8.0;
+        enum topc = top/8.0;
+        enum bottomc = bottom/8.0;
+
         auto tex = texture_coordinates[index];
         static if(rotation == 0) {
-            return texture_coordinates[index].r0(left, right, top, bottom);
+            return tex.r0(cast(short)(tex.half_width*leftc), cast(short)(tex.half_width*rightc),
+                          cast(short)(tex.half_height*topc), cast(short)(tex.half_height*bottomc));
         } else static if(rotation == 90) {
-            return texture_coordinates[index].r90(left, right, top, bottom);
+            return tex.r90(cast(short)(tex.half_width*leftc), cast(short)(tex.half_width*rightc),
+                           cast(short)(tex.half_height*topc), cast(short)(tex.half_height*bottomc));
         } else static if(rotation == 180) {
-            return texture_coordinates[index].r180(left, right, top, bottom);
+            return tex.r180(cast(short)(tex.half_width*leftc), cast(short)(tex.half_width*rightc),
+                            cast(short)(tex.half_height*topc), cast(short)(tex.half_height*bottomc));
         } else static if(rotation == 270) {
-            return texture_coordinates[index].r270(left, right, top, bottom);
+            return tex.r270(cast(short)(tex.half_width*leftc), cast(short)(tex.half_width*rightc),
+                            cast(short)(tex.half_height*topc), cast(short)(tex.half_height*bottomc));
         }
     }
 

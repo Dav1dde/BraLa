@@ -469,6 +469,7 @@ class World {
 
         auto frustum = engine.frustum;
         engine.flush_uniforms();
+        engine.current_shader.uniform("texture_size", atlas.dimensions);
         
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty && chunk.tessellated) {

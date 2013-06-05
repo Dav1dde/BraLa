@@ -12,6 +12,7 @@ public {
     import std.functional : memoize;
     import std.typetuple : TypeTuple;
     import std.conv : to;
+    import std.string : format;
 
     import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.blocks : BLOCKS, BlockDescriptor;
@@ -37,7 +38,8 @@ mixin template BlockBuilder() {
                                const Block block,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
-        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
+        in { assert(elements+vertices.length <= buffer.length,
+                    "not enough allocated memory for tessellator: %d+%d <= %d".format(elements+vertices.length, buffer.length)); }
         body {
             size_t end = elements + vertices.length*Vertex.sizeof;
             
@@ -748,9 +750,10 @@ mixin template BlockBuilder() {
             short bottom = (data & 2) ? 8 : 3;
             short right = (data & 4) ? 8 : 3;
             short left = (data & 8) ? 8 : 3;
-            auto tex = atlas.get_tex!("redstoneDust_cross")().r0(left, right, top, bottom);
+            auto tex = atlas.get_tex!("redstoneDust_cross")();
+            auto coords = tex.r0(tex.unify(left, right, top, bottom).expand);
 
-            auto vertices = memoize!(redstone_wire, 8)(Facing.SOUTH, tex, left, right, top, bottom);
+            auto vertices = memoize!(redstone_wire, 8)(Facing.SOUTH, coords, left, right, top, bottom);
             add_template_vertices(vertices, block, x_offset, y_offset, z_offset, color.field);
         }
 
