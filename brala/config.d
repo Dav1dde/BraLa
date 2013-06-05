@@ -47,7 +47,7 @@ struct AppArguments {
     bool no_snoop = false;
     size_t tessellation_threads = 0;
 
-    bool default_tp = false;
+    string texture_pack;
 
     void help(string[] args, string[][] p) {
         string[] help_strings = [
@@ -83,7 +83,7 @@ struct AppArguments {
             "\t\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
             "\t\t\t\tmore CPU usage, but faster terrain tessellation",
 
-            "\ttry to extract the minecraft terrain.png from the installed minecraft.jar"
+            "\tPath to texture pack, if none specified defaults to config or tries to find minecraft.jar"
 
             "\t\tshows this help"
         ];
@@ -154,8 +154,7 @@ Config initialize_config() {
     config.set_default("brala.tessellation_threads", 3);
     config.set_if("brala.tessellation_threads", app_arguments.tessellation_threads);
 
-    config.set_default("brala.default_tp", false);
-    config.set_if("brala.default_tp", app_arguments.default_tp);
+    config.set_if("game.texture.pack", app_arguments.texture_pack);
 
     return config;
 }

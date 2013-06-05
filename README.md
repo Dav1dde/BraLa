@@ -168,7 +168,7 @@ BraLa supports a few commandline options:
                             More threads: more used memory (each thread needs his own tessellation-buffer),
                             more CPU usage, but faster terrain tessellation.
 
---default-tp                try to extract the minecraft terrain.png from the installed minecraft.jar
+--texture-pack              Path to texture pack, if none specified defaults to config or tries to find minecraft.jar
                         
 --width                     specifies the width of the window
 --height                    specifies the height of the window
