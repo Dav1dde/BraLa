@@ -102,7 +102,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
@@ -244,7 +244,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
@@ -386,7 +386,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
@@ -528,7 +528,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
@@ -670,7 +670,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
@@ -812,7 +812,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // stone button
     {""}, // snow
     {"ice"}, // ice
-    {"snow_side"}, // snow block
+    {"snow"}, // snow block
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
