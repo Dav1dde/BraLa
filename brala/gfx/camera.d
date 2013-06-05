@@ -32,8 +32,8 @@ class BraLaCamera : ICamera {
     BraLaEngine engine;    
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
-    float fov = 65.0f;
-    float near = 1.0f;
+    float fov = 70.0f;
+    float near = 0.001f;
     float far = 400.0f;
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     
