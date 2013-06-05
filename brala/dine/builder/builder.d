@@ -592,6 +592,7 @@ mixin template BlockBuilder() {
                        float x_offset, float y_offset, float z_offset) {
 
 
+        bool adjust_height = false;
         static if(s == Side.TOP) {
             enum left = 1;
             enum right = 1;
@@ -605,14 +606,19 @@ mixin template BlockBuilder() {
         } else {
             enum left = 2;
             enum right = 2;
-            enum top = 2;
+            static if(tex == "redtorch_lit") {
+                adjust_height = true;
+                enum top = 3;
+            } else {
+                enum top = 2;
+            }
             enum bottom = 8;
         }
 
         enum fs = [Facing.EAST, Facing.WEST, Facing.SOUTH, Facing.NORTH];
 
         auto vertices = simple_torch(s, fs[block.metadata > 0x4 ? 3 : block.metadata-1], block.metadata > 0x4,
-                                     atlas.get!(tex, 0, left, right, top, bottom)());
+                                     atlas.get!(tex, 0, left, right, top, bottom)(), adjust_height);
         add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
     }
 
@@ -623,22 +629,24 @@ mixin template BlockBuilder() {
 
     void redstone_repeater(Side s, bool powered = false)(const Block block, const ref BiomeData biome_data,
                                                          float x_offset, float y_offset, float z_offset) {
+        bool adjust_height = false;
         short[2][4] tex;
         short[2][4] torch_tex;
         static if(s == Side.TOP || s == Side.BOTTOM) {
             static if(powered) {
-                tex = atlas.get!("repeater");
-                torch_tex = atlas.get!("redtorch", 0, 1, 1, 2, 0);
+                tex = atlas.get!("repeater_lit")();
+                torch_tex = atlas.get!("redtorch_lit", 0, 1, 1, 2, 0)();
             } else {
-                tex = atlas.get!("repeater_lit");
-                torch_tex = atlas.get!("redtorch_lit", 0, 1, 1, 2, 0);
+                tex = atlas.get!("repeater")();
+                torch_tex = atlas.get!("redtorch", 0, 1, 1, 2, 0)();
             }
-        } else static if(s != Side.TOP && s != Side.BOTTOM) {
-            tex = atlas.get!("stoneslab_side", 0, 8, 8, -6, 8); // double slab texture
+        } else {
+            tex = atlas.get!("stoneslab_side", 0, 8, 8, -6, 8)(); // double slab texture
             static if(powered) {
-                torch_tex = atlas.get!("redtorch_lit", 0, 1, 1, 2, 0);
+                torch_tex = atlas.get!("redtorch_lit", 0, 2, 2, 3, 4)();
+                adjust_height = true;
             } else {
-                torch_tex = atlas.get!("redtorch", 0, 1, 1, 2, 0);
+                torch_tex = atlas.get!("redtorch", 0, 2, 2, 2, 4)();
             }
         }
 
@@ -647,7 +655,7 @@ mixin template BlockBuilder() {
         float offset = -0.0625f + ((block.metadata >> 2) & 0x3) * 0.125f;
 
         alias memoize!(.redstone_repeater, 16) rr;
-        add_template_vertices(rr(s, fs[block.metadata & 0x3], offset, tex, torch_tex), block, x_offset, y_offset, z_offset);
+        add_template_vertices(rr(s, fs[block.metadata & 0x3], offset, tex, torch_tex, adjust_height), block, x_offset, y_offset, z_offset);
     }
 
     void redstone(Side s)(const Block block, vec3i world_coords, float x_offset, float y_offset, float z_offset) {

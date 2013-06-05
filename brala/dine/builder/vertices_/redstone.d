@@ -170,13 +170,22 @@ immutable CubeSideData[6] TORCH_VERTICES_WALL = [
 ];
 
 
-Vertex[] simple_torch(Side side, Facing face, bool on_ground, short[2][4] texture_slice) {
+Vertex[] simple_torch(Side side, Facing face, bool on_ground, short[2][4] texture_slice, bool adjust_height) {
     CubeSideData cbsd;
 
     if(on_ground) {
         cbsd = TORCH_VERTICES[side];
     } else {
         cbsd = TORCH_VERTICES_WALL[side];
+    }
+
+    if(adjust_height && side < 4) {
+        foreach(i, vertex; cbsd.positions) {
+            cbsd.positions[i] = vertex;
+            if(cbsd.positions[i][1] == 0.125f) {
+                cbsd.positions[i][1] = 0.1875f;
+            }
+        }
     }
 
 
@@ -186,11 +195,15 @@ Vertex[] simple_torch(Side side, Facing face, bool on_ground, short[2][4] textur
     return data.dup;
 }
 
-Vertex[] cut_torch(Side side, Facing face, float y_offset, float z_offset, short[2][4] texture_slice) {
+Vertex[] cut_torch(Side side, Facing face, float y_offset, float z_offset, short[2][4] texture_slice, bool adjust_height) {
     CubeSideData cbsd = TORCH_VERTICES_CUT[side];
     alias texture_slice mask_slice;
 
     foreach(ref v; cbsd.positions) {
+        if(adjust_height && side < 4 && v[1] == 0.125f) {
+            v[1] = 0.1875f;
+        }
+
         v[1] += y_offset;
         v[2] += z_offset;
     }
@@ -220,12 +233,12 @@ immutable CubeSideData[6] REPEATER_VERTICES = [
        [0.0f, -1.0f, 0.0f] }
 ];
 
-Vertex[] redstone_repeater(Side side, Facing face, float offset, short[2][4] texture_slice, short[2][4] torch_tex) {
+Vertex[] redstone_repeater(Side side, Facing face, float offset, short[2][4] texture_slice, short[2][4] torch_tex, bool adjust_height) {
     CubeSideData cbsd = REPEATER_VERTICES[side];
     alias texture_slice mask_slice;
 
     mixin(mk_vertices_adv("to_triangles", true));
-    return data ~ cut_torch(side, face, 0.125f, offset, torch_tex);
+    return data ~ cut_torch(side, face, 0.125f, offset, torch_tex, adjust_height);
 }
 
 
