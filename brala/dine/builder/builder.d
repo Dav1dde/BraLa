@@ -561,14 +561,14 @@ mixin template BlockBuilder() {
         short[2][4] tex;
         final switch(s) {
             case 0:
-            case 2:
                 if(block.metadata & 0x8) {
-                    tex = atlas.get!("piston_top_sticky");
+                    tex = atlas.get!("piston_top_sticky")();
                 } else {
-                    tex = atlas.get!("piston_top");
+                    tex = atlas.get!("piston_top")();
                 }
                 break;
             case 1: tex = atlas.get!("piston_side", 90, 8, 8, 8, -4)(); break;
+            case 2: tex = atlas.get!("piston_top")(); break;
             case 3: tex = atlas.get!("piston_side", 270, 8, 8, 8, -4)(); break;
             case 4: tex = atlas.get!("piston_side", 180, 8, 8, 8, -4)(); break;
             case 5: tex = atlas.get!("piston_side", 0, 8, 8, 8, -4)(); break;
