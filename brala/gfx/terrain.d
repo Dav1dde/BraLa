@@ -6,8 +6,10 @@ private {
     import gl3n.math : sign;
     import glamour.sampler : Sampler;
     import glamour.gl;
+    import glamour.util;
     
-    import std.path : expandTilde, baseName, extension, stripExtension, setExtension;
+    import std.path : buildPath, expandTilde, baseName, extension,
+                      stripExtension, setExtension;
     import std.algorithm : canFind, min, max, countUntil;
     import std.string : format, splitLines, strip;
     import std.array : split, replace;
@@ -18,10 +20,12 @@ private {
     
     import brala.log : logger = terrain_logger;
     import brala.engine : BraLaEngine;
+    import brala.network.session : minecraft_folder;
     import brala.dine.builder.constants : Side;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : TEXTURE_INFORMATION, simple_block;
     import brala.utils.log;
+    import brala.utils.config : Config, Path;
     import brala.utils.ctfe : TupleRange;
     import brala.utils.atlas : Atlas, Rectangle;
     import brala.utils.image : Image, RGB, RGBA;
@@ -292,15 +296,33 @@ class MinecraftAtlas : Atlas {
         this.dimensions = vec2(atlas.width, atlas.height);
         this.engine = engine;
 
+        string path = engine.config.get!Path("game.texture.pack");
+        if(path == "default" || path.length == 0) {
+            path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
+        }
+        enforceEx!AtlasException(file.exists(path), "Unable to load textures from: " ~ path);
+
         sampler = new Sampler();
         sampler.set_parameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
         sampler.set_parameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
         sampler.set_parameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-    }
+        if(engine.config.get!bool("game.texture.mipmap", true)) {
+            sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+        } else {
+            sampler.set_parameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        }
 
-    this(BraLaEngine engine, string path) {
-        this(engine);
+        string ani = engine.config.get!string("game.texture.anisotropic", "");
+        if(ani.length && ani != "0") {
+            float level = 0.0f;
+            if(ani == "max") {
+                checkgl!glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &level);
+            } else {
+                level = engine.config.get!int("game.texture.anisotropic");
+            }
+
+            sampler.set_parameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, level);
+        }
 
         load(path);
     }

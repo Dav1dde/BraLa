@@ -55,9 +55,9 @@ class BraLaGame {
 
     size_t tessellation_threads = 3;
     
-    this(BraLaEngine engine, Config config, Session session, MinecraftAtlas atlas) {
+    this(BraLaEngine engine, Session session, MinecraftAtlas atlas) {
         this.engine = engine;
-        this.config = config;
+        this.config = engine.config;
         this.tessellation_threads = config.get!int("brala.tessellation_threads");
         this.session = session;
         this.atlas = atlas;

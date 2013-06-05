@@ -23,7 +23,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.game : BraLaGame;
     import brala.config : initialize_config;
-    import brala.network.session : Session, DelayedSnooper, minecraft_folder;
+    import brala.network.session : Session, DelayedSnooper;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
     import brala.gfx.terrain : MinecraftAtlas, extract_minecraft_terrain;
@@ -143,11 +143,8 @@ class BraLa {
     void start_game(string host, short port) {
         collectException(snooper.snoop());
         
-        string path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
-        assert(file.exists(path));
-        auto atlas = new MinecraftAtlas(engine, path);
-
-        game = new BraLaGame(engine, config, session, atlas);
+        auto atlas = new MinecraftAtlas(engine);
+        game = new BraLaGame(engine, session, atlas);
         game.start(host, port);
     }
 
