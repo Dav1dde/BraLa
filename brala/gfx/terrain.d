@@ -388,7 +388,7 @@ class MinecraftAtlas : Atlas {
 
         update_everything();
 
-        engine.set_texture("terrain", texture, sampler);
+        engine.set_texture("terrain", atlas.to_texture(), sampler);
     }
 
     protected void update_everything() {
@@ -452,25 +452,15 @@ class MinecraftAtlas : Atlas {
         enum index = ORDER.countUntil(s);
         static assert(index >= 0, "Unknown texture: " ~ s);
 
-        static if(left == 0) { enum leftc = 0; } else { enum leftc = 8/left; }
-        static if(right == 0) { enum rightc = 0; } else { enum rightc = 8/right; }
-        static if(top == 0) { enum topc = 0; } else { enum topc = 8/top; }
-        static if(bottom == 0) { enum bottomc = 0; } else { enum bottomc = 8/bottom; }
-
         auto tex = texture_coordinates[index];
-
         static if(rotation == 0) {
-            return texture_coordinates[index].r0(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
-                                                 cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
+            return texture_coordinates[index].r0(left, right, top, bottom);
         } else static if(rotation == 90) {
-            return texture_coordinates[index].r90(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
-                                                  cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
+            return texture_coordinates[index].r90(left, right, top, bottom);
         } else static if(rotation == 180) {
-            return texture_coordinates[index].r180(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
-                                                   cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
+            return texture_coordinates[index].r180(left, right, top, bottom);
         } else static if(rotation == 270) {
-            return texture_coordinates[index].r270(cast(short)(leftc*tex.half_width), cast(short)(rightc*tex.half_width),
-                                                   cast(short)(topc*tex.half_height), cast(short)(bottomc*tex.half_height));
+            return texture_coordinates[index].r270(left, right, top, bottom);
         }
     }
 

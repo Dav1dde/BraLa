@@ -576,9 +576,9 @@ mixin template BlockBuilder() {
         }
 
         static if(s == Side.LEFT || s == Side.RIGHT) {
-            auto arm_tex = atlas.get!("piston_side")();
+            auto arm_tex = atlas.get!("piston_side", 0, 8, 8, 8, -4)();
         } else {
-            auto arm_tex = atlas.get!("piston_side", 90)();
+            auto arm_tex = atlas.get!("piston_side", 90, 8, 8, 8, -4)();
         }
 
         enum fs = [Side.BOTTOM, Side.TOP, Side.FAR, Side.NEAR, Side.LEFT, Side.RIGHT];
