@@ -5,7 +5,7 @@ private {
     import core.stdc.stdlib : exit;
 
     import std.getopt : getopt;
-    import std.algorithm : canFind, any;
+    import std.algorithm : startsWith, canFind, any;
     import std.string : join;
     import std.array : replace, split;
     import std.typetuple : TypeTuple, NoDuplicates;
@@ -80,6 +80,11 @@ private static string[] build_param_list(T)() {
     foreach(member; __traits(allMembers, T)) {
         static if(!__traits(compiles, mixin(`T.` ~ member ~ `.alias_to`))) {    
             string temp = member;
+
+            if(member.startsWith("__")) {
+                // some strange shit goes on here, __xopEquals e.g.
+                continue;
+            }
 
             if(temp == "help") {
                 continue;

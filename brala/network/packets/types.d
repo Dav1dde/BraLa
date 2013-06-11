@@ -306,7 +306,7 @@ struct MapChunkType { // TODO: implement send
         return ret;
     }
 
-    static size_t parse_raw_chunk(Chunk chunk, const ref ubyte[] unc_data, bool biome_data) {
+    static size_t parse_raw_chunk(Chunk chunk, const ubyte[] unc_data, bool biome_data) {
         size_t offset = 0;
         foreach(i; 0..16) {
             if(chunk.primary_bitmask & 1 << i) {

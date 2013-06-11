@@ -21,7 +21,7 @@ struct AppArguments {
     } else {
         string brala_conf = `brala.conf`;
     }
-    
+
     string username;
     Alias!("username") u;
 
