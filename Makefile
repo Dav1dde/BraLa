@@ -43,7 +43,6 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)gl3n \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)glamour \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)openssl \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)std \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)nbd \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)glwtf \
 			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c \
