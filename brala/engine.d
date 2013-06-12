@@ -50,7 +50,7 @@ class BraLaEngine {
     protected Shader _current_shader = null;
     protected ITexture _current_texture = null;
     protected Sampler _current_sampler = null;
-    Sampler[ITexture] samplers;
+    Sampler[string] samplers;
     
     @property Shader current_shader() { return _current_shader; }
     @property void current_shader(Shader shader) {
@@ -60,18 +60,7 @@ class BraLaEngine {
     }
 
     @property ITexture current_texture() { return _current_texture; }
-    @property void current_texture(ITexture texture)
-        in { assert(texture !is null, "Current texture can not be set to null"); }
-        body {
-            _current_texture = texture;
-            _current_texture.activate();
-            _current_texture.bind();
-            if(Sampler* sampler = _current_texture in samplers) {
-                _current_sampler = *sampler;
-                _current_sampler.bind(_current_texture);
-            }
-        }
-    
+
     this(Window window, Config config) {
         this.window = window;
         this.config = config;
@@ -81,13 +70,6 @@ class BraLaEngine {
         
         resize(window.width, window.height);
         window.on_resize.connect(&resize);
-
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glEnable(GL_CULL_FACE);
-
-        // wireframe mode, for debugging
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 
     void shutdown() {
@@ -137,10 +119,6 @@ class BraLaEngine {
         logger.log!Info("Mainloop ran %f seconds", ts.to!("seconds", float));
     }
     
-    void use_shader(Shader shader) {
-        current_shader = shader;
-    }
-    
     void use_shader(string id) {
         current_shader = resmgr.get!Shader(id);
     }
@@ -161,50 +139,37 @@ class BraLaEngine {
     void set_texture(string tex_id, ITexture texture, Sampler new_sampler = null)
         in { assert(texture !is null, "Can't set a null texture"); }
         body {
-            ITexture old;
-            try {
-                old = resmgr.get!ITexture(tex_id);
-                resmgr.remove!ITexture(tex_id);
-            } catch(ResmgrError) {}
-
-            Sampler tex_sampler = new_sampler;
-            if(old !is null && tex_sampler is null) {
-                if(Sampler* sampler = old in samplers) {
-                    tex_sampler = *sampler;
-                }
-            }
-            samplers.remove(old);
+            try { resmgr.remove!ITexture(tex_id); } catch(ResmgrError) {}
 
             resmgr.add(tex_id, texture);
-            if(tex_sampler !is null) {
-                set_sampler(texture, tex_sampler);
+            if(new_sampler !is null) {
+                set_sampler(tex_id, new_sampler);
             }
         }
 
-    void use_texture(ITexture texture)
-        in { assert(texture !is null, "Tried to use null texture"); }
+    void use_texture(string id, int unit)
+        in { assert(_current_shader !is null, "Shader can't be null when using texture"); }
         body {
-            current_texture = texture;
+            _current_texture = resmgr.get!ITexture(id);
+            assert(_current_texture !is null);
+            _current_texture.bind_and_activate(unit);
+            if(Sampler* sampler = id in samplers) {
+                _current_sampler = *sampler;
+                _current_sampler.bind(_current_texture);
+            }
+
+            current_shader.uniform1i(id, unit);
         }
 
-    void use_texture(string id) {
-        current_texture = resmgr.get!ITexture(id);
-    }
-
-    void set_sampler(ITexture tex, Sampler s)
-        in { assert(s !is null, "Can't set a null sampler"); }
-        body {
-            samplers[tex] = s;
-        }
     
     void set_sampler(string tex_id, Sampler s)
         in { assert(s !is null, "Can't set a null sampler"); }
         body {
-            samplers[resmgr.get!ITexture(tex_id)] = s;
+            samplers[tex_id] = s;
         }
 
     void use_sampler(string tex_id) {
-        _current_sampler = samplers[resmgr.get!ITexture(tex_id)];
+        _current_sampler = samplers[tex_id];
         _current_sampler.bind(_current_texture);
     }
 }

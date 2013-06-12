@@ -27,6 +27,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.engine : BraLaEngine;
     import brala.entities.player : Player;
+    import brala.gfx.renderer : IRenderer, ForwardRenderer, DeferredRenderer;
     import brala.gfx.terrain : MinecraftAtlas;
     import brala.gfx.text : parse_chat;
     import brala.gfx.gl : clear;
@@ -42,6 +43,7 @@ class BraLaGame {
     Session session;
     MinecraftAtlas atlas;
     ThreadedConnection connection;
+    IRenderer renderer;
     
     Player player;
     protected World _current_world;    
@@ -61,7 +63,8 @@ class BraLaGame {
         this.tessellation_threads = config.get!int("brala.tessellation_threads");
         this.session = session;
         this.atlas = atlas;
-        connection = new ThreadedConnection(session);
+        this.connection = new ThreadedConnection(session);
+        this.renderer = new ForwardRenderer(engine);
     }
 
     void quit() {
@@ -128,17 +131,10 @@ class BraLaGame {
     }
     
     void display() {
-        glDisable(GL_BLEND);
-        clear(vec3(0.2f, 0.2f, 0.9f));
+        renderer.enter();
+        scope(success) renderer.exit();
 
-        if(_current_world !is null) {
-            engine.use_shader("terrain");
-
-            engine.use_texture("terrain");
-            engine.current_shader.uniform1i("terrain", 0);
-
-            current_world.draw(engine);
-        }
+        if(current_world !is null) current_world.draw(engine);
     }
     
     // Server/Connection
