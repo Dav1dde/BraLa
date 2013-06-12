@@ -12,6 +12,8 @@ private {
     import gl3n.linalg;
     import gl3n.frustum : Frustum;
 
+    import std.signals;
+
     import brala.exception : ResmgrError;
     import brala.log : logger = engine_logger;
     import brala.utils.log;
@@ -30,6 +32,9 @@ class BraLaEngine {
     @property vec2i viewport() {
         return _viewport;
     }
+
+    mixin Signal!() on_shutdown;
+    mixin Signal!() on_resize;
     
     mat4 model = mat4.identity;
     mat4 view = mat4.identity;
@@ -73,6 +78,9 @@ class BraLaEngine {
     }
 
     void shutdown() {
+        logger.log!Info("Triggering on_shutdown");
+        on_shutdown.emit();
+
         logger.log!Info("Removing Samplers from Engine");
         foreach(sampler; samplers.values) {
             sampler.remove();
@@ -84,6 +92,8 @@ class BraLaEngine {
     void resize(int width, int height) {
         _viewport = vec2i(width, height);
         glViewport(0, 0, width, height);
+        logger.log!Info("Triggering on_resize");
+        on_resize.emit();
     }
     
     void mainloop(bool delegate(TickDuration) callback) {
@@ -152,7 +162,7 @@ class BraLaEngine {
         body {
             _current_texture = resmgr.get!ITexture(id);
             assert(_current_texture !is null);
-            _current_texture.bind_and_activate(unit);
+            _current_texture.bind_and_activate(GL_TEXTURE0+unit);
             if(Sampler* sampler = id in samplers) {
                 _current_sampler = *sampler;
                 _current_sampler.bind(_current_texture);
@@ -161,7 +171,6 @@ class BraLaEngine {
             current_shader.uniform1i(id, unit);
         }
 
-    
     void set_sampler(string tex_id, Sampler s)
         in { assert(s !is null, "Can't set a null sampler"); }
         body {

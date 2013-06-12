@@ -65,6 +65,7 @@ class BraLaGame {
         this.atlas = atlas;
         this.connection = new ThreadedConnection(session);
         this.renderer = new ForwardRenderer(engine);
+//         this.renderer = new DeferredRenderer(engine);
     }
 
     void quit() {

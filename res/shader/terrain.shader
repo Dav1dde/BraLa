@@ -23,16 +23,16 @@ vertex:
     void main() {
         vec4 view_pos = view * model * vec4(position, 1.0);
         v_position = view_pos.xyz;
-        
+
 //         mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
 //         v_normal = v * normal;
-        
+
         v_color = color;
         v_texcoord = texcoord/texture_size.x;
         v_mask = mask/texture_size.y;
 
         //v_light = clamp(light.x+light.y, 0, 15)/15;
-        
+
         gl_Position = proj * view_pos;
     }
 

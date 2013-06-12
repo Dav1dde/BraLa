@@ -419,7 +419,7 @@ class World {
             GLuint color = shader.get_attrib_location("color");
             GLuint texcoord = shader.get_attrib_location("texcoord");
             GLuint mask = shader.get_attrib_location("mask");
-            GLuint light = shader.get_attrib_location("light");
+//             GLuint light = shader.get_attrib_location("light");
             
             enum stride = Vertex.sizeof;
             chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
@@ -427,7 +427,7 @@ class World {
             chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 12, stride, true); // normalize it
             chunk.vbo.bind(texcoord, GL_SHORT, 2, 16, stride);
             chunk.vbo.bind(mask, GL_SHORT, 2, 20, stride);
-            chunk.vbo.bind(light, GL_UNSIGNED_BYTE, 2, 22, stride);
+//             chunk.vbo.bind(light, GL_UNSIGNED_BYTE, 2, 22, stride);
         }
     
     void draw(BraLaEngine engine) {
