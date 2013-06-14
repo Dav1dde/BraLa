@@ -60,13 +60,11 @@ And to install the rest of the dependencies:
 sudo apt-get install git cmake libssl-dev libxss-dev
 ```
 
-The following commands might depend on your current graphics driver, for mesa this would be:
+Furthermore you need the `libxrandr` headers:
 
 ```
-sudo apt-get install libgl1-mesa-dev libxrandr-dev
+sudo apt-get install libxrandr-dev
 ```
-
-In general, the OpenGL and XrandR development headers are needed.
 
 Now you're ready to proceed with Cloning!
 
