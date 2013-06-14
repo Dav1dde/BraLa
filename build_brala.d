@@ -2,10 +2,11 @@
 
 private {
     import std.algorithm : max, map, filter, endsWith, canFind;
-    import std.path : buildPath, extension, setExtension, dirName, baseName, getcwd, chdir;
+    import std.path : buildPath, extension, setExtension, dirName, baseName, getcwd;
     import std.array : join, split, appender, array;
     import std.process : shell, system, environment;
-    import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse, FileException, exists, copy, remove, readText, write;
+    import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse,
+                      FileException, exists, copy, remove, readText, write, chdir;
     import std.stdio : writeln, writefln, File;
     import std.string : format, stripRight;
     import std.parallelism : TaskPool;
@@ -22,7 +23,7 @@ private {
     }
 
     version(linux) {
-        import std.path : symlink;
+        import std.file : symlink;
     }
 }
 
