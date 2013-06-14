@@ -74,7 +74,7 @@ class DeferredRenderer : IRenderer {
         }
         if(depth !is null) depth.remove();
 
-        foreach(i; 0..1) {
+        foreach(i; 0..4) {
             auto tex = new Texture2D();
             tex.set_data(cast(void*)null, GL_RGBA, engine.viewport.x, engine.viewport.y,
                          GL_RGBA, GL_UNSIGNED_BYTE, true, 0);

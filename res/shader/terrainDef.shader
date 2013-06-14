@@ -27,6 +27,8 @@ vertex:
 //         mat3 v = mat3(transpose(inverse(view))) * mat3(transpose(inverse(model)));
 //         v_normal = v * normal;
 
+        v_normal = vec3(0.0, 0.0, 0.0);
+
         v_color = color;
         v_texcoord = texcoord/texture_size.x;
         v_mask = mask/texture_size.y;
@@ -37,7 +39,7 @@ vertex:
     }
 
 fragment:
-//     in vec3 v_normal;
+    in vec3 v_normal;
     in vec3 v_position;
     in vec4 v_color;
     in vec2 v_texcoord;
@@ -65,4 +67,8 @@ fragment:
                     gl_FragData[0] = mask_color*v_color;
             }
         }
+
+        gl_FragData[1] = vec4(v_position, 0.0);
+        gl_FragData[2] = vec4(v_texcoord, v_mask);
+        gl_FragData[3] = vec4(v_normal, 0.0);
     }
