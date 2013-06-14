@@ -6,7 +6,6 @@ private {
 public {
     import std.typetuple : TypeTuple, staticMap, staticIndexOf, NoDuplicates;
     import std.typecons : Tuple;
-    import std.metastrings : toStringNow;
     import std.stream : Stream;
     import std.conv : to;
 
@@ -46,7 +45,7 @@ mixin template get_packets_mixin(Members...) {
     auto parse_packet(ubyte id)(Stream s) {
         alias staticIndexOf!(id, staticMap!(extract_id, get_packets!())) id_index;
         static if(id_index < 0) {
-            static assert(false, "Invalid packet with id: " ~ toStringNow!id);
+            static assert(false, "Invalid packet with id: " ~ to!string(id));
         } else {
             return get_packets!()[id_index].cls.recv(s);
         }

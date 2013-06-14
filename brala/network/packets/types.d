@@ -4,7 +4,6 @@ private {
     import std.stream : Stream;
     import std.typetuple : TypeTuple, staticIndexOf, staticMap;
     import std.typecons : Tuple;
-    import std.metastrings : toStringNow;
     import std.algorithm : canFind;
     import std.string : format;
     import std.array : join, appender, replace;
@@ -41,7 +40,7 @@ struct Metadata {
 
     private template extract_type(alias T) { alias T.type extract_type; }
     private template extract_name(alias T) { alias T.name extract_name; }
-    private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ toStringNow!(T.name) ~ ";"; }
+    private template make_decl(alias T) { enum make_decl = T.type.stringof ~ " _" ~ to!string(T.name) ~ ";"; }
 
     alias TypeTuple!(Pair!(byte, 0), Pair!(short, 1), Pair!(int, 2), Pair!(float, 3),
                      Pair!(string, 4), Pair!(SlotType, 5), Pair!(Tup6, 6)) members;
@@ -60,7 +59,7 @@ struct Metadata {
         static if(type_index < 0) {
             static assert(false);
         } else {
-            return mixin("_" ~ toStringNow!(members[type_index].name));
+            return mixin("_" ~ to!string(members[type_index].name));
         }
     }
     
@@ -70,7 +69,7 @@ struct Metadata {
         string s;
         final switch(type) {
             foreach(m; members) {
-                case m.name: s = to!string(mixin("_" ~ toStringNow!(m.name)));
+                case m.name: s = to!string(mixin("_" ~ to!string(m.name)));
             }
         }
 
