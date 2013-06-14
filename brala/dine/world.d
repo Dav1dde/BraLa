@@ -160,7 +160,7 @@ class World {
             Chunk chunk = chunks[chunkc];
             chunk.empty_chunk();
 
-            if(chunk.vbo !is null && chunk.vbo.buffer != 0) {
+            if(chunk.vbo !is null) {
                 vram.remove(chunk.vbo.length);
                 chunk.vbo.remove();
             }
@@ -178,7 +178,7 @@ class World {
     
     void remove_all_chunks() {
         foreach(key; chunks.keys()) {
-            remove_chunk(key);
+            remove_chunk(key, false);
         }
     }
 
