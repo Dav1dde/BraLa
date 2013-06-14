@@ -6,6 +6,7 @@ private {
     import glamour.fbo;
 
     import brala.engine : BraLaEngine;
+    import brala.gfx.tscreen : TScreen, TScreenInvertedUVY;
 }
 
 
@@ -46,14 +47,18 @@ class ForwardRenderer : IRenderer {
 
 
 class DeferredRenderer : IRenderer {
-    BraLaEngine engine;
-    FrameBuffer fbo;
-    Texture2D[] textures;
-    Texture2D depth;
+    protected BraLaEngine engine;
 
+    protected FrameBuffer fbo;
+    protected Texture2D[] textures;
+    protected RenderBuffer depth;
+    protected uint[] draw_buffers;
+
+    protected TScreen tscreen;
 
     this(BraLaEngine engine) {
         this.engine = engine;
+        this.tscreen = new TScreenInvertedUVY(engine);
         this.fbo = new FrameBuffer();
 
         update();
@@ -64,20 +69,32 @@ class DeferredRenderer : IRenderer {
     void update() {
         fbo.bind();
 
-        foreach(i; 0..4) {
+        foreach(tex; textures) {
+            if(tex !is null) tex.remove();
+        }
+        if(depth !is null) depth.remove();
+
+        foreach(i; 0..1) {
             auto tex = new Texture2D();
-            tex.set_data(cast(void*)null, GL_RGB32F, engine.viewport.x, engine.viewport.y,
-                         GL_RGB, GL_FLOAT, false, 0);
+            tex.set_data(cast(void*)null, GL_RGBA, engine.viewport.x, engine.viewport.y,
+                         GL_RGBA, GL_UNSIGNED_BYTE, true, 0);
+            tex.set_parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            tex.set_parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            tex.set_parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            tex.set_parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+            draw_buffers ~= GL_COLOR_ATTACHMENT0+i;
             fbo.attach(tex, GL_COLOR_ATTACHMENT0+i);
+            tex.unbind();
 
             textures ~= tex;
         }
 
-        depth = new Texture2D();
-        depth.set_data(cast(void*)null, GL_DEPTH_COMPONENT32F, engine.viewport.x, engine.viewport.y,
-                       GL_DEPTH_COMPONENT, GL_FLOAT, false, 0);
+        depth = new RenderBuffer();
+        depth.set_storage(GL_DEPTH_COMPONENT, engine.viewport.x, engine.viewport.y);
         fbo.attach(depth, GL_DEPTH_ATTACHMENT);
 
+        depth.unbind();
         fbo.unbind();
     }
 
@@ -91,6 +108,8 @@ class DeferredRenderer : IRenderer {
     }
 
     void enter() {
+        fbo.bind();
+
         glClearColor(0.2f, 0.2f, 0.9f, 1.0f);
         glClearDepth(1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -102,17 +121,16 @@ class DeferredRenderer : IRenderer {
 //         wireframe mode, for debugging
 //         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        fbo.bind();
-
-        auto draw_buffers = [GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3];
         glDrawBuffers(cast(int)draw_buffers.length, draw_buffers.ptr);
 
-        engine.use_shader("terrain");
+        engine.use_shader("terrainDef");
         engine.use_texture("terrain", 0);
     }
 
     void exit() {
         fbo.unbind();
-    }
 
+        tscreen.display(textures[0]);
+//         tscreen.display("terrain");
+    }
 }
