@@ -15,16 +15,6 @@ private {
     import std.digest.md;
     import std.digest.digest;
     import core.time : dur;
-
-    version(NoDownload) {
-    } else {
-        pragma(lib, "curl");
-        import std.net.curl : download, HTTP, CurlOption;
-    }
-
-    version(linux) {
-        import std.file : symlink;
-    }
 }
 
 version(Windows) {
