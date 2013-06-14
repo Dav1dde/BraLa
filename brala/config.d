@@ -38,6 +38,8 @@ struct AppArguments {
 
     bool not_resizable = false;
 
+    string renderer;
+
     string host;
     Alias!("host") h;
     ushort port = 0;
@@ -70,6 +72,8 @@ struct AppArguments {
             "\tspecifies the height of the window",
 
             "\twindow should not be resizable",
+
+            "\tSpecify default renderer for BraLa, either deferred or forward",
 
             "\tthe IP/adress of the minecraft server",
 
@@ -142,6 +146,8 @@ Config initialize_config() {
 
     config.set_default("window.resizable", true);
     config.set("window.resizable", !app_arguments.not_resizable);
+
+    config.set_if("game.renderer", app_arguments.renderer);
 
     config.set_if("connection.host", app_arguments.host);
 

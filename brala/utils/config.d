@@ -3,7 +3,7 @@ module brala.utils.config;
 private {
     import std.stdio : File;
     import std.conv : ConvException, to;
-    import std.traits : moduleName, ReturnType, isArray;
+    import std.traits : moduleName, ReturnType, isArray, CommonType;
     import std.exception : enforceEx, collectException;
     import std.string : format, strip, splitLines;
     import std.array : split, join, replace;
@@ -172,6 +172,19 @@ class Config {
         }
 
         throw new NoKey(`Config %s: Key "%s" not in config"`.format(name, key));
+    }
+
+    CommonType!(Args) get_option(Args...)(string key) {
+        alias T = typeof(return);
+
+        T value = get!T(key);
+
+        if([Args].canFind(value)) {
+            return value;
+        }
+
+        throw new InvalidValue(`Config %s: Value "%s" is not allowed for key %s, must be in "[%s]"`
+                               .format(name, value, key, [Args].join(", ")));
     }
 
     /// special method for expandVars call, only returns serialized, but expanded strings

@@ -64,8 +64,14 @@ class BraLaGame {
         this.session = session;
         this.atlas = atlas;
         this.connection = new ThreadedConnection(session);
-        this.renderer = new ForwardRenderer(engine);
-//         this.renderer = new DeferredRenderer(engine);
+
+        if(config.get_option!("forward", "deferred")("game.renderer") == "forward") {
+            logger.log!Info("Using forward renderer");
+            this.renderer = new ForwardRenderer(engine);
+        } else {
+            logger.log!Info("Using deferred renderer");
+            this.renderer = new DeferredRenderer(engine);
+        }
     }
 
     void quit() {
