@@ -44,6 +44,7 @@ class Player : NamedEntity {
     int MOVE_BACKWARD;
     int STRAFE_LEFT;
     int STRAFE_RIGHT;
+    float SENSITIVITY = 5;
 
     protected vec2i mouse_offset = vec2i(0, 0);
     protected bool moved;
@@ -62,15 +63,16 @@ class Player : NamedEntity {
         game.on_notchian_tick.connect(&on_tick);
     }
 
-    void update_keys(Config config) {
+    void update_from_config(Config config) {
         MOVE_FORWARD = cast(int)config.get!char("game.key.movement.forward");
         MOVE_BACKWARD = cast(int)config.get!char("game.key.movement.backward");
         STRAFE_LEFT = cast(int)config.get!char("game.key.movement.left");
         STRAFE_RIGHT = cast(int)config.get!char("game.key.movement.right");
+        SENSITIVITY = config.get!float("game.mouse.sensitivity");
     }
 
     void update(TickDuration delta_t) {
-        float turning_speed = delta_t.to!("seconds", float) * 4;
+        float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
         
         if(mouse_offset.x != 0) camera.rotatex(-turning_speed * mouse_offset.x); moved = true;
         if(mouse_offset.y != 0) camera.rotatey(turning_speed * mouse_offset.y); moved = true;

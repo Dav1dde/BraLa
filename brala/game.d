@@ -193,7 +193,7 @@ class BraLaGame {
         _current_world = new World(engine.resmgr, atlas, tessellation_threads);
         
         player = new Player(this, packet.entity_id);
-        player.update_keys(config);
+        player.update_from_config(config);
     }
     
     void on_packet(T : s.ChatMessage)(T packet) {
