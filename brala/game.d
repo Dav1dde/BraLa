@@ -72,10 +72,24 @@ class BraLaGame {
             logger.log!Info("Using deferred renderer");
             this.renderer = new DeferredRenderer(engine);
         }
+
+        engine.on_shutdown.connect(&shutdown);
     }
 
     void quit() {
         _quit = true;
+    }
+
+    protected void shutdown() {
+        if(connection.connected && connection.thread.isRunning) {
+            connection.disconnect("Garbage collector went crazy, again");
+            logger.log!Info("Waiting for connection thread to shutdown");
+            connection.thread.join(false);
+            logger.log!Info("Connection is done");
+        }
+
+        if(_current_world !is null) _current_world.shutdown();
+        _current_world = null;
     }
 
     // rendering
@@ -106,15 +120,6 @@ class BraLaGame {
         }
         
         if(_quit) {           
-            if(connection.connected && connection.thread.isRunning) {
-                connection.disconnect("Garbage collector went crazy, again");
-                logger.log!Info("Waiting for connection thread to shutdown");
-                connection.thread.join(false);
-                logger.log!Info("Connection is done");
-            }
-            
-            if(_current_world !is null) _current_world.shutdown();
-
             return true;
         }
 
