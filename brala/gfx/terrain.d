@@ -206,7 +206,7 @@ struct ProjectionTextureCoordinates {
             // y
             index_1 = 0;
             index_2 = 2;
-            n = sign(cbsd.normal[1]);
+            n = s = sign(cbsd.normal[1]);
 
             if(n > 0) { // y+
                 x = x2;

@@ -205,10 +205,10 @@ mixin template BlockBuilder() {
 
         static if(s == Side.TOP) {
             if((block.metadata & 0x7) == 0) { // stone
-                mixin(add_slab_vertices(s, "stoneslab_side"));
+                mixin(add_slab_vertices(s, "stoneslab_top"));
                 return;
             } else if((block.metadata & 0x7) == 1) { // sandstone
-                mixin(add_slab_vertices(s, "sandstone_side"));
+                mixin(add_slab_vertices(s, "sandstone_top"));
                 return;
             }
         } else static if(s == Side.BOTTOM) {
@@ -216,7 +216,7 @@ mixin template BlockBuilder() {
                 mixin(add_slab_vertices(s, "stoneslab_top"));
                 return;
             } else if((block.metadata & 0x7) == 1) { // sandstone
-                mixin(add_slab_vertices(s, "sandstone_top"));
+                mixin(add_slab_vertices(s, "sandstone_bottom"));
                 return;
             }
         }
@@ -894,18 +894,20 @@ static string add_block_vertices(string name) {
 
 static string add_slab_vertices(Side s, string name) {
     string v;
+    string vusd;
     if(s == Side.TOP || s == Side.BOTTOM) {
-        v = `auto vertices = simple_slab(s, false, atlas.get!("` ~ name ~ `")());
-             auto vertices_usd = simple_slab(s, true, atlas.get!("` ~ name ~ `")());`;
+        v = `auto vertices = simple_slab(s, false, atlas.get!("` ~ name ~ `")());`;
+        vusd = `auto vertices_usd = simple_slab(s, true, atlas.get!("` ~ name ~ `")());`;
     } else {
-        v = `auto vertices = simple_slab(s, false, atlas.get!("` ~ name ~ `", 0, 8, 8, 8, 0)());
-             auto vertices_usd = simple_slab(s, true, atlas.get!("` ~ name ~ `", 0, 8, 8, 8, 0)());`;
+        v = `auto vertices = simple_slab(s, false, atlas.get!("` ~ name ~ `", 0, 8, 8, 0, 8)());`;
+        vusd = `auto vertices_usd = simple_slab(s, true, atlas.get!("` ~ name ~ `", 0, 8, 8, 8, 0)());`;
     }
     
-    return  v ~ `
-            if(upside_down) {
+    return `if(upside_down) {
+                ` ~ vusd ~ `
                 add_template_vertices(vertices_usd, block, x_offset, y_offset, z_offset);
             } else {
+                ` ~ v ~ `
                 add_template_vertices(vertices, block, x_offset, y_offset, z_offset);
             }`;
 }

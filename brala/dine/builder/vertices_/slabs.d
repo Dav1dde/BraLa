@@ -48,13 +48,11 @@ Vertex[] simple_slab(Side side, bool upside_down, short[2][4] texture_slice, sho
     CubeSideData cbsd;
     if(upside_down) {
         cbsd = SLAB_VERTICES_UPSIDEDOWN[side];
-        
-        if(side != Side.TOP && side != Side.BOTTOM) {
-            texture_slice[0][1] -= 1;
-            texture_slice[1][1] -= 1;
-            texture_slice[2][1] -= 1;
-            texture_slice[3][1] -= 1;
+
+        if(side == Side.BOTTOM) {
+            
         }
+
     } else {
         cbsd = SLAB_VERTICES[side];
     }
