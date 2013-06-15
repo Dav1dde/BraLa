@@ -10,7 +10,7 @@ private {
 public import brala.dine.builder.constants : Biome;
 
 
-alias Tuple!(ubyte, "r", ubyte, "g", ubyte, "b", ubyte, "a") Color4;
+alias Tuple!(ubyte, "r", ubyte, "g", ubyte, "b") Color3;
 
 
 struct BiomeSet {
@@ -38,9 +38,9 @@ struct BiomeSet {
             ubyte[] leave = resmgr.get!Image("leavecolor").get_pixel(pixel.field);
             ubyte[] water = resmgr.get!Image("watercolor").get_pixel(pixel.field);
 
-            biome.color.grass = Color4(grass[0], grass[1], grass[2], cast(ubyte)0xff);
-            biome.color.leave = Color4(leave[0], leave[1], leave[2], cast(ubyte)0xff);
-            biome.color.water = Color4(water[0], water[1], water[2], cast(ubyte)0xff);
+            biome.color.grass = Color3(grass[0], grass[1], grass[2]);
+            biome.color.leave = Color3(leave[0], leave[1], leave[2]);
+            biome.color.water = Color3(water[0], water[1], water[2]);
         }
     }
 }
@@ -53,9 +53,9 @@ struct BiomeData {
     float rainfall;
 
     struct Color {
-        Color4 grass;
-        Color4 leave;
-        Color4 water;
+        Color3 grass;
+        Color3 leave;
+        Color3 water;
     }
 
     Color color;

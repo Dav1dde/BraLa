@@ -21,8 +21,8 @@ private {
     import brala.log : logger = terrain_logger;
     import brala.engine : BraLaEngine;
     import brala.network.session : minecraft_folder;
+    import brala.gfx.data : Vertex, Normal;
     import brala.dine.builder.constants : Side;
-    import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : TEXTURE_INFORMATION, simple_block;
     import brala.utils.log;
     import brala.utils.config : Config, Path;
@@ -161,7 +161,7 @@ struct TextureCoordinate {
 
 struct CubeSideData {
     float[3][4] positions;
-    float[3] normal;
+    Normal normal;
 }
 
 struct ProjectionTextureCoordinates {
@@ -194,19 +194,21 @@ struct ProjectionTextureCoordinates {
         // since in OpenGL +y goes up but in the texture atlas +y goes down
         float s = 1.0f;
 
-        if(cbsd.normal[1] == 0.0f && cbsd.normal[2] == 0.0f) {
+        if(cbsd.normal == Normal.X_POSITIVE || cbsd.normal == Normal.X_NEGATIVE) {
             // x
             index_1 = 2;
             index_2 = 1;
             s = -1.0f; // flip here
 
             //n = sign(cbsd.normal[0]);
-            n = sign(-cbsd.normal[0]);
-        } else if(cbsd.normal[0] == 0.0f && cbsd.normal[2] == 0.0f) {
+//             n = sign(-cbsd.normal[0]);
+            n = cbsd.normal == Normal.X_POSITIVE ? -1 : 1;
+        } else if(cbsd.normal == Normal.Y_POSITIVE || cbsd.normal == Normal.Y_NEGATIVE) {
             // y
             index_1 = 0;
             index_2 = 2;
-            n = s = sign(cbsd.normal[1]);
+//             n = s = sign(cbsd.normal[1]);
+            n = s = cbsd.normal == Normal.Y_POSITIVE ? 1 : 0;
 
             if(n > 0) { // y+
                 x = x2;
@@ -215,12 +217,13 @@ struct ProjectionTextureCoordinates {
                 x = x3;
                 y = y3;
             }
-        } else if(cbsd.normal[0] == 0.0f && cbsd.normal[1] == 0.0f) {
+        } else if(cbsd.normal == Normal.Z_POSITIVE || cbsd.normal == Normal.Z_NEGATIVE) {
             // z
             index_1 = 0;
             index_2 = 1;
             s = -1.0f; // flip here
-            n = sign(cbsd.normal[2]);
+//             n = sign(cbsd.normal[2]);
+            n = cbsd.normal == Normal.Z_POSITIVE ? 1 : -1;
         } else {
             assert(false, "normal not supported");
         }

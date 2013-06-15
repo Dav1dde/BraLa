@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.blocks;
 
 private {
+    import brala.gfx.data : Normal;
     import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
@@ -9,22 +10,22 @@ private {
 
 immutable CubeSideData[6] CUBE_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 
@@ -53,22 +54,22 @@ Vertex[] simple_block(Side side, short[2][4] texture_slice, short[2][4] mask_sli
 
 immutable CubeSideData[6] CUBE_VERTICES_FARMLAND = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.4375f, 0.5f], [-0.5f, 0.4375f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.4375f, 0.5f], [-0.5f, 0.4375f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.4375f, -0.5f], [0.5f, 0.4375f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.4375f, -0.5f], [0.5f, 0.4375f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.4375f, 0.5f], [0.5f, 0.4375f, 0.5f], [0.5f, 0.4375f, -0.5f], [-0.5f, 0.4375f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 Vertex[] farmland_block(Side side, ProjectionTextureCoordinates texture_slice) pure {
@@ -92,22 +93,22 @@ Vertex[] farmland_block(Side side, ProjectionTextureCoordinates texture_slice) p
 
 immutable CubeSideData[6] CUBE_VERTICES_CACTUS = [
     { [[-0.5f, -0.5f, 0.4375f], [0.5f, -0.5f, 0.4375f], [0.5f, 0.5f, 0.4375f], [-0.5f, 0.5f, 0.4375f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.4375f, -0.5f, -0.5f], [-0.4375f, -0.5f, 0.5f], [-0.4375f, 0.5f, 0.5f], [-0.4375f, 0.5f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.4375f], [-0.5f, -0.5f, -0.4375f], [-0.5f, 0.5f, -0.4375f], [0.5f, 0.5f, -0.4375f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.4375f, -0.5f, 0.5f], [0.4375f, -0.5f, -0.5f], [0.4375f, 0.5f, -0.5f], [0.4375f, 0.5f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 

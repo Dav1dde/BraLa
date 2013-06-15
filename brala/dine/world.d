@@ -16,8 +16,9 @@ private {
     import brala.utils.log;
     import brala.dine.chunk : Chunk, Block;
     import brala.dine.builder.biomes : BiomeSet;
-    import brala.dine.builder.tessellator : Tessellator, Vertex;
+    import brala.dine.builder.tessellator : Tessellator;
     import brala.dine.util : py_div, py_mod;
+    import brala.gfx.data : Vertex;
     import brala.gfx.terrain : MinecraftAtlas;
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
@@ -414,20 +415,7 @@ class World {
         in { assert(chunk.vbo !is null, "chunk vbos is null");
              assert(shader !is null, "no current shader"); }
         body {
-            GLuint position = shader.get_attrib_location("position");
-            GLuint normal = shader.get_attrib_location("normal");
-            GLuint color = shader.get_attrib_location("color");
-            GLuint texcoord = shader.get_attrib_location("texcoord");
-            GLuint mask = shader.get_attrib_location("mask");
-//             GLuint light = shader.get_attrib_location("light");
-            
-            enum stride = Vertex.sizeof;
-            chunk.vbo.bind(position, GL_FLOAT, 3, 0, stride);
-//             chunk.vbo.bind(normal, GL_FLOAT, 3, 12, stride);
-            chunk.vbo.bind(color, GL_UNSIGNED_BYTE, 4, 12, stride, true); // normalize it
-            chunk.vbo.bind(texcoord, GL_SHORT, 2, 16, stride);
-            chunk.vbo.bind(mask, GL_SHORT, 2, 20, stride);
-//             chunk.vbo.bind(light, GL_UNSIGNED_BYTE, 2, 22, stride);
+
         }
     
     void draw(BraLaEngine engine) {
@@ -440,15 +428,19 @@ class World {
 
             chunk.vao.bind();
             chunk.vbo.bind();
+            scope(exit) chunk.vbo.unbind();
+            scope(exit) chunk.vao.unbind();
 
             debug size_t prev = chunk.vbo.length;
 
             chunk.vbo.set_data(buffer.ptr, elements);
-            bind(engine.current_shader, chunk);
 
-            chunk.vao.unbind();
+            assert(chunk.vbo !is null, "chunk vbo is null");
+            assert(engine.current_shader !is null, "current shader is null");
+            Vertex.bind(engine.current_shader, chunk.vbo);
 
             chunk.tessellated = true;
+            buffer.available = true;
 
             debug {
                 if(prev == 0 && chunk.vbo.length) {
@@ -457,8 +449,6 @@ class World {
                     vram.adjust(chunk.vbo.length - prev);
                 }
             }
-
-            buffer.available = true;
         }
 
         version(NoThreads) {
@@ -468,9 +458,6 @@ class World {
         }
 
         auto frustum = engine.frustum;
-        engine.flush_uniforms();
-        engine.current_shader.uniform("texture_size", atlas.dimensions);
-        
         foreach(chunkc, chunk; chunks) {
             if(chunk.dirty && chunk.tessellated) {
                 chunk.dirty = false;

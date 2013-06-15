@@ -1,12 +1,5 @@
 module brala.dine.builder.vertices;
 
-private {
-    import std.traits : isIntegral;
-
-    import brala.dine.builder.tessellator : Vertex;
-    import brala.dine.builder.constants : Side;
-}
-
 public import brala.dine.builder.vertices_.blocks;
 public import brala.dine.builder.vertices_.slabs;
 public import brala.dine.builder.vertices_.stairs;

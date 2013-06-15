@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.slabs;
 
 private {
+    import brala.gfx.data : Normal;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.util;
@@ -8,22 +9,22 @@ private {
 
 immutable CubeSideData[6] SLAB_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.0f, -0.5f], [0.5f, 0.0f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, 0.0f, -0.5f], [0.5f, 0.0f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, -0.5f], [-0.5f, 0.0f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 immutable CubeSideData[6] SLAB_VERTICES_UPSIDEDOWN = upside_down_slabs();

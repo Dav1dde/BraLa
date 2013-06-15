@@ -1,7 +1,10 @@
 module brala.dine.builder.vertices_.util;
 
 private {
+    import brala.gfx.data : Normal, rotate_90, rotate_180,
+                            rotate_270, rotate_y90, rotate_y270;
     import brala.dine.builder.vertices : CubeSideData;
+    import brala.utils.ctfe : TupleRange;
 }
 
 public import brala.dine.builder.constants;
@@ -64,8 +67,8 @@ package string mk_vertices_adv(string tri_func, bool rotate = false) pure {
 
     foreach(i; 0..6) {
         data[i] = Vertex(positions[i][0], positions[i][1], positions[i][2],
-//                          cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                         0, 0, 0, 0,
+                         cbsd.normal, // normal
+                         0, 0, 0, // color
                          texcoords[i][0], texcoords[i][1],
                          mask[i][0], mask[i][1]);
     }`;
@@ -94,8 +97,8 @@ package string mk_stair_vertex(string v) pure {
 
         foreach(i; 0..6) {
             ret ~= Vertex(positions[i][0], positions[i][1], positions[i][2],
-//                           cbsd.normal[0], cbsd.normal[1], cbsd.normal[2],
-                          0, 0, 0, 0,
+                          cbsd.normal, // normal
+                          0, 0, 0, // color
                           texcoords[i][0], texcoords[i][1],
                           texcoords[i][0], texcoords[i][1]);
         }`;
@@ -110,9 +113,7 @@ CubeSideData rotate_90(CubeSideData cbsd) pure {
         vertex[2] = x;
     }
     
-    auto x = cbsd.normal[0];
-    cbsd.normal[0] = -cbsd.normal[2];
-    cbsd.normal[2] = x;
+    cbsd.normal = cbsd.normal.rotate_90();
 
     return cbsd;
 }
@@ -136,8 +137,7 @@ CubeSideData rotate_180(CubeSideData cbsd) pure {
     cbsd.positions[3][0] *= -1;
     cbsd.positions[3][2] *= -1;
 
-    cbsd.normal[0] *= -1;
-    cbsd.normal[2] *= -1;
+    cbsd.normal = cbsd.normal.rotate_180();
 
     return cbsd;
 }
@@ -149,9 +149,7 @@ CubeSideData rotate_270(CubeSideData cbsd) pure {
         vertex[2] = -x;
     }
 
-    auto x = cbsd.normal[0];
-    cbsd.normal[0] = cbsd.normal[2];
-    cbsd.normal[2] = -x;
+    cbsd.normal = cbsd.normal.rotate_270();
 
     return cbsd;
 }
@@ -160,15 +158,13 @@ CubeSideData rotate_270(CubeSideData cbsd) pure {
 CubeSideData rotate_y90(CubeSideData cbsd) pure {
     float x;
 
-    for(size_t i = 0; i < 4; i++) {
+    foreach(i; TupleRange!(0, 4)) {
         x = cbsd.positions[i][1];
         cbsd.positions[i][1] = -cbsd.positions[i][2];
         cbsd.positions[i][2] = x;
     }
 
-    x = cbsd.normal[1];
-    cbsd.normal[1] = -cbsd.normal[2];
-    cbsd.normal[2] = x;
+    cbsd.normal = cbsd.normal.rotate_y90();
 
     return cbsd;
 }
@@ -176,15 +172,13 @@ CubeSideData rotate_y90(CubeSideData cbsd) pure {
 CubeSideData rotate_y270(CubeSideData cbsd) pure {
     float x;
 
-    for(size_t i = 0; i < 4; i++) {
+    foreach(i; TupleRange!(0, 4)) {
         x = cbsd.positions[i][1];
         cbsd.positions[i][1] = cbsd.positions[i][2];
         cbsd.positions[i][2] = -x;
     }
 
-    x = cbsd.normal[1];
-    cbsd.normal[1] = cbsd.normal[2];
-    cbsd.normal[2] = -x;
+    cbsd.normal = cbsd.normal.rotate_y270();
 
     return cbsd;
 }
@@ -201,7 +195,11 @@ CubeSideData make_upsidedown(CubeSideData cbsd) pure {
     cbsd.positions[2][1] *= -1;
     cbsd.positions[3][1] *= -1;
 
-    cbsd.normal[1] *= -1;
+    if(cbsd.normal == Normal.Y_POSITIVE) {
+        cbsd.normal = Normal.Y_NEGATIVE;
+    } else if(cbsd.normal == Normal.Y_NEGATIVE) {
+        cbsd.normal = Normal.Y_POSITIVE;
+    }
 
     return cbsd;
 }

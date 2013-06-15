@@ -5,6 +5,7 @@ private {
 
     import gl3n.math : sign;
     
+    import brala.gfx.data : Normal;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.blocks : CUBE_VERTICES;
@@ -21,22 +22,22 @@ Vertex[] retracted_piston(Side side, Side face, short[2][4] texture_slice) {
 
 immutable CubeSideData[6] PISTON_EXTENDED_VERTICES = [
     { [[-0.5f, -0.5f, 0.25f], [0.5f, -0.5f, 0.25f], [0.5f, 0.5f, 0.25f], [-0.5f, 0.5f, 0.25f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.25f], [-0.5f, 0.5f, 0.25f], [-0.5f, 0.5f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.25f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.25f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.5f, 0.25f], [0.5f, 0.5f, 0.25f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.25f], [-0.5f, -0.5f, 0.25f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 Vertex[] extended_piston(Side side, Side face, short[2][4] texture_slice) {
@@ -49,42 +50,42 @@ Vertex[] extended_piston(Side side, Side face, short[2][4] texture_slice) {
 
 immutable CubeSideData[6] PISTON_ARM_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, 0.25f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.25f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.25f], [-0.5f, -0.5f, 0.25f], [-0.5f, 0.5f, 0.25f], [0.5f, 0.5f, 0.25f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.25f], [0.5f, 0.5f, 0.25f], [0.5f, 0.5f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [0.5f, 0.5f, 0.25f], [-0.5f, 0.5f, 0.25f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, 0.25f], [0.5f, -0.5f, 0.25f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 immutable CubeSideData[6] PISTON_ARM_VERTICES_ARM = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.5f, 0.5f], [-0.5f, 0.5f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.125f, -0.125f, -0.75f], [-0.125f, -0.125f, 0.25f], [-0.125f, 0.125f, 0.25f], [-0.125f, 0.125f, -0.75f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.125f, -0.125f, 0.25f], [0.125f, -0.125f, -0.75f], [0.125f, 0.125f, -0.75f], [0.125f, 0.125f, 0.25f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.125f, 0.125f, 0.25f], [0.125f, 0.125f, 0.25f], [0.125f, 0.125f, -0.75f], [-0.125f, 0.125f, -0.75f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.125f, -0.125f, -0.75f], [0.125f, -0.125f, -0.75f], [0.125f, -0.125f, 0.25f], [-0.125f, -0.125f, 0.25f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 Vertex[] piston_arm(Side side, Side face, short[2][4] texture_slice, short[2][4] arm_texture_slice) {
@@ -112,22 +113,22 @@ Vertex[] piston_arm(Side side, Side face, short[2][4] texture_slice, short[2][4]
 
 immutable CubeSideData[6] TORCH_VERTICES = [
     { [[-0.125f, -0.5, 0.0625f], [0.125f, -0.5f, 0.0625f], [0.125f, 0.125f, 0.0625f], [-0.125f, 0.125f, 0.0625f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.0625f, -0.5f, -0.125f], [-0.0625f, -0.5f, 0.125f], [-0.0625f, 0.125f, 0.125f], [-0.0625f, 0.125f, -0.125f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.125f, -0.5f, -0.0625f], [-0.125f, -0.5f, -0.0625f], [-0.125f, 0.125f, -0.0625f], [0.125f, 0.125f, -0.0625f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.0625f, -0.5f, 0.125f], [0.0625f, -0.5f, -0.125f], [0.0625f, 0.125f, -0.125f], [0.0625f, 0.125f, 0.125f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.0625f, 0.125f, 0.0625f], [0.0625f, 0.125f, 0.0625f], [0.0625f, 0.125f, -0.0625f], [-0.0625f, 0.125f, -0.0625f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.0625f, -0.5f, -0.0625f], [0.0625f, -0.5f, -0.0625f], [0.0625f, -0.5f, 0.0625f], [-0.0625f, -0.5f, 0.0625f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 private CubeSideData[6] cut_torch_vertices() {
@@ -150,22 +151,22 @@ immutable CubeSideData[6] TORCH_VERTICES_CUT = cut_torch_vertices();
 
 immutable CubeSideData[6] TORCH_VERTICES_WALL = [
     { [[-0.125f, -0.3125f, -0.4375f], [0.125f, -0.3125f, -0.4375f], [0.125f, 0.4375f, 0.0625f], [-0.125f, 0.4375f, 0.0625f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.0625f, -0.3125f, -0.625f], [-0.0625f, -0.3125f, -0.375f], [-0.0625f, 0.4375f, 0.125f], [-0.0625f, 0.4375f, -0.125f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.125f, -0.3125f, -0.5625f], [-0.125f, -0.3125f, -0.5625f], [-0.125f, 0.4375f, -0.0625f], [0.125f, 0.4375f, -0.0625f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.0625f, -0.3125f, -0.375f], [0.0625f, -0.3125f, -0.625f], [0.0625f, 0.4375f, -0.125f], [0.0625f, 0.4375f, 0.125f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.0625f, 0.4375f, 0.0625f], [0.0625f, 0.4375f, 0.0625f], [0.0625f, 0.4375f, -0.0625f], [-0.0625f, 0.4375f, -0.0625f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.0625f, -0.3125f, -0.5625f], [0.0625f, -0.3125f, -0.5625f], [0.0625f, -0.3125f, -0.4375f], [-0.0625f, -0.3125f, -0.4375f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 
@@ -214,22 +215,22 @@ Vertex[] cut_torch(Side side, Facing face, float y_offset, float z_offset, short
 
 immutable CubeSideData[6] REPEATER_VERTICES = [
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, -0.375f, 0.5f], [-0.5f, -0.375f, 0.5f]], // near
-       [0.0f, 0.0f, 1.0f] },
+       Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.5f], [-0.5f, -0.375f, 0.5f], [-0.5f, -0.375f, -0.5f]], // left
-       [-1.0f, 0.0f, 0.0f] },
+       Normal.X_NEGATIVE },
 
     { [[0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f], [-0.5f, -0.375f, -0.5f], [0.5f, -0.375f, -0.5f]], // far
-       [0.0f, 0.0f, -1.0f] },
+       Normal.Z_NEGATIVE },
 
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.375f, -0.5f], [0.5f, -0.375f, 0.5f]], // right
-       [1.0f, 0.0f, 0.0f] },
+       Normal.X_POSITIVE },
 
     { [[-0.5f, -0.375f, 0.5f], [0.5f, -0.375f, 0.5f], [0.5f, -0.375f, -0.5f], [-0.5f, -0.375f, -0.5f]], // top
-       [0.0f, 1.0f, 0.0f]  },
+       Normal.Y_POSITIVE  },
 
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]], // bottom
-       [0.0f, -1.0f, 0.0f] }
+       Normal.Y_NEGATIVE }
 ];
 
 Vertex[] redstone_repeater(Side side, Facing face, float offset, short[2][4] texture_slice, short[2][4] torch_tex, bool adjust_height) {
@@ -249,7 +250,7 @@ Vertex[] redstone_wire(Facing face, short[2][4] texture_slice, short left=8, sho
                       [-right*0.0625f, -0.49f, -bottom*0.0625f],
                       [-right*0.0625f, -0.49f, top*0.0625f],
                       [left*0.0625f, -0.49f, top*0.0625f]];
-    cbsd.normal = [0.0f, 1.0f, 0.0f];
+    cbsd.normal = Normal.Y_POSITIVE;
     
     mixin(mk_vertices_adv("to_triangles", true));
     return data.dup;
@@ -257,7 +258,7 @@ Vertex[] redstone_wire(Facing face, short[2][4] texture_slice, short left=8, sho
 
 immutable CubeSideData REDSTONE_WIRE_SIDE_VERTEX = {
     [[-0.5f, -0.5f, 0.49f], [0.5f, -0.5f, 0.49f], [0.5f, 0.5f, 0.49f], [-0.5f, 0.5f, 0.49f]],
-     [0.0f, 0.0f, 1.0f]
+     Normal.Z_POSITIVE
 };
 
 Vertex[] redstone_wire_side(Facing face, short[2][4] texture_slice) {

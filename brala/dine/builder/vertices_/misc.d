@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.misc;
 
 private {
+    import brala.gfx.data : Normal;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.util;
@@ -9,7 +10,7 @@ private {
 
 CubeSideData LADDER_VERTEX = {
     [[-0.5f, -0.5f, -0.49f], [0.5f, -0.5f, -0.49f], [0.5f, 0.5f, -0.49f], [-0.5f, 0.5f, -0.49f]],
-     [0.0f, 0.0f, 1.0f]
+     Normal.Z_POSITIVE
 };
 
 
@@ -49,7 +50,7 @@ Vertex[] simple_vine(short[2][4] texture_slice, /+short[2][4] mask_slice,+/ Faci
 
 CubeSideData TOP_VINE_VERTEX = {
     [[-0.5f, 0.49f, 0.5f], [0.5f, 0.49f, 0.5f], [0.5f, 0.49f, -0.5f], [-0.5f, 0.49f, -0.5f]],
-     [0.0f, 1.0f, 0.0f]
+     Normal.Y_POSITIVE
 };
 
 

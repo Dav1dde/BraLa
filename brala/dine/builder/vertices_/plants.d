@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.plants;
 
 private {
+    import brala.gfx.data : Normal;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
     import brala.dine.builder.vertices_.util;
@@ -10,10 +11,10 @@ private {
 // TODO: check normals
 immutable CubeSideData[4] PLANT_VERTICES = [
     { [[-0.3535533f, -0.5f, -0.3535533f], [0.3535533f, -0.5f, 0.3535533f], [0.3535533f, 0.5f, 0.3535533f], [-0.3535533f, 0.5f, -0.3535533f]],
-      [-0.707107f, 0.0f, 0.707107f] },
+      Normal.X_NEGATIVE_Z_POSITIVE },
 
     { [[-0.3535533f, -0.5f, 0.3535533f], [0.3535533f, -0.5f, -0.3535533f], [0.3535533f, 0.5f, -0.3535533f], [-0.3535533f, 0.5f, 0.3535533f]],
-      [0.707107f, 0.0f, 0.707107f] }
+      Normal.X_POSITIVE_Z_POSITIVE }
 ];
 
 Vertex[] simple_plant(short[2][4] texture_slice, Facing face = cast(Facing)0) pure {
@@ -41,7 +42,7 @@ Vertex[] simple_plant(short[2][4] texture_slice, short[2][4] mask_slice, Facing 
 
 immutable CubeSideData SIDE_STEM_VERTICES = {
     [[0.0f, -0.5f, 0.5f], [0.0f, -0.5f, -0.5f], [0.0f, 0.5f, -0.5f], [0.0f, 0.5f, 0.5f]],
-    [1.0f, 0.0f, 0.0f]
+    Normal.X_POSITIVE
 };
 
 Vertex[] side_stem(Facing face, short[2][4] texture_slice) pure {
@@ -69,16 +70,16 @@ Vertex[] side_stem(Facing face, short[2][4] texture_slice, short[2][4] mask_slic
 // TODO: check normals
 immutable CubeSideData[] FOOD_PLANT_VERTICES = [
     { [[-0.3f, -0.5f, 0.5f], [-0.3f, -0.5f, -0.5f], [-0.3f, 0.5f, -0.5f], [-0.3f, 0.5f, 0.5f]],
-      [1.0f, 0.0f, 0.0f] },
+      Normal.X_POSITIVE_Z_POSITIVE },
 
     { [[0.3f, -0.5f, 0.5f], [0.3f, -0.5f, -0.5f], [0.3f, 0.5f, -0.5f], [0.3f, 0.5f, 0.5f]],
-      [-1.0f, 0.0f, 0.0f] },
+      Normal.X_POSITIVE_Z_POSITIVE },
     
     { [[-0.5f, -0.5f, -0.3f], [0.5f, -0.5f, -0.3f], [0.5f, 0.5f, -0.3f], [-0.5f, 0.5f, -0.3f]],
-      [1.0f, 0.0f, 0.0f] },
+      Normal.X_POSITIVE_Z_POSITIVE },
 
     { [[-0.5f, -0.5f, 0.3f], [0.5f, -0.5f, 0.3f], [0.5f, 0.5f, 0.3f], [-0.5f, 0.5f, 0.3f]],
-      [1.0f, 0.0f, 0.0f] }
+      Normal.X_POSITIVE_Z_POSITIVE }
 ];
 
 Vertex[] simple_food_plant(short[2][4] texture_slice) pure {

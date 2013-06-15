@@ -16,30 +16,6 @@ private {
 }
 
 
-align(1) struct Vertex {
-    align(1):
-    float x;
-    float y;
-    float z;
-//     float nx;
-//     float ny;
-//     float nz;
-    ubyte r;
-    ubyte g;
-    ubyte b;
-    ubyte a;
-    short u_terrain;
-    short v_terrain;
-    short u_mask;
-    short v_mask;
-    ubyte sky_light;
-    ubyte block_light;
-    short pad;
-}
-
-static assert(Vertex.sizeof % 4 == 0, "Vertex size must be multiple of 4");
-
-
 struct Tessellator {
     World world;
     MinecraftAtlas atlas;

@@ -27,6 +27,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.engine : BraLaEngine;
     import brala.entities.player : Player;
+    import brala.gfx.data : set_normals_uniform;
     import brala.gfx.renderer : IRenderer, ForwardRenderer, DeferredRenderer;
     import brala.gfx.terrain : MinecraftAtlas;
     import brala.gfx.text : parse_chat;
@@ -148,6 +149,7 @@ class BraLaGame {
 
         if(current_world !is null) {
             renderer.set_shader("terrain");
+            engine.current_shader.set_normals_uniform("normals");
             engine.use_texture("terrain", 0);
 
             engine.flush_uniforms();

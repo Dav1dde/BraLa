@@ -1,6 +1,7 @@
 module brala.dine.builder.vertices_.stairs;
 
 private {
+    import brala.gfx.data : Normal;
     import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.vertices : CubeSideData;
@@ -10,44 +11,44 @@ private {
 
 immutable CubeSideData[2] STAIR_VERTICES_NEAR = [
     { [[-0.5f, 0.0f, 0.0f], [0.5f, 0.0f, 0.0f], [0.5f, 0.5f, 0.0f], [-0.5f, 0.5f, 0.0f]], // upper
-      [0.0f, 0.0f, 1.0f] },
+      Normal.Z_POSITIVE },
 
     { [[-0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.5f], [0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.5f]], // lower
-      [0.0f, 0.0f, 1.0f] }
+      Normal.Z_POSITIVE }
 ];
 
 immutable CubeSideData[1] STAIR_VERTICES_FAR = [
     { [[-0.5f, 0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, -0.5f]],
-      [0.0f, 0.0f, -1.0f] }
+      Normal.Z_NEGATIVE }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_LEFT = [
     { [[-0.5f, -0.5f, 0.0f], [-0.5f, -0.5f, 0.5f], [-0.5f, 0.0f, 0.5f], [-0.5f, 0.0f, 0.0f]], // small, front
-      [-1.0f, 0.0f, 0.0f] },
+      Normal.X_NEGATIVE },
 
     { [[-0.5f, -0.5f, -0.5f], [-0.5f, -0.5f, 0.0f], [-0.5f, 0.5f, 0.0f], [-0.5f, 0.5f, -0.5f]],
-      [-1.0f, 0.0f, 0.0f] }
+      Normal.X_NEGATIVE }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_RIGHT = [
     { [[0.5f, -0.5f, 0.5f], [0.5f, -0.5f, 0.0f], [0.5f, 0.0f, 0.0f], [0.5f, 0.0f, 0.5f]], // small, front
-      [1.0f, 0.0f, 0.0f] },
+      Normal.X_POSITIVE },
 
     { [[0.5f, -0.5f, 0.0f], [0.5f, -0.5f, -0.5f], [0.5f, 0.5f, -0.5f], [0.5f, 0.5f, 0.0f]],
-      [1.0f, 0.0f, 0.0f] }
+      Normal.X_POSITIVE }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_TOP = [
     { [[-0.5f, 0.5f, 0.0f], [0.5f, 0.5f, 0.0f], [0.5f, 0.5f, -0.5f], [-0.5f, 0.5f, -0.5f]],
-      [0.0f, 1.0f, 0.0f] },
+      Normal.Y_POSITIVE },
       
     { [[-0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.5f], [0.5f, 0.0f, 0.0f], [-0.5f, 0.0f, 0.0f]], // near
-      [0.0f, 1.0f, 0.0f] }
+      Normal.Y_POSITIVE }
 ];
 
 immutable CubeSideData[2] STAIR_VERTICES_BOTTOM = [
     { [[-0.5f, -0.5f, -0.5f], [0.5f, -0.5f, -0.5f], [0.5f, -0.5f, 0.5f], [-0.5f, -0.5f, 0.5f]],
-      [0.0f, -1.0f, 0.0f] }
+      Normal.Y_NEGATIVE }
 ];
 
 // Vertex[] simple_stair(Side s, Facing face, bool upside_down, StairTextureSlice texture_slice) pure {

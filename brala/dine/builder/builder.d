@@ -1,8 +1,8 @@
 module brala.dine.builder.builder;
 
 private {
+    import brala.gfx.data : Vertex;
     import brala.dine.chunk : Block;
-    import brala.dine.builder.tessellator : Vertex;
     import brala.dine.builder.constants : Side, Facing;
 }
 
@@ -16,12 +16,8 @@ public {
 
     import brala.gfx.terrain : ProjectionTextureCoordinates;
     import brala.dine.builder.blocks : BLOCKS, BlockDescriptor;
-    import brala.dine.builder.biomes : BiomeData, Color4;
-    import brala.dine.builder.vertices /+: BLOCK_VERTICES_LEFT, BLOCK_VERTICES_RIGHT, BLOCK_VERTICES_NEAR,
-                                         BLOCK_VERTICES_FAR, BLOCK_VERTICES_TOP, BLOCK_VERTICES_BOTTOM,
-                                         get_vertices, TextureSlice, SlabTextureSlice, ProjTextureSlice,
-                                         simple_block, simple_slab, simple_stair, simple_plant, side_stem,
-                                         simple_food_plant+/;
+    import brala.dine.builder.biomes : BiomeData, Color3;
+    import brala.dine.builder.vertices;
     import brala.utils.ctfe : TupleRange;
 }
 
@@ -37,7 +33,7 @@ mixin template BlockBuilder() {
     void add_template_vertices(T : Vertex)(const auto ref T[] vertices,
                                const Block block,
                                float x_offset, float y_offset, float z_offset,
-                               ubyte r=0xff, ubyte g=0xff, ubyte b=0xff, ubyte a=0xff)
+                               ubyte r=0xff, ubyte g=0xff, ubyte b=0xff)
         in { assert(elements+vertices.length <= buffer.length,
                     "not enough allocated memory for tessellator: %d+%d <= %d".format(elements+vertices.length, buffer.length)); }
         body {
@@ -53,7 +49,6 @@ mixin template BlockBuilder() {
                 vertex.r = r;
                 vertex.g = g;
                 vertex.b = b;
-                vertex.a = a;
                 vertex.sky_light = block.sky_light;
                 vertex.block_light = block.block_light;
             }
@@ -371,7 +366,7 @@ mixin template BlockBuilder() {
     void tall_grass(Side s)(const Block block, const ref BiomeData biome_data,
                             float x_offset, float y_offset, float z_offset) {
         short[2][4] tex;
-        Color4 color = Color4(cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff);
+        Color3 color = Color3(cast(ubyte)0xff, cast(ubyte)0xff, cast(ubyte)0xff);
 
         final switch(block.metadata & 0x3) {
             case 0: tex = atlas.get!("deadbush"); break; // shrub aka deadbush
@@ -387,7 +382,7 @@ mixin template BlockBuilder() {
                       vec3i world_coords, float x_offset, float y_offset, float z_offset) {
 
         auto stem = atlas.get!("stem_straight")();
-        Color4 color = Color4(cast(ubyte)0x0, cast(ubyte)0xad, cast(ubyte)0x17, cast(ubyte)0xff);
+        Color3 color = Color3(cast(ubyte)0x0, cast(ubyte)0xad, cast(ubyte)0x17);
         
         int id = 86; // pumpkin
         if(block.id == 105) {
@@ -398,7 +393,7 @@ mixin template BlockBuilder() {
         bool render_stem2 = false;
 
         if((block.metadata & 0x7) == 0x7) { // fully grown
-            color = Color4(cast(ubyte)0x8a, cast(ubyte)0x77, cast(ubyte)0x11, cast(ubyte)0xff);
+            color = Color3(cast(ubyte)0x8a, cast(ubyte)0x77, cast(ubyte)0x11);
 
             if(world.get_block_safe(vec3i(world_coords.x+1, world_coords.y, world_coords.z)).id == id) {
                 face = Facing.EAST; render_stem2 = true;
@@ -679,7 +674,7 @@ mixin template BlockBuilder() {
             return false;
         }
 
-        auto color = Color4(cast(ubyte)(0x5a+block.metadata*10), cast(ubyte)0x00, cast(ubyte)0x00, cast(ubyte)0xff);
+        auto color = Color3(cast(ubyte)(0x5a+block.metadata*10), cast(ubyte)0x00, cast(ubyte)0x00);
         
         enum {
             FRONT =     0b00000001,
