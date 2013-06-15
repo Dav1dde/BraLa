@@ -434,7 +434,7 @@ final class MinecraftAtlas : Atlas {
         logger.log!Info("Updating texture coordinates...");
 
         foreach(name; map.keys()) {
-            long index = ORDER.countUntil(name);
+            int index = cast(int)(ORDER.countUntil(name));
             if(index < 0) {
                 logger.log!Info("Found unexpected texture %s", name);
             }
