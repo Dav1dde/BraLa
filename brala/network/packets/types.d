@@ -11,7 +11,8 @@ private {
     import std.zlib : uncompress;
     import std.exception : enforceEx;
     import core.stdc.errno;
-    
+    import core.bitop : popcnt;
+
     import gl3n.linalg : vec3i;
     import nbt : NBTFile;
     
@@ -299,16 +300,22 @@ struct MapChunkType { // TODO: implement send
 
         ret.chunk.fill_chunk_with_nothing();
 
+        int pc = popcnt(ret.chunk.primary_bitmask);
+        // 4096 offset for each 16x16x16 blocks
+        // 2048 offset for metadata and block_light
+        // 256 is biome_data
+        bool has_skylight = pc*4096+pc*2048*2 > 256;
+
         // if ret.contiguous, there is biome data
-        parse_raw_chunk(ret.chunk, unc_data, ret.contiguous);
+        parse_raw_chunk(ret.chunk, unc_data, ret.contiguous, has_skylight);
 
         return ret;
     }
 
-    static size_t parse_raw_chunk(Chunk chunk, const ubyte[] unc_data, bool biome_data) {
+    static size_t parse_raw_chunk(Chunk chunk, const ubyte[] unc_data, bool biome_data, bool has_skylight) {
         size_t offset = 0;
         foreach(i; 0..16) {
-            if(chunk.primary_bitmask & 1 << i) {
+            if(chunk.primary_bitmask & (1 << i)) {
                 const(ubyte)[] temp = unc_data[offset..offset+4096];
 
                 foreach(j, block_id; temp) {
@@ -322,6 +329,13 @@ struct MapChunkType { // TODO: implement send
         }
 
         foreach(f; TypeTuple!("metadata", "block_light", "sky_light")) {
+            static if(f == "sky_light") {
+                if(!has_skylight) {
+                    // GOTO!!!
+                    goto LBiome;
+                }
+            }
+
             foreach(i; 0..16) {
                 if(chunk.primary_bitmask & 1 << i) {
                     const(ubyte)[] temp = unc_data[offset..offset+2048];
@@ -340,6 +354,7 @@ struct MapChunkType { // TODO: implement send
             }
         }
 
+        LBiome:
         if(biome_data) {
             chunk.biome_data = unc_data[offset..(offset+256)];
             offset += 256;
@@ -389,7 +404,7 @@ struct MapChunkBulkType {
         ret.chunk_count = read!short(s);
 
         uint len = read!uint(s);
-        read!bool(s); // unknown
+        bool has_skylight = read!bool(s);
         ubyte[] compressed_data = new ubyte[len];
         s.readExact(compressed_data.ptr, len);
         ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
@@ -412,7 +427,7 @@ struct MapChunkBulkType {
         foreach(cc; ret.chunks) {
             cc.chunk.fill_chunk_with_nothing();
 
-            offset += MapChunkType.parse_raw_chunk(cc.chunk, unc_data[offset..$], true);
+            offset += MapChunkType.parse_raw_chunk(cc.chunk, unc_data[offset..$], true, has_skylight);
         }
 
         return ret;
