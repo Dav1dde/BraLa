@@ -42,6 +42,11 @@ fragment:
 
     uniform sampler2D terrain;
 
+    out vec4 out_color;
+    out vec4 out_texcoords;
+    out vec4 out_position;
+    out vec4 out_normal;
+
     void main() {
         vec4 color = texture(terrain, v_texcoord);
         vec4 mask_color = texture(terrain, v_mask);
@@ -50,18 +55,17 @@ fragment:
             discard;
         } else {
             if(v_mask == v_texcoord) {
-                gl_FragData[0] = color*v_color;
+                color = color*v_color;
             } else {
                 float alpha = mask_color.a;
 
-                if(alpha < 0.15)
-                    gl_FragData[0] = color;
-                else
-                    gl_FragData[0] = mask_color*v_color;
+                if(alpha >= 0.15)
+                    color = mask_color*v_color;
             }
         }
 
+        gl_FragData[0] = color;
         gl_FragData[1] = vec4(v_position, 0.0);
-        gl_FragData[2] = vec4(v_texcoord, v_mask);
-        gl_FragData[3] = vec4(v_normal, 0.0);
+        gl_FragData[2] = vec4(v_normal, 0.0);
+        gl_FragData[3] = vec4(v_texcoord, v_mask);
     }

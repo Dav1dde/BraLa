@@ -6,6 +6,7 @@ private {
     import glamour.fbo;
 
     import brala.engine : BraLaEngine;
+    import brala.gfx.gl : attach_new_texture, attach_new_renderbuffer;
     import brala.gfx.tscreen : TScreen, TScreenInvertedUVY;
 }
 
@@ -70,42 +71,47 @@ class DeferredRenderer : IRenderer {
 
     void update() {
         fbo.bind();
+        scope(exit) fbo.unbind();
 
-        foreach(tex; textures) {
-            if(tex !is null) tex.remove();
+        remove_attachments();
+
+        auto width = engine.viewport.x;
+        auto height = engine.viewport.y;
+
+        // color
+        textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT0, GL_RGBA, width, height,
+                                           GL_RGBA, GL_UNSIGNED_BYTE);
+        // position
+        textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT1, GL_RGBA, width, height,
+                                           GL_RGBA, GL_FLOAT);
+        // normal
+        textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT2, GL_RGBA, width, height,
+                                           GL_RGBA, GL_UNSIGNED_BYTE);
+        // texcoords
+        textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT3, GL_RGBA, width, height,
+                                           GL_RGBA, GL_UNSIGNED_BYTE);
+
+        draw_buffers = [GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
+                        GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3];
+
+        depth = fbo.attach_new_renderbuffer(GL_DEPTH_ATTACHMENT,
+                                            GL_DEPTH_COMPONENT, width, height);
+    }
+
+    protected void remove_attachments() {
+        foreach(texture; textures) {
+            if(texture !is null) {
+                texture.remove();
+            }
         }
-        if(depth !is null) depth.remove();
 
-        foreach(i; 0..4) {
-            auto tex = new Texture2D();
-            tex.set_data(cast(void*)null, GL_RGBA, engine.viewport.x, engine.viewport.y,
-                         GL_RGBA, GL_UNSIGNED_BYTE, true, 0);
-            tex.set_parameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            tex.set_parameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            tex.set_parameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            tex.set_parameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-            draw_buffers ~= GL_COLOR_ATTACHMENT0+i;
-            fbo.attach(tex, GL_COLOR_ATTACHMENT0+i);
-            tex.unbind();
-
-            textures ~= tex;
+        if(depth !is null) {
+            depth.remove();
         }
-
-        depth = new RenderBuffer();
-        depth.set_storage(GL_DEPTH_COMPONENT, engine.viewport.x, engine.viewport.y);
-        fbo.attach(depth, GL_DEPTH_ATTACHMENT);
-
-        depth.unbind();
-        fbo.unbind();
     }
 
     void shutdown() {
-        foreach(tex; textures) {
-            tex.remove();
-        }
-
-        depth.remove();
+        remove_attachments();
         fbo.remove();
     }
 
