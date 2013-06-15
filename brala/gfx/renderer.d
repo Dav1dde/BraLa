@@ -14,6 +14,7 @@ interface IRenderer {
     void shutdown();
     void enter();
     void exit();
+    void set_shader(string);
 }
 
 
@@ -37,12 +38,13 @@ class ForwardRenderer : IRenderer {
 
         // wireframe mode, for debugging
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-        engine.use_shader("terrain");
-        engine.use_texture("terrain", 0);
     }
 
     void exit() {}
+
+    void set_shader(string name) {
+        engine.use_shader(name);
+    }
 }
 
 
@@ -122,9 +124,6 @@ class DeferredRenderer : IRenderer {
 //         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         glDrawBuffers(cast(int)draw_buffers.length, draw_buffers.ptr);
-
-        engine.use_shader("terrainDef");
-        engine.use_texture("terrain", 0);
     }
 
     void exit() {
@@ -132,5 +131,9 @@ class DeferredRenderer : IRenderer {
 
         tscreen.display(textures[0]);
 //         tscreen.display("terrain");
+    }
+
+    void set_shader(string name) {
+        engine.use_shader(name ~ "Def");
     }
 }
