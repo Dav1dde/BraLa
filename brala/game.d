@@ -38,7 +38,7 @@ private {
     debug import std.stdio;
 }
 
-class BraLaGame {
+final class BraLaGame {
     BraLaEngine engine;
     Config config;
     Session session;

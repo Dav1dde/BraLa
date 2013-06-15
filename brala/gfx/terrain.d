@@ -282,7 +282,7 @@ enum string[] ORDER = ["activatorRail", "activatorRail_powered",
 
 enum BLOCK_IDS = 200;
 
-class MinecraftAtlas : Atlas {
+final class MinecraftAtlas : Atlas {
     BraLaEngine engine;
     Sampler sampler;
 

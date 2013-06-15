@@ -22,7 +22,7 @@ private {
     import brala.utils.config : Config;
 }
 
-class BraLaEngine {
+final class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
     Timer timer;
     ResourceManager resmgr;

@@ -82,7 +82,7 @@ struct TessellationBuffer {
 alias Tuple!(Chunk, "chunk", TessellationBuffer*, "buffer", size_t, "elements") TessOut;
 alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
-class World {
+final class World {
     static const default_tessellation_bufer_size = width*height*depth*100;
     
     const int width = 16;
@@ -477,7 +477,7 @@ class World {
 }
 
 
-class TessellationThread : VerboseThread {
+final class TessellationThread : VerboseThread {
     protected TessellationBuffer buffer;
     protected World world;
     protected Queue!ChunkData input;

@@ -55,7 +55,7 @@ void glamour_error_cb(GLenum errno, string func, string args) {
 }
     
 
-class BraLa {
+final class BraLa {
     Config config;
     Window window;
 

@@ -90,7 +90,7 @@ enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE_TYPE }
 
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
-class ResourceManager {
+final class ResourceManager {
     protected CBS[string] open_tasks;    
     protected Shader[string] shaders;
     protected ITexture[string] textures;

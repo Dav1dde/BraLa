@@ -49,7 +49,7 @@ struct Block {
 
 // NOTE to programmer, ctor will maybe called from a seperate thread
 // => dont do opengl stuff in the ctor
-class Chunk {
+final class Chunk {
     // width, height, depth must be a power of two
     const int width = 16;
     const int height = 256;
