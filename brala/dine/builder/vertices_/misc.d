@@ -9,7 +9,7 @@ private {
 
 
 CubeSideData LADDER_VERTEX = {
-    [[-0.5f, -0.5f, -0.49f], [0.5f, -0.5f, -0.49f], [0.5f, 0.5f, -0.49f], [-0.5f, 0.5f, -0.49f]],
+    [[-0.5f, -0.5f, -0.45f], [0.5f, -0.5f, -0.45f], [0.5f, 0.5f, -0.45f], [-0.5f, 0.5f, -0.45f]],
      Normal.Z_POSITIVE
 };
 
@@ -49,7 +49,7 @@ Vertex[] simple_vine(short[2][4] texture_slice, /+short[2][4] mask_slice,+/ Faci
 }
 
 CubeSideData TOP_VINE_VERTEX = {
-    [[-0.5f, 0.49f, 0.5f], [0.5f, 0.49f, 0.5f], [0.5f, 0.49f, -0.5f], [-0.5f, 0.49f, -0.5f]],
+    [[-0.5f, 0.45f, 0.5f], [0.5f, 0.45f, 0.5f], [0.5f, 0.45f, -0.5f], [-0.5f, 0.45f, -0.5f]],
      Normal.Y_POSITIVE
 };
 
