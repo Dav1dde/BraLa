@@ -7,7 +7,7 @@ private {
 
     import brala.engine : BraLaEngine;
     import brala.gfx.gl : attach_new_texture, attach_new_renderbuffer;
-    import brala.gfx.tscreen : TScreen, TScreenInvertedUVY;
+    import brala.gfx.tscreen : TScreen, SplitTScreen, TScreenInvertedUVY;
 }
 
 
@@ -58,11 +58,17 @@ class DeferredRenderer : IRenderer {
     protected uint[] draw_buffers;
 
     protected TScreen tscreen;
+    protected SplitTScreen debug_screen;
+    protected void delegate() display;
 
     this(BraLaEngine engine) {
         this.engine = engine;
         this.tscreen = new TScreenInvertedUVY(engine);
+        this.debug_screen = new SplitTScreen(engine, 2, 2, true);
         this.fbo = new FrameBuffer();
+
+        display = &display_scene;
+//         display = &display_debug;
 
         update();
         engine.on_resize.connect(&update);
@@ -90,6 +96,7 @@ class DeferredRenderer : IRenderer {
         // texcoords
         textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT3, GL_RGBA, width, height,
                                            GL_RGBA, GL_UNSIGNED_BYTE);
+
 
         draw_buffers = [GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
                         GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3];
@@ -135,8 +142,15 @@ class DeferredRenderer : IRenderer {
     void exit() {
         fbo.unbind();
 
+        display();
+    }
+
+    protected void display_debug() {
+        debug_screen.display(textures[3], textures[1], textures[0], textures[2]);
+    }
+
+    protected void display_scene() {
         tscreen.display(textures[0]);
-//         tscreen.display("terrain");
     }
 
     void set_shader(string name) {

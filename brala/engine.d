@@ -129,8 +129,9 @@ final class BraLaEngine {
         logger.log!Info("Mainloop ran %f seconds", ts.to!("seconds", float));
     }
     
-    void use_shader(string id) {
+    Shader use_shader(string id) {
         current_shader = resmgr.get!Shader(id);
+        return _current_shader;
     }
     
     void flush_uniforms() {

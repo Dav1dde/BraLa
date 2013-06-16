@@ -145,7 +145,7 @@ final class BraLaGame {
     
     void display() {
         renderer.enter();
-        scope(success) renderer.exit();
+//         scope(success) renderer.exit();
 
         if(current_world !is null) {
             renderer.set_shader("terrain");
@@ -156,6 +156,8 @@ final class BraLaGame {
             engine.current_shader.uniform("texture_size", atlas.dimensions);
             current_world.draw(engine);
         }
+
+        renderer.exit();
     }
     
     // Server/Connection
