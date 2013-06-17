@@ -6,7 +6,6 @@ private {
     import glamour.fbo;
 
     import brala.engine : BraLaEngine;
-    import brala.gfx.gl : attach_new_texture, attach_new_renderbuffer;
     import brala.gfx.tscreen : TScreen, SplitTScreen, TScreenInvertedUVY;
 }
 
@@ -92,7 +91,7 @@ class DeferredRenderer : IRenderer {
                                            GL_RGBA, GL_FLOAT);
         // normal
         textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT2, GL_RGBA, width, height,
-                                           GL_RGBA, GL_UNSIGNED_BYTE);
+                                             GL_RGBA, GL_UNSIGNED_BYTE);
         // texcoords
         textures ~= fbo.attach_new_texture(GL_COLOR_ATTACHMENT3, GL_RGBA, width, height,
                                            GL_RGBA, GL_UNSIGNED_BYTE);
