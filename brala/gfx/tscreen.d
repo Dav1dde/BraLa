@@ -11,32 +11,32 @@ private {
 
 enum float[] VERTEX_DATA = [
     1.0f, -1.0f,
-//     1, 1,
+    1, 1,
     1.0f, 1.0f,
-//     1, 0,
+    1, 0,
     -1.0f, -1.0f,
-//     0, 1,
+    0, 1,
     -1.0f, 1.0f,
-//     0, 0,
+    0, 0,
     -1.0f, -1.0f,
-//     0, 1,
+    0, 1,
     1.0f, 1.0f,
-//     1, 0,
+    1, 0,
 ];
 
 enum float[] VERTEX_DATA_INVERTED_UVY = [
     1.0f, -1.0f,
-//     1, 0,
+    1, 0,
     1.0f, 1.0f,
-//     1, 1,
+    1, 1,
     -1.0f, -1.0f,
-//     0, 0,
+    0, 0,
     -1.0f, 1.0f,
-//     0, 1,
+    0, 1,
     -1.0f, -1.0f,
-//     0, 0,
+    0, 0,
     1.0f, 1.0f,
-//     1, 1,
+    1, 1,
 ];
 
 
@@ -58,7 +58,8 @@ class TScreen {
         vbo.set_data(vertices);
 
         auto shader = engine.use_shader("tscreen");
-        vbo.bind(shader, "position", GL_FLOAT, 2, 0, 0);
+        vbo.bind(shader, "position", GL_FLOAT, 2, 0, 4*float.sizeof);
+        vbo.bind(shader, "texcoord", GL_FLOAT, 2, 2*float.sizeof, 4*float.sizeof);
 
         vao.unbind();
     }
@@ -112,7 +113,7 @@ class SplitTScreen {
             base_vertices = VERTEX_DATA.dup;
         }
 
-        enum stride = 2;
+        enum stride = 4;
 
         foreach(i; 0..base_vertices.length/stride) {
             base_vertices[i*stride] = ((base_vertices[i*stride]+1.0f) / 2.0f) / x_tiles;
@@ -148,7 +149,8 @@ class SplitTScreen {
 
             vbo.set_data(tile);
 
-            vbo.bind(shader, "position", GL_FLOAT, 2, 0, 0);
+            vbo.bind(shader, "position", GL_FLOAT, 2, 0, 4*float.sizeof);
+            vbo.bind(shader, "texcoord", GL_FLOAT, 2, 2*float.sizeof, 4*float.sizeof);
 
             vao.unbind();
 

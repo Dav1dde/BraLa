@@ -145,6 +145,10 @@ class DeferredRenderer : IRenderer {
     }
 
     protected void display_debug() {
+        foreach(texture; textures) {
+            texture.generate_mipmaps();
+        }
+
         debug_screen.display(textures[3], textures[1], textures[0], textures[2]);
     }
 
