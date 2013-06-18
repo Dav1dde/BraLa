@@ -465,6 +465,10 @@ int main(string[] args) {
     dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
                            dc.version_("glamour"), dc.debug_, dc.debug_info];
     
+    version(Windows) {
+        dc.additional_flags ~= "-m32";
+    }
+
     dc.import_paths = [buildPath("brala"),
                        buildPath("src", "d", "derelict3", "import"),
                        buildPath("src", "d", "glamour"),
