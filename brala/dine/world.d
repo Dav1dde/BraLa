@@ -134,6 +134,17 @@ final class World {
     ~this() {
         remove_all_chunks();
     }
+
+    @property
+    bool is_ok() {
+        foreach(thread; tessellation_threads) {
+            if(!thread.isRunning) {
+                return false;
+            }
+        }
+
+        return true;
+    }
    
     // when a chunk is passed to this method, the world will take care of it's memory
     // you should also lose all other references to this chunk

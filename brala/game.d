@@ -119,6 +119,11 @@ final class BraLaGame {
             logger.log!Info("Connection thread died");
             _quit = true;
         }
+
+        if(current_world !is null && !current_world.is_ok) {
+            logger.log!"Error"("Tessellation thread died!");
+            _quit = true;
+        }
         
         if(_quit) {           
             return true;
