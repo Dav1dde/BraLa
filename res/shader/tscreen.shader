@@ -1,3 +1,5 @@
+#version 150
+
 vertex:
     in vec2 position;
     in vec2 texcoord;
