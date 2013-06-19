@@ -159,6 +159,7 @@ final class BraLa {
     }
 }
 
+
 int main(string[] args) {
     DerelictGL3.load();
     version(DynamicGLFW) { DerelictGLFW3.load(); }

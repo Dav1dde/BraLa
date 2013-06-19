@@ -17,6 +17,7 @@ private {
     import brala.log : logger = resmgr_logger;
     import brala.utils.log;
     import brala.utils.image : Image;
+    import brala.utils.gloom : Gloom, parse_gloom_file;
     import brala.exception : ResmgrError;    
 }
 
@@ -38,8 +39,14 @@ Texture2D load_texture(ResourceManager rsmg, string id, string filename) {
     return tex;
 }
 
+Gloom load_gloom(ResourceManager rsmg, string id, string filename) {
+    Gloom gloom = parse_gloom_file(filename);
+    rsmg.done_loading(gloom, id);
+    return gloom;
+}
+
 private template is_loadable(T) {
-    static if(is(T : Image) || is(T : Shader) || is(T : ITexture)) {
+    static if(is(T : Image) || is(T : Shader) || is(T : ITexture) || is(T : Gloom)) {
         enum is_loadable = true;
     } else {
         enum is_loadable = false;
@@ -51,6 +58,7 @@ private struct CBS {
         void delegate(Image) imgcb;
         void delegate(Shader) sdrcb;
         void delegate(ITexture) texcb;
+        void delegate(Gloom) gloomcb;
     }
     
     void opCall(T)(T arg) {
@@ -60,6 +68,8 @@ private struct CBS {
             auto cb = sdrcb;
         } else static if(is(T : ITexture)) {
             auto cb = texcb;
+        } else static if(is(T : Gloom)) {
+            auto cb = gloomcb;
         } else {
             static assert(false, "Unknown argument type, no matching callback");
         }
@@ -78,6 +88,8 @@ private struct CBS {
             ret.sdrcb = cb;
         } else static if(is(T : void delegate(ITexture))) {
             ret.texcb = cb;
+        } else static if(is(T : void delegate(Gloom))) {
+            ret.gloomcb = cb;
         } else {
             static assert(false, "Unknown callback-type.");
         }
@@ -86,7 +98,7 @@ private struct CBS {
     }
 }
 
-enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE_TYPE }
+enum { AUTO_TYPE = -1, IMAGE_TYPE, SHADER_TYPE, TEXTURE_TYPE, GLOOM_TYPE }
 
 alias Tuple!(string, "id", string, "filename", int, "type") Resource;
 
@@ -95,6 +107,7 @@ final class ResourceManager {
     protected Shader[string] shaders;
     protected ITexture[string] textures;
     protected Image[string] images;
+    protected Gloom[string] glooms;
         
     this() {}
 
@@ -115,6 +128,9 @@ final class ResourceManager {
 
             logger.log!Info("Removing Images from ResourceManager");
             images = images.init;
+
+            logger.log!Info("Removing Glooms from ResourceManager");
+            glooms = glooms.init;
         }
   
     protected auto _add(alias taskfun, T)(string id, string filename, void delegate(T) cb = null) {
@@ -128,6 +144,7 @@ final class ResourceManager {
         if((is(T : Image) && id in images) ||
            (is(T : Shader) && id in shaders) ||
            (is(T : ITexture) && id in textures) ||
+           (is(T : Gloom) && id in glooms) ||
            idt in open_tasks) {
             throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
         }
@@ -140,14 +157,17 @@ final class ResourceManager {
     alias _add!(load_image, Image) add_image;
     alias _add!(load_shader, Shader) add_shader;
     alias _add!(load_texture, ITexture) add_texture;
+    alias _add!(load_gloom, Gloom) add_gloom;
     
     auto add(T)(string id, string filename, void delegate(T) cb = null) if(is_loadable!T) {
         static if(is(T : Image)) {
             return add_image(id, filename, cb);
         } else static if(is(T : Shader)) {
             return add_shader(id, filename, cb);
-        } else {
+        } else static if(is(T : Texture2D)) {
             return add_texture(id, filename, cb);
+        } else {
+            return add_gloom(id, filename, cb);
         }
     }
 
@@ -157,6 +177,7 @@ final class ResourceManager {
         if((is(T : Image) && id in images) ||
            (is(T : Shader) && id in shaders) ||
            (is(T : ITexture) && id in textures) ||
+           (is(T : Gloom) && id in glooms) ||
            idt in open_tasks) {
             throw new ResmgrError("ID: \"" ~ id ~ "\" is already used.");
         }
@@ -167,6 +188,8 @@ final class ResourceManager {
             shaders[id] = t;
         } else static if(is(T : ITexture)) {
             textures[id] = t;
+        } else static if(is(T : Gloom)) {
+            glooms[id] = t;
         }
     }
     
@@ -177,6 +200,7 @@ final class ResourceManager {
                 case IMAGE_TYPE: add_image(res.id, res.filename); break;
                 case SHADER_TYPE: add_shader(res.id, res.filename); break;
                 case TEXTURE_TYPE: add_texture(res.id, res.filename); break;
+                case GLOOM_TYPE: add_gloom(res.id, res.filename); break;
                 default: throw new ResmgrError("Unknown resource-type.");
             }
         }
@@ -193,6 +217,8 @@ final class ResourceManager {
             shaders.remove(id);
         } else static if(is(T : ITexture)) {
             textures.remove(id);
+        } else static if(is(T : Gloom)) {
+            glooms.remove(id);
         }
     }
     
@@ -203,6 +229,8 @@ final class ResourceManager {
             if(Shader* shader = id in shaders) return *shader;
         } else static if(is(T : ITexture)) {
             if(ITexture* tex = id in textures) return *tex;
+        } else static if(is(T : Gloom)) {
+            if(Gloom* gloom = id in glooms) return *gloom;
         }
 
         throw new ResmgrError("No %s with id \"%s\" available.".format(T.stringof, id));
@@ -220,6 +248,7 @@ final class ResourceManager {
             case ".glsl": return SHADER_TYPE;
             case ".texture": return TEXTURE_TYPE;
             case ".texture2d": return TEXTURE_TYPE;
+            case ".gloom": return GLOOM_TYPE;
             default: throw new ResmgrError(`Unable to guess resource-type for "%s"`.format(filename));
         }
     }
@@ -234,6 +263,7 @@ final class ResourceManager {
         static if(is(T : Image)) images[id] = res;
         else static if(is(T : Shader)) shaders[id] = res;
         else static if(is(T : ITexture)) textures[id] = res;
+        else static if(is(T : Gloom)) glooms[id] = res;
 
         string idt = id ~ T.stringof;
         if(CBS* t = idt in open_tasks) {
