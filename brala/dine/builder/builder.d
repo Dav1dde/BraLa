@@ -34,15 +34,16 @@ mixin template BlockBuilder() {
                                const Block block,
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff)
-        in { assert(elements+vertices.length <= buffer.length,
-                    "not enough allocated memory for tessellator: %d+%d <= %d".format(elements+vertices.length, buffer.length)); }
+        in { assert(terrain_elements+Vertex.sizeof*vertices.length <= buffer.terrain.length,
+                    "not enough allocated memory for tessellator: %d+%d <= %d"
+                        .format(terrain_elements+vertices.length, buffer.terrain.length)); }
         body {
-            size_t end = elements + vertices.length*Vertex.sizeof;
+            size_t end = terrain_elements + vertices.length*Vertex.sizeof;
             
-            buffer.ptr[elements..end] = cast(void[])vertices;
+            buffer.terrain.ptr[terrain_elements..end] = cast(void[])vertices;
             
-            for(; elements < end; elements += Vertex.sizeof) {
-                Vertex* vertex = cast(Vertex*)&((buffer.ptr)[elements]);
+            for(; terrain_elements < end; terrain_elements += Vertex.sizeof) {
+                Vertex* vertex = cast(Vertex*)&((buffer.terrain.ptr)[terrain_elements]);
                 vertex.x += x_offset;
                 vertex.y += y_offset;
                 vertex.z += z_offset;
@@ -55,9 +56,10 @@ mixin template BlockBuilder() {
         }
 
     void add_vertices(T : Vertex)(const auto ref T[] vertices)
-        in { assert(elements+vertices.length <= buffer.length, "not enough allocated memory for tessellator"); }
+        in { assert(terrain_elements+vertices.length <= buffer.terrain.length,
+                    "not enough allocated memory for tessellator"); }
         body {
-            buffer.ptr[elements..(elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
+            buffer.terrain.ptr[terrain_elements..(terrain_elements += vertices.length*Vertex.sizeof)] = cast(void[])vertices;
         }
 
     // blocks

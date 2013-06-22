@@ -37,7 +37,6 @@ Gloom parse_gloom(T)(T data_) if(isInputRange!T) {
 
     auto vertex = data.front().split();
     enforce(vertex[0] == "vertex:", "Invalid gloom file");
-    data.popFront();
 
     Gloom ret;
 
@@ -45,6 +44,8 @@ Gloom parse_gloom(T)(T data_) if(isInputRange!T) {
         ret.names ~= Tup(info[0].idup, to!int(info[1]));
         ret.stride += to!int(info[1]);
     }
+
+    data.popFront();
 
     bool index;
     float[] vertices;

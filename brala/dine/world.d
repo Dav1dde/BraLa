@@ -24,6 +24,7 @@ private {
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
     import brala.utils.aa : ThreadAA;
+    import brala.utils.gloom : Gloom;
     import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
@@ -31,10 +32,41 @@ private {
 
 private enum Block AIR_BLOCK = Block(0);
 
-struct TessellationBuffer {
+struct Pointer {
     void* ptr = null;
-    alias ptr this; 
+    alias ptr this;
     size_t length = 0;
+
+    this(size_t size) {
+        ptr = cast(void*)malloc(size);
+        length = size;
+    }
+
+    void realloc(size_t size) {
+        ptr = cast(void*).realloc(ptr, size);
+        length = size;
+    }
+
+    void realloc_interval(ptrdiff_t interval) {
+        realloc(length + interval);
+    }
+
+    void realloc_interval_if_needed(size_t stored, ptrdiff_t interval) {
+        if(stored+interval >= length) {
+            realloc_interval(interval);
+        }
+    }
+
+    void free() {
+        .free(ptr);
+        ptr = null;
+        length = 0;
+    }
+}
+
+struct TessellationBuffer {
+    Pointer terrain;
+    Pointer light;
 
     private Event _event;
     @property event() {
@@ -62,20 +94,14 @@ struct TessellationBuffer {
         event.wait();
     }
 
-    this(size_t size) {
-        ptr = cast(void*)malloc(size);
-        length = size;
+    this(size_t size, size_t light_size) {
+        terrain = Pointer(size);
+        light = Pointer(light_size);
     }
 
-    void realloc(size_t size) {
-        ptr = cast(void*).realloc(ptr, size);
-        length = size;
-    }
-    
     void free() {
-        .free(ptr);
-        ptr = null;
-        length = 0;
+        terrain.free();
+        light.free();
     }
 }
 
@@ -83,7 +109,9 @@ alias Tuple!(Chunk, "chunk", TessellationBuffer*, "buffer", size_t, "elements") 
 alias Tuple!(Chunk, "chunk", vec3i, "position") ChunkData;
 
 final class World {
-    static const default_tessellation_bufer_size = width*height*depth*100;
+    // approximations / educated guesses
+    static const default_tessellation_buffer_size = width*height*depth*Vertex.sizeof*6;
+    static const default_light_buffer_size = 12*4*500;
     
     const int width = 16;
     const int height = 256;
@@ -98,6 +126,7 @@ final class World {
 
     MemoryCounter vram = MemoryCounter("vram");
 
+    protected ResourceManager resmgr;
     protected BiomeSet biome_set;
     protected MinecraftAtlas atlas;
 
@@ -106,8 +135,11 @@ final class World {
     protected TessellationThread[] tessellation_threads;
     
     this(ResourceManager resmgr, MinecraftAtlas atlas, size_t threads) {
+        this.resmgr = resmgr;
         this.atlas = atlas;
         biome_set.update_colors(resmgr);
+
+        assert(resmgr.get!Gloom("sphere").stride == 3, "invalid sphere");
 
         threads = threads ? threads : 1;
 
@@ -334,7 +366,7 @@ final class World {
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
     size_t tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
-        Tessellator tessellator = Tessellator(this, atlas, tb);
+        Tessellator tessellator = Tessellator(this, atlas, resmgr.get!Gloom("sphere"), tb);
 
         int index;
         int y;
@@ -364,7 +396,7 @@ final class World {
                 wcoords.y = wcoords_orig.y + y;
                 wcoords.z = wcoords_orig.z;
 
-                tessellator.realloc_buffer_if_needed(1024*(16-hds));
+                tessellator.trigger_realloc();
 
                 foreach(z; 0..depth) {
                     z_offset = wcoords_orig.z + z + 0.5f;
@@ -411,15 +443,15 @@ final class World {
             }
         }
 
-        chunk.vbo_vcount = tessellator.elements / Vertex.sizeof;
+        chunk.vbo_vcount = tessellator.terrain_elements / Vertex.sizeof;
 
         debug {
-            assert(cast(size_t)tb.ptr % 4 == 0, "whatever I did check here isn't true anylonger");
-            //assert(tessellator.elements*Vertex.sizeof % 4 == 0, "");
+            assert(cast(size_t)tb.terrain.ptr % 4 == 0, "whatever I did check here isn't true anylonger");
+            //assert(tessellator.terrain_elements*Vertex.sizeof % 4 == 0, "");
             static assert(Vertex.sizeof % 4 == 0, "Vertex struct is not a multiple of 4");
         }
 
-        return tessellator.elements;
+        return tessellator.terrain_elements;
     }
 
     void bind(Shader shader, Chunk chunk)
@@ -444,7 +476,7 @@ final class World {
 
             debug size_t prev = chunk.vbo.length;
 
-            chunk.vbo.set_data(buffer.ptr, elements);
+            chunk.vbo.set_data(buffer.terrain.ptr, elements);
 
             assert(chunk.vbo !is null, "chunk vbo is null");
             assert(engine.current_shader !is null, "current shader is null");
@@ -485,6 +517,12 @@ final class World {
             }
         }
     }
+
+    void draw_lights() {
+        foreach(chunkc, chunk; chunks) {
+
+        }
+    }
 }
 
 
@@ -500,7 +538,8 @@ final class TessellationThread : VerboseThread {
         super(&run);
 
         this.world = world;
-        this.buffer = TessellationBuffer(world.default_tessellation_bufer_size);
+        this.buffer = TessellationBuffer(world.default_tessellation_buffer_size,
+                                         world.default_light_buffer_size);
         this.input = input;
         this.output = output;
 

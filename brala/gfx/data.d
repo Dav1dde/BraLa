@@ -39,8 +39,14 @@ align(1) struct Vertex {
 //         vbo.bind(shader, "light",    GL_UNSIGNED_BYTE, 2, 22, stride);
     }
 }
-
 static assert(Vertex.sizeof % 4 == 0, "Vertex size must be multiple of 4");
+
+align(1) struct LightVertex {
+    align(1):
+    float x;
+    float y;
+    float z;
+}
 
 
 enum float normals[] = [
