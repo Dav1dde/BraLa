@@ -55,6 +55,13 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool)))
         }
     } else static if(__traits(compiles, s.write(data))) {
         s.write(data);
+    } else static if(is(T : Value[Key], Key, Value)) {
+        write(s, cast(int)data.length);
+
+        foreach(key, value; data) {
+            write(s, key);
+            write(s, value);
+        }
     } else {
         // TODO: implement .send for MapChunkS, EntityMetadataS, Slot
         assert(false, "write not implemented for %s".format(T.stringof));
@@ -122,6 +129,12 @@ private T read_impl(T)(Stream s) if(!(is(T : string) || is(T : bool) || __traits
                     static if(!__traits(hasMember, T, "LenType") && __traits(hasMember, ret[i], "array_position")) ret[i].array_position = i;
                 }
             }
+        }
+    } else static if(is(T : Value[Key], Key, Value)) {
+        int count = read!int(s);
+
+        foreach(_; 0..count) {
+            ret[read!Key(s)] = read!Value(s);
         }
     } else {
         s.read(ret);

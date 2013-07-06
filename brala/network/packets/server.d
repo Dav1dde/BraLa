@@ -44,7 +44,7 @@ class SpawnPosition : IPacket {
 }
 
 class UpdateHealth : IPacket {
-    mixin Packet!(0x08, short, "health", short, "food", float, "food_saturation");
+    mixin Packet!(0x08, float, "health", short, "food", float, "food_saturation");
 }
 
 class Respawn : IPacket {
@@ -133,7 +133,7 @@ class EntityStatus : IPacket {
 }
 
 class AttachEntity : IPacket {
-    mixin Packet!(0x27, int, "entity_id", int, "vehicle_id");
+    mixin Packet!(0x27, int, "entity_id", int, "vehicle_id", bool, "leash");
 }
 
 class EntityMetadata : IPacket {
@@ -150,6 +150,10 @@ class RemoveEntityEffect : IPacket {
 
 class Experience : IPacket {
     mixin Packet!(0x2B, float, "experience_bar", short, "level", short, "total_experience");
+}
+
+class EntityProperties : IPacket {
+    mixin Packet!(0x2C, int, "entity_id", AA!(double, string), "properties");
 }
 
 class MapChunk : IPacket {
@@ -205,7 +209,8 @@ class ThunderBolt : IPacket {
 }
 
 class OpenWindow : IPacket {
-    mixin Packet!(0x64, byte, "window_id", byte, "inventory_type", string, "window_title", byte, "slots", bool, "use_provided");
+    mixin Packet!(0x64, byte, "window_id", byte, "inventory_type", string, "window_title",
+                  byte, "slots", bool, "use_provided", int, "unknown");
 }
 
 class CloseWindow : IPacket {
@@ -244,8 +249,12 @@ class UpdateTileEntity : IPacket {
     mixin Packet!(0x84, int, "x", short, "y", int, "z", byte, "action", Array!(short, byte), "nbt_data");
 }
 
+class Unknown : IPacket {
+    mixin Packet!(0x85, byte, "a", int, "b", int, "c", int, "d");
+}
+
 class IncrementStatistic : IPacket {
-    mixin Packet!(0xC8, int, "statistic_id", byte, "amount");
+    mixin Packet!(0xC8, int, "statistic_id", int, "amount");
 }
 
 class PlayerListItem : IPacket {
@@ -253,7 +262,7 @@ class PlayerListItem : IPacket {
 }
 
 class PlayerAbilities : IPacket {
-    mixin Packet!(0xCA, byte, "flags", byte, "flying_speed", byte, "walking_speed");
+    mixin Packet!(0xCA, byte, "flags", float, "flying_speed", float, "walking_speed");
 }
 
 class TabComplete : IPacket {

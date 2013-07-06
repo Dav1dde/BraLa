@@ -65,7 +65,11 @@ class HoldingChange : IPacket {
 }
 
 class EntityAction : IPacket {
-    mixin Packet!(0x13, int, "entity_id", byte, "action_id");
+    mixin Packet!(0x13, int, "entity_id", byte, "action_id", int, "unknown");
+}
+
+class SteerVehicle : IPacket {
+    mixin Packet!(0x1B, float, "sideways", float, "forward", bool, "jump", bool, "unmount");
 }
 
 class WindowClick : IPacket {
@@ -96,7 +100,8 @@ class ClientStatuses : IPacket {
 public alias server.EncryptionKeyResponse EncryptionKeyResponse;
 
 class ServerListPing : IPacket {
-    mixin Packet!(0xFE);
+    mixin Packet!(0xFE, byte, "payload", byte, "identifier", string, "msg",
+                  short, "len", byte, "protocol_version", string, "hostname", int, "port");
 }
 
 public alias server.Disconnect Disconnect;

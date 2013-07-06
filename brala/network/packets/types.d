@@ -10,6 +10,7 @@ private {
     import std.conv : to;
     import std.zlib : uncompress;
     import std.exception : enforceEx;
+    import std.traits : isNumeric;
     import core.stdc.errno;
     import core.bitop : popcnt;
 
@@ -269,6 +270,66 @@ struct Array(T, S) {
 struct StaticArray(T, size_t length) {
     T[length] arr;
     alias arr this;
+}
+
+struct AAList {
+    long msb;
+    long lsb;
+    double double_;
+    byte byte_;
+
+    static AAList recv(Stream s) {
+        AAList ret;
+        ret.msb = read!long(s);
+        ret.lsb = read!long(s);
+        ret.double_ = read!double(s);
+        ret.byte_ = read!byte(s);
+        return ret;
+    }
+
+    string toString() {
+        return `%s(long msb : %s, long lsb : %s, double double_ : %s, byte byte_ : %s)`.format(msb, lsb, double_, byte_);
+    }
+}
+
+struct AA(V, K, T = int) {
+    alias T CountType;
+
+    struct Value {
+        V value;
+        alias value this;
+        Array!(short, AAList) list;
+
+        static Value recv(Stream s) {
+            Value ret;
+            ret.value = read!V(s);
+            ret.list = read!(Array!(short, AAList))(s);
+            return ret;
+        }
+
+        string toString() {
+            static if(isNumeric!V) {
+                return `(%s, %s)`.format(value, list);
+            } else {
+                return `("%s", %s)`.format(value, list);
+            }
+        }
+    }
+
+    Value[K] aa;
+    alias aa this;
+
+    string toString() {
+        string[] kv;
+        foreach(K key, Value value; aa) {
+            static if(isNumeric!V) {
+                kv ~= `"%s" : %s`.format(key, value);
+            } else {
+                kv ~= `"%s" : "%s"`.format(key, value);
+            }
+        }
+        return "[%s]".format(kv.join(", "));
+    }
 }
 
 
