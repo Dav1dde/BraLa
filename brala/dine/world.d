@@ -10,7 +10,7 @@ private {
     import gl3n.aabb : AABB;
 
     import std.typecons : Tuple;
-    import core.time : dur;
+    import core.time : TickDuration, dur;
 
     import brala.log : logger = world_logger;
     import brala.utils.log;
@@ -124,22 +124,20 @@ final class World {
     Chunk[vec3i] chunks;
     vec3i spawn;
 
-    MemoryCounter vram = MemoryCounter("vram");
-
-    protected ResourceManager resmgr;
-    protected BiomeSet biome_set;
-    protected MinecraftAtlas atlas;
+    protected BraLaEngine engine;
+    BiomeSet biome_set;
+    MinecraftAtlas atlas;
 
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
     protected TessellationThread[] tessellation_threads;
     
-    this(ResourceManager resmgr, MinecraftAtlas atlas, size_t threads) {
-        this.resmgr = resmgr;
+    this(BraLaEngine engine, MinecraftAtlas atlas, size_t threads) {
+        this.engine = engine;
         this.atlas = atlas;
-        biome_set.update_colors(resmgr);
+        biome_set.update_colors(engine.resmgr);
 
-        assert(resmgr.get!Gloom("sphere").stride == 3, "invalid sphere");
+        assert(engine.resmgr.get!Gloom("sphere").stride == 3, "invalid sphere");
 
         threads = threads ? threads : 1;
 
@@ -158,9 +156,9 @@ final class World {
         }
     }
     
-    this(ResourceManager resmgr, MinecraftAtlas atlas, vec3i spawn, size_t threads) {
+    this(BraLaEngine engine, MinecraftAtlas atlas, vec3i spawn, size_t threads) {
+        this(engine, atlas, threads);
         this.spawn = spawn;
-        this(resmgr, atlas, threads);
     }
     
     ~this() {
@@ -205,7 +203,6 @@ final class World {
             chunk.empty_chunk();
 
             if(chunk.vbo !is null) {
-                vram.remove(chunk.vbo.length);
                 chunk.vbo.remove();
             }
 
@@ -366,7 +363,7 @@ final class World {
     // fills the vbo with the chunk content
     // original version from florian boesch - http://codeflow.org/
     size_t tessellate(Chunk chunk, vec3i chunkc, TessellationBuffer* tb) {
-        Tessellator tessellator = Tessellator(this, atlas, resmgr.get!Gloom("sphere"), tb);
+        Tessellator tessellator = Tessellator(this, atlas, engine.resmgr.get!Gloom("sphere"), tb);
 
         int index;
         int y;
@@ -454,16 +451,9 @@ final class World {
         return tessellator.terrain_elements;
     }
 
-    void bind(Shader shader, Chunk chunk)
-        in { assert(chunk.vbo !is null, "chunk vbos is null");
-             assert(shader !is null, "no current shader"); }
-        body {
-
-        }
-    
-    void draw(BraLaEngine engine) {
+    void postprocess_chunks() {
         // NOTE queue opApply changed, eventual fix required
-        foreach(tess_out; output) with(tess_out) {
+        if(!output.empty) foreach(tess_out; output) with(tess_out) {
             if(chunk.vbo is null) {
                 chunk.vao = new VAO();
                 chunk.vbo = new Buffer();
@@ -474,8 +464,6 @@ final class World {
             scope(exit) chunk.vbo.unbind();
             scope(exit) chunk.vao.unbind();
 
-            debug size_t prev = chunk.vbo.length;
-
             chunk.vbo.set_data(buffer.terrain.ptr, elements);
 
             assert(chunk.vbo !is null, "chunk vbo is null");
@@ -484,14 +472,6 @@ final class World {
 
             chunk.tessellated = true;
             buffer.available = true;
-
-            debug {
-                if(prev == 0 && chunk.vbo.length) {
-                    vram.add(chunk.vbo.length);
-                } else {
-                    vram.adjust(chunk.vbo.length - prev);
-                }
-            }
         }
 
         version(NoThreads) {
@@ -499,28 +479,14 @@ final class World {
                 tessellation_threads[0].poll();
             }
         }
-
-        auto frustum = engine.frustum;
-        foreach(chunkc, chunk; chunks) {
-            if(chunk.dirty && chunk.tessellated) {
-                chunk.dirty = false;
-                chunk.tessellated = false;
-                // this queue is never full and we don't wanna waste time waiting
-                input.put(ChunkData(chunk, chunkc), false);
-            }
-
-            if(chunk.vbo !is null && chunk.vao !is null) {
-                if(chunk.aabb in frustum) {
-                    chunk.vao.bind();
-                    glDrawArrays(GL_TRIANGLES, 0, cast(uint)chunk.vbo_vcount);
-                }
-            }
-        }
     }
 
-    void draw_lights() {
-        foreach(chunkc, chunk; chunks) {
-
+    void check_chunk(Chunk chunk, vec3i chunkc) {
+        if(chunk.dirty && chunk.tessellated) {
+            chunk.dirty = false;
+            chunk.tessellated = false;
+            // this queue is never full and we don't wanna waste time waiting
+            input.put(ChunkData(chunk, chunkc), false);
         }
     }
 }

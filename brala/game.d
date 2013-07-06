@@ -27,7 +27,8 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.engine : BraLaEngine;
     import brala.entities.player : Player;
-    import brala.gfx.data : set_normals_uniform;
+    import brala.gfx.world : draw;
+    import brala.gfx.data;
     import brala.gfx.renderer : IRenderer, ForwardRenderer, DeferredRenderer;
     import brala.gfx.terrain : MinecraftAtlas;
     import brala.gfx.text : parse_chat;
@@ -50,7 +51,6 @@ final class BraLaGame {
     protected World _current_world;    
     @property current_world() { return _current_world; }
     
-    protected bool _quit = false;
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
 
@@ -74,11 +74,12 @@ final class BraLaGame {
             this.renderer = new DeferredRenderer(engine);
         }
 
+        engine.on_frame.connect(&poll);
         engine.on_shutdown.connect(&shutdown);
     }
 
     void quit() {
-        _quit = true;
+        engine.stop();
     }
 
     protected void shutdown() {
@@ -101,7 +102,7 @@ final class BraLaGame {
         }
         connection.run();
 
-        engine.mainloop(&poll);
+        engine.mainloop();
     }
     
     void start(Address to, string hostname) {
@@ -114,19 +115,15 @@ final class BraLaGame {
         start();
     }
 
-    bool poll(TickDuration delta_t) {
+    void poll(TickDuration delta_t) {
         if(!connection.thread.isRunning) {
             logger.log!Info("Connection thread died");
-            _quit = true;
+            engine.stop();
         }
 
         if(current_world !is null && !current_world.is_ok) {
             logger.log!"Error"("Tessellation thread died!");
-            _quit = true;
-        }
-        
-        if(_quit) {           
-            return true;
+            engine.stop();
         }
 
         foreach(packet; connection) {
@@ -136,7 +133,7 @@ final class BraLaGame {
         if(player !is null) {
             player.update(delta_t);
         }
-        
+
         display();
         
         TickDuration now = engine.timer.get_time();
@@ -144,25 +141,13 @@ final class BraLaGame {
             on_notchian_tick.emit();
             last_notchian_tick = now;
         }
-        
-        return false;
     }
     
     void display() {
         renderer.enter();
-//         scope(success) renderer.exit();
+        scope(success) renderer.exit();
 
-        if(current_world !is null) {
-            renderer.set_shader("terrain");
-            engine.current_shader.set_normals_uniform("normals");
-            engine.use_texture("terrain", 0);
-
-            engine.flush_uniforms();
-            engine.current_shader.uniform("texture_size", atlas.dimensions);
-            current_world.draw(engine);
-        }
-
-        renderer.exit();
+        current_world.draw(engine, renderer);
     }
     
     // Server/Connection
@@ -206,7 +191,7 @@ final class BraLaGame {
         logger.log!Info("%s", packet);
 
         if(_current_world !is null) _current_world.shutdown();
-        _current_world = new World(engine.resmgr, atlas, tessellation_threads);
+        _current_world = new World(engine, atlas, tessellation_threads);
         
         player = new Player(this, packet.entity_id);
         player.update_from_config(config);

@@ -8,6 +8,8 @@ private {
     import gl3n.math : sign;
 
     import std.string : format;
+
+    import brala.engine : BraLaEngine;
 }
 
 
@@ -85,6 +87,10 @@ enum Normal : ubyte {
 Shader set_normals_uniform(Shader shader, string name) {
     shader.uniform4fv(name, normals);
     return shader;
+}
+
+Shader set_normals_uniform(BraLaEngine engine, string name) {
+    return engine.current_shader.set_normals_uniform(name);
 }
 
 Normal get_normal(float x, float y, float z) {

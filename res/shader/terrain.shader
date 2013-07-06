@@ -40,9 +40,9 @@ fragment:
     in vec2 v_texcoord;
     in vec2 v_mask;
 
-    out vec4 color_out;
-
     uniform sampler2D terrain;
+
+    out vec4 color_out;
 
     void main() {
         vec4 color = texture(terrain, v_texcoord);

@@ -24,6 +24,7 @@ private {
 
 final class BraLaEngine {
     protected vec2i _viewport = vec2i(0, 0);
+    protected bool _stop = false;
     Timer timer;
     ResourceManager resmgr;
     Window window;
@@ -35,6 +36,9 @@ final class BraLaEngine {
 
     mixin Signal!() on_shutdown;
     mixin Signal!() on_resize;
+    mixin Signal!() on_start;
+    mixin Signal!(TickDuration) on_frame;
+    mixin Signal!(TickDuration) on_stop;
     
     mat4 model = mat4.identity;
     mat4 view = mat4.identity;
@@ -96,20 +100,20 @@ final class BraLaEngine {
         on_resize.emit();
     }
     
-    void mainloop(bool delegate(TickDuration) callback) {
+    void mainloop() {
         bool stop = false;
         timer.start();
         
         TickDuration now, last;
         debug TickDuration lastfps = TickDuration(0);
         
-        while(true) {
+        on_start.emit();
+
+        while(!_stop) {
             now = timer.get_time();
             TickDuration delta_ticks = (now - last);
 
-            if(callback(delta_ticks)) {
-                break;
-            }
+            on_frame.emit(delta_ticks);
         
             debug {
                 TickDuration t = timer.get_time();
@@ -127,6 +131,13 @@ final class BraLaEngine {
         
         TickDuration ts = timer.stop();
         logger.log!Info("Mainloop ran %f seconds", ts.to!("seconds", float));
+
+        on_stop.emit(ts);
+    }
+
+    void stop(size_t line = __LINE__, string file = __FILE__) {
+        logger.log!Info("Stop triggered from: %s:%s", file, line);
+        _stop = true;
     }
     
     Shader use_shader(string id) {
