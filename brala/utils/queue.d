@@ -10,8 +10,8 @@ private {
 
 public import brala.utils.exception : QueueException, Full, Empty;
 
-
-private enum Duration DUR_0 = dur!("seconds")(0);
+// gdc bug?
+private enum DUR_0 = Duration.init;
 
 class Queue(type) {
     protected Mutex mutex;
