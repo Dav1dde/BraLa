@@ -55,7 +55,7 @@ private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool)))
         }
     } else static if(__traits(compiles, s.write(data))) {
         s.write(data);
-    } else static if(is(T : Value[Key], Key, Value)) {
+    } else static if(is(T x : Value[Key], Key, Value)) {
         write(s, cast(int)data.length);
 
         foreach(key, value; data) {
