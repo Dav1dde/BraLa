@@ -70,7 +70,8 @@ class DeferredRenderer : IRenderer {
 //         display = &display_debug;
 
         update();
-        engine.on_resize.connect(&update);
+        // TODO investigate why this makes glDrawArrays segfault
+//         engine.on_resize.connect(&update);
         engine.on_shutdown.connect(&shutdown);
     }
 

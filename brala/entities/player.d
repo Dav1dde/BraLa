@@ -106,14 +106,15 @@ class Player : NamedEntity {
         connection.send(packet);
     }
 
-    void on_mouse_pos(int x, int y) {
+    void on_mouse_pos(double x, double y) {
         static int last_x = 0;
         static int last_y = 0;
 
-        mouse_offset.x = x - last_x;
-        mouse_offset.y = y - last_y;
+        // TODO double?
+        mouse_offset.x = cast(int)x - last_x;
+        mouse_offset.y = cast(int)y - last_y;
 
-        last_x = x;
-        last_y = y;
+        last_x = cast(int)x;
+        last_y = cast(int)y;
     }
 }

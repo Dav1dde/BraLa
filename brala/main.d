@@ -35,6 +35,7 @@ private {
     import std.stdio : writefln;
 }
 
+
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {
@@ -128,7 +129,7 @@ final class BraLa {
         glfwSwapInterval(0);
 
         if(!is_debugged) {
-            window.set_input_mode(GLFW_CURSOR_MODE, GLFW_CURSOR_CAPTURED);
+//             window.set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
 
         DerelictGL3.reload();
