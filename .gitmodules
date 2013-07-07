@@ -12,7 +12,7 @@
 	url = git://github.com/aldacron/Derelict3.git
 [submodule "src/c/glfw"]
 	path = src/c/glfw
-	url = git://github.com/elmindreda/glfw.git
+	url = git://github.com/glfw/glfw.git
 [submodule "src/d/nbd"]
 	path = src/d/nbd
 	url = git://github.com/Dav1dde/nbd.git
