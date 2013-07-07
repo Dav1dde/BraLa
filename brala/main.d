@@ -97,6 +97,10 @@ final class BraLa {
         if(config.has_key!string("connection.host")) {
             if(config.get!bool("connection.offline")) {
                 session.minecraft_username = config.get!(string, false)("account.username");
+            } else if(config.has_key!string("account.session")) {
+                session.session_id = config.get!(string, false)("account.session");
+                session.minecraft_username = config.get!(string, false)("account.username");
+                session.username = config.get!(string, false)("account.realusername");
             } else {
                 session.login(config.get!(string, false)("account.username"),
                               config.get!(string, false)("account.password"));

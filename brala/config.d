@@ -9,6 +9,7 @@ private {
     import std.array : join;
     
     import brala.minecraft.lastlogin : minecraft_credentials;
+    import brala.minecraft.profiles : current_profile;
     import brala.utils.dargs : get_options, Alias;
     import brala.utils.config : Config, Path;
     
@@ -30,6 +31,11 @@ struct AppArguments {
 
     bool credentials;
     Alias!("credentials") c;
+
+    string session;
+
+    bool auto_session;
+    Alias!("auto_session") a;
 
     bool offline;
 
@@ -64,6 +70,10 @@ struct AppArguments {
 
             "uses minecrafts lastlogin file for authentication and logging in,\n" ~
             "\t\t\t\t--username and --password are used as fallback",
+
+            "uses the supplied session to login to minecraft, this requires --username",
+
+            "tries to use launcher_profiles.json to extract session key",
 
             "\tstart in offline mode",
 
@@ -135,6 +145,16 @@ Config initialize_config() {
 
         config.set_if("account.username", credentials.username);
         config.set_if("account.password", credentials.password);
+    }
+
+    config.set_if("account.session", app_arguments.session);
+
+    if(!config.has_key!string("account.session") && app_arguments.auto_session) {
+        auto profile = current_profile();
+
+        config.set_if("account.session", profile.session);
+        config.set_if("account.username", profile.authentication["displayName"]);
+        config.set_if("account.realusername", profile.authentication["username"]);
     }
 
     config.set("connection.offline", app_arguments.offline);

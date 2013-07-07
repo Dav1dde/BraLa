@@ -43,7 +43,12 @@ class Session {
     string minecraft_username;
     string session_id;
     
-    this() {
+    this() {}
+
+    this(string username, string minecraft_username, string session_id) {
+        this.username = username;
+        this.minecraft_username = minecraft_username;
+        this.session_id = session_id;
     }
     
     void login(string username, string password) {
@@ -82,7 +87,8 @@ class Session {
                                   "serverId" : login_hash(server_id, shared_secret, public_key)]));
         
         if(res != "OK") {
-            throw new SessionError("Failed to join server: " ~ res.idup);
+            throw new SessionError(`Failed to join server [user:"%s", session:"%s"]: %s`
+                                   .format(minecraft_username, session_id, res));
         }
     }
     
