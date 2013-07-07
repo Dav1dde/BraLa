@@ -40,6 +40,12 @@ class SessionError : BraLaException {
     }
 }
 
+class MinecraftException : BraLaException {
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
+
 class WorldError : BraLaException {
     this(string s, string f=__FILE__, size_t l=__LINE__) {
         super(s, f, l);

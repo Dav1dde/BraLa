@@ -3,7 +3,6 @@ module brala.main;
 
 private {
     import glamour.gl;
-    import glamour.texture : Texture2D;
     import glamour.util : gl_error_string, glamour_set_error_callback = set_error_callback;
     import glwtf.glfw;
     import glwtf.window : Window;
@@ -26,7 +25,7 @@ private {
     import brala.network.session : Session, DelayedSnooper;
     import brala.network.packets.types : IPacket;
     import brala.gfx.palette : palette_atlas;
-    import brala.gfx.terrain : MinecraftAtlas, extract_minecraft_terrain;
+    import brala.gfx.terrain : MinecraftAtlas;
     import brala.exception : InitError;
     import brala.utils.image : Image;
     import brala.utils.config : Config, Path;
@@ -129,7 +128,7 @@ final class BraLa {
         glfwSwapInterval(0);
 
         if(!is_debugged) {
-//             window.set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            window.set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
 
         DerelictGL3.reload();

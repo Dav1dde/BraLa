@@ -28,7 +28,7 @@ private {
     import brala.network.packets.types : IPacket, Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
-    import brala.network.crypto : decode_public, encrypt, seed_prng, get_random, get_random_max;
+    import brala.minecraft.crypto : decode_public, encrypt, seed_prng, get_random, get_random_max;
     import brala.utils.queue : Queue;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Thread, VerboseThread, Timer;

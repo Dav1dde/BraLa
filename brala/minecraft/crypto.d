@@ -1,4 +1,4 @@
-module brala.network.crypto;
+module brala.minecraft.crypto;
 
 private {
     import std.conv : to;
@@ -7,7 +7,7 @@ private {
     import brala.utils.openssl.hash : MD5;
     import brala.utils.openssl.encrypt : DESCBC;
     import brala.utils.openssl.exception : OpenSSLException;
-    
+
     import deimos.openssl.rand;
     import deimos.openssl.rsa;
     import deimos.openssl.x509;
@@ -44,7 +44,7 @@ ubyte[] get_random(size_t size) {
     if(!RAND_bytes(rand.ptr, cast(uint)size)) {
         throw new OpenSSLException();
     }
-    
+
     return rand;
 }
 
@@ -63,7 +63,7 @@ ubyte[] get_random_max(size_t size, ubyte max) {
 class PBEWithMD5AndDES {
     protected ubyte[] key;
     protected ubyte[] IV;
-    
+
     this(ubyte[] inp_key) {
         ubyte[] md5_key = generate_md5_key(inp_key, 5);
 

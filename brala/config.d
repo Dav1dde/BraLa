@@ -8,7 +8,7 @@ private {
     import std.range : zip;
     import std.array : join;
     
-    import brala.network.session : minecraft_credentials;
+    import brala.minecraft.lastlogin : minecraft_credentials;
     import brala.utils.dargs : get_options, Alias;
     import brala.utils.config : Config, Path;
     

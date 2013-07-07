@@ -20,7 +20,7 @@ private {
     
     import brala.log : logger = terrain_logger;
     import brala.engine : BraLaEngine;
-    import brala.network.session : minecraft_folder;
+    import brala.minecraft.folder : minecraft_jar;
     import brala.gfx.data : Vertex, Normal;
     import brala.dine.builder.constants : Side;
     import brala.dine.builder.vertices : TEXTURE_INFORMATION, simple_block;
@@ -301,7 +301,7 @@ final class MinecraftAtlas : Atlas {
 
         string path = engine.config.get!Path("game.texture.pack");
         if(path == "default" || path.length == 0) {
-            path = buildPath(minecraft_folder(), "bin", "minecraft.jar");
+            path = minecraft_jar;
         }
         enforceEx!AtlasException(file.exists(path), "Unable to load textures from: " ~ path);
 
@@ -342,6 +342,11 @@ final class MinecraftAtlas : Atlas {
         ZipArchive za = new ZipArchive(path);
 
         string[] files = za.list_dir("textures/blocks", false);
+        if(files.length == 0) {
+            files = za.list_dir("assets/minecraft/textures/blocks", false);
+        }
+        enforceEx!AtlasException(files.length > 0, "No textures found");
+
         logger.log!Info("Processing ~%d textures", files.length);
         foreach(f; files) {
             string name = f.baseName();
