@@ -17,11 +17,13 @@ private {
     import std.typecons : tuple;
     import std.conv : to;
     import file = std.file;
+    import std.json;
     
     import brala.log : logger = terrain_logger;
     import brala.engine : BraLaEngine;
     import brala.minecraft.folder : minecraft_jar;
     import brala.gfx.data : Vertex, Normal;
+    import brala.gfx.util : is_power_of_two;
     import brala.dine.builder.constants : Side;
     import brala.dine.builder.vertices : TEXTURE_INFORMATION, simple_block;
     import brala.utils.log;
@@ -33,37 +35,6 @@ private {
     import brala.utils.zip : ZipArchive, ArchiveMember;
 }
 
-struct AtlasImage {
-    Image image;
-    alias image this;
-
-    AnimatedImage[] images;
-
-    size_t position;
-    int frame;
-
-    Image get_next() {
-        return image;
-    }
-}
-
-struct AnimatedImage {
-    Image image;
-    alias image this;
-
-    int duration;
-}
-
-bool is_power_of_two(Image image) {
-    if(image.width == 0 || image.height == 0 ||
-        (image.width & (image.width - 1)) ||
-        (image.height & (image.height - 1))) {
-
-        return false;
-    }
-
-    return true;
-}
 
 struct TextureCoordinate {
     short x;
@@ -239,48 +210,25 @@ struct ProjectionTextureCoordinates {
     }
 }
 
-
-// open("/tmp/l", 'w').write(str([p.rsplit('.', 1)[0] for p in sorted(os.listdir("/tmp/mmm/textures/blocks/"))]).replace("'", '"'))
-enum string[] ORDER = ["activatorRail", "activatorRail_powered",
-                       "anvil_base", "anvil_top", "anvil_top_damaged_1", "anvil_top_damaged_2", "beacon",
-                       "bed_feet_end", "bed_feet_side", "bed_feet_top", "bed_head_end", "bed_head_side", "bed_head_top",
-                       "bedrock", "blockDiamond", "blockEmerald", "blockGold", "blockIron", "blockLapis", "blockRedstone",
-                       "bookshelf", "brewingStand", "brewingStand_base", "brick", "cactus_bottom", "cactus_side", "cactus_top",
-                       "cake_bottom", "cake_inner", "cake_side", "cake_top", "carrots_0", "carrots_1", "carrots_2", "carrots_3",
-                       "cauldron_bottom", "cauldron_inner", "cauldron_side", "cauldron_top", "clay",
-                       "cloth_0", "cloth_1", "cloth_2", "cloth_3", "cloth_4", "cloth_5", "cloth_6", "cloth_7", "cloth_8", "cloth_9",
-                       "cloth_10", "cloth_11", "cloth_12", "cloth_13", "cloth_14", "cloth_15",
-                       "cocoa_0", "cocoa_1", "cocoa_2", "commandBlock", "comparator", "comparator_lit",
-                       "crops_0", "crops_1", "crops_2", "crops_3", "crops_4", "crops_5", "crops_6", "crops_7",
-                       "daylightDetector_side", "daylightDetector_top", "deadbush", "destroy_0", "destroy_1", "destroy_2", "destroy_3",
-                       "destroy_4", "destroy_5", "destroy_6", "destroy_7", "destroy_8", "destroy_9", "detectorRail", "detectorRail_on",
-                       "dirt", "dispenser_front", "dispenser_front_vertical", "doorIron_lower", "doorIron_upper",
-                       "doorWood_lower", "doorWood_upper", "dragonEgg", "dropper_front", "dropper_front_vertical",
-                       "enchantment_bottom", "enchantment_side", "enchantment_top", "endframe_eye", "endframe_side", "endframe_top",
-                       "farmland_dry", "farmland_wet", "fenceIron", "fern", "fire_0", "fire_0", "fire_1", "fire_1", "flower", "flowerPot",
-                       "furnace_front", "furnace_front_lit", "furnace_side", "furnace_top", "glass", "goldenRail", "goldenRail_powered",
-                       "grass_side", "grass_side_overlay", "grass_top", "gravel", "hellrock", "hellsand", "hopper", "hopper_inside",
-                       "hopper_top", "ice", "itemframe_back", "jukebox_top", "ladder", "lava", "lava", "lava_flow", "lava_flow", "leaves",
-                       "leaves_jungle", "leaves_jungle_opaque", "leaves_opaque", "leaves_spruce", "leaves_spruce_opaque", "lever",
-                       "lightgem", "melon_side", "melon_top", "mobSpawner", "mushroom_brown", "mushroom_inside", "mushroom_red",
-                       "mushroom_skin_brown", "mushroom_skin_red", "mushroom_skin_stem", "musicBlock", "mycel_side", "mycel_top",
-                       "netherBrick", "netherStalk_0", "netherStalk_1", "netherStalk_2", "netherquartz", "obsidian", "oreCoal",
-                       "oreDiamond", "oreEmerald", "oreGold", "oreIron", "oreLapis", "oreRedstone", "piston_bottom", "piston_inner_top",
-                       "piston_side", "piston_top", "piston_top_sticky", "portal", "portal", "potatoes_0", "potatoes_1", "potatoes_2",
-                       "potatoes_3", "pumpkin_face", "pumpkin_jack", "pumpkin_side", "pumpkin_top", "quartzblock_bottom",
-                       "quartzblock_chiseled", "quartzblock_chiseled_top", "quartzblock_lines", "quartzblock_lines_top",
-                       "quartzblock_side", "quartzblock_top", "rail", "rail_turn", "redstoneDust_cross", "redstoneDust_cross_overlay",
-                       "redstoneDust_line", "redstoneDust_line_overlay", "redstoneLight", "redstoneLight_lit", "redtorch",
-                       "redtorch_lit", "reeds", "repeater", "repeater_lit", "rose", "sand", "sandstone_bottom", "sandstone_carved",
-                       "sandstone_side", "sandstone_smooth", "sandstone_top", "sapling", "sapling_birch", "sapling_jungle",
-                       "sapling_spruce", "snow", "snow_side", "sponge", "stem_bent", "stem_straight", "stone", "stoneMoss",
-                       "stonebrick", "stonebricksmooth", "stonebricksmooth_carved", "stonebricksmooth_cracked", "stonebricksmooth_mossy",
-                       "stoneslab_side", "stoneslab_top", "tallgrass", "thinglass_top", "tnt_bottom", "tnt_side", "tnt_top", "torch",
-                       "trapdoor", "tree_birch", "tree_jungle", "tree_side", "tree_spruce", "tree_top", "tripWire", "tripWireSource",
-                       "vine", "water", "water", "water_flow", "water_flow", "waterlily", "web", "whiteStone", "wood", "wood_birch",
-                       "wood_jungle", "wood_spruce", "workbench_front", "workbench_side", "workbench_top"];
+public import brala.gfx._texlist : ORDER;
 
 enum BLOCK_IDS = 200;
+
+struct AtlasImage {
+    Image image;
+    alias image this;
+
+    Image[] images;
+    int frametime;
+
+    size_t position;
+    int frame;
+
+    Image get_next() {
+        return image;
+    }
+}
+
 
 final class MinecraftAtlas : Atlas {
     BraLaEngine engine;
@@ -364,53 +312,45 @@ final class MinecraftAtlas : Atlas {
                 AtlasImage atlas_image;
                 atlas_image.image = image;
 
-                string anim_file = f.setExtension(".txt");
-                if(files.canFind(anim_file)) {
-                    am = za.directory[anim_file];
+                string meta = f ~ ".mcmeta";
+                if(files.canFind(meta)) {
+                    am = za.directory[meta];
                     auto data = cast(char[])za.expand(am);
 
-                    foreach(line; data.splitLines()) {
-                        foreach(comma; line.split(",")) {
-                            auto anim_data = comma.replace(" ", "").split("*");
-                            if(anim_data.length == 0) {
-                                continue;
-                            } else if(anim_data.length > 2) {
-                                throw new AtlasException("Malformed animation file: " ~ anim_file);
-                            }
+                    auto json = parseJSON(data);
+                    auto j_animation = json["animation"].object;
+                    if(j_animation is null) {
+                        continue;
+                    }
 
-                            AnimatedImage anim_image;
+                    atlas_image.frametime = "frametime" in j_animation ? cast(int)j_animation["frametime"].integer : 1;
 
-                            int index = to!int(anim_data[0]);
-                            if(index < 0) {
-                                throw new AtlasException("Negative animation frame: " ~ anim_file);
-                            }
+                    int min_ = min(image.width, image.height);
+                    int max_ = max(image.width, image.height);
 
-                            int min_ = min(image.width, image.height);
-                            int max_ = max(image.width, image.height);
-                            if((index+1)*min_ > max_) {
-                                throw new AtlasException("Animation frame %s does not exist in %s".format(index, f));
-                            }
+                    if(auto j_frames = "frames" in j_animation) {
+                        enforceEx!AtlasException(j_frames.array !is null, "Malformed mcmeta: " ~ meta);
 
+                        foreach(j_frame; j_frames.array) {
+                            enforceEx!AtlasException(j_frame.type == JSON_TYPE.INTEGER, "Malformed mcmeta: " ~ meta);
+
+                            int index = cast(int)j_frame.integer;
+                            enforceEx!AtlasException(index >= 0, "Negative animation frame: " ~ meta);
+                            enforceEx!AtlasException((index+1)*min_ <= max_,
+                                    "Animation frame %s does not exist in %s".format(index, f));
+
+                            Image anim_image;
                             if(image.width > image.height) {
-                                anim_image.image = image.crop(index*image.height, 0, (index+1)*image.height, image.height);
+                                anim_image = image.crop(index*image.height, 0, (index+1)*image.height, image.height);
                             } else {
-                                anim_image.image = image.crop(0, index*image.width, image.width, (index+1)*image.width);
+                                anim_image = image.crop(0, index*image.width, image.width, (index+1)*image.width);
                             }
 
-                            assert(anim_image.image.width == min(image.width, image.height));
-                            assert(anim_image.image.width == anim_image.image.height);
-
-                            if(anim_data.length == 2) {
-                                int duration = to!int(anim_data[1]);
-
-                                if(duration < 0) {
-                                    throw new AtlasException("Negative animation duration: " ~ anim_file);
-                                }
-                                anim_image.duration = duration;
-                            }
+                            assert(anim_image.width == min(image.width, image.height));
+                            assert(anim_image.width == anim_image.height);
 
                             enforceEx!AtlasException(anim_image.is_power_of_two(),
-                                                     "Animationframe %s is not a power of two: %s".format(index, f));
+                                    "Animationframe %s is not a power of two: %s".format(index, f));
 
                             atlas_image.images ~= anim_image;
                         }
@@ -442,6 +382,7 @@ final class MinecraftAtlas : Atlas {
             int index = cast(int)(ORDER.countUntil(name));
             if(index < 0) {
                 logger.log!Info("Found unexpected texture %s", name);
+                continue;
             }
 
             texture_coordinates[index] = TextureCoordinate(map[name].area);
@@ -455,9 +396,7 @@ final class MinecraftAtlas : Atlas {
                 if(tex_info.name.length == 0) continue;
 
                 auto tex_index = ORDER.countUntil(tex_info.name);
-                if(tex_index < 0) {
-                    throw new Exception(tex_info.name);
-                }
+                enforceEx!AtlasException(tex_index >= 0, `"%s" not found`.format(tex_info.name));
 
                 short[2][4] tex = texture_coordinates[tex_index].def;
                 short[2][4] tex_overlay;

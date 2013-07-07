@@ -19,8 +19,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {"stone"}, // stone
     {"grass_side", "grass_side_overlay"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -29,18 +29,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_side"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak"}, // wood
+    {"leaves_oak"}, // leafs
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_side"}, // dispenser
-    {"sandstone_side"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"sandstone_normal"}, // sandstone
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -56,24 +56,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_side"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_side"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_side"}, // tnt
     {"bookshelf"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table TODO front
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_side"}, // furnace
@@ -88,8 +88,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -99,12 +99,12 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
-    {"musicBlock"}, // jukebox
+    {"noteblock"}, // jukebox
     {""}, // fence
     {"pumpkin_side"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_side"}, // jack-o-lantern
     {""}, // cake block
@@ -113,7 +113,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -125,9 +125,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_side"}, // mycelium
+    {"mycelium_side"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -136,19 +136,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {"cauldron_side"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
@@ -161,8 +161,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {"stone"}, // stone
     {"grass_side", "grass_side_overlay"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -171,18 +171,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_side"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak"}, // wood
+    {"leaves_oak"}, // leaf
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_side"}, // dispenser
-    {"sandstone_side"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"sandstone_normal"}, // sandstone
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -198,24 +198,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_side"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_side"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_side"}, // tnt
     {"bookshelf"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_side"}, // furnace
@@ -230,8 +230,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -241,12 +241,12 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
-    {"musicBlock"}, // jukebox
+    {"noteblock"}, // jukebox
     {""}, // fence
     {"pumpkin_side"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_side"}, // jack-o-lantern
     {""}, // cake block
@@ -255,7 +255,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -267,9 +267,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_side"}, // mycelium
+    {"mycelium_side"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -278,19 +278,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {"cauldron_side"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
@@ -303,8 +303,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {"stone"}, // stone
     {"grass_side", "grass_side_overlay"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -313,18 +313,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_side"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak"}, // wood
+    {"leaves_oak"}, // leaf
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_side"}, // dispenser
-    {"sandstone_side"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"sandstone_normal"}, // sandstone
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -340,24 +340,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_side"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_side"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_side"}, // tnt
     {"bookshelf"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_side"}, // furnace
@@ -372,8 +372,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -383,12 +383,12 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
-    {"musicBlock"}, // jukebox
+    {"noteblock"}, // jukebox
     {""}, // fence
     {"pumpkin_side"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_side"}, // jack-o-lantern
     {""}, // cake block
@@ -397,7 +397,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -409,9 +409,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_side"}, // mycelium
+    {"mycelium_side"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -420,19 +420,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {"cauldron_side"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
@@ -445,8 +445,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {"stone"}, // stone
     {"grass_side", "grass_side_overlay"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -455,18 +455,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_side"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak"}, // wood
+    {"leaves_oak"}, // leaf
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_side"}, // dispenser
-    {"sandstone_side"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"sandstone_normal"}, // sandstone
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -482,24 +482,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_side"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_side"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_side"}, // tnt
     {"bookshelf"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_side"}, // furnace
@@ -514,8 +514,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -525,12 +525,12 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
-    {"musicBlock"}, // jukebox
+    {"noteblock"}, // jukebox
     {""}, // fence
     {"pumpkin_side"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_side"}, // jack-o-lantern
     {""}, // cake block
@@ -539,7 +539,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -551,9 +551,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_side"}, // mycelium
+    {"mycelium_side"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -562,19 +562,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {"cauldron_side"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
@@ -587,8 +587,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {"stone"}, // stone
     {"grass_top"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -597,18 +597,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_top"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak_top"}, // wood
+    {"leaves_oak"}, // leaf
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_top"}, // dispenser
     {"sandstone_top"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -624,24 +624,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_top"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_top"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_bottom"}, // tnt
-    {"wood"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"planks_oak"}, // bookshelf
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table
     {""}, // wheat
     {"farmland_wet"}, // farmland
     {"furnace_top"}, // furnace
@@ -656,8 +656,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -670,9 +670,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {"jukebox_top"}, // jukebox
     {""}, // fence
     {"pumpkin_top"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_top"}, // jack-o-lantern
     {""}, // cake block
@@ -681,7 +681,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -693,9 +693,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_top"}, // mycelium
+    {"mycelium_top"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -704,19 +704,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {"cauldron_top"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
@@ -729,8 +729,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {"stone"}, // stone
     {"dirt"}, // grass
     {"dirt"}, // dirt
-    {"stonebrick"}, // cobble
-    {"wood"}, // wooden plank
+    {"cobblestone"}, // cobble
+    {"planks_oak"}, // wooden plank
     {""}, // sappling
     {"bedrock"}, // bedrock
     {""}, // water
@@ -739,18 +739,18 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // stationary lava
     {"sand"}, // sand
     {"gravel"}, // gravel
-    {"oreGold"}, // gold ore
-    {"oreIron"}, // iron ore
-    {"oreCoal"}, // coal ore
-    {"tree_top"}, // wood
-    {"leaves"}, // leaf
+    {"gold_ore"}, // gold ore
+    {"iron_ore"}, // iron ore
+    {"coal_ore"}, // coal ore
+    {"log_oak_top"}, // wood
+    {"leaves_oak"}, // leaf
     {"sponge"}, // sponge
     {"glass"}, // glass
-    {"oreLapis"}, // lapis lazuli ore
-    {"blockLapis"}, // lapis lazuli block
+    {"lapis_ore"}, // lapis lazuli ore
+    {"lapis_block"}, // lapis lazuli block
     {"furnace_top"}, // dispenser
     {"sandstone_bottom"}, // sandstone
-    {"musicBlock"}, // noteblock
+    {"noteblock"}, // noteblock
     {""}, // bed
     {""}, // powered rail
     {""}, // detector rail
@@ -766,24 +766,24 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // rose
     {""}, // brown mushroom
     {""}, // red mushroom
-    {"blockGold"}, // gold block
-    {"blockIron"}, // iron block
-    {"stoneslab_top"}, // double slab
+    {"gold_block"}, // gold block
+    {"iron_block"}, // iron block
+    {"stone_slab_top"}, // double slab
     {""}, // slab
     {"brick"}, // brick
     {"tnt_bottom"}, // tnt
-    {"wood"}, // bookshelf
-    {"stoneMoss"}, // mossy stone
+    {"planks_oak"}, // bookshelf
+    {"cobblestone_mossy"}, // mossy stone
     {"obsidian"}, // obsidian
     {""}, // torch
     {""}, // fire
-    {"mobSpawner"}, // spawner
+    {"mob_spawner"}, // spawner
     {""}, // wooden stair
     {""}, // chest
     {""}, // redstone wire
-    {"oreDiamond"}, // diamond ore
-    {"blockDiamond"}, // diamond block
-    {"workbench_side"}, // crafting table
+    {"diamond_ore"}, // diamond ore
+    {"diamond_block"}, // diamond block
+    {"crafting_table_side"}, // crafting table
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_top"}, // furnace
@@ -798,8 +798,8 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // stone pressure plate
     {""}, // iron door
     {""}, // wooden pressure plate
-    {"oreRedstone"}, // redstone ore
-    {"oreRedstone"}, // glowing redstone ore TODO
+    {"redstone_ore"}, // redstone ore
+    {"redstone_ore"}, // glowing redstone ore TODO
     {""}, // redstone torch
     {""}, // redstone torch on
     {""}, // stone button
@@ -809,12 +809,12 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // cactus
     {"clay"}, // clay block
     {""}, // sugar cane
-    {"musicBlock"}, // jukebox
+    {"noteblock"}, // jukebox
     {""}, // fence
     {"pumpkin_top"}, // pumpkin
-    {"hellrock"}, // netherrack
-    {"hellsand"}, // soul sand
-    {"lightgem"}, // glowstone block
+    {"netherrack"}, // netherrack
+    {"soul_sand"}, // soul sand
+    {"glowstone"}, // glowstone block
     {""}, // portal
     {"pumpkin_top"}, // jack-o-lantern
     {""}, // cake block
@@ -823,7 +823,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // locked chest
     {""}, // trapdoor
     {""}, // hidden silverfish
-    {"stonebricksmooth"}, // stone brick
+    {"stonebrick"}, // stone brick
     {""}, // huge brown mushroom
     {""}, // huge red mushroom
     {""}, // iron bar
@@ -835,9 +835,9 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // fence gate
     {""}, // brick stair
     {""}, // stone brick stair
-    {"mycel_side"}, // mycelium
+    {"mycelium_side"}, // mycelium
     {""}, // lilly pad
-    {"netherBrick"}, // nether brick
+    {"nether_brick"}, // nether brick
     {""}, // nether brick fence
     {""}, // nether wart
     {""}, // nether brick stair
@@ -846,19 +846,19 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {"cauldron_bottom"}, // cauldron
     {""}, // end portal
     {""}, // end portal frame
-    {"whiteStone"}, // end stone
+    {"end_stone"}, // end stone
     {""}, // dragon egg
-    {"redstoneLight"}, // redstone lamp
-    {"redstoneLight_lit"}, // redstone lamp on
+    {"redstone_lamp_off"}, // redstone lamp
+    {"redstone_lamp_on"}, // redstone lamp on
     {""}, // wooden double slab
     {""}, // wooden slab
     {""}, // cocoa plant
     {""}, // sandstone stairs
-    {"oreEmerald"}, // emerald ore
+    {"emerald_ore"}, // emerald ore
     {""}, // ender chest
     {""}, // tripwire hook
     {""}, // tripwire
-    {"blockEmerald"}, // emerald block
+    {"emerald_block"}, // emerald block
     {""}, // spruce wood stairs
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
