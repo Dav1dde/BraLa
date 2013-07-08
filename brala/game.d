@@ -116,15 +116,10 @@ final class BraLaGame {
     }
 
     void poll(TickDuration delta_t) {
-        if(!connection.thread.isRunning) {
-            logger.log!Info("Connection thread died");
-            engine.stop();
-        }
-
-        if(current_world !is null && !current_world.is_ok) {
-            logger.log!"Error"("Tessellation thread died!");
-            engine.stop();
-        }
+        logger.log_if!Info(!connection.thread.isRunning,
+                           "Connection thread died").ifTrue(&engine.stop);
+        logger.log_if!"Error"(current_world !is null && !current_world.is_ok,
+                              "Tessellation thread died!").ifTrue(&engine.stop);
 
         foreach(packet; connection) {
             dispatch_packets(packet);

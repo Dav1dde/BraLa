@@ -7,6 +7,7 @@ private {
     import std.exception : enforceEx;
     import std.datetime : Clock;
     import std.array : replace;
+    import std.traits : isCallable;
     import core.exception : InvalidMemoryOperationError;
 
     import clib = std.c.stdlib;
@@ -31,8 +32,6 @@ alias LogLevel.Fatal Fatal;
 
 
 LogLevel string2loglevel(string inp) {
-
-
     if(inp.icmp("debug") == 0) {
         return LogLevel.Debug;
     } else if(inp.icmp("info") == 0) {
@@ -173,8 +172,18 @@ private class _OutWriter(string fname) : IWriter {
 alias _OutWriter!("_StdoutWriter") StdoutWriter;
 alias _OutWriter!("_StderrWriter") StderrWriter;
 
-alias NamedLogger = Logger.NamedLogger;
+bool ifTrue(bool ex, scope void delegate() dlg) {
+    if(ex) dlg();
+    return ex;
+}
 
+bool ifTrue(bool ex, scope void delegate(string,size_t) dlg, string file = __FILE__, size_t line = __LINE__) {
+    if(ex) dlg(file, line);
+    return ex;
+}
+
+
+alias NamedLogger = Logger.NamedLogger;
 class Logger {
     protected NamedLogger[string] _logger;
     
@@ -230,6 +239,16 @@ class Logger {
                 break;
             }
         }
+
+        bool log_if(string level, Args...)(bool ex, auto ref Args args) {
+            if(ex) log!level(args);
+            return ex;
+        }
+
+        bool log_if(LogLevel level, Args...)(bool ex, auto ref Args args) {
+            if(ex) log!level(args);
+            return ex;
+        }
     }
 
     NamedLogger get(string name) {
@@ -250,6 +269,13 @@ class Logger {
         _logger["default"].log!(level)(args);
     }
 
+    bool log_if(string level, Args...)(bool ex, auto ref Args args) {
+        return _logger["default"].log_if!(level)(ex, args);
+    }
+
+    bool log_if(LogLevel level, Args...)(bool ex, auto ref Args args) {
+        return _logger["default"].log_if!(level)(ex, args);
+    }
 
     void opIndexAssign(IWriter writer, string level) {
         opIndexAssign(writer, string2loglevel(level));

@@ -135,7 +135,7 @@ final class BraLaEngine {
         on_stop.emit(ts);
     }
 
-    void stop(size_t line = __LINE__, string file = __FILE__) {
+    void stop(string file = __FILE__, size_t line = __LINE__) {
         logger.log!Info("Stop triggered from: %s:%s", file, line);
         _stop = true;
     }
