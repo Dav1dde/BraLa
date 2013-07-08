@@ -153,7 +153,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_LEFT = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_side"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_side"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
@@ -295,7 +331,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_RIGHT = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_side"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_side"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
@@ -437,7 +509,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_NEAR = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_side"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_side"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
@@ -579,7 +687,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_FAR = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_side"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_side"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
@@ -721,7 +865,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_top"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_top"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
@@ -863,7 +1043,43 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // birch wood stairs
     {""}, // jungle wood stairs
     {""}, // command block
-    {""}  // beacon block
+    {""}, // beacon block
+    {""}, // cobblestone wall
+    {""}, // flower pot
+    {""}, // carrots
+    {""}, // potatoes
+    {""}, // wooden button
+    {""}, // mob head
+    {""}, // anvil
+    {""}, // trapped chest
+    {""}, // weighted pressure plate (light/gold)
+    {""}, // weighted preasure plate (heavy/iron)
+    {""}, // redstone comparator off
+    {""}, // redstone comparator on
+    {""}, // daylight sensor
+    {"redstone_block"}, // block of redstone
+    {"quartz_ore"}, // quartz ore
+    {""}, // hopper
+    {"quartz_block_bottom"}, // block of quartz
+    {""}, // activator rail
+    {""}, // dropper
+    {""}, // stained clay
+    {""}, // 160
+    {""}, // 161
+    {""}, // 162
+    {""}, // 163
+    {""}, // 164
+    {""}, // 165
+    {""}, // 166
+    {""}, // 167
+    {""}, // 168
+    {""}, // 169
+    {"hay_block_top"}, // hay block
+    {""}, // carpet
+    {""}, // hardened clay
+    {"coal_block"}, // block of coal
+    {""}, // 174
+    {""}, // 175
 ];
 
 // Order matches Side.*
