@@ -495,28 +495,3 @@ final class MinecraftAtlas : Atlas {
         return vertices[side][id];
     }
 }
-
-
-Image extract_minecraft_terrain(string path) {
-    ZipArchive za = new ZipArchive(file.read(path));
-
-    auto am = za.directory["terrain.png"];
-    auto content = za.expand(am);
-
-    int x;
-    int y;
-    int comp;    
-    ubyte* data = stbi_load_from_memory(content.ptr, cast(uint)content.length, &x, &y, &comp, 0);
-
-    if(data is null) {
-        throw new ImageException("Unable to load terrain.png");
-    }
-
-    scope(exit) stbi_image_free(data);
-
-    if(!(comp == RGB || comp == RGBA)) {
-        throw new ImageException("Unknown/Unsupported stbi image format");
-    }
-
-    return new Image(data[0..x*y*comp].dup, x, y, comp);
-}
