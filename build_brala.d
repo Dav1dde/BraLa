@@ -419,6 +419,24 @@ string[] glfw_libraries() {
     }
 }
 
+void build_glfw() {
+    version(Windows) { return; }
+    collectException(mkdirRecurse(["build", "glfw", "src"].buildPath));
+
+    string old = getcwd();
+    chdir(["build", "glfw"].buildPath);
+    scope(success) chdir(old);
+
+    writeln("    CMAKE  src/c/glfw/*");
+    shell(`
+        cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ../../src/c/glfw
+    `);
+
+    shell(`
+        make --silent -j3
+    `);
+}
+
 int main(string[] args) {
     size_t jobs = 1;
     string cache_file = ".build_cache";
@@ -488,6 +506,12 @@ int main(string[] args) {
     builder.out_path = buildPath("bin");
     builder.out_file = "bralad";
     builder.build_prefix = buildPath("build");
+
+    if(args.canFind("clean")) {
+        collectException(builder.build_prefix.rmdirRecurse());
+        collectException(".build_cache".remove());
+        return 0;
+    }
     
     builder.add_scan_path(buildPath("brala"));
     builder.add_scan_path(buildPath("src", "d", "arsd"));
@@ -518,6 +542,8 @@ int main(string[] args) {
     builder.linker_options_osx ~= ["-Llib/osx"];
 
     collectException(rmdirRecurse(builder.out_file));
+
+    build_glfw();
 
     builder.compile(task_pool);
     builder.link();
