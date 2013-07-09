@@ -31,6 +31,13 @@ version(Windows) {
     enum SO_LINK = "";
 }
 
+enum LF = "-L";
+version(Windows) {
+    enum LLF = "";
+} else {
+    enum LLF = "-L-l";
+}
+
 
 alias filter!("a.length > 0") filter0;
 
@@ -104,13 +111,6 @@ class DMD : DCompiler, Linker {
     }
 
     void link(string out_path, string[] object_files, string[] libraries, string[] options) {
-        enum LF = "-L";
-        version(Windows) {
-            enum LLF = "";
-        } else {
-            enum LLF = "-L-l";
-        }
-        
         string cmd = "dmd %s %s %s -of%s".format(
                         object_files.join(" "),
                         filter0(libraries).map!(x => LLF ~ x).join(" "),
@@ -125,10 +125,56 @@ class DMD : DCompiler, Linker {
 // GDC: "-fdebug -g";
 // LDC: "-debug -g -gc";
 
-class GDC : DCompiler {
+class GDC : DCompiler, Linker {
+    override string version_(string ver) {
+        return "-fversion=" ~ ver;
+    }
+    override @property string debug_() { return "-fdebug"; }
+    override @property string debug_info() { return "-g"; }
+    override @property string compiler() { return "gdc"; }
+
+    override void compile(string src, string dest) {
+        string cmd = "gdc %s %s -c %s -o %s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
+        print(cmd, src, dest);
+        shell(cmd);
+    }
+
+    void link(string out_path, string[] object_files, string[] libraries, string[] options) {
+        string cmd = "gdc %s %s %s -o %s".format(
+                        object_files.join(" "),
+                        filter0(libraries).map!(x => LLF ~ x).join(" "),
+                        filter0(options).map!(x => LF ~ x).join(" "),
+                        out_path);
+
+        print(cmd, out_path, "");
+        shell(cmd);
+    }
 }
 
-class LDC : DCompiler {
+class LDC : DCompiler, Linker {
+    override string version_(string ver) {
+        return "-d-version=" ~ ver;
+    }
+    override @property string debug_() { return "-d-debug"; }
+    override @property string debug_info() { return "-g -gc"; }
+    override @property string compiler() { return "ldc"; }
+
+    override void compile(string src, string dest) {
+        string cmd = "ldc2 %s %s -c %s -of=%s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
+        print(cmd, src, dest);
+        shell(cmd);
+    }
+
+    void link(string out_path, string[] object_files, string[] libraries, string[] options) {
+        string cmd = "ldc2 %s %s %s -of=%s".format(
+                        object_files.join(" "),
+                        filter0(libraries).map!(x => LLF ~ x).join(" "),
+                        filter0(options).map!(x => LF ~ x).join(" "),
+                        out_path);
+
+        print(cmd, out_path, "");
+        shell(cmd);
+    }
 }
 
 class DMC : CCompiler {
