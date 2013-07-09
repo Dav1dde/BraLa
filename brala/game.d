@@ -5,13 +5,13 @@ private {
     import glamour.shader : Shader;
     
     import glwtf.glfw;
+    import glwtf.signals;
     
     import std.socket : Address;
     import std.conv : to;
     import std.math : isNaN;
     import core.time : TickDuration;
     import core.thread: thread_isMainThread;
-    import std.signals;
     
     import gl3n.linalg : vec2i, vec3i, vec3;
     import gl3n.math : almost_equal, radians;
@@ -54,7 +54,7 @@ final class BraLaGame {
     protected bool moved = false;
     protected TickDuration last_notchian_tick;
 
-    mixin Signal!() on_notchian_tick;
+    Signal!() on_notchian_tick;
 
     size_t tessellation_threads = 3;
     

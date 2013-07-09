@@ -8,11 +8,10 @@ private {
     
     import glwtf.glfw;
     import glwtf.window;
+    import glwtf.signals;
     
     import gl3n.linalg;
     import gl3n.frustum : Frustum;
-
-    import std.signals;
 
     import brala.exception : ResmgrError;
     import brala.log : logger = engine_logger;
@@ -34,11 +33,11 @@ final class BraLaEngine {
         return _viewport;
     }
 
-    mixin Signal!() on_shutdown;
-    mixin Signal!() on_resize;
-    mixin Signal!() on_start;
-    mixin Signal!(TickDuration) on_frame;
-    mixin Signal!(TickDuration) on_stop;
+    Signal!() on_shutdown;
+    Signal!() on_resize;
+    Signal!() on_start;
+    Signal!(TickDuration) on_frame;
+    Signal!(TickDuration) on_stop;
     
     mat4 model = mat4.identity;
     mat4 view = mat4.identity;
