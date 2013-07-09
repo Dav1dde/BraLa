@@ -203,4 +203,9 @@ class DelayedSnooper : Snooper {
         timer.join(false);
         timer = null;
     }
+
+    @property
+    bool is_running() {
+        return timer.isRunning;
+    }
 }

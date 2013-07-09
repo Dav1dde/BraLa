@@ -84,10 +84,7 @@ final class BraLa {
         this.config = config;
         this.session = new Session();
         this.snooper = new DelayedSnooper();
-        if(!config.get!bool("brala.no_snoop")) {
-            snooper.start(dur!"minutes"(10));
-        }
-        
+
         this.window = new Window();
 
         initialize_context();
@@ -95,6 +92,10 @@ final class BraLa {
 
         window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
         window.on_close = &on_close;
+
+        if(!config.get!bool("brala.no_snoop")) {
+            snooper.start(dur!"minutes"(10));
+        }
     }
 
     void shutdown()
