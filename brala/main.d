@@ -35,7 +35,7 @@ private {
 }
 
 
-static this() {
+shared static this() {
     static if(__traits(compiles, {
         import etc.linux.memoryerror;
         registerMemoryErrorHandler();
