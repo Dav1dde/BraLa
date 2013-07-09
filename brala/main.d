@@ -35,6 +35,17 @@ private {
 }
 
 
+static this() {
+    static if(__traits(compiles, {
+        import etc.linux.memoryerror;
+        registerMemoryErrorHandler();
+    })) {
+        import etc.linux.memoryerror;
+        logger.log!Info("Segfault handler registered");
+        registerMemoryErrorHandler();
+    }
+}
+
 void glfw_error_cb(int errno, string error) {
     static int last_errno = -1;
     if(last_errno != errno) {

@@ -495,6 +495,7 @@ int main(string[] args) {
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
+    builder.add_scan_path(buildPath("src", "d", "etc"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),
