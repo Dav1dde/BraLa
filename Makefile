@@ -82,14 +82,14 @@ all: brala
 .PHONY: clean
 
 brala: buildDir glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
-	@echo "  LD     bin$(PATH_SEP)bralad"
+	@echo "    LD     bin$(PATH_SEP)bralad"
 	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad
 	$(POST_BUILD_CMD)
 
 glfw:
 	@$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
-	@echo "  CMAKE  src/c/glfw/*"
+	@echo "    CMAKE  src/c/glfw/*"
 	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
 	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw 2>&1 >/dev/null
 	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) --silent $(MFLAGS) >/dev/null
@@ -97,39 +97,39 @@ glfw:
 
 # create object files
 $(DBUILD_PATH)$(PATH_SEP)%$(EXT) : %.d
-	@echo "  $(DC_UPPER)    $<"
+	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT) : %.d
-	@echo "  $(DC_UPPER)    $<"
+	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_DERELICT)$(PATH_SEP)%$(EXT): %.d
-	@echo "  $(DC_UPPER)    $<"
+	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT) : %.d
-	@echo "  $(DC_UPPER)    $<"
+	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
-	@echo "  $(DC_UPPER)    $<"
+	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
-	@echo "  $(CC_UPPER)    $<"
+	@echo "    $(CC_UPPER)    $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 buildDir: $(OBJDIRS)
 
 $(OBJDIRS) :
-	@echo "  MKDIR  $@"
+	@echo "    MKDIR  $@"
 	@$(MKDIR) $@
 
 clean:
-	@echo "  RM     build$(PATH_SEP)brala"
+	@echo "    RM     build$(PATH_SEP)brala"
 	@$(RM) build$(PATH_SEP)brala
 
 clean-all:
-	@echo "  RM     build/"
+	@echo "    RM     build/"
 	@$(RM) build

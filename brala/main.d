@@ -41,8 +41,8 @@ shared static this() {
         registerMemoryErrorHandler();
     })) {
         import etc.linux.memoryerror;
-        logger.log!Info("Segfault handler registered");
-        registerMemoryErrorHandler();
+        logger.log!Info("Registering segfault handler");
+        logger.log_if!Warn(!registerMemoryErrorHandler(), "Could not register handler");
     }
 }
 

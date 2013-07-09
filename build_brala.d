@@ -8,7 +8,7 @@ private {
     import std.file : dirEntries, SpanMode, mkdirRecurse, rmdirRecurse,
                       FileException, exists, copy, remove, readText, write, chdir;
     import std.stdio : writeln, writefln, File;
-    import std.string : format, stripRight;
+    import std.string : format, stripRight, toUpper;
     import std.parallelism : TaskPool;
     import std.exception : enforce, collectException;
     import std.getopt;
@@ -66,6 +66,10 @@ abstract class Compiler {
     bool is_available() {
         return system("%s -v".format(compiler)) == 0;
     }
+
+    void print(string cmd, string src, string dest) {
+        writefln("    %s    %s", compiler.toUpper, src);
+    }
 }
 
 class DCompiler : Compiler {
@@ -95,7 +99,7 @@ class DMD : DCompiler, Linker {
     
     override void compile(string src, string dest) {
         string cmd = "dmd %s %s -c %s -of%s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
-        writeln(cmd);
+        print(cmd, src, dest);
         shell(cmd);
     }
 
@@ -113,7 +117,7 @@ class DMD : DCompiler, Linker {
                         filter0(options).map!(x => LF ~ x).join(" "),
                         out_path);
 
-        writeln(cmd);
+        print(cmd, out_path, "");
         shell(cmd);
     }
 }
@@ -131,7 +135,7 @@ class DMC : CCompiler {
     override @property string compiler() { return "dmc"; }
     override void compile(string src, string dest) {
         string cmd = "dmc %s %s -c %s -o%s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
-        writeln(cmd);
+        print(cmd, src, dest);
         shell(cmd);
     }
 }
@@ -140,7 +144,7 @@ class GCC : CCompiler {
     override @property string compiler() { return "gcc"; }
     override void compile(string src, string dest) {
         string cmd = "gcc %s %s -c %s -o %s".format(import_flags, filter0(additional_flags).join(" "), src, dest);
-        writeln(cmd);
+        print(cmd, src, dest);
         shell(cmd);
     }
 }
