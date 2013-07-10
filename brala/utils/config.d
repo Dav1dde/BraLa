@@ -17,7 +17,7 @@ private {
     import glwtf.signals : Signal;
 
     import brala.utils.ctfe : matches_overload, hasAttribute;
-    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
+    import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue, ConfigException;
     import brala.utils.aa : DefaultAA;
     import brala.utils.string : expandVars;
 }
@@ -250,9 +250,14 @@ class Config {
     void set(T)(string key, T value) if(!isArray!T || is(T == string)) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
 
-        // .value is important! Segfault pls
-        db[key] = ValueSignalPair!string(serializer!(T)(value));
-        db[key].signal.emit(this, key);
+        if(auto v = key in db) {
+            v.value = serializer!(T)(value);
+            v.signal.emit(this, key);
+        } else {
+            // .value is important! Segfault pls
+            db[key] = ValueSignalPair!string(serializer!(T)(value));
+            db[key].signal.emit(this, key);
+        }
     }
 
     void set(T)(string key, T value) if(isArray!T && !is(T == string)) {
@@ -265,9 +270,14 @@ class Config {
             t[i] = serializer!(ElementEncodingType!T)(v);
         }
 
-        // same with .value here...
-        db_arrays[key] = ValueSignalPair!(string[])(t);
-        db_arrays[key].signal.emit(this, key);
+        if(auto v = key in db) {
+            v.value = t;
+            v.signal.emit(this, key);
+        } else {
+            // same with .value here...
+            db_arrays[key] = ValueSignalPair!(string[])(t);
+            db_arrays[key].signal.emit(this, key);
+        }
     }
 
     bool set_if(T)(string key, T value) {
@@ -345,7 +355,7 @@ class Config {
     }
 
     void disconnect(T)(string key, ref T cb) if(isInstanceOf!(ConfigBound, T)) {
-        disconnect!(T.GetType)(key, cb.handler);
+        cb.disconnect(this, key);
     }
 
     void emit(T)(string[] keys...) {
@@ -373,19 +383,17 @@ struct ConfigBound(T, S = void) {
         alias GetType = S;
     }
 
-    package void delegate(Config, string) handler;
+    private string key;
+    private Config config;
 
     this(T rhs) {
+        // TODO sync with config once connected?
         value = rhs;
     }
 
     auto connect(Config config, string key) {
-        if(handler is null) {
-            handler = (Config config, string key) {
-                value = to!T(config.get!GetType(key));
-            };
-        }
-        config.connect!GetType(key, handler);
+        enforceEx!ConfigException(this.config !is config, "ConfigBound already bound to config");
+        enforceEx!ConfigException(this.key != key, "ConfigBound already bound to key: " ~ this.key);
 
         struct FakeEmitter {
             private void delegate(Config, string) handler;
@@ -394,11 +402,31 @@ struct ConfigBound(T, S = void) {
             }
         }
 
-        return FakeEmitter(handler);
+        if(this.config !is null) return FakeEmitter(&handler);
+
+        this.key = key;
+        this.config = config;
+        config.connect!GetType(key, &handler);
+
+        return FakeEmitter(&handler);
+    }
+
+    void handler(Config config, string key) {
+        value = to!T(config.get!GetType(key));
     }
 
     void disconnect(Config config, string key) {
-        config.disconnect!GetType(key, handler);
+        config.disconnect!GetType(key, &handler);
+    }
+
+    void opAssign(T value) {
+        enforceEx!ConfigException(this.config !is null,
+                                  "You need to connect this ConfigBound to a Config first");
+        static if(is(T == GetType)) {
+            config.set(key, value);
+        } else {
+            config.set(key, to!GetType(value));
+        }
     }
 }
 

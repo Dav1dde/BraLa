@@ -77,7 +77,7 @@ class Player : NamedEntity {
 
     void update(TickDuration delta_t) {
         float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
-        
+
         if(mouse_offset.x != 0) { camera.rotatex(-turning_speed * mouse_offset.x); moved = true; }
         if(mouse_offset.y != 0) { camera.rotatey(turning_speed * mouse_offset.y); moved = true; }
         mouse_offset.x = 0;
