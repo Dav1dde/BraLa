@@ -69,9 +69,10 @@ class Player : NamedEntity {
         game.config.connect(STRAFE_RIGHT, "game.key.movement.right").emit();
         game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
 
-        import std.stdio;
-        writefln("FORWARD: %s", MOVE_FORWARD.value);
         assert(MOVE_FORWARD.value != 0);
+        assert(MOVE_BACKWARD.value != 0);
+        assert(STRAFE_LEFT.value != 0);
+        assert(STRAFE_RIGHT.value != 0);
     }
 
     void update(TickDuration delta_t) {
