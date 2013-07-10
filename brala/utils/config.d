@@ -23,14 +23,19 @@ private {
 
 
 private struct ValueSignalPair(Value) {
-    Signal!(string) signal;
-    bool set = false;
     Value value;
     alias value this;
+    Signal!(string) signal;
+    bool set = false;
 
-    this(T)(T handler) {
+    this(T)(T handler) if(__traits(compiles, signal.connect(handler))) {
 //         signal = new Signal!(string);
         signal.connect(handler);
+    }
+
+    this()(Value value) {
+        this.value = value;
+        this.set = true;
     }
 }
 
@@ -96,26 +101,23 @@ class Config {
 
                 if(auto v = key in db_arrays) {
                     if(index < 0) {
-                        (*v) ~= value;
+                        (*v).value ~= value;
                     } else {
                         if(index >= v.length) v.length = index+1;
 
-                        (*v)[index] = value;
+                        (*v).value[index] = value;
                     }
                     v.set = true;
                 } else {
                     if(index <= 0) {
-                        db_arrays[key] = [value];
+                        db_arrays[key] = ValueSignalPair!(string[])([value]);
                     } else {
-                        db_arrays[key] = [];
-                        db_arrays[key].length = index+1;
-                        db_arrays[key][index] = value;
+                        db_arrays[key].value = ValueSignalPair!(string[])(new string[index+1]);
+                        db_arrays[key].value[index] = value;
                     }
-                    db_arrays[key].set = true;
                 }
             } else {
-                db[key] = value;
-                db[key].set = true;
+                db[key] = ValueSignalPair!string(value);
             }
         }
     }
@@ -238,9 +240,8 @@ class Config {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
 
         // .value is important! Segfault pls
-        db[key].value = serializer!(T)(value);
+        db[key] = ValueSignalPair!string(serializer!(T)(value));
         db[key].signal.emit(key);
-        db[key].set = true;
     }
 
     void set(T)(string key, T value) if(isArray!T && !is(T == string)) {
@@ -254,9 +255,8 @@ class Config {
         }
 
         // same with .value here...
-        db_arrays[key].value = t;
+        db_arrays[key] = ValueSignalPair!(string[])(t);
         db_arrays[key].signal.emit(key);
-        db_arrays[key].set = true;
     }
 
     bool set_if(T)(string key, T value) {
