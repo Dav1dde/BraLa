@@ -3,7 +3,7 @@ module brala.utils.config;
 private {
     import std.stdio : File;
     import std.conv : ConvException, to;
-    import std.traits : moduleName, ReturnType, isArray, CommonType;
+    import std.traits : moduleName, ReturnType, isArray, CommonType, isInstanceOf;
     import std.exception : enforceEx, collectException;
     import std.string : format, strip, splitLines;
     import std.array : split, join, replace;
@@ -11,6 +11,7 @@ private {
     import std.path : baseName, buildNormalizedPath;
     import std.regex : regex, reReplace = replace, match;
     import std.range : ElementEncodingType;
+    import std.typecons : TypeTuple;
     import core.exception : RangeError;
 
     import glwtf.signals : Signal;
@@ -25,7 +26,7 @@ private {
 private struct ValueSignalPair(Value) {
     Value value;
     alias value this;
-    Signal!(string) signal;
+    Signal!(Config, string) signal;
     bool set = false;
 
     this(T)(T handler) if(__traits(compiles, signal.connect(handler))) {
@@ -42,6 +43,14 @@ private struct ValueSignalPair(Value) {
 class Config {
     protected ValueSignalPair!(string)[string] db;
     protected ValueSignalPair!(string[])[string] db_arrays;
+
+    protected template get_db(T) {
+        static if(!isArray!T || is(T == string)) {
+            alias get_db = db;
+        } else {
+            alias get_db = db_arrays;
+        }
+    }
 
     string name = "<?Config?>";
 
@@ -120,6 +129,8 @@ class Config {
                 db[key] = ValueSignalPair!string(value);
             }
         }
+
+        emit_all();
     }
 
     void write(string path) {
@@ -241,7 +252,7 @@ class Config {
 
         // .value is important! Segfault pls
         db[key] = ValueSignalPair!string(serializer!(T)(value));
-        db[key].signal.emit(key);
+        db[key].signal.emit(this, key);
     }
 
     void set(T)(string key, T value) if(isArray!T && !is(T == string)) {
@@ -256,7 +267,7 @@ class Config {
 
         // same with .value here...
         db_arrays[key] = ValueSignalPair!(string[])(t);
-        db_arrays[key].signal.emit(key);
+        db_arrays[key].signal.emit(this, key);
     }
 
     bool set_if(T)(string key, T value) {
@@ -293,30 +304,105 @@ class Config {
     }
 
     bool has_key(T)(string key) {
-        static if(!isArray!T || is(T == string)) {
-            alias db cdb;
-        } else {
-            alias db_arrays cdb;
-        }
+        alias cdb = get_db!T;
 
         auto value = key in cdb;
         return value && value.set;
     }
 
-    void connect(T, S)(string key, auto ref S handler) {
-        static if(!isArray!T || is(T == string)) {
-            alias db cdb;
-        } else {
-            alias db_arrays cdb;
-        }
+    auto connect(T, S)(string key, auto ref S handler) {
+        alias cdb = get_db!T;
 
         if(auto v = key in cdb) {
             v.signal.connect(handler);
         } else {
             cdb[key] = typeof(cdb[key])(handler);
         }
+
+        static struct FakeEmitter {
+            Config config;
+            string key;
+            typeof(cdb[key].signal) signal;
+
+            void emit() {
+                signal.emit(config, key);
+            }
+        }
+
+        return FakeEmitter(this, key, cdb[key].signal);
+    }
+
+    auto connect(T)(ref T cb, string key) if(isInstanceOf!(ConfigBound, T)) {
+        return cb.connect(this, key);
+    }
+
+    void disconnect(T, S)(string key, auto ref S handler) {
+        alias cdb = get_db!T;
+
+        if(auto v = key in cdb) {
+            v.signal.disconnect(handler);
+        }
+    }
+
+    void disconnect(T)(string key, ref T cb) if(isInstanceOf!(ConfigBound, T)) {
+        disconnect!(T.GetType)(key, cb.handler);
+    }
+
+    void emit(T)(string[] keys...) {
+        alias cdb = get_db!T;
+        foreach(key; keys) {
+            cdb[key].signal.emit(this, key);
+        }
+    }
+
+    void emit_all() {
+        foreach(cdb; TypeTuple!(db, db_arrays))
+        foreach(key, value; db) {
+            value.signal.emit(this, key);
+        }
     }
 }
+
+struct ConfigBound(T, S = void) {
+    T value;
+    alias value this;
+
+    static if(is(S == void)) {
+        alias GetType = T;
+    } else {
+        alias GetType = S;
+    }
+
+    package void delegate(Config, string) handler;
+
+    this(T rhs) {
+        value = rhs;
+    }
+
+    auto connect(Config config, string key) {
+        if(handler is null) {
+            handler = (Config config, string key) {
+                value = to!T(config.get!GetType(key));
+            };
+        }
+        config.connect!GetType(key, handler);
+
+        struct FakeEmitter {
+            private void delegate(Config, string) handler;
+            void emit() {
+                handler(config, key);
+            }
+        }
+
+        return FakeEmitter(handler);
+    }
+
+    void disconnect(Config config, string key) {
+        config.disconnect!GetType(key, handler);
+    }
+}
+
+
 
 struct Serializer {}
 struct Deserializer {}

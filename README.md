@@ -145,7 +145,7 @@ BraLa supports a few commandline options:
 
 ```
     --brala-conf            the path to brala.conf, relativ to "res" or absolute
-    --username              -u  specifies the username, which will be used to auth with the login servers,
+    --username  -u          specifies the username, which will be used to auth with the login servers,
                             if this is not possible and the server is in offline mode, it will be used
                             as playername
     --password  -p          the password which is used to authenticate with the login servers, set this

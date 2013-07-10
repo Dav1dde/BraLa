@@ -16,8 +16,9 @@ private {
     import brala.gfx.camera : BraLaCamera;
     import brala.entities.mobs : NamedEntity;
 
-    import brala.utils.config : Config;
+    import brala.utils.config : Config, ConfigBound;
 }
+
 
 class Player : NamedEntity {
     static const vec3 YAW_0_DIRECTION = vec3(0.0f, 0.0f, 1.0f);
@@ -40,11 +41,11 @@ class Player : NamedEntity {
     }
 
     float moving_speed = 4.35f; // creative speed
-    int MOVE_FORWARD;
-    int MOVE_BACKWARD;
-    int STRAFE_LEFT;
-    int STRAFE_RIGHT;
-    float SENSITIVITY = 5;
+    ConfigBound!(int, char) MOVE_FORWARD;
+    ConfigBound!(int, char) MOVE_BACKWARD;
+    ConfigBound!(int, char) STRAFE_LEFT;
+    ConfigBound!(int, char) STRAFE_RIGHT;
+    ConfigBound!float SENSITIVITY = 5.0f;
 
     protected vec2i mouse_offset = vec2i(0, 0);
     protected bool moved;
@@ -61,14 +62,16 @@ class Player : NamedEntity {
 
         window.on_mouse_pos.connect(&on_mouse_pos);
         game.on_notchian_tick.connect(&on_tick);
-    }
 
-    void update_from_config(Config config) {
-        MOVE_FORWARD = cast(int)config.get!char("game.key.movement.forward");
-        MOVE_BACKWARD = cast(int)config.get!char("game.key.movement.backward");
-        STRAFE_LEFT = cast(int)config.get!char("game.key.movement.left");
-        STRAFE_RIGHT = cast(int)config.get!char("game.key.movement.right");
-        SENSITIVITY = config.get!float("game.mouse.sensitivity");
+        game.config.connect(MOVE_FORWARD, "game.key.movement.forward").emit();
+        game.config.connect(MOVE_BACKWARD, "game.key.movement.backward").emit();
+        game.config.connect(STRAFE_LEFT, "game.key.movement.left").emit();
+        game.config.connect(STRAFE_RIGHT, "game.key.movement.right").emit();
+        game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
+
+        import std.stdio;
+        writefln("FORWARD: %s", MOVE_FORWARD.value);
+        assert(MOVE_FORWARD.value != 0);
     }
 
     void update(TickDuration delta_t) {
