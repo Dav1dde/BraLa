@@ -8,10 +8,11 @@ BraLa is an opensource minecraft (S)MP Client:
 ![Brala Screenshot](https://raw.github.com/wiki/Dav1dde/BraLa/screenshots/brala_03.png)
 
 This screenshot was taken with an awesome 128x128 texture pack, called [R3D-Craft](http://www.minecraftforum.net/topic/1182714-13112),
-made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia) and the best thing, it comes with BraLa!
+made by [UniblueMedia](http://www.youtube.com/user/UniblueMedia).
 
-You prefer the default texture pack? If you have minecraft installed,
-BraLa will try to extract the texture from minecraft (when started with the `--default-tp=true` argument.
+Currently BraLa tries to load the texture pack from your currently installed minecraft, however you can use the
+`--texture-pack=path/to/tetxture/pack.zip` commandline switch to specify your custom texturepack.
+
 
 ## Features ##
 
@@ -24,7 +25,7 @@ What BraLa *can* do:
 * Connect to 1.6.2 servers
 * Supports the whole 1.6.2 protocol
 * Authenticate with the official login servers
-* Read the lastlogin file
+* Read the lastlogin file / launcher_profiles.json
 * Send "snoop" requests
 * Display biome colors, based on rainfall/temperature
 * Display nearly all blocks
@@ -143,33 +144,30 @@ bin\bralad.exe -c -h"localhost"
 BraLa supports a few commandline options:
 
 ```
--u, --username              specifies the username, which will be used to auth with the login servers,
+    --brala-conf            the path to brala.conf, relativ to "res" or absolute
+    --username              -u  specifies the username, which will be used to auth with the login servers,
                             if this is not possible and the server is in offline mode, it will be used
-                            as playername.
-
--p, --password              the password which is used to authenticate with the login servers, set this
+                            as playername
+    --password  -p          the password which is used to authenticate with the login servers, set this
                             to a random value if you don't want to authenticate with the servers
-
--c, --credentials           minecrafts lastlogin file will be used for authentication and logging in,
+    --credentials   -c      uses minecrafts lastlogin file for authentication and logging in,
                             --username and --password are used as fallback
-
---offline                   start in offline mode
-
-
--h, --host                  the IP/adress of the minecraft server
---port                      the port of the minecraft server, defaults to 25565
-
---res                       path to the resources folder, named "res"
-
---no-snoop                  disables "snooping" (= sending completly anonym information to mojang)
---tesselation-threads       specifies the number of threads used to tessellate the terrain, defaults to 3.
+    --session               uses the supplied session to login to minecraft, this requires --username
+    --auto-session  -a      tries to use launcher_profiles.json to extract session key
+    --offline               start in offline mode
+    --width                 specifies the width of the window
+    --height                specifies the height of the window
+    --not-resizable         window should not be resizable
+    --renderer              Specify default renderer for BraLa, either deferred or forward
+    --host  -h              the IP/adress of the minecraft server
+    --port                  the port of the minecraft server, defaults to 25565
+    --res                   path to the resources folder, named "res"
+    --no-snoop              disables "snooping" (= sending completly anonym information to mojang)
+    --tessellation-threads  specifies the number of threads used to tessellate the terrain, defaults to 3.
                             More threads: more used memory (each thread needs his own tessellation-buffer),
-                            more CPU usage, but faster terrain tessellation.
-
---texture-pack              Path to texture pack, if none specified defaults to config or tries to find minecraft.jar
-                        
---width                     specifies the width of the window
---height                    specifies the height of the window
+                            more CPU usage, but faster terrain tessellation
+    --texture-pack          Path to texture pack, if none specified defaults to config or tries to find minecraft.jar
+    --help
 ```
 
 ## Support ##

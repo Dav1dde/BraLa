@@ -71,7 +71,7 @@ struct AppArguments {
             "uses minecrafts lastlogin file for authentication and logging in,\n" ~
             "\t\t\t\t--username and --password are used as fallback",
 
-            "uses the supplied session to login to minecraft, this requires --username",
+            "\tuses the supplied session to login to minecraft, this requires --username",
 
             "tries to use launcher_profiles.json to extract session key",
 
@@ -97,7 +97,7 @@ struct AppArguments {
             "\t\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
             "\t\t\t\tmore CPU usage, but faster terrain tessellation",
 
-            "\tPath to texture pack, if none specified defaults to config or tries to find minecraft.jar"
+            "\tPath to texture pack, if none specified defaults to config or tries to find minecraft.jar",
 
             "\t\tshows this help"
         ];
