@@ -13,6 +13,8 @@ private {
     import std.range : ElementEncodingType;
     import core.exception : RangeError;
 
+    import glwtf.signals : Signal;
+
     import brala.utils.ctfe : matches_overload, hasAttribute;
     import brala.utils.exception : InvalidConfig, NoKey, InvalidKey, InvalidValue;
     import brala.utils.aa : DefaultAA;
@@ -20,9 +22,21 @@ private {
 }
 
 
+private struct ValueSignalPair(Value) {
+    Signal!(string) signal;
+    bool set = false;
+    Value value;
+    alias value this;
+
+    this(T)(T handler) {
+//         signal = new Signal!(string);
+        signal.connect(handler);
+    }
+}
+
 class Config {
-    protected string[string] db;
-    protected string[][string] db_arrays;
+    protected ValueSignalPair!(string)[string] db;
+    protected ValueSignalPair!(string[])[string] db_arrays;
 
     string name = "<?Config?>";
 
@@ -88,6 +102,7 @@ class Config {
 
                         (*v)[index] = value;
                     }
+                    v.set = true;
                 } else {
                     if(index <= 0) {
                         db_arrays[key] = [value];
@@ -96,9 +111,11 @@ class Config {
                         db_arrays[key].length = index+1;
                         db_arrays[key][index] = value;
                     }
+                    db_arrays[key].set = true;
                 }
             } else {
                 db[key] = value;
+                db[key].set = true;
             }
         }
     }
@@ -138,7 +155,8 @@ class Config {
     }
 
     T get(T, bool expand = true)(string key) if(!isArray!T || is(T == string)) {
-        if(auto value = key in db) {
+        auto value = key in db;
+        if(value !is null && value.set) {
             static if(expand) {
                 T ret = deserializer!T((*value).expandVars(&get_string));
             } else {
@@ -152,7 +170,8 @@ class Config {
     }
 
     T get(T, bool expand = true)(string key) if(isArray!T && !is(T == string)) {
-        if(auto value = key in db_arrays) {
+        auto value = key in db_arrays;
+        if(value && value.set) {
             T ret;
             ret.length = value.length;
 
@@ -165,7 +184,7 @@ class Config {
                     }
                 } catch(ConvException e) {
                     ret[i] = (ElementEncodingType!T).init;
-                }               
+                }
             }
 
             return ret;
@@ -217,8 +236,11 @@ class Config {
 
     void set(T)(string key, T value) if(!isArray!T || is(T == string)) {
         enforceEx!InvalidKey(!key.canFind("="), `Config %s: Invalid Key: "=" not allowed in keyname`.format(name));
-        
-        db[key] = serializer!(T)(value);
+
+        // .value is important! Segfault pls
+        db[key].value = serializer!(T)(value);
+        db[key].signal.emit(key);
+        db[key].set = true;
     }
 
     void set(T)(string key, T value) if(isArray!T && !is(T == string)) {
@@ -231,7 +253,10 @@ class Config {
             t[i] = serializer!(ElementEncodingType!T)(v);
         }
 
-        db_arrays[key] = t;
+        // same with .value here...
+        db_arrays[key].value = t;
+        db_arrays[key].signal.emit(key);
+        db_arrays[key].set = true;
     }
 
     bool set_if(T)(string key, T value) {
@@ -274,7 +299,22 @@ class Config {
             alias db_arrays cdb;
         }
 
-        return (key in cdb) !is null;
+        auto value = key in cdb;
+        return value && value.set;
+    }
+
+    void connect(T, S)(string key, auto ref S handler) {
+        static if(!isArray!T || is(T == string)) {
+            alias db cdb;
+        } else {
+            alias db_arrays cdb;
+        }
+
+        if(auto v = key in cdb) {
+            v.signal.connect(handler);
+        } else {
+            cdb[key] = typeof(cdb[key])(handler);
+        }
     }
 }
 
