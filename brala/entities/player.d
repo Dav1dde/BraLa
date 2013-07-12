@@ -13,7 +13,7 @@ private {
     import brala.network.session : Session;
     import brala.network.connection : Connection;
     import c = brala.network.packets.client;
-    import brala.gfx.camera : BraLaCamera;
+    import brala.gfx.camera : FirstPersonCamera;
     import brala.entities.mobs : NamedEntity;
 
     import brala.utils.config : Config, ConfigBound;
@@ -30,7 +30,7 @@ class Player : NamedEntity {
 
     @property auto world() { return game.current_world; }
 
-    BraLaCamera camera;
+    FirstPersonCamera camera;
 
     @property vec3 position() { return camera.position; }
     @property void position(vec3 position) { camera.position = position; }
@@ -41,10 +41,12 @@ class Player : NamedEntity {
     }
 
     float moving_speed = 4.35f; // creative speed
-    ConfigBound!(int, char) MOVE_FORWARD;
-    ConfigBound!(int, char) MOVE_BACKWARD;
-    ConfigBound!(int, char) STRAFE_LEFT;
-    ConfigBound!(int, char) STRAFE_RIGHT;
+    ConfigBound!int MOVE_UP;
+    ConfigBound!int MOVE_DOWN;
+    ConfigBound!int MOVE_FORWARD;
+    ConfigBound!int MOVE_BACKWARD;
+    ConfigBound!int STRAFE_LEFT;
+    ConfigBound!int STRAFE_RIGHT;
     ConfigBound!float SENSITIVITY = 5.0f;
 
     protected vec2i mouse_offset = vec2i(0, 0);
@@ -58,11 +60,13 @@ class Player : NamedEntity {
         this.window = engine.window;
         this.connection = game.connection;
 
-        this.camera = new BraLaCamera();
+        this.camera = new FirstPersonCamera();
 
         window.on_mouse_pos.connect(&on_mouse_pos);
         game.on_notchian_tick.connect(&on_tick);
 
+        game.config.connect(MOVE_UP, "game.key.movement.up").emit();
+        game.config.connect(MOVE_DOWN, "game.key.movement.down").emit();
         game.config.connect(MOVE_FORWARD, "game.key.movement.forward").emit();
         game.config.connect(MOVE_BACKWARD, "game.key.movement.backward").emit();
         game.config.connect(STRAFE_LEFT, "game.key.movement.left").emit();
@@ -85,6 +89,8 @@ class Player : NamedEntity {
         
         float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
 
+        if(window.is_key_down(MOVE_UP)) { camera.move_up(movement/1.5f); moved = true; }
+        if(window.is_key_down(MOVE_DOWN)) { camera.move_down(movement/1.5f); moved = true; }
         if(window.is_key_down(MOVE_FORWARD)) { camera.move_forward(movement); moved = true; }
         if(window.is_key_down(MOVE_BACKWARD)) { camera.move_backward(movement); moved = true; }
         if(window.is_key_down(STRAFE_LEFT)) { camera.strafe_left(movement); moved = true; }

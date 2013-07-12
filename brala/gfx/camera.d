@@ -18,6 +18,8 @@ interface ICamera {
     void rotatey(float angle);
     quat get_rotation(vec3 comparison);
     void set_rotation(vec3 forward, float yaw, float pitch, float roll);
+    void move_up(float delta);
+    void move_down(float delta);
     void move_forward(float delta);
     void move_backward(float delta);
     void strafe_left(float delta);
@@ -27,11 +29,10 @@ interface ICamera {
 }
 
 
-// Refering to https://github.com/mitsuhiko/webgl-meincraft/blob/master/src/camera.coffee
-class BraLaCamera : ICamera {
-    BraLaEngine engine;    
+class FirstPersonCamera : ICamera {
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
+    vec3 direction = vec3(0.0f, 0.0f, 1.0f);
     float fov = 70.0f;
     float near = 0.001f;
     float far = 400.0f;
@@ -55,11 +56,13 @@ class BraLaCamera : ICamera {
      
     void look_at(vec3 position) {
         forward = (position - _position).normalized;
+        direction = vec3(forward.x, 0, forward.z).normalized;
     }
     
     void rotatex(float angle) { // degrees
         mat4 rotmat = mat4.rotation(radians(-angle), up);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
+        direction = vec3(rotmat * vec4(direction, 1.0f)).normalized;
     }
 
     void rotatey(float angle) { // degrees
@@ -79,23 +82,31 @@ class BraLaCamera : ICamera {
         forward = vec3(rotation.to_matrix!(3, 3) * forward).normalized;
         look_at(position + forward);
     }
+
+    void move_up(float delta) {
+        _position += up*delta;
+    }
+
+    void move_down(float delta) {
+        _position -= up*delta;
+    }
     
     void move_forward(float delta) { // W
-        _position = _position + forward*delta;
+        _position += direction*delta;
     }
     
     void move_backward(float delta) { // S
-        _position = _position - forward*delta;
+        _position -= direction*delta;
     }
     
     void strafe_left(float delta) { // A
-        vec3 vcross = cross(up, forward).normalized;
-        _position = _position + (vcross*delta);
+        vec3 vcross = cross(up, direction).normalized;
+        _position += (vcross*delta);
     }
     
     void strafe_right(float delta) { // D
-        vec3 vcross = cross(up, forward).normalized;
-        _position = _position - (vcross*delta);
+        vec3 vcross = cross(up, direction).normalized;
+        _position -= (vcross*delta);
     }
     
     @property mat4 camera() {

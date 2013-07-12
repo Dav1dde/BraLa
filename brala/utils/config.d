@@ -392,7 +392,7 @@ struct ConfigBound(T, S = void) {
     }
 
     auto connect(Config config, string key) {
-        enforceEx!ConfigException(this.config !is config, "ConfigBound already bound to config");
+        enforceEx!ConfigException(this.config !is config, "ConfigBound already bound to config, key: " ~ this.key);
         enforceEx!ConfigException(this.key != key, "ConfigBound already bound to key: " ~ this.key);
 
         struct FakeEmitter {
