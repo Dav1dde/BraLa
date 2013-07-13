@@ -34,6 +34,9 @@ class Player : NamedEntity {
 
     @property vec3 position() { return camera.position; }
     @property void position(vec3 position) { camera.position = position; }
+    @property vec3 rotation() { assert(camera !is null); return camera.rotation; }
+    @property void rotation(vec3 rotation) { camera.rotation = rotation; }
+
 
     float moving_speed = 4.35f; // creative speed
     ConfigBound!int MOVE_UP;
@@ -79,8 +82,8 @@ class Player : NamedEntity {
     void update(TickDuration delta_t) {
         float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
 
-        if(mouse_offset.x != 0) { camera.rotatey(radians(-turning_speed * mouse_offset.x)); moved = true; }
-        if(mouse_offset.y != 0) { camera.rotatex(radians(turning_speed * mouse_offset.y)); moved = true; }
+        if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); moved = true; }
+        if(mouse_offset.y != 0) { camera.rotatex((turning_speed * mouse_offset.y).radians); moved = true; }
         mouse_offset.x = 0;
         mouse_offset.y = 0;
         
@@ -106,8 +109,11 @@ class Player : NamedEntity {
     }
 
     void send_packet() {
-        auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 1.6, position.z,
-                                               0f, 0f, true); // TODO: all of this
+        auto packet = new c.PlayerPositionLook(
+            position.x, position.y, position.y + 1.6, position.z,
+            (rotation.y+180).degrees, rotation.x.degrees, true
+        );
+
         connection.send(packet);
     }
 

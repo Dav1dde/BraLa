@@ -13,6 +13,10 @@ private {
 interface ICamera {
     @property vec3 position();
     @property void position(vec3 position);
+
+    @property vec3 rotation();
+    @property void rotation(vec3 rotation);
+
     void rotatex(float angle);
     void rotatey(float angle);
 
@@ -39,7 +43,8 @@ string make_property(string name, string pre_code = "", string post_code = "") {
 class FirstPersonCamera : ICamera {
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
     mixin(make_property("position"));
-    vec3 rotation = vec3(0.0f, 0.0f, 0.0f);
+    vec3 _rotation = vec3(0.0f, 0.0f, 0.0f);
+    mixin(make_property("rotation"));
 
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
@@ -70,9 +75,9 @@ class FirstPersonCamera : ICamera {
         _viewport = viewport;
     }
 
-    void rotatex(float angle) { rotation.x = clamp(rotation.x + angle, cradians!(-70), cradians!(70)); }
-    void rotatey(float angle) { rotation.y += angle; }
-    void rotatez(float angle) { rotation.z += angle; }
+    void rotatex(float angle) { _rotation.x = clamp(_rotation.x + angle, cradians!(-70), cradians!(70)); }
+    void rotatey(float angle) { _rotation.y += angle; }
+    void rotatez(float angle) { _rotation.z += angle; }
 
     void move_up(float delta) {
         _position += up * delta;
@@ -132,6 +137,10 @@ class FreeCamera : ICamera {
     @property vec3 position() { return _position; }
     @property void position(vec3 position) { _position = position; }
     
+    // TODO
+    @property vec3 rotation() { return vec3(0.0f, 0.0f, 0.0f); }
+    @property void rotation(vec3 rotation) {}
+
     this() {}
     
     this(vec3 position) {
@@ -208,8 +217,5 @@ class FreeCamera : ICamera {
     void apply(BraLaEngine engine) {
         engine.proj = mat4.perspective(engine.viewport.x, engine.viewport.y, fov, near, far);
         engine.view = camera;
-
-        import std.stdio;
-        writefln("CAMERA: %s", camera);
     }
 }
