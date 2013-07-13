@@ -27,31 +27,47 @@ interface ICamera {
     void apply(BraLaEngine engine);
 }
 
+private
+string make_property(string name, string pre_code = "", string post_code = "") {
+    return `
+        @property
+        void %1$s(typeof(_%1$s) s) { %2$s _%1$s = s; %3$s }
+        @property
+        typeof(_%1$s) %1$s() { return _%1$s; }`.format(name, pre_code, post_code);
+}
 
 class FirstPersonCamera : ICamera {
     vec3 _position = vec3(0.0f, 0.0f, 0.0f);
-    @property vec3 position() { return _position; }
-    @property void position(vec3 position) { _position = position; }
+    mixin(make_property("position"));
     vec3 rotation = vec3(0.0f, 0.0f, 0.0f);
 
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
     vec3 right = vec3(1.0f, 0.0f, 0.0f);
 
-    float fov = 70.0f;
-    float near = 0.001f;
-    float far = 400.0f;
+    float _fov = 70.0f;
+    mixin(make_property("fov", "_dirty = true;"));
+    float _near = 0.001f;
+    mixin(make_property("near", "_dirty = true;"));
+    float _far = 400.0f;
+    mixin(make_property("far", "_dirty = true;"));
+    vec2i _viewport;
+    mixin(make_property("viewport", "_dirty = true;"));
+
+    mat4 _perspective = mat4.identity;
+    bool _dirty = true;
 
     this() {}
     this(vec3 position) {
         _position = position;
     }
 
-    this(vec3 position, float fov, float near, float far) {
-        this._position = position;
-        this.fov = fov;
-        this.near = near;
-        this.far = far;
+    this(vec3 position, float fov, float near, float far, vec2i viewport) {
+        _position = position;
+        _fov = fov;
+        _near = near;
+        _far = far;
+        _viewport = viewport;
     }
 
     void rotatex(float angle) { rotation.x = clamp(rotation.x + angle, cradians!(-70), cradians!(70)); }
@@ -82,14 +98,24 @@ class FirstPersonCamera : ICamera {
         _position += (mat3.yrotation(rotation.y) * right).normalized * delta;
     }
 
-    @property mat4 camera() {
+    @property
+    mat4 perspective() {
+        if(_dirty) {
+            _perspective = mat4.perspective(viewport.x, viewport.y, fov, near, far);
+            _dirty = false;
+        }
+        return _perspective;
+    }
+
+    @property
+    mat4 camera() {
         return mat4.identity.translate(-_position.x, -_position.y, -position.z)
                     .rotatey(-rotation.y)
                     .rotatex(rotation.x);
     }
 
     void apply(BraLaEngine engine) {
-        engine.proj = mat4.perspective(engine.viewport.x, engine.viewport.y, fov, near, far);
+        engine.proj = perspective;
         engine.view = camera;
     }
 }

@@ -56,7 +56,9 @@ class Player : NamedEntity {
         this.connection = game.connection;
 
         this.camera = new FirstPersonCamera();
+        this.camera.viewport = engine.viewport;
 
+        engine.on_resize.connect({ camera.viewport = engine.viewport; });
         window.on_mouse_pos.connect(&on_mouse_pos);
         game.on_notchian_tick.connect(&on_tick);
 
