@@ -33,9 +33,9 @@ class Player : NamedEntity {
     FirstPersonCamera camera;
 
     @property vec3 position() { return camera.position; }
-    @property void position(vec3 position) { camera.position = position; }
-    @property vec3 rotation() { assert(camera !is null); return camera.rotation; }
-    @property void rotation(vec3 rotation) { camera.rotation = rotation; }
+    @property void position(vec3 position) { camera.position = position; dirty = true; }
+    @property vec3 rotation() { return camera.rotation; }
+    @property void rotation(vec3 rotation) { camera.rotation = rotation; dirty = true; }
 
 
     float moving_speed = 4.35f; // creative speed
@@ -49,6 +49,7 @@ class Player : NamedEntity {
 
     protected vec2i mouse_offset = vec2i(0, 0);
     protected bool moved;
+    protected bool dirty;
 
     this(BraLaGame game, int entity_id) {
         super(entity_id, game.session.minecraft_username);
@@ -80,6 +81,8 @@ class Player : NamedEntity {
     }
 
     void update(TickDuration delta_t) {
+        bool moved = false;
+
         float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
 
         if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); moved = true; }
@@ -96,8 +99,10 @@ class Player : NamedEntity {
         if(window.is_key_down(STRAFE_LEFT)) { camera.strafe_left(movement); moved = true; }
         if(window.is_key_down(STRAFE_RIGHT)) { camera.strafe_right(movement); moved = true; }
 
-        if(moved) {
+        if(moved || dirty) {
             camera.apply(engine);
+            dirty = false;
+            this.moved = true;
         }
     }
 
@@ -109,12 +114,11 @@ class Player : NamedEntity {
     }
 
     void send_packet() {
-        auto packet = new c.PlayerPositionLook(
+        // TODO needs some more tweaking X+ and X- are off
+        connection.send(new c.PlayerPositionLook(
             position.x, position.y, position.y + 1.6, position.z,
-            (rotation.y+180).degrees, rotation.x.degrees, true
-        );
-
-        connection.send(packet);
+            (rotation.y.degrees+180), rotation.x.degrees, true
+        ));
     }
 
     void on_mouse_pos(double x, double y) {

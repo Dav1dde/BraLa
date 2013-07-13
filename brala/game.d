@@ -248,14 +248,25 @@ final class BraLaGame {
     void on_packet(T : s.PlayerPositionLook)(T packet)
         in { assert(!isNaN(packet.x) && !isNaN(packet.y) && !isNaN(packet.z)); }
         body {
-            packet.yaw = isNaN(packet.yaw) ? 0:radians(packet.yaw);
-            packet.pitch = isNaN(packet.pitch) ? 0:radians(packet.pitch);
-            
-            player.position = vec3(to!float(packet.x), to!float(packet.y), to!float(packet.z)); // TODO: change it to doubles
-            player.set_rotation(packet.yaw, packet.pitch);
+            player.position = vec3(
+                packet.x.to!float,
+                packet.y.to!float,
+                packet.z.to!float
+            );
 
-            auto repl = new c.PlayerPositionLook(packet.x, packet.y, packet.stance, packet.z, packet.yaw, packet.pitch, packet.on_ground);
-            connection.send(repl);
+            // TODO needs some more tweaking X+ and X- are off
+            packet.yaw = (isNaN(packet.yaw) ? 0 : packet.yaw) + 180;
+            packet.pitch = isNaN(packet.pitch) ? 0 : packet.pitch;
+            player.rotation = vec3(
+                packet.pitch.radians,
+                packet.yaw.radians,
+                0
+            );
+
+            connection.send(new c.PlayerPositionLook(
+                packet.x, packet.y, packet.stance, packet.z,
+                packet.yaw, packet.pitch, packet.on_ground
+            ));
         }
 
     void on_packet(T : s.Disconnect)(T packet) {
