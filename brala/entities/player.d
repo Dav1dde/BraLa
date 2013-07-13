@@ -34,11 +34,6 @@ class Player : NamedEntity {
 
     @property vec3 position() { return camera.position; }
     @property void position(vec3 position) { camera.position = position; }
-    @property quat rotation() { return camera.get_rotation(YAW_0_DIRECTION); }
-    override void set_rotation(float yaw, float pitch, float roll = 0) {
-        super.set_rotation(yaw, pitch, roll);
-        camera.set_rotation(YAW_0_DIRECTION, yaw, pitch, roll);
-    }
 
     float moving_speed = 4.35f; // creative speed
     ConfigBound!int MOVE_UP;
@@ -82,8 +77,8 @@ class Player : NamedEntity {
     void update(TickDuration delta_t) {
         float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
 
-        if(mouse_offset.x != 0) { camera.rotatex(-turning_speed * mouse_offset.x); moved = true; }
-        if(mouse_offset.y != 0) { camera.rotatey(turning_speed * mouse_offset.y); moved = true; }
+        if(mouse_offset.x != 0) { camera.rotatey(radians(-turning_speed * mouse_offset.x)); moved = true; }
+        if(mouse_offset.y != 0) { camera.rotatex(radians(turning_speed * mouse_offset.y)); moved = true; }
         mouse_offset.x = 0;
         mouse_offset.y = 0;
         
@@ -109,10 +104,8 @@ class Player : NamedEntity {
     }
 
     void send_packet() {
-        quat rotation = camera.get_rotation(YAW_0_DIRECTION);
         auto packet = new c.PlayerPositionLook(position.x, position.y, position.y + 1.6, position.z,
-                                               degrees(to!float(rotation.yaw)), degrees(to!float(rotation.pitch)), true); // TODO: verify bool
-
+                                               0f, 0f, true); // TODO: all of this
         connection.send(packet);
     }
 
@@ -120,7 +113,6 @@ class Player : NamedEntity {
         static int last_x = 0;
         static int last_y = 0;
 
-        // TODO double?
         mouse_offset.x = cast(int)x - last_x;
         mouse_offset.y = cast(int)y - last_y;
 
