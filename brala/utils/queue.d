@@ -5,6 +5,8 @@ private {
     import core.sync.mutex : Mutex;
     import core.sync.condition : Condition;
 
+    import std.exception : enforceEx;
+    import std.datetime : Clock;
     import std.algorithm : canFind;
 }
 
@@ -42,22 +44,18 @@ class Queue(type) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
-        if(maxsize > 0) {
-            if(!block) {
-                if(queue.length >= maxsize) {
-                    throw new Full("full queue");
-                }
-            } else if(timeout.isNegative) {
-                throw new QueueException("negative timeout");
-            } else if(timeout.total!("msecs") == 0) {
-                if(full) {
-                    not_full.wait();
-                }
+        enforceEx!QueueException(!timeout.isNegative, "negative timeout");
+        if(full) {
+            enforceEx!Full(block, "full queue");
+
+            if(timeout.total!"msecs" == 0) {
+                not_full.wait();
             } else {
-                if(full) {
-                    if(!not_full.wait(timeout)) {
-                        throw new Full("queue after timeout still full");
-                    }
+                auto cur = Clock.currTime();
+                while(full) {
+                    auto remaining = Clock.currTime() - cur;
+                    enforceEx!Full(remaining.total!"msecs" > 0, "full queue");
+                    not_full.wait(remaining);
                 }
             }
         }
@@ -76,20 +74,18 @@ class Queue(type) {
 
 
     protected type get_no_lock(bool block=true, Duration timeout=DUR_0) {
-        if(!block) {
-            if(queue.length == 0) {
-                throw new Empty("queue is empty");
-            }
-        } else if(timeout.isNegative) {
-            throw new QueueException("negativ timeout");
-        } else if(timeout.total!("msecs") == 0) {
-            if(queue.length == 0) {
+        enforceEx!QueueException(!timeout.isNegative, "negative timeout");
+        if(empty) {
+            enforceEx!Empty(block, "empty queue");
+
+            if(timeout.total!"msecs" == 0) {
                 not_empty.wait();
-            }
-        } else {
-            if(queue.length == 0) {
-                if(!not_empty.wait(timeout)) {
-                    throw new Empty("queue after timeout still empty");
+            } else {
+                auto cur = Clock.currTime();
+                while(empty) {
+                    auto remaining = Clock.currTime() - cur;
+                    enforceEx!Empty(remaining.total!"msecs" > 0, "full queue");
+                    not_empty.wait(remaining);
                 }
             }
         }
@@ -98,6 +94,14 @@ class Queue(type) {
         queue = queue[1..$];
         not_full.notify();
         return item;
+    }
+
+    type[] get_all() {
+        mutex.lock();
+        scope(exit) mutex.unlock();
+        scope(success) queue = [];
+
+        return queue;
     }
 
     void task_done() {

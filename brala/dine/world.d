@@ -25,6 +25,7 @@ private {
     import brala.engine : BraLaEngine;
     import brala.utils.aa : ThreadAA;
     import brala.utils.gloom : Gloom;
+//     import brala.utils.pqueue : PsuedoQueue, Empty;
     import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
@@ -233,7 +234,7 @@ final class World {
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
         logger.log!Info("Marking all buffers as available");
-        foreach(tess_out; output) {
+        foreach(tess_out; output.get_all()) {
             tess_out.buffer.available = true;
         }
 
@@ -453,7 +454,7 @@ final class World {
 
     void postprocess_chunks() {
         // NOTE queue opApply changed, eventual fix required
-        if(!output.empty) foreach(tess_out; output) with(tess_out) {
+        if(!output.empty) foreach(tess_out; output.get_all()) with(tess_out) {
             if(chunk.vbo is null) {
                 chunk.vao = new VAO();
                 chunk.vbo = new Buffer();
@@ -486,7 +487,7 @@ final class World {
             chunk.dirty = false;
             chunk.tessellated = false;
             // this queue is never full and we don't wanna waste time waiting
-            input.put(ChunkData(chunk, chunkc), false);
+            input.put(ChunkData(chunk, chunkc));
         }
     }
 }
@@ -533,8 +534,8 @@ final class TessellationThread : VerboseThread {
 
         ChunkData chunk_data;
         try {
-            // continue loop every 300ms to check if we should continue or exit
-            chunk_data = input.get(true, dur!"msecs"(300));
+            // continue loop every 500ms to check if we should continue or exit
+            chunk_data = input.get(true, dur!"msecs"(500));
         } catch(Empty) {
             return;
         }
