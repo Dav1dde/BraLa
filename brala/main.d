@@ -93,7 +93,7 @@ final class BraLa {
         window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
         window.on_close = &on_close;
 
-        if(!config.get!bool("brala.no_snoop")) {
+        if(!config.get!bool("brala.no_snoop") && !config.get!bool("connection.offline")) {
             snooper.start(dur!"minutes"(10));
         }
     }
@@ -157,7 +157,7 @@ final class BraLa {
     }
 
     void start_game(string host, short port) {
-        collectException(snooper.snoop());
+        if(snooper.is_running) collectException(snooper.snoop());
         
         auto atlas = new MinecraftAtlas(engine);
         game = new BraLaGame(engine, session, atlas);

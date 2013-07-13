@@ -198,6 +198,11 @@ class DelayedSnooper : Snooper {
     }
 
     void stop() {
+        if(timer is null || !is_running) {
+            logger.log!Info("DelayedSnooper wasn't running");
+            return;
+        }
+
         logger.log!Info("Stopping DelayedSnooper and joining it");
         timer.cancel();
         timer.join(false);
@@ -206,6 +211,6 @@ class DelayedSnooper : Snooper {
 
     @property
     bool is_running() {
-        return timer.isRunning;
+        return timer !is null && timer.isRunning;
     }
 }
