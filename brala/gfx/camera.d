@@ -50,6 +50,8 @@ class FirstPersonCamera : ICamera {
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
     vec3 right = vec3(1.0f, 0.0f, 0.0f);
 
+    vec3 offset = vec3(0.0f, 0.0f, 0.0f);
+
     float _fov = 70.0f;
     mixin(make_property("fov", "_dirty = true;"));
     float _near = 0.001f;
@@ -114,7 +116,8 @@ class FirstPersonCamera : ICamera {
 
     @property
     mat4 camera() {
-        return mat4.identity.translate(-_position.x, -_position.y, -position.z)
+        vec3 pos = -(_position + offset);
+        return mat4.identity.translate(pos.x, pos.y, pos.z)
                     .rotatey(-rotation.y)
                     .rotatex(rotation.x);
     }
