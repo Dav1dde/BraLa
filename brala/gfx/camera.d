@@ -75,7 +75,7 @@ class FirstPersonCamera : ICamera {
         _viewport = viewport;
     }
 
-    void rotatex(float angle) { _rotation.x = clamp(_rotation.x + angle, cradians!(-70), cradians!(70)); }
+    void rotatex(float angle) { _rotation.x = clamp(_rotation.x + angle, cradians!(-85), cradians!(89)); }
     void rotatey(float angle) { _rotation.y += angle; }
     void rotatez(float angle) { _rotation.z += angle; }
 
