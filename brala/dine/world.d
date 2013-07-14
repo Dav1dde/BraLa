@@ -25,8 +25,9 @@ private {
     import brala.engine : BraLaEngine;
     import brala.utils.aa : ThreadAA;
     import brala.utils.gloom : Gloom;
-//     import brala.utils.pqueue : PsuedoQueue, Empty;
-    import brala.utils.queue : Queue, Empty;
+    import brala.utils.pqueue : PseudoQueue, Empty;
+    alias Queue = PseudoQueue;
+//     import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
@@ -131,6 +132,7 @@ final class World {
 
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
+    protected TessOut[] output_buffer;
     protected TessellationThread[] tessellation_threads;
     
     this(BraLaEngine engine, MinecraftAtlas atlas, size_t threads) {
@@ -217,7 +219,7 @@ final class World {
                 mark_surrounding_chunks_dirty(chunkc);
             }
         }
-    
+
     void remove_all_chunks() {
         foreach(key; chunks.keys()) {
             remove_chunk(key, false);
@@ -234,7 +236,7 @@ final class World {
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
         logger.log!Info("Marking all buffers as available");
-        foreach(tess_out; output.get_all()) {
+        foreach(tess_out; output.get_all(output_buffer, true)) {
             tess_out.buffer.available = true;
         }
 
@@ -454,7 +456,7 @@ final class World {
 
     void postprocess_chunks() {
         // NOTE queue opApply changed, eventual fix required
-        if(!output.empty) foreach(tess_out; output.get_all()) with(tess_out) {
+        if(!output.empty) foreach(tess_out; output.get_all(output_buffer, true)) with(tess_out) {
             if(chunk.vbo is null) {
                 chunk.vao = new VAO();
                 chunk.vbo = new Buffer();

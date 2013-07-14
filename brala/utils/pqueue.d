@@ -13,7 +13,7 @@ private {
 
 private enum DUR_0 = Duration.init;
 
-class PsuedoQueue(type) {
+class PseudoQueue(type) {
     protected type[] storage;
     protected size_t realloc_interval = 32;
     protected size_t start = 0;
@@ -68,7 +68,7 @@ class PsuedoQueue(type) {
         }
 
         if(start > 0) {
-            storage[start--] = item;
+            storage[--start] = item;
         } else {
             storage[end++] = item;
         }
@@ -100,6 +100,25 @@ class PsuedoQueue(type) {
         return storage[start++];
     }
 
+    type[] get_all(ref type[] s, bool autoresize=true) {
+        mutex.lock();
+        scope(exit) mutex.unlock();
+
+        if(autoresize && s.length < storage.length) {
+            s.length = storage.length;
+        }
+        enforceEx!QueueException(storage.length <= s.length, "array to small for get_all");
+
+        scope(success) {
+            end = 0;
+            start = 0;
+            not_full.notifyAll();
+        }
+
+        s[0..end-start] = storage[start..end];
+        return s[0..end-start];
+    }
+
     type[] get_all() {
         mutex.lock();
         scope(exit) mutex.unlock();
@@ -111,6 +130,7 @@ class PsuedoQueue(type) {
 
         return storage[start..end].dup;
     }
+
 
     void task_done() {
         mutex.lock();
@@ -147,7 +167,7 @@ class PsuedoQueue(type) {
 unittest {
     import std.exception : assertThrown;
 
-    alias PsuedoQueue!int Q;
+    alias PseudoQueue!int Q;
     Q q = new Q(10, 5);
 
     assertThrown!Empty(q.get());
@@ -179,7 +199,7 @@ unittest {
     assert(a.length == 10);
     assert(q.length == 0);
 
-    alias PsuedoQueue!Object Q2;
+    alias PseudoQueue!Object Q2;
 
     Q2 q2 = new Q2(10, 1);
 
