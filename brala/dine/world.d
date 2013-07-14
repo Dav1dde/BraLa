@@ -130,6 +130,7 @@ final class World {
     BiomeSet biome_set;
     MinecraftAtlas atlas;
 
+    // NOTE: don't join on these queues!
     protected Queue!ChunkData input;
     protected Queue!TessOut output;
     protected TessOut[] output_buffer;

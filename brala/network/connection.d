@@ -219,7 +219,10 @@ class ThreadedConnection : Connection {
     }
 
     override void poll() {
-        foreach(packet; queue) {
+        // NOTE: we are not calling task_done,
+        // so joining on the queue is a bad idea.
+        // This is like that in several places... e.g. world
+        foreach(packet; queue.get_all()) {
             packet.send(endianstream);
         }
         endianstream.flush();
@@ -234,15 +237,5 @@ class ThreadedConnection : Connection {
         }
 
         _thread.start();
-    }
-
-    int opApply(int delegate(Packet packet) dg) {
-        int result;
-
-        foreach(packet; out_queue) {
-            result = dg(packet);
-            if(result) break;
-        }
-        return result;
     }
 }

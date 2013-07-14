@@ -121,7 +121,7 @@ final class BraLaGame {
         logger.log_if!"Error"(current_world !is null && !current_world.is_ok,
                               "Tessellation thread died!").ifTrue(&engine.stop);
 
-        foreach(packet; connection) {
+        foreach(packet; connection.out_queue.get_all()) {
             dispatch_packets(packet);
         }
 
