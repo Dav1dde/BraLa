@@ -114,10 +114,9 @@ class Player : NamedEntity {
     }
 
     void send_packet() {
-        // TODO needs some more tweaking X+ and X- are off
         connection.send(new c.PlayerPositionLook(
             position.x, position.y, position.y + 1.6, position.z,
-            (rotation.y.degrees+180), rotation.x.degrees, true
+            (180-rotation.y.degrees), rotation.x.degrees, true
         ));
     }
 

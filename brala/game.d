@@ -254,12 +254,11 @@ final class BraLaGame {
                 packet.z.to!float
             );
 
-            // TODO needs some more tweaking X+ and X- are off
-            packet.yaw = (isNaN(packet.yaw) ? 0 : packet.yaw) + 180;
+            packet.yaw = isNaN(packet.yaw) ? 0 : packet.yaw;
             packet.pitch = isNaN(packet.pitch) ? 0 : packet.pitch;
             player.rotation = vec3(
                 packet.pitch.radians,
-                packet.yaw.radians,
+                (180 - packet.yaw).radians,
                 0
             );
 
