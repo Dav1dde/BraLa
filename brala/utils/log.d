@@ -201,8 +201,13 @@ class Logger {
     class NamedLogger {
         immutable string name;
 
+        IWriter[LogLevel.max+1] writer;
+        LogLevel loglevel = LogLevel.Debug;
+
         this(string name) {
             this.name = name;
+            this.writer = this.outer.writer;
+            this.loglevel = this.outer.loglevel;
         }
 
         void log(string level, Args...)(auto ref Args args) if(__traits(compiles, cstring2loglevel!(level))) {
@@ -210,11 +215,11 @@ class Logger {
         }
 
         void log(LogLevel level, Args...)(auto ref Args args) {
-            if(level < this.outer.loglevel) {
+            if(level < this.loglevel) {
                 return;
             }
 
-            IWriter[] wr = this.outer.writer[level..$];
+            IWriter[] wr = this.writer[level..$];
 
             const(char)[] message;
             try {
@@ -248,6 +253,14 @@ class Logger {
         bool log_if(LogLevel level, Args...)(bool ex, auto ref Args args) {
             if(ex) log!level(args);
             return ex;
+        }
+
+        void opIndexAssign(IWriter writer, string level) {
+            opIndexAssign(writer, string2loglevel(level));
+        }
+
+        void opIndexAssign(IWriter writer, LogLevel level) {
+            this.writer[level] = writer;
         }
     }
 

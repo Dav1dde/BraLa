@@ -49,6 +49,7 @@ shared static this() {
 
     main_logger = brala_logger.get("Main");
     memory_logger = brala_logger.get("Memory");
+    memory_logger.loglevel = LogLevel.Warn;
     resmgr_logger = brala_logger.get("Resmgr");
     world_logger = brala_logger.get("World");
     engine_logger = brala_logger.get("Engine");
