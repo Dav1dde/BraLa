@@ -7,6 +7,7 @@ private {
     import std.conv : to;
     import std.algorithm : canFind;
 
+    import brala.dine.chunk : Block;
     import brala.dine.world : World;
     import brala.gfx.camera : Camera;
 }
@@ -17,6 +18,7 @@ public {
 }
 
 
+enum AIR_BLOCK = Block(0);
 
 abstract class Physics {
     protected World _world;
@@ -28,7 +30,6 @@ abstract class Physics {
     enum PLAYER_HEIGHT = 1.8f;
 
     bool is_valid_position(vec3 position) {
-        // slap me?
         vec3[4] corners = [
             vec3(position.x+PLAYER_WIDTH_HALF, position.y, position.z+PLAYER_WIDTH_HALF),
             vec3(position.x+PLAYER_WIDTH_HALF, position.y, position.z-PLAYER_WIDTH_HALF),
@@ -49,9 +50,13 @@ abstract class Physics {
 
                 auto foot = world.get_block_safe(corner);
                 auto head = world.get_block_safe(corner + vec3i(0, 1, 0));
+                auto head2 = AIR_BLOCK;
+                if((position.y+PLAYER_HEIGHT).floor > (corner.y+1)) {
+                    head2 = world.get_block_safe(corner + vec3i(0, 2, 0));
+                }
 
                 // TODO liquids
-                if(foot.id != 0 || head.id != 0) return false;
+                if(foot.id != 0 || head.id != 0 || head2.id != 0) return false;
             }
         }
 
