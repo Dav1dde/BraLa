@@ -144,10 +144,7 @@ class Connection {
         scope(exit) RSA_free(rsa);
 
         ubyte[] enc_verify_token = rsa.encrypt(packet.verify_token.arr);
-        seed_prng();
-
         this.shared_secret = get_random(16);
-
         ubyte[] enc_shared_secret = rsa.encrypt(shared_secret);
 
         if(packet.server_id != "-") {

@@ -13,6 +13,10 @@ private {
     import deimos.openssl.x509;
 }
 
+shared static this() {
+    seed_prng();
+}
+
 RSA* decode_public(const(ubyte)[] public_key)
     out(rsa) { assert(rsa !is null); }
     body {
