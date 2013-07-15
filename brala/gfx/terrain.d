@@ -367,6 +367,7 @@ final class MinecraftAtlas : Atlas {
                 insert(atlas_image.image, name.stripExtension());
             }
         }
+        insert(Image.empty(16, 16, 4), "__empty");
 
         logger.log!Info("All files processed");
 

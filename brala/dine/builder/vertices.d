@@ -785,7 +785,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
     {""}, // redstone wire
     {"diamond_ore"}, // diamond ore
     {"diamond_block"}, // diamond block
-    {"crafting_table_side"}, // crafting table
+    {"crafting_table_top"}, // crafting table
     {""}, // wheat
     {"farmland_wet"}, // farmland
     {"furnace_top"}, // furnace
@@ -907,7 +907,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_TOP = [
 TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // air
     {"stone"}, // stone
-    {"dirt"}, // grass
+    {"dirt", "__empty"}, // grass
     {"dirt"}, // dirt
     {"cobblestone"}, // cobble
     {"planks_oak"}, // wooden plank
@@ -963,7 +963,7 @@ TextureInformation[BLOCK_IDS] TEXTURE_INFORMATION_BOTTOM = [
     {""}, // redstone wire
     {"diamond_ore"}, // diamond ore
     {"diamond_block"}, // diamond block
-    {"crafting_table_side"}, // crafting table
+    {"crafting_table_top"}, // crafting table
     {""}, // wheat
     {"dirt"}, // farmland
     {"furnace_top"}, // furnace
