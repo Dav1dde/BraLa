@@ -35,8 +35,8 @@ mixin template BlockBuilder() {
                                float x_offset, float y_offset, float z_offset,
                                ubyte r=0xff, ubyte g=0xff, ubyte b=0xff)
         in { assert(terrain_elements+Vertex.sizeof*vertices.length <= buffer.terrain.length,
-                    "not enough allocated memory for tessellator: %d+%d <= %d"
-                        .format(terrain_elements+vertices.length, buffer.terrain.length)); }
+                    "not enough allocated memory for tessellator: %d+%d*Vertex.sizeof <= %d"
+                        .format(terrain_elements, vertices.length, buffer.terrain.length)); }
         body {
             size_t end = terrain_elements + vertices.length*Vertex.sizeof;
             
