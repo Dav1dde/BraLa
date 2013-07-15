@@ -91,7 +91,7 @@ final class Chunk {
 
     protected void free_chunk() {
         if(!empty) {
-            free(blocks);
+            blocks.free();
         }
     }
     
@@ -100,12 +100,23 @@ final class Chunk {
         empty = true;
         dirty = false;
     }
-    
-    ~this() {
-        // for some strange reason this causes segmentation faults
-//         free_chunk();
+
+    void shutdown() {
+        scope(exit) {
+            empty = true;
+            dirty = true;
+        }
+
+        free_chunk();
+
+        if(vbo !is null) {
+            vbo.remove();
+        }
+        if(vao !is null) {
+            vao.remove();
+        }
     }
-    
+
     // Make sure you allocated *blocks with malloc,
     // the chunk will free the memory when needed.
     void fill_chunk(Block* blocks) {
@@ -121,13 +132,6 @@ final class Chunk {
         
         blocks = cast(Block*)calloc(block_count, Block.sizeof);
         empty = false;
-        dirty = true;
-    }
-    
-    void empty_chunk() {
-        free(blocks);
-        blocks = empty_blocks;
-        empty = true;
         dirty = true;
     }
     

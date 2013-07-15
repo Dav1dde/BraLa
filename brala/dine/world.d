@@ -122,7 +122,6 @@ final class World {
     const int min_height = 0;
     const int max_height = height;    
 
-    //ThreadAA!(Chunk, vec3i) chunks;
     Chunk[vec3i] chunks;
     vec3i spawn;
 
@@ -142,6 +141,8 @@ final class World {
         biome_set.update_colors(engine.resmgr);
 
         assert(engine.resmgr.get!Gloom("sphere").stride == 3, "invalid sphere");
+
+        engine.on_shutdown.connect(&shutdown);
 
         threads = threads ? threads : 1;
 
@@ -164,10 +165,6 @@ final class World {
         this(engine, atlas, threads);
         this.spawn = spawn;
     }
-    
-    ~this() {
-        remove_all_chunks();
-    }
 
     @property
     bool is_ok() {
@@ -184,36 +181,34 @@ final class World {
     // you should also lose all other references to this chunk
     //
     // old chunk will be cleared
-    void add_chunk(Chunk chunk, vec3i chunkc, bool mark_dirty=true) {
-        if(Chunk* c = chunkc in chunks) {
-            c.empty_chunk();
-        } 
+    void add_chunk(Chunk chunk, vec3i chunkc, bool mark_dirty=true)
+        in { assert(chunk !is null, "chunk was null"); }
+        body {
+            if(Chunk* c = chunkc in chunks) {
+                remove_chunk(chunkc, *c, false);
+            }
 
-        vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
-        AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
-        chunk.aabb = aabb;
-        
-        chunks[chunkc] = chunk;
-        if(mark_dirty) {
-            mark_surrounding_chunks_dirty(chunkc);
+            vec3i w_chunkc = vec3i(chunkc.x*width, chunkc.y*height, chunkc.z*depth);
+            AABB aabb = AABB(vec3(w_chunkc), vec3(w_chunkc.x+width, w_chunkc.y+height, w_chunkc.z+depth));
+            chunk.aabb = aabb;
+
+            chunks[chunkc] = chunk;
+            if(mark_dirty) {
+                mark_surrounding_chunks_dirty(chunkc);
+            }
         }
-    }
 
     /// only safe when called from mainthread
     void remove_chunk(vec3i chunkc, bool mark_dirty=true)
         in { assert(chunkc in chunks, "Chunkc not in chunks: %s".format(chunkc)); }
         body {
-            Chunk chunk = chunks[chunkc];
-            chunk.empty_chunk();
+            remove_chunk(chunkc, chunks[chunkc], mark_dirty);
+        }
 
-            if(chunk.vbo !is null) {
-                chunk.vbo.remove();
-            }
-
-            if(chunk.vao !is null) {
-                chunk.vao.remove();
-            }
-            
+    void remove_chunk(vec3i chunkc, Chunk chunk, bool mark_dirty=true)
+        in { assert(chunk !is null, "chunk was null"); }
+        body {
+            chunk.shutdown();
             chunks.remove(chunkc);
 
             if(mark_dirty) {
@@ -228,6 +223,9 @@ final class World {
     }
 
     void shutdown() {
+        logger.log!Info("disconnecting world from shutdown event");
+        engine.on_shutdown.disconnect(&shutdown);
+
         logger.log!Info("Sending stop to all tessellation threads");
         foreach(t; tessellation_threads) {
             t.stop();
@@ -249,10 +247,10 @@ final class World {
                 logger.log!Info(`Thread "%s" already terminated`, t.name);
             }
 
-            destroy(t);
+            t.free();
         }
 
-        logger.log!Info("Removing all chunks");
+        logger.log!Info("Removing all chunks (%s)", chunks.length);
         remove_all_chunks();
     }
     
@@ -458,6 +456,16 @@ final class World {
     void postprocess_chunks() {
         // NOTE queue opApply changed, eventual fix required
         if(!output.empty) foreach(tess_out; output.get_all(output_buffer, true)) with(tess_out) {
+            scope(exit) {
+                chunk.tessellated = true;
+                buffer.available = true;
+            }
+
+            if(chunk.empty) {
+                logger.log!Debug("Chunk is empty, skipping!");
+                continue;
+            }
+
             if(chunk.vbo is null) {
                 chunk.vao = new VAO();
                 chunk.vbo = new Buffer();
@@ -473,9 +481,6 @@ final class World {
             assert(chunk.vbo !is null, "chunk vbo is null");
             assert(engine.current_shader !is null, "current shader is null");
             Vertex.bind(engine.current_shader, chunk.vbo);
-
-            chunk.tessellated = true;
-            buffer.available = true;
         }
 
         version(NoThreads) {
@@ -486,11 +491,10 @@ final class World {
     }
 
     void check_chunk(Chunk chunk, vec3i chunkc) {
-        if(chunk.dirty && chunk.tessellated) {
+        if(!chunk.empty && chunk.dirty && chunk.tessellated) {
             chunk.dirty = false;
             chunk.tessellated = false;
-            // this queue is never full and we don't wanna waste time waiting
-            input.put(ChunkData(chunk, chunkc));
+            input.put(ChunkData(chunk, chunkc), false);
         }
     }
 }
@@ -515,11 +519,17 @@ final class TessellationThread : VerboseThread {
 
         this.stop_event = new Event();
     }
+    
+    void free() {
+        logger.log!Info("Freeing tessellation buffer: " ~ this.name);
+        if(!stop_event.is_set) {
+            logger.log!Warn("Free called, but thread not stopped!");
+            stop();
+        }
 
-    ~this() {
         buffer.free();
     }
-    
+
     void run() {
         while(!stop_event.is_set) {
             poll();
@@ -538,14 +548,17 @@ final class TessellationThread : VerboseThread {
         ChunkData chunk_data;
         try {
             // continue loop every 500ms to check if we should continue or exit
-            chunk_data = input.get(true, dur!"msecs"(500));
+            chunk_data = input.get(true, dur!"msecs"(300));
         } catch(Empty) {
             return;
         }
         scope(exit) input.task_done();
 
         with(chunk_data) {
-            if(chunk.tessellated) {
+            if(chunk.empty) {
+                logger.log!Debug("Chunk is empty, skipping! %s", position);
+                return;
+            } else if(chunk.tessellated) {
                 logger.log!Debug("Chunk is already tessellated! %s", position);
                 return;
             } else {

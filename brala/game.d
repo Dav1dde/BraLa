@@ -89,9 +89,6 @@ final class BraLaGame {
             connection.thread.join(false);
             logger.log!Info("Connection is done");
         }
-
-        if(_current_world !is null) _current_world.shutdown();
-        _current_world = null;
     }
 
     // rendering

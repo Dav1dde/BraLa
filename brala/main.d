@@ -195,7 +195,8 @@ int main(string[] args) {
         brala.shutdown();
     }
 
-    brala.start();
+    try brala.start();
+    catch(Throwable t) logger.log!Error_(t.toString);
 
     return 0;
 }
