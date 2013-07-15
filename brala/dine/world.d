@@ -300,9 +300,9 @@ final class World {
                 throw new WorldError("No chunk available for position " ~ position.toString());
             }
             
-            return chunk[chunk.to_flat(py_mod(position.x, width),
-                                       py_mod(position.y, height),
-                                       py_mod(position.z, depth))];
+            return chunk.blocks[chunk.to_flat(py_mod(position.x, width),
+                                              py_mod(position.y, height),
+                                              py_mod(position.z, depth))];
         }
 
     Block get_block_safe(vec3i position, Block def = AIR_BLOCK) {
