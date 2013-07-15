@@ -255,7 +255,7 @@ class Logger {
             return ex;
         }
 
-        void log_exception(LogLevel level = LogLevel.Error_)(Throwable t, string information="",
+        void log_exception(LogLevel level = Error_)(Throwable t, string information="",
                                                              string file=__FILE__, size_t line=__LINE__) {
             if(information.length == 0) {
                 information = "in %s:%s".format(file, line);
@@ -301,7 +301,7 @@ class Logger {
         return _logger["default"].log_if!(level)(ex, args);
     }
 
-    void log_exception(LogLevel level = LogLevel.Error_)(Throwable t, string information="",
+    void log_exception(LogLevel level = Error_)(Throwable t, string information="",
                                                          string file=__FILE__, size_t line=__LINE__) {
         return _logger["default"].log_exception!(level)(t, information, file, line);
     }
