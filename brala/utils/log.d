@@ -255,6 +255,17 @@ class Logger {
             return ex;
         }
 
+        void log_exception(LogLevel level = LogLevel.Error_)(Throwable t, string information="",
+                                                             string file=__FILE__, size_t line=__LINE__) {
+            if(information.length == 0) {
+                information = "in %s:%s".format(file, line);
+            }
+            log!level("--- Exception %s ---", information);
+            log!level("%s", t.toString());
+            log!level("--- End Exception %s ---", information);
+
+        }
+
         void opIndexAssign(IWriter writer, string level) {
             opIndexAssign(writer, string2loglevel(level));
         }
@@ -288,6 +299,11 @@ class Logger {
 
     bool log_if(LogLevel level, Args...)(bool ex, auto ref Args args) {
         return _logger["default"].log_if!(level)(ex, args);
+    }
+
+    void log_exception(LogLevel level = LogLevel.Error_)(Throwable t, string information="",
+                                                         string file=__FILE__, size_t line=__LINE__) {
+        return _logger["default"].log_exception!(level)(t, information, file, line);
     }
 
     void opIndexAssign(IWriter writer, string level) {

@@ -196,7 +196,7 @@ int main(string[] args) {
     }
 
     try brala.start();
-    catch(Throwable t) logger.log!Error_(t.toString);
+    catch(Throwable t) logger.log_exception(t);
 
     return 0;
 }

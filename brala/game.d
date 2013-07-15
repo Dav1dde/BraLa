@@ -84,7 +84,7 @@ final class BraLaGame {
 
     protected void shutdown() {
         if(connection.connected && connection.thread.isRunning) {
-            connection.disconnect("Garbage collector went crazy, again");
+            disconnect("Garbage collector went crazy, again");
             logger.log!Info("Waiting for connection thread to shutdown");
             connection.thread.join(false);
             logger.log!Info("Connection is done");
@@ -115,8 +115,8 @@ final class BraLaGame {
     void poll(TickDuration delta_t) {
         logger.log_if!Info(!connection.thread.isRunning,
                            "Connection thread died").ifTrue(&engine.stop);
-        logger.log_if!"Error"(current_world !is null && !current_world.is_ok,
-                              "Tessellation thread died!").ifTrue(&engine.stop);
+        logger.log_if!Error_(current_world !is null && !current_world.is_ok,
+                             "Tessellation thread died!").ifTrue(&engine.stop);
 
         foreach(packet; connection.out_queue.get_all()) {
             dispatch_packets(packet);
@@ -153,6 +153,7 @@ final class BraLaGame {
     
     void disconnect(string message = "") {
         connection.disconnect(message);
+        connection.shutdown();
     }
     
     void login() { // this is blocking

@@ -86,9 +86,7 @@ class Connection {
             socket.shutdown(SocketShutdown.BOTH);
             socket.close();
         } catch(Exception e) {
-            logger.log!Info("--- Exception during connection-shutdown ---");
-            logger.log!Info(e.toString());
-            logger.log!Info("--- End exception during connection-shutdown ---");
+            logger.log_exception!Info(e, "during connection-shutdown");
         }
         
         _connected = false;

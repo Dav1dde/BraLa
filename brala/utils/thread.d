@@ -25,9 +25,7 @@ private enum CATCH_DELEGATE = `
             fun();
         } catch(Throwable t) {
             version(BraLa) {
-                logger.log!Error_("--- Exception in Thread: \"%s\" ---", this.name);
-                logger.log!Error_("%s", t.toString());
-                logger.log!Error_("--- End Exception in Thread: \"%s\" ---", this.name);
+                logger.log_exception(t, "in Thread: \"%s\"".format(this.name));
             } else {
                 stderr.writefln("--- Exception in Thread: \"%s\" ---".format(this.name));
                 stderr.writeln(t.toString());
