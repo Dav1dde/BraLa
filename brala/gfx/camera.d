@@ -10,12 +10,9 @@ private {
 }
 
 
-interface ICamera {
-    @property vec3 position();
-    @property void position(vec3 position);
-
-    @property vec3 rotation();
-    @property void rotation(vec3 rotation);
+abstract class Camera {
+    vec3 position;
+    vec3 rotation;
 
     void rotatex(float angle);
     void rotatey(float angle);
@@ -40,11 +37,9 @@ string make_property(string name, string pre_code = "", string post_code = "") {
         typeof(_%1$s) %1$s() { return _%1$s; }`.format(name, pre_code, post_code);
 }
 
-class FirstPersonCamera : ICamera {
-    vec3 _position = vec3(0.0f, 0.0f, 0.0f);
-    mixin(make_property("position"));
-    vec3 _rotation = vec3(0.0f, 0.0f, 0.0f);
-    mixin(make_property("rotation"));
+class FirstPersonCamera : Camera {
+    vec3 position = vec3(0.0f, 0.0f, 0.0f);
+    vec3 rotation = vec3(0.0f, 0.0f, 0.0f);
 
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
@@ -66,43 +61,56 @@ class FirstPersonCamera : ICamera {
 
     this() {}
     this(vec3 position) {
-        _position = position;
+        this.position = position;
     }
 
     this(vec3 position, float fov, float near, float far, vec2i viewport) {
-        _position = position;
+        this.position = position;
         _fov = fov;
         _near = near;
         _far = far;
         _viewport = viewport;
     }
 
-    void rotatex(float angle) { _rotation.x = clamp(_rotation.x + angle, cradians!(-85), cradians!(89)); }
-    void rotatey(float angle) { _rotation.y += angle; }
-    void rotatez(float angle) { _rotation.z += angle; }
+    override void rotatex(float angle) { rotation.x = clamp(rotation.x + angle, cradians!(-85), cradians!(89)); }
+    override void rotatey(float angle) { rotation.y += angle; }
+    void rotatez(float angle) { rotation.z += angle; }
 
+
+    vec3 move(vec3 delta) {
+        return position + (mat3.yrotation(rotation.y) * right  ).normalized * delta.x
+                        + (up * delta.y)
+                        + (mat3.yrotation(rotation.y) * forward).normalized * delta.z;
+    }
+
+    override
     void move_up(float delta) {
-        _position += up * delta;
+        position += up * delta;
     }
 
+    override
     void move_down(float delta) {
-        _position -= up * delta;
+        position -= up * delta;
     }
 
+    override
     void move_forward(float delta) {
-        _position -= (mat3.yrotation(rotation.y) * forward).normalized * delta;
+        position -= (mat3.yrotation(rotation.y) * forward).normalized * delta;
     }
 
+    override
     void move_backward(float delta) {
-        _position += (mat3.yrotation(rotation.y) * forward).normalized * delta;
+        position += (mat3.yrotation(rotation.y) * forward).normalized * delta;
     }
 
+    override
     void strafe_left(float delta) {
-        _position -= (mat3.yrotation(rotation.y) * right).normalized * delta;
+        position -= (mat3.yrotation(rotation.y) * right).normalized * delta;
     }
 
+    override
     void strafe_right(float delta) {
-        _position += (mat3.yrotation(rotation.y) * right).normalized * delta;
+        position += (mat3.yrotation(rotation.y) * right).normalized * delta;
     }
 
     @property
@@ -114,22 +122,23 @@ class FirstPersonCamera : ICamera {
         return _perspective;
     }
 
-    @property
+    @property override
     mat4 camera() {
-        vec3 pos = -(_position + offset);
+        vec3 pos = -(position + offset);
         return mat4.identity.translate(pos.x, pos.y, pos.z)
                     .rotatey(-rotation.y)
                     .rotatex(rotation.x);
     }
 
+    override
     void apply(BraLaEngine engine) {
         engine.proj = perspective;
         engine.view = camera;
     }
 }
 
-class FreeCamera : ICamera {
-    vec3 _position = vec3(0.0f, 0.0f, 0.0f);
+class FreeCamera : Camera {
+    vec3 position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
     vec3 direction = vec3(0.0f, 0.0f, 1.0f);
     float fov = 70.0f;
@@ -137,37 +146,31 @@ class FreeCamera : ICamera {
     float far = 400.0f;
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     
-    @property vec3 position() { return _position; }
-    @property void position(vec3 position) { _position = position; }
-    
-    // TODO
-    @property vec3 rotation() { return vec3(0.0f, 0.0f, 0.0f); }
-    @property void rotation(vec3 rotation) {}
-
     this() {}
-    
     this(vec3 position) {
-        _position = position;
+        this.position = position;
     }
     
     this(vec3 position, float fov, float near, float far) {
-        this._position = position;
+        this.position = position;
         this.fov = fov;
         this.near = near;
         this.far = far;
     }
      
     void look_at(vec3 position) {
-        forward = (position - _position).normalized;
+        forward = (position - this.position).normalized;
         direction = vec3(forward.x, 0, forward.z).normalized;
     }
 
+    override
     void rotatex(float angle) { // degrees
         vec3 vcross = cross(up, forward);
         mat4 rotmat = mat4.rotation(-angle, vcross);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
     }
     
+    override
     void rotatey(float angle) { // degrees
         mat4 rotmat = mat4.rotation(-angle, up);
         forward = vec3(rotmat * vec4(forward, 1.0f)).normalized;
@@ -186,37 +189,45 @@ class FreeCamera : ICamera {
         look_at(position + forward);
     }
 
+    override
     void move_up(float delta) {
-        _position += up*delta;
+        position += up*delta;
     }
 
+    override
     void move_down(float delta) {
-        _position -= up*delta;
+        position -= up*delta;
     }
     
+    override
     void move_forward(float delta) { // W
-        _position += direction*delta;
+        position += direction*delta;
     }
     
+    override
     void move_backward(float delta) { // S
-        _position -= direction*delta;
+        position -= direction*delta;
     }
     
+    override
     void strafe_left(float delta) { // A
         vec3 vcross = cross(up, direction).normalized;
-        _position += (vcross*delta);
+        position += (vcross*delta);
     }
     
+    override
     void strafe_right(float delta) { // D
         vec3 vcross = cross(up, direction).normalized;
-        _position -= (vcross*delta);
+        position -= (vcross*delta);
     }
     
-    @property mat4 camera() {
-        vec3 target = _position + forward;
-        return mat4.look_at(_position, target, up);
+    @property override
+    mat4 camera() {
+        vec3 target = position + forward;
+        return mat4.look_at(position, target, up);
     }
     
+    override
     void apply(BraLaEngine engine) {
         engine.proj = mat4.perspective(engine.viewport.x, engine.viewport.y, fov, near, far);
         engine.view = camera;

@@ -14,6 +14,7 @@ private {
     import brala.network.connection : Connection;
     import c = brala.network.packets.client;
     import brala.gfx.camera : FirstPersonCamera;
+    import brala.physics.physics : Physics, CreativePhysics, SurvivalPhysics;
     import brala.entities.mobs : NamedEntity;
 
     import brala.utils.config : Config, ConfigBound;
@@ -30,13 +31,18 @@ class Player : NamedEntity {
 
     @property auto world() { return game.current_world; }
 
+    Physics physics;
     FirstPersonCamera camera;
 
     @property vec3 position() { return camera.position; }
-    @property void position(vec3 position) { camera.position = position; dirty = true; }
+    @property void position(vec3 position) {
+        if(camera.position != position) {
+            camera.position = position;
+            dirty = true;
+        }
+    }
     @property vec3 rotation() { return camera.rotation; }
     @property void rotation(vec3 rotation) { camera.rotation = rotation; dirty = true; }
-
 
     float moving_speed = 4.35f; // creative speed
     ConfigBound!int MOVE_UP;
@@ -58,6 +64,8 @@ class Player : NamedEntity {
         this.engine = game.engine;
         this.window = engine.window;
         this.connection = game.connection;
+
+        this.physics = new CreativePhysics(game.current_world);
 
         this.camera = new FirstPersonCamera();
         this.camera.offset = vec3(0.0f, 1.6f, 0.0f);
@@ -88,17 +96,21 @@ class Player : NamedEntity {
 
         if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); moved = true; }
         if(mouse_offset.y != 0) { camera.rotatex((turning_speed * mouse_offset.y).radians); moved = true; }
-        mouse_offset.x = 0;
-        mouse_offset.y = 0;
-        
-        float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
+        mouse_offset = vec2i(0, 0);
 
-        if(window.is_key_down(MOVE_UP)) { camera.move_up(movement/1.5f); moved = true; }
-        if(window.is_key_down(MOVE_DOWN)) { camera.move_down(movement/1.5f); moved = true; }
-        if(window.is_key_down(MOVE_FORWARD)) { camera.move_forward(movement); moved = true; }
-        if(window.is_key_down(MOVE_BACKWARD)) { camera.move_backward(movement); moved = true; }
-        if(window.is_key_down(STRAFE_LEFT)) { camera.strafe_left(movement); moved = true; }
-        if(window.is_key_down(STRAFE_RIGHT)) { camera.strafe_right(movement); moved = true; }
+        float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
+        vec3 delta = vec3(
+            (window.is_key_down(STRAFE_RIGHT)  * movement) - (window.is_key_down(STRAFE_LEFT)  * movement),
+            (window.is_key_down(MOVE_UP)       * movement) - (window.is_key_down(MOVE_DOWN)    * movement),
+            (window.is_key_down(MOVE_BACKWARD) * movement) - (window.is_key_down(MOVE_FORWARD) * movement)
+        );
+
+        position = physics.move(
+            position,
+            camera.move(delta)
+        );
+
+        physics.apply(camera);
 
         if(moved || dirty) {
             camera.apply(engine);
