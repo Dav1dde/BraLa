@@ -20,6 +20,7 @@ private {
     import brala.dine.chunk : Chunk, Block;
     import brala.network.packets.util : staticJoin, coords_from_j;
     import brala.network.util : read, write;
+    import brala.utils.memory : calloc, free;
     import brala.exception : ServerError;
 }
 
@@ -355,9 +356,10 @@ struct MapChunkType { // TODO: implement send
         ret.chunk.add_bitmask = read!ushort(s);
 
         int len = read!int(s);
-        ubyte[] compressed_data = new ubyte[len];
+        ubyte[] compressed_data = (cast(ubyte*)calloc(len, ubyte.sizeof))[0..len];
+        scope(exit) compressed_data.ptr.free();
         s.readExact(compressed_data.ptr, len);
-        ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data);
+        ubyte[] unc_data = cast(ubyte[])uncompress(compressed_data, len*5);
 
         ret.chunk.fill_chunk_with_nothing();
 
