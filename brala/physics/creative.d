@@ -16,7 +16,7 @@ class CreativePhysics : Physics {
 
     override
     vec3 move(vec3 from, vec3 to) {
-        return is_valid_position(to) ? to : from;
+        return super.move(from, to);
     }
 
     override
