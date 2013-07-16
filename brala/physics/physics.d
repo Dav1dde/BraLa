@@ -93,11 +93,6 @@ abstract class Physics {
             vec3(-PLAYER_WIDTH_HALF, PLAYER_HEIGHT,  PLAYER_WIDTH_HALF),
             vec3(-PLAYER_WIDTH_HALF, PLAYER_HEIGHT, -PLAYER_WIDTH_HALF)
         ];
-        // "caches", if we had this block already, we don't need it again
-        // TODO verify this makes sense
-        vec3i[12] xblocks;
-        vec3i[12] yblocks;
-        vec3i[12] zblocks;
 
         foreach(i, dc; corners) {
             vec3 dxc = dx + dc;
@@ -116,7 +111,7 @@ abstract class Physics {
             // by extending its boundingbox in every direction
             Block b = AIR_BLOCK;
 
-            if(!xblocks[].canFind(fdxc) && (bdxc = world.get_block_safe(fdxc)) != 0) {
+            if(world.get_block_safe(fdxc) != 0) {
                 // 0.00001f*dx.x.sign is needed because the math is too accurate ;).
                 // Without it this value the boundingbox edge would be exactly on the edge of
                 // this block and the adjacent block, which means on next movement, the
@@ -126,17 +121,13 @@ abstract class Physics {
                 dx.x = absmin(dx.x, (fdxc.x + step(0, -dx.x)) - (from.x + dc.x) - 0.00001f*dx.x.sign);
             }
 
-            if(!yblocks[].canFind(fdyc) && (bdyc = world.get_block_safe(fdyc)) != 0) {
+            if(world.get_block_safe(fdyc) != 0) {
                 dy.y = absmin(dy.y, (fdyc.y + step(0, -dy.y)) - (from.y + dc.y) - 0.00001f*dy.y.sign);
             }
 
-            if(!zblocks[].canFind(fdzc) && (bdzc = world.get_block_safe(fdzc)) != 0) {
+            if(world.get_block_safe(fdzc) != 0) {
                 dz.z = absmin(dz.z, (fdzc.z + step(0, -dz.z)) - (from.z + dc.z) - 0.00001f*dz.z.sign);
             }
-
-            xblocks[i] = fdxc;
-            yblocks[i] = fdyc;
-            zblocks[i] = fdzc;
         }
 
         return from + dx + dy + dz;
