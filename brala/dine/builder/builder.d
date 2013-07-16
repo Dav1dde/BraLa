@@ -316,7 +316,7 @@ mixin template BlockBuilder() {
         add_template_vertices(fb, block, x_offset, y_offset, z_offset);
     }
 
-    void furnace(Side s, string tex = `atlas.get!("furnace_front_on")`)(const Block block, const ref BiomeData biome_data,
+    void furnace(Side s, string tex = `atlas.get!("furnace_front_off")`)(const Block block, const ref BiomeData biome_data,
                                                                  float x_offset, float y_offset, float z_offset) {
         enum fs = [Facing.WEST, Facing.EAST, Facing.NORTH, Facing.SOUTH];
 
