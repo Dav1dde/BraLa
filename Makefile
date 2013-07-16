@@ -1,19 +1,19 @@
-export PROJECT_NAME     = BraLa
-export AUTHOR           = David Herberth
-export DESCRIPTION      = A Minecraft SMP Client written in D
-export VERSION          =
-export LICENSE          = GPLv3
+export PROJECT_NAME	= BraLa
+export AUTHOR		= David Herberth
+export DESCRIPTION	= A Minecraft SMP Client written in D
+export VERSION		=
+export LICENSE		= GPLv3
 
-DCFLAGS_IMPORT      = -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ \
-			-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/
+DCFLAGS_IMPORT		= -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ \
+				-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/
 
 include command.make
 
-DCFLAGS_LINK = 	$(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
-		$(LINKERFLAG)-Lbuild/glfw/src \
-		$(addprefix -L,$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
+DCFLAGS_LINK	= $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
+			$(LINKERFLAG)-Lbuild/glfw/src \
+			$(addprefix -L,$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
 
-VERSIONS = Derelict3 gl3n glamour stb BraLa
+VERSIONS	= Derelict3 gl3n glamour stb BraLa
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = $(addprefix -d-version=,$(VERSIONS)) -d-debug -unittest -g -gc
@@ -24,20 +24,9 @@ else
 endif
 
 
-ifeq ($(OS),"Linux")
-	ifeq ($(MODEL),32)
-		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux32/" $(LINKERFLAG)-Llib/linux32/
-	else
-		DCFLAGS_LINK      += $(LINKERFLAG)"-rpath=\$$ORIGIN/../lib/linux64/" $(LINKERFLAG)-Llib/linux64/
-	endif
-else ifeq ($(OS),"Darwin")
-	DCFLAGS_LINK      += $(LINKERFLAG)-Llib/osx/
-endif
+DERELICT_DIR	= src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
 
-
-DERELICT_DIR = src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
-
-OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
+OBJDIRS		= $(DBUILD_PATH)$(PATH_SEP)brala \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)arsd \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)derelict3 \
 			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)gl3n \
@@ -51,26 +40,25 @@ OBJDIRS		     = $(DBUILD_PATH)$(PATH_SEP)brala \
 			lib$(PATH_SEP)linux32 \
 			lib$(PATH_SEP)linux64 \
 
-DSOURCES             = $(call getSource,brala,d)
-DOBJECTS             = $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
+DSOURCES	= $(call getSource,brala,d)
+DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
 
-DSOURCES_GL3N	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
-DOBJECTS_GL3N	     = $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT),   $(DSOURCES_GL3N))
+DSOURCES_GL3N	= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
+DOBJECTS_GL3N	= $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT),   $(DSOURCES_GL3N))
 
-DSOURCES_DERELICT    =  \
-		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)opengl3,d) \
-		       $(call getSource,$(DERELICT_DIR)$(PATH_SEP)util,d)
-DOBJECTS_DERELICT    = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_DERELICT))
+DSOURCES_DERELICT	=  $(call getSource,$(DERELICT_DIR)$(PATH_SEP)opengl3,d) \
+				$(call getSource,$(DERELICT_DIR)$(PATH_SEP)util,d)
+DOBJECTS_DERELICT	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_DERELICT))
 
-DSOURCES_GLAMOUR     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
-DOBJECTS_GLAMOUR     = $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
+DSOURCES_GLAMOUR	= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
+DOBJECTS_GLAMOUR	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
 
-DSOURCES_OTHER	     = $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)etc,d) \
-			src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
-DOBJECTS_OTHER       = $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
+DSOURCES_OTHER		= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)etc,d) \
+				src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
+DOBJECTS_OTHER		= $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
 
-CSOURCES             = src$(PATH_SEP)c$(PATH_SEP)stb_image.c src$(PATH_SEP)c$(PATH_SEP)stb_image_write.c
-COBJECTS             = $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
+CSOURCES	= src$(PATH_SEP)c$(PATH_SEP)stb_image.c src$(PATH_SEP)c$(PATH_SEP)stb_image_write.c
+COBJECTS	= $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
 
 DC_UPPER	= `echo $(DC) | tr a-z A-Z`
 CC_UPPER	= `echo $(CC) | tr a-z A-Z`
