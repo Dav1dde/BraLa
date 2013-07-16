@@ -457,7 +457,6 @@ final class World {
         // NOTE queue opApply changed, eventual fix required
         if(!output.empty) foreach(tess_out; output/+.get_all(output_buffer, true)+/) with(tess_out) {
             scope(exit) {
-                chunk.tessellated = true;
                 buffer.available = true;
             }
 
@@ -481,6 +480,8 @@ final class World {
             assert(chunk.vbo !is null, "chunk vbo is null");
             assert(engine.current_shader !is null, "current shader is null");
             Vertex.bind(engine.current_shader, chunk.vbo);
+
+            chunk.tessellated = true;
         }
 
         version(NoThreads) {
@@ -548,7 +549,7 @@ final class TessellationThread : VerboseThread {
         ChunkData chunk_data;
         try {
             // continue loop every 500ms to check if we should continue or exit
-            chunk_data = input.get(true, dur!"msecs"(300));
+            chunk_data = input.get(true, dur!"msecs"(500));
         } catch(Empty) {
             return;
         }

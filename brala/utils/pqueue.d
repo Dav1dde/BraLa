@@ -7,9 +7,10 @@ private {
 
     import std.datetime : Clock;
     import std.exception : enforceEx;
-
-    import brala.utils.exception : QueueException, Full, Empty;
 }
+
+public import brala.utils.exception : QueueException, Full, Empty;
+
 
 private enum DUR_0 = Duration.init;
 
