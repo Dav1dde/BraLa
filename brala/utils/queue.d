@@ -100,6 +100,10 @@ class Queue(type) {
         mutex.lock();
         scope(exit) mutex.unlock();
 
+        task_done_no_lock();
+    }
+
+    protected void task_done_no_lock() {
         size_t u = unfinished_taks - 1;
         if(u < 0) {
             throw new QueueException("task_done called too many times");
@@ -145,7 +149,7 @@ class Queue(type) {
 
         while(queue.length > 0) {
             type item = get_no_lock(false);
-            scope(exit) task_done();
+            scope(exit) task_done_no_lock();
 
             result = dg(item);
             if(result) break;
