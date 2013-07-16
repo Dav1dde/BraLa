@@ -25,9 +25,9 @@ private {
     import brala.engine : BraLaEngine;
     import brala.utils.aa : ThreadAA;
     import brala.utils.gloom : Gloom;
-    import brala.utils.pqueue : PseudoQueue, Empty;
-    alias Queue = PseudoQueue;
-//     import brala.utils.queue : Queue, Empty;
+//     import brala.utils.pqueue : PseudoQueue, Empty;
+//     alias Queue = PseudoQueue;
+    import brala.utils.queue : Queue, Empty;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
@@ -147,7 +147,7 @@ final class World {
         threads = threads ? threads : 1;
 
         input = new Queue!ChunkData();
-        output = new Queue!TessOut(threads);
+        output = new Queue!TessOut();
 
         version(NoThreads) {
             threads = 1;
@@ -235,7 +235,7 @@ final class World {
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
         logger.log!Info("Marking all buffers as available");
-        foreach(tess_out; output.get_all(output_buffer, true)) {
+        foreach(tess_out; output/+.get_all(output_buffer, true)+/) {
             tess_out.buffer.available = true;
         }
 
@@ -455,7 +455,7 @@ final class World {
 
     void postprocess_chunks() {
         // NOTE queue opApply changed, eventual fix required
-        if(!output.empty) foreach(tess_out; output.get_all(output_buffer, true)) with(tess_out) {
+        if(!output.empty) foreach(tess_out; output/+.get_all(output_buffer, true)+/) with(tess_out) {
             scope(exit) {
                 chunk.tessellated = true;
                 buffer.available = true;

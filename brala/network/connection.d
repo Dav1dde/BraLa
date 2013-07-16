@@ -217,7 +217,7 @@ class ThreadedConnection : Connection {
         // NOTE: we are not calling task_done,
         // so joining on the queue is a bad idea.
         // This is like that in several places... e.g. world
-        foreach(packet; queue.get_all()) {
+        foreach(packet; queue/+.get_all()+/) {
             packet.send(endianstream);
         }
         endianstream.flush();
