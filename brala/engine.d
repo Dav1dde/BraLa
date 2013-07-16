@@ -112,8 +112,6 @@ final class BraLaEngine {
             now = timer.get_time();
             TickDuration delta_ticks = (now - last);
 
-            on_frame.emit(delta_ticks);
-        
             debug {
                 TickDuration t = timer.get_time();
                 if((t-lastfps).to!("seconds", float) > 0.5) {
@@ -121,8 +119,9 @@ final class BraLaEngine {
                     lastfps = t;
                 }
             }
-            
+
             last = now;
+            on_frame.emit(delta_ticks);
 
             window.swap_buffers();
             glfwPollEvents();
