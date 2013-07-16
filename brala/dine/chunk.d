@@ -32,6 +32,11 @@ struct Block {
         this.id = id;
         this.metadata = metadata;
     }
+
+    @property
+    string name() {
+        return BLOCKS[id].name.capitalize;
+    }
                      
     bool opEquals(const ref Block other) const {
         return other.id == id && other.metadata == metadata;
