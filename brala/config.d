@@ -177,7 +177,7 @@ Config initialize_config() {
     config.set_default("brala.no_snoop", false);
     config.set_if("brala.no_snoop", app_arguments.no_snoop);
 
-    config.set_default("brala.tessellation_threads", 3);
+    config.set_default("brala.tessellation_threads", 1);
     config.set_if("brala.tessellation_threads", app_arguments.tessellation_threads);
 
     config.set_if("game.texture.pack", app_arguments.texture_pack);
