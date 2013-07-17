@@ -188,44 +188,36 @@ struct Packet {
     void* ptr;
 }
 
+// NOTE writing to this connection from multiple threads
+// is not supported, max. 1 writer!
 class ThreadedConnection : Connection {
     protected Thread _thread = null;
     @property Thread thread() { return _thread; }    
-    protected Queue!IPacket queue;
 
     public Queue!Packet out_queue;
     
     this(Session session) {
         super(session);
 
-        queue = new Queue!IPacket();
         out_queue = new Queue!Packet();
         callback = &add_to_queue;
     }
 
-    protected void add_to_queue(ubyte id, void* packet) {
+    protected
+    void add_to_queue(ubyte id, void* packet) {
         out_queue.put(Packet(id, packet));
     }
 
-    override void send(IPacket[] packets...) {
+    override
+    void send(IPacket[] packets...) {
         foreach(packet; packets) {
-            queue.put(packet);
-        }
-    }
-
-    override void poll() {
-        // NOTE: we are not calling task_done,
-        // so joining on the queue is a bad idea.
-        // This is like that in several places... e.g. world
-        foreach(packet; queue/+.get_all()+/) {
             packet.send(endianstream);
         }
         endianstream.flush();
-
-        super.poll();
     }
-    
-    override void run() {
+
+    override
+    void run() {
         if(_thread is null) {
             _thread = new VerboseThread(&super.run);
             _thread.name = "BraLa Connection Thread";
