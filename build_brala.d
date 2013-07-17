@@ -545,7 +545,8 @@ int main(string[] args) {
                        buildPath("src", "d", "openssl"),
                        buildPath("src", "d", "glfw"),
                        buildPath("src", "d", "nbd"),
-                       buildPath("src", "d", "glwtf")];
+                       buildPath("src", "d", "glwtf"),
+                       buildPath("src", "d", "minilib")];
 
     auto builder = new Builder(cache, dc, dc, cc);
 
@@ -567,6 +568,7 @@ int main(string[] args) {
     builder.add_scan_path(buildPath("src", "d", "gl3n", "gl3n"));
     builder.add_scan_path(buildPath("src", "d", "glamour", "glamour"));
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
+    builder.add_scan_path(buildPath("src", "d", "minilib"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
     builder.add_scan_path(buildPath("src", "d", "etc"));
