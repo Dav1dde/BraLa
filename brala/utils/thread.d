@@ -56,17 +56,17 @@ class TTimer(T...) : VerboseThread {
         alias T Args;
     }
 
-    Duration interval;
-    Args args;
-    void delegate(Args) func;
+    protected Duration interval;
+    protected Args args;
+    protected void delegate(Args) func;
 
-    protected Event _finished;
-    @property bool is_finished() { return _finished.is_set; }
+    protected Event finished;
+    @property bool is_finished() { return finished.is_set; }
     
     this(Duration interval, void delegate(Args) func, Args args) {
         super(&run);
 
-        _finished = new Event();
+        finished = new Event();
         
         this.interval = interval;
         this.func = func;
@@ -76,18 +76,20 @@ class TTimer(T...) : VerboseThread {
         }
     }
 
+    final
     void cancel() {
-        _finished.set();
+        finished.set();
     }
     
-    private void run() {
-        _finished.wait(interval);
+    protected
+    void run() {
+        finished.wait(interval);
 
-        if(!_finished.is_set) {
+        if(!finished.is_set) {
             func(args);
         }
 
-        _finished.set();
+        finished.set();
     }
                 
 }
@@ -96,48 +98,47 @@ alias TTimer!() Timer;
 
 
 class Event {
-    protected Mutex _mutex;
-    protected Condition _cond;
+    protected Mutex mutex;
+    protected Condition cond;
 
-    protected bool _flag;
-    @property bool is_set() { return _flag; }
+    protected bool flag;
+    @property bool is_set() { return flag; }
     
     this() {
-        _mutex = new Mutex();
-        _cond = new Condition(_mutex);
+        mutex = new Mutex();
+        cond = new Condition(mutex);
 
-        _flag = false;
+        flag = false;
     }
 
     void set() {
-        _mutex.lock();
-        scope(exit) _mutex.unlock();
+        mutex.lock();
+        scope(exit) mutex.unlock();
 
-        _flag = true;
-        _cond.notifyAll();
+        flag = true;
+        cond.notifyAll();
     }
     
     void clear() {
-        _mutex.lock();
-        scope(exit) _mutex.unlock();
+        mutex.lock();
+        scope(exit) mutex.unlock();
 
-        _flag = false;
+        flag = false;
     }
 
     bool wait(T...)(T timeout) if(T.length == 0 || (T.length == 1 && is(T[0] : Duration))) {
-        _mutex.lock();
-        scope(exit) _mutex.unlock();
+        mutex.lock();
+        scope(exit) mutex.unlock();
 
-        bool notified = _flag;
+        bool notified = flag;
         if(!notified) {
             static if(T.length == 0) {
-                _cond.wait();
+                cond.wait();
                 notified = true;
             } else {
-                notified = _cond.wait(timeout);
+                notified = cond.wait(timeout);
             }
         }
         return notified;
     }
 }
-    
