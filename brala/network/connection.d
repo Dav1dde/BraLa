@@ -25,14 +25,16 @@ private {
     import brala.network.session : Session;
     import brala.network.stream : AESStream, LoggingStream;
     import brala.network.util : read, write;
-    import brala.network.packets.types : IPacket, Array;
+    import brala.network.packets.types : Array;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.minecraft.crypto : decode_public, encrypt, seed_prng, get_random, get_random_max;
-    import brala.utils.queue : Queue;
+    import brala.utils.ringbuffer : RingBuffer;
     import brala.utils.openssl.encrypt : AES128CFB8;
     import brala.utils.thread : Thread, VerboseThread, Timer;
 }
+
+public import brala.network.packets.types : IPacket;
 
 
 class Connection {
@@ -189,23 +191,25 @@ struct Packet {
 }
 
 // NOTE writing to this connection from multiple threads
-// is not supported, max. 1 writer!
+// is not supported, max. 1 reader, 1 writer!
 class ThreadedConnection : Connection {
     protected Thread _thread = null;
     @property Thread thread() { return _thread; }    
 
-    public Queue!Packet out_queue;
+    public RingBuffer!Packet outbuf;
     
     this(Session session) {
         super(session);
 
-        out_queue = new Queue!Packet();
+        outbuf = new RingBuffer!Packet(512);
         callback = &add_to_queue;
     }
 
     protected
     void add_to_queue(ubyte id, void* packet) {
-        out_queue.put(Packet(id, packet));
+        logger.log_if!Warn(outbuf.write_count == 0,
+                "RingBuffer for packets full! Deadlock incoming!?");
+        outbuf.write_one(Packet(id, packet));
     }
 
     override

@@ -110,8 +110,14 @@ mixin template Packet(ubyte id_, Vars...) {
                 this(`~cdecl~`) {
                     `~ctor_body~`
                 }
+
+                override
+                ubyte get_id() {
+                    return cast(ubyte)` ~ to!string(id_) ~ `;
+                }
                        
-                override void send(Stream s) {
+                override
+                void send(Stream s) {
                     write(s, id, `~snames~`);
                 }
                        
@@ -119,7 +125,8 @@ mixin template Packet(ubyte id_, Vars...) {
                     return new typeof(this)(`~newargs~`);
                 }
                 
-                override string toString() {
+                override
+                string toString() {
                     return .stringof[7..$] ~ "." ~ typeof(this).stringof ~ "("~`~tostring~`~")";
                 }`);
     }

@@ -20,7 +20,6 @@ private {
     import brala.utils.log;
     import brala.network.session : Session;
     import brala.network.connection : Packet, Connection, ThreadedConnection;
-    import brala.network.packets.types : IPacket;
     import s = brala.network.packets.server;
     import c = brala.network.packets.client;
     import brala.dine.world : World;
@@ -118,8 +117,8 @@ final class BraLaGame {
         logger.log_if!Error_(current_world !is null && !current_world.is_ok,
                              "Tessellation thread died!").ifTrue(&engine.stop);
 
-        foreach(packet; connection.out_queue/+.get_all()+/) {
-            dispatch_packets(packet);
+        foreach(packet; connection.outbuf.read_all()) {
+            dispatch_packets(packet.id, packet.ptr);
         }
 
         if(player !is null) {
@@ -161,12 +160,9 @@ final class BraLaGame {
     }
     
     // network events
-    void dispatch_packets(Packet packet) {
-        dispatch_packets(packet.id, packet.ptr);
-    }
-
     void dispatch_packets(ubyte id, void* packet)
-        in { assert(thread_isMainThread(), "dispatch packets not called from the main thread!"); }
+        in { assert(thread_isMainThread(), "dispatch packets not called from the main thread!");
+             assert(packet !is null, "packet is null"); }
         body {
             final switch(id) {
                 foreach(p; s.get_packets!()) {

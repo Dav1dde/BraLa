@@ -26,7 +26,7 @@ private {
 
 
 abstract class IPacket {
-    const ubyte id;
+    abstract ubyte get_id();
     void send(Stream s);
     static typeof(this) recv(Stream s);
 }
