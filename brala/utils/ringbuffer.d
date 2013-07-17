@@ -6,6 +6,7 @@ private {
     import std.exception : enforceEx;
     import core.thread : Thread;
     import core.time : msecs;
+    import core.memory : GC;
 
     import brala.utils.memory : calloc, free;
 }
@@ -19,12 +20,26 @@ class RingBuffer(T) {
     alias Type = T;
     protected void* buffer;
     protected mrb.RingBuffer ringbuffer;
+    protected immutable bool gc_memory;
 
 
-    this(size_t elements) {
+    this(size_t elements, bool use_gc=true) {
         enforceEx!RingBufferException(elements.is_power_of_two, "elements is not a power of two");
+
+        gc_memory = use_gc;
         buffer = calloc(elements, Type.sizeof);
-        scope(failure) buffer.free();
+        if(use_gc) {
+            GC.addRange(buffer, elements*Type.sizeof);
+        }
+
+        scope(failure) {
+            if(use_gc) {
+                GC.removeRange(buffer);
+            }
+
+            buffer.free();
+        }
+
         ringbuffer = mrb.RingBuffer(Type.sizeof, elements, buffer);
     }
 
@@ -93,6 +108,10 @@ class RingBuffer(T) {
     }
 
     ~this() {
+        if(gc_memory) {
+            GC.removeRange(buffer);
+        }
+
         buffer.free();
     }
 }

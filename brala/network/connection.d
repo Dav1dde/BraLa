@@ -201,7 +201,7 @@ class ThreadedConnection : Connection {
     this(Session session) {
         super(session);
 
-        outbuf = new RingBuffer!Packet(512);
+        outbuf = new RingBuffer!Packet(512, true);
         callback = &add_to_queue;
     }
 
