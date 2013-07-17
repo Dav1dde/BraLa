@@ -68,7 +68,7 @@ class Player : NamedEntity {
         this.physics = new CreativePhysics(game.current_world);
 
         this.camera = new FirstPersonCamera();
-        this.camera.offset = vec3(0.0f, 1.6f, 0.0f);
+        this.camera.offset = vec3(0.0f, 1.55f, 0.0f);
         this.camera.viewport = engine.viewport;
 
         engine.on_resize.connect({ camera.viewport = engine.viewport; });
