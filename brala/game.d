@@ -55,12 +55,9 @@ final class BraLaGame {
 
     Signal!() on_notchian_tick;
 
-    size_t tessellation_threads = 3;
-    
     this(BraLaEngine engine, Session session, MinecraftAtlas atlas) {
         this.engine = engine;
         this.config = engine.config;
-        this.tessellation_threads = config.get!int("brala.tessellation_threads");
         this.session = session;
         this.atlas = atlas;
         this.connection = new ThreadedConnection(session);
@@ -180,7 +177,7 @@ final class BraLaGame {
         logger.log!Info("%s", packet);
 
         if(_current_world !is null) _current_world.shutdown();
-        _current_world = new World(engine, atlas, tessellation_threads);
+        _current_world = new World(engine, atlas);
         
         player = new Player(this, packet.entity_id);
     }

@@ -53,7 +53,6 @@ struct AppArguments {
     string res = "./res";
 
     bool no_snoop = false;
-    size_t tessellation_threads = 0;
 
     string texture_pack;
 
@@ -92,10 +91,6 @@ struct AppArguments {
             "\t\tpath to the resources folder, named \"res\"",
 
             "\tdisables \"snooping\" (= sending completly anonym information to mojang)",
-
-            "specifies the number of threads used to tessellate the terrain, defaults to 3.\n" ~
-            "\t\t\t\tMore threads: more used memory (each thread needs his own tessellation-buffer),\n" ~
-            "\t\t\t\tmore CPU usage, but faster terrain tessellation",
 
             "\tPath to texture pack, if none specified defaults to config or tries to find minecraft.jar",
 
@@ -176,9 +171,6 @@ Config initialize_config() {
 
     config.set_default("brala.no_snoop", false);
     config.set_if("brala.no_snoop", app_arguments.no_snoop);
-
-    config.set_default("brala.tessellation_threads", 1);
-    config.set_if("brala.tessellation_threads", app_arguments.tessellation_threads);
 
     config.set_if("game.texture.pack", app_arguments.texture_pack);
 

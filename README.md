@@ -163,9 +163,6 @@ BraLa supports a few commandline options:
     --port                  the port of the minecraft server, defaults to 25565
     --res                   path to the resources folder, named "res"
     --no-snoop              disables "snooping" (= sending completly anonym information to mojang)
-    --tessellation-threads  specifies the number of threads used to tessellate the terrain, defaults to 3.
-                            More threads: more used memory (each thread needs his own tessellation-buffer),
-                            more CPU usage, but faster terrain tessellation
     --texture-pack          Path to texture pack, if none specified defaults to config or tries to find minecraft.jar
     --help
 ```

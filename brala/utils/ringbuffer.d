@@ -19,8 +19,8 @@ public import brala.utils.exception : RingBufferException;
 class RingBuffer(T) {
     alias Type = T;
     protected void* buffer;
-    protected mrb.RingBuffer ringbuffer;
     protected immutable bool gc_memory;
+    mrb.RingBuffer ringbuffer;
 
 
     this(size_t elements, bool use_gc=true) {

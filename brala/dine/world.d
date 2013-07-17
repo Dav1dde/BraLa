@@ -10,7 +10,7 @@ private {
     import gl3n.aabb : AABB;
 
     import std.typecons : Tuple;
-    import core.time : TickDuration, dur;
+    import core.time : msecs;
 
     import brala.log : logger = world_logger;
     import brala.utils.log;
@@ -23,11 +23,8 @@ private {
     import brala.exception : WorldError;
     import brala.resmgr : ResourceManager;
     import brala.engine : BraLaEngine;
-    import brala.utils.aa : ThreadAA;
     import brala.utils.gloom : Gloom;
-//     import brala.utils.pqueue : PseudoQueue, Empty;
-//     alias Queue = PseudoQueue;
-    import brala.utils.queue : Queue, Empty;
+    import brala.utils.ringbuffer : RingBuffer;
     import brala.utils.thread : Thread, VerboseThread, Event, thread_isMainThread;
     import brala.utils.memory : MemoryCounter, malloc, realloc, free;
 }
@@ -130,10 +127,10 @@ final class World {
     MinecraftAtlas atlas;
 
     // NOTE: don't join on these queues!
-    protected Queue!ChunkData input;
-    protected TessellationThread[] tessellation_threads;
+    protected RingBuffer!ChunkData input;
+    protected TessellationThread tessellation_thread;
     
-    this(BraLaEngine engine, MinecraftAtlas atlas, size_t threads) {
+    this(BraLaEngine engine, MinecraftAtlas atlas) {
         this.engine = engine;
         this.atlas = atlas;
         biome_set.update_colors(engine.resmgr);
@@ -142,36 +139,27 @@ final class World {
 
         engine.on_shutdown.connect(&shutdown);
 
-        threads = threads ? threads : 1;
+        // Renderdistance 10 has a maximum of 441 chunks
+        // Renderdistance 15 has a maximum of 961 chunks
+        // Better safe than sorry!
+        // Also add this memory to the GC range, TessOut
+        // contains a GC allocated class (Chunk).
+        // TODO check if GC is needed!
+        input = new RingBuffer!ChunkData(1024, true);
 
-        input = new Queue!ChunkData();
-
-        version(NoThreads) {
-            threads = 1;
-        }
-        
-        foreach(i; 0..threads) {
-            auto t = new TessellationThread(this, input);
-            t.name = "BraLa Tessellation Thread %s/%s".format(i+1, threads);
-            version(NoThreads) {} else { t.start(); }
-            tessellation_threads ~= t;
-        }
+        tessellation_thread = new TessellationThread(this, input);
+        tessellation_thread.name = "BraLa Tessellation Thread";
+        tessellation_thread.start();
     }
     
-    this(BraLaEngine engine, MinecraftAtlas atlas, vec3i spawn, size_t threads) {
-        this(engine, atlas, threads);
+    this(BraLaEngine engine, MinecraftAtlas atlas, vec3i spawn) {
+        this(engine, atlas);
         this.spawn = spawn;
     }
 
     @property
     bool is_ok() {
-        foreach(thread; tessellation_threads) {
-            if(!thread.isRunning) {
-                return false;
-            }
-        }
-
-        return true;
+        return tessellation_thread.isRunning;
     }
    
     // when a chunk is passed to this method, the world will take care of it's memory
@@ -220,33 +208,27 @@ final class World {
     }
 
     void shutdown() {
-        logger.log!Info("disconnecting world from shutdown event");
+        logger.log!Info("Disconnecting world from shutdown event");
         engine.on_shutdown.disconnect(&shutdown);
 
-        logger.log!Info("Sending stop to all tessellation threads");
-        foreach(t; tessellation_threads) {
-            t.stop();
-        }
+        logger.log!Info("Sending stop to tessellation thread");
+        tessellation_thread.stop();
 
         // threads wait on the buffer until it gets available,
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
-        logger.log!Info("Marking all buffers as available");
-        foreach(thread; tessellation_threads)
-        if(auto tess_out = thread.get()) {
+        logger.log!Info("Marking buffer as available");
+        if(auto tess_out = tessellation_thread.get()) {
             tess_out.buffer.available = true;
         }
 
-        foreach(ref t; tessellation_threads) {
-            if(t.isRunning) {
-                logger.log!Info(`Waiting on thread: "%s"`, t.name);
-                t.join(false);
-            } else {
-                logger.log!Info(`Thread "%s" already terminated`, t.name);
-            }
-
-            t.free();
+        if(tessellation_thread.isRunning) {
+            logger.log!Info(`Waiting on thread: "%s"`, tessellation_thread.name);
+            tessellation_thread.join(false);
+        } else {
+            logger.log!Info(`Thread "%s" already terminated`, tessellation_thread.name);
         }
+        tessellation_thread.free();
 
         logger.log!Info("Removing all chunks (%s)", chunks.length);
         remove_all_chunks();
@@ -452,15 +434,14 @@ final class World {
     }
 
     void postprocess_chunks() {
-        foreach(thread; tessellation_threads)
-        if(auto tess_out = thread.get()) with(*tess_out) {
+        if(auto tess_out = tessellation_thread.get()) with(*tess_out) {
             scope(exit) {
                 buffer.available = true;
             }
 
             if(chunk.empty) {
                 logger.log!Debug("Chunk is empty, skipping!");
-                continue;
+                return;
             }
 
             if(chunk.vbo is null) {
@@ -482,10 +463,9 @@ final class World {
             chunk.tessellated = true;
         }
 
-        version(NoThreads) {
-            if(!input.empty) {
-                tessellation_threads[0].poll();
-            }
+        version(NoThreads)
+        if(input.read_count != 0) {
+            tessellation_thread.poll();
         }
     }
 
@@ -493,7 +473,7 @@ final class World {
         if(!chunk.empty && chunk.dirty && chunk.tessellated) {
             chunk.dirty = false;
             chunk.tessellated = false;
-            input.put(ChunkData(chunk, chunkc), false);
+            input.write_one(ChunkData(chunk, chunkc));
         }
     }
 }
@@ -502,27 +482,27 @@ final class World {
 final class TessellationThread : VerboseThread {
     protected TessellationBuffer buffer;
     protected World world;
-    protected Queue!ChunkData input;
+    protected RingBuffer!ChunkData input;
     protected TessOut output;
-    protected bool ready;
+    protected bool ready = false;
+    protected bool _stop = false;
 
-    protected Event stop_event;
-
-    this(World world, Queue!ChunkData input) {
+    this(World world, RingBuffer!ChunkData input) {
         super(&run);
 
         this.world = world;
         this.buffer = TessellationBuffer(world.default_tessellation_buffer_size,
                                          world.default_light_buffer_size);
         this.input = input;
-
-        this.stop_event = new Event();
     }
     
     void free() {
-        logger.log!Info("Freeing tessellation buffer: " ~ this.name);
-        if(!stop_event.is_set) {
-            logger.log!Warn("Free called, but thread not stopped!");
+        logger.log!Info(`Freeing tessellation buffer: "%s"`, this.name);
+        if(!_stop) {
+            // this is an error, because we free data at the end!
+            // Logically this should never happen, but if it happens
+            // let's hope it's not critical.
+            logger.log!Error_("Free called, but thread not stopped!");
             stop();
         }
 
@@ -530,28 +510,33 @@ final class TessellationThread : VerboseThread {
     }
 
     void run() {
-        while(!stop_event.is_set) {
+        while(!_stop) {
             poll();
         }
     }
 
     void stop() {
         logger.log!Info(`Setting stop for: "%s"`, this.name);
-        stop_event.set();
+        _stop = true;
+    }
+
+    @property
+    bool stopped() {
+        return _stop;
     }
             
     void poll() {
         // waits only if the buffer is not available
         buffer.wait_available();
+        if(_stop) return;
 
         ChunkData chunk_data;
-        try {
-            // continue loop every 500ms to check if we should continue or exit
-            chunk_data = input.get(true, dur!"msecs"(500));
-        } catch(Empty) {
+        if(input.ringbuffer.read(&chunk_data, 1) == 0) {
+            // we don't want the thread to be running all the time
+            // take a break if there is nothing to do!
+            Thread.sleep(350.msecs);
             return;
         }
-        scope(exit) input.task_done();
 
         with(chunk_data) {
             if(chunk.empty) {
