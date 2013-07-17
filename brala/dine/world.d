@@ -131,8 +131,6 @@ final class World {
 
     // NOTE: don't join on these queues!
     protected Queue!ChunkData input;
-    protected Queue!TessOut output;
-    protected TessOut[] output_buffer;
     protected TessellationThread[] tessellation_threads;
     
     this(BraLaEngine engine, MinecraftAtlas atlas, size_t threads) {
@@ -147,14 +145,13 @@ final class World {
         threads = threads ? threads : 1;
 
         input = new Queue!ChunkData();
-        output = new Queue!TessOut();
 
         version(NoThreads) {
             threads = 1;
         }
         
         foreach(i; 0..threads) {
-            auto t = new TessellationThread(this, input, output);
+            auto t = new TessellationThread(this, input);
             t.name = "BraLa Tessellation Thread %s/%s".format(i+1, threads);
             version(NoThreads) {} else { t.start(); }
             tessellation_threads ~= t;
@@ -235,7 +232,8 @@ final class World {
         // so tell them the buffer is free, so they actually reach
         // the stop code, otherwise we'll wait for ever!        
         logger.log!Info("Marking all buffers as available");
-        foreach(tess_out; output/+.get_all(output_buffer, true)+/) {
+        foreach(thread; tessellation_threads)
+        if(auto tess_out = thread.get()) {
             tess_out.buffer.available = true;
         }
 
@@ -454,8 +452,8 @@ final class World {
     }
 
     void postprocess_chunks() {
-        // NOTE queue opApply changed, eventual fix required
-        if(!output.empty) foreach(tess_out; output/+.get_all(output_buffer, true)+/) with(tess_out) {
+        foreach(thread; tessellation_threads)
+        if(auto tess_out = thread.get()) with(*tess_out) {
             scope(exit) {
                 buffer.available = true;
             }
@@ -505,18 +503,18 @@ final class TessellationThread : VerboseThread {
     protected TessellationBuffer buffer;
     protected World world;
     protected Queue!ChunkData input;
-    protected Queue!TessOut output;
+    protected TessOut output;
+    protected bool ready;
 
     protected Event stop_event;
 
-    this(World world, Queue!ChunkData input, Queue!TessOut output) {
+    this(World world, Queue!ChunkData input) {
         super(&run);
 
         this.world = world;
         this.buffer = TessellationBuffer(world.default_tessellation_buffer_size,
                                          world.default_light_buffer_size);
         this.input = input;
-        this.output = output;
 
         this.stop_event = new Event();
     }
@@ -568,7 +566,16 @@ final class TessellationThread : VerboseThread {
 
             size_t elements = world.tessellate(chunk, position, &buffer);
 
-            output.put(TessOut(chunk, &buffer, elements));
+            output = TessOut(chunk, &buffer, elements);
+            ready = true;
         }       
+    }
+
+    TessOut* get() {
+        if(ready) {
+            ready = false;
+            return &output;
+        }
+        return null;
     }
 }
