@@ -435,9 +435,7 @@ final class World {
 
     void postprocess_chunks() {
         if(auto tess_out = tessellation_thread.get()) with(*tess_out) {
-            scope(exit) {
-                buffer.available = true;
-            }
+            scope(exit) buffer.available = true;
 
             if(chunk.empty) {
                 logger.log!Debug("Chunk is empty, skipping!");
@@ -450,9 +448,9 @@ final class World {
             }
 
             chunk.vao.bind();
+            scope(success) chunk.vao.unbind();
             chunk.vbo.bind();
-            scope(exit) chunk.vbo.unbind();
-            scope(exit) chunk.vao.unbind();
+            scope(success) chunk.vbo.unbind();
 
             chunk.vbo.set_data(buffer.terrain.ptr, elements);
 
