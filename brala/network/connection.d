@@ -201,6 +201,10 @@ class ThreadedConnection : Connection {
     this(Session session) {
         super(session);
 
+        // NOTE 128 is the critical size, let's hope
+        // 512 is enough!
+        // We also want the GC to take care of our memory,
+        // Packet.ptr contains a GC allocated class!
         outbuf = new RingBuffer!Packet(512, true);
         callback = &add_to_queue;
     }
