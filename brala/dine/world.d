@@ -310,7 +310,7 @@ final class World {
                                 py_div(wy, height),
                                 py_div(wz, depth));
 
-        if(chunk is null/+ || chunk.empty+/) { return def; }
+        if(chunk is null || chunk.empty) { return def; }
 
         int x = py_mod(wx, width);
         int y = py_mod(wy, height);
