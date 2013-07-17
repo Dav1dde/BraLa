@@ -24,41 +24,41 @@ else
 endif
 
 
-DERELICT_DIR	= src$(PATH_SEP)d$(PATH_SEP)derelict3$(PATH_SEP)import$(PATH_SEP)derelict
+DERELICT_DIR	= src/d/derelict3/import/derelict
 
-OBJDIRS		= $(DBUILD_PATH)$(PATH_SEP)brala \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)arsd \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)derelict3 \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)gl3n \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)glamour \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)openssl \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)nbd \
-			$(DBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)d$(PATH_SEP)glwtf \
-			$(CBUILD_PATH)$(PATH_SEP)src$(PATH_SEP)c \
+OBJDIRS		= $(DBUILD_PATH)/brala \
+			$(DBUILD_PATH)/src/d/arsd \
+			$(DBUILD_PATH)/src/d/derelict3 \
+			$(DBUILD_PATH)/src/d/gl3n \
+			$(DBUILD_PATH)/src/d/glamour \
+			$(DBUILD_PATH)/src/d/openssl \
+			$(DBUILD_PATH)/src/d/nbd \
+			$(DBUILD_PATH)/src/d/glwtf \
+			$(CBUILD_PATH)/src/c \
 			bin \
-			lib$(PATH_SEP)osx \
-			lib$(PATH_SEP)linux32 \
-			lib$(PATH_SEP)linux64 \
+			lib/osx \
+			lib/linux32 \
+			lib/linux64 \
 
 DSOURCES	= $(call getSource,brala,d)
-DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)$(PATH_SEP)%$(EXT),   $(DSOURCES))
+DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)/%$(EXT),   $(DSOURCES))
 
-DSOURCES_GL3N	= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)gl3n$(PATH_SEP)gl3n,d)
-DOBJECTS_GL3N	= $(patsubst %.d,$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT),   $(DSOURCES_GL3N))
+DSOURCES_GL3N	= $(call getSource,src/d/gl3n/gl3n,d)
+DOBJECTS_GL3N	= $(patsubst %.d,$(DBUILD_PATH_GL3N)/%$(EXT),   $(DSOURCES_GL3N))
 
-DSOURCES_DERELICT	=  $(call getSource,$(DERELICT_DIR)$(PATH_SEP)opengl3,d) \
-				$(call getSource,$(DERELICT_DIR)$(PATH_SEP)util,d)
-DOBJECTS_DERELICT	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_DERELICT))
+DSOURCES_DERELICT	=  $(call getSource,$(DERELICT_DIR)/opengl3,d) \
+				$(call getSource,$(DERELICT_DIR)/util,d)
+DOBJECTS_DERELICT	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_DERELICT))
 
-DSOURCES_GLAMOUR	= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glamour$(PATH_SEP)glamour,d)
-DOBJECTS_GLAMOUR	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT),   $(DSOURCES_GLAMOUR))
+DSOURCES_GLAMOUR	= $(call getSource,src/d/glamour/glamour,d)
+DOBJECTS_GLAMOUR	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_GLAMOUR))
 
-DSOURCES_OTHER		= $(call getSource,src$(PATH_SEP)d$(PATH_SEP)arsd,d) $(call getSource,src$(PATH_SEP)d$(PATH_SEP)etc,d) \
-				src$(PATH_SEP)d$(PATH_SEP)nbd$(PATH_SEP)nbt.d $(call getSource,src$(PATH_SEP)d$(PATH_SEP)glwtf,d)
-DOBJECTS_OTHER		= $(patsubst %.d,$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT),   $(DSOURCES_OTHER))
+DSOURCES_OTHER		= $(call getSource,src/d/arsd,d) $(call getSource,src/d/etc,d) \
+				src/d/nbd/nbt.d $(call getSource,src/d/glwtf,d)
+DOBJECTS_OTHER		= $(patsubst %.d,$(DBUILD_PATH_OTHER)/%$(EXT),   $(DSOURCES_OTHER))
 
-CSOURCES	= src$(PATH_SEP)c$(PATH_SEP)stb_image.c src$(PATH_SEP)c$(PATH_SEP)stb_image_write.c
-COBJECTS	= $(patsubst %.c,$(CBUILD_PATH)$(PATH_SEP)%$(EXT),   $(CSOURCES))
+CSOURCES	= src/c/stb_image.c src/c/stb_image_write.c
+COBJECTS	= $(patsubst %.c,$(CBUILD_PATH)/%$(EXT),   $(CSOURCES))
 
 DC_UPPER	= `echo $(DC) | tr a-z A-Z`
 CC_UPPER	= `echo $(CC) | tr a-z A-Z`
@@ -70,40 +70,40 @@ all: brala
 .PHONY: clean
 
 brala: buildDir glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
-	@echo "    LD     bin$(PATH_SEP)bralad"
+	@echo "    LD     bin/bralad"
 	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
-	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin$(PATH_SEP)bralad
+	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin/bralad
 
 glfw:
-	@$(MKDIR) $(CBUILD_PATH)$(PATH_SEP)glfw
+	@$(MKDIR) $(CBUILD_PATH)/glfw
 	@echo "    CMAKE  src/c/glfw/*"
-	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && \
-	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ..$(PATH_SEP)..$(PATH_SEP)src$(PATH_SEP)c$(PATH_SEP)glfw 2>&1 >/dev/null
-	@cd $(CBUILD_PATH)$(PATH_SEP)glfw && $(MAKE) --silent $(MFLAGS) >/dev/null
+	@cd $(CBUILD_PATH)/glfw && \
+	cmake -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF ../../src/c/glfw 2>&1 >/dev/null
+	@cd $(CBUILD_PATH)/glfw && $(MAKE) --silent $(MFLAGS) >/dev/null
 
 
 # create object files
-$(DBUILD_PATH)$(PATH_SEP)%$(EXT) : %.d
+$(DBUILD_PATH)/%$(EXT) : %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_GL3N)$(PATH_SEP)%$(EXT) : %.d
+$(DBUILD_PATH_GL3N)/%$(EXT) : %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_DERELICT)$(PATH_SEP)%$(EXT): %.d
+$(DBUILD_PATH_DERELICT)/%$(EXT): %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_GLAMOUR)$(PATH_SEP)%$(EXT) : %.d
+$(DBUILD_PATH_GLAMOUR)/%$(EXT) : %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(DBUILD_PATH_OTHER)$(PATH_SEP)%$(EXT) : %.d
+$(DBUILD_PATH_OTHER)/%$(EXT) : %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
-$(CBUILD_PATH)$(PATH_SEP)%$(EXT) : %.c
+$(CBUILD_PATH)/%$(EXT) : %.c
 	@echo "    $(CC_UPPER)    $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -114,8 +114,8 @@ $(OBJDIRS) :
 	@$(MKDIR) $@
 
 clean:
-	@echo "    RM     build$(PATH_SEP)brala"
-	@$(RM) build$(PATH_SEP)brala
+	@echo "    RM     build/brala"
+	@$(RM) build/brala
 
 clean-all:
 	@echo "    RM     build/"
