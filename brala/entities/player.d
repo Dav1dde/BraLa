@@ -45,12 +45,14 @@ class Player : NamedEntity {
     @property void rotation(vec3 rotation) { camera.rotation = rotation; dirty = true; }
 
     float moving_speed = 4.35f; // creative speed
-    ConfigBound!int MOVE_UP;
-    ConfigBound!int MOVE_DOWN;
     ConfigBound!int MOVE_FORWARD;
     ConfigBound!int MOVE_BACKWARD;
     ConfigBound!int STRAFE_LEFT;
     ConfigBound!int STRAFE_RIGHT;
+    ConfigBound!int MOVE_UP;
+    ConfigBound!int MOVE_DOWN;
+    ConfigBound!int JUMP;
+    ConfigBound!int SNEAK;
     ConfigBound!float SENSITIVITY = 5.0f;
 
     protected vec2i mouse_offset = vec2i(0, 0);
@@ -75,12 +77,14 @@ class Player : NamedEntity {
         window.on_mouse_pos.connect(&on_mouse_pos);
         game.on_notchian_tick.connect(&on_tick);
 
-        game.config.connect(MOVE_UP, "game.key.movement.up").emit();
-        game.config.connect(MOVE_DOWN, "game.key.movement.down").emit();
         game.config.connect(MOVE_FORWARD, "game.key.movement.forward").emit();
         game.config.connect(MOVE_BACKWARD, "game.key.movement.backward").emit();
         game.config.connect(STRAFE_LEFT, "game.key.movement.left").emit();
         game.config.connect(STRAFE_RIGHT, "game.key.movement.right").emit();
+        game.config.connect(JUMP, "game.key.movement.jump").emit();
+        game.config.connect(SNEAK, "game.key.movement.sneak").emit();
+        game.config.connect(MOVE_UP, "game.key.movement.jump").emit();
+        game.config.connect(MOVE_DOWN, "game.key.movement.sneak").emit();
         game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
 
         assert(MOVE_FORWARD.value != 0);
