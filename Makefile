@@ -11,7 +11,7 @@ include command.make
 
 DCFLAGS_LINK	= $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 			$(LINKERFLAG)-Lbuild/glfw/src \
-			$(addprefix -L,$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
+			$(addprefix $(LINKERFLAG),$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
 
 VERSIONS	= Derelict3 gl3n glamour stb BraLa
 
@@ -24,21 +24,18 @@ else
 endif
 
 
-DERELICT_DIR	= src/d/derelict3/import/derelict
-
 OBJDIRS		= $(DBUILD_PATH)/brala \
 			$(DBUILD_PATH)/src/d/arsd \
 			$(DBUILD_PATH)/src/d/derelict3 \
+			$(DBUILD_PATH)/src/d/etc \
 			$(DBUILD_PATH)/src/d/gl3n \
 			$(DBUILD_PATH)/src/d/glamour \
-			$(DBUILD_PATH)/src/d/openssl \
-			$(DBUILD_PATH)/src/d/nbd \
+			$(DBUILD_PATH)/src/d/glfw \
 			$(DBUILD_PATH)/src/d/glwtf \
+			$(DBUILD_PATH)/src/d/nbd \
+			$(DBUILD_PATH)/src/d/openssl \
 			$(CBUILD_PATH)/src/c \
 			bin \
-			lib/osx \
-			lib/linux32 \
-			lib/linux64 \
 
 DSOURCES	= $(call getSource,brala,d)
 DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)/%$(EXT),   $(DSOURCES))
@@ -46,8 +43,8 @@ DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)/%$(EXT),   $(DSOURCES))
 DSOURCES_GL3N	= $(call getSource,src/d/gl3n/gl3n,d)
 DOBJECTS_GL3N	= $(patsubst %.d,$(DBUILD_PATH_GL3N)/%$(EXT),   $(DSOURCES_GL3N))
 
-DSOURCES_DERELICT	=  $(call getSource,$(DERELICT_DIR)/opengl3,d) \
-				$(call getSource,$(DERELICT_DIR)/util,d)
+DERELICT_DIR	= src/d/derelict3/import/derelict
+DSOURCES_DERELICT	= $(call getSource,$(DERELICT_DIR)/opengl3,d) $(call getSource,$(DERELICT_DIR)/util,d)
 DOBJECTS_DERELICT	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_DERELICT))
 
 DSOURCES_GLAMOUR	= $(call getSource,src/d/glamour/glamour,d)
