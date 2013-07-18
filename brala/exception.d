@@ -63,3 +63,13 @@ class AllocationError : FatalException {
         super(s, f, l);
     }
 }
+
+class YggdrasilException : Exception {
+    string error;
+    string error_message;
+    string cause;
+
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
+    }
+}
