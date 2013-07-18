@@ -69,7 +69,7 @@ struct Refresh {
     string access_token;
     string client_token;
 
-    Profile profile;
+    Profile selected_profile;
 }
 
 Refresh refresh(string access_token, string client_token, Profile profile) {
@@ -97,7 +97,7 @@ Refresh refresh(string access_token, string client_token, string id, string name
     auto json = j.parseJSON(response.content);
     refresh.access_token = json["accessToken"].str;
     refresh.client_token = json["clientToken"].str;
-    refresh.profile = Profile(
+    refresh.selected_profile = Profile(
         json["selectedProfile"]["id"].str,
         json["selectedProfile"]["name"].str
     );

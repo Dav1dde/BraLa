@@ -18,6 +18,7 @@ private {
     import brala.log : logger = session_logger;
     import brala.utils.log;
     import brala.exception : SessionError;
+    import yggdrasil = brala.minecraft.yggdrasil;
     import brala.network.util : urlencode, twos_compliment, to_hexdigest;
     import brala.utils.openssl.hash : SHA1;
     import brala.utils.thread : Timer;
@@ -30,15 +31,9 @@ private {
 }
 
 class Session {
-    static const int LAUNCHER_VERSION = 1337;
-    static const string LOGIN_URL = "https://login.minecraft.net";
     static const string JOIN_SERVER_URL = "http://session.minecraft.net/game/joinserver.jsp";
     static const string CHECK_SESSION_URL = "http://session.minecraft.net/game/checkserver.jsp";
     
-    protected SysTime _last_login;
-    @property last_login() { return _last_login; }
-    
-    long game_version;
     string username;
     string minecraft_username;
     string session_id;
@@ -51,44 +46,35 @@ class Session {
         this.session_id = session_id;
     }
     
-    void login(string username, string password) {
-        auto res = LOGIN_URL.post(["user" : username,
-                                   "password" : password,
-                                   "version" : to!string(LAUNCHER_VERSION)]);
+    void authenticate(string username, string password) {
+        auto response = yggdrasil.authenticate(username, password);
 
-        if(res.count(":") == 4) {
-            string[] s = res.idup.split(":");
-            
-            this.game_version = to!long(s[0]);
-            this.username = username;
-            this.minecraft_username = s[2];
-            this.session_id = s[3];
-        } else {
-            throw new SessionError(`Unable to login as user "` ~ username ~ `". ` ~ res.idup);
-        }
-     
-        _last_login = Clock.currTime();
+        this.username = username;
+        this.minecraft_username = response.selected_profile.name;
+        this.session_id = "token:%s:%s".format(
+            response.access_token,
+            response.selected_profile.id
+        );
     }
 
     @property bool logged_in() {
         return cast(bool)session_id.length;
     }
-
-    void login_if_needed(string username, string password) {
-        if(session_id.length == 0 || (Clock.currTime() - _last_login).total!"seconds" > 50) {
-            login(username, password);
-        }
-    }
     
     void join(string server_id, ubyte[] shared_secret, ubyte[] public_key) {
-        auto res = get(JOIN_SERVER_URL ~ "?" ~
-                       urlencode(["user" : minecraft_username,
-                                  "sessionId" : session_id,
-                                  "serverId" : login_hash(server_id, shared_secret, public_key)]));
+        auto res = get(
+            JOIN_SERVER_URL ~ "?" ~ urlencode([
+                "user" : minecraft_username,
+                "sessionId" : session_id,
+                "serverId" : login_hash(server_id, shared_secret, public_key)
+            ])
+        );
         
         if(res != "OK") {
-            throw new SessionError(`Failed to join server [user:"%s", session:"%s"]: %s`
-                                   .format(minecraft_username, session_id, res));
+            throw new SessionError(
+                `Failed to join server [user:"%s", session:"%s"]: %s`
+                    .format(minecraft_username, session_id, res)
+            );
         }
     }
     
