@@ -8,12 +8,13 @@ class HttpException : Exception {
     }
 }
 
+version=with_openssl;
 
 /**
     Gets a textual document, ignoring headers. Throws on non-text or error.
 */
-string get(string url) {
-    auto hr = httpRequest("GET", url);
+string get(string url, string[string] cookies = null) {
+    auto hr = httpRequest("GET", url, null, cookies);
     if(hr.code != 200)
         throw new HttpException(format("HTTP answered %d instead of 200 on %s", hr.code, url));
     if(hr.contentType.indexOf("text/") == -1)
@@ -24,7 +25,7 @@ string get(string url) {
 
 static import std.uri;
 
-string post(string url, string[string] args) {
+string post(string url, string[string] args, string[string] cookies = null) {
     string content;
 
     foreach(name, arg; args) {
@@ -33,7 +34,7 @@ string post(string url, string[string] args) {
         content ~= std.uri.encode(name) ~ "=" ~ std.uri.encode(arg);
     }
 
-    auto hr = httpRequest("POST", url, cast(ubyte[]) content, ["Content-Type: application/x-www-form-urlencoded"]);
+    auto hr = httpRequest("POST", url, cast(ubyte[]) content, cookies, ["Content-Type: application/x-www-form-urlencoded"]);
     if(hr.code != 200)
         throw new HttpException(format("HTTP answered %d instead of 200", hr.code));
     if(hr.contentType.indexOf("text/") == -1)
@@ -45,6 +46,7 @@ string post(string url, string[string] args) {
 struct HttpResponse {
     int code;
     string contentType;
+    string[string] cookies;
     string[] headers;
     ubyte[] content;
 }
@@ -70,6 +72,10 @@ struct UriParts {
         else
         if(uri[0..7] != "http://")
             throw new HttpException("You must use an absolute, http or https URL.");
+
+        version(with_openssl) {} else
+        if(useHttps)
+            throw new HttpException("openssl support not compiled in try -version=with_openssl");
 
         int start = useHttps ? 8 : 7;
 
@@ -101,7 +107,7 @@ struct UriParts {
     }
 }
 
-HttpResponse httpRequest(string method, string uri, const(ubyte)[] content = null, string headers[] = null) {
+HttpResponse httpRequest(string method, string uri, const(ubyte)[] content = null, string[string] cookies = null, string headers[] = null) {
     import std.socket;
 
     auto u = UriParts(uri);
@@ -119,41 +125,46 @@ HttpResponse httpRequest(string method, string uri, const(ubyte)[] content = nul
         return readBuffer[0..num];
     };
 
-    import deimos.openssl.ssl;
-    SSL* ssl;
-    SSL_CTX* ctx;
-    if(u.useHttps) {
-        void sslAssert(bool ret){
-            if (!ret){
-                throw new HttpException("SSL_ERROR");
+    version(with_openssl) {
+        import deimos.openssl.ssl;
+        SSL* ssl;
+        SSL_CTX* ctx;
+        if(u.useHttps) {
+            void sslAssert(bool ret){
+                if (!ret){
+                    throw new Exception("SSL_ERROR");
+                }
             }
+            SSL_library_init();
+            OpenSSL_add_all_algorithms();
+            SSL_load_error_strings();
+
+            ctx = SSL_CTX_new(SSLv3_client_method());
+            sslAssert(!(ctx is null));
+
+            ssl = SSL_new(ctx);
+            SSL_set_fd(ssl, f.handle);
+            sslAssert(SSL_connect(ssl) != -1);
+
+            write = (string d) {
+                SSL_write(ssl, d.ptr, cast(uint)d.length);
+            };
+
+            read = () {
+                auto len = SSL_read(ssl, readBuffer.ptr, readBuffer.length);
+                return readBuffer[0 .. len];
+            };
         }
-        SSL_library_init();
-        OpenSSL_add_all_algorithms();
-        SSL_load_error_strings();
-
-        ctx = SSL_CTX_new(SSLv3_client_method());
-        sslAssert(!(ctx is null));
-
-        ssl = SSL_new(ctx);
-        SSL_set_fd(ssl, f.handle);
-        sslAssert(SSL_connect(ssl) != -1);
-
-        write = (string d) {
-            SSL_write(ssl, d.ptr, cast(uint)d.length);
-        };
-
-        read = () {
-            auto len = SSL_read(ssl, readBuffer.ptr, readBuffer.length);
-            return readBuffer[0 .. len];
-        };
     }
 
-    HttpResponse response = doHttpRequestOnHelpers(write, read, method, uri, content, headers, u.useHttps);
 
-    if(u.useHttps) {
-        SSL_free(ssl);
-        SSL_CTX_free(ctx);
+    HttpResponse response = doHttpRequestOnHelpers(write, read, method, uri, content, cookies, headers, u.useHttps);
+
+    version(with_openssl) {
+        if(u.useHttps) {
+            SSL_free(ssl);
+            SSL_CTX_free(ctx);
+        }
     }
 
     return response;
@@ -164,18 +175,37 @@ HttpResponse httpRequest(string method, string uri, const(ubyte)[] content = nul
     of the parameters are the caller's responsibility. Content-Length is added automatically,
     but YOU must give Content-Type!
 */
-HttpResponse doHttpRequestOnHelpers(void delegate(string) write, char[] delegate() read, string method, string uri, const(ubyte)[] content = null, string headers[] = null, bool https = false)
+HttpResponse doHttpRequestOnHelpers(void delegate(string) write, char[] delegate() read, string method, string uri, const(ubyte)[] content = null, string[string] cookies = null, string headers[] = null, bool https = false)
     in {
         assert(method == "POST" || method == "GET");
     }
 body {
     auto u = UriParts(uri);
 
+
+
+
+
     write(format("%s %s HTTP/1.1\r\n", method, u.path));
     write(format("Host: %s\r\n", u.host));
     write(format("Connection: close\r\n"));
     if(content !is null)
         write(format("Content-Length: %d\r\n", content.length));
+
+    if(cookies !is null) {
+        string cookieHeader = "Cookie: ";
+        bool first = true;
+        foreach(k, v; cookies) {
+            if(first)
+                first = false;
+            else
+                cookieHeader ~= "; ";
+            cookieHeader ~= std.uri.encodeComponent(k) ~ "=" ~ std.uri.encodeComponent(v);
+        }
+
+        write(format("%s\r\n", cookieHeader));
+    }
+
     if(headers !is null)
         foreach(header; headers)
             write(format("%s\r\n", header));
@@ -200,17 +230,17 @@ body {
         }
         auto ret = buffer[0 .. idx + 2]; // + the \r\n
         if(idx + 2 < buffer.length)
-        buffer = buffer[idx + 2 .. $];
+            buffer = buffer[idx + 2 .. $];
         else
-        buffer = null;
-            return ret;
+            buffer = null;
+        return ret;
     }
 
     HttpResponse hr;
  cont:
     string l = readln();
     if(l[0..9] != "HTTP/1.1 ")
-        throw new HttpException("Not talking to a http server");
+        throw new Exception("Not talking to a http server");
 
     hr.code = to!int(l[9..12]); // HTTP/1.1 ### OK
 
@@ -231,6 +261,27 @@ body {
         hr.headers ~= line;
         if(line.startsWith("Content-Type: "))
             hr.contentType = line[14..$-1];
+        if(line.startsWith("Set-Cookie: ")) {
+            auto hdr = line["Set-Cookie: ".length .. $-1];
+            auto semi = hdr.indexOf(";");
+            if(semi != -1)
+                hdr = hdr[0 .. semi];
+
+            auto equal = hdr.indexOf("=");
+            string name, value;
+            if(equal == -1) {
+                name = hdr;
+                // doesn't this mean erase the cookie?
+            } else {
+                name = hdr[0 .. equal];
+                value = hdr[equal + 1 .. $];
+            }
+
+            name = std.uri.decodeComponent(name);
+            value = std.uri.decodeComponent(value);
+
+            hr.cookies[name] = value;
+        }
         if(line.startsWith("Transfer-Encoding: chunked"))
             chunked = true;
         line = readln();
@@ -306,10 +357,3 @@ body {
 
     return hr;
 }
-
-
-/*
-void main(string args[]) {
-    write(post("http://arsdnet.net/bugs.php", ["test" : "hey", "again" : "what"]));
-}
-*/
