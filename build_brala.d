@@ -546,7 +546,8 @@ int main(string[] args) {
                        buildPath("src", "d", "glfw"),
                        buildPath("src", "d", "nbd"),
                        buildPath("src", "d", "glwtf"),
-                       buildPath("src", "d", "minilib")];
+                       buildPath("src", "d", "minilib"),
+                       buildPath("src", "d", "std")];
 
     auto builder = new Builder(cache, dc, dc, cc);
 
@@ -565,13 +566,14 @@ int main(string[] args) {
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"));
     builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "util"));
+    builder.add_scan_path(buildPath("src", "d", "etc"));
     builder.add_scan_path(buildPath("src", "d", "gl3n", "gl3n"));
     builder.add_scan_path(buildPath("src", "d", "glamour", "glamour"));
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "d", "minilib"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
     builder.add_scan_path(buildPath("src", "d", "openssl"));
-    builder.add_scan_path(buildPath("src", "d", "etc"));
+    builder.add_scan_path(buildPath("src", "d", "std"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 
     builder.libraries_win = [buildPath("lib", "win", "libssl32.lib"),

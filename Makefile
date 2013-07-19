@@ -35,6 +35,7 @@ OBJDIRS		= $(DBUILD_PATH)/brala \
 			$(DBUILD_PATH)/src/d/minilib \
 			$(DBUILD_PATH)/src/d/nbd \
 			$(DBUILD_PATH)/src/d/openssl \
+			$(DBUILD_PATH)/src/d/std \
 			$(CBUILD_PATH)/src/c \
 			bin \
 
@@ -53,7 +54,7 @@ DOBJECTS_GLAMOUR	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_G
 
 DSOURCES_OTHER		= $(call getSource,src/d/arsd,d) $(call getSource,src/d/etc,d) \
 				src/d/nbd/nbt.d $(call getSource,src/d/glwtf,d) \
-				$(call getSource,src/d/minilib,d)
+				$(call getSource,src/d/minilib,d) $(call getSource,src/d/std,d)
 DOBJECTS_OTHER		= $(patsubst %.d,$(DBUILD_PATH_OTHER)/%$(EXT),   $(DSOURCES_OTHER))
 
 CSOURCES	= src/c/stb_image.c src/c/stb_image_write.c

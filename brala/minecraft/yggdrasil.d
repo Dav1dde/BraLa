@@ -1,9 +1,9 @@
 module brala.minecraft.yggdrasil;
 
 private {
-    import j = std.json;
+    import std.json;
 
-    import brala.minecraft.util : toJSON, to, post, get_exception;
+    import brala.minecraft.util : post, get_exception;
 }
 
 // use like: import yggdrasil = brala.minecraft.yggdrasil;
@@ -28,25 +28,25 @@ Authentication authenticate(string username, string password, string client_toke
     enum ENDPOINT = URL ~ "/authenticate";
 
     auto payload = [
-        "agent" : toJSON([
-            "name" : toJSON("Minecraft"),
-            "version" : toJSON(1)
+        "agent" : JSONValue([
+            "name" : JSONValue("Minecraft"),
+            "version" : JSONValue(1)
         ]),
 
-        "username" : toJSON(username),
-        "password" : toJSON(password)
+        "username" : JSONValue(username),
+        "password" : JSONValue(password)
     ];
 
     if(client_token.length > 0) {
-        payload["clientToken"] = toJSON(client_token);
+        payload["clientToken"] = JSONValue(client_token);
     }
 
-    auto response = ENDPOINT.post(toJSON(payload));
+    auto response = ENDPOINT.post(JSONValue(payload));
     if(response.code != 200) throw response.get_exception();
 
     Authentication auth;
 
-    auto json = j.parseJSON(response.content);
+    auto json = parseJSON(response.content);
     auth.access_token = json["accessToken"].str;
     auth.client_token = json["clientToken"].str;
     auth.selected_profile = Profile(
@@ -80,21 +80,21 @@ Refresh refresh(string access_token, string client_token, string id, string name
     enum ENDPOINT = URL ~ "/refresh";
 
     auto payload = [
-        "accessToken" : toJSON(access_token),
-        "clientToken" : toJSON(client_token),
+        "accessToken" : JSONValue(access_token),
+        "clientToken" : JSONValue(client_token),
 
-        "selectedProfile" : toJSON([
+        "selectedProfile" : JSONValue([
             "id" : id,
             "name" : name
         ])
     ];
 
-    auto response = ENDPOINT.post(toJSON(payload));
+    auto response = ENDPOINT.post(JSONValue(payload));
     if(response.code != 200) throw response.get_exception();
 
     Refresh refresh;
 
-    auto json = j.parseJSON(response.content);
+    auto json = parseJSON(response.content);
     refresh.access_token = json["accessToken"].str;
     refresh.client_token = json["clientToken"].str;
     refresh.selected_profile = Profile(
@@ -109,7 +109,7 @@ Refresh refresh(string access_token, string client_token, string id, string name
 bool is_valid(string access_token) {
     enum ENDPOINT = URL ~ "/validate";
 
-    auto response = ENDPOINT.post(toJSON([
+    auto response = ENDPOINT.post(JSONValue([
         "accessToken" : access_token
     ]));
 

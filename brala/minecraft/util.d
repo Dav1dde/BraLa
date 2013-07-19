@@ -3,6 +3,7 @@ module brala.minecraft.util;
 private {
     import arsd.http : HttpResponse, httpRequest;
 
+    import std.conv : to;
     import std.string : format;
     import std.traits : isUnsigned;
     import std.exception : enforceEx;
@@ -10,59 +11,6 @@ private {
     import j = std.json;
 
     import brala.exception : YggdrasilException;
-}
-
-
-j.JSONValue toJSON(T)(auto ref T arg) {
-    j.JSONValue ret;
-    static if(is(T : string)) {
-        ret.type = j.JSON_TYPE.STRING;
-        ret.str = arg;
-    } else static if(is(T : ulong) && isUnsigned!T) {
-        ret.type = j.JSON_TYPE.UINTEGER;
-        ret.uinteger = arg;
-    } else static if(is(T : long)) {
-        ret.type = j.JSON_TYPE.INTEGER;
-        ret.integer = arg;
-    } else static if(is(T : Value[Key], Key, Value)) {
-        static assert(is(Key : string), "AA key != string");
-        ret.type = j.JSON_TYPE.OBJECT;
-        static if(is(Value : j.JSONValue)) {
-            ret.object = arg;
-        } else {
-            j.JSONValue[string] aa;
-            foreach(key, value; arg) {
-                aa[key] = toJSON(value);
-            }
-            ret.object = aa;
-        }
-    } else static if(isArray!T) {
-        ret.type = j.JSON_TYPE.ARRAY;
-        static if(is(ElementEncodingType!T : j.JSONValue)) {
-            ret.arg = arg;
-        } else {
-            j.JSONValue[] new_arg = new j.JSONValue[arg.length];
-            foreach(i, e; arg) {
-                new_arg[i] = toJSON(e);
-            }
-            ret.arg = new_arg;
-        }
-    } else static if(is(T : bool)) {
-        if(arg) {
-            ret.type = j.JSON_TYPE.TRUE;
-        } else {
-            ret.type = j.JSON_TYPE.FALSE;
-        }
-        ret.integer = cast(int)arg;
-    } else {
-        static assert(false, "unable to convert type to json");
-    }
-    return ret;
-}
-
-
-string to(T : string)(j.JSONValue value) {
-    return j.toJSON(&value);
 }
 
 
