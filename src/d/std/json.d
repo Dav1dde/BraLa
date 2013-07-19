@@ -405,7 +405,7 @@ JSONValue parseJSON(T)(T json, int maxDepth = -1) if(isInputRange!T)
         {
             case '{':
                 value.type = JSON_TYPE.OBJECT;
-                value.object = null;
+                value.store.object = null;
 
                 if(testChar('}')) break;
 
@@ -416,7 +416,7 @@ JSONValue parseJSON(T)(T json, int maxDepth = -1) if(isInputRange!T)
                     checkChar(':');
                     JSONValue member = void;
                     parseValue(&member);
-                    value.object[name] = member;
+                    value.store.object[name] = member;
                 }
                 while(testChar(','));
 
@@ -428,17 +428,17 @@ JSONValue parseJSON(T)(T json, int maxDepth = -1) if(isInputRange!T)
 
                 if(testChar(']'))
                 {
-                    value.array = cast(JSONValue[]) "";
+                    value.store.array = cast(JSONValue[]) "";
                     break;
                 }
 
-                value.array = null;
+                value.store.array = null;
 
                 do
                 {
                     JSONValue element = void;
                     parseValue(&element);
-                    value.array ~= element;
+                    value.store.array ~= element;
                 }
                 while(testChar(','));
 
@@ -447,7 +447,7 @@ JSONValue parseJSON(T)(T json, int maxDepth = -1) if(isInputRange!T)
 
             case '"':
                 value.type = JSON_TYPE.STRING;
-                value.str = parseString();
+                value.store.str = parseString();
                 break;
 
             case '0': .. case '9':
@@ -498,15 +498,16 @@ JSONValue parseJSON(T)(T json, int maxDepth = -1) if(isInputRange!T)
                 if(isFloat)
                 {
                     value.type = JSON_TYPE.FLOAT;
-                    value.floating = parse!real(data);
+                    value.store.floating = parse!real(data);
                 }
                 else
                 {
                     if (isNegative)
-                        value.integer = parse!long(data);
+                        value.store.integer = parse!long(data);
                     else
-                        value.uinteger = parse!ulong(data);
-                    value.type = !isNegative && value.uinteger & (1UL << 63) ? JSON_TYPE.UINTEGER : JSON_TYPE.INTEGER;
+                        value.store.uinteger = parse!ulong(data);
+
+                    value.type = !isNegative && value.store.uinteger & (1UL << 63) ? JSON_TYPE.UINTEGER : JSON_TYPE.INTEGER;
                 }
                 break;
 
@@ -604,7 +605,7 @@ string toJSON(in JSONValue* root, in bool pretty = false)
         final switch(value.type)
         {
             case JSON_TYPE.OBJECT:
-                if(!value.object.length)
+                if(!value.store.object.length)
                 {
                     json.put("{}");
                 }
@@ -612,7 +613,7 @@ string toJSON(in JSONValue* root, in bool pretty = false)
                 {
                     putCharAndEOL('{');
                     bool first = true;
-                    foreach(name, member; value.object)
+                    foreach(name, member; value.store.object)
                     {
                         if(!first)
                             putCharAndEOL(',');
@@ -631,14 +632,14 @@ string toJSON(in JSONValue* root, in bool pretty = false)
                 break;
 
             case JSON_TYPE.ARRAY:
-                if(value.array.empty)
+                if(value.store.array.empty)
                 {
                     json.put("[]");
                 }
                 else
                 {
                     putCharAndEOL('[');
-                    foreach (i, ref el; value.array)
+                    foreach (i, ref el; value.store.array)
                     {
                         if(i)
                             putCharAndEOL(',');
@@ -652,19 +653,19 @@ string toJSON(in JSONValue* root, in bool pretty = false)
                 break;
 
             case JSON_TYPE.STRING:
-                toString(value.str);
+                toString(value.store.str);
                 break;
 
             case JSON_TYPE.INTEGER:
-                json.put(to!string(value.integer));
+                json.put(to!string(value.store.integer));
                 break;
 
             case JSON_TYPE.UINTEGER:
-                json.put(to!string(value.uinteger));
+                json.put(to!string(value.store.uinteger));
                 break;
 
             case JSON_TYPE.FLOAT:
-                json.put(to!string(value.floating));
+                json.put(to!string(value.store.floating));
                 break;
 
             case JSON_TYPE.TRUE:
