@@ -3,15 +3,20 @@ module brala.physics.creative;
 private {
     import gl3n.linalg : vec3;
 
+    import std.datetime : Clock;
+    import core.time : TickDuration;
+
     import brala.dine.world : World;
     import brala.entities.player: Player;
     import brala.gfx.camera : Camera;
+    import brala.physics.physics : Physics;
     import brala.physics.survival: SurvivalPhysics;
 }
 
 
 class CreativePhysics : SurvivalPhysics {
     bool flying;
+    TickDuration last_jump;
 
     this(Player player, Camera camera, World world) {
         super(player, camera, world);
@@ -22,22 +27,40 @@ class CreativePhysics : SurvivalPhysics {
     }
 
     override
+    void jump() {
+        auto now = Clock.currSystemTick();
+        if((now - last_jump).msecs < 350) {
+            flying = !flying;
+        }
+        last_jump = Clock.currSystemTick();
+
+        if(flying) {
+            falling.stop();
+            falling.reset();
+        } else {
+            super.jump();
+        }
+    }
+
+    override
     void move(vec3 delta, float s) {
-        return super.move(delta, s);
+        if(flying) {
+            float moving_speed = velocity * s;
+
+            player.position = (cast(Physics)this).move(
+                player.position,
+                camera.move(delta * moving_speed)
+            );
+        } else {
+            super.move(delta, s);
+        }
     }
 
     override
     void apply(float s) {
-        return super.apply(s);
-    }
-
-    override @property
-    bool on_ground() {
-        if(flying) {
-            return false;
+        if(!flying) {
+            super.apply(s);
         }
-
-        return super.on_ground;
     }
 }
 

@@ -26,46 +26,43 @@ class SurvivalPhysics : Physics {
         this.velocity = 4.3f;
     }
 
-    override @property
-    bool on_ground() {
-        return !falling.running;
+    override
+    void jump() {
+        if(on_ground) {
+            acceleration.y = 9.8;
+        }
     }
 
     override
     void move(vec3 delta, float s) {
         float moving_speed = velocity * s;
+        delta.y = 0;
 
-        player.position = Physics.move(
-            world,
+        player.position = super.move(
             player.position,
             camera.move(delta * moving_speed)
         );
-
-        bool og = super.on_ground; // cache it
-        if(falling.running && og) {
-            falling.stop();
-            falling.reset();
-        } else if(!falling.running && !og) {
-            falling.start();
-        }
     }
 
     override
     void apply(float s) {
-        if(!on_ground) {
-            float ticks = falling.peek().msecs;
+        vec3 m = vec3(0.0f, 0.0f, 0.0f);
 
-            // not really what minecraft uses
-            acceleration.y = -pow(ticks, 1.048) * 2 * s;
-        } else {
+        // TODO proper gravity
+        enum g = -32;
+        if(!on_ground || acceleration.y > 0) {
+            m.y = acceleration.y * s + 0.5 * g * s*s;
+            acceleration.y += g*s;
+        } else if(acceleration.y < 0) {
             acceleration.y = 0;
+        } else {
+            m = acceleration;
         }
 
 
-        player.position = Physics.move(
-            world,
+        player.position = super.move(
             player.position,
-            player.position + acceleration*s
+            player.position + m
         );
     }
 }

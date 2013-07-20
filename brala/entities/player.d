@@ -71,8 +71,8 @@ class Player : NamedEntity {
         this.camera.viewport = engine.viewport;
         this.camera.recalculate();
 
-        this.physics = new SurvivalPhysics(this, camera, game.current_world);
-//         this.physics = new CreativePhysics(this, camera, game.current_world);
+//         this.physics = new SurvivalPhysics(this, camera, game.current_world);
+        this.physics = new CreativePhysics(this, camera, game.current_world);
 
         engine.on_resize.connect({
             camera.viewport = engine.viewport;
@@ -90,6 +90,8 @@ class Player : NamedEntity {
         game.config.connect(MOVE_UP, "game.key.movement.jump").emit();
         game.config.connect(MOVE_DOWN, "game.key.movement.sneak").emit();
         game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
+
+        window.single_key_down[JUMP].connect({ physics.jump(); });
 
         assert(MOVE_FORWARD.value != 0);
         assert(MOVE_BACKWARD.value != 0);

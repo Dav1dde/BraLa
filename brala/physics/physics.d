@@ -58,8 +58,7 @@ abstract class Physics {
         return false;
     }
 
-    static
-    vec3 move(World world, vec3 from, vec3 to) {
+    vec3 move(vec3 from, vec3 to) {
         if(to == from) {
             return to;
         }
@@ -125,8 +124,14 @@ abstract class Physics {
             }
         }
 
+//         if(!almost_equal(delta.y, 0)) {
+//             on_ground = !almost_equal(delta.y, dy.y, 0.001f);
+//         }
+
         return from + dx + dy + dz;
     }
+
+    void jump() {}
 
     abstract void move(vec3,float);
     abstract void apply(float);
