@@ -4,7 +4,7 @@ private {
     import gl3n.linalg : vec3;
 
     import brala.dine.world : World;
-    import brala.gfx.camera : Camera;
+    import brala.entities.player: Player;
     import brala.physics.physics : Physics;
 }
 
@@ -20,7 +20,7 @@ class CreativePhysics : Physics {
     }
 
     override
-    void apply(Camera camera) {}
+    void apply(Player player) {}
 }
 
 

@@ -94,12 +94,10 @@ class Player : NamedEntity {
     }
 
     void update(TickDuration delta_t) {
-        bool moved = false;
-
         float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
 
-        if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); moved = true; }
-        if(mouse_offset.y != 0) { camera.rotatex((turning_speed * mouse_offset.y).radians); moved = true; }
+        if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); dirty = true; }
+        if(mouse_offset.y != 0) { camera.rotatex((turning_speed * mouse_offset.y).radians); dirty = true; }
         mouse_offset = vec2i(0, 0);
 
         float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
@@ -114,12 +112,12 @@ class Player : NamedEntity {
             camera.move(delta)
         );
 
-        physics.apply(camera);
+        physics.apply(this);
 
-        if(moved || dirty) {
+        if(dirty) {
             camera.apply(engine);
             dirty = false;
-            this.moved = true;
+            moved = true;
         }
     }
 

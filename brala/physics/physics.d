@@ -9,7 +9,8 @@ private {
 
     import brala.dine.chunk : Block;
     import brala.dine.world : World;
-    import brala.gfx.camera : Camera;
+    // selective import doesn't work, bug!?
+    import brala.entities.player;
 }
 
 public {
@@ -133,7 +134,7 @@ abstract class Physics {
         return from + dx + dy + dz;
     }
 
-    abstract void apply(Camera);
+    abstract void apply(Player);
 }
 
 // TODO implement these properly in gl3n.math
