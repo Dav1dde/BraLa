@@ -46,19 +46,19 @@ BraLa brings most of the dependencies as gitsubmodules, but there are still a fe
 
 #### Ubuntu/Debian based systems ####
 
-To install the latest dmd compiler, best choice is the [d-apt](http://code.google.com/p/d-apt/wiki/APT_Repository)
+To install the latest dmd compiler, best choice is the [d-apt](http://d-apt.sourceforge.net/)
 repository:
 
 ```
-sudo wget https://d-apt.googlecode.com/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
-sudo apt-get update && sudo apt-get --yes --allow-unauthenticated install d-apt-keyring && sudo apt-get update
+sudo wget http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
+sudo apt-get update && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
 sudo apt-get install dmd
 ```
 
 And to install the rest of the dependencies:
 
 ```
-sudo apt-get install git cmake libssl-dev libxss-dev
+sudo apt-get install git pkg-config cmake libssl-dev libxss-dev
 ```
 
 Furthermore you need the `libxrandr` headers:
@@ -91,7 +91,8 @@ git submodule update
 
 Since BraLa is written mostly in D, you need a D2 compiler. BraLa compiles with all major D compilers,
 [DMD](http://dlang.org/download.html), [LDC](https://github.com/ldc-developers/ldc) and 
-[GDC](https://github.com/D-Programming-GDC/GDC).
+[GDC](https://github.com/D-Programming-GDC/GDC). To use LDC or GDC you have probably install these
+compilers from `git`, so the fronted version matches DMDs frontend version.
 
 #### DMD ####
 
