@@ -12,8 +12,8 @@ private {
 
 abstract
 class Camera {
-    vec3 position;
-    vec3 rotation;
+    vec3 position = vec3(0.0f, 0.0f, 0.0f);
+    vec3 rotation = vec3(0.0f, 0.0f, 0.0f);
 
     float fov = 70.0f;
     float near = 0.001f;

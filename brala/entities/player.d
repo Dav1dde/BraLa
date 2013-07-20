@@ -131,7 +131,8 @@ class Player : NamedEntity {
     void send_packet() {
         connection.send(new c.PlayerPositionLook(
             position.x, position.y, position.y + 1.6, position.z,
-            (180-rotation.y.degrees), rotation.x.degrees, physics.on_ground(world, this)
+            (180-rotation.y.degrees), rotation.x.degrees,
+            physics.on_ground
         ));
     }
 

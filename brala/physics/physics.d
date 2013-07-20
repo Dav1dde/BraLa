@@ -35,17 +35,24 @@ abstract class Physics {
     vec3 acceleration = vec3(0.0f, 0.0f, 0.0f);
     float velocity = 0.0f;
 
-    static
-    bool on_ground(World world, Player player) {
-        vec3i position = player.position.vfloor.vto!vec3i;
+    bool on_ground() {
+        vec3 position = player.position;
 
-        // TODO liquids, plants etc.
-        if(world.get_block_safe(position) != 0) {
-            return true;
-        }
+        vec3[4] corners = [
+            // reason why -0.0001f is needed below, *10 because safety
+            vec3( PLAYER_WIDTH_HALF, -0.0001f,  PLAYER_WIDTH_HALF),
+            vec3( PLAYER_WIDTH_HALF, -0.0001f, -PLAYER_WIDTH_HALF),
+            vec3(-PLAYER_WIDTH_HALF, -0.0001f,  PLAYER_WIDTH_HALF),
+            vec3(-PLAYER_WIDTH_HALF, -0.0001f, -PLAYER_WIDTH_HALF)
+        ];
 
-        if(almost_equal(player.position.y, position.y, 0.001)) {
-            return world.get_block_safe(position - vec3i(0, 1, 0)).id != 0;
+        foreach(corner; corners) {
+            vec3i cpos = (position + corner).vfloor.vto!vec3i;
+
+            // TODO liquids, plants etc.
+            if(world.get_block_safe(cpos) != 0) {
+                return true;
+            }
         }
 
         return false;

@@ -11,11 +11,14 @@ private {
 
 
 class CreativePhysics : SurvivalPhysics {
+    bool flying;
+
     this(Player player, Camera camera, World world) {
         super(player, camera, world);
 
         // Flying speed in m/s
         this.velocity = 10.8;
+        this.flying = true;
     }
 
     override
@@ -26,6 +29,15 @@ class CreativePhysics : SurvivalPhysics {
     override
     void apply(float s) {
         return super.apply(s);
+    }
+
+    override @property
+    bool on_ground() {
+        if(flying) {
+            return false;
+        }
+
+        return super.on_ground;
     }
 }
 
