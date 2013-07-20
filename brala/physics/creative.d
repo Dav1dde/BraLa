@@ -5,22 +5,28 @@ private {
 
     import brala.dine.world : World;
     import brala.entities.player: Player;
-    import brala.physics.physics : Physics;
+    import brala.gfx.camera : Camera;
+    import brala.physics.survival: SurvivalPhysics;
 }
 
 
-class CreativePhysics : Physics {
-    this(World world) {
-        this._world = world;
+class CreativePhysics : SurvivalPhysics {
+    this(Player player, Camera camera, World world) {
+        super(player, camera, world);
+
+        // Flying speed in m/s
+        this.velocity = 10.8;
     }
 
     override
-    vec3 move(vec3 from, vec3 to) {
-        return super.move(from, to);
+    void move(vec3 delta, float s) {
+        return super.move(delta, s);
     }
 
     override
-    void apply(Player player) {}
+    void apply(float s) {
+        return super.apply(s);
+    }
 }
 
 

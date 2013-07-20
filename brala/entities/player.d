@@ -13,7 +13,7 @@ private {
     import brala.network.session : Session;
     import brala.network.connection : Connection;
     import c = brala.network.packets.client;
-    import brala.gfx.camera : FirstPersonCamera;
+    import brala.gfx.camera : Camera, FirstPersonCamera;
     import brala.physics.physics : Physics, CreativePhysics, SurvivalPhysics;
     import brala.entities.mobs : NamedEntity;
 
@@ -32,7 +32,7 @@ class Player : NamedEntity {
     @property auto world() { return game.current_world; }
 
     Physics physics;
-    FirstPersonCamera camera;
+    Camera camera;
 
     @property vec3 position() { return camera.position; }
     @property void position(vec3 position) {
@@ -67,13 +67,17 @@ class Player : NamedEntity {
         this.window = engine.window;
         this.connection = game.connection;
 
-        this.physics = new CreativePhysics(game.current_world);
-
-        this.camera = new FirstPersonCamera();
-        this.camera.offset = vec3(0.0f, 1.55f, 0.0f);
+        this.camera = new FirstPersonCamera(vec3(0.0f, 1.55f, 0.0f));
         this.camera.viewport = engine.viewport;
+        this.camera.recalculate();
 
-        engine.on_resize.connect({ camera.viewport = engine.viewport; });
+        this.physics = new SurvivalPhysics(this, camera, game.current_world);
+//         this.physics = new CreativePhysics(this, camera, game.current_world);
+
+        engine.on_resize.connect({
+            camera.viewport = engine.viewport;
+            camera.recalculate();
+        });
         window.on_mouse_pos.connect(&on_mouse_pos);
         game.on_notchian_tick.connect(&on_tick);
 
@@ -94,25 +98,21 @@ class Player : NamedEntity {
     }
 
     void update(TickDuration delta_t) {
-        float turning_speed = delta_t.to!("seconds", float) * SENSITIVITY;
+        float s = delta_t.to!("seconds", float);
 
+        float turning_speed = s * SENSITIVITY;
         if(mouse_offset.x != 0) { camera.rotatey((-turning_speed * mouse_offset.x).radians); dirty = true; }
         if(mouse_offset.y != 0) { camera.rotatex((turning_speed * mouse_offset.y).radians); dirty = true; }
         mouse_offset = vec2i(0, 0);
 
-        float movement = delta_t.to!("seconds", float) /+0.05+/ * moving_speed;
         vec3 delta = vec3(
-            (window.is_key_down(STRAFE_RIGHT)  * movement) - (window.is_key_down(STRAFE_LEFT)  * movement),
-            (window.is_key_down(MOVE_UP)       * movement) - (window.is_key_down(MOVE_DOWN)    * movement),
-            (window.is_key_down(MOVE_BACKWARD) * movement) - (window.is_key_down(MOVE_FORWARD) * movement)
+            window.is_key_down(STRAFE_RIGHT)  - window.is_key_down(STRAFE_LEFT),
+            window.is_key_down(MOVE_UP)       - window.is_key_down(MOVE_DOWN),
+            window.is_key_down(MOVE_BACKWARD) - window.is_key_down(MOVE_FORWARD)
         );
 
-        position = physics.move(
-            position,
-            camera.move(delta)
-        );
-
-        physics.apply(this);
+        physics.move(delta, s);
+        physics.apply(s);
 
         if(dirty) {
             camera.apply(engine);
@@ -131,7 +131,7 @@ class Player : NamedEntity {
     void send_packet() {
         connection.send(new c.PlayerPositionLook(
             position.x, position.y, position.y + 1.6, position.z,
-            (180-rotation.y.degrees), rotation.x.degrees, true
+            (180-rotation.y.degrees), rotation.x.degrees, physics.on_ground(world, this)
         ));
     }
 

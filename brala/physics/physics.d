@@ -11,6 +11,7 @@ private {
     import brala.dine.world : World;
     // selective import doesn't work, bug!?
     import brala.entities.player;
+    import brala.gfx.camera : Camera;
 }
 
 public {
@@ -22,51 +23,36 @@ public {
 enum AIR_BLOCK = Block(0);
 
 abstract class Physics {
-    protected World _world;
-    @property void world(World world) { this._world = world; }
-    @property World world() { return _world; }
+    protected Player player;
+    protected World world;
+    protected Camera camera;
 
     enum PLAYER_WIDTH = 0.6f;
     enum PLAYER_WIDTH_HALF = 0.3f;
     enum PLAYER_HEIGHT = 1.8f;
     enum PLAYER_HEIGHT_HALF = 0.9f;
 
+    vec3 acceleration = vec3(0.0f, 0.0f, 0.0f);
+    float velocity = 0.0f;
 
-    bool is_valid_position(vec3 position) {
-        vec3[4] corners = [
-            vec3(position.x+PLAYER_WIDTH_HALF, position.y, position.z+PLAYER_WIDTH_HALF),
-            vec3(position.x+PLAYER_WIDTH_HALF, position.y, position.z-PLAYER_WIDTH_HALF),
-            vec3(position.x-PLAYER_WIDTH_HALF, position.y, position.z+PLAYER_WIDTH_HALF),
-            vec3(position.x-PLAYER_WIDTH_HALF, position.y, position.z-PLAYER_WIDTH_HALF)
-        ];
-        vec3i[4] blocks;
+    static
+    bool on_ground(World world, Player player) {
+        vec3i position = player.position.vfloor.vto!vec3i;
 
-        foreach(i, fcorner; corners) {
-            vec3i corner = vec3i(
-                fcorner.x.floor.to!int,
-                fcorner.y.floor.to!int,
-                fcorner.z.floor.to!int
-            );
-
-            if(!blocks[].canFind(corner)) {
-                blocks[i] = corner;
-
-                auto foot = world.get_block_safe(corner);
-                auto head = world.get_block_safe(corner + vec3i(0, 1, 0));
-                auto head2 = AIR_BLOCK;
-                if((position.y+PLAYER_HEIGHT).floor > (position.y.floor+1)) {
-                    head2 = world.get_block_safe(corner + vec3i(0, 2, 0));
-                }
-
-                // TODO liquids
-                if(foot.id != 0 || head.id != 0 || head2.id != 0) return false;
-            }
+        // TODO liquids, plants etc.
+        if(world.get_block_safe(position) != 0) {
+            return true;
         }
 
-        return true;
+        if(almost_equal(player.position.y, position.y, 0.001)) {
+            return world.get_block_safe(position - vec3i(0, 1, 0)).id != 0;
+        }
+
+        return false;
     }
 
-    abstract vec3 move(vec3 from, vec3 to) {
+    static
+    vec3 move(World world, vec3 from, vec3 to) {
         if(to == from) {
             return to;
         }
@@ -100,10 +86,10 @@ abstract class Physics {
             vec3 dyc = dy + dc;
             vec3 dzc = dz + dc;
 
-            auto fdxc = (from + dxc).vfloor.vto!int;
-            auto fdyc = (from + dyc).vfloor.vto!int;
-            auto fdzc = (from + dzc).vfloor.vto!int;
-            auto fb = (from + dxc + dyc + dzc).vfloor.vto!int;
+            auto fdxc = (from + dxc).vfloor.vto!vec3i;
+            auto fdyc = (from + dyc).vfloor.vto!vec3i;
+            auto fdzc = (from + dzc).vfloor.vto!vec3i;
+            auto fb = (from + dxc + dyc + dzc).vfloor.vto!vec3i;
 
             Block bdxc = AIR_BLOCK;
             Block bdyc = AIR_BLOCK;
@@ -112,6 +98,7 @@ abstract class Physics {
             // by extending its boundingbox in every direction
             Block b = AIR_BLOCK;
 
+            // TODO liquids, plants etc.
             if(world.get_block_safe(fdxc) != 0) {
                 // 0.00001f*dx.x.sign is needed because the math is too accurate ;).
                 // Without it this value the boundingbox edge would be exactly on the edge of
@@ -134,11 +121,12 @@ abstract class Physics {
         return from + dx + dy + dz;
     }
 
-    abstract void apply(Player);
+    abstract void move(vec3,float);
+    abstract void apply(float);
 }
 
 // TODO implement these properly in gl3n.math
-vec3i vto(T)(vec3 v) if(is(T == vec3i)) {
+vec3i vto(T : vec3i)(vec3 v) {
     return vec3i(
         v.x.to!int,
         v.y.to!int,

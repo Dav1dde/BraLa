@@ -10,22 +10,34 @@ private {
 }
 
 
-abstract class Camera {
+abstract
+class Camera {
     vec3 position;
     vec3 rotation;
 
-    void rotatex(float angle);
-    void rotatey(float angle);
+    float fov = 70.0f;
+    float near = 0.001f;
+    float far = 400.0f;
+    vec2i viewport;
 
-    void move_up(float delta);
-    void move_down(float delta);
-    void move_forward(float delta);
-    void move_backward(float delta);
-    void strafe_left(float delta);
-    void strafe_right(float delta);    
+    mat4 perspective = mat4.identity;
 
-    mat4 camera();
-    void apply(BraLaEngine engine);
+    abstract void rotatex(float angle);
+    abstract void rotatey(float angle);
+
+    abstract vec3 move(vec3 delta);
+
+    abstract void move_up(float delta);
+    abstract void move_down(float delta);
+    abstract void move_forward(float delta);
+    abstract void move_backward(float delta);
+    abstract void strafe_left(float delta);
+    abstract void strafe_right(float delta);
+
+    abstract void recalculate();
+
+    abstract mat4 camera();
+    abstract void apply(BraLaEngine engine);
 }
 
 private
@@ -38,45 +50,34 @@ string make_property(string name, string pre_code = "", string post_code = "") {
 }
 
 class FirstPersonCamera : Camera {
-    vec3 position = vec3(0.0f, 0.0f, 0.0f);
-    vec3 rotation = vec3(0.0f, 0.0f, 0.0f);
-
     vec3 up = vec3(0.0f, 1.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
     vec3 right = vec3(1.0f, 0.0f, 0.0f);
 
     vec3 offset = vec3(0.0f, 0.0f, 0.0f);
 
-    float _fov = 70.0f;
-    mixin(make_property("fov", "_dirty = true;"));
-    float _near = 0.001f;
-    mixin(make_property("near", "_dirty = true;"));
-    float _far = 400.0f;
-    mixin(make_property("far", "_dirty = true;"));
-    vec2i _viewport;
-    mixin(make_property("viewport", "_dirty = true;"));
+    this(vec3 offset = vec3(0.0f, 0.0f, 0.0f)) {
+        this.offset = offset;
+    }
 
-    mat4 _perspective = mat4.identity;
-    bool _dirty = true;
-
-    this() {}
-    this(vec3 position) {
+    this(vec3 position, vec3 offset = vec3(0.0f, 0.0f, 0.0f)) {
         this.position = position;
     }
 
-    this(vec3 position, float fov, float near, float far, vec2i viewport) {
+    this(vec3 position, float fov, float near, float far, vec2i viewport, vec3 offset = vec3(0.0f, 0.0f, 0.0f)) {
         this.position = position;
-        _fov = fov;
-        _near = near;
-        _far = far;
-        _viewport = viewport;
+        this.fov = fov;
+        this.near = near;
+        this.far = far;
+        this.viewport = viewport;
+        this.offset = offset;
     }
 
     override void rotatex(float angle) { rotation.x = clamp(rotation.x + angle, cradians!(-85), cradians!(89)); }
     override void rotatey(float angle) { rotation.y += angle; }
     void rotatez(float angle) { rotation.z += angle; }
 
-
+    override
     vec3 move(vec3 delta) {
         return position + (mat3.yrotation(rotation.y) * right  ).normalized * delta.x
                         + (up * delta.y)
@@ -113,13 +114,9 @@ class FirstPersonCamera : Camera {
         position += (mat3.yrotation(rotation.y) * right).normalized * delta;
     }
 
-    @property
-    mat4 perspective() {
-        if(_dirty) {
-            _perspective = mat4.perspective(viewport.x, viewport.y, fov, near, far);
-            _dirty = false;
-        }
-        return _perspective;
+    override
+    void recalculate() {
+        perspective = mat4.perspective(viewport.x, viewport.y, fov, near, far);
     }
 
     @property override
@@ -137,6 +134,7 @@ class FirstPersonCamera : Camera {
     }
 }
 
+/+
 class FreeCamera : Camera {
     vec3 position = vec3(0.0f, 0.0f, 0.0f);
     vec3 forward = vec3(0.0f, 0.0f, 1.0f);
@@ -233,3 +231,4 @@ class FreeCamera : Camera {
         engine.view = camera;
     }
 }
++/
