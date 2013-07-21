@@ -18,8 +18,8 @@ class CreativePhysics : SurvivalPhysics {
     bool flying;
     TickDuration last_jump;
 
-    this(Player player, Camera camera, World world) {
-        super(player, camera, world);
+    this(Player player, World world) {
+        super(player, world);
 
         // Flying speed in m/s
         this.velocity = 10.8;

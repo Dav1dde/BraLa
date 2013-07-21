@@ -17,10 +17,12 @@ private {
 class SurvivalPhysics : Physics {
     StopWatch falling;
 
-    this(Player player, Camera camera, World world) {
+    this(Player player, World world) {
         this.player = player;
-        this.camera = camera;
+        this.camera = player.camera;
         this.world = world;
+
+        player.window.single_key_down[player.JUMP].connect!"jump"(this);
 
         // Walking speed in m/s
         this.velocity = 4.3f;

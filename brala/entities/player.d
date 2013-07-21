@@ -45,8 +45,8 @@ class Player : NamedEntity {
         if(this._mode != mode) {
             this.physics = (
                 mode == Player.Mode.CREATIVE ?
-                    new CreativePhysics(this, camera, game.current_world) :
-                    new SurvivalPhysics(this, camera, game.current_world)
+                    new CreativePhysics(this, game.current_world) :
+                    new SurvivalPhysics(this, game.current_world)
             );
         }
         this._mode = mode;
@@ -90,13 +90,6 @@ class Player : NamedEntity {
         this.camera.viewport = engine.viewport;
         this.camera.recalculate();
 
-        this.physics = (
-            mode == Player.Mode.CREATIVE ?
-                new CreativePhysics(this, camera, game.current_world) :
-                new SurvivalPhysics(this, camera, game.current_world)
-        );
-        this._mode = mode;
-
         engine.on_resize.connect!"on_resize"(this);
         window.on_mouse_pos.connect!"on_mouse_pos"(this);
         game.on_notchian_tick.connect!"on_tick"(this);
@@ -111,10 +104,12 @@ class Player : NamedEntity {
         game.config.connect(MOVE_DOWN, "game.key.movement.sneak").emit();
         game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
 
-        assert(MOVE_FORWARD.value != 0);
-        assert(MOVE_BACKWARD.value != 0);
-        assert(STRAFE_LEFT.value != 0);
-        assert(STRAFE_RIGHT.value != 0);
+        this.physics = (
+            mode == Player.Mode.CREATIVE ?
+                new CreativePhysics(this, game.current_world) :
+                new SurvivalPhysics(this, game.current_world)
+        );
+        this._mode = mode;
     }
 
     void on_resize() {
