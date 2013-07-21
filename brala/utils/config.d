@@ -395,9 +395,6 @@ class Config {
     void emit_all() {
         foreach(cdb; TypeTuple!(db, db_arrays))
         foreach(key, value; db) {
-            import std.stdio;
-            writefln("Key: %s, Value: %s, Signal: %s", key, value, value.signal);
-
             value.signal.emit(this, key);
         }
     }
