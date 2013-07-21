@@ -59,7 +59,6 @@ class SurvivalPhysics : Physics {
             m = acceleration;
         }
 
-
         player.position = super.move(
             player.position,
             player.position + m

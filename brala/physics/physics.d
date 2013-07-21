@@ -59,8 +59,8 @@ abstract class Physics {
     }
 
     vec3 move(vec3 from, vec3 to) {
-        if(to == from) {
-            return to;
+        if(almost_equal(from, to)) {
+            return from;
         }
 
         vec3 delta = to-from;
@@ -95,14 +95,14 @@ abstract class Physics {
             auto fdxc = (from + dxc).vfloor.vto!vec3i;
             auto fdyc = (from + dyc).vfloor.vto!vec3i;
             auto fdzc = (from + dzc).vfloor.vto!vec3i;
-            auto fb = (from + dxc + dyc + dzc).vfloor.vto!vec3i;
+//             auto fb = (from + dxc + dyc + dzc).vfloor.vto!vec3i;
 
-            Block bdxc = AIR_BLOCK;
-            Block bdyc = AIR_BLOCK;
-            Block bdzc = AIR_BLOCK;
+//             Block bdxc = AIR_BLOCK;
+//             Block bdyc = AIR_BLOCK;
+//             Block bdzc = AIR_BLOCK;
             // TODO integrate "b", to prevent glitching into corners
             // by extending its boundingbox in every direction
-            Block b = AIR_BLOCK;
+//             Block b = AIR_BLOCK;
 
             // TODO liquids, plants etc.
             if(world.get_block_safe(fdxc) != 0) {

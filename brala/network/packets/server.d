@@ -201,7 +201,7 @@ class NamedParticle : IPacket {
 }
 
 class ChangeGameState : IPacket {
-    mixin Packet!(0x46, byte, "reason", byte, "gamemode");
+    mixin Packet!(0x46, byte, "reason", byte, "mode");
 }
 
 class ThunderBolt : IPacket {

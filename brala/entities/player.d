@@ -22,8 +22,14 @@ private {
 
 
 class Player : NamedEntity {
-    static const vec3 YAW_0_DIRECTION = vec3(0.0f, 0.0f, 1.0f);
-    
+    enum Mode : byte {
+        SURVIVAL  = 0b0000,
+        CREATIVE  = 0b0001,
+        ADVENTURE = 0b0010,
+
+        HARDCORE  = 0b1000,
+    }
+
     BraLaGame game;
     BraLaEngine engine;
     Window window;
@@ -31,8 +37,21 @@ class Player : NamedEntity {
 
     @property auto world() { return game.current_world; }
 
-    Physics physics;
     Camera camera;
+    Physics physics;
+
+    protected Player.Mode _mode;
+    @property void mode(Player.Mode mode) {
+        if(this._mode != mode) {
+            this.physics = (
+                mode == Player.Mode.CREATIVE ?
+                    new CreativePhysics(this, camera, game.current_world) :
+                    new SurvivalPhysics(this, camera, game.current_world)
+            );
+        }
+        this._mode = mode;
+    }
+    @property Player.Mode mode() { return _mode; }
 
     @property vec3 position() { return camera.position; }
     @property void position(vec3 position) {
@@ -59,7 +78,7 @@ class Player : NamedEntity {
     protected bool moved;
     protected bool dirty;
 
-    this(BraLaGame game, int entity_id) {
+    this(BraLaGame game, Player.Mode mode, int entity_id) {
         super(entity_id, game.session.minecraft_username);
         
         this.game = game;
@@ -71,8 +90,12 @@ class Player : NamedEntity {
         this.camera.viewport = engine.viewport;
         this.camera.recalculate();
 
-//         this.physics = new SurvivalPhysics(this, camera, game.current_world);
-        this.physics = new CreativePhysics(this, camera, game.current_world);
+        this.physics = (
+            mode == Player.Mode.CREATIVE ?
+                new CreativePhysics(this, camera, game.current_world) :
+                new SurvivalPhysics(this, camera, game.current_world)
+        );
+        this._mode = mode;
 
         engine.on_resize.connect!"on_resize"(this);
         window.on_mouse_pos.connect!"on_mouse_pos"(this);

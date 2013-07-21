@@ -178,8 +178,8 @@ final class BraLaGame {
 
         if(_current_world !is null) _current_world.shutdown();
         _current_world = new World(engine, atlas);
-        
-        player = new Player(this, packet.entity_id);
+
+        player = new Player(this, cast(Player.Mode)packet.mode, packet.entity_id);
     }
     
     void on_packet(T : s.ChatMessage)(T packet) {
@@ -191,6 +191,10 @@ final class BraLaGame {
         if(_current_world !is null) {
             _current_world.spawn = vec3i(packet.x, packet.y, packet.z);
         }
+    }
+
+    void on_packet(T : s.Respawn)(T packet) {
+        player.mode = cast(Player.Mode)packet.mode;
     }
 
     void on_packet(T : s.MapChunk)(T packet) {
@@ -218,6 +222,12 @@ final class BraLaGame {
                     //debug _current_world.vram.log();
                 }
             }
+        }
+    }
+
+    void on_packet(T : s.ChangeGameState)(T packet) {
+        if(packet.reason == 3) {
+            player.mode = cast(Player.Mode)packet.mode;
         }
     }
 
