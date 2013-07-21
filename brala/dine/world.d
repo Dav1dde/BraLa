@@ -137,7 +137,7 @@ final class World {
 
         assert(engine.resmgr.get!Gloom("sphere").stride == 3, "invalid sphere");
 
-        engine.on_shutdown.connect(&shutdown);
+        engine.on_shutdown.connect!"shutdown"(this);
 
         // Renderdistance 10 has a maximum of 441 chunks
         // Renderdistance 15 has a maximum of 961 chunks
@@ -209,7 +209,7 @@ final class World {
 
     void shutdown() {
         logger.log!Info("Disconnecting world from shutdown event");
-        engine.on_shutdown.disconnect(&shutdown);
+        engine.on_shutdown.disconnect!"shutdown"(this);
 
         logger.log!Info("Sending stop to tessellation thread");
         tessellation_thread.stop();

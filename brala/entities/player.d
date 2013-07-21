@@ -74,12 +74,9 @@ class Player : NamedEntity {
 //         this.physics = new SurvivalPhysics(this, camera, game.current_world);
         this.physics = new CreativePhysics(this, camera, game.current_world);
 
-        engine.on_resize.connect({
-            camera.viewport = engine.viewport;
-            camera.recalculate();
-        });
-        window.on_mouse_pos.connect(&on_mouse_pos);
-        game.on_notchian_tick.connect(&on_tick);
+        engine.on_resize.connect!"on_resize"(this);
+        window.on_mouse_pos.connect!"on_mouse_pos"(this);
+        game.on_notchian_tick.connect!"on_tick"(this);
 
         game.config.connect(MOVE_FORWARD, "game.key.movement.forward").emit();
         game.config.connect(MOVE_BACKWARD, "game.key.movement.backward").emit();
@@ -91,12 +88,15 @@ class Player : NamedEntity {
         game.config.connect(MOVE_DOWN, "game.key.movement.sneak").emit();
         game.config.connect(SENSITIVITY, "game.mouse.sensitivity").emit();
 
-        window.single_key_down[JUMP].connect({ physics.jump(); });
-
         assert(MOVE_FORWARD.value != 0);
         assert(MOVE_BACKWARD.value != 0);
         assert(STRAFE_LEFT.value != 0);
         assert(STRAFE_RIGHT.value != 0);
+    }
+
+    void on_resize() {
+        camera.viewport = engine.viewport;
+        camera.recalculate();
     }
 
     void update(TickDuration delta_t) {

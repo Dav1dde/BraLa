@@ -70,8 +70,8 @@ final class BraLaGame {
             this.renderer = new DeferredRenderer(engine);
         }
 
-        engine.on_frame.connect(&poll);
-        engine.on_shutdown.connect(&shutdown);
+        engine.on_frame.connect!"poll"(this);
+        engine.on_shutdown.connect!"shutdown"(this);
     }
 
     void quit() {

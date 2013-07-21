@@ -90,7 +90,7 @@ final class BraLa {
         initialize_context();
         initialize_engine();
 
-        window.single_key_down[GLFW_KEY_ESCAPE].connect(&exit);
+        window.single_key_down[GLFW_KEY_ESCAPE].connect!"exit"(this);
         window.on_close = &on_close;
 
         if(!config.get!bool("brala.no_snoop") && !config.get!bool("connection.offline")) {

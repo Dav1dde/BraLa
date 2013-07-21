@@ -47,7 +47,7 @@ class TScreen {
 
     this(BraLaEngine engine, float[] vertices) {
         this.engine = engine;
-        engine.on_shutdown.connect(&shutdown);
+        engine.on_shutdown.connect!"shutdown"(this);
 
         vao = new VAO();
         vbo = new Buffer();
@@ -104,7 +104,7 @@ class SplitTScreen {
 
     this(BraLaEngine engine, int x_tiles, int y_tiles, bool inverted_uvy) {
         this.engine = engine;
-        engine.on_shutdown.connect(&shutdown);
+        engine.on_shutdown.connect!"shutdown"(this);
 
         float[] base_vertices;
         if(inverted_uvy) {

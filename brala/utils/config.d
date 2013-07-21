@@ -26,15 +26,21 @@ private {
 private struct ValueSignalPair(Value) {
     Value value;
     alias value this;
-    Signal!(Config, string) signal;
+    Signal!(Config, string)* signal;
     bool set = false;
 
-    this(T)(T handler) if(__traits(compiles, signal.connect(handler))) {
-//         signal = new Signal!(string);
-        signal.connect(handler);
+    this(T)(T handler) if(__traits(compiles, signal.strongConnect(handler))) {
+        signal = new Signal!(Config, string);
+        signal.strongConnect(handler);
+    }
+
+    this(string method, T)(T clazz) {
+        signal = new Signal!(Config, string);
+        signal.connect!method(clazz);
     }
 
     this()(Value value) {
+        signal = new Signal!(Config, string);
         this.value = value;
         this.set = true;
     }
@@ -49,6 +55,16 @@ class Config {
             alias get_db = db;
         } else {
             alias get_db = db_arrays;
+        }
+    }
+
+    private static struct FakeEmitter(ST) {
+        Config config;
+        string key;
+        ST signal;
+
+        void emit() {
+            signal.emit(config, key);
         }
     }
 
@@ -239,7 +255,7 @@ class Config {
             } catch(RangeError) {}
         } else {
             try {
-                return db[s];
+                return db[s].value;
             } catch(RangeError) {}
         }
 
@@ -320,37 +336,48 @@ class Config {
         return value && value.set;
     }
 
-    auto connect(T, S)(string key, auto ref S handler) {
+    auto connect(string method, T, S)(string key, S clazz) {
         alias cdb = get_db!T;
 
         if(auto v = key in cdb) {
-            v.signal.connect(handler);
+            v.signal.connect!method(clazz);
+        } else {
+            alias VP = typeof(cdb[key]);
+            cdb[key] = VP!method(clazz);
+        }
+
+        return FakeEmitter!(typeof(cdb[key].signal))(this, key, cdb[key].signal);
+    }
+
+    auto strongConnect(T, S)(string key, S handler) {
+        alias cdb = get_db!T;
+
+        if(auto v = key in cdb) {
+            v.signal.strongConnect(handler);
         } else {
             cdb[key] = typeof(cdb[key])(handler);
         }
 
-        static struct FakeEmitter {
-            Config config;
-            string key;
-            typeof(cdb[key].signal) signal;
-
-            void emit() {
-                signal.emit(config, key);
-            }
-        }
-
-        return FakeEmitter(this, key, cdb[key].signal);
+        return FakeEmitter!(typeof(cdb[key].signal))(this, key, cdb[key].signal);
     }
 
     auto connect(T)(ref T cb, string key) if(isInstanceOf!(ConfigBound, T)) {
         return cb.connect(this, key);
     }
 
-    void disconnect(T, S)(string key, auto ref S handler) {
+    void disconnect(string method, T, S)(string key, S clazz) {
         alias cdb = get_db!T;
 
         if(auto v = key in cdb) {
-            v.signal.disconnect(handler);
+            v.signal.disconnect!method(clazz);
+        }
+    }
+
+    void disconnect(T, S)(string key, S handler) {
+        alias cdb = get_db!T;
+
+        if(auto v = key in cdb) {
+            v.signal.strongDisconnect(handler);
         }
     }
 
@@ -368,6 +395,9 @@ class Config {
     void emit_all() {
         foreach(cdb; TypeTuple!(db, db_arrays))
         foreach(key, value; db) {
+            import std.stdio;
+            writefln("Key: %s, Value: %s, Signal: %s", key, value, value.signal);
+
             value.signal.emit(this, key);
         }
     }
@@ -406,7 +436,7 @@ struct ConfigBound(T, S = void) {
 
         this.key = key;
         this.config = config;
-        config.connect!GetType(key, &handler);
+        config.strongConnect!GetType(key, &handler);
 
         return FakeEmitter(&handler);
     }

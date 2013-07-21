@@ -77,7 +77,7 @@ final class BraLaEngine {
         resmgr = new ResourceManager();
         
         resize(window.width, window.height);
-        window.on_resize.connect(&resize);
+        window.on_resize.connect!"resize"(this);
     }
 
     void shutdown() {
