@@ -148,8 +148,8 @@ Config initialize_config() {
         auto profile = current_profile();
 
         config.set_if("account.session", profile.session);
-        config.set_if("account.username", profile.authentication["displayName"]);
-        config.set_if("account.realusername", profile.authentication["username"]);
+        config.set_if("account.username", profile.minecraft_username);
+        config.set_if("account.realusername", profile.username);
     }
 
     config.set("connection.offline", app_arguments.offline);

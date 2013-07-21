@@ -12,13 +12,17 @@ private {
 }
 
 struct Profile {
-    string[string] fields;
-    alias fields this;
-    string[string] authentication;
+    string name;
+
+    string username;
+    string minecraft_username;
+    string uuid;
+
+    string access_token;
 
     @property
     string session() {
-        return "token:%s:%s".format(authentication["accessToken"], authentication["uuid"]);
+        return "token:%s:%s".format(access_token, uuid);
     }
 }
 
@@ -30,23 +34,17 @@ Profile current_profile(string profile_name = "") {
     auto s = file.readText();
 
     auto json = parseJSON(s);
-    profile_name = profile_name.length == 0 ? json["selectedProfile"].str : profile_name;
+    profile_name = json["selectedProfile"].str;
 
     Profile profile;
     auto json_profile = json["profiles"][profile_name].object;
-    enforceEx!MinecraftException(json_profile !is null, "malformed profile");
-    foreach(key, value; json_profile) {
-        if(value.type == JSON_TYPE.STRING) {
-            profile[key] = value.str;
-        }
-    }
+    profile.name = json_profile["name"].str;
+    profile.uuid = json_profile["playerUUID"].str;
 
-    auto json_auth = json_profile["authentication"].object;
-    enforceEx!MinecraftException(json_auth !is null, "malformed profile");
-    foreach(key, value; json_auth) {
-        enforceEx!MinecraftException(value.type == JSON_TYPE.STRING, "malformed profile");
-        profile.authentication[key] = value.str;
-    }
+    auto json_auth = json["authenticationDatabase"][profile.uuid];
+    profile.username = json_auth["username"].str;
+    profile.minecraft_username = json_auth["displayName"].str;
+    profile.access_token = json_auth["accessToken"].str;
 
     return profile;
 }
