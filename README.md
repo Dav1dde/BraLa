@@ -24,11 +24,12 @@ creative mod or allow to fly).
 What BraLa *can* do:
 * Connect to 1.6.2 servers
 * Supports the whole 1.6.2 protocol
+* Display biome colors, based on rainfall/temperature
+* Display nearly all blocks
+* Physics
 * Authenticate with the official login servers
 * Read the lastlogin file / launcher_profiles.json
 * Send "snoop" requests
-* Display biome colors, based on rainfall/temperature
-* Display nearly all blocks
 
 Not a whole lot, but a start.
 
