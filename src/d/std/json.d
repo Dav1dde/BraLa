@@ -129,67 +129,112 @@ struct JSONValue
         return store.array;
     }
 
-    private void assign(T)(auto ref T arg)
+    private void assign(T)(T arg)
     {
-        static if(is(T : typeof(null))) {
+        static if(is(T : typeof(null)))
+        {
             type = JSON_TYPE.NULL;
-        } else static if(is(T : string)) {
+        }
+        else static if(is(T : string))
+        {
             type = JSON_TYPE.STRING;
             store.str = arg;
-        } else static if(is(T : ulong) && isUnsigned!T) {
+        }
+        else static if(is(T : ulong) && isUnsigned!T)
+        {
             type = JSON_TYPE.UINTEGER;
             store.uinteger = arg;
-        } else static if(is(T : long)) {
+        }
+        else static if(is(T : long))
+        {
             type = JSON_TYPE.INTEGER;
             store.integer = arg;
-        } else static if(isFloatingPoint!T) {
+        }
+        else static if(isFloatingPoint!T)
+        {
             type = JSON_TYPE.FLOAT;
             store.floating = arg;
-        } else static if(is(T : Value[Key], Key, Value)) {
+        }
+        else static if(is(T : Value[Key], Key, Value))
+        {
             static assert(is(Key : string), "AA key must be string");
             type = JSON_TYPE.OBJECT;
             static if(is(Value : JSONValue)) {
                 store.object = arg;
-            } else {
+            }
+            else
+            {
                 JSONValue[string] aa;
-                foreach(key, value; arg) {
+                foreach(key, value; arg)
                     aa[key] = JSONValue(value);
-                }
                 store.object = aa;
             }
-        } else static if(isArray!T) {
+        }
+        else static if(isArray!T)
+        {
             type = JSON_TYPE.ARRAY;
-            static if(is(ElementEncodingType!T : JSONValue)) {
+            static if(is(ElementEncodingType!T : JSONValue))
+            {
                 store.array = arg;
-            } else {
+            }
+            else
+            {
                 JSONValue[] new_arg = new JSONValue[arg.length];
-                foreach(i, e; arg) {
+                foreach(i, e; arg)
                     new_arg[i] = JSONValue(e);
-                }
                 store.array = new_arg;
             }
-        } else static if(is(T : bool)) {
-            if(arg) {
-                type = JSON_TYPE.TRUE;
-            } else {
-                type = JSON_TYPE.FALSE;
-            }
-        } else static if(is(T : JSONValue)) {
+        }
+        else static if(is(T : bool))
+        {
+            type = arg ? JSON_TYPE.TRUE : JSON_TYPE.FALSE;
+        }
+        else static if(is(T : JSONValue))
+        {
             type = arg.type;
             store = arg.store;
-        } else {
+        }
+        else
+        {
             static assert(false, text(`unable to convert type "`, T.stringof, `" to json`));
         }
     }
 
-    this(T)(auto ref T arg)
+    private void assignRef(T)(ref T arg) if(isStaticArray!T)
+    {
+        type = JSON_TYPE.ARRAY;
+        static if(is(ElementEncodingType!T : JSONValue))
+        {
+            store.array = arg;
+        }
+        else
+        {
+            JSONValue[] new_arg = new JSONValue[arg.length];
+            foreach(i, e; arg)
+                new_arg[i] = JSONValue(e);
+            store.array = new_arg;
+        }
+    }
+
+
+    this(T)(T arg) if(!isStaticArray!T)
     {
         assign(arg);
     }
 
-    void opAssign(T)(auto ref T arg)
+    this(T)(ref T arg) if(isStaticArray!T)
+    {
+        assignRef(arg);
+    }
+
+    void opAssign(T)(T arg) if(!isStaticArray!T)
     {
         assign(arg);
+    }
+
+    void opAssign(T)(ref T arg) if(isStaticArray!T)
+    {
+        assignRef(arg);
     }
 
     /// Array syntax for json arrays.
