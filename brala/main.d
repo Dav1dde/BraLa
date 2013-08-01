@@ -7,6 +7,7 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
+    import glad.loader;
 
     import std.conv : to;
     import std.path : buildPath, dirName, absolutePath;
@@ -83,12 +84,14 @@ final class BraLa {
     this(Config config) {
         this.config = config;
         this.session = new Session();
-        this.snooper = new DelayedSnooper();
 
         this.window = new Window();
 
         initialize_context();
         initialize_engine();
+
+        // initialize snooper after opengl was initialized!
+        this.snooper = new DelayedSnooper();
 
         window.single_key_down[GLFW_KEY_ESCAPE].connect!"exit"(this);
         window.on_close = &on_close;
@@ -151,7 +154,7 @@ final class BraLa {
             window.set_input_mode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
 
-        DerelictGL3.reload();
+        auto glv = gladLoadGL();
     }
 
     void initialize_engine() {
@@ -181,23 +184,22 @@ final class BraLa {
 
 
 int main(string[] args) {
-    DerelictGL3.load();
+    enforceEx!InitError(gladInit(), "gladInit failed!");
+    scope(exit) gladTerminate();
+
     version(DynamicGLFW) { DerelictGLFW3.load(); }
+    enforceEx!InitError(glfwInit(), "glfwInit failed!");
+    scope(exit) glfwTerminate();
 
     register_glfw_error_callback(&glfw_error_cb);
     debug glamour_set_error_callback(&glamour_error_cb);
-
-    enforceEx!InitError(glfwInit(), "glfwInit failed!");
-    scope(exit) glfwTerminate();
 
     Config config = initialize_config();
     string exedir = (args[0].dirName().absolutePath());
 
     auto brala = new BraLa(config);
 
-    scope(exit) {
-        brala.shutdown();
-    }
+    scope(exit) brala.shutdown();
 
     try brala.start();
     catch(Throwable t) logger.log_exception(t);

@@ -116,7 +116,7 @@ class DMD : DCompiler, Linker {
                         filter0(libraries).map!(x => LLF ~ x).join(" "),
                         filter0(options).map!(x => LF ~ x).join(" "),
                         out_path);
-
+        writefln("%s", cmd);
         print(cmd, out_path, "");
         shell(cmd);
     }
@@ -530,7 +530,7 @@ int main(string[] args) {
         static assert(false, "Unsupported compiler");
     }
 
-    dc.additional_flags = [dc.version_("Derelict3"), dc.version_("gl3n"), dc.version_("stb"),
+    dc.additional_flags = [dc.version_("glad"), dc.version_("gl3n"), dc.version_("stb"),
                            dc.version_("glamour"), dc.debug_, dc.debug_info];
     
     version(Windows) {
@@ -538,15 +538,15 @@ int main(string[] args) {
     }
 
     dc.import_paths = [buildPath("brala"),
-                       buildPath("src", "d", "derelict3", "import"),
-                       buildPath("src", "d", "glamour"),
-                       buildPath("src", "d", "gl3n"),
                        buildPath("src", "d"),
-                       buildPath("src", "d", "openssl"),
+                       buildPath("src", "d", "gl3n"),
+                       buildPath("src", "d", "glad"),
+                       buildPath("src", "d", "glamour"),
                        buildPath("src", "d", "glfw"),
-                       buildPath("src", "d", "nbd"),
                        buildPath("src", "d", "glwtf"),
                        buildPath("src", "d", "minilib"),
+                       buildPath("src", "d", "nbd"),
+                       buildPath("src", "d", "openssl"),
                        buildPath("src", "d", "std")];
 
     auto builder = new Builder(cache, dc, dc, cc);
@@ -563,16 +563,14 @@ int main(string[] args) {
     
     builder.add_scan_path(buildPath("brala"));
     builder.add_scan_path(buildPath("src", "d", "arsd"));
-    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "opengl3"));
-    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "glfw3"));
-    builder.add_scan_path(buildPath("src", "d", "derelict3", "import", "derelict", "util"));
     builder.add_scan_path(buildPath("src", "d", "etc"));
     builder.add_scan_path(buildPath("src", "d", "gl3n", "gl3n"));
+    builder.add_scan_path(buildPath("src", "d", "glad"));
     builder.add_scan_path(buildPath("src", "d", "glamour", "glamour"));
     builder.add_scan_path(buildPath("src", "d", "glwtf", "glwtf"));
     builder.add_scan_path(buildPath("src", "d", "minilib"));
     builder.add_scan_path(buildPath("src", "d", "nbd"), SpanMode.shallow);
-    builder.add_scan_path(buildPath("src", "d", "openssl"));
+//     builder.add_scan_path(buildPath("src", "d", "openssl"));
     builder.add_scan_path(buildPath("src", "d", "std"));
     builder.add_scan_path(buildPath("src", "c"), SpanMode.shallow);
 

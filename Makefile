@@ -4,7 +4,7 @@ export DESCRIPTION	= A Minecraft SMP Client written in D
 export VERSION		=
 export LICENSE		= GPLv3
 
-DCFLAGS_IMPORT		= -Ibrala/ -Isrc/d/derelict3/import -Isrc/d/glamour -Isrc/d/gl3n/ \
+DCFLAGS_IMPORT		= -Ibrala/ -Isrc/d/glad/ -Isrc/d/glamour -Isrc/d/gl3n/ \
 				-Isrc/d/ -Isrc/d/openssl/ -Isrc/d/glfw/ -Isrc/d/nbd/ -Isrc/d/glwtf/
 
 include command.make
@@ -13,7 +13,7 @@ DCFLAGS_LINK	= $(LDCFLAGS) $(LINKERFLAG)-lssl $(LINKERFLAG)-lcrypto \
 			$(LINKERFLAG)-Lbuild/glfw/src \
 			$(addprefix $(LINKERFLAG),$(shell env PKG_CONFIG_PATH=./build/glfw/src pkg-config --static --libs glfw3))
 
-VERSIONS	= Derelict3 gl3n glamour stb BraLa
+VERSIONS	= glad gl3n glamour stb BraLa
 
 ifeq ($(DC),ldc2)
 	ADDITIONAL_FLAGS = $(addprefix -d-version=,$(VERSIONS)) -d-debug -unittest -g -gc
@@ -26,7 +26,7 @@ endif
 
 OBJDIRS		= $(DBUILD_PATH)/brala \
 			$(DBUILD_PATH)/src/d/arsd \
-			$(DBUILD_PATH)/src/d/derelict3 \
+			$(DBUILD_PATH)/src/d/glad \
 			$(DBUILD_PATH)/src/d/etc \
 			$(DBUILD_PATH)/src/d/gl3n \
 			$(DBUILD_PATH)/src/d/glamour \
@@ -45,16 +45,13 @@ DOBJECTS	= $(patsubst %.d,$(DBUILD_PATH)/%$(EXT),   $(DSOURCES))
 DSOURCES_GL3N	= $(call getSource,src/d/gl3n/gl3n,d)
 DOBJECTS_GL3N	= $(patsubst %.d,$(DBUILD_PATH_GL3N)/%$(EXT),   $(DSOURCES_GL3N))
 
-DERELICT_DIR	= src/d/derelict3/import/derelict
-DSOURCES_DERELICT	= $(call getSource,$(DERELICT_DIR)/opengl3,d) $(call getSource,$(DERELICT_DIR)/util,d)
-DOBJECTS_DERELICT	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_DERELICT))
-
 DSOURCES_GLAMOUR	= $(call getSource,src/d/glamour/glamour,d)
 DOBJECTS_GLAMOUR	= $(patsubst %.d,$(DBUILD_PATH_GLAMOUR)/%$(EXT),   $(DSOURCES_GLAMOUR))
 
 DSOURCES_OTHER		= $(call getSource,src/d/arsd,d) $(call getSource,src/d/etc,d) \
 				src/d/nbd/nbt.d $(call getSource,src/d/glwtf,d) \
-				$(call getSource,src/d/minilib,d) $(call getSource,src/d/std,d)
+				$(call getSource,src/d/minilib,d) $(call getSource,src/d/std,d) \
+				$(call getSource,src/d/glad,d)
 DOBJECTS_OTHER		= $(patsubst %.d,$(DBUILD_PATH_OTHER)/%$(EXT),   $(DSOURCES_OTHER))
 
 CSOURCES	= src/c/stb_image.c src/c/stb_image_write.c
@@ -69,9 +66,9 @@ all: brala
 
 .PHONY: clean
 
-brala: buildDir glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_DERELICT) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
+brala: buildDir glfw $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_OTHER)
 	@echo "    LD     bin/bralad"
-	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) $(DOBJECTS_DERELICT) \
+	@$(DC) $(DCFLAGS_LINK) $(COBJECTS) $(DOBJECTS) $(DOBJECTS_GL3N) $(DOBJECTS_GLAMOUR) \
 	$(DOBJECTS_OTHER) $(DCFLAGS) $(OUTPUT)bin/bralad
 
 glfw:
@@ -88,10 +85,6 @@ $(DBUILD_PATH)/%$(EXT) : %.d
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
 $(DBUILD_PATH_GL3N)/%$(EXT) : %.d
-	@echo "    $(DC_UPPER)    $<"
-	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
-
-$(DBUILD_PATH_DERELICT)/%$(EXT): %.d
 	@echo "    $(DC_UPPER)    $<"
 	@$(DC) $(DCFLAGS) $(DCFLAGS_IMPORT) $(ADDITIONAL_FLAGS) -c $< $(OUTPUT)$@
 
