@@ -2,7 +2,6 @@ module glad.glfuncs;
 
 
 private import glad.gltypes;
-
 // GL_VERSION_1_0
 bool GL_VERSION_1_0;
 extern(System) alias fp_glCullFace = void function(GLenum) nothrow; __gshared fp_glCullFace glCullFace;

@@ -4,7 +4,6 @@ module glad.glext;
 private import glad.gltypes;
 private import glad.glenums;
 private import glad.glfuncs;
-
 // GL_SGIX_pixel_tiles
 bool GL_SGIX_pixel_tiles;
 enum uint GL_PIXEL_TILE_BEST_ALIGNMENT_SGIX = 0x813E;
