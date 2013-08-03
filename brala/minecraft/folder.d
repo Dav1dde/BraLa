@@ -3,6 +3,7 @@ module brala.minecraft.folder;
 private {
     import std.path : buildPath, expandTilde, setExtension, baseName, stripExtension;
     import std.exception : enforceEx;
+    import std.process : getenv;
     import std.array : array;
     import std.file : exists, dirEntries, SpanMode;
     import std.algorithm : endsWith, sort, filter;
