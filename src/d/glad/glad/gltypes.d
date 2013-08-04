@@ -33,14 +33,13 @@ alias GLfixed = int;
 alias GLhalf = ushort;
 alias GLclampx = int;
 alias GLhalfNV = ushort;
-struct __GLsync {}
+struct __GLsync;
 alias GLsync = __GLsync*;
-
-struct _cl_context {}
+struct _cl_context;
 struct _cl_event;
-
-extern(System) alias GLDEBUGPROC = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, in GLchar*, GLvoid*);
+extern(System) {
+alias GLDEBUGPROC = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, in GLchar*, GLvoid*);
 alias GLDEBUGPROCARB = GLDEBUGPROC;
 alias GLDEBUGPROCKHR = GLDEBUGPROC;
-extern(System) alias GLDEBUGPROCAMD = void function(GLuint, GLenum, GLenum, GLsizei, in GLchar*, GLvoid*);
-
+alias GLDEBUGPROCAMD = void function(GLuint, GLenum, GLenum, GLsizei, in GLchar*, GLvoid*);
+}

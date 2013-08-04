@@ -4,7 +4,6 @@ module glad.glext;
 private import glad.gltypes;
 private import glad.glenums;
 private import glad.glfuncs;
-// GL_SGIX_pixel_tiles
 bool GL_SGIX_pixel_tiles;
 enum uint GL_PIXEL_TILE_BEST_ALIGNMENT_SGIX = 0x813E;
 enum uint GL_PIXEL_TILE_CACHE_INCREMENT_SGIX = 0x813F;
@@ -14,61 +13,48 @@ enum uint GL_PIXEL_TILE_GRID_WIDTH_SGIX = 0x8142;
 enum uint GL_PIXEL_TILE_GRID_HEIGHT_SGIX = 0x8143;
 enum uint GL_PIXEL_TILE_GRID_DEPTH_SGIX = 0x8144;
 enum uint GL_PIXEL_TILE_CACHE_SIZE_SGIX = 0x8145;
-// GL_NV_point_sprite
+
 bool GL_NV_point_sprite;
 enum uint GL_POINT_SPRITE_NV = 0x8861;
 enum uint GL_COORD_REPLACE_NV = 0x8862;
 enum uint GL_POINT_SPRITE_R_MODE_NV = 0x8863;
-extern(System) alias fp_glPointParameteriNV = void function(GLenum, GLint) nothrow; __gshared fp_glPointParameteriNV glPointParameteriNV;
-extern(System) alias fp_glPointParameterivNV = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glPointParameterivNV glPointParameterivNV;
-// GL_APPLE_element_array
+
 bool GL_APPLE_element_array;
 enum uint GL_ELEMENT_ARRAY_APPLE = 0x8A0C;
 enum uint GL_ELEMENT_ARRAY_TYPE_APPLE = 0x8A0D;
 enum uint GL_ELEMENT_ARRAY_POINTER_APPLE = 0x8A0E;
-extern(System) alias fp_glElementPointerAPPLE = void function(GLenum, const(GLvoid)*) nothrow; __gshared fp_glElementPointerAPPLE glElementPointerAPPLE;
-extern(System) alias fp_glDrawElementArrayAPPLE = void function(GLenum, GLint, GLsizei) nothrow; __gshared fp_glDrawElementArrayAPPLE glDrawElementArrayAPPLE;
-extern(System) alias fp_glDrawRangeElementArrayAPPLE = void function(GLenum, GLuint, GLuint, GLint, GLsizei) nothrow; __gshared fp_glDrawRangeElementArrayAPPLE glDrawRangeElementArrayAPPLE;
-extern(System) alias fp_glMultiDrawElementArrayAPPLE = void function(GLenum, const(GLint)*, const(GLsizei)*, GLsizei) nothrow; __gshared fp_glMultiDrawElementArrayAPPLE glMultiDrawElementArrayAPPLE;
-extern(System) alias fp_glMultiDrawRangeElementArrayAPPLE = void function(GLenum, GLuint, GLuint, const(GLint)*, const(GLsizei)*, GLsizei) nothrow; __gshared fp_glMultiDrawRangeElementArrayAPPLE glMultiDrawRangeElementArrayAPPLE;
-// GL_AMD_multi_draw_indirect
+
 bool GL_AMD_multi_draw_indirect;
-extern(System) alias fp_glMultiDrawArraysIndirectAMD = void function(GLenum, const(GLvoid)*, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawArraysIndirectAMD glMultiDrawArraysIndirectAMD;
-extern(System) alias fp_glMultiDrawElementsIndirectAMD = void function(GLenum, GLenum, const(GLvoid)*, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawElementsIndirectAMD glMultiDrawElementsIndirectAMD;
-// GL_EXT_blend_subtract
+
 bool GL_EXT_blend_subtract;
 enum uint GL_FUNC_SUBTRACT_EXT = 0x800A;
 enum uint GL_FUNC_REVERSE_SUBTRACT_EXT = 0x800B;
-// GL_SGIX_tag_sample_buffer
+
 bool GL_SGIX_tag_sample_buffer;
-extern(System) alias fp_glTagSampleBufferSGIX = void function() nothrow; __gshared fp_glTagSampleBufferSGIX glTagSampleBufferSGIX;
-// GL_IBM_texture_mirrored_repeat
+
 bool GL_IBM_texture_mirrored_repeat;
 enum uint GL_MIRRORED_REPEAT_IBM = 0x8370;
-// GL_APPLE_transform_hint
+
 bool GL_APPLE_transform_hint;
 enum uint GL_TRANSFORM_HINT_APPLE = 0x85B1;
-// GL_ATI_separate_stencil
+
 bool GL_ATI_separate_stencil;
 enum uint GL_STENCIL_BACK_FUNC_ATI = 0x8800;
 enum uint GL_STENCIL_BACK_FAIL_ATI = 0x8801;
 enum uint GL_STENCIL_BACK_PASS_DEPTH_FAIL_ATI = 0x8802;
 enum uint GL_STENCIL_BACK_PASS_DEPTH_PASS_ATI = 0x8803;
-extern(System) alias fp_glStencilOpSeparateATI = void function(GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glStencilOpSeparateATI glStencilOpSeparateATI;
-extern(System) alias fp_glStencilFuncSeparateATI = void function(GLenum, GLenum, GLint, GLuint) nothrow; __gshared fp_glStencilFuncSeparateATI glStencilFuncSeparateATI;
-// GL_NV_vertex_program2_option
+
 bool GL_NV_vertex_program2_option;
 enum uint GL_MAX_PROGRAM_EXEC_INSTRUCTIONS_NV = 0x88F4;
 enum uint GL_MAX_PROGRAM_CALL_DEPTH_NV = 0x88F5;
-// GL_EXT_texture_buffer_object
+
 bool GL_EXT_texture_buffer_object;
 enum uint GL_TEXTURE_BUFFER_EXT = 0x8C2A;
 enum uint GL_MAX_TEXTURE_BUFFER_SIZE_EXT = 0x8C2B;
 enum uint GL_TEXTURE_BINDING_BUFFER_EXT = 0x8C2C;
 enum uint GL_TEXTURE_BUFFER_DATA_STORE_BINDING_EXT = 0x8C2D;
 enum uint GL_TEXTURE_BUFFER_FORMAT_EXT = 0x8C2E;
-extern(System) alias fp_glTexBufferEXT = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glTexBufferEXT glTexBufferEXT;
-// GL_ARB_vertex_blend
+
 bool GL_ARB_vertex_blend;
 enum uint GL_MAX_VERTEX_UNITS_ARB = 0x86A4;
 enum uint GL_ACTIVE_VERTEX_UNITS_ARB = 0x86A5;
@@ -112,85 +98,19 @@ enum uint GL_MODELVIEW28_ARB = 0x873C;
 enum uint GL_MODELVIEW29_ARB = 0x873D;
 enum uint GL_MODELVIEW30_ARB = 0x873E;
 enum uint GL_MODELVIEW31_ARB = 0x873F;
-extern(System) alias fp_glWeightbvARB = void function(GLint, const(GLbyte)*) nothrow; __gshared fp_glWeightbvARB glWeightbvARB;
-extern(System) alias fp_glWeightsvARB = void function(GLint, const(GLshort)*) nothrow; __gshared fp_glWeightsvARB glWeightsvARB;
-extern(System) alias fp_glWeightivARB = void function(GLint, const(GLint)*) nothrow; __gshared fp_glWeightivARB glWeightivARB;
-extern(System) alias fp_glWeightfvARB = void function(GLint, const(GLfloat)*) nothrow; __gshared fp_glWeightfvARB glWeightfvARB;
-extern(System) alias fp_glWeightdvARB = void function(GLint, const(GLdouble)*) nothrow; __gshared fp_glWeightdvARB glWeightdvARB;
-extern(System) alias fp_glWeightubvARB = void function(GLint, const(GLubyte)*) nothrow; __gshared fp_glWeightubvARB glWeightubvARB;
-extern(System) alias fp_glWeightusvARB = void function(GLint, const(GLushort)*) nothrow; __gshared fp_glWeightusvARB glWeightusvARB;
-extern(System) alias fp_glWeightuivARB = void function(GLint, const(GLuint)*) nothrow; __gshared fp_glWeightuivARB glWeightuivARB;
-extern(System) alias fp_glWeightPointerARB = void function(GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glWeightPointerARB glWeightPointerARB;
-extern(System) alias fp_glVertexBlendARB = void function(GLint) nothrow; __gshared fp_glVertexBlendARB glVertexBlendARB;
-// GL_NV_vertex_program2
+
 bool GL_NV_vertex_program2;
-// GL_ARB_program_interface_query
+
 bool GL_ARB_program_interface_query;
-// enum uint GL_UNIFORM = 0x92E1;
-// enum uint GL_UNIFORM_BLOCK = 0x92E2;
-// enum uint GL_PROGRAM_INPUT = 0x92E3;
-// enum uint GL_PROGRAM_OUTPUT = 0x92E4;
-// enum uint GL_BUFFER_VARIABLE = 0x92E5;
-// enum uint GL_SHADER_STORAGE_BLOCK = 0x92E6;
-// enum uint GL_ATOMIC_COUNTER_BUFFER = 0x92C0;
-// enum uint GL_VERTEX_SUBROUTINE = 0x92E8;
-// enum uint GL_TESS_CONTROL_SUBROUTINE = 0x92E9;
-// enum uint GL_TESS_EVALUATION_SUBROUTINE = 0x92EA;
-// enum uint GL_GEOMETRY_SUBROUTINE = 0x92EB;
-// enum uint GL_FRAGMENT_SUBROUTINE = 0x92EC;
-// enum uint GL_COMPUTE_SUBROUTINE = 0x92ED;
-// enum uint GL_VERTEX_SUBROUTINE_UNIFORM = 0x92EE;
-// enum uint GL_TESS_CONTROL_SUBROUTINE_UNIFORM = 0x92EF;
-// enum uint GL_TESS_EVALUATION_SUBROUTINE_UNIFORM = 0x92F0;
-// enum uint GL_GEOMETRY_SUBROUTINE_UNIFORM = 0x92F1;
-// enum uint GL_FRAGMENT_SUBROUTINE_UNIFORM = 0x92F2;
-// enum uint GL_COMPUTE_SUBROUTINE_UNIFORM = 0x92F3;
-// enum uint GL_TRANSFORM_FEEDBACK_VARYING = 0x92F4;
-// enum uint GL_ACTIVE_RESOURCES = 0x92F5;
-// enum uint GL_MAX_NAME_LENGTH = 0x92F6;
-// enum uint GL_MAX_NUM_ACTIVE_VARIABLES = 0x92F7;
-// enum uint GL_MAX_NUM_COMPATIBLE_SUBROUTINES = 0x92F8;
-// enum uint GL_NAME_LENGTH = 0x92F9;
-// enum uint GL_TYPE = 0x92FA;
-// enum uint GL_ARRAY_SIZE = 0x92FB;
-// enum uint GL_OFFSET = 0x92FC;
-// enum uint GL_BLOCK_INDEX = 0x92FD;
-// enum uint GL_ARRAY_STRIDE = 0x92FE;
-// enum uint GL_MATRIX_STRIDE = 0x92FF;
-// enum uint GL_IS_ROW_MAJOR = 0x9300;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_INDEX = 0x9301;
-// enum uint GL_BUFFER_BINDING = 0x9302;
-// enum uint GL_BUFFER_DATA_SIZE = 0x9303;
-// enum uint GL_NUM_ACTIVE_VARIABLES = 0x9304;
-// enum uint GL_ACTIVE_VARIABLES = 0x9305;
-// enum uint GL_REFERENCED_BY_VERTEX_SHADER = 0x9306;
-// enum uint GL_REFERENCED_BY_TESS_CONTROL_SHADER = 0x9307;
-// enum uint GL_REFERENCED_BY_TESS_EVALUATION_SHADER = 0x9308;
-// enum uint GL_REFERENCED_BY_GEOMETRY_SHADER = 0x9309;
-// enum uint GL_REFERENCED_BY_FRAGMENT_SHADER = 0x930A;
-// enum uint GL_REFERENCED_BY_COMPUTE_SHADER = 0x930B;
-// enum uint GL_TOP_LEVEL_ARRAY_SIZE = 0x930C;
-// enum uint GL_TOP_LEVEL_ARRAY_STRIDE = 0x930D;
-// enum uint GL_LOCATION = 0x930E;
-// enum uint GL_LOCATION_INDEX = 0x930F;
-// enum uint GL_IS_PER_PATCH = 0x92E7;
-// enum uint GL_NUM_COMPATIBLE_SUBROUTINES = 0x8E4A;
-// enum uint GL_COMPATIBLE_SUBROUTINES = 0x8E4B;
-// extern(System) alias fp_glGetProgramInterfaceiv = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetProgramInterfaceiv glGetProgramInterfaceiv;
-// extern(System) alias fp_glGetProgramResourceIndex = GLuint function(GLuint, GLenum, const(GLchar)*) nothrow; __gshared fp_glGetProgramResourceIndex glGetProgramResourceIndex;
-// extern(System) alias fp_glGetProgramResourceName = void function(GLuint, GLenum, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetProgramResourceName glGetProgramResourceName;
-// extern(System) alias fp_glGetProgramResourceiv = void function(GLuint, GLenum, GLuint, GLsizei, const(GLenum)*, GLsizei, GLsizei*, GLint*) nothrow; __gshared fp_glGetProgramResourceiv glGetProgramResourceiv;
-// extern(System) alias fp_glGetProgramResourceLocation = GLint function(GLuint, GLenum, const(GLchar)*) nothrow; __gshared fp_glGetProgramResourceLocation glGetProgramResourceLocation;
-// extern(System) alias fp_glGetProgramResourceLocationIndex = GLint function(GLuint, GLenum, const(GLchar)*) nothrow; __gshared fp_glGetProgramResourceLocationIndex glGetProgramResourceLocationIndex;
-// GL_EXT_misc_attribute
+
 bool GL_EXT_misc_attribute;
-// GL_NV_multisample_coverage
+
 bool GL_NV_multisample_coverage;
 enum uint GL_SAMPLES_ARB = 0x80A9;
 enum uint GL_COLOR_SAMPLES_NV = 0x8E20;
-// GL_ARB_shading_language_packing
+
 bool GL_ARB_shading_language_packing;
-// GL_EXT_texture_cube_map
+
 bool GL_EXT_texture_cube_map;
 enum uint GL_NORMAL_MAP_EXT = 0x8511;
 enum uint GL_REFLECTION_MAP_EXT = 0x8512;
@@ -204,17 +124,14 @@ enum uint GL_TEXTURE_CUBE_MAP_POSITIVE_Z_EXT = 0x8519;
 enum uint GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_EXT = 0x851A;
 enum uint GL_PROXY_TEXTURE_CUBE_MAP_EXT = 0x851B;
 enum uint GL_MAX_CUBE_MAP_TEXTURE_SIZE_EXT = 0x851C;
-// GL_ARB_texture_stencil8
+
 bool GL_ARB_texture_stencil8;
-// enum uint GL_STENCIL_INDEX = 0x1901;
-// enum uint GL_STENCIL_INDEX8 = 0x8D48;
-// GL_EXT_index_func
+
 bool GL_EXT_index_func;
 enum uint GL_INDEX_TEST_EXT = 0x81B5;
 enum uint GL_INDEX_TEST_FUNC_EXT = 0x81B6;
 enum uint GL_INDEX_TEST_REF_EXT = 0x81B7;
-extern(System) alias fp_glIndexFuncEXT = void function(GLenum, GLclampf) nothrow; __gshared fp_glIndexFuncEXT glIndexFuncEXT;
-// GL_OES_compressed_paletted_texture
+
 bool GL_OES_compressed_paletted_texture;
 enum uint GL_PALETTE4_RGB8_OES = 0x8B90;
 enum uint GL_PALETTE4_RGBA8_OES = 0x8B91;
@@ -226,84 +143,33 @@ enum uint GL_PALETTE8_RGBA8_OES = 0x8B96;
 enum uint GL_PALETTE8_R5_G6_B5_OES = 0x8B97;
 enum uint GL_PALETTE8_RGBA4_OES = 0x8B98;
 enum uint GL_PALETTE8_RGB5_A1_OES = 0x8B99;
-// GL_NV_depth_clamp
+
 bool GL_NV_depth_clamp;
 enum uint GL_DEPTH_CLAMP_NV = 0x864F;
-// GL_NV_shader_buffer_load
+
 bool GL_NV_shader_buffer_load;
 enum uint GL_BUFFER_GPU_ADDRESS_NV = 0x8F1D;
 enum uint GL_GPU_ADDRESS_NV = 0x8F34;
 enum uint GL_MAX_SHADER_BUFFER_ADDRESS_NV = 0x8F35;
-extern(System) alias fp_glMakeBufferResidentNV = void function(GLenum, GLenum) nothrow; __gshared fp_glMakeBufferResidentNV glMakeBufferResidentNV;
-extern(System) alias fp_glMakeBufferNonResidentNV = void function(GLenum) nothrow; __gshared fp_glMakeBufferNonResidentNV glMakeBufferNonResidentNV;
-extern(System) alias fp_glIsBufferResidentNV = GLboolean function(GLenum) nothrow; __gshared fp_glIsBufferResidentNV glIsBufferResidentNV;
-extern(System) alias fp_glMakeNamedBufferResidentNV = void function(GLuint, GLenum) nothrow; __gshared fp_glMakeNamedBufferResidentNV glMakeNamedBufferResidentNV;
-extern(System) alias fp_glMakeNamedBufferNonResidentNV = void function(GLuint) nothrow; __gshared fp_glMakeNamedBufferNonResidentNV glMakeNamedBufferNonResidentNV;
-extern(System) alias fp_glIsNamedBufferResidentNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsNamedBufferResidentNV glIsNamedBufferResidentNV;
-extern(System) alias fp_glGetBufferParameterui64vNV = void function(GLenum, GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetBufferParameterui64vNV glGetBufferParameterui64vNV;
-extern(System) alias fp_glGetNamedBufferParameterui64vNV = void function(GLuint, GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetNamedBufferParameterui64vNV glGetNamedBufferParameterui64vNV;
-extern(System) alias fp_glGetIntegerui64vNV = void function(GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetIntegerui64vNV glGetIntegerui64vNV;
-extern(System) alias fp_glUniformui64NV = void function(GLint, GLuint64EXT) nothrow; __gshared fp_glUniformui64NV glUniformui64NV;
-extern(System) alias fp_glUniformui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glUniformui64vNV glUniformui64vNV;
-extern(System) alias fp_glGetUniformui64vNV = void function(GLuint, GLint, GLuint64EXT*) nothrow; __gshared fp_glGetUniformui64vNV glGetUniformui64vNV;
-extern(System) alias fp_glProgramUniformui64NV = void function(GLuint, GLint, GLuint64EXT) nothrow; __gshared fp_glProgramUniformui64NV glProgramUniformui64NV;
-extern(System) alias fp_glProgramUniformui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glProgramUniformui64vNV glProgramUniformui64vNV;
-// GL_EXT_color_subtable
+
 bool GL_EXT_color_subtable;
-extern(System) alias fp_glColorSubTableEXT = void function(GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glColorSubTableEXT glColorSubTableEXT;
-extern(System) alias fp_glCopyColorSubTableEXT = void function(GLenum, GLsizei, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyColorSubTableEXT glCopyColorSubTableEXT;
-// GL_SUNX_constant_data
+
 bool GL_SUNX_constant_data;
 enum uint GL_UNPACK_CONSTANT_DATA_SUNX = 0x81D5;
 enum uint GL_TEXTURE_CONSTANT_DATA_SUNX = 0x81D6;
-extern(System) alias fp_glFinishTextureSUNX = void function() nothrow; __gshared fp_glFinishTextureSUNX glFinishTextureSUNX;
-// GL_EXT_multi_draw_arrays
+
 bool GL_EXT_multi_draw_arrays;
-extern(System) alias fp_glMultiDrawArraysEXT = void function(GLenum, const(GLint)*, const(GLsizei)*, GLsizei) nothrow; __gshared fp_glMultiDrawArraysEXT glMultiDrawArraysEXT;
-extern(System) alias fp_glMultiDrawElementsEXT = void function(GLenum, const(GLsizei)*, GLenum, const(GLvoid*)*, GLsizei) nothrow; __gshared fp_glMultiDrawElementsEXT glMultiDrawElementsEXT;
-// GL_ARB_shader_atomic_counters
+
 bool GL_ARB_shader_atomic_counters;
-// enum uint GL_ATOMIC_COUNTER_BUFFER = 0x92C0;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_BINDING = 0x92C1;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_START = 0x92C2;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_SIZE = 0x92C3;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_DATA_SIZE = 0x92C4;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTERS = 0x92C5;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_ACTIVE_ATOMIC_COUNTER_INDICES = 0x92C6;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER = 0x92C7;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_CONTROL_SHADER = 0x92C8;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_TESS_EVALUATION_SHADER = 0x92C9;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_GEOMETRY_SHADER = 0x92CA;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_FRAGMENT_SHADER = 0x92CB;
-// enum uint GL_MAX_VERTEX_ATOMIC_COUNTER_BUFFERS = 0x92CC;
-// enum uint GL_MAX_TESS_CONTROL_ATOMIC_COUNTER_BUFFERS = 0x92CD;
-// enum uint GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS = 0x92CE;
-// enum uint GL_MAX_GEOMETRY_ATOMIC_COUNTER_BUFFERS = 0x92CF;
-// enum uint GL_MAX_FRAGMENT_ATOMIC_COUNTER_BUFFERS = 0x92D0;
-// enum uint GL_MAX_COMBINED_ATOMIC_COUNTER_BUFFERS = 0x92D1;
-// enum uint GL_MAX_VERTEX_ATOMIC_COUNTERS = 0x92D2;
-// enum uint GL_MAX_TESS_CONTROL_ATOMIC_COUNTERS = 0x92D3;
-// enum uint GL_MAX_TESS_EVALUATION_ATOMIC_COUNTERS = 0x92D4;
-// enum uint GL_MAX_GEOMETRY_ATOMIC_COUNTERS = 0x92D5;
-// enum uint GL_MAX_FRAGMENT_ATOMIC_COUNTERS = 0x92D6;
-// enum uint GL_MAX_COMBINED_ATOMIC_COUNTERS = 0x92D7;
-// enum uint GL_MAX_ATOMIC_COUNTER_BUFFER_SIZE = 0x92D8;
-// enum uint GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS = 0x92DC;
-// enum uint GL_ACTIVE_ATOMIC_COUNTER_BUFFERS = 0x92D9;
-// enum uint GL_UNIFORM_ATOMIC_COUNTER_BUFFER_INDEX = 0x92DA;
-// enum uint GL_UNSIGNED_INT_ATOMIC_COUNTER = 0x92DB;
-// extern(System) alias fp_glGetActiveAtomicCounterBufferiv = void function(GLuint, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetActiveAtomicCounterBufferiv glGetActiveAtomicCounterBufferiv;
-// GL_ARB_arrays_of_arrays
+
 bool GL_ARB_arrays_of_arrays;
-// GL_NV_conditional_render
+
 bool GL_NV_conditional_render;
 enum uint GL_QUERY_WAIT_NV = 0x8E13;
 enum uint GL_QUERY_NO_WAIT_NV = 0x8E14;
 enum uint GL_QUERY_BY_REGION_WAIT_NV = 0x8E15;
 enum uint GL_QUERY_BY_REGION_NO_WAIT_NV = 0x8E16;
-extern(System) alias fp_glBeginConditionalRenderNV = void function(GLuint, GLenum) nothrow; __gshared fp_glBeginConditionalRenderNV glBeginConditionalRenderNV;
-extern(System) alias fp_glEndConditionalRenderNV = void function() nothrow; __gshared fp_glEndConditionalRenderNV glEndConditionalRenderNV;
-// GL_EXT_texture_env_combine
+
 bool GL_EXT_texture_env_combine;
 enum uint GL_COMBINE_EXT = 0x8570;
 enum uint GL_COMBINE_RGB_EXT = 0x8571;
@@ -326,39 +192,31 @@ enum uint GL_OPERAND2_RGB_EXT = 0x8592;
 enum uint GL_OPERAND0_ALPHA_EXT = 0x8598;
 enum uint GL_OPERAND1_ALPHA_EXT = 0x8599;
 enum uint GL_OPERAND2_ALPHA_EXT = 0x859A;
-// GL_NV_fog_distance
+
 bool GL_NV_fog_distance;
 enum uint GL_FOG_DISTANCE_MODE_NV = 0x855A;
 enum uint GL_EYE_RADIAL_NV = 0x855B;
 enum uint GL_EYE_PLANE_ABSOLUTE_NV = 0x855C;
-enum uint GL_EYE_PLANE = 0x2502;
-// GL_SGIX_async_histogram
+
 bool GL_SGIX_async_histogram;
 enum uint GL_ASYNC_HISTOGRAM_SGIX = 0x832C;
 enum uint GL_MAX_ASYNC_HISTOGRAM_SGIX = 0x832D;
-// GL_MESA_resize_buffers
+
 bool GL_MESA_resize_buffers;
-extern(System) alias fp_glResizeBuffersMESA = void function() nothrow; __gshared fp_glResizeBuffersMESA glResizeBuffersMESA;
-// GL_NV_light_max_exponent
+
 bool GL_NV_light_max_exponent;
 enum uint GL_MAX_SHININESS_NV = 0x8504;
 enum uint GL_MAX_SPOT_EXPONENT_NV = 0x8505;
-// GL_NV_texture_env_combine4
+
 bool GL_NV_texture_env_combine4;
 enum uint GL_COMBINE4_NV = 0x8503;
 enum uint GL_SOURCE3_RGB_NV = 0x8583;
 enum uint GL_SOURCE3_ALPHA_NV = 0x858B;
 enum uint GL_OPERAND3_RGB_NV = 0x8593;
 enum uint GL_OPERAND3_ALPHA_NV = 0x859B;
-// GL_ARB_texture_view
+
 bool GL_ARB_texture_view;
-// enum uint GL_TEXTURE_VIEW_MIN_LEVEL = 0x82DB;
-// enum uint GL_TEXTURE_VIEW_NUM_LEVELS = 0x82DC;
-// enum uint GL_TEXTURE_VIEW_MIN_LAYER = 0x82DD;
-// enum uint GL_TEXTURE_VIEW_NUM_LAYERS = 0x82DE;
-// enum uint GL_TEXTURE_IMMUTABLE_LEVELS = 0x82DF;
-// extern(System) alias fp_glTextureView = void function(GLuint, GLenum, GLuint, GLenum, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glTextureView glTextureView;
-// GL_ARB_texture_env_combine
+
 bool GL_ARB_texture_env_combine;
 enum uint GL_COMBINE_ARB = 0x8570;
 enum uint GL_COMBINE_RGB_ARB = 0x8571;
@@ -382,17 +240,9 @@ enum uint GL_SUBTRACT_ARB = 0x84E7;
 enum uint GL_CONSTANT_ARB = 0x8576;
 enum uint GL_PRIMARY_COLOR_ARB = 0x8577;
 enum uint GL_PREVIOUS_ARB = 0x8578;
-// GL_ARB_map_buffer_range
+
 bool GL_ARB_map_buffer_range;
-// enum uint GL_MAP_READ_BIT = 0x0001;
-// enum uint GL_MAP_WRITE_BIT = 0x0002;
-// enum uint GL_MAP_INVALIDATE_RANGE_BIT = 0x0004;
-// enum uint GL_MAP_INVALIDATE_BUFFER_BIT = 0x0008;
-// enum uint GL_MAP_FLUSH_EXPLICIT_BIT = 0x0010;
-// enum uint GL_MAP_UNSYNCHRONIZED_BIT = 0x0020;
-// extern(System) alias fp_glMapBufferRange = void* function(GLenum, GLintptr, GLsizeiptr, GLbitfield) nothrow; __gshared fp_glMapBufferRange glMapBufferRange;
-// extern(System) alias fp_glFlushMappedBufferRange = void function(GLenum, GLintptr, GLsizeiptr) nothrow; __gshared fp_glFlushMappedBufferRange glFlushMappedBufferRange;
-// GL_EXT_convolution
+
 bool GL_EXT_convolution;
 enum uint GL_CONVOLUTION_1D_EXT = 0x8010;
 enum uint GL_CONVOLUTION_2D_EXT = 0x8011;
@@ -414,47 +264,15 @@ enum uint GL_POST_CONVOLUTION_RED_BIAS_EXT = 0x8020;
 enum uint GL_POST_CONVOLUTION_GREEN_BIAS_EXT = 0x8021;
 enum uint GL_POST_CONVOLUTION_BLUE_BIAS_EXT = 0x8022;
 enum uint GL_POST_CONVOLUTION_ALPHA_BIAS_EXT = 0x8023;
-extern(System) alias fp_glConvolutionFilter1DEXT = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glConvolutionFilter1DEXT glConvolutionFilter1DEXT;
-extern(System) alias fp_glConvolutionFilter2DEXT = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glConvolutionFilter2DEXT glConvolutionFilter2DEXT;
-extern(System) alias fp_glConvolutionParameterfEXT = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glConvolutionParameterfEXT glConvolutionParameterfEXT;
-extern(System) alias fp_glConvolutionParameterfvEXT = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glConvolutionParameterfvEXT glConvolutionParameterfvEXT;
-extern(System) alias fp_glConvolutionParameteriEXT = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glConvolutionParameteriEXT glConvolutionParameteriEXT;
-extern(System) alias fp_glConvolutionParameterivEXT = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glConvolutionParameterivEXT glConvolutionParameterivEXT;
-extern(System) alias fp_glCopyConvolutionFilter1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyConvolutionFilter1DEXT glCopyConvolutionFilter1DEXT;
-extern(System) alias fp_glCopyConvolutionFilter2DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyConvolutionFilter2DEXT glCopyConvolutionFilter2DEXT;
-extern(System) alias fp_glGetConvolutionFilterEXT = void function(GLenum, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetConvolutionFilterEXT glGetConvolutionFilterEXT;
-extern(System) alias fp_glGetConvolutionParameterfvEXT = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetConvolutionParameterfvEXT glGetConvolutionParameterfvEXT;
-extern(System) alias fp_glGetConvolutionParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetConvolutionParameterivEXT glGetConvolutionParameterivEXT;
-extern(System) alias fp_glGetSeparableFilterEXT = void function(GLenum, GLenum, GLenum, GLvoid*, GLvoid*, GLvoid*) nothrow; __gshared fp_glGetSeparableFilterEXT glGetSeparableFilterEXT;
-extern(System) alias fp_glSeparableFilter2DEXT = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*, const(GLvoid)*) nothrow; __gshared fp_glSeparableFilter2DEXT glSeparableFilter2DEXT;
-// GL_NV_compute_program5
+
 bool GL_NV_compute_program5;
 enum uint GL_COMPUTE_PROGRAM_NV = 0x90FB;
 enum uint GL_COMPUTE_PROGRAM_PARAMETER_BUFFER_NV = 0x90FC;
-// GL_NV_vertex_attrib_integer_64bit
+
 bool GL_NV_vertex_attrib_integer_64bit;
 enum uint GL_INT64_NV = 0x140E;
 enum uint GL_UNSIGNED_INT64_NV = 0x140F;
-extern(System) alias fp_glVertexAttribL1i64NV = void function(GLuint, GLint64EXT) nothrow; __gshared fp_glVertexAttribL1i64NV glVertexAttribL1i64NV;
-extern(System) alias fp_glVertexAttribL2i64NV = void function(GLuint, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glVertexAttribL2i64NV glVertexAttribL2i64NV;
-extern(System) alias fp_glVertexAttribL3i64NV = void function(GLuint, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glVertexAttribL3i64NV glVertexAttribL3i64NV;
-extern(System) alias fp_glVertexAttribL4i64NV = void function(GLuint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glVertexAttribL4i64NV glVertexAttribL4i64NV;
-extern(System) alias fp_glVertexAttribL1i64vNV = void function(GLuint, const(GLint64EXT)*) nothrow; __gshared fp_glVertexAttribL1i64vNV glVertexAttribL1i64vNV;
-extern(System) alias fp_glVertexAttribL2i64vNV = void function(GLuint, const(GLint64EXT)*) nothrow; __gshared fp_glVertexAttribL2i64vNV glVertexAttribL2i64vNV;
-extern(System) alias fp_glVertexAttribL3i64vNV = void function(GLuint, const(GLint64EXT)*) nothrow; __gshared fp_glVertexAttribL3i64vNV glVertexAttribL3i64vNV;
-extern(System) alias fp_glVertexAttribL4i64vNV = void function(GLuint, const(GLint64EXT)*) nothrow; __gshared fp_glVertexAttribL4i64vNV glVertexAttribL4i64vNV;
-extern(System) alias fp_glVertexAttribL1ui64NV = void function(GLuint, GLuint64EXT) nothrow; __gshared fp_glVertexAttribL1ui64NV glVertexAttribL1ui64NV;
-extern(System) alias fp_glVertexAttribL2ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glVertexAttribL2ui64NV glVertexAttribL2ui64NV;
-extern(System) alias fp_glVertexAttribL3ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glVertexAttribL3ui64NV glVertexAttribL3ui64NV;
-extern(System) alias fp_glVertexAttribL4ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glVertexAttribL4ui64NV glVertexAttribL4ui64NV;
-extern(System) alias fp_glVertexAttribL1ui64vNV = void function(GLuint, const(GLuint64EXT)*) nothrow; __gshared fp_glVertexAttribL1ui64vNV glVertexAttribL1ui64vNV;
-extern(System) alias fp_glVertexAttribL2ui64vNV = void function(GLuint, const(GLuint64EXT)*) nothrow; __gshared fp_glVertexAttribL2ui64vNV glVertexAttribL2ui64vNV;
-extern(System) alias fp_glVertexAttribL3ui64vNV = void function(GLuint, const(GLuint64EXT)*) nothrow; __gshared fp_glVertexAttribL3ui64vNV glVertexAttribL3ui64vNV;
-extern(System) alias fp_glVertexAttribL4ui64vNV = void function(GLuint, const(GLuint64EXT)*) nothrow; __gshared fp_glVertexAttribL4ui64vNV glVertexAttribL4ui64vNV;
-extern(System) alias fp_glGetVertexAttribLi64vNV = void function(GLuint, GLenum, GLint64EXT*) nothrow; __gshared fp_glGetVertexAttribLi64vNV glGetVertexAttribLi64vNV;
-extern(System) alias fp_glGetVertexAttribLui64vNV = void function(GLuint, GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetVertexAttribLui64vNV glGetVertexAttribLui64vNV;
-extern(System) alias fp_glVertexAttribLFormatNV = void function(GLuint, GLint, GLenum, GLsizei) nothrow; __gshared fp_glVertexAttribLFormatNV glVertexAttribLFormatNV;
-// GL_EXT_paletted_texture
+
 bool GL_EXT_paletted_texture;
 enum uint GL_COLOR_INDEX1_EXT = 0x80E2;
 enum uint GL_COLOR_INDEX2_EXT = 0x80E3;
@@ -463,19 +281,14 @@ enum uint GL_COLOR_INDEX8_EXT = 0x80E5;
 enum uint GL_COLOR_INDEX12_EXT = 0x80E6;
 enum uint GL_COLOR_INDEX16_EXT = 0x80E7;
 enum uint GL_TEXTURE_INDEX_SIZE_EXT = 0x80ED;
-extern(System) alias fp_glColorTableEXT = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glColorTableEXT glColorTableEXT;
-extern(System) alias fp_glGetColorTableEXT = void function(GLenum, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetColorTableEXT glGetColorTableEXT;
-extern(System) alias fp_glGetColorTableParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetColorTableParameterivEXT glGetColorTableParameterivEXT;
-extern(System) alias fp_glGetColorTableParameterfvEXT = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetColorTableParameterfvEXT glGetColorTableParameterfvEXT;
-// GL_ARB_texture_buffer_object
+
 bool GL_ARB_texture_buffer_object;
 enum uint GL_TEXTURE_BUFFER_ARB = 0x8C2A;
 enum uint GL_MAX_TEXTURE_BUFFER_SIZE_ARB = 0x8C2B;
 enum uint GL_TEXTURE_BINDING_BUFFER_ARB = 0x8C2C;
 enum uint GL_TEXTURE_BUFFER_DATA_STORE_BINDING_ARB = 0x8C2D;
 enum uint GL_TEXTURE_BUFFER_FORMAT_ARB = 0x8C2E;
-extern(System) alias fp_glTexBufferARB = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glTexBufferARB glTexBufferARB;
-// GL_ATI_pn_triangles
+
 bool GL_ATI_pn_triangles;
 enum uint GL_PN_TRIANGLES_ATI = 0x87F0;
 enum uint GL_MAX_PN_TRIANGLES_TESSELATION_LEVEL_ATI = 0x87F1;
@@ -486,19 +299,16 @@ enum uint GL_PN_TRIANGLES_POINT_MODE_LINEAR_ATI = 0x87F5;
 enum uint GL_PN_TRIANGLES_POINT_MODE_CUBIC_ATI = 0x87F6;
 enum uint GL_PN_TRIANGLES_NORMAL_MODE_LINEAR_ATI = 0x87F7;
 enum uint GL_PN_TRIANGLES_NORMAL_MODE_QUADRATIC_ATI = 0x87F8;
-extern(System) alias fp_glPNTrianglesiATI = void function(GLenum, GLint) nothrow; __gshared fp_glPNTrianglesiATI glPNTrianglesiATI;
-extern(System) alias fp_glPNTrianglesfATI = void function(GLenum, GLfloat) nothrow; __gshared fp_glPNTrianglesfATI glPNTrianglesfATI;
-// GL_SGIX_resample
+
 bool GL_SGIX_resample;
 enum uint GL_PACK_RESAMPLE_SGIX = 0x842C;
 enum uint GL_UNPACK_RESAMPLE_SGIX = 0x842D;
 enum uint GL_RESAMPLE_REPLICATE_SGIX = 0x842E;
 enum uint GL_RESAMPLE_ZERO_FILL_SGIX = 0x842F;
 enum uint GL_RESAMPLE_DECIMATE_SGIX = 0x8430;
-// GL_SGIX_flush_raster
+
 bool GL_SGIX_flush_raster;
-extern(System) alias fp_glFlushRasterSGIX = void function() nothrow; __gshared fp_glFlushRasterSGIX glFlushRasterSGIX;
-// GL_EXT_light_texture
+
 bool GL_EXT_light_texture;
 enum uint GL_FRAGMENT_MATERIAL_EXT = 0x8349;
 enum uint GL_FRAGMENT_NORMAL_EXT = 0x834A;
@@ -510,82 +320,51 @@ enum uint GL_TEXTURE_LIGHT_EXT = 0x8350;
 enum uint GL_TEXTURE_MATERIAL_FACE_EXT = 0x8351;
 enum uint GL_TEXTURE_MATERIAL_PARAMETER_EXT = 0x8352;
 enum uint GL_FRAGMENT_DEPTH_EXT = 0x8452;
-extern(System) alias fp_glApplyTextureEXT = void function(GLenum) nothrow; __gshared fp_glApplyTextureEXT glApplyTextureEXT;
-extern(System) alias fp_glTextureLightEXT = void function(GLenum) nothrow; __gshared fp_glTextureLightEXT glTextureLightEXT;
-extern(System) alias fp_glTextureMaterialEXT = void function(GLenum, GLenum) nothrow; __gshared fp_glTextureMaterialEXT glTextureMaterialEXT;
-// GL_ARB_point_sprite
+
 bool GL_ARB_point_sprite;
 enum uint GL_POINT_SPRITE_ARB = 0x8861;
 enum uint GL_COORD_REPLACE_ARB = 0x8862;
-// GL_ARB_half_float_pixel
+
 bool GL_ARB_half_float_pixel;
 enum uint GL_HALF_FLOAT_ARB = 0x140B;
-// GL_NV_tessellation_program5
+
 bool GL_NV_tessellation_program5;
 enum uint GL_MAX_PROGRAM_PATCH_ATTRIBS_NV = 0x86D8;
 enum uint GL_TESS_CONTROL_PROGRAM_NV = 0x891E;
 enum uint GL_TESS_EVALUATION_PROGRAM_NV = 0x891F;
 enum uint GL_TESS_CONTROL_PROGRAM_PARAMETER_BUFFER_NV = 0x8C74;
 enum uint GL_TESS_EVALUATION_PROGRAM_PARAMETER_BUFFER_NV = 0x8C75;
-// GL_REND_screen_coordinates
+
 bool GL_REND_screen_coordinates;
 enum uint GL_SCREEN_COORDINATES_REND = 0x8490;
 enum uint GL_INVERTED_SCREEN_W_REND = 0x8491;
-// GL_EXT_shared_texture_palette
+
 bool GL_EXT_shared_texture_palette;
 enum uint GL_SHARED_TEXTURE_PALETTE_EXT = 0x81FB;
-// GL_EXT_packed_float
+
 bool GL_EXT_packed_float;
 enum uint GL_R11F_G11F_B10F_EXT = 0x8C3A;
 enum uint GL_UNSIGNED_INT_10F_11F_11F_REV_EXT = 0x8C3B;
 enum uint GL_RGBA_SIGNED_COMPONENTS_EXT = 0x8C3C;
-// GL_OML_subsample
+
 bool GL_OML_subsample;
 enum uint GL_FORMAT_SUBSAMPLE_24_24_OML = 0x8982;
 enum uint GL_FORMAT_SUBSAMPLE_244_244_OML = 0x8983;
-// GL_SGIX_vertex_preclip
+
 bool GL_SGIX_vertex_preclip;
 enum uint GL_VERTEX_PRECLIP_SGIX = 0x83EE;
 enum uint GL_VERTEX_PRECLIP_HINT_SGIX = 0x83EF;
-// GL_SGIX_texture_scale_bias
+
 bool GL_SGIX_texture_scale_bias;
 enum uint GL_POST_TEXTURE_FILTER_BIAS_SGIX = 0x8179;
 enum uint GL_POST_TEXTURE_FILTER_SCALE_SGIX = 0x817A;
 enum uint GL_POST_TEXTURE_FILTER_BIAS_RANGE_SGIX = 0x817B;
 enum uint GL_POST_TEXTURE_FILTER_SCALE_RANGE_SGIX = 0x817C;
-// GL_AMD_draw_buffers_blend
+
 bool GL_AMD_draw_buffers_blend;
-extern(System) alias fp_glBlendFuncIndexedAMD = void function(GLuint, GLenum, GLenum) nothrow; __gshared fp_glBlendFuncIndexedAMD glBlendFuncIndexedAMD;
-extern(System) alias fp_glBlendFuncSeparateIndexedAMD = void function(GLuint, GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glBlendFuncSeparateIndexedAMD glBlendFuncSeparateIndexedAMD;
-extern(System) alias fp_glBlendEquationIndexedAMD = void function(GLuint, GLenum) nothrow; __gshared fp_glBlendEquationIndexedAMD glBlendEquationIndexedAMD;
-extern(System) alias fp_glBlendEquationSeparateIndexedAMD = void function(GLuint, GLenum, GLenum) nothrow; __gshared fp_glBlendEquationSeparateIndexedAMD glBlendEquationSeparateIndexedAMD;
-// GL_MESA_window_pos
+
 bool GL_MESA_window_pos;
-extern(System) alias fp_glWindowPos2dMESA = void function(GLdouble, GLdouble) nothrow; __gshared fp_glWindowPos2dMESA glWindowPos2dMESA;
-extern(System) alias fp_glWindowPos2dvMESA = void function(const(GLdouble)*) nothrow; __gshared fp_glWindowPos2dvMESA glWindowPos2dvMESA;
-extern(System) alias fp_glWindowPos2fMESA = void function(GLfloat, GLfloat) nothrow; __gshared fp_glWindowPos2fMESA glWindowPos2fMESA;
-extern(System) alias fp_glWindowPos2fvMESA = void function(const(GLfloat)*) nothrow; __gshared fp_glWindowPos2fvMESA glWindowPos2fvMESA;
-extern(System) alias fp_glWindowPos2iMESA = void function(GLint, GLint) nothrow; __gshared fp_glWindowPos2iMESA glWindowPos2iMESA;
-extern(System) alias fp_glWindowPos2ivMESA = void function(const(GLint)*) nothrow; __gshared fp_glWindowPos2ivMESA glWindowPos2ivMESA;
-extern(System) alias fp_glWindowPos2sMESA = void function(GLshort, GLshort) nothrow; __gshared fp_glWindowPos2sMESA glWindowPos2sMESA;
-extern(System) alias fp_glWindowPos2svMESA = void function(const(GLshort)*) nothrow; __gshared fp_glWindowPos2svMESA glWindowPos2svMESA;
-extern(System) alias fp_glWindowPos3dMESA = void function(GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glWindowPos3dMESA glWindowPos3dMESA;
-extern(System) alias fp_glWindowPos3dvMESA = void function(const(GLdouble)*) nothrow; __gshared fp_glWindowPos3dvMESA glWindowPos3dvMESA;
-extern(System) alias fp_glWindowPos3fMESA = void function(GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glWindowPos3fMESA glWindowPos3fMESA;
-extern(System) alias fp_glWindowPos3fvMESA = void function(const(GLfloat)*) nothrow; __gshared fp_glWindowPos3fvMESA glWindowPos3fvMESA;
-extern(System) alias fp_glWindowPos3iMESA = void function(GLint, GLint, GLint) nothrow; __gshared fp_glWindowPos3iMESA glWindowPos3iMESA;
-extern(System) alias fp_glWindowPos3ivMESA = void function(const(GLint)*) nothrow; __gshared fp_glWindowPos3ivMESA glWindowPos3ivMESA;
-extern(System) alias fp_glWindowPos3sMESA = void function(GLshort, GLshort, GLshort) nothrow; __gshared fp_glWindowPos3sMESA glWindowPos3sMESA;
-extern(System) alias fp_glWindowPos3svMESA = void function(const(GLshort)*) nothrow; __gshared fp_glWindowPos3svMESA glWindowPos3svMESA;
-extern(System) alias fp_glWindowPos4dMESA = void function(GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glWindowPos4dMESA glWindowPos4dMESA;
-extern(System) alias fp_glWindowPos4dvMESA = void function(const(GLdouble)*) nothrow; __gshared fp_glWindowPos4dvMESA glWindowPos4dvMESA;
-extern(System) alias fp_glWindowPos4fMESA = void function(GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glWindowPos4fMESA glWindowPos4fMESA;
-extern(System) alias fp_glWindowPos4fvMESA = void function(const(GLfloat)*) nothrow; __gshared fp_glWindowPos4fvMESA glWindowPos4fvMESA;
-extern(System) alias fp_glWindowPos4iMESA = void function(GLint, GLint, GLint, GLint) nothrow; __gshared fp_glWindowPos4iMESA glWindowPos4iMESA;
-extern(System) alias fp_glWindowPos4ivMESA = void function(const(GLint)*) nothrow; __gshared fp_glWindowPos4ivMESA glWindowPos4ivMESA;
-extern(System) alias fp_glWindowPos4sMESA = void function(GLshort, GLshort, GLshort, GLshort) nothrow; __gshared fp_glWindowPos4sMESA glWindowPos4sMESA;
-extern(System) alias fp_glWindowPos4svMESA = void function(const(GLshort)*) nothrow; __gshared fp_glWindowPos4svMESA glWindowPos4svMESA;
-// GL_EXT_texture_array
+
 bool GL_EXT_texture_array;
 enum uint GL_TEXTURE_1D_ARRAY_EXT = 0x8C18;
 enum uint GL_PROXY_TEXTURE_1D_ARRAY_EXT = 0x8C19;
@@ -596,162 +375,50 @@ enum uint GL_TEXTURE_BINDING_2D_ARRAY_EXT = 0x8C1D;
 enum uint GL_MAX_ARRAY_TEXTURE_LAYERS_EXT = 0x88FF;
 enum uint GL_COMPARE_REF_DEPTH_TO_TEXTURE_EXT = 0x884E;
 enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER_EXT = 0x8CD4;
-// GL_NV_texture_barrier
+
 bool GL_NV_texture_barrier;
-extern(System) alias fp_glTextureBarrierNV = void function() nothrow; __gshared fp_glTextureBarrierNV glTextureBarrierNV;
-// GL_ARB_texture_query_levels
+
 bool GL_ARB_texture_query_levels;
-// GL_NV_texgen_emboss
+
 bool GL_NV_texgen_emboss;
 enum uint GL_EMBOSS_LIGHT_NV = 0x855D;
 enum uint GL_EMBOSS_CONSTANT_NV = 0x855E;
 enum uint GL_EMBOSS_MAP_NV = 0x855F;
-// GL_EXT_texture_swizzle
+
 bool GL_EXT_texture_swizzle;
 enum uint GL_TEXTURE_SWIZZLE_R_EXT = 0x8E42;
 enum uint GL_TEXTURE_SWIZZLE_G_EXT = 0x8E43;
 enum uint GL_TEXTURE_SWIZZLE_B_EXT = 0x8E44;
 enum uint GL_TEXTURE_SWIZZLE_A_EXT = 0x8E45;
 enum uint GL_TEXTURE_SWIZZLE_RGBA_EXT = 0x8E46;
-// GL_ARB_texture_rg
+
 bool GL_ARB_texture_rg;
-// enum uint GL_RG = 0x8227;
-// enum uint GL_RG_INTEGER = 0x8228;
-// enum uint GL_R8 = 0x8229;
-// enum uint GL_R16 = 0x822A;
-// enum uint GL_RG8 = 0x822B;
-// enum uint GL_RG16 = 0x822C;
-// enum uint GL_R16F = 0x822D;
-// enum uint GL_R32F = 0x822E;
-// enum uint GL_RG16F = 0x822F;
-// enum uint GL_RG32F = 0x8230;
-// enum uint GL_R8I = 0x8231;
-// enum uint GL_R8UI = 0x8232;
-// enum uint GL_R16I = 0x8233;
-// enum uint GL_R16UI = 0x8234;
-// enum uint GL_R32I = 0x8235;
-// enum uint GL_R32UI = 0x8236;
-// enum uint GL_RG8I = 0x8237;
-// enum uint GL_RG8UI = 0x8238;
-// enum uint GL_RG16I = 0x8239;
-// enum uint GL_RG16UI = 0x823A;
-// enum uint GL_RG32I = 0x823B;
-// enum uint GL_RG32UI = 0x823C;
-// GL_ARB_vertex_type_2_10_10_10_rev
+
 bool GL_ARB_vertex_type_2_10_10_10_rev;
-// enum uint GL_UNSIGNED_INT_2_10_10_10_REV = 0x8368;
-// enum uint GL_INT_2_10_10_10_REV = 0x8D9F;
-// extern(System) alias fp_glVertexAttribP1ui = void function(GLuint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexAttribP1ui glVertexAttribP1ui;
-// extern(System) alias fp_glVertexAttribP1uiv = void function(GLuint, GLenum, GLboolean, const(GLuint)*) nothrow; __gshared fp_glVertexAttribP1uiv glVertexAttribP1uiv;
-// extern(System) alias fp_glVertexAttribP2ui = void function(GLuint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexAttribP2ui glVertexAttribP2ui;
-// extern(System) alias fp_glVertexAttribP2uiv = void function(GLuint, GLenum, GLboolean, const(GLuint)*) nothrow; __gshared fp_glVertexAttribP2uiv glVertexAttribP2uiv;
-// extern(System) alias fp_glVertexAttribP3ui = void function(GLuint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexAttribP3ui glVertexAttribP3ui;
-// extern(System) alias fp_glVertexAttribP3uiv = void function(GLuint, GLenum, GLboolean, const(GLuint)*) nothrow; __gshared fp_glVertexAttribP3uiv glVertexAttribP3uiv;
-// extern(System) alias fp_glVertexAttribP4ui = void function(GLuint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexAttribP4ui glVertexAttribP4ui;
-// extern(System) alias fp_glVertexAttribP4uiv = void function(GLuint, GLenum, GLboolean, const(GLuint)*) nothrow; __gshared fp_glVertexAttribP4uiv glVertexAttribP4uiv;
-// extern(System) alias fp_glVertexP2ui = void function(GLenum, GLuint) nothrow; __gshared fp_glVertexP2ui glVertexP2ui;
-// extern(System) alias fp_glVertexP2uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glVertexP2uiv glVertexP2uiv;
-// extern(System) alias fp_glVertexP3ui = void function(GLenum, GLuint) nothrow; __gshared fp_glVertexP3ui glVertexP3ui;
-// extern(System) alias fp_glVertexP3uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glVertexP3uiv glVertexP3uiv;
-// extern(System) alias fp_glVertexP4ui = void function(GLenum, GLuint) nothrow; __gshared fp_glVertexP4ui glVertexP4ui;
-// extern(System) alias fp_glVertexP4uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glVertexP4uiv glVertexP4uiv;
-// extern(System) alias fp_glTexCoordP1ui = void function(GLenum, GLuint) nothrow; __gshared fp_glTexCoordP1ui glTexCoordP1ui;
-// extern(System) alias fp_glTexCoordP1uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glTexCoordP1uiv glTexCoordP1uiv;
-// extern(System) alias fp_glTexCoordP2ui = void function(GLenum, GLuint) nothrow; __gshared fp_glTexCoordP2ui glTexCoordP2ui;
-// extern(System) alias fp_glTexCoordP2uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glTexCoordP2uiv glTexCoordP2uiv;
-// extern(System) alias fp_glTexCoordP3ui = void function(GLenum, GLuint) nothrow; __gshared fp_glTexCoordP3ui glTexCoordP3ui;
-// extern(System) alias fp_glTexCoordP3uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glTexCoordP3uiv glTexCoordP3uiv;
-// extern(System) alias fp_glTexCoordP4ui = void function(GLenum, GLuint) nothrow; __gshared fp_glTexCoordP4ui glTexCoordP4ui;
-// extern(System) alias fp_glTexCoordP4uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glTexCoordP4uiv glTexCoordP4uiv;
-// extern(System) alias fp_glMultiTexCoordP1ui = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexCoordP1ui glMultiTexCoordP1ui;
-// extern(System) alias fp_glMultiTexCoordP1uiv = void function(GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glMultiTexCoordP1uiv glMultiTexCoordP1uiv;
-// extern(System) alias fp_glMultiTexCoordP2ui = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexCoordP2ui glMultiTexCoordP2ui;
-// extern(System) alias fp_glMultiTexCoordP2uiv = void function(GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glMultiTexCoordP2uiv glMultiTexCoordP2uiv;
-// extern(System) alias fp_glMultiTexCoordP3ui = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexCoordP3ui glMultiTexCoordP3ui;
-// extern(System) alias fp_glMultiTexCoordP3uiv = void function(GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glMultiTexCoordP3uiv glMultiTexCoordP3uiv;
-// extern(System) alias fp_glMultiTexCoordP4ui = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexCoordP4ui glMultiTexCoordP4ui;
-// extern(System) alias fp_glMultiTexCoordP4uiv = void function(GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glMultiTexCoordP4uiv glMultiTexCoordP4uiv;
-// extern(System) alias fp_glNormalP3ui = void function(GLenum, GLuint) nothrow; __gshared fp_glNormalP3ui glNormalP3ui;
-// extern(System) alias fp_glNormalP3uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glNormalP3uiv glNormalP3uiv;
-// extern(System) alias fp_glColorP3ui = void function(GLenum, GLuint) nothrow; __gshared fp_glColorP3ui glColorP3ui;
-// extern(System) alias fp_glColorP3uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glColorP3uiv glColorP3uiv;
-// extern(System) alias fp_glColorP4ui = void function(GLenum, GLuint) nothrow; __gshared fp_glColorP4ui glColorP4ui;
-// extern(System) alias fp_glColorP4uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glColorP4uiv glColorP4uiv;
-// extern(System) alias fp_glSecondaryColorP3ui = void function(GLenum, GLuint) nothrow; __gshared fp_glSecondaryColorP3ui glSecondaryColorP3ui;
-// extern(System) alias fp_glSecondaryColorP3uiv = void function(GLenum, const(GLuint)*) nothrow; __gshared fp_glSecondaryColorP3uiv glSecondaryColorP3uiv;
-// GL_ARB_fragment_shader
+
 bool GL_ARB_fragment_shader;
 enum uint GL_FRAGMENT_SHADER_ARB = 0x8B30;
 enum uint GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB = 0x8B49;
 enum uint GL_FRAGMENT_SHADER_DERIVATIVE_HINT_ARB = 0x8B8B;
-// GL_3DFX_tbuffer
+
 bool GL_3DFX_tbuffer;
-extern(System) alias fp_glTbufferMask3DFX = void function(GLuint) nothrow; __gshared fp_glTbufferMask3DFX glTbufferMask3DFX;
-// GL_GREMEDY_frame_terminator
+
 bool GL_GREMEDY_frame_terminator;
-extern(System) alias fp_glFrameTerminatorGREMEDY = void function() nothrow; __gshared fp_glFrameTerminatorGREMEDY glFrameTerminatorGREMEDY;
-// GL_ARB_blend_func_extended
+
 bool GL_ARB_blend_func_extended;
-// enum uint GL_SRC1_COLOR = 0x88F9;
-// enum uint GL_SRC1_ALPHA = 0x8589;
-// enum uint GL_ONE_MINUS_SRC1_COLOR = 0x88FA;
-// enum uint GL_ONE_MINUS_SRC1_ALPHA = 0x88FB;
-// enum uint GL_MAX_DUAL_SOURCE_DRAW_BUFFERS = 0x88FC;
-// extern(System) alias fp_glBindFragDataLocationIndexed = void function(GLuint, GLuint, GLuint, const(GLchar)*) nothrow; __gshared fp_glBindFragDataLocationIndexed glBindFragDataLocationIndexed;
-// extern(System) alias fp_glGetFragDataIndex = GLint function(GLuint, const(GLchar)*) nothrow; __gshared fp_glGetFragDataIndex glGetFragDataIndex;
-// GL_EXT_separate_shader_objects
+
 bool GL_EXT_separate_shader_objects;
 enum uint GL_ACTIVE_PROGRAM_EXT = 0x8B8D;
 enum uint GL_VERTEX_SHADER_BIT_EXT = 0x00000001;
 enum uint GL_FRAGMENT_SHADER_BIT_EXT = 0x00000002;
 enum uint GL_ALL_SHADER_BITS_EXT = 0xFFFFFFFF;
 enum uint GL_PROGRAM_SEPARABLE_EXT = 0x8258;
-// enum uint GL_ACTIVE_PROGRAM_EXT = 0x8B8D;
 enum uint GL_PROGRAM_PIPELINE_BINDING_EXT = 0x825A;
-extern(System) alias fp_glUseShaderProgramEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glUseShaderProgramEXT glUseShaderProgramEXT;
-extern(System) alias fp_glActiveProgramEXT = void function(GLuint) nothrow; __gshared fp_glActiveProgramEXT glActiveProgramEXT;
-extern(System) alias fp_glCreateShaderProgramEXT = GLuint function(GLenum, const(GLchar)*) nothrow; __gshared fp_glCreateShaderProgramEXT glCreateShaderProgramEXT;
-extern(System) alias fp_glActiveShaderProgramEXT = void function(GLuint, GLuint) nothrow; __gshared fp_glActiveShaderProgramEXT glActiveShaderProgramEXT;
-extern(System) alias fp_glBindProgramPipelineEXT = void function(GLuint) nothrow; __gshared fp_glBindProgramPipelineEXT glBindProgramPipelineEXT;
-extern(System) alias fp_glCreateShaderProgramvEXT = GLuint function(GLenum, GLsizei, const(GLchar*)*) nothrow; __gshared fp_glCreateShaderProgramvEXT glCreateShaderProgramvEXT;
-extern(System) alias fp_glDeleteProgramPipelinesEXT = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteProgramPipelinesEXT glDeleteProgramPipelinesEXT;
-extern(System) alias fp_glGenProgramPipelinesEXT = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenProgramPipelinesEXT glGenProgramPipelinesEXT;
-extern(System) alias fp_glGetProgramPipelineInfoLogEXT = void function(GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetProgramPipelineInfoLogEXT glGetProgramPipelineInfoLogEXT;
-extern(System) alias fp_glGetProgramPipelineivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetProgramPipelineivEXT glGetProgramPipelineivEXT;
-extern(System) alias fp_glIsProgramPipelineEXT = GLboolean function(GLuint) nothrow; __gshared fp_glIsProgramPipelineEXT glIsProgramPipelineEXT;
-extern(System) alias fp_glProgramParameteriEXT = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glProgramParameteriEXT glProgramParameteriEXT;
-extern(System) alias fp_glProgramUniform1fEXT = void function(GLuint, GLint, GLfloat) nothrow; __gshared fp_glProgramUniform1fEXT glProgramUniform1fEXT;
-extern(System) alias fp_glProgramUniform1fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform1fvEXT glProgramUniform1fvEXT;
-extern(System) alias fp_glProgramUniform1iEXT = void function(GLuint, GLint, GLint) nothrow; __gshared fp_glProgramUniform1iEXT glProgramUniform1iEXT;
-extern(System) alias fp_glProgramUniform1ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform1ivEXT glProgramUniform1ivEXT;
-extern(System) alias fp_glProgramUniform2fEXT = void function(GLuint, GLint, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform2fEXT glProgramUniform2fEXT;
-extern(System) alias fp_glProgramUniform2fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform2fvEXT glProgramUniform2fvEXT;
-extern(System) alias fp_glProgramUniform2iEXT = void function(GLuint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform2iEXT glProgramUniform2iEXT;
-extern(System) alias fp_glProgramUniform2ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform2ivEXT glProgramUniform2ivEXT;
-extern(System) alias fp_glProgramUniform3fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform3fEXT glProgramUniform3fEXT;
-extern(System) alias fp_glProgramUniform3fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform3fvEXT glProgramUniform3fvEXT;
-extern(System) alias fp_glProgramUniform3iEXT = void function(GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform3iEXT glProgramUniform3iEXT;
-extern(System) alias fp_glProgramUniform3ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform3ivEXT glProgramUniform3ivEXT;
-extern(System) alias fp_glProgramUniform4fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform4fEXT glProgramUniform4fEXT;
-extern(System) alias fp_glProgramUniform4fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform4fvEXT glProgramUniform4fvEXT;
-extern(System) alias fp_glProgramUniform4iEXT = void function(GLuint, GLint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform4iEXT glProgramUniform4iEXT;
-extern(System) alias fp_glProgramUniform4ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform4ivEXT glProgramUniform4ivEXT;
-extern(System) alias fp_glProgramUniformMatrix2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2fvEXT glProgramUniformMatrix2fvEXT;
-extern(System) alias fp_glProgramUniformMatrix3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3fvEXT glProgramUniformMatrix3fvEXT;
-extern(System) alias fp_glProgramUniformMatrix4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4fvEXT glProgramUniformMatrix4fvEXT;
-extern(System) alias fp_glUseProgramStagesEXT = void function(GLuint, GLbitfield, GLuint) nothrow; __gshared fp_glUseProgramStagesEXT glUseProgramStagesEXT;
-extern(System) alias fp_glValidateProgramPipelineEXT = void function(GLuint) nothrow; __gshared fp_glValidateProgramPipelineEXT glValidateProgramPipelineEXT;
-// GL_NV_texture_multisample
+
 bool GL_NV_texture_multisample;
 enum uint GL_TEXTURE_COVERAGE_SAMPLES_NV = 0x9045;
 enum uint GL_TEXTURE_COLOR_SAMPLES_NV = 0x9046;
-extern(System) alias fp_glTexImage2DMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexImage2DMultisampleCoverageNV glTexImage2DMultisampleCoverageNV;
-extern(System) alias fp_glTexImage3DMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexImage3DMultisampleCoverageNV glTexImage3DMultisampleCoverageNV;
-extern(System) alias fp_glTextureImage2DMultisampleNV = void function(GLuint, GLenum, GLsizei, GLint, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureImage2DMultisampleNV glTextureImage2DMultisampleNV;
-extern(System) alias fp_glTextureImage3DMultisampleNV = void function(GLuint, GLenum, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureImage3DMultisampleNV glTextureImage3DMultisampleNV;
-extern(System) alias fp_glTextureImage2DMultisampleCoverageNV = void function(GLuint, GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureImage2DMultisampleCoverageNV glTextureImage2DMultisampleCoverageNV;
-extern(System) alias fp_glTextureImage3DMultisampleCoverageNV = void function(GLuint, GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureImage3DMultisampleCoverageNV glTextureImage3DMultisampleCoverageNV;
-// GL_ARB_shader_objects
+
 bool GL_ARB_shader_objects;
 enum uint GL_PROGRAM_OBJECT_ARB = 0x8B40;
 enum uint GL_SHADER_OBJECT_ARB = 0x8B48;
@@ -787,148 +454,9 @@ enum uint GL_OBJECT_ATTACHED_OBJECTS_ARB = 0x8B85;
 enum uint GL_OBJECT_ACTIVE_UNIFORMS_ARB = 0x8B86;
 enum uint GL_OBJECT_ACTIVE_UNIFORM_MAX_LENGTH_ARB = 0x8B87;
 enum uint GL_OBJECT_SHADER_SOURCE_LENGTH_ARB = 0x8B88;
-extern(System) alias fp_glDeleteObjectARB = void function(GLhandleARB) nothrow; __gshared fp_glDeleteObjectARB glDeleteObjectARB;
-extern(System) alias fp_glGetHandleARB = GLhandleARB function(GLenum) nothrow; __gshared fp_glGetHandleARB glGetHandleARB;
-extern(System) alias fp_glDetachObjectARB = void function(GLhandleARB, GLhandleARB) nothrow; __gshared fp_glDetachObjectARB glDetachObjectARB;
-extern(System) alias fp_glCreateShaderObjectARB = GLhandleARB function(GLenum) nothrow; __gshared fp_glCreateShaderObjectARB glCreateShaderObjectARB;
-extern(System) alias fp_glShaderSourceARB = void function(GLhandleARB, GLsizei, const(GLcharARB*)*, const(GLint)*) nothrow; __gshared fp_glShaderSourceARB glShaderSourceARB;
-extern(System) alias fp_glCompileShaderARB = void function(GLhandleARB) nothrow; __gshared fp_glCompileShaderARB glCompileShaderARB;
-extern(System) alias fp_glCreateProgramObjectARB = GLhandleARB function() nothrow; __gshared fp_glCreateProgramObjectARB glCreateProgramObjectARB;
-extern(System) alias fp_glAttachObjectARB = void function(GLhandleARB, GLhandleARB) nothrow; __gshared fp_glAttachObjectARB glAttachObjectARB;
-extern(System) alias fp_glLinkProgramARB = void function(GLhandleARB) nothrow; __gshared fp_glLinkProgramARB glLinkProgramARB;
-extern(System) alias fp_glUseProgramObjectARB = void function(GLhandleARB) nothrow; __gshared fp_glUseProgramObjectARB glUseProgramObjectARB;
-extern(System) alias fp_glValidateProgramARB = void function(GLhandleARB) nothrow; __gshared fp_glValidateProgramARB glValidateProgramARB;
-extern(System) alias fp_glUniform1fARB = void function(GLint, GLfloat) nothrow; __gshared fp_glUniform1fARB glUniform1fARB;
-extern(System) alias fp_glUniform2fARB = void function(GLint, GLfloat, GLfloat) nothrow; __gshared fp_glUniform2fARB glUniform2fARB;
-extern(System) alias fp_glUniform3fARB = void function(GLint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glUniform3fARB glUniform3fARB;
-extern(System) alias fp_glUniform4fARB = void function(GLint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glUniform4fARB glUniform4fARB;
-extern(System) alias fp_glUniform1iARB = void function(GLint, GLint) nothrow; __gshared fp_glUniform1iARB glUniform1iARB;
-extern(System) alias fp_glUniform2iARB = void function(GLint, GLint, GLint) nothrow; __gshared fp_glUniform2iARB glUniform2iARB;
-extern(System) alias fp_glUniform3iARB = void function(GLint, GLint, GLint, GLint) nothrow; __gshared fp_glUniform3iARB glUniform3iARB;
-extern(System) alias fp_glUniform4iARB = void function(GLint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glUniform4iARB glUniform4iARB;
-extern(System) alias fp_glUniform1fvARB = void function(GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glUniform1fvARB glUniform1fvARB;
-extern(System) alias fp_glUniform2fvARB = void function(GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glUniform2fvARB glUniform2fvARB;
-extern(System) alias fp_glUniform3fvARB = void function(GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glUniform3fvARB glUniform3fvARB;
-extern(System) alias fp_glUniform4fvARB = void function(GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glUniform4fvARB glUniform4fvARB;
-extern(System) alias fp_glUniform1ivARB = void function(GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glUniform1ivARB glUniform1ivARB;
-extern(System) alias fp_glUniform2ivARB = void function(GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glUniform2ivARB glUniform2ivARB;
-extern(System) alias fp_glUniform3ivARB = void function(GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glUniform3ivARB glUniform3ivARB;
-extern(System) alias fp_glUniform4ivARB = void function(GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glUniform4ivARB glUniform4ivARB;
-extern(System) alias fp_glUniformMatrix2fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glUniformMatrix2fvARB glUniformMatrix2fvARB;
-extern(System) alias fp_glUniformMatrix3fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glUniformMatrix3fvARB glUniformMatrix3fvARB;
-extern(System) alias fp_glUniformMatrix4fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glUniformMatrix4fvARB glUniformMatrix4fvARB;
-extern(System) alias fp_glGetObjectParameterfvARB = void function(GLhandleARB, GLenum, GLfloat*) nothrow; __gshared fp_glGetObjectParameterfvARB glGetObjectParameterfvARB;
-extern(System) alias fp_glGetObjectParameterivARB = void function(GLhandleARB, GLenum, GLint*) nothrow; __gshared fp_glGetObjectParameterivARB glGetObjectParameterivARB;
-extern(System) alias fp_glGetInfoLogARB = void function(GLhandleARB, GLsizei, GLsizei*, GLcharARB*) nothrow; __gshared fp_glGetInfoLogARB glGetInfoLogARB;
-extern(System) alias fp_glGetAttachedObjectsARB = void function(GLhandleARB, GLsizei, GLsizei*, GLhandleARB*) nothrow; __gshared fp_glGetAttachedObjectsARB glGetAttachedObjectsARB;
-extern(System) alias fp_glGetUniformLocationARB = GLint function(GLhandleARB, const(GLcharARB)*) nothrow; __gshared fp_glGetUniformLocationARB glGetUniformLocationARB;
-extern(System) alias fp_glGetActiveUniformARB = void function(GLhandleARB, GLuint, GLsizei, GLsizei*, GLint*, GLenum*, GLcharARB*) nothrow; __gshared fp_glGetActiveUniformARB glGetActiveUniformARB;
-extern(System) alias fp_glGetUniformfvARB = void function(GLhandleARB, GLint, GLfloat*) nothrow; __gshared fp_glGetUniformfvARB glGetUniformfvARB;
-extern(System) alias fp_glGetUniformivARB = void function(GLhandleARB, GLint, GLint*) nothrow; __gshared fp_glGetUniformivARB glGetUniformivARB;
-extern(System) alias fp_glGetShaderSourceARB = void function(GLhandleARB, GLsizei, GLsizei*, GLcharARB*) nothrow; __gshared fp_glGetShaderSourceARB glGetShaderSourceARB;
-// GL_ARB_framebuffer_object
+
 bool GL_ARB_framebuffer_object;
-// enum uint GL_INVALID_FRAMEBUFFER_OPERATION = 0x0506;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING = 0x8210;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE = 0x8211;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE = 0x8212;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE = 0x8213;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE = 0x8214;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE = 0x8215;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE = 0x8216;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE = 0x8217;
-// enum uint GL_FRAMEBUFFER_DEFAULT = 0x8218;
-// enum uint GL_FRAMEBUFFER_UNDEFINED = 0x8219;
-// enum uint GL_DEPTH_STENCIL_ATTACHMENT = 0x821A;
-// enum uint GL_MAX_RENDERBUFFER_SIZE = 0x84E8;
-// enum uint GL_DEPTH_STENCIL = 0x84F9;
-// enum uint GL_UNSIGNED_INT_24_8 = 0x84FA;
-// enum uint GL_DEPTH24_STENCIL8 = 0x88F0;
-// enum uint GL_TEXTURE_STENCIL_SIZE = 0x88F1;
-// enum uint GL_TEXTURE_RED_TYPE = 0x8C10;
-// enum uint GL_TEXTURE_GREEN_TYPE = 0x8C11;
-// enum uint GL_TEXTURE_BLUE_TYPE = 0x8C12;
-// enum uint GL_TEXTURE_ALPHA_TYPE = 0x8C13;
-// enum uint GL_TEXTURE_DEPTH_TYPE = 0x8C16;
-// enum uint GL_UNSIGNED_NORMALIZED = 0x8C17;
-// enum uint GL_FRAMEBUFFER_BINDING = 0x8CA6;
-// enum uint GL_DRAW_FRAMEBUFFER_BINDING = 0x8CA6;
-// enum uint GL_RENDERBUFFER_BINDING = 0x8CA7;
-// enum uint GL_READ_FRAMEBUFFER = 0x8CA8;
-// enum uint GL_DRAW_FRAMEBUFFER = 0x8CA9;
-// enum uint GL_READ_FRAMEBUFFER_BINDING = 0x8CAA;
-// enum uint GL_RENDERBUFFER_SAMPLES = 0x8CAB;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = 0x8CD0;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = 0x8CD1;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = 0x8CD2;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = 0x8CD3;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER = 0x8CD4;
-// enum uint GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 0x8CD6;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER = 0x8CDB;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER = 0x8CDC;
-// enum uint GL_FRAMEBUFFER_UNSUPPORTED = 0x8CDD;
-// enum uint GL_MAX_COLOR_ATTACHMENTS = 0x8CDF;
-// enum uint GL_COLOR_ATTACHMENT0 = 0x8CE0;
-// enum uint GL_COLOR_ATTACHMENT1 = 0x8CE1;
-// enum uint GL_COLOR_ATTACHMENT2 = 0x8CE2;
-// enum uint GL_COLOR_ATTACHMENT3 = 0x8CE3;
-// enum uint GL_COLOR_ATTACHMENT4 = 0x8CE4;
-// enum uint GL_COLOR_ATTACHMENT5 = 0x8CE5;
-// enum uint GL_COLOR_ATTACHMENT6 = 0x8CE6;
-// enum uint GL_COLOR_ATTACHMENT7 = 0x8CE7;
-// enum uint GL_COLOR_ATTACHMENT8 = 0x8CE8;
-// enum uint GL_COLOR_ATTACHMENT9 = 0x8CE9;
-// enum uint GL_COLOR_ATTACHMENT10 = 0x8CEA;
-// enum uint GL_COLOR_ATTACHMENT11 = 0x8CEB;
-// enum uint GL_COLOR_ATTACHMENT12 = 0x8CEC;
-// enum uint GL_COLOR_ATTACHMENT13 = 0x8CED;
-// enum uint GL_COLOR_ATTACHMENT14 = 0x8CEE;
-// enum uint GL_COLOR_ATTACHMENT15 = 0x8CEF;
-// enum uint GL_DEPTH_ATTACHMENT = 0x8D00;
-// enum uint GL_STENCIL_ATTACHMENT = 0x8D20;
-// enum uint GL_FRAMEBUFFER = 0x8D40;
-// enum uint GL_RENDERBUFFER = 0x8D41;
-// enum uint GL_RENDERBUFFER_WIDTH = 0x8D42;
-// enum uint GL_RENDERBUFFER_HEIGHT = 0x8D43;
-// enum uint GL_RENDERBUFFER_INTERNAL_FORMAT = 0x8D44;
-// enum uint GL_STENCIL_INDEX1 = 0x8D46;
-// enum uint GL_STENCIL_INDEX4 = 0x8D47;
-// enum uint GL_STENCIL_INDEX8 = 0x8D48;
-// enum uint GL_STENCIL_INDEX16 = 0x8D49;
-// enum uint GL_RENDERBUFFER_RED_SIZE = 0x8D50;
-// enum uint GL_RENDERBUFFER_GREEN_SIZE = 0x8D51;
-// enum uint GL_RENDERBUFFER_BLUE_SIZE = 0x8D52;
-// enum uint GL_RENDERBUFFER_ALPHA_SIZE = 0x8D53;
-// enum uint GL_RENDERBUFFER_DEPTH_SIZE = 0x8D54;
-// enum uint GL_RENDERBUFFER_STENCIL_SIZE = 0x8D55;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE = 0x8D56;
-// enum uint GL_MAX_SAMPLES = 0x8D57;
-// enum uint GL_INDEX = 0x8222;
-enum uint GL_TEXTURE_LUMINANCE_TYPE = 0x8C14;
-enum uint GL_TEXTURE_INTENSITY_TYPE = 0x8C15;
-// extern(System) alias fp_glIsRenderbuffer = GLboolean function(GLuint) nothrow; __gshared fp_glIsRenderbuffer glIsRenderbuffer;
-// extern(System) alias fp_glBindRenderbuffer = void function(GLenum, GLuint) nothrow; __gshared fp_glBindRenderbuffer glBindRenderbuffer;
-// extern(System) alias fp_glDeleteRenderbuffers = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteRenderbuffers glDeleteRenderbuffers;
-// extern(System) alias fp_glGenRenderbuffers = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenRenderbuffers glGenRenderbuffers;
-// extern(System) alias fp_glRenderbufferStorage = void function(GLenum, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glRenderbufferStorage glRenderbufferStorage;
-// extern(System) alias fp_glGetRenderbufferParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetRenderbufferParameteriv glGetRenderbufferParameteriv;
-// extern(System) alias fp_glIsFramebuffer = GLboolean function(GLuint) nothrow; __gshared fp_glIsFramebuffer glIsFramebuffer;
-// extern(System) alias fp_glBindFramebuffer = void function(GLenum, GLuint) nothrow; __gshared fp_glBindFramebuffer glBindFramebuffer;
-// extern(System) alias fp_glDeleteFramebuffers = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteFramebuffers glDeleteFramebuffers;
-// extern(System) alias fp_glGenFramebuffers = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenFramebuffers glGenFramebuffers;
-// extern(System) alias fp_glCheckFramebufferStatus = GLenum function(GLenum) nothrow; __gshared fp_glCheckFramebufferStatus glCheckFramebufferStatus;
-// extern(System) alias fp_glFramebufferTexture1D = void function(GLenum, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTexture1D glFramebufferTexture1D;
-// extern(System) alias fp_glFramebufferTexture2D = void function(GLenum, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTexture2D glFramebufferTexture2D;
-// extern(System) alias fp_glFramebufferTexture3D = void function(GLenum, GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glFramebufferTexture3D glFramebufferTexture3D;
-// extern(System) alias fp_glFramebufferRenderbuffer = void function(GLenum, GLenum, GLenum, GLuint) nothrow; __gshared fp_glFramebufferRenderbuffer glFramebufferRenderbuffer;
-// extern(System) alias fp_glGetFramebufferAttachmentParameteriv = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFramebufferAttachmentParameteriv glGetFramebufferAttachmentParameteriv;
-// extern(System) alias fp_glGenerateMipmap = void function(GLenum) nothrow; __gshared fp_glGenerateMipmap glGenerateMipmap;
-// extern(System) alias fp_glBlitFramebuffer = void function(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLbitfield, GLenum) nothrow; __gshared fp_glBlitFramebuffer glBlitFramebuffer;
-// extern(System) alias fp_glRenderbufferStorageMultisample = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glRenderbufferStorageMultisample glRenderbufferStorageMultisample;
-// extern(System) alias fp_glFramebufferTextureLayer = void function(GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glFramebufferTextureLayer glFramebufferTextureLayer;
-// GL_ATI_envmap_bumpmap
+
 bool GL_ATI_envmap_bumpmap;
 enum uint GL_BUMP_ROT_MATRIX_ATI = 0x8775;
 enum uint GL_BUMP_ROT_MATRIX_SIZE_ATI = 0x8776;
@@ -938,43 +466,32 @@ enum uint GL_DUDV_ATI = 0x8779;
 enum uint GL_DU8DV8_ATI = 0x877A;
 enum uint GL_BUMP_ENVMAP_ATI = 0x877B;
 enum uint GL_BUMP_TARGET_ATI = 0x877C;
-extern(System) alias fp_glTexBumpParameterivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glTexBumpParameterivATI glTexBumpParameterivATI;
-extern(System) alias fp_glTexBumpParameterfvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glTexBumpParameterfvATI glTexBumpParameterfvATI;
-extern(System) alias fp_glGetTexBumpParameterivATI = void function(GLenum, GLint*) nothrow; __gshared fp_glGetTexBumpParameterivATI glGetTexBumpParameterivATI;
-extern(System) alias fp_glGetTexBumpParameterfvATI = void function(GLenum, GLfloat*) nothrow; __gshared fp_glGetTexBumpParameterfvATI glGetTexBumpParameterfvATI;
-// GL_ARB_robust_buffer_access_behavior
+
 bool GL_ARB_robust_buffer_access_behavior;
-// GL_ARB_shader_stencil_export
+
 bool GL_ARB_shader_stencil_export;
-// GL_NV_texture_rectangle
+
 bool GL_NV_texture_rectangle;
 enum uint GL_TEXTURE_RECTANGLE_NV = 0x84F5;
 enum uint GL_TEXTURE_BINDING_RECTANGLE_NV = 0x84F6;
 enum uint GL_PROXY_TEXTURE_RECTANGLE_NV = 0x84F7;
 enum uint GL_MAX_RECTANGLE_TEXTURE_SIZE_NV = 0x84F8;
-// GL_ARB_enhanced_layouts
+
 bool GL_ARB_enhanced_layouts;
-enum uint GL_LOCATION_COMPONENT = 0x934A;
-// enum uint GL_TRANSFORM_FEEDBACK_BUFFER = 0x8C8E;
-enum uint GL_TRANSFORM_FEEDBACK_BUFFER_INDEX = 0x934B;
-enum uint GL_TRANSFORM_FEEDBACK_BUFFER_STRIDE = 0x934C;
-// GL_ARB_texture_rectangle
+
 bool GL_ARB_texture_rectangle;
 enum uint GL_TEXTURE_RECTANGLE_ARB = 0x84F5;
 enum uint GL_TEXTURE_BINDING_RECTANGLE_ARB = 0x84F6;
 enum uint GL_PROXY_TEXTURE_RECTANGLE_ARB = 0x84F7;
 enum uint GL_MAX_RECTANGLE_TEXTURE_SIZE_ARB = 0x84F8;
-// GL_SGI_texture_color_table
+
 bool GL_SGI_texture_color_table;
 enum uint GL_TEXTURE_COLOR_TABLE_SGI = 0x80BC;
 enum uint GL_PROXY_TEXTURE_COLOR_TABLE_SGI = 0x80BD;
-// GL_ATI_map_object_buffer
+
 bool GL_ATI_map_object_buffer;
-extern(System) alias fp_glMapObjectBufferATI = void* function(GLuint) nothrow; __gshared fp_glMapObjectBufferATI glMapObjectBufferATI;
-extern(System) alias fp_glUnmapObjectBufferATI = void function(GLuint) nothrow; __gshared fp_glUnmapObjectBufferATI glUnmapObjectBufferATI;
-// GL_ARB_robustness
+
 bool GL_ARB_robustness;
-// enum uint GL_NO_ERROR = 0;
 enum uint GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT_ARB = 0x00000004;
 enum uint GL_LOSE_CONTEXT_ON_RESET_ARB = 0x8252;
 enum uint GL_GUILTY_CONTEXT_RESET_ARB = 0x8253;
@@ -982,27 +499,7 @@ enum uint GL_INNOCENT_CONTEXT_RESET_ARB = 0x8254;
 enum uint GL_UNKNOWN_CONTEXT_RESET_ARB = 0x8255;
 enum uint GL_RESET_NOTIFICATION_STRATEGY_ARB = 0x8256;
 enum uint GL_NO_RESET_NOTIFICATION_ARB = 0x8261;
-extern(System) alias fp_glGetGraphicsResetStatusARB = GLenum function() nothrow; __gshared fp_glGetGraphicsResetStatusARB glGetGraphicsResetStatusARB;
-extern(System) alias fp_glGetnTexImageARB = void function(GLenum, GLint, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnTexImageARB glGetnTexImageARB;
-extern(System) alias fp_glReadnPixelsARB = void function(GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glReadnPixelsARB glReadnPixelsARB;
-extern(System) alias fp_glGetnCompressedTexImageARB = void function(GLenum, GLint, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnCompressedTexImageARB glGetnCompressedTexImageARB;
-extern(System) alias fp_glGetnUniformfvARB = void function(GLuint, GLint, GLsizei, GLfloat*) nothrow; __gshared fp_glGetnUniformfvARB glGetnUniformfvARB;
-extern(System) alias fp_glGetnUniformivARB = void function(GLuint, GLint, GLsizei, GLint*) nothrow; __gshared fp_glGetnUniformivARB glGetnUniformivARB;
-extern(System) alias fp_glGetnUniformuivARB = void function(GLuint, GLint, GLsizei, GLuint*) nothrow; __gshared fp_glGetnUniformuivARB glGetnUniformuivARB;
-extern(System) alias fp_glGetnUniformdvARB = void function(GLuint, GLint, GLsizei, GLdouble*) nothrow; __gshared fp_glGetnUniformdvARB glGetnUniformdvARB;
-extern(System) alias fp_glGetnMapdvARB = void function(GLenum, GLenum, GLsizei, GLdouble*) nothrow; __gshared fp_glGetnMapdvARB glGetnMapdvARB;
-extern(System) alias fp_glGetnMapfvARB = void function(GLenum, GLenum, GLsizei, GLfloat*) nothrow; __gshared fp_glGetnMapfvARB glGetnMapfvARB;
-extern(System) alias fp_glGetnMapivARB = void function(GLenum, GLenum, GLsizei, GLint*) nothrow; __gshared fp_glGetnMapivARB glGetnMapivARB;
-extern(System) alias fp_glGetnPixelMapfvARB = void function(GLenum, GLsizei, GLfloat*) nothrow; __gshared fp_glGetnPixelMapfvARB glGetnPixelMapfvARB;
-extern(System) alias fp_glGetnPixelMapuivARB = void function(GLenum, GLsizei, GLuint*) nothrow; __gshared fp_glGetnPixelMapuivARB glGetnPixelMapuivARB;
-extern(System) alias fp_glGetnPixelMapusvARB = void function(GLenum, GLsizei, GLushort*) nothrow; __gshared fp_glGetnPixelMapusvARB glGetnPixelMapusvARB;
-extern(System) alias fp_glGetnPolygonStippleARB = void function(GLsizei, GLubyte*) nothrow; __gshared fp_glGetnPolygonStippleARB glGetnPolygonStippleARB;
-extern(System) alias fp_glGetnColorTableARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnColorTableARB glGetnColorTableARB;
-extern(System) alias fp_glGetnConvolutionFilterARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnConvolutionFilterARB glGetnConvolutionFilterARB;
-extern(System) alias fp_glGetnSeparableFilterARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*, GLsizei, GLvoid*, GLvoid*) nothrow; __gshared fp_glGetnSeparableFilterARB glGetnSeparableFilterARB;
-extern(System) alias fp_glGetnHistogramARB = void function(GLenum, GLboolean, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnHistogramARB glGetnHistogramARB;
-extern(System) alias fp_glGetnMinmaxARB = void function(GLenum, GLboolean, GLenum, GLenum, GLsizei, GLvoid*) nothrow; __gshared fp_glGetnMinmaxARB glGetnMinmaxARB;
-// GL_NV_pixel_data_range
+
 bool GL_NV_pixel_data_range;
 enum uint GL_WRITE_PIXEL_DATA_RANGE_NV = 0x8878;
 enum uint GL_READ_PIXEL_DATA_RANGE_NV = 0x8879;
@@ -1010,54 +507,20 @@ enum uint GL_WRITE_PIXEL_DATA_RANGE_LENGTH_NV = 0x887A;
 enum uint GL_READ_PIXEL_DATA_RANGE_LENGTH_NV = 0x887B;
 enum uint GL_WRITE_PIXEL_DATA_RANGE_POINTER_NV = 0x887C;
 enum uint GL_READ_PIXEL_DATA_RANGE_POINTER_NV = 0x887D;
-extern(System) alias fp_glPixelDataRangeNV = void function(GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glPixelDataRangeNV glPixelDataRangeNV;
-extern(System) alias fp_glFlushPixelDataRangeNV = void function(GLenum) nothrow; __gshared fp_glFlushPixelDataRangeNV glFlushPixelDataRangeNV;
-// GL_EXT_framebuffer_blit
+
 bool GL_EXT_framebuffer_blit;
 enum uint GL_READ_FRAMEBUFFER_EXT = 0x8CA8;
 enum uint GL_DRAW_FRAMEBUFFER_EXT = 0x8CA9;
 enum uint GL_DRAW_FRAMEBUFFER_BINDING_EXT = 0x8CA6;
 enum uint GL_READ_FRAMEBUFFER_BINDING_EXT = 0x8CAA;
-extern(System) alias fp_glBlitFramebufferEXT = void function(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLbitfield, GLenum) nothrow; __gshared fp_glBlitFramebufferEXT glBlitFramebufferEXT;
-// GL_ARB_gpu_shader_fp64
+
 bool GL_ARB_gpu_shader_fp64;
-// enum uint GL_DOUBLE = 0x140A;
-// enum uint GL_DOUBLE_VEC2 = 0x8FFC;
-// enum uint GL_DOUBLE_VEC3 = 0x8FFD;
-// enum uint GL_DOUBLE_VEC4 = 0x8FFE;
-// enum uint GL_DOUBLE_MAT2 = 0x8F46;
-// enum uint GL_DOUBLE_MAT3 = 0x8F47;
-// enum uint GL_DOUBLE_MAT4 = 0x8F48;
-// enum uint GL_DOUBLE_MAT2x3 = 0x8F49;
-// enum uint GL_DOUBLE_MAT2x4 = 0x8F4A;
-// enum uint GL_DOUBLE_MAT3x2 = 0x8F4B;
-// enum uint GL_DOUBLE_MAT3x4 = 0x8F4C;
-// enum uint GL_DOUBLE_MAT4x2 = 0x8F4D;
-// enum uint GL_DOUBLE_MAT4x3 = 0x8F4E;
-// extern(System) alias fp_glUniform1d = void function(GLint, GLdouble) nothrow; __gshared fp_glUniform1d glUniform1d;
-// extern(System) alias fp_glUniform2d = void function(GLint, GLdouble, GLdouble) nothrow; __gshared fp_glUniform2d glUniform2d;
-// extern(System) alias fp_glUniform3d = void function(GLint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glUniform3d glUniform3d;
-// extern(System) alias fp_glUniform4d = void function(GLint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glUniform4d glUniform4d;
-// extern(System) alias fp_glUniform1dv = void function(GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glUniform1dv glUniform1dv;
-// extern(System) alias fp_glUniform2dv = void function(GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glUniform2dv glUniform2dv;
-// extern(System) alias fp_glUniform3dv = void function(GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glUniform3dv glUniform3dv;
-// extern(System) alias fp_glUniform4dv = void function(GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glUniform4dv glUniform4dv;
-// extern(System) alias fp_glUniformMatrix2dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix2dv glUniformMatrix2dv;
-// extern(System) alias fp_glUniformMatrix3dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix3dv glUniformMatrix3dv;
-// extern(System) alias fp_glUniformMatrix4dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix4dv glUniformMatrix4dv;
-// extern(System) alias fp_glUniformMatrix2x3dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix2x3dv glUniformMatrix2x3dv;
-// extern(System) alias fp_glUniformMatrix2x4dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix2x4dv glUniformMatrix2x4dv;
-// extern(System) alias fp_glUniformMatrix3x2dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix3x2dv glUniformMatrix3x2dv;
-// extern(System) alias fp_glUniformMatrix3x4dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix3x4dv glUniformMatrix3x4dv;
-// extern(System) alias fp_glUniformMatrix4x2dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix4x2dv glUniformMatrix4x2dv;
-// extern(System) alias fp_glUniformMatrix4x3dv = void function(GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glUniformMatrix4x3dv glUniformMatrix4x3dv;
-// extern(System) alias fp_glGetUniformdv = void function(GLuint, GLint, GLdouble*) nothrow; __gshared fp_glGetUniformdv glGetUniformdv;
-// GL_SGIX_depth_texture
+
 bool GL_SGIX_depth_texture;
 enum uint GL_DEPTH_COMPONENT16_SGIX = 0x81A5;
 enum uint GL_DEPTH_COMPONENT24_SGIX = 0x81A6;
 enum uint GL_DEPTH_COMPONENT32_SGIX = 0x81A7;
-// GL_EXT_vertex_weighting
+
 bool GL_EXT_vertex_weighting;
 enum uint GL_MODELVIEW0_STACK_DEPTH_EXT = 0x0BA3;
 enum uint GL_MODELVIEW1_STACK_DEPTH_EXT = 0x8502;
@@ -1072,35 +535,29 @@ enum uint GL_VERTEX_WEIGHT_ARRAY_SIZE_EXT = 0x850D;
 enum uint GL_VERTEX_WEIGHT_ARRAY_TYPE_EXT = 0x850E;
 enum uint GL_VERTEX_WEIGHT_ARRAY_STRIDE_EXT = 0x850F;
 enum uint GL_VERTEX_WEIGHT_ARRAY_POINTER_EXT = 0x8510;
-extern(System) alias fp_glVertexWeightfEXT = void function(GLfloat) nothrow; __gshared fp_glVertexWeightfEXT glVertexWeightfEXT;
-extern(System) alias fp_glVertexWeightfvEXT = void function(const(GLfloat)*) nothrow; __gshared fp_glVertexWeightfvEXT glVertexWeightfvEXT;
-extern(System) alias fp_glVertexWeightPointerEXT = void function(GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexWeightPointerEXT glVertexWeightPointerEXT;
-// GL_GREMEDY_string_marker
+
 bool GL_GREMEDY_string_marker;
-extern(System) alias fp_glStringMarkerGREMEDY = void function(GLsizei, const(GLvoid)*) nothrow; __gshared fp_glStringMarkerGREMEDY glStringMarkerGREMEDY;
-// GL_ARB_texture_compression_bptc
+
 bool GL_ARB_texture_compression_bptc;
 enum uint GL_COMPRESSED_RGBA_BPTC_UNORM_ARB = 0x8E8C;
 enum uint GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB = 0x8E8D;
 enum uint GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB = 0x8E8E;
 enum uint GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB = 0x8E8F;
-// GL_EXT_subtexture
+
 bool GL_EXT_subtexture;
-extern(System) alias fp_glTexSubImage1DEXT = void function(GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexSubImage1DEXT glTexSubImage1DEXT;
-extern(System) alias fp_glTexSubImage2DEXT = void function(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexSubImage2DEXT glTexSubImage2DEXT;
-// GL_EXT_pixel_transform_color_table
+
 bool GL_EXT_pixel_transform_color_table;
-// GL_EXT_texture_compression_rgtc
+
 bool GL_EXT_texture_compression_rgtc;
 enum uint GL_COMPRESSED_RED_RGTC1_EXT = 0x8DBB;
 enum uint GL_COMPRESSED_SIGNED_RED_RGTC1_EXT = 0x8DBC;
 enum uint GL_COMPRESSED_RED_GREEN_RGTC2_EXT = 0x8DBD;
 enum uint GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT = 0x8DBE;
-// GL_SGIX_depth_pass_instrument
+
 bool GL_SGIX_depth_pass_instrument;
-// GL_ARB_shader_precision
+
 bool GL_ARB_shader_precision;
-// GL_NV_evaluators
+
 bool GL_NV_evaluators;
 enum uint GL_EVAL_2D_NV = 0x86C0;
 enum uint GL_EVAL_TRIANGULAR_2D_NV = 0x86C1;
@@ -1126,22 +583,11 @@ enum uint GL_EVAL_VERTEX_ATTRIB14_NV = 0x86D4;
 enum uint GL_EVAL_VERTEX_ATTRIB15_NV = 0x86D5;
 enum uint GL_MAX_MAP_TESSELLATION_NV = 0x86D6;
 enum uint GL_MAX_RATIONAL_EVAL_ORDER_NV = 0x86D7;
-extern(System) alias fp_glMapControlPointsNV = void function(GLenum, GLuint, GLenum, GLsizei, GLsizei, GLint, GLint, GLboolean, const(GLvoid)*) nothrow; __gshared fp_glMapControlPointsNV glMapControlPointsNV;
-extern(System) alias fp_glMapParameterivNV = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glMapParameterivNV glMapParameterivNV;
-extern(System) alias fp_glMapParameterfvNV = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glMapParameterfvNV glMapParameterfvNV;
-extern(System) alias fp_glGetMapControlPointsNV = void function(GLenum, GLuint, GLenum, GLsizei, GLsizei, GLboolean, GLvoid*) nothrow; __gshared fp_glGetMapControlPointsNV glGetMapControlPointsNV;
-extern(System) alias fp_glGetMapParameterivNV = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMapParameterivNV glGetMapParameterivNV;
-extern(System) alias fp_glGetMapParameterfvNV = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMapParameterfvNV glGetMapParameterfvNV;
-extern(System) alias fp_glGetMapAttribParameterivNV = void function(GLenum, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetMapAttribParameterivNV glGetMapAttribParameterivNV;
-extern(System) alias fp_glGetMapAttribParameterfvNV = void function(GLenum, GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetMapAttribParameterfvNV glGetMapAttribParameterfvNV;
-extern(System) alias fp_glEvalMapsNV = void function(GLenum, GLenum) nothrow; __gshared fp_glEvalMapsNV glEvalMapsNV;
-// GL_SGIS_texture_filter4
+
 bool GL_SGIS_texture_filter4;
 enum uint GL_FILTER4_SGIS = 0x8146;
 enum uint GL_TEXTURE_FILTER4_SIZE_SGIS = 0x8147;
-extern(System) alias fp_glGetTexFilterFuncSGIS = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetTexFilterFuncSGIS glGetTexFilterFuncSGIS;
-extern(System) alias fp_glTexFilterFuncSGIS = void function(GLenum, GLenum, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glTexFilterFuncSGIS glTexFilterFuncSGIS;
-// GL_AMD_performance_monitor
+
 bool GL_AMD_performance_monitor;
 enum uint GL_COUNTER_TYPE_AMD = 0x8BC0;
 enum uint GL_COUNTER_RANGE_AMD = 0x8BC1;
@@ -1150,27 +596,15 @@ enum uint GL_PERCENTAGE_AMD = 0x8BC3;
 enum uint GL_PERFMON_RESULT_AVAILABLE_AMD = 0x8BC4;
 enum uint GL_PERFMON_RESULT_SIZE_AMD = 0x8BC5;
 enum uint GL_PERFMON_RESULT_AMD = 0x8BC6;
-extern(System) alias fp_glGetPerfMonitorGroupsAMD = void function(GLint*, GLsizei, GLuint*) nothrow; __gshared fp_glGetPerfMonitorGroupsAMD glGetPerfMonitorGroupsAMD;
-extern(System) alias fp_glGetPerfMonitorCountersAMD = void function(GLuint, GLint*, GLint*, GLsizei, GLuint*) nothrow; __gshared fp_glGetPerfMonitorCountersAMD glGetPerfMonitorCountersAMD;
-extern(System) alias fp_glGetPerfMonitorGroupStringAMD = void function(GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetPerfMonitorGroupStringAMD glGetPerfMonitorGroupStringAMD;
-extern(System) alias fp_glGetPerfMonitorCounterStringAMD = void function(GLuint, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetPerfMonitorCounterStringAMD glGetPerfMonitorCounterStringAMD;
-extern(System) alias fp_glGetPerfMonitorCounterInfoAMD = void function(GLuint, GLuint, GLenum, GLvoid*) nothrow; __gshared fp_glGetPerfMonitorCounterInfoAMD glGetPerfMonitorCounterInfoAMD;
-extern(System) alias fp_glGenPerfMonitorsAMD = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenPerfMonitorsAMD glGenPerfMonitorsAMD;
-extern(System) alias fp_glDeletePerfMonitorsAMD = void function(GLsizei, GLuint*) nothrow; __gshared fp_glDeletePerfMonitorsAMD glDeletePerfMonitorsAMD;
-extern(System) alias fp_glSelectPerfMonitorCountersAMD = void function(GLuint, GLboolean, GLuint, GLint, GLuint*) nothrow; __gshared fp_glSelectPerfMonitorCountersAMD glSelectPerfMonitorCountersAMD;
-extern(System) alias fp_glBeginPerfMonitorAMD = void function(GLuint) nothrow; __gshared fp_glBeginPerfMonitorAMD glBeginPerfMonitorAMD;
-extern(System) alias fp_glEndPerfMonitorAMD = void function(GLuint) nothrow; __gshared fp_glEndPerfMonitorAMD glEndPerfMonitorAMD;
-extern(System) alias fp_glGetPerfMonitorCounterDataAMD = void function(GLuint, GLenum, GLsizei, GLuint*, GLint*) nothrow; __gshared fp_glGetPerfMonitorCounterDataAMD glGetPerfMonitorCounterDataAMD;
-// GL_NV_geometry_shader4
+
 bool GL_NV_geometry_shader4;
-// GL_EXT_stencil_clear_tag
+
 bool GL_EXT_stencil_clear_tag;
 enum uint GL_STENCIL_TAG_BITS_EXT = 0x88F2;
 enum uint GL_STENCIL_CLEAR_TAG_VALUE_EXT = 0x88F3;
-extern(System) alias fp_glStencilClearTagEXT = void function(GLsizei, GLuint) nothrow; __gshared fp_glStencilClearTagEXT glStencilClearTagEXT;
-// GL_NV_vertex_program1_1
+
 bool GL_NV_vertex_program1_1;
-// GL_NV_present_video
+
 bool GL_NV_present_video;
 enum uint GL_FRAME_NV = 0x8E26;
 enum uint GL_FIELDS_NV = 0x8E27;
@@ -1178,54 +612,31 @@ enum uint GL_CURRENT_TIME_NV = 0x8E28;
 enum uint GL_NUM_FILL_STREAMS_NV = 0x8E29;
 enum uint GL_PRESENT_TIME_NV = 0x8E2A;
 enum uint GL_PRESENT_DURATION_NV = 0x8E2B;
-extern(System) alias fp_glPresentFrameKeyedNV = void function(GLuint, GLuint64EXT, GLuint, GLuint, GLenum, GLenum, GLuint, GLuint, GLenum, GLuint, GLuint) nothrow; __gshared fp_glPresentFrameKeyedNV glPresentFrameKeyedNV;
-extern(System) alias fp_glPresentFrameDualFillNV = void function(GLuint, GLuint64EXT, GLuint, GLuint, GLenum, GLenum, GLuint, GLenum, GLuint, GLenum, GLuint, GLenum, GLuint) nothrow; __gshared fp_glPresentFrameDualFillNV glPresentFrameDualFillNV;
-extern(System) alias fp_glGetVideoivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVideoivNV glGetVideoivNV;
-extern(System) alias fp_glGetVideouivNV = void function(GLuint, GLenum, GLuint*) nothrow; __gshared fp_glGetVideouivNV glGetVideouivNV;
-extern(System) alias fp_glGetVideoi64vNV = void function(GLuint, GLenum, GLint64EXT*) nothrow; __gshared fp_glGetVideoi64vNV glGetVideoi64vNV;
-extern(System) alias fp_glGetVideoui64vNV = void function(GLuint, GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetVideoui64vNV glGetVideoui64vNV;
-// GL_ARB_texture_compression_rgtc
+
 bool GL_ARB_texture_compression_rgtc;
-// enum uint GL_COMPRESSED_RED_RGTC1 = 0x8DBB;
-// enum uint GL_COMPRESSED_SIGNED_RED_RGTC1 = 0x8DBC;
-// enum uint GL_COMPRESSED_RG_RGTC2 = 0x8DBD;
-// enum uint GL_COMPRESSED_SIGNED_RG_RGTC2 = 0x8DBE;
-// GL_HP_convolution_border_modes
+
 bool GL_HP_convolution_border_modes;
 enum uint GL_IGNORE_BORDER_HP = 0x8150;
 enum uint GL_CONSTANT_BORDER_HP = 0x8151;
 enum uint GL_REPLICATE_BORDER_HP = 0x8153;
 enum uint GL_CONVOLUTION_BORDER_COLOR_HP = 0x8154;
-// GL_EXT_gpu_program_parameters
+
 bool GL_EXT_gpu_program_parameters;
-extern(System) alias fp_glProgramEnvParameters4fvEXT = void function(GLenum, GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramEnvParameters4fvEXT glProgramEnvParameters4fvEXT;
-extern(System) alias fp_glProgramLocalParameters4fvEXT = void function(GLenum, GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramLocalParameters4fvEXT glProgramLocalParameters4fvEXT;
-// GL_SGIX_list_priority
+
 bool GL_SGIX_list_priority;
 enum uint GL_LIST_PRIORITY_SGIX = 0x8182;
-extern(System) alias fp_glGetListParameterfvSGIX = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetListParameterfvSGIX glGetListParameterfvSGIX;
-extern(System) alias fp_glGetListParameterivSGIX = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetListParameterivSGIX glGetListParameterivSGIX;
-extern(System) alias fp_glListParameterfSGIX = void function(GLuint, GLenum, GLfloat) nothrow; __gshared fp_glListParameterfSGIX glListParameterfSGIX;
-extern(System) alias fp_glListParameterfvSGIX = void function(GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glListParameterfvSGIX glListParameterfvSGIX;
-extern(System) alias fp_glListParameteriSGIX = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glListParameteriSGIX glListParameteriSGIX;
-extern(System) alias fp_glListParameterivSGIX = void function(GLuint, GLenum, const(GLint)*) nothrow; __gshared fp_glListParameterivSGIX glListParameterivSGIX;
-// GL_ARB_stencil_texturing
+
 bool GL_ARB_stencil_texturing;
-// enum uint GL_DEPTH_STENCIL_TEXTURE_MODE = 0x90EA;
-// GL_SGIX_fog_offset
+
 bool GL_SGIX_fog_offset;
 enum uint GL_FOG_OFFSET_SGIX = 0x8198;
 enum uint GL_FOG_OFFSET_VALUE_SGIX = 0x8199;
-// GL_ARB_draw_elements_base_vertex
+
 bool GL_ARB_draw_elements_base_vertex;
-// extern(System) alias fp_glDrawElementsBaseVertex = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLint) nothrow; __gshared fp_glDrawElementsBaseVertex glDrawElementsBaseVertex;
-// extern(System) alias fp_glDrawRangeElementsBaseVertex = void function(GLenum, GLuint, GLuint, GLsizei, GLenum, const(GLvoid)*, GLint) nothrow; __gshared fp_glDrawRangeElementsBaseVertex glDrawRangeElementsBaseVertex;
-// extern(System) alias fp_glDrawElementsInstancedBaseVertex = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLsizei, GLint) nothrow; __gshared fp_glDrawElementsInstancedBaseVertex glDrawElementsInstancedBaseVertex;
-// extern(System) alias fp_glMultiDrawElementsBaseVertex = void function(GLenum, const(GLsizei)*, GLenum, const(GLvoid*)*, GLsizei, const(GLint)*) nothrow; __gshared fp_glMultiDrawElementsBaseVertex glMultiDrawElementsBaseVertex;
-// GL_INGR_interlace_read
+
 bool GL_INGR_interlace_read;
 enum uint GL_INTERLACE_READ_INGR = 0x8568;
-// GL_NV_transform_feedback
+
 bool GL_NV_transform_feedback;
 enum uint GL_BACK_PRIMARY_COLOR_NV = 0x8C77;
 enum uint GL_BACK_SECONDARY_COLOR_NV = 0x8C78;
@@ -1258,19 +669,7 @@ enum uint GL_SKIP_COMPONENTS4_NV = -3;
 enum uint GL_SKIP_COMPONENTS3_NV = -4;
 enum uint GL_SKIP_COMPONENTS2_NV = -5;
 enum uint GL_SKIP_COMPONENTS1_NV = -6;
-extern(System) alias fp_glBeginTransformFeedbackNV = void function(GLenum) nothrow; __gshared fp_glBeginTransformFeedbackNV glBeginTransformFeedbackNV;
-extern(System) alias fp_glEndTransformFeedbackNV = void function() nothrow; __gshared fp_glEndTransformFeedbackNV glEndTransformFeedbackNV;
-extern(System) alias fp_glTransformFeedbackAttribsNV = void function(GLuint, const(GLint)*, GLenum) nothrow; __gshared fp_glTransformFeedbackAttribsNV glTransformFeedbackAttribsNV;
-extern(System) alias fp_glBindBufferRangeNV = void function(GLenum, GLuint, GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glBindBufferRangeNV glBindBufferRangeNV;
-extern(System) alias fp_glBindBufferOffsetNV = void function(GLenum, GLuint, GLuint, GLintptr) nothrow; __gshared fp_glBindBufferOffsetNV glBindBufferOffsetNV;
-extern(System) alias fp_glBindBufferBaseNV = void function(GLenum, GLuint, GLuint) nothrow; __gshared fp_glBindBufferBaseNV glBindBufferBaseNV;
-extern(System) alias fp_glTransformFeedbackVaryingsNV = void function(GLuint, GLsizei, const(GLint)*, GLenum) nothrow; __gshared fp_glTransformFeedbackVaryingsNV glTransformFeedbackVaryingsNV;
-extern(System) alias fp_glActiveVaryingNV = void function(GLuint, const(GLchar)*) nothrow; __gshared fp_glActiveVaryingNV glActiveVaryingNV;
-extern(System) alias fp_glGetVaryingLocationNV = GLint function(GLuint, const(GLchar)*) nothrow; __gshared fp_glGetVaryingLocationNV glGetVaryingLocationNV;
-extern(System) alias fp_glGetActiveVaryingNV = void function(GLuint, GLuint, GLsizei, GLsizei*, GLsizei*, GLenum*, GLchar*) nothrow; __gshared fp_glGetActiveVaryingNV glGetActiveVaryingNV;
-extern(System) alias fp_glGetTransformFeedbackVaryingNV = void function(GLuint, GLuint, GLint*) nothrow; __gshared fp_glGetTransformFeedbackVaryingNV glGetTransformFeedbackVaryingNV;
-extern(System) alias fp_glTransformFeedbackStreamAttribsNV = void function(GLsizei, const(GLint)*, GLsizei, const(GLint)*, GLenum) nothrow; __gshared fp_glTransformFeedbackStreamAttribsNV glTransformFeedbackStreamAttribsNV;
-// GL_NV_fragment_program
+
 bool GL_NV_fragment_program;
 enum uint GL_MAX_FRAGMENT_PROGRAM_LOCAL_PARAMETERS_NV = 0x8868;
 enum uint GL_FRAGMENT_PROGRAM_NV = 0x8870;
@@ -1278,36 +677,26 @@ enum uint GL_MAX_TEXTURE_COORDS_NV = 0x8871;
 enum uint GL_MAX_TEXTURE_IMAGE_UNITS_NV = 0x8872;
 enum uint GL_FRAGMENT_PROGRAM_BINDING_NV = 0x8873;
 enum uint GL_PROGRAM_ERROR_STRING_NV = 0x8874;
-extern(System) alias fp_glProgramNamedParameter4fNV = void function(GLuint, GLsizei, const(GLubyte)*, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramNamedParameter4fNV glProgramNamedParameter4fNV;
-extern(System) alias fp_glProgramNamedParameter4fvNV = void function(GLuint, GLsizei, const(GLubyte)*, const(GLfloat)*) nothrow; __gshared fp_glProgramNamedParameter4fvNV glProgramNamedParameter4fvNV;
-extern(System) alias fp_glProgramNamedParameter4dNV = void function(GLuint, GLsizei, const(GLubyte)*, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramNamedParameter4dNV glProgramNamedParameter4dNV;
-extern(System) alias fp_glProgramNamedParameter4dvNV = void function(GLuint, GLsizei, const(GLubyte)*, const(GLdouble)*) nothrow; __gshared fp_glProgramNamedParameter4dvNV glProgramNamedParameter4dvNV;
-extern(System) alias fp_glGetProgramNamedParameterfvNV = void function(GLuint, GLsizei, const(GLubyte)*, GLfloat*) nothrow; __gshared fp_glGetProgramNamedParameterfvNV glGetProgramNamedParameterfvNV;
-extern(System) alias fp_glGetProgramNamedParameterdvNV = void function(GLuint, GLsizei, const(GLubyte)*, GLdouble*) nothrow; __gshared fp_glGetProgramNamedParameterdvNV glGetProgramNamedParameterdvNV;
-// GL_AMD_stencil_operation_extended
+
 bool GL_AMD_stencil_operation_extended;
 enum uint GL_SET_AMD = 0x874A;
 enum uint GL_REPLACE_VALUE_AMD = 0x874B;
 enum uint GL_STENCIL_OP_VALUE_AMD = 0x874C;
 enum uint GL_STENCIL_BACK_OP_VALUE_AMD = 0x874D;
-extern(System) alias fp_glStencilOpValueAMD = void function(GLenum, GLuint) nothrow; __gshared fp_glStencilOpValueAMD glStencilOpValueAMD;
-// GL_ARB_seamless_cubemap_per_texture
+
 bool GL_ARB_seamless_cubemap_per_texture;
-// enum uint GL_TEXTURE_CUBE_MAP_SEAMLESS = 0x884F;
-// GL_ARB_instanced_arrays
+
 bool GL_ARB_instanced_arrays;
 enum uint GL_VERTEX_ATTRIB_ARRAY_DIVISOR_ARB = 0x88FE;
-extern(System) alias fp_glVertexAttribDivisorARB = void function(GLuint, GLuint) nothrow; __gshared fp_glVertexAttribDivisorARB glVertexAttribDivisorARB;
-// GL_EXT_polygon_offset
+
 bool GL_EXT_polygon_offset;
 enum uint GL_POLYGON_OFFSET_EXT = 0x8037;
 enum uint GL_POLYGON_OFFSET_FACTOR_EXT = 0x8038;
 enum uint GL_POLYGON_OFFSET_BIAS_EXT = 0x8039;
-extern(System) alias fp_glPolygonOffsetEXT = void function(GLfloat, GLfloat) nothrow; __gshared fp_glPolygonOffsetEXT glPolygonOffsetEXT;
-// GL_NV_vertex_array_range2
+
 bool GL_NV_vertex_array_range2;
 enum uint GL_VERTEX_ARRAY_RANGE_WITHOUT_FLUSH_NV = 0x8533;
-// GL_AMD_sparse_texture
+
 bool GL_AMD_sparse_texture;
 enum uint GL_VIRTUAL_PAGE_SIZE_X_AMD = 0x9195;
 enum uint GL_VIRTUAL_PAGE_SIZE_Y_AMD = 0x9196;
@@ -1318,122 +707,58 @@ enum uint GL_MAX_SPARSE_ARRAY_TEXTURE_LAYERS = 0x919A;
 enum uint GL_MIN_SPARSE_LEVEL_AMD = 0x919B;
 enum uint GL_MIN_LOD_WARNING_AMD = 0x919C;
 enum uint GL_TEXTURE_STORAGE_SPARSE_BIT_AMD = 0x00000001;
-extern(System) alias fp_glTexStorageSparseAMD = void function(GLenum, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLbitfield) nothrow; __gshared fp_glTexStorageSparseAMD glTexStorageSparseAMD;
-extern(System) alias fp_glTextureStorageSparseAMD = void function(GLuint, GLenum, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLbitfield) nothrow; __gshared fp_glTextureStorageSparseAMD glTextureStorageSparseAMD;
-// GL_NV_fence
+
 bool GL_NV_fence;
 enum uint GL_ALL_COMPLETED_NV = 0x84F2;
 enum uint GL_FENCE_STATUS_NV = 0x84F3;
 enum uint GL_FENCE_CONDITION_NV = 0x84F4;
-extern(System) alias fp_glDeleteFencesNV = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteFencesNV glDeleteFencesNV;
-extern(System) alias fp_glGenFencesNV = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenFencesNV glGenFencesNV;
-extern(System) alias fp_glIsFenceNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsFenceNV glIsFenceNV;
-extern(System) alias fp_glTestFenceNV = GLboolean function(GLuint) nothrow; __gshared fp_glTestFenceNV glTestFenceNV;
-extern(System) alias fp_glGetFenceivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetFenceivNV glGetFenceivNV;
-extern(System) alias fp_glFinishFenceNV = void function(GLuint) nothrow; __gshared fp_glFinishFenceNV glFinishFenceNV;
-extern(System) alias fp_glSetFenceNV = void function(GLuint, GLenum) nothrow; __gshared fp_glSetFenceNV glSetFenceNV;
-// GL_ARB_texture_buffer_range
+
 bool GL_ARB_texture_buffer_range;
-// enum uint GL_TEXTURE_BUFFER_OFFSET = 0x919D;
-// enum uint GL_TEXTURE_BUFFER_SIZE = 0x919E;
-// enum uint GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT = 0x919F;
-// extern(System) alias fp_glTexBufferRange = void function(GLenum, GLenum, GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glTexBufferRange glTexBufferRange;
-// GL_SUN_mesh_array
+
 bool GL_SUN_mesh_array;
 enum uint GL_QUAD_MESH_SUN = 0x8614;
 enum uint GL_TRIANGLE_MESH_SUN = 0x8615;
-extern(System) alias fp_glDrawMeshArraysSUN = void function(GLenum, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glDrawMeshArraysSUN glDrawMeshArraysSUN;
-// GL_ARB_vertex_attrib_binding
+
 bool GL_ARB_vertex_attrib_binding;
-// enum uint GL_VERTEX_ATTRIB_BINDING = 0x82D4;
-// enum uint GL_VERTEX_ATTRIB_RELATIVE_OFFSET = 0x82D5;
-// enum uint GL_VERTEX_BINDING_DIVISOR = 0x82D6;
-// enum uint GL_VERTEX_BINDING_OFFSET = 0x82D7;
-// enum uint GL_VERTEX_BINDING_STRIDE = 0x82D8;
-// enum uint GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET = 0x82D9;
-// enum uint GL_MAX_VERTEX_ATTRIB_BINDINGS = 0x82DA;
-// extern(System) alias fp_glBindVertexBuffer = void function(GLuint, GLuint, GLintptr, GLsizei) nothrow; __gshared fp_glBindVertexBuffer glBindVertexBuffer;
-// extern(System) alias fp_glVertexAttribFormat = void function(GLuint, GLint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexAttribFormat glVertexAttribFormat;
-// extern(System) alias fp_glVertexAttribIFormat = void function(GLuint, GLint, GLenum, GLuint) nothrow; __gshared fp_glVertexAttribIFormat glVertexAttribIFormat;
-// extern(System) alias fp_glVertexAttribLFormat = void function(GLuint, GLint, GLenum, GLuint) nothrow; __gshared fp_glVertexAttribLFormat glVertexAttribLFormat;
-// extern(System) alias fp_glVertexAttribBinding = void function(GLuint, GLuint) nothrow; __gshared fp_glVertexAttribBinding glVertexAttribBinding;
-// extern(System) alias fp_glVertexBindingDivisor = void function(GLuint, GLuint) nothrow; __gshared fp_glVertexBindingDivisor glVertexBindingDivisor;
-// GL_ARB_framebuffer_no_attachments
+
 bool GL_ARB_framebuffer_no_attachments;
-// enum uint GL_FRAMEBUFFER_DEFAULT_WIDTH = 0x9310;
-// enum uint GL_FRAMEBUFFER_DEFAULT_HEIGHT = 0x9311;
-// enum uint GL_FRAMEBUFFER_DEFAULT_LAYERS = 0x9312;
-// enum uint GL_FRAMEBUFFER_DEFAULT_SAMPLES = 0x9313;
-// enum uint GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS = 0x9314;
-// enum uint GL_MAX_FRAMEBUFFER_WIDTH = 0x9315;
-// enum uint GL_MAX_FRAMEBUFFER_HEIGHT = 0x9316;
-// enum uint GL_MAX_FRAMEBUFFER_LAYERS = 0x9317;
-// enum uint GL_MAX_FRAMEBUFFER_SAMPLES = 0x9318;
-// extern(System) alias fp_glFramebufferParameteri = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glFramebufferParameteri glFramebufferParameteri;
-// extern(System) alias fp_glGetFramebufferParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFramebufferParameteriv glGetFramebufferParameteriv;
-// GL_ARB_cl_event
+
 bool GL_ARB_cl_event;
 enum uint GL_SYNC_CL_EVENT_ARB = 0x8240;
 enum uint GL_SYNC_CL_EVENT_COMPLETE_ARB = 0x8241;
-extern(System) alias fp_glCreateSyncFromCLeventARB = GLsync function(_cl_context*, _cl_event*, GLbitfield) nothrow; __gshared fp_glCreateSyncFromCLeventARB glCreateSyncFromCLeventARB;
-// GL_NV_packed_depth_stencil
+
 bool GL_NV_packed_depth_stencil;
 enum uint GL_DEPTH_STENCIL_NV = 0x84F9;
 enum uint GL_UNSIGNED_INT_24_8_NV = 0x84FA;
-// GL_OES_single_precision
+
 bool GL_OES_single_precision;
-extern(System) alias fp_glClearDepthfOES = void function(GLclampf) nothrow; __gshared fp_glClearDepthfOES glClearDepthfOES;
-extern(System) alias fp_glClipPlanefOES = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glClipPlanefOES glClipPlanefOES;
-extern(System) alias fp_glDepthRangefOES = void function(GLclampf, GLclampf) nothrow; __gshared fp_glDepthRangefOES glDepthRangefOES;
-extern(System) alias fp_glFrustumfOES = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glFrustumfOES glFrustumfOES;
-extern(System) alias fp_glGetClipPlanefOES = void function(GLenum, GLfloat*) nothrow; __gshared fp_glGetClipPlanefOES glGetClipPlanefOES;
-extern(System) alias fp_glOrthofOES = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glOrthofOES glOrthofOES;
-// GL_NV_primitive_restart
+
 bool GL_NV_primitive_restart;
 enum uint GL_PRIMITIVE_RESTART_NV = 0x8558;
 enum uint GL_PRIMITIVE_RESTART_INDEX_NV = 0x8559;
-extern(System) alias fp_glPrimitiveRestartNV = void function() nothrow; __gshared fp_glPrimitiveRestartNV glPrimitiveRestartNV;
-extern(System) alias fp_glPrimitiveRestartIndexNV = void function(GLuint) nothrow; __gshared fp_glPrimitiveRestartIndexNV glPrimitiveRestartIndexNV;
-// GL_SUN_global_alpha
+
 bool GL_SUN_global_alpha;
 enum uint GL_GLOBAL_ALPHA_SUN = 0x81D9;
 enum uint GL_GLOBAL_ALPHA_FACTOR_SUN = 0x81DA;
-extern(System) alias fp_glGlobalAlphaFactorbSUN = void function(GLbyte) nothrow; __gshared fp_glGlobalAlphaFactorbSUN glGlobalAlphaFactorbSUN;
-extern(System) alias fp_glGlobalAlphaFactorsSUN = void function(GLshort) nothrow; __gshared fp_glGlobalAlphaFactorsSUN glGlobalAlphaFactorsSUN;
-extern(System) alias fp_glGlobalAlphaFactoriSUN = void function(GLint) nothrow; __gshared fp_glGlobalAlphaFactoriSUN glGlobalAlphaFactoriSUN;
-extern(System) alias fp_glGlobalAlphaFactorfSUN = void function(GLfloat) nothrow; __gshared fp_glGlobalAlphaFactorfSUN glGlobalAlphaFactorfSUN;
-extern(System) alias fp_glGlobalAlphaFactordSUN = void function(GLdouble) nothrow; __gshared fp_glGlobalAlphaFactordSUN glGlobalAlphaFactordSUN;
-extern(System) alias fp_glGlobalAlphaFactorubSUN = void function(GLubyte) nothrow; __gshared fp_glGlobalAlphaFactorubSUN glGlobalAlphaFactorubSUN;
-extern(System) alias fp_glGlobalAlphaFactorusSUN = void function(GLushort) nothrow; __gshared fp_glGlobalAlphaFactorusSUN glGlobalAlphaFactorusSUN;
-extern(System) alias fp_glGlobalAlphaFactoruiSUN = void function(GLuint) nothrow; __gshared fp_glGlobalAlphaFactoruiSUN glGlobalAlphaFactoruiSUN;
-// GL_EXT_texture_object
+
 bool GL_EXT_texture_object;
 enum uint GL_TEXTURE_PRIORITY_EXT = 0x8066;
 enum uint GL_TEXTURE_RESIDENT_EXT = 0x8067;
 enum uint GL_TEXTURE_1D_BINDING_EXT = 0x8068;
 enum uint GL_TEXTURE_2D_BINDING_EXT = 0x8069;
 enum uint GL_TEXTURE_3D_BINDING_EXT = 0x806A;
-extern(System) alias fp_glAreTexturesResidentEXT = GLboolean function(GLsizei, const(GLuint)*, GLboolean*) nothrow; __gshared fp_glAreTexturesResidentEXT glAreTexturesResidentEXT;
-extern(System) alias fp_glBindTextureEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glBindTextureEXT glBindTextureEXT;
-extern(System) alias fp_glDeleteTexturesEXT = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteTexturesEXT glDeleteTexturesEXT;
-extern(System) alias fp_glGenTexturesEXT = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenTexturesEXT glGenTexturesEXT;
-extern(System) alias fp_glIsTextureEXT = GLboolean function(GLuint) nothrow; __gshared fp_glIsTextureEXT glIsTextureEXT;
-extern(System) alias fp_glPrioritizeTexturesEXT = void function(GLsizei, const(GLuint)*, const(GLclampf)*) nothrow; __gshared fp_glPrioritizeTexturesEXT glPrioritizeTexturesEXT;
-// GL_AMD_name_gen_delete
+
 bool GL_AMD_name_gen_delete;
 enum uint GL_DATA_BUFFER_AMD = 0x9151;
 enum uint GL_PERFORMANCE_MONITOR_AMD = 0x9152;
 enum uint GL_QUERY_OBJECT_AMD = 0x9153;
 enum uint GL_VERTEX_ARRAY_OBJECT_AMD = 0x9154;
 enum uint GL_SAMPLER_OBJECT_AMD = 0x9155;
-extern(System) alias fp_glGenNamesAMD = void function(GLenum, GLuint, GLuint*) nothrow; __gshared fp_glGenNamesAMD glGenNamesAMD;
-extern(System) alias fp_glDeleteNamesAMD = void function(GLenum, GLuint, const(GLuint)*) nothrow; __gshared fp_glDeleteNamesAMD glDeleteNamesAMD;
-extern(System) alias fp_glIsNameAMD = GLboolean function(GLenum, GLuint) nothrow; __gshared fp_glIsNameAMD glIsNameAMD;
-// GL_NV_texture_compression_vtc
+
 bool GL_NV_texture_compression_vtc;
-// GL_SGIX_ycrcb_subsample
+
 bool GL_SGIX_ycrcb_subsample;
-// GL_NV_texture_shader3
+
 bool GL_NV_texture_shader3;
 enum uint GL_OFFSET_PROJECTIVE_TEXTURE_2D_NV = 0x8850;
 enum uint GL_OFFSET_PROJECTIVE_TEXTURE_2D_SCALE_NV = 0x8851;
@@ -1452,10 +777,10 @@ enum uint GL_DOT_PRODUCT_AFFINE_DEPTH_REPLACE_NV = 0x885D;
 enum uint GL_HILO8_NV = 0x885E;
 enum uint GL_SIGNED_HILO8_NV = 0x885F;
 enum uint GL_FORCE_BLUE_TO_ONE_NV = 0x8860;
-// GL_NV_texture_shader2
+
 bool GL_NV_texture_shader2;
 enum uint GL_DOT_PRODUCT_TEXTURE_3D_NV = 0x86EF;
-// GL_EXT_texture
+
 bool GL_EXT_texture;
 enum uint GL_ALPHA4_EXT = 0x803B;
 enum uint GL_ALPHA8_EXT = 0x803C;
@@ -1500,21 +825,11 @@ enum uint GL_REPLACE_EXT = 0x8062;
 enum uint GL_PROXY_TEXTURE_1D_EXT = 0x8063;
 enum uint GL_PROXY_TEXTURE_2D_EXT = 0x8064;
 enum uint GL_TEXTURE_TOO_LARGE_EXT = 0x8065;
-// GL_ARB_buffer_storage
+
 bool GL_ARB_buffer_storage;
-// enum uint GL_MAP_READ_BIT = 0x0001;
-// enum uint GL_MAP_WRITE_BIT = 0x0002;
-enum uint GL_MAP_PERSISTENT_BIT = 0x0040;
-enum uint GL_MAP_COHERENT_BIT = 0x0080;
-enum uint GL_DYNAMIC_STORAGE_BIT = 0x0100;
-enum uint GL_CLIENT_STORAGE_BIT = 0x0200;
-enum uint GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT = 0x00004000;
-enum uint GL_BUFFER_IMMUTABLE_STORAGE = 0x821F;
-enum uint GL_BUFFER_STORAGE_FLAGS = 0x8220;
-extern(System) alias fp_glBufferStorage = void function(GLenum, GLsizeiptr, const(void)*, GLbitfield) nothrow; __gshared fp_glBufferStorage glBufferStorage;
-// GL_AMD_shader_atomic_counter_ops
+
 bool GL_AMD_shader_atomic_counter_ops;
-// GL_APPLE_vertex_program_evaluators
+
 bool GL_APPLE_vertex_program_evaluators;
 enum uint GL_VERTEX_ATTRIB_MAP1_APPLE = 0x8A00;
 enum uint GL_VERTEX_ATTRIB_MAP2_APPLE = 0x8A01;
@@ -1526,33 +841,16 @@ enum uint GL_VERTEX_ATTRIB_MAP2_SIZE_APPLE = 0x8A06;
 enum uint GL_VERTEX_ATTRIB_MAP2_COEFF_APPLE = 0x8A07;
 enum uint GL_VERTEX_ATTRIB_MAP2_ORDER_APPLE = 0x8A08;
 enum uint GL_VERTEX_ATTRIB_MAP2_DOMAIN_APPLE = 0x8A09;
-extern(System) alias fp_glEnableVertexAttribAPPLE = void function(GLuint, GLenum) nothrow; __gshared fp_glEnableVertexAttribAPPLE glEnableVertexAttribAPPLE;
-extern(System) alias fp_glDisableVertexAttribAPPLE = void function(GLuint, GLenum) nothrow; __gshared fp_glDisableVertexAttribAPPLE glDisableVertexAttribAPPLE;
-extern(System) alias fp_glIsVertexAttribEnabledAPPLE = GLboolean function(GLuint, GLenum) nothrow; __gshared fp_glIsVertexAttribEnabledAPPLE glIsVertexAttribEnabledAPPLE;
-extern(System) alias fp_glMapVertexAttrib1dAPPLE = void function(GLuint, GLuint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*) nothrow; __gshared fp_glMapVertexAttrib1dAPPLE glMapVertexAttrib1dAPPLE;
-extern(System) alias fp_glMapVertexAttrib1fAPPLE = void function(GLuint, GLuint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*) nothrow; __gshared fp_glMapVertexAttrib1fAPPLE glMapVertexAttrib1fAPPLE;
-extern(System) alias fp_glMapVertexAttrib2dAPPLE = void function(GLuint, GLuint, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*) nothrow; __gshared fp_glMapVertexAttrib2dAPPLE glMapVertexAttrib2dAPPLE;
-extern(System) alias fp_glMapVertexAttrib2fAPPLE = void function(GLuint, GLuint, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*) nothrow; __gshared fp_glMapVertexAttrib2fAPPLE glMapVertexAttrib2fAPPLE;
-// GL_ARB_multi_bind
+
 bool GL_ARB_multi_bind;
-extern(System) alias fp_glBindBuffersBase = void function(GLenum, GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glBindBuffersBase glBindBuffersBase;
-extern(System) alias fp_glBindBuffersRange = void function(GLenum, GLuint, GLsizei, const(GLuint)*, const(GLintptr)*, const(GLsizeiptr)*) nothrow; __gshared fp_glBindBuffersRange glBindBuffersRange;
-extern(System) alias fp_glBindTextures = void function(GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glBindTextures glBindTextures;
-extern(System) alias fp_glBindSamplers = void function(GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glBindSamplers glBindSamplers;
-extern(System) alias fp_glBindImageTextures = void function(GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glBindImageTextures glBindImageTextures;
-extern(System) alias fp_glBindVertexBuffers = void function(GLuint, GLsizei, const(GLuint)*, const(GLintptr)*, const(GLsizei)*) nothrow; __gshared fp_glBindVertexBuffers glBindVertexBuffers;
-// GL_ARB_explicit_uniform_location
+
 bool GL_ARB_explicit_uniform_location;
-// enum uint GL_MAX_UNIFORM_LOCATIONS = 0x826E;
-// GL_ARB_depth_buffer_float
+
 bool GL_ARB_depth_buffer_float;
-// enum uint GL_DEPTH_COMPONENT32F = 0x8CAC;
-// enum uint GL_DEPTH32F_STENCIL8 = 0x8CAD;
-// enum uint GL_FLOAT_32_UNSIGNED_INT_24_8_REV = 0x8DAD;
-// GL_SGIX_shadow_ambient
+
 bool GL_SGIX_shadow_ambient;
 enum uint GL_SHADOW_AMBIENT_SGIX = 0x80BF;
-// GL_ARB_texture_cube_map
+
 bool GL_ARB_texture_cube_map;
 enum uint GL_NORMAL_MAP_ARB = 0x8511;
 enum uint GL_REFLECTION_MAP_ARB = 0x8512;
@@ -1566,9 +864,9 @@ enum uint GL_TEXTURE_CUBE_MAP_POSITIVE_Z_ARB = 0x8519;
 enum uint GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_ARB = 0x851A;
 enum uint GL_PROXY_TEXTURE_CUBE_MAP_ARB = 0x851B;
 enum uint GL_MAX_CUBE_MAP_TEXTURE_SIZE_ARB = 0x851C;
-// GL_AMD_vertex_shader_viewport_index
+
 bool GL_AMD_vertex_shader_viewport_index;
-// GL_NV_vertex_buffer_unified_memory
+
 bool GL_NV_vertex_buffer_unified_memory;
 enum uint GL_VERTEX_ATTRIB_ARRAY_UNIFIED_NV = 0x8F1E;
 enum uint GL_ELEMENT_ARRAY_UNIFIED_NV = 0x8F1F;
@@ -1595,36 +893,22 @@ enum uint GL_ELEMENT_ARRAY_LENGTH_NV = 0x8F33;
 enum uint GL_DRAW_INDIRECT_UNIFIED_NV = 0x8F40;
 enum uint GL_DRAW_INDIRECT_ADDRESS_NV = 0x8F41;
 enum uint GL_DRAW_INDIRECT_LENGTH_NV = 0x8F42;
-extern(System) alias fp_glBufferAddressRangeNV = void function(GLenum, GLuint, GLuint64EXT, GLsizeiptr) nothrow; __gshared fp_glBufferAddressRangeNV glBufferAddressRangeNV;
-extern(System) alias fp_glVertexFormatNV = void function(GLint, GLenum, GLsizei) nothrow; __gshared fp_glVertexFormatNV glVertexFormatNV;
-extern(System) alias fp_glNormalFormatNV = void function(GLenum, GLsizei) nothrow; __gshared fp_glNormalFormatNV glNormalFormatNV;
-extern(System) alias fp_glColorFormatNV = void function(GLint, GLenum, GLsizei) nothrow; __gshared fp_glColorFormatNV glColorFormatNV;
-extern(System) alias fp_glIndexFormatNV = void function(GLenum, GLsizei) nothrow; __gshared fp_glIndexFormatNV glIndexFormatNV;
-extern(System) alias fp_glTexCoordFormatNV = void function(GLint, GLenum, GLsizei) nothrow; __gshared fp_glTexCoordFormatNV glTexCoordFormatNV;
-extern(System) alias fp_glEdgeFlagFormatNV = void function(GLsizei) nothrow; __gshared fp_glEdgeFlagFormatNV glEdgeFlagFormatNV;
-extern(System) alias fp_glSecondaryColorFormatNV = void function(GLint, GLenum, GLsizei) nothrow; __gshared fp_glSecondaryColorFormatNV glSecondaryColorFormatNV;
-extern(System) alias fp_glFogCoordFormatNV = void function(GLenum, GLsizei) nothrow; __gshared fp_glFogCoordFormatNV glFogCoordFormatNV;
-extern(System) alias fp_glVertexAttribFormatNV = void function(GLuint, GLint, GLenum, GLboolean, GLsizei) nothrow; __gshared fp_glVertexAttribFormatNV glVertexAttribFormatNV;
-extern(System) alias fp_glVertexAttribIFormatNV = void function(GLuint, GLint, GLenum, GLsizei) nothrow; __gshared fp_glVertexAttribIFormatNV glVertexAttribIFormatNV;
-extern(System) alias fp_glGetIntegerui64i_vNV = void function(GLenum, GLuint, GLuint64EXT*) nothrow; __gshared fp_glGetIntegerui64i_vNV glGetIntegerui64i_vNV;
-// GL_EXT_texture_env_dot3
+
 bool GL_EXT_texture_env_dot3;
 enum uint GL_DOT3_RGB_EXT = 0x8740;
 enum uint GL_DOT3_RGBA_EXT = 0x8741;
-// GL_ATI_texture_env_combine3
+
 bool GL_ATI_texture_env_combine3;
 enum uint GL_MODULATE_ADD_ATI = 0x8744;
 enum uint GL_MODULATE_SIGNED_ADD_ATI = 0x8745;
 enum uint GL_MODULATE_SUBTRACT_ATI = 0x8746;
-// GL_ARB_map_buffer_alignment
+
 bool GL_ARB_map_buffer_alignment;
-// enum uint GL_MIN_MAP_BUFFER_ALIGNMENT = 0x90BC;
-// GL_NV_blend_equation_advanced
+
 bool GL_NV_blend_equation_advanced;
 enum uint GL_BLEND_ADVANCED_COHERENT_NV = 0x9285;
 enum uint GL_BLEND_OVERLAP_NV = 0x9281;
 enum uint GL_BLEND_PREMULTIPLIED_SRC_NV = 0x9280;
-// enum uint GL_BLUE = 0x1905;
 enum uint GL_COLORBURN_NV = 0x929A;
 enum uint GL_COLORDODGE_NV = 0x9299;
 enum uint GL_CONJOINT_NV = 0x9284;
@@ -1638,14 +922,12 @@ enum uint GL_DST_NV = 0x9287;
 enum uint GL_DST_OUT_NV = 0x928D;
 enum uint GL_DST_OVER_NV = 0x9289;
 enum uint GL_EXCLUSION_NV = 0x92A0;
-// enum uint GL_GREEN = 0x1904;
 enum uint GL_HARDLIGHT_NV = 0x929B;
 enum uint GL_HARDMIX_NV = 0x92A9;
 enum uint GL_HSL_COLOR_NV = 0x92AF;
 enum uint GL_HSL_HUE_NV = 0x92AD;
 enum uint GL_HSL_LUMINOSITY_NV = 0x92B0;
 enum uint GL_HSL_SATURATION_NV = 0x92AE;
-// enum uint GL_INVERT = 0x150A;
 enum uint GL_INVERT_OVG_NV = 0x92B4;
 enum uint GL_INVERT_RGB_NV = 0x92A3;
 enum uint GL_LIGHTEN_NV = 0x9298;
@@ -1661,7 +943,6 @@ enum uint GL_PLUS_CLAMPED_ALPHA_NV = 0x92B2;
 enum uint GL_PLUS_CLAMPED_NV = 0x92B1;
 enum uint GL_PLUS_DARKER_NV = 0x9292;
 enum uint GL_PLUS_NV = 0x9291;
-// enum uint GL_RED = 0x1903;
 enum uint GL_SCREEN_NV = 0x9295;
 enum uint GL_SOFTLIGHT_NV = 0x929C;
 enum uint GL_SRC_ATOP_NV = 0x928E;
@@ -1671,19 +952,13 @@ enum uint GL_SRC_OUT_NV = 0x928C;
 enum uint GL_SRC_OVER_NV = 0x9288;
 enum uint GL_UNCORRELATED_NV = 0x9282;
 enum uint GL_VIVIDLIGHT_NV = 0x92A6;
-// enum uint GL_XOR = 0x1506;
-// enum uint GL_ZERO = 0;
-extern(System) alias fp_glBlendParameteriNV = void function(GLenum, GLint) nothrow; __gshared fp_glBlendParameteriNV glBlendParameteriNV;
-extern(System) alias fp_glBlendBarrierNV = void function() nothrow; __gshared fp_glBlendBarrierNV glBlendBarrierNV;
-// GL_SGIS_sharpen_texture
+
 bool GL_SGIS_sharpen_texture;
 enum uint GL_LINEAR_SHARPEN_SGIS = 0x80AD;
 enum uint GL_LINEAR_SHARPEN_ALPHA_SGIS = 0x80AE;
 enum uint GL_LINEAR_SHARPEN_COLOR_SGIS = 0x80AF;
 enum uint GL_SHARPEN_TEXTURE_FUNC_POINTS_SGIS = 0x80B0;
-extern(System) alias fp_glSharpenTexFuncSGIS = void function(GLenum, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glSharpenTexFuncSGIS glSharpenTexFuncSGIS;
-extern(System) alias fp_glGetSharpenTexFuncSGIS = void function(GLenum, GLfloat*) nothrow; __gshared fp_glGetSharpenTexFuncSGIS glGetSharpenTexFuncSGIS;
-// GL_ARB_vertex_program
+
 bool GL_ARB_vertex_program;
 enum uint GL_COLOR_SUM_ARB = 0x8458;
 enum uint GL_VERTEX_PROGRAM_ARB = 0x8620;
@@ -1764,80 +1039,17 @@ enum uint GL_MATRIX28_ARB = 0x88DC;
 enum uint GL_MATRIX29_ARB = 0x88DD;
 enum uint GL_MATRIX30_ARB = 0x88DE;
 enum uint GL_MATRIX31_ARB = 0x88DF;
-extern(System) alias fp_glVertexAttrib1dARB = void function(GLuint, GLdouble) nothrow; __gshared fp_glVertexAttrib1dARB glVertexAttrib1dARB;
-extern(System) alias fp_glVertexAttrib1dvARB = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib1dvARB glVertexAttrib1dvARB;
-extern(System) alias fp_glVertexAttrib1fARB = void function(GLuint, GLfloat) nothrow; __gshared fp_glVertexAttrib1fARB glVertexAttrib1fARB;
-extern(System) alias fp_glVertexAttrib1fvARB = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib1fvARB glVertexAttrib1fvARB;
-extern(System) alias fp_glVertexAttrib1sARB = void function(GLuint, GLshort) nothrow; __gshared fp_glVertexAttrib1sARB glVertexAttrib1sARB;
-extern(System) alias fp_glVertexAttrib1svARB = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib1svARB glVertexAttrib1svARB;
-extern(System) alias fp_glVertexAttrib2dARB = void function(GLuint, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib2dARB glVertexAttrib2dARB;
-extern(System) alias fp_glVertexAttrib2dvARB = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib2dvARB glVertexAttrib2dvARB;
-extern(System) alias fp_glVertexAttrib2fARB = void function(GLuint, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib2fARB glVertexAttrib2fARB;
-extern(System) alias fp_glVertexAttrib2fvARB = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib2fvARB glVertexAttrib2fvARB;
-extern(System) alias fp_glVertexAttrib2sARB = void function(GLuint, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib2sARB glVertexAttrib2sARB;
-extern(System) alias fp_glVertexAttrib2svARB = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib2svARB glVertexAttrib2svARB;
-extern(System) alias fp_glVertexAttrib3dARB = void function(GLuint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib3dARB glVertexAttrib3dARB;
-extern(System) alias fp_glVertexAttrib3dvARB = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib3dvARB glVertexAttrib3dvARB;
-extern(System) alias fp_glVertexAttrib3fARB = void function(GLuint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib3fARB glVertexAttrib3fARB;
-extern(System) alias fp_glVertexAttrib3fvARB = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib3fvARB glVertexAttrib3fvARB;
-extern(System) alias fp_glVertexAttrib3sARB = void function(GLuint, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib3sARB glVertexAttrib3sARB;
-extern(System) alias fp_glVertexAttrib3svARB = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib3svARB glVertexAttrib3svARB;
-extern(System) alias fp_glVertexAttrib4NbvARB = void function(GLuint, const(GLbyte)*) nothrow; __gshared fp_glVertexAttrib4NbvARB glVertexAttrib4NbvARB;
-extern(System) alias fp_glVertexAttrib4NivARB = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttrib4NivARB glVertexAttrib4NivARB;
-extern(System) alias fp_glVertexAttrib4NsvARB = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib4NsvARB glVertexAttrib4NsvARB;
-extern(System) alias fp_glVertexAttrib4NubARB = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte) nothrow; __gshared fp_glVertexAttrib4NubARB glVertexAttrib4NubARB;
-extern(System) alias fp_glVertexAttrib4NubvARB = void function(GLuint, const(GLubyte)*) nothrow; __gshared fp_glVertexAttrib4NubvARB glVertexAttrib4NubvARB;
-extern(System) alias fp_glVertexAttrib4NuivARB = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttrib4NuivARB glVertexAttrib4NuivARB;
-extern(System) alias fp_glVertexAttrib4NusvARB = void function(GLuint, const(GLushort)*) nothrow; __gshared fp_glVertexAttrib4NusvARB glVertexAttrib4NusvARB;
-extern(System) alias fp_glVertexAttrib4bvARB = void function(GLuint, const(GLbyte)*) nothrow; __gshared fp_glVertexAttrib4bvARB glVertexAttrib4bvARB;
-extern(System) alias fp_glVertexAttrib4dARB = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib4dARB glVertexAttrib4dARB;
-extern(System) alias fp_glVertexAttrib4dvARB = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib4dvARB glVertexAttrib4dvARB;
-extern(System) alias fp_glVertexAttrib4fARB = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib4fARB glVertexAttrib4fARB;
-extern(System) alias fp_glVertexAttrib4fvARB = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib4fvARB glVertexAttrib4fvARB;
-extern(System) alias fp_glVertexAttrib4ivARB = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttrib4ivARB glVertexAttrib4ivARB;
-extern(System) alias fp_glVertexAttrib4sARB = void function(GLuint, GLshort, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib4sARB glVertexAttrib4sARB;
-extern(System) alias fp_glVertexAttrib4svARB = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib4svARB glVertexAttrib4svARB;
-extern(System) alias fp_glVertexAttrib4ubvARB = void function(GLuint, const(GLubyte)*) nothrow; __gshared fp_glVertexAttrib4ubvARB glVertexAttrib4ubvARB;
-extern(System) alias fp_glVertexAttrib4uivARB = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttrib4uivARB glVertexAttrib4uivARB;
-extern(System) alias fp_glVertexAttrib4usvARB = void function(GLuint, const(GLushort)*) nothrow; __gshared fp_glVertexAttrib4usvARB glVertexAttrib4usvARB;
-extern(System) alias fp_glVertexAttribPointerARB = void function(GLuint, GLint, GLenum, GLboolean, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexAttribPointerARB glVertexAttribPointerARB;
-extern(System) alias fp_glEnableVertexAttribArrayARB = void function(GLuint) nothrow; __gshared fp_glEnableVertexAttribArrayARB glEnableVertexAttribArrayARB;
-extern(System) alias fp_glDisableVertexAttribArrayARB = void function(GLuint) nothrow; __gshared fp_glDisableVertexAttribArrayARB glDisableVertexAttribArrayARB;
-extern(System) alias fp_glProgramStringARB = void function(GLenum, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glProgramStringARB glProgramStringARB;
-extern(System) alias fp_glBindProgramARB = void function(GLenum, GLuint) nothrow; __gshared fp_glBindProgramARB glBindProgramARB;
-extern(System) alias fp_glDeleteProgramsARB = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteProgramsARB glDeleteProgramsARB;
-extern(System) alias fp_glGenProgramsARB = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenProgramsARB glGenProgramsARB;
-extern(System) alias fp_glProgramEnvParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramEnvParameter4dARB glProgramEnvParameter4dARB;
-extern(System) alias fp_glProgramEnvParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glProgramEnvParameter4dvARB glProgramEnvParameter4dvARB;
-extern(System) alias fp_glProgramEnvParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramEnvParameter4fARB glProgramEnvParameter4fARB;
-extern(System) alias fp_glProgramEnvParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glProgramEnvParameter4fvARB glProgramEnvParameter4fvARB;
-extern(System) alias fp_glProgramLocalParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramLocalParameter4dARB glProgramLocalParameter4dARB;
-extern(System) alias fp_glProgramLocalParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glProgramLocalParameter4dvARB glProgramLocalParameter4dvARB;
-extern(System) alias fp_glProgramLocalParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramLocalParameter4fARB glProgramLocalParameter4fARB;
-extern(System) alias fp_glProgramLocalParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glProgramLocalParameter4fvARB glProgramLocalParameter4fvARB;
-extern(System) alias fp_glGetProgramEnvParameterdvARB = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetProgramEnvParameterdvARB glGetProgramEnvParameterdvARB;
-extern(System) alias fp_glGetProgramEnvParameterfvARB = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetProgramEnvParameterfvARB glGetProgramEnvParameterfvARB;
-extern(System) alias fp_glGetProgramLocalParameterdvARB = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetProgramLocalParameterdvARB glGetProgramLocalParameterdvARB;
-extern(System) alias fp_glGetProgramLocalParameterfvARB = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetProgramLocalParameterfvARB glGetProgramLocalParameterfvARB;
-extern(System) alias fp_glGetProgramivARB = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetProgramivARB glGetProgramivARB;
-extern(System) alias fp_glGetProgramStringARB = void function(GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetProgramStringARB glGetProgramStringARB;
-extern(System) alias fp_glGetVertexAttribdvARB = void function(GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetVertexAttribdvARB glGetVertexAttribdvARB;
-extern(System) alias fp_glGetVertexAttribfvARB = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVertexAttribfvARB glGetVertexAttribfvARB;
-extern(System) alias fp_glGetVertexAttribivARB = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexAttribivARB glGetVertexAttribivARB;
-extern(System) alias fp_glGetVertexAttribPointervARB = void function(GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetVertexAttribPointervARB glGetVertexAttribPointervARB;
-extern(System) alias fp_glIsProgramARB = GLboolean function(GLuint) nothrow; __gshared fp_glIsProgramARB glIsProgramARB;
-// GL_ARB_texture_rgb10_a2ui
+
 bool GL_ARB_texture_rgb10_a2ui;
-// enum uint GL_RGB10_A2UI = 0x906F;
-// GL_OML_interlace
+
 bool GL_OML_interlace;
 enum uint GL_INTERLACE_OML = 0x8980;
 enum uint GL_INTERLACE_READ_OML = 0x8981;
-// GL_ATI_pixel_format_float
+
 bool GL_ATI_pixel_format_float;
 enum uint GL_RGBA_FLOAT_MODE_ATI = 0x8820;
 enum uint GL_COLOR_CLEAR_UNCLAMPED_VALUE_ATI = 0x8835;
-// GL_ARB_vertex_buffer_object
+
 bool GL_ARB_vertex_buffer_object;
 enum uint GL_BUFFER_SIZE_ARB = 0x8764;
 enum uint GL_BUFFER_USAGE_ARB = 0x8765;
@@ -1870,32 +1082,19 @@ enum uint GL_STATIC_COPY_ARB = 0x88E6;
 enum uint GL_DYNAMIC_DRAW_ARB = 0x88E8;
 enum uint GL_DYNAMIC_READ_ARB = 0x88E9;
 enum uint GL_DYNAMIC_COPY_ARB = 0x88EA;
-extern(System) alias fp_glBindBufferARB = void function(GLenum, GLuint) nothrow; __gshared fp_glBindBufferARB glBindBufferARB;
-extern(System) alias fp_glDeleteBuffersARB = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteBuffersARB glDeleteBuffersARB;
-extern(System) alias fp_glGenBuffersARB = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenBuffersARB glGenBuffersARB;
-extern(System) alias fp_glIsBufferARB = GLboolean function(GLuint) nothrow; __gshared fp_glIsBufferARB glIsBufferARB;
-extern(System) alias fp_glBufferDataARB = void function(GLenum, GLsizeiptrARB, const(GLvoid)*, GLenum) nothrow; __gshared fp_glBufferDataARB glBufferDataARB;
-extern(System) alias fp_glBufferSubDataARB = void function(GLenum, GLintptrARB, GLsizeiptrARB, const(GLvoid)*) nothrow; __gshared fp_glBufferSubDataARB glBufferSubDataARB;
-extern(System) alias fp_glGetBufferSubDataARB = void function(GLenum, GLintptrARB, GLsizeiptrARB, GLvoid*) nothrow; __gshared fp_glGetBufferSubDataARB glGetBufferSubDataARB;
-extern(System) alias fp_glMapBufferARB = void* function(GLenum, GLenum) nothrow; __gshared fp_glMapBufferARB glMapBufferARB;
-extern(System) alias fp_glUnmapBufferARB = GLboolean function(GLenum) nothrow; __gshared fp_glUnmapBufferARB glUnmapBufferARB;
-extern(System) alias fp_glGetBufferParameterivARB = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetBufferParameterivARB glGetBufferParameterivARB;
-extern(System) alias fp_glGetBufferPointervARB = void function(GLenum, GLenum, GLvoid**) nothrow; __gshared fp_glGetBufferPointervARB glGetBufferPointervARB;
-// GL_EXT_shadow_funcs
+
 bool GL_EXT_shadow_funcs;
-// GL_ATI_text_fragment_shader
+
 bool GL_ATI_text_fragment_shader;
 enum uint GL_TEXT_FRAGMENT_SHADER_ATI = 0x8200;
-// GL_NV_vertex_array_range
+
 bool GL_NV_vertex_array_range;
 enum uint GL_VERTEX_ARRAY_RANGE_NV = 0x851D;
 enum uint GL_VERTEX_ARRAY_RANGE_LENGTH_NV = 0x851E;
 enum uint GL_VERTEX_ARRAY_RANGE_VALID_NV = 0x851F;
 enum uint GL_MAX_VERTEX_ARRAY_RANGE_ELEMENT_NV = 0x8520;
 enum uint GL_VERTEX_ARRAY_RANGE_POINTER_NV = 0x8521;
-extern(System) alias fp_glFlushVertexArrayRangeNV = void function() nothrow; __gshared fp_glFlushVertexArrayRangeNV glFlushVertexArrayRangeNV;
-extern(System) alias fp_glVertexArrayRangeNV = void function(GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexArrayRangeNV glVertexArrayRangeNV;
-// GL_SGIX_fragment_lighting
+
 bool GL_SGIX_fragment_lighting;
 enum uint GL_FRAGMENT_LIGHTING_SGIX = 0x8400;
 enum uint GL_FRAGMENT_COLOR_MATERIAL_SGIX = 0x8401;
@@ -1917,98 +1116,24 @@ enum uint GL_FRAGMENT_LIGHT4_SGIX = 0x8410;
 enum uint GL_FRAGMENT_LIGHT5_SGIX = 0x8411;
 enum uint GL_FRAGMENT_LIGHT6_SGIX = 0x8412;
 enum uint GL_FRAGMENT_LIGHT7_SGIX = 0x8413;
-extern(System) alias fp_glFragmentColorMaterialSGIX = void function(GLenum, GLenum) nothrow; __gshared fp_glFragmentColorMaterialSGIX glFragmentColorMaterialSGIX;
-extern(System) alias fp_glFragmentLightfSGIX = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glFragmentLightfSGIX glFragmentLightfSGIX;
-extern(System) alias fp_glFragmentLightfvSGIX = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glFragmentLightfvSGIX glFragmentLightfvSGIX;
-extern(System) alias fp_glFragmentLightiSGIX = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glFragmentLightiSGIX glFragmentLightiSGIX;
-extern(System) alias fp_glFragmentLightivSGIX = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glFragmentLightivSGIX glFragmentLightivSGIX;
-extern(System) alias fp_glFragmentLightModelfSGIX = void function(GLenum, GLfloat) nothrow; __gshared fp_glFragmentLightModelfSGIX glFragmentLightModelfSGIX;
-extern(System) alias fp_glFragmentLightModelfvSGIX = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glFragmentLightModelfvSGIX glFragmentLightModelfvSGIX;
-extern(System) alias fp_glFragmentLightModeliSGIX = void function(GLenum, GLint) nothrow; __gshared fp_glFragmentLightModeliSGIX glFragmentLightModeliSGIX;
-extern(System) alias fp_glFragmentLightModelivSGIX = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glFragmentLightModelivSGIX glFragmentLightModelivSGIX;
-extern(System) alias fp_glFragmentMaterialfSGIX = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glFragmentMaterialfSGIX glFragmentMaterialfSGIX;
-extern(System) alias fp_glFragmentMaterialfvSGIX = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glFragmentMaterialfvSGIX glFragmentMaterialfvSGIX;
-extern(System) alias fp_glFragmentMaterialiSGIX = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glFragmentMaterialiSGIX glFragmentMaterialiSGIX;
-extern(System) alias fp_glFragmentMaterialivSGIX = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glFragmentMaterialivSGIX glFragmentMaterialivSGIX;
-extern(System) alias fp_glGetFragmentLightfvSGIX = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetFragmentLightfvSGIX glGetFragmentLightfvSGIX;
-extern(System) alias fp_glGetFragmentLightivSGIX = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFragmentLightivSGIX glGetFragmentLightivSGIX;
-extern(System) alias fp_glGetFragmentMaterialfvSGIX = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetFragmentMaterialfvSGIX glGetFragmentMaterialfvSGIX;
-extern(System) alias fp_glGetFragmentMaterialivSGIX = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFragmentMaterialivSGIX glGetFragmentMaterialivSGIX;
-extern(System) alias fp_glLightEnviSGIX = void function(GLenum, GLint) nothrow; __gshared fp_glLightEnviSGIX glLightEnviSGIX;
-// GL_NV_texture_expand_normal
+
 bool GL_NV_texture_expand_normal;
 enum uint GL_TEXTURE_UNSIGNED_REMAP_MODE_NV = 0x888F;
-// GL_NV_framebuffer_multisample_coverage
+
 bool GL_NV_framebuffer_multisample_coverage;
 enum uint GL_RENDERBUFFER_COVERAGE_SAMPLES_NV = 0x8CAB;
 enum uint GL_RENDERBUFFER_COLOR_SAMPLES_NV = 0x8E10;
 enum uint GL_MAX_MULTISAMPLE_COVERAGE_MODES_NV = 0x8E11;
 enum uint GL_MULTISAMPLE_COVERAGE_MODES_NV = 0x8E12;
-extern(System) alias fp_glRenderbufferStorageMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glRenderbufferStorageMultisampleCoverageNV glRenderbufferStorageMultisampleCoverageNV;
-// GL_EXT_timer_query
+
 bool GL_EXT_timer_query;
 enum uint GL_TIME_ELAPSED_EXT = 0x88BF;
-extern(System) alias fp_glGetQueryObjecti64vEXT = void function(GLuint, GLenum, GLint64*) nothrow; __gshared fp_glGetQueryObjecti64vEXT glGetQueryObjecti64vEXT;
-extern(System) alias fp_glGetQueryObjectui64vEXT = void function(GLuint, GLenum, GLuint64*) nothrow; __gshared fp_glGetQueryObjectui64vEXT glGetQueryObjectui64vEXT;
-// GL_EXT_vertex_array_bgra
+
 bool GL_EXT_vertex_array_bgra;
-// enum uint GL_BGRA = 0x80E1;
-// GL_NV_bindless_texture
+
 bool GL_NV_bindless_texture;
-extern(System) alias fp_glGetTextureHandleNV = GLuint64 function(GLuint) nothrow; __gshared fp_glGetTextureHandleNV glGetTextureHandleNV;
-extern(System) alias fp_glGetTextureSamplerHandleNV = GLuint64 function(GLuint, GLuint) nothrow; __gshared fp_glGetTextureSamplerHandleNV glGetTextureSamplerHandleNV;
-extern(System) alias fp_glMakeTextureHandleResidentNV = void function(GLuint64) nothrow; __gshared fp_glMakeTextureHandleResidentNV glMakeTextureHandleResidentNV;
-extern(System) alias fp_glMakeTextureHandleNonResidentNV = void function(GLuint64) nothrow; __gshared fp_glMakeTextureHandleNonResidentNV glMakeTextureHandleNonResidentNV;
-extern(System) alias fp_glGetImageHandleNV = GLuint64 function(GLuint, GLint, GLboolean, GLint, GLenum) nothrow; __gshared fp_glGetImageHandleNV glGetImageHandleNV;
-extern(System) alias fp_glMakeImageHandleResidentNV = void function(GLuint64, GLenum) nothrow; __gshared fp_glMakeImageHandleResidentNV glMakeImageHandleResidentNV;
-extern(System) alias fp_glMakeImageHandleNonResidentNV = void function(GLuint64) nothrow; __gshared fp_glMakeImageHandleNonResidentNV glMakeImageHandleNonResidentNV;
-extern(System) alias fp_glUniformHandleui64NV = void function(GLint, GLuint64) nothrow; __gshared fp_glUniformHandleui64NV glUniformHandleui64NV;
-extern(System) alias fp_glUniformHandleui64vNV = void function(GLint, GLsizei, const(GLuint64)*) nothrow; __gshared fp_glUniformHandleui64vNV glUniformHandleui64vNV;
-extern(System) alias fp_glProgramUniformHandleui64NV = void function(GLuint, GLint, GLuint64) nothrow; __gshared fp_glProgramUniformHandleui64NV glProgramUniformHandleui64NV;
-extern(System) alias fp_glProgramUniformHandleui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64)*) nothrow; __gshared fp_glProgramUniformHandleui64vNV glProgramUniformHandleui64vNV;
-extern(System) alias fp_glIsTextureHandleResidentNV = GLboolean function(GLuint64) nothrow; __gshared fp_glIsTextureHandleResidentNV glIsTextureHandleResidentNV;
-extern(System) alias fp_glIsImageHandleResidentNV = GLboolean function(GLuint64) nothrow; __gshared fp_glIsImageHandleResidentNV glIsImageHandleResidentNV;
-// GL_KHR_debug
+
 bool GL_KHR_debug;
-// enum uint GL_DEBUG_OUTPUT_SYNCHRONOUS = 0x8242;
-// enum uint GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH = 0x8243;
-// enum uint GL_DEBUG_CALLBACK_FUNCTION = 0x8244;
-// enum uint GL_DEBUG_CALLBACK_USER_PARAM = 0x8245;
-// enum uint GL_DEBUG_SOURCE_API = 0x8246;
-// enum uint GL_DEBUG_SOURCE_WINDOW_SYSTEM = 0x8247;
-// enum uint GL_DEBUG_SOURCE_SHADER_COMPILER = 0x8248;
-// enum uint GL_DEBUG_SOURCE_THIRD_PARTY = 0x8249;
-// enum uint GL_DEBUG_SOURCE_APPLICATION = 0x824A;
-// enum uint GL_DEBUG_SOURCE_OTHER = 0x824B;
-// enum uint GL_DEBUG_TYPE_ERROR = 0x824C;
-// enum uint GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR = 0x824D;
-// enum uint GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR = 0x824E;
-// enum uint GL_DEBUG_TYPE_PORTABILITY = 0x824F;
-// enum uint GL_DEBUG_TYPE_PERFORMANCE = 0x8250;
-// enum uint GL_DEBUG_TYPE_OTHER = 0x8251;
-// enum uint GL_DEBUG_TYPE_MARKER = 0x8268;
-// enum uint GL_DEBUG_TYPE_PUSH_GROUP = 0x8269;
-// enum uint GL_DEBUG_TYPE_POP_GROUP = 0x826A;
-// enum uint GL_DEBUG_SEVERITY_NOTIFICATION = 0x826B;
-// enum uint GL_MAX_DEBUG_GROUP_STACK_DEPTH = 0x826C;
-// enum uint GL_DEBUG_GROUP_STACK_DEPTH = 0x826D;
-// enum uint GL_BUFFER = 0x82E0;
-// enum uint GL_SHADER = 0x82E1;
-// enum uint GL_PROGRAM = 0x82E2;
-enum uint GL_VERTEX_ARRAY = 0x8074;
-// enum uint GL_QUERY = 0x82E3;
-// enum uint GL_SAMPLER = 0x82E6;
-// enum uint GL_MAX_LABEL_LENGTH = 0x82E8;
-// enum uint GL_MAX_DEBUG_MESSAGE_LENGTH = 0x9143;
-// enum uint GL_MAX_DEBUG_LOGGED_MESSAGES = 0x9144;
-// enum uint GL_DEBUG_LOGGED_MESSAGES = 0x9145;
-// enum uint GL_DEBUG_SEVERITY_HIGH = 0x9146;
-// enum uint GL_DEBUG_SEVERITY_MEDIUM = 0x9147;
-// enum uint GL_DEBUG_SEVERITY_LOW = 0x9148;
-// enum uint GL_DEBUG_OUTPUT = 0x92E0;
-// enum uint GL_CONTEXT_FLAG_DEBUG_BIT = 0x00000002;
-enum uint GL_STACK_OVERFLOW = 0x0503;
-enum uint GL_STACK_UNDERFLOW = 0x0504;
 enum uint GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR = 0x8242;
 enum uint GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_KHR = 0x8243;
 enum uint GL_DEBUG_CALLBACK_FUNCTION_KHR = 0x8244;
@@ -2047,39 +1172,12 @@ enum uint GL_DEBUG_OUTPUT_KHR = 0x92E0;
 enum uint GL_CONTEXT_FLAG_DEBUG_BIT_KHR = 0x00000002;
 enum uint GL_STACK_OVERFLOW_KHR = 0x0503;
 enum uint GL_STACK_UNDERFLOW_KHR = 0x0504;
-// enum uint GL_PROGRAM_PIPELINE = 0x82E4;
-// enum uint GL_DISPLAY_LIST = 0x82E7;
-// extern(System) alias fp_glDebugMessageControl = void function(GLenum, GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean) nothrow; __gshared fp_glDebugMessageControl glDebugMessageControl;
-// extern(System) alias fp_glDebugMessageInsert = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, const(GLchar)*) nothrow; __gshared fp_glDebugMessageInsert glDebugMessageInsert;
-// extern(System) alias fp_glDebugMessageCallback = void function(GLDEBUGPROC, const(void)*) nothrow; __gshared fp_glDebugMessageCallback glDebugMessageCallback;
-// extern(System) alias fp_glGetDebugMessageLog = GLuint function(GLuint, GLsizei, GLenum*, GLenum*, GLuint*, GLenum*, GLsizei*, GLchar*) nothrow; __gshared fp_glGetDebugMessageLog glGetDebugMessageLog;
-// extern(System) alias fp_glPushDebugGroup = void function(GLenum, GLuint, GLsizei, const(GLchar)*) nothrow; __gshared fp_glPushDebugGroup glPushDebugGroup;
-// extern(System) alias fp_glPopDebugGroup = void function() nothrow; __gshared fp_glPopDebugGroup glPopDebugGroup;
-// extern(System) alias fp_glObjectLabel = void function(GLenum, GLuint, GLsizei, const(GLchar)*) nothrow; __gshared fp_glObjectLabel glObjectLabel;
-// extern(System) alias fp_glGetObjectLabel = void function(GLenum, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetObjectLabel glGetObjectLabel;
-// extern(System) alias fp_glObjectPtrLabel = void function(const(void)*, GLsizei, const(GLchar)*) nothrow; __gshared fp_glObjectPtrLabel glObjectPtrLabel;
-// extern(System) alias fp_glGetObjectPtrLabel = void function(const(void)*, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetObjectPtrLabel glGetObjectPtrLabel;
-extern(System) alias fp_glGetPointerv = void function(GLenum, GLvoid**) nothrow; __gshared fp_glGetPointerv glGetPointerv;
-extern(System) alias fp_glDebugMessageControlKHR = void function(GLenum, GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean) nothrow; __gshared fp_glDebugMessageControlKHR glDebugMessageControlKHR;
-extern(System) alias fp_glDebugMessageInsertKHR = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, const(GLchar)*) nothrow; __gshared fp_glDebugMessageInsertKHR glDebugMessageInsertKHR;
-extern(System) alias fp_glDebugMessageCallbackKHR = void function(GLDEBUGPROCKHR, const(void)*) nothrow; __gshared fp_glDebugMessageCallbackKHR glDebugMessageCallbackKHR;
-extern(System) alias fp_glGetDebugMessageLogKHR = GLuint function(GLuint, GLsizei, GLenum*, GLenum*, GLuint*, GLenum*, GLsizei*, GLchar*) nothrow; __gshared fp_glGetDebugMessageLogKHR glGetDebugMessageLogKHR;
-extern(System) alias fp_glPushDebugGroupKHR = void function(GLenum, GLuint, GLsizei, const(GLchar)*) nothrow; __gshared fp_glPushDebugGroupKHR glPushDebugGroupKHR;
-extern(System) alias fp_glPopDebugGroupKHR = void function() nothrow; __gshared fp_glPopDebugGroupKHR glPopDebugGroupKHR;
-extern(System) alias fp_glObjectLabelKHR = void function(GLenum, GLuint, GLsizei, const(GLchar)*) nothrow; __gshared fp_glObjectLabelKHR glObjectLabelKHR;
-extern(System) alias fp_glGetObjectLabelKHR = void function(GLenum, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetObjectLabelKHR glGetObjectLabelKHR;
-extern(System) alias fp_glObjectPtrLabelKHR = void function(const(void)*, GLsizei, const(GLchar)*) nothrow; __gshared fp_glObjectPtrLabelKHR glObjectPtrLabelKHR;
-extern(System) alias fp_glGetObjectPtrLabelKHR = void function(const(void)*, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetObjectPtrLabelKHR glGetObjectPtrLabelKHR;
-extern(System) alias fp_glGetPointervKHR = void function(GLenum, GLvoid**) nothrow; __gshared fp_glGetPointervKHR glGetPointervKHR;
-// GL_SGIS_texture_border_clamp
+
 bool GL_SGIS_texture_border_clamp;
 enum uint GL_CLAMP_TO_BORDER_SGIS = 0x812D;
-// GL_ATI_vertex_attrib_array_object
+
 bool GL_ATI_vertex_attrib_array_object;
-extern(System) alias fp_glVertexAttribArrayObjectATI = void function(GLuint, GLint, GLenum, GLboolean, GLsizei, GLuint, GLuint) nothrow; __gshared fp_glVertexAttribArrayObjectATI glVertexAttribArrayObjectATI;
-extern(System) alias fp_glGetVertexAttribArrayObjectfvATI = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVertexAttribArrayObjectfvATI glGetVertexAttribArrayObjectfvATI;
-extern(System) alias fp_glGetVertexAttribArrayObjectivATI = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexAttribArrayObjectivATI glGetVertexAttribArrayObjectivATI;
-// GL_SGIX_clipmap
+
 bool GL_SGIX_clipmap;
 enum uint GL_LINEAR_CLIPMAP_LINEAR_SGIX = 0x8170;
 enum uint GL_TEXTURE_CLIPMAP_CENTER_SGIX = 0x8171;
@@ -2093,7 +1191,7 @@ enum uint GL_MAX_CLIPMAP_VIRTUAL_DEPTH_SGIX = 0x8178;
 enum uint GL_NEAREST_CLIPMAP_NEAREST_SGIX = 0x844D;
 enum uint GL_NEAREST_CLIPMAP_LINEAR_SGIX = 0x844E;
 enum uint GL_LINEAR_CLIPMAP_NEAREST_SGIX = 0x844F;
-// GL_EXT_geometry_shader4
+
 bool GL_EXT_geometry_shader4;
 enum uint GL_GEOMETRY_SHADER_EXT = 0x8DD9;
 enum uint GL_GEOMETRY_VERTICES_OUT_EXT = 0x8DDA;
@@ -2113,15 +1211,13 @@ enum uint GL_TRIANGLE_STRIP_ADJACENCY_EXT = 0x000D;
 enum uint GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT = 0x8DA8;
 enum uint GL_FRAMEBUFFER_INCOMPLETE_LAYER_COUNT_EXT = 0x8DA9;
 enum uint GL_FRAMEBUFFER_ATTACHMENT_LAYERED_EXT = 0x8DA7;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER_EXT = 0x8CD4;
 enum uint GL_PROGRAM_POINT_SIZE_EXT = 0x8642;
-// extern(System) alias fp_glProgramParameteriEXT = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glProgramParameteriEXT glProgramParameteriEXT;
-// GL_MESA_ycbcr_texture
+
 bool GL_MESA_ycbcr_texture;
 enum uint GL_UNSIGNED_SHORT_8_8_MESA = 0x85BA;
 enum uint GL_UNSIGNED_SHORT_8_8_REV_MESA = 0x85BB;
 enum uint GL_YCBCR_MESA = 0x8757;
-// GL_MESAX_texture_stack
+
 bool GL_MESAX_texture_stack;
 enum uint GL_TEXTURE_1D_STACK_MESAX = 0x8759;
 enum uint GL_TEXTURE_2D_STACK_MESAX = 0x875A;
@@ -2129,10 +1225,9 @@ enum uint GL_PROXY_TEXTURE_1D_STACK_MESAX = 0x875B;
 enum uint GL_PROXY_TEXTURE_2D_STACK_MESAX = 0x875C;
 enum uint GL_TEXTURE_1D_STACK_BINDING_MESAX = 0x875D;
 enum uint GL_TEXTURE_2D_STACK_BINDING_MESAX = 0x875E;
-// GL_AMD_seamless_cubemap_per_texture
+
 bool GL_AMD_seamless_cubemap_per_texture;
-// enum uint GL_TEXTURE_CUBE_MAP_SEAMLESS = 0x884F;
-// GL_EXT_bindable_uniform
+
 bool GL_EXT_bindable_uniform;
 enum uint GL_MAX_VERTEX_BINDABLE_UNIFORMS_EXT = 0x8DE2;
 enum uint GL_MAX_FRAGMENT_BINDABLE_UNIFORMS_EXT = 0x8DE3;
@@ -2140,37 +1235,29 @@ enum uint GL_MAX_GEOMETRY_BINDABLE_UNIFORMS_EXT = 0x8DE4;
 enum uint GL_MAX_BINDABLE_UNIFORM_SIZE_EXT = 0x8DED;
 enum uint GL_UNIFORM_BUFFER_EXT = 0x8DEE;
 enum uint GL_UNIFORM_BUFFER_BINDING_EXT = 0x8DEF;
-extern(System) alias fp_glUniformBufferEXT = void function(GLuint, GLint, GLuint) nothrow; __gshared fp_glUniformBufferEXT glUniformBufferEXT;
-extern(System) alias fp_glGetUniformBufferSizeEXT = GLint function(GLuint, GLint) nothrow; __gshared fp_glGetUniformBufferSizeEXT glGetUniformBufferSizeEXT;
-extern(System) alias fp_glGetUniformOffsetEXT = GLintptr function(GLuint, GLint) nothrow; __gshared fp_glGetUniformOffsetEXT glGetUniformOffsetEXT;
-// GL_ARB_fragment_program_shadow
+
 bool GL_ARB_fragment_program_shadow;
-// GL_ATI_element_array
+
 bool GL_ATI_element_array;
 enum uint GL_ELEMENT_ARRAY_ATI = 0x8768;
 enum uint GL_ELEMENT_ARRAY_TYPE_ATI = 0x8769;
 enum uint GL_ELEMENT_ARRAY_POINTER_ATI = 0x876A;
-extern(System) alias fp_glElementPointerATI = void function(GLenum, const(GLvoid)*) nothrow; __gshared fp_glElementPointerATI glElementPointerATI;
-extern(System) alias fp_glDrawElementArrayATI = void function(GLenum, GLsizei) nothrow; __gshared fp_glDrawElementArrayATI glDrawElementArrayATI;
-extern(System) alias fp_glDrawRangeElementArrayATI = void function(GLenum, GLuint, GLuint, GLsizei) nothrow; __gshared fp_glDrawRangeElementArrayATI glDrawRangeElementArrayATI;
-// GL_AMD_texture_texture4
+
 bool GL_AMD_texture_texture4;
-// GL_SGIX_reference_plane
+
 bool GL_SGIX_reference_plane;
 enum uint GL_REFERENCE_PLANE_SGIX = 0x817D;
 enum uint GL_REFERENCE_PLANE_EQUATION_SGIX = 0x817E;
-extern(System) alias fp_glReferencePlaneSGIX = void function(const(GLdouble)*) nothrow; __gshared fp_glReferencePlaneSGIX glReferencePlaneSGIX;
-// GL_EXT_stencil_two_side
+
 bool GL_EXT_stencil_two_side;
 enum uint GL_STENCIL_TEST_TWO_SIDE_EXT = 0x8910;
 enum uint GL_ACTIVE_STENCIL_FACE_EXT = 0x8911;
-extern(System) alias fp_glActiveStencilFaceEXT = void function(GLenum) nothrow; __gshared fp_glActiveStencilFaceEXT glActiveStencilFaceEXT;
-// GL_SGIX_texture_lod_bias
+
 bool GL_SGIX_texture_lod_bias;
 enum uint GL_TEXTURE_LOD_BIAS_S_SGIX = 0x818E;
 enum uint GL_TEXTURE_LOD_BIAS_T_SGIX = 0x818F;
 enum uint GL_TEXTURE_LOD_BIAS_R_SGIX = 0x8190;
-// GL_NV_explicit_multisample
+
 bool GL_NV_explicit_multisample;
 enum uint GL_SAMPLE_POSITION_NV = 0x8E50;
 enum uint GL_SAMPLE_MASK_NV = 0x8E51;
@@ -2182,40 +1269,31 @@ enum uint GL_SAMPLER_RENDERBUFFER_NV = 0x8E56;
 enum uint GL_INT_SAMPLER_RENDERBUFFER_NV = 0x8E57;
 enum uint GL_UNSIGNED_INT_SAMPLER_RENDERBUFFER_NV = 0x8E58;
 enum uint GL_MAX_SAMPLE_MASK_WORDS_NV = 0x8E59;
-extern(System) alias fp_glGetMultisamplefvNV = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetMultisamplefvNV glGetMultisamplefvNV;
-extern(System) alias fp_glSampleMaskIndexedNV = void function(GLuint, GLbitfield) nothrow; __gshared fp_glSampleMaskIndexedNV glSampleMaskIndexedNV;
-extern(System) alias fp_glTexRenderbufferNV = void function(GLenum, GLuint) nothrow; __gshared fp_glTexRenderbufferNV glTexRenderbufferNV;
-// GL_IBM_static_data
+
 bool GL_IBM_static_data;
 enum uint GL_ALL_STATIC_DATA_IBM = 103060;
 enum uint GL_STATIC_VERTEX_ARRAY_IBM = 103061;
-extern(System) alias fp_glFlushStaticDataIBM = void function(GLenum) nothrow; __gshared fp_glFlushStaticDataIBM glFlushStaticDataIBM;
-// GL_EXT_clip_volume_hint
+
 bool GL_EXT_clip_volume_hint;
 enum uint GL_CLIP_VOLUME_CLIPPING_HINT_EXT = 0x80F0;
-// GL_EXT_texture_perturb_normal
+
 bool GL_EXT_texture_perturb_normal;
 enum uint GL_PERTURB_EXT = 0x85AE;
 enum uint GL_TEXTURE_NORMAL_EXT = 0x85AF;
-extern(System) alias fp_glTextureNormalEXT = void function(GLenum) nothrow; __gshared fp_glTextureNormalEXT glTextureNormalEXT;
-// GL_NV_fragment_program2
+
 bool GL_NV_fragment_program2;
-// enum uint GL_MAX_PROGRAM_EXEC_INSTRUCTIONS_NV = 0x88F4;
-// enum uint GL_MAX_PROGRAM_CALL_DEPTH_NV = 0x88F5;
 enum uint GL_MAX_PROGRAM_IF_DEPTH_NV = 0x88F6;
 enum uint GL_MAX_PROGRAM_LOOP_DEPTH_NV = 0x88F7;
 enum uint GL_MAX_PROGRAM_LOOP_COUNT_NV = 0x88F8;
-// GL_NV_fragment_program4
+
 bool GL_NV_fragment_program4;
-// GL_EXT_point_parameters
+
 bool GL_EXT_point_parameters;
 enum uint GL_POINT_SIZE_MIN_EXT = 0x8126;
 enum uint GL_POINT_SIZE_MAX_EXT = 0x8127;
 enum uint GL_POINT_FADE_THRESHOLD_SIZE_EXT = 0x8128;
 enum uint GL_DISTANCE_ATTENUATION_EXT = 0x8129;
-extern(System) alias fp_glPointParameterfEXT = void function(GLenum, GLfloat) nothrow; __gshared fp_glPointParameterfEXT glPointParameterfEXT;
-extern(System) alias fp_glPointParameterfvEXT = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glPointParameterfvEXT glPointParameterfvEXT;
-// GL_PGI_misc_hints
+
 bool GL_PGI_misc_hints;
 enum uint GL_PREFER_DOUBLEBUFFER_HINT_PGI = 0x1A1F8;
 enum uint GL_CONSERVE_MEMORY_HINT_PGI = 0x1A1FD;
@@ -2237,19 +1315,18 @@ enum uint GL_CLIP_NEAR_HINT_PGI = 0x1A220;
 enum uint GL_CLIP_FAR_HINT_PGI = 0x1A221;
 enum uint GL_WIDE_LINE_HINT_PGI = 0x1A222;
 enum uint GL_BACK_NORMALS_HINT_PGI = 0x1A223;
-extern(System) alias fp_glHintPGI = void function(GLenum, GLint) nothrow; __gshared fp_glHintPGI glHintPGI;
-// GL_SGIX_subsample
+
 bool GL_SGIX_subsample;
 enum uint GL_PACK_SUBSAMPLE_RATE_SGIX = 0x85A0;
 enum uint GL_UNPACK_SUBSAMPLE_RATE_SGIX = 0x85A1;
 enum uint GL_PIXEL_SUBSAMPLE_4444_SGIX = 0x85A2;
 enum uint GL_PIXEL_SUBSAMPLE_2424_SGIX = 0x85A3;
 enum uint GL_PIXEL_SUBSAMPLE_4242_SGIX = 0x85A4;
-// GL_AMD_shader_stencil_export
+
 bool GL_AMD_shader_stencil_export;
-// GL_ARB_shader_texture_lod
+
 bool GL_ARB_shader_texture_lod;
-// GL_ARB_vertex_shader
+
 bool GL_ARB_vertex_shader;
 enum uint GL_VERTEX_SHADER_ARB = 0x8B31;
 enum uint GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB = 0x8B4A;
@@ -2258,13 +1335,9 @@ enum uint GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB = 0x8B4C;
 enum uint GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS_ARB = 0x8B4D;
 enum uint GL_OBJECT_ACTIVE_ATTRIBUTES_ARB = 0x8B89;
 enum uint GL_OBJECT_ACTIVE_ATTRIBUTE_MAX_LENGTH_ARB = 0x8B8A;
-extern(System) alias fp_glBindAttribLocationARB = void function(GLhandleARB, GLuint, const(GLcharARB)*) nothrow; __gshared fp_glBindAttribLocationARB glBindAttribLocationARB;
-extern(System) alias fp_glGetActiveAttribARB = void function(GLhandleARB, GLuint, GLsizei, GLsizei*, GLint*, GLenum*, GLcharARB*) nothrow; __gshared fp_glGetActiveAttribARB glGetActiveAttribARB;
-extern(System) alias fp_glGetAttribLocationARB = GLint function(GLhandleARB, const(GLcharARB)*) nothrow; __gshared fp_glGetAttribLocationARB glGetAttribLocationARB;
-// GL_ARB_depth_clamp
+
 bool GL_ARB_depth_clamp;
-// enum uint GL_DEPTH_CLAMP = 0x864F;
-// GL_SGIS_texture_select
+
 bool GL_SGIS_texture_select;
 enum uint GL_DUAL_ALPHA4_SGIS = 0x8110;
 enum uint GL_DUAL_ALPHA8_SGIS = 0x8111;
@@ -2288,7 +1361,7 @@ enum uint GL_QUAD_INTENSITY4_SGIS = 0x8122;
 enum uint GL_QUAD_INTENSITY8_SGIS = 0x8123;
 enum uint GL_DUAL_TEXTURE_SELECT_SGIS = 0x8124;
 enum uint GL_QUAD_TEXTURE_SELECT_SGIS = 0x8125;
-// GL_NV_texture_shader
+
 bool GL_NV_texture_shader;
 enum uint GL_OFFSET_TEXTURE_RECTANGLE_NV = 0x864C;
 enum uint GL_OFFSET_TEXTURE_RECTANGLE_SCALE_NV = 0x864D;
@@ -2363,121 +1436,22 @@ enum uint GL_TEXTURE_LO_SIZE_NV = 0x871C;
 enum uint GL_TEXTURE_DS_SIZE_NV = 0x871D;
 enum uint GL_TEXTURE_DT_SIZE_NV = 0x871E;
 enum uint GL_TEXTURE_MAG_SIZE_NV = 0x871F;
-// GL_ARB_tessellation_shader
+
 bool GL_ARB_tessellation_shader;
-// enum uint GL_PATCHES = 0x000E;
-// enum uint GL_PATCH_VERTICES = 0x8E72;
-// enum uint GL_PATCH_DEFAULT_INNER_LEVEL = 0x8E73;
-// enum uint GL_PATCH_DEFAULT_OUTER_LEVEL = 0x8E74;
-// enum uint GL_TESS_CONTROL_OUTPUT_VERTICES = 0x8E75;
-// enum uint GL_TESS_GEN_MODE = 0x8E76;
-// enum uint GL_TESS_GEN_SPACING = 0x8E77;
-// enum uint GL_TESS_GEN_VERTEX_ORDER = 0x8E78;
-// enum uint GL_TESS_GEN_POINT_MODE = 0x8E79;
-// enum uint GL_TRIANGLES = 0x0004;
-// enum uint GL_ISOLINES = 0x8E7A;
-// enum uint GL_EQUAL = 0x0202;
-// enum uint GL_FRACTIONAL_ODD = 0x8E7B;
-// enum uint GL_FRACTIONAL_EVEN = 0x8E7C;
-// enum uint GL_CCW = 0x0901;
-// enum uint GL_CW = 0x0900;
-// enum uint GL_MAX_PATCH_VERTICES = 0x8E7D;
-// enum uint GL_MAX_TESS_GEN_LEVEL = 0x8E7E;
-// enum uint GL_MAX_TESS_CONTROL_UNIFORM_COMPONENTS = 0x8E7F;
-// enum uint GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS = 0x8E80;
-// enum uint GL_MAX_TESS_CONTROL_TEXTURE_IMAGE_UNITS = 0x8E81;
-// enum uint GL_MAX_TESS_EVALUATION_TEXTURE_IMAGE_UNITS = 0x8E82;
-// enum uint GL_MAX_TESS_CONTROL_OUTPUT_COMPONENTS = 0x8E83;
-// enum uint GL_MAX_TESS_PATCH_COMPONENTS = 0x8E84;
-// enum uint GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS = 0x8E85;
-// enum uint GL_MAX_TESS_EVALUATION_OUTPUT_COMPONENTS = 0x8E86;
-// enum uint GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS = 0x8E89;
-// enum uint GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS = 0x8E8A;
-// enum uint GL_MAX_TESS_CONTROL_INPUT_COMPONENTS = 0x886C;
-// enum uint GL_MAX_TESS_EVALUATION_INPUT_COMPONENTS = 0x886D;
-// enum uint GL_MAX_COMBINED_TESS_CONTROL_UNIFORM_COMPONENTS = 0x8E1E;
-// enum uint GL_MAX_COMBINED_TESS_EVALUATION_UNIFORM_COMPONENTS = 0x8E1F;
-// enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER = 0x84F0;
-// enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_EVALUATION_SHADER = 0x84F1;
-// enum uint GL_TESS_EVALUATION_SHADER = 0x8E87;
-// enum uint GL_TESS_CONTROL_SHADER = 0x8E88;
-// enum uint GL_QUADS = 0x0007;
-// extern(System) alias fp_glPatchParameteri = void function(GLenum, GLint) nothrow; __gshared fp_glPatchParameteri glPatchParameteri;
-// extern(System) alias fp_glPatchParameterfv = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glPatchParameterfv glPatchParameterfv;
-// GL_EXT_draw_buffers2
+
 bool GL_EXT_draw_buffers2;
-extern(System) alias fp_glColorMaskIndexedEXT = void function(GLuint, GLboolean, GLboolean, GLboolean, GLboolean) nothrow; __gshared fp_glColorMaskIndexedEXT glColorMaskIndexedEXT;
-extern(System) alias fp_glGetBooleanIndexedvEXT = void function(GLenum, GLuint, GLboolean*) nothrow; __gshared fp_glGetBooleanIndexedvEXT glGetBooleanIndexedvEXT;
-extern(System) alias fp_glGetIntegerIndexedvEXT = void function(GLenum, GLuint, GLint*) nothrow; __gshared fp_glGetIntegerIndexedvEXT glGetIntegerIndexedvEXT;
-extern(System) alias fp_glEnableIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glEnableIndexedEXT glEnableIndexedEXT;
-extern(System) alias fp_glDisableIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glDisableIndexedEXT glDisableIndexedEXT;
-extern(System) alias fp_glIsEnabledIndexedEXT = GLboolean function(GLenum, GLuint) nothrow; __gshared fp_glIsEnabledIndexedEXT glIsEnabledIndexedEXT;
-// GL_ARB_vertex_attrib_64bit
+
 bool GL_ARB_vertex_attrib_64bit;
-// enum uint GL_RGB32I = 0x8D83;
-// enum uint GL_DOUBLE_VEC2 = 0x8FFC;
-// enum uint GL_DOUBLE_VEC3 = 0x8FFD;
-// enum uint GL_DOUBLE_VEC4 = 0x8FFE;
-// enum uint GL_DOUBLE_MAT2 = 0x8F46;
-// enum uint GL_DOUBLE_MAT3 = 0x8F47;
-// enum uint GL_DOUBLE_MAT4 = 0x8F48;
-// enum uint GL_DOUBLE_MAT2x3 = 0x8F49;
-// enum uint GL_DOUBLE_MAT2x4 = 0x8F4A;
-// enum uint GL_DOUBLE_MAT3x2 = 0x8F4B;
-// enum uint GL_DOUBLE_MAT3x4 = 0x8F4C;
-// enum uint GL_DOUBLE_MAT4x2 = 0x8F4D;
-// enum uint GL_DOUBLE_MAT4x3 = 0x8F4E;
-// extern(System) alias fp_glVertexAttribL1d = void function(GLuint, GLdouble) nothrow; __gshared fp_glVertexAttribL1d glVertexAttribL1d;
-// extern(System) alias fp_glVertexAttribL2d = void function(GLuint, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL2d glVertexAttribL2d;
-// extern(System) alias fp_glVertexAttribL3d = void function(GLuint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL3d glVertexAttribL3d;
-// extern(System) alias fp_glVertexAttribL4d = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL4d glVertexAttribL4d;
-// extern(System) alias fp_glVertexAttribL1dv = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL1dv glVertexAttribL1dv;
-// extern(System) alias fp_glVertexAttribL2dv = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL2dv glVertexAttribL2dv;
-// extern(System) alias fp_glVertexAttribL3dv = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL3dv glVertexAttribL3dv;
-// extern(System) alias fp_glVertexAttribL4dv = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL4dv glVertexAttribL4dv;
-// extern(System) alias fp_glVertexAttribLPointer = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexAttribLPointer glVertexAttribLPointer;
-// extern(System) alias fp_glGetVertexAttribLdv = void function(GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetVertexAttribLdv glGetVertexAttribLdv;
-// GL_WIN_specular_fog
+
 bool GL_WIN_specular_fog;
 enum uint GL_FOG_SPECULAR_TEXTURE_WIN = 0x80EC;
-// GL_AMD_interleaved_elements
+
 bool GL_AMD_interleaved_elements;
 enum uint GL_VERTEX_ELEMENT_SWIZZLE_AMD = 0x91A4;
 enum uint GL_VERTEX_ID_SWIZZLE_AMD = 0x91A5;
-// enum uint GL_RED = 0x1903;
-// enum uint GL_GREEN = 0x1904;
-// enum uint GL_BLUE = 0x1905;
-// enum uint GL_ALPHA = 0x1906;
-// enum uint GL_RG8UI = 0x8238;
-// enum uint GL_RG16UI = 0x823A;
-// enum uint GL_RGBA8UI = 0x8D7C;
-extern(System) alias fp_glVertexAttribParameteriAMD = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glVertexAttribParameteriAMD glVertexAttribParameteriAMD;
-// GL_ARB_fragment_program
+
 bool GL_ARB_fragment_program;
 enum uint GL_FRAGMENT_PROGRAM_ARB = 0x8804;
-// enum uint GL_PROGRAM_FORMAT_ASCII_ARB = 0x8875;
-// enum uint GL_PROGRAM_LENGTH_ARB = 0x8627;
-// enum uint GL_PROGRAM_FORMAT_ARB = 0x8876;
-// enum uint GL_PROGRAM_BINDING_ARB = 0x8677;
-// enum uint GL_PROGRAM_INSTRUCTIONS_ARB = 0x88A0;
-// enum uint GL_MAX_PROGRAM_INSTRUCTIONS_ARB = 0x88A1;
-// enum uint GL_PROGRAM_NATIVE_INSTRUCTIONS_ARB = 0x88A2;
-// enum uint GL_MAX_PROGRAM_NATIVE_INSTRUCTIONS_ARB = 0x88A3;
-// enum uint GL_PROGRAM_TEMPORARIES_ARB = 0x88A4;
-// enum uint GL_MAX_PROGRAM_TEMPORARIES_ARB = 0x88A5;
-// enum uint GL_PROGRAM_NATIVE_TEMPORARIES_ARB = 0x88A6;
-// enum uint GL_MAX_PROGRAM_NATIVE_TEMPORARIES_ARB = 0x88A7;
-// enum uint GL_PROGRAM_PARAMETERS_ARB = 0x88A8;
-// enum uint GL_MAX_PROGRAM_PARAMETERS_ARB = 0x88A9;
-// enum uint GL_PROGRAM_NATIVE_PARAMETERS_ARB = 0x88AA;
-// enum uint GL_MAX_PROGRAM_NATIVE_PARAMETERS_ARB = 0x88AB;
-// enum uint GL_PROGRAM_ATTRIBS_ARB = 0x88AC;
-// enum uint GL_MAX_PROGRAM_ATTRIBS_ARB = 0x88AD;
-// enum uint GL_PROGRAM_NATIVE_ATTRIBS_ARB = 0x88AE;
-// enum uint GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB = 0x88AF;
-// enum uint GL_MAX_PROGRAM_LOCAL_PARAMETERS_ARB = 0x88B4;
-// enum uint GL_MAX_PROGRAM_ENV_PARAMETERS_ARB = 0x88B5;
-// enum uint GL_PROGRAM_UNDER_NATIVE_LIMITS_ARB = 0x88B6;
 enum uint GL_PROGRAM_ALU_INSTRUCTIONS_ARB = 0x8805;
 enum uint GL_PROGRAM_TEX_INSTRUCTIONS_ARB = 0x8806;
 enum uint GL_PROGRAM_TEX_INDIRECTIONS_ARB = 0x8807;
@@ -2490,68 +1464,9 @@ enum uint GL_MAX_PROGRAM_TEX_INDIRECTIONS_ARB = 0x880D;
 enum uint GL_MAX_PROGRAM_NATIVE_ALU_INSTRUCTIONS_ARB = 0x880E;
 enum uint GL_MAX_PROGRAM_NATIVE_TEX_INSTRUCTIONS_ARB = 0x880F;
 enum uint GL_MAX_PROGRAM_NATIVE_TEX_INDIRECTIONS_ARB = 0x8810;
-// enum uint GL_PROGRAM_STRING_ARB = 0x8628;
-// enum uint GL_PROGRAM_ERROR_POSITION_ARB = 0x864B;
-// enum uint GL_CURRENT_MATRIX_ARB = 0x8641;
-// enum uint GL_TRANSPOSE_CURRENT_MATRIX_ARB = 0x88B7;
-// enum uint GL_CURRENT_MATRIX_STACK_DEPTH_ARB = 0x8640;
-// enum uint GL_MAX_PROGRAM_MATRICES_ARB = 0x862F;
-// enum uint GL_MAX_PROGRAM_MATRIX_STACK_DEPTH_ARB = 0x862E;
 enum uint GL_MAX_TEXTURE_COORDS_ARB = 0x8871;
 enum uint GL_MAX_TEXTURE_IMAGE_UNITS_ARB = 0x8872;
-// enum uint GL_PROGRAM_ERROR_STRING_ARB = 0x8874;
-// enum uint GL_MATRIX0_ARB = 0x88C0;
-// enum uint GL_MATRIX1_ARB = 0x88C1;
-// enum uint GL_MATRIX2_ARB = 0x88C2;
-// enum uint GL_MATRIX3_ARB = 0x88C3;
-// enum uint GL_MATRIX4_ARB = 0x88C4;
-// enum uint GL_MATRIX5_ARB = 0x88C5;
-// enum uint GL_MATRIX6_ARB = 0x88C6;
-// enum uint GL_MATRIX7_ARB = 0x88C7;
-// enum uint GL_MATRIX8_ARB = 0x88C8;
-// enum uint GL_MATRIX9_ARB = 0x88C9;
-// enum uint GL_MATRIX10_ARB = 0x88CA;
-// enum uint GL_MATRIX11_ARB = 0x88CB;
-// enum uint GL_MATRIX12_ARB = 0x88CC;
-// enum uint GL_MATRIX13_ARB = 0x88CD;
-// enum uint GL_MATRIX14_ARB = 0x88CE;
-// enum uint GL_MATRIX15_ARB = 0x88CF;
-// enum uint GL_MATRIX16_ARB = 0x88D0;
-// enum uint GL_MATRIX17_ARB = 0x88D1;
-// enum uint GL_MATRIX18_ARB = 0x88D2;
-// enum uint GL_MATRIX19_ARB = 0x88D3;
-// enum uint GL_MATRIX20_ARB = 0x88D4;
-// enum uint GL_MATRIX21_ARB = 0x88D5;
-// enum uint GL_MATRIX22_ARB = 0x88D6;
-// enum uint GL_MATRIX23_ARB = 0x88D7;
-// enum uint GL_MATRIX24_ARB = 0x88D8;
-// enum uint GL_MATRIX25_ARB = 0x88D9;
-// enum uint GL_MATRIX26_ARB = 0x88DA;
-// enum uint GL_MATRIX27_ARB = 0x88DB;
-// enum uint GL_MATRIX28_ARB = 0x88DC;
-// enum uint GL_MATRIX29_ARB = 0x88DD;
-// enum uint GL_MATRIX30_ARB = 0x88DE;
-// enum uint GL_MATRIX31_ARB = 0x88DF;
-// extern(System) alias fp_glProgramStringARB = void function(GLenum, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glProgramStringARB glProgramStringARB;
-// extern(System) alias fp_glBindProgramARB = void function(GLenum, GLuint) nothrow; __gshared fp_glBindProgramARB glBindProgramARB;
-// extern(System) alias fp_glDeleteProgramsARB = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteProgramsARB glDeleteProgramsARB;
-// extern(System) alias fp_glGenProgramsARB = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenProgramsARB glGenProgramsARB;
-// extern(System) alias fp_glProgramEnvParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramEnvParameter4dARB glProgramEnvParameter4dARB;
-// extern(System) alias fp_glProgramEnvParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glProgramEnvParameter4dvARB glProgramEnvParameter4dvARB;
-// extern(System) alias fp_glProgramEnvParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramEnvParameter4fARB glProgramEnvParameter4fARB;
-// extern(System) alias fp_glProgramEnvParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glProgramEnvParameter4fvARB glProgramEnvParameter4fvARB;
-// extern(System) alias fp_glProgramLocalParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramLocalParameter4dARB glProgramLocalParameter4dARB;
-// extern(System) alias fp_glProgramLocalParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glProgramLocalParameter4dvARB glProgramLocalParameter4dvARB;
-// extern(System) alias fp_glProgramLocalParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramLocalParameter4fARB glProgramLocalParameter4fARB;
-// extern(System) alias fp_glProgramLocalParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glProgramLocalParameter4fvARB glProgramLocalParameter4fvARB;
-// extern(System) alias fp_glGetProgramEnvParameterdvARB = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetProgramEnvParameterdvARB glGetProgramEnvParameterdvARB;
-// extern(System) alias fp_glGetProgramEnvParameterfvARB = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetProgramEnvParameterfvARB glGetProgramEnvParameterfvARB;
-// extern(System) alias fp_glGetProgramLocalParameterdvARB = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetProgramLocalParameterdvARB glGetProgramLocalParameterdvARB;
-// extern(System) alias fp_glGetProgramLocalParameterfvARB = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetProgramLocalParameterfvARB glGetProgramLocalParameterfvARB;
-// extern(System) alias fp_glGetProgramivARB = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetProgramivARB glGetProgramivARB;
-// extern(System) alias fp_glGetProgramStringARB = void function(GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetProgramStringARB glGetProgramStringARB;
-// extern(System) alias fp_glIsProgramARB = GLboolean function(GLuint) nothrow; __gshared fp_glIsProgramARB glIsProgramARB;
-// GL_OML_resample
+
 bool GL_OML_resample;
 enum uint GL_PACK_RESAMPLE_OML = 0x8984;
 enum uint GL_UNPACK_RESAMPLE_OML = 0x8985;
@@ -2559,102 +1474,63 @@ enum uint GL_RESAMPLE_REPLICATE_OML = 0x8986;
 enum uint GL_RESAMPLE_ZERO_FILL_OML = 0x8987;
 enum uint GL_RESAMPLE_AVERAGE_OML = 0x8988;
 enum uint GL_RESAMPLE_DECIMATE_OML = 0x8989;
-// GL_APPLE_ycbcr_422
+
 bool GL_APPLE_ycbcr_422;
 enum uint GL_YCBCR_422_APPLE = 0x85B9;
 enum uint GL_UNSIGNED_SHORT_8_8_APPLE = 0x85BA;
 enum uint GL_UNSIGNED_SHORT_8_8_REV_APPLE = 0x85BB;
-// GL_SGIX_texture_add_env
+
 bool GL_SGIX_texture_add_env;
 enum uint GL_TEXTURE_ENV_BIAS_SGIX = 0x80BE;
-// GL_ARB_shadow_ambient
+
 bool GL_ARB_shadow_ambient;
 enum uint GL_TEXTURE_COMPARE_FAIL_VALUE_ARB = 0x80BF;
-// GL_ARB_texture_storage
+
 bool GL_ARB_texture_storage;
-// enum uint GL_TEXTURE_IMMUTABLE_FORMAT = 0x912F;
-// extern(System) alias fp_glTexStorage1D = void function(GLenum, GLsizei, GLenum, GLsizei) nothrow; __gshared fp_glTexStorage1D glTexStorage1D;
-// extern(System) alias fp_glTexStorage2D = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glTexStorage2D glTexStorage2D;
-// extern(System) alias fp_glTexStorage3D = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei) nothrow; __gshared fp_glTexStorage3D glTexStorage3D;
-// GL_EXT_pixel_buffer_object
+
 bool GL_EXT_pixel_buffer_object;
 enum uint GL_PIXEL_PACK_BUFFER_EXT = 0x88EB;
 enum uint GL_PIXEL_UNPACK_BUFFER_EXT = 0x88EC;
 enum uint GL_PIXEL_PACK_BUFFER_BINDING_EXT = 0x88ED;
 enum uint GL_PIXEL_UNPACK_BUFFER_BINDING_EXT = 0x88EF;
-// GL_ARB_copy_image
+
 bool GL_ARB_copy_image;
-// extern(System) alias fp_glCopyImageSubData = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei) nothrow; __gshared fp_glCopyImageSubData glCopyImageSubData;
-// GL_SGIS_pixel_texture
+
 bool GL_SGIS_pixel_texture;
 enum uint GL_PIXEL_TEXTURE_SGIS = 0x8353;
 enum uint GL_PIXEL_FRAGMENT_RGB_SOURCE_SGIS = 0x8354;
 enum uint GL_PIXEL_FRAGMENT_ALPHA_SOURCE_SGIS = 0x8355;
 enum uint GL_PIXEL_GROUP_COLOR_SGIS = 0x8356;
-extern(System) alias fp_glPixelTexGenParameteriSGIS = void function(GLenum, GLint) nothrow; __gshared fp_glPixelTexGenParameteriSGIS glPixelTexGenParameteriSGIS;
-extern(System) alias fp_glPixelTexGenParameterivSGIS = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glPixelTexGenParameterivSGIS glPixelTexGenParameterivSGIS;
-extern(System) alias fp_glPixelTexGenParameterfSGIS = void function(GLenum, GLfloat) nothrow; __gshared fp_glPixelTexGenParameterfSGIS glPixelTexGenParameterfSGIS;
-extern(System) alias fp_glPixelTexGenParameterfvSGIS = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glPixelTexGenParameterfvSGIS glPixelTexGenParameterfvSGIS;
-extern(System) alias fp_glGetPixelTexGenParameterivSGIS = void function(GLenum, GLint*) nothrow; __gshared fp_glGetPixelTexGenParameterivSGIS glGetPixelTexGenParameterivSGIS;
-extern(System) alias fp_glGetPixelTexGenParameterfvSGIS = void function(GLenum, GLfloat*) nothrow; __gshared fp_glGetPixelTexGenParameterfvSGIS glGetPixelTexGenParameterfvSGIS;
-// GL_SGIS_generate_mipmap
+
 bool GL_SGIS_generate_mipmap;
 enum uint GL_GENERATE_MIPMAP_SGIS = 0x8191;
 enum uint GL_GENERATE_MIPMAP_HINT_SGIS = 0x8192;
-// GL_SGIX_instruments
+
 bool GL_SGIX_instruments;
 enum uint GL_INSTRUMENT_BUFFER_POINTER_SGIX = 0x8180;
 enum uint GL_INSTRUMENT_MEASUREMENTS_SGIX = 0x8181;
-extern(System) alias fp_glGetInstrumentsSGIX = GLint function() nothrow; __gshared fp_glGetInstrumentsSGIX glGetInstrumentsSGIX;
-extern(System) alias fp_glInstrumentsBufferSGIX = void function(GLsizei, GLint*) nothrow; __gshared fp_glInstrumentsBufferSGIX glInstrumentsBufferSGIX;
-extern(System) alias fp_glPollInstrumentsSGIX = GLint function(GLint*) nothrow; __gshared fp_glPollInstrumentsSGIX glPollInstrumentsSGIX;
-extern(System) alias fp_glReadInstrumentsSGIX = void function(GLint) nothrow; __gshared fp_glReadInstrumentsSGIX glReadInstrumentsSGIX;
-extern(System) alias fp_glStartInstrumentsSGIX = void function() nothrow; __gshared fp_glStartInstrumentsSGIX glStartInstrumentsSGIX;
-extern(System) alias fp_glStopInstrumentsSGIX = void function(GLint) nothrow; __gshared fp_glStopInstrumentsSGIX glStopInstrumentsSGIX;
-// GL_HP_texture_lighting
+
 bool GL_HP_texture_lighting;
 enum uint GL_TEXTURE_LIGHTING_MODE_HP = 0x8167;
 enum uint GL_TEXTURE_POST_SPECULAR_HP = 0x8168;
 enum uint GL_TEXTURE_PRE_SPECULAR_HP = 0x8169;
-// GL_ARB_shader_storage_buffer_object
+
 bool GL_ARB_shader_storage_buffer_object;
-// enum uint GL_SHADER_STORAGE_BUFFER = 0x90D2;
-// enum uint GL_SHADER_STORAGE_BUFFER_BINDING = 0x90D3;
-// enum uint GL_SHADER_STORAGE_BUFFER_START = 0x90D4;
-// enum uint GL_SHADER_STORAGE_BUFFER_SIZE = 0x90D5;
-// enum uint GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS = 0x90D6;
-// enum uint GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS = 0x90D7;
-// enum uint GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS = 0x90D8;
-// enum uint GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS = 0x90D9;
-// enum uint GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS = 0x90DA;
-// enum uint GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS = 0x90DB;
-// enum uint GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS = 0x90DC;
-// enum uint GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 0x90DD;
-// enum uint GL_MAX_SHADER_STORAGE_BLOCK_SIZE = 0x90DE;
-// enum uint GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT = 0x90DF;
-// enum uint GL_SHADER_STORAGE_BARRIER_BIT = 0x00002000;
-// enum uint GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES = 0x8F39;
-// enum uint GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS = 0x8F39;
-// extern(System) alias fp_glShaderStorageBlockBinding = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glShaderStorageBlockBinding glShaderStorageBlockBinding;
-// GL_EXT_blend_minmax
+
 bool GL_EXT_blend_minmax;
 enum uint GL_MIN_EXT = 0x8007;
 enum uint GL_MAX_EXT = 0x8008;
 enum uint GL_FUNC_ADD_EXT = 0x8006;
 enum uint GL_BLEND_EQUATION_EXT = 0x8009;
-extern(System) alias fp_glBlendEquationEXT = void function(GLenum) nothrow; __gshared fp_glBlendEquationEXT glBlendEquationEXT;
-// GL_MESA_pack_invert
+
 bool GL_MESA_pack_invert;
 enum uint GL_PACK_INVERT_MESA = 0x8758;
-// GL_ARB_base_instance
+
 bool GL_ARB_base_instance;
-// extern(System) alias fp_glDrawArraysInstancedBaseInstance = void function(GLenum, GLint, GLsizei, GLsizei, GLuint) nothrow; __gshared fp_glDrawArraysInstancedBaseInstance glDrawArraysInstancedBaseInstance;
-// extern(System) alias fp_glDrawElementsInstancedBaseInstance = void function(GLenum, GLsizei, GLenum, const(void)*, GLsizei, GLuint) nothrow; __gshared fp_glDrawElementsInstancedBaseInstance glDrawElementsInstancedBaseInstance;
-// extern(System) alias fp_glDrawElementsInstancedBaseVertexBaseInstance = void function(GLenum, GLsizei, GLenum, const(void)*, GLsizei, GLint, GLuint) nothrow; __gshared fp_glDrawElementsInstancedBaseVertexBaseInstance glDrawElementsInstancedBaseVertexBaseInstance;
-// GL_SGIX_convolution_accuracy
+
 bool GL_SGIX_convolution_accuracy;
 enum uint GL_CONVOLUTION_HINT_SGIX = 0x8316;
-// GL_PGI_vertex_hints
+
 bool GL_PGI_vertex_hints;
 enum uint GL_VERTEX_DATA_HINT_PGI = 0x1A22A;
 enum uint GL_VERTEX_CONSISTENT_HINT_PGI = 0x1A22B;
@@ -2678,7 +1554,7 @@ enum uint GL_TEXCOORD3_BIT_PGI = 0x40000000;
 enum uint GL_TEXCOORD4_BIT_PGI = 0x80000000;
 enum uint GL_VERTEX23_BIT_PGI = 0x00000004;
 enum uint GL_VERTEX4_BIT_PGI = 0x00000008;
-// GL_EXT_texture_integer
+
 bool GL_EXT_texture_integer;
 enum uint GL_RGBA32UI_EXT = 0x8D70;
 enum uint GL_RGB32UI_EXT = 0x8D71;
@@ -2727,40 +1603,9 @@ enum uint GL_BGRA_INTEGER_EXT = 0x8D9B;
 enum uint GL_LUMINANCE_INTEGER_EXT = 0x8D9C;
 enum uint GL_LUMINANCE_ALPHA_INTEGER_EXT = 0x8D9D;
 enum uint GL_RGBA_INTEGER_MODE_EXT = 0x8D9E;
-extern(System) alias fp_glTexParameterIivEXT = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glTexParameterIivEXT glTexParameterIivEXT;
-extern(System) alias fp_glTexParameterIuivEXT = void function(GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glTexParameterIuivEXT glTexParameterIuivEXT;
-extern(System) alias fp_glGetTexParameterIivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetTexParameterIivEXT glGetTexParameterIivEXT;
-extern(System) alias fp_glGetTexParameterIuivEXT = void function(GLenum, GLenum, GLuint*) nothrow; __gshared fp_glGetTexParameterIuivEXT glGetTexParameterIuivEXT;
-extern(System) alias fp_glClearColorIiEXT = void function(GLint, GLint, GLint, GLint) nothrow; __gshared fp_glClearColorIiEXT glClearColorIiEXT;
-extern(System) alias fp_glClearColorIuiEXT = void function(GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glClearColorIuiEXT glClearColorIuiEXT;
-// GL_ARB_texture_multisample
+
 bool GL_ARB_texture_multisample;
-// enum uint GL_SAMPLE_POSITION = 0x8E50;
-// enum uint GL_SAMPLE_MASK = 0x8E51;
-// enum uint GL_SAMPLE_MASK_VALUE = 0x8E52;
-// enum uint GL_MAX_SAMPLE_MASK_WORDS = 0x8E59;
-// enum uint GL_TEXTURE_2D_MULTISAMPLE = 0x9100;
-// enum uint GL_PROXY_TEXTURE_2D_MULTISAMPLE = 0x9101;
-// enum uint GL_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x9102;
-// enum uint GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x9103;
-// enum uint GL_TEXTURE_BINDING_2D_MULTISAMPLE = 0x9104;
-// enum uint GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY = 0x9105;
-// enum uint GL_TEXTURE_SAMPLES = 0x9106;
-// enum uint GL_TEXTURE_FIXED_SAMPLE_LOCATIONS = 0x9107;
-// enum uint GL_SAMPLER_2D_MULTISAMPLE = 0x9108;
-// enum uint GL_INT_SAMPLER_2D_MULTISAMPLE = 0x9109;
-// enum uint GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE = 0x910A;
-// enum uint GL_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910B;
-// enum uint GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910C;
-// enum uint GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY = 0x910D;
-// enum uint GL_MAX_COLOR_TEXTURE_SAMPLES = 0x910E;
-// enum uint GL_MAX_DEPTH_TEXTURE_SAMPLES = 0x910F;
-// enum uint GL_MAX_INTEGER_SAMPLES = 0x9110;
-// extern(System) alias fp_glTexImage2DMultisample = void function(GLenum, GLsizei, GLint, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexImage2DMultisample glTexImage2DMultisample;
-// extern(System) alias fp_glTexImage3DMultisample = void function(GLenum, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexImage3DMultisample glTexImage3DMultisample;
-// extern(System) alias fp_glGetMultisamplefv = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetMultisamplefv glGetMultisamplefv;
-// extern(System) alias fp_glSampleMaski = void function(GLuint, GLbitfield) nothrow; __gshared fp_glSampleMaski glSampleMaski;
-// GL_S3_s3tc
+
 bool GL_S3_s3tc;
 enum uint GL_RGB_S3TC = 0x83A0;
 enum uint GL_RGB4_S3TC = 0x83A1;
@@ -2768,13 +1613,9 @@ enum uint GL_RGBA_S3TC = 0x83A2;
 enum uint GL_RGBA4_S3TC = 0x83A3;
 enum uint GL_RGBA_DXT5_S3TC = 0x83A4;
 enum uint GL_RGBA4_DXT5_S3TC = 0x83A5;
-// GL_ARB_query_buffer_object
+
 bool GL_ARB_query_buffer_object;
-enum uint GL_QUERY_BUFFER = 0x9192;
-enum uint GL_QUERY_BUFFER_BARRIER_BIT = 0x00008000;
-enum uint GL_QUERY_BUFFER_BINDING = 0x9193;
-enum uint GL_QUERY_RESULT_NO_WAIT = 0x9194;
-// GL_AMD_vertex_shader_tessellator
+
 bool GL_AMD_vertex_shader_tessellator;
 enum uint GL_SAMPLER_BUFFER_AMD = 0x9001;
 enum uint GL_INT_SAMPLER_BUFFER_AMD = 0x9002;
@@ -2783,36 +1624,23 @@ enum uint GL_TESSELLATION_MODE_AMD = 0x9004;
 enum uint GL_TESSELLATION_FACTOR_AMD = 0x9005;
 enum uint GL_DISCRETE_AMD = 0x9006;
 enum uint GL_CONTINUOUS_AMD = 0x9007;
-extern(System) alias fp_glTessellationFactorAMD = void function(GLfloat) nothrow; __gshared fp_glTessellationFactorAMD glTessellationFactorAMD;
-extern(System) alias fp_glTessellationModeAMD = void function(GLenum) nothrow; __gshared fp_glTessellationModeAMD glTessellationModeAMD;
-// GL_ARB_invalidate_subdata
+
 bool GL_ARB_invalidate_subdata;
-// extern(System) alias fp_glInvalidateTexSubImage = void function(GLuint, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei) nothrow; __gshared fp_glInvalidateTexSubImage glInvalidateTexSubImage;
-// extern(System) alias fp_glInvalidateTexImage = void function(GLuint, GLint) nothrow; __gshared fp_glInvalidateTexImage glInvalidateTexImage;
-// extern(System) alias fp_glInvalidateBufferSubData = void function(GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glInvalidateBufferSubData glInvalidateBufferSubData;
-// extern(System) alias fp_glInvalidateBufferData = void function(GLuint) nothrow; __gshared fp_glInvalidateBufferData glInvalidateBufferData;
-// extern(System) alias fp_glInvalidateFramebuffer = void function(GLenum, GLsizei, const(GLenum)*) nothrow; __gshared fp_glInvalidateFramebuffer glInvalidateFramebuffer;
-// extern(System) alias fp_glInvalidateSubFramebuffer = void function(GLenum, GLsizei, const(GLenum)*, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glInvalidateSubFramebuffer glInvalidateSubFramebuffer;
-// GL_EXT_index_material
+
 bool GL_EXT_index_material;
 enum uint GL_INDEX_MATERIAL_EXT = 0x81B8;
 enum uint GL_INDEX_MATERIAL_PARAMETER_EXT = 0x81B9;
 enum uint GL_INDEX_MATERIAL_FACE_EXT = 0x81BA;
-extern(System) alias fp_glIndexMaterialEXT = void function(GLenum, GLenum) nothrow; __gshared fp_glIndexMaterialEXT glIndexMaterialEXT;
-// GL_NV_blend_equation_advanced_coherent
+
 bool GL_NV_blend_equation_advanced_coherent;
-// GL_INTEL_parallel_arrays
+
 bool GL_INTEL_parallel_arrays;
 enum uint GL_PARALLEL_ARRAYS_INTEL = 0x83F4;
 enum uint GL_VERTEX_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F5;
 enum uint GL_NORMAL_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F6;
 enum uint GL_COLOR_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F7;
 enum uint GL_TEXTURE_COORD_ARRAY_PARALLEL_POINTERS_INTEL = 0x83F8;
-extern(System) alias fp_glVertexPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*) nothrow; __gshared fp_glVertexPointervINTEL glVertexPointervINTEL;
-extern(System) alias fp_glNormalPointervINTEL = void function(GLenum, const(GLvoid*)*) nothrow; __gshared fp_glNormalPointervINTEL glNormalPointervINTEL;
-extern(System) alias fp_glColorPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*) nothrow; __gshared fp_glColorPointervINTEL glColorPointervINTEL;
-extern(System) alias fp_glTexCoordPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*) nothrow; __gshared fp_glTexCoordPointervINTEL glTexCoordPointervINTEL;
-// GL_ATI_draw_buffers
+
 bool GL_ATI_draw_buffers;
 enum uint GL_MAX_DRAW_BUFFERS_ATI = 0x8824;
 enum uint GL_DRAW_BUFFER0_ATI = 0x8825;
@@ -2831,120 +1659,60 @@ enum uint GL_DRAW_BUFFER12_ATI = 0x8831;
 enum uint GL_DRAW_BUFFER13_ATI = 0x8832;
 enum uint GL_DRAW_BUFFER14_ATI = 0x8833;
 enum uint GL_DRAW_BUFFER15_ATI = 0x8834;
-extern(System) alias fp_glDrawBuffersATI = void function(GLsizei, const(GLenum)*) nothrow; __gshared fp_glDrawBuffersATI glDrawBuffersATI;
-// GL_EXT_cmyka
+
 bool GL_EXT_cmyka;
 enum uint GL_CMYK_EXT = 0x800C;
 enum uint GL_CMYKA_EXT = 0x800D;
 enum uint GL_PACK_CMYK_HINT_EXT = 0x800E;
 enum uint GL_UNPACK_CMYK_HINT_EXT = 0x800F;
-// GL_SGIX_pixel_texture
+
 bool GL_SGIX_pixel_texture;
 enum uint GL_PIXEL_TEX_GEN_SGIX = 0x8139;
 enum uint GL_PIXEL_TEX_GEN_MODE_SGIX = 0x832B;
-extern(System) alias fp_glPixelTexGenSGIX = void function(GLenum) nothrow; __gshared fp_glPixelTexGenSGIX glPixelTexGenSGIX;
-// GL_APPLE_specular_vector
+
 bool GL_APPLE_specular_vector;
 enum uint GL_LIGHT_MODEL_SPECULAR_VECTOR_APPLE = 0x85B0;
-// GL_ARB_compatibility
+
 bool GL_ARB_compatibility;
-// GL_ARB_timer_query
+
 bool GL_ARB_timer_query;
-// enum uint GL_TIME_ELAPSED = 0x88BF;
-// enum uint GL_TIMESTAMP = 0x8E28;
-// extern(System) alias fp_glQueryCounter = void function(GLuint, GLenum) nothrow; __gshared fp_glQueryCounter glQueryCounter;
-// extern(System) alias fp_glGetQueryObjecti64v = void function(GLuint, GLenum, GLint64*) nothrow; __gshared fp_glGetQueryObjecti64v glGetQueryObjecti64v;
-// extern(System) alias fp_glGetQueryObjectui64v = void function(GLuint, GLenum, GLuint64*) nothrow; __gshared fp_glGetQueryObjectui64v glGetQueryObjectui64v;
-// GL_SGIX_interlace
+
 bool GL_SGIX_interlace;
 enum uint GL_INTERLACE_SGIX = 0x8094;
-// GL_NV_parameter_buffer_object
+
 bool GL_NV_parameter_buffer_object;
 enum uint GL_MAX_PROGRAM_PARAMETER_BUFFER_BINDINGS_NV = 0x8DA0;
 enum uint GL_MAX_PROGRAM_PARAMETER_BUFFER_SIZE_NV = 0x8DA1;
 enum uint GL_VERTEX_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA2;
 enum uint GL_GEOMETRY_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA3;
 enum uint GL_FRAGMENT_PROGRAM_PARAMETER_BUFFER_NV = 0x8DA4;
-extern(System) alias fp_glProgramBufferParametersfvNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramBufferParametersfvNV glProgramBufferParametersfvNV;
-extern(System) alias fp_glProgramBufferParametersIivNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramBufferParametersIivNV glProgramBufferParametersIivNV;
-extern(System) alias fp_glProgramBufferParametersIuivNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramBufferParametersIuivNV glProgramBufferParametersIuivNV;
-// GL_AMD_shader_trinary_minmax
+
 bool GL_AMD_shader_trinary_minmax;
-// GL_EXT_rescale_normal
+
 bool GL_EXT_rescale_normal;
 enum uint GL_RESCALE_NORMAL_EXT = 0x803A;
-// GL_ARB_pixel_buffer_object
+
 bool GL_ARB_pixel_buffer_object;
 enum uint GL_PIXEL_PACK_BUFFER_ARB = 0x88EB;
 enum uint GL_PIXEL_UNPACK_BUFFER_ARB = 0x88EC;
 enum uint GL_PIXEL_PACK_BUFFER_BINDING_ARB = 0x88ED;
 enum uint GL_PIXEL_UNPACK_BUFFER_BINDING_ARB = 0x88EF;
-// GL_ARB_uniform_buffer_object
+
 bool GL_ARB_uniform_buffer_object;
-// enum uint GL_UNIFORM_BUFFER = 0x8A11;
-// enum uint GL_UNIFORM_BUFFER_BINDING = 0x8A28;
-// enum uint GL_UNIFORM_BUFFER_START = 0x8A29;
-// enum uint GL_UNIFORM_BUFFER_SIZE = 0x8A2A;
-// enum uint GL_MAX_VERTEX_UNIFORM_BLOCKS = 0x8A2B;
 enum uint GL_MAX_GEOMETRY_UNIFORM_BLOCKS = 0x8A2C;
-// enum uint GL_MAX_FRAGMENT_UNIFORM_BLOCKS = 0x8A2D;
-// enum uint GL_MAX_COMBINED_UNIFORM_BLOCKS = 0x8A2E;
-// enum uint GL_MAX_UNIFORM_BUFFER_BINDINGS = 0x8A2F;
-// enum uint GL_MAX_UNIFORM_BLOCK_SIZE = 0x8A30;
-// enum uint GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS = 0x8A31;
 enum uint GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS = 0x8A32;
-// enum uint GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS = 0x8A33;
-// enum uint GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT = 0x8A34;
-// enum uint GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH = 0x8A35;
-// enum uint GL_ACTIVE_UNIFORM_BLOCKS = 0x8A36;
-// enum uint GL_UNIFORM_TYPE = 0x8A37;
-// enum uint GL_UNIFORM_SIZE = 0x8A38;
-// enum uint GL_UNIFORM_NAME_LENGTH = 0x8A39;
-// enum uint GL_UNIFORM_BLOCK_INDEX = 0x8A3A;
-// enum uint GL_UNIFORM_OFFSET = 0x8A3B;
-// enum uint GL_UNIFORM_ARRAY_STRIDE = 0x8A3C;
-// enum uint GL_UNIFORM_MATRIX_STRIDE = 0x8A3D;
-// enum uint GL_UNIFORM_IS_ROW_MAJOR = 0x8A3E;
-// enum uint GL_UNIFORM_BLOCK_BINDING = 0x8A3F;
-// enum uint GL_UNIFORM_BLOCK_DATA_SIZE = 0x8A40;
-// enum uint GL_UNIFORM_BLOCK_NAME_LENGTH = 0x8A41;
-// enum uint GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS = 0x8A42;
-// enum uint GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES = 0x8A43;
-// enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER = 0x8A44;
 enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER = 0x8A45;
-// enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER = 0x8A46;
-// enum uint GL_INVALID_INDEX = 0xFFFFFFFF;
-// extern(System) alias fp_glGetUniformIndices = void function(GLuint, GLsizei, const(GLchar*)*, GLuint*) nothrow; __gshared fp_glGetUniformIndices glGetUniformIndices;
-// extern(System) alias fp_glGetActiveUniformsiv = void function(GLuint, GLsizei, const(GLuint)*, GLenum, GLint*) nothrow; __gshared fp_glGetActiveUniformsiv glGetActiveUniformsiv;
-// extern(System) alias fp_glGetActiveUniformName = void function(GLuint, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetActiveUniformName glGetActiveUniformName;
-// extern(System) alias fp_glGetUniformBlockIndex = GLuint function(GLuint, const(GLchar)*) nothrow; __gshared fp_glGetUniformBlockIndex glGetUniformBlockIndex;
-// extern(System) alias fp_glGetActiveUniformBlockiv = void function(GLuint, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetActiveUniformBlockiv glGetActiveUniformBlockiv;
-// extern(System) alias fp_glGetActiveUniformBlockName = void function(GLuint, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetActiveUniformBlockName glGetActiveUniformBlockName;
-// extern(System) alias fp_glUniformBlockBinding = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glUniformBlockBinding glUniformBlockBinding;
-// GL_ARB_vertex_type_10f_11f_11f_rev
+
 bool GL_ARB_vertex_type_10f_11f_11f_rev;
-// enum uint GL_UNSIGNED_INT_10F_11F_11F_REV = 0x8C3B;
-// GL_ARB_texture_swizzle
+
 bool GL_ARB_texture_swizzle;
-// enum uint GL_TEXTURE_SWIZZLE_R = 0x8E42;
-// enum uint GL_TEXTURE_SWIZZLE_G = 0x8E43;
-// enum uint GL_TEXTURE_SWIZZLE_B = 0x8E44;
-// enum uint GL_TEXTURE_SWIZZLE_A = 0x8E45;
-// enum uint GL_TEXTURE_SWIZZLE_RGBA = 0x8E46;
-// GL_NV_transform_feedback2
+
 bool GL_NV_transform_feedback2;
 enum uint GL_TRANSFORM_FEEDBACK_NV = 0x8E22;
 enum uint GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED_NV = 0x8E23;
 enum uint GL_TRANSFORM_FEEDBACK_BUFFER_ACTIVE_NV = 0x8E24;
 enum uint GL_TRANSFORM_FEEDBACK_BINDING_NV = 0x8E25;
-extern(System) alias fp_glBindTransformFeedbackNV = void function(GLenum, GLuint) nothrow; __gshared fp_glBindTransformFeedbackNV glBindTransformFeedbackNV;
-extern(System) alias fp_glDeleteTransformFeedbacksNV = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteTransformFeedbacksNV glDeleteTransformFeedbacksNV;
-extern(System) alias fp_glGenTransformFeedbacksNV = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenTransformFeedbacksNV glGenTransformFeedbacksNV;
-extern(System) alias fp_glIsTransformFeedbackNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsTransformFeedbackNV glIsTransformFeedbackNV;
-extern(System) alias fp_glPauseTransformFeedbackNV = void function() nothrow; __gshared fp_glPauseTransformFeedbackNV glPauseTransformFeedbackNV;
-extern(System) alias fp_glResumeTransformFeedbackNV = void function() nothrow; __gshared fp_glResumeTransformFeedbackNV glResumeTransformFeedbackNV;
-extern(System) alias fp_glDrawTransformFeedbackNV = void function(GLenum, GLuint) nothrow; __gshared fp_glDrawTransformFeedbackNV glDrawTransformFeedbackNV;
-// GL_SGIX_async_pixel
+
 bool GL_SGIX_async_pixel;
 enum uint GL_ASYNC_TEX_IMAGE_SGIX = 0x835C;
 enum uint GL_ASYNC_DRAW_PIXELS_SGIX = 0x835D;
@@ -2952,23 +1720,22 @@ enum uint GL_ASYNC_READ_PIXELS_SGIX = 0x835E;
 enum uint GL_MAX_ASYNC_TEX_IMAGE_SGIX = 0x835F;
 enum uint GL_MAX_ASYNC_DRAW_PIXELS_SGIX = 0x8360;
 enum uint GL_MAX_ASYNC_READ_PIXELS_SGIX = 0x8361;
-// GL_NV_fragment_program_option
+
 bool GL_NV_fragment_program_option;
-// GL_ARB_explicit_attrib_location
+
 bool GL_ARB_explicit_attrib_location;
-// GL_EXT_blend_color
+
 bool GL_EXT_blend_color;
 enum uint GL_CONSTANT_COLOR_EXT = 0x8001;
 enum uint GL_ONE_MINUS_CONSTANT_COLOR_EXT = 0x8002;
 enum uint GL_CONSTANT_ALPHA_EXT = 0x8003;
 enum uint GL_ONE_MINUS_CONSTANT_ALPHA_EXT = 0x8004;
 enum uint GL_BLEND_COLOR_EXT = 0x8005;
-extern(System) alias fp_glBlendColorEXT = void function(GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glBlendColorEXT glBlendColorEXT;
-// GL_EXT_stencil_wrap
+
 bool GL_EXT_stencil_wrap;
 enum uint GL_INCR_WRAP_EXT = 0x8507;
 enum uint GL_DECR_WRAP_EXT = 0x8508;
-// GL_EXT_index_array_formats
+
 bool GL_EXT_index_array_formats;
 enum uint GL_IUI_V2F_EXT = 0x81AD;
 enum uint GL_IUI_V3F_EXT = 0x81AE;
@@ -2978,7 +1745,7 @@ enum uint GL_T2F_IUI_V2F_EXT = 0x81B1;
 enum uint GL_T2F_IUI_V3F_EXT = 0x81B2;
 enum uint GL_T2F_IUI_N3F_V2F_EXT = 0x81B3;
 enum uint GL_T2F_IUI_N3F_V3F_EXT = 0x81B4;
-// GL_EXT_histogram
+
 bool GL_EXT_histogram;
 enum uint GL_HISTOGRAM_EXT = 0x8024;
 enum uint GL_PROXY_HISTOGRAM_EXT = 0x8025;
@@ -2994,287 +1761,21 @@ enum uint GL_MINMAX_EXT = 0x802E;
 enum uint GL_MINMAX_FORMAT_EXT = 0x802F;
 enum uint GL_MINMAX_SINK_EXT = 0x8030;
 enum uint GL_TABLE_TOO_LARGE_EXT = 0x8031;
-extern(System) alias fp_glGetHistogramEXT = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetHistogramEXT glGetHistogramEXT;
-extern(System) alias fp_glGetHistogramParameterfvEXT = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetHistogramParameterfvEXT glGetHistogramParameterfvEXT;
-extern(System) alias fp_glGetHistogramParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetHistogramParameterivEXT glGetHistogramParameterivEXT;
-extern(System) alias fp_glGetMinmaxEXT = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetMinmaxEXT glGetMinmaxEXT;
-extern(System) alias fp_glGetMinmaxParameterfvEXT = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMinmaxParameterfvEXT glGetMinmaxParameterfvEXT;
-extern(System) alias fp_glGetMinmaxParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMinmaxParameterivEXT glGetMinmaxParameterivEXT;
-extern(System) alias fp_glHistogramEXT = void function(GLenum, GLsizei, GLenum, GLboolean) nothrow; __gshared fp_glHistogramEXT glHistogramEXT;
-extern(System) alias fp_glMinmaxEXT = void function(GLenum, GLenum, GLboolean) nothrow; __gshared fp_glMinmaxEXT glMinmaxEXT;
-extern(System) alias fp_glResetHistogramEXT = void function(GLenum) nothrow; __gshared fp_glResetHistogramEXT glResetHistogramEXT;
-extern(System) alias fp_glResetMinmaxEXT = void function(GLenum) nothrow; __gshared fp_glResetMinmaxEXT glResetMinmaxEXT;
-// GL_SGIS_point_parameters
+
 bool GL_SGIS_point_parameters;
 enum uint GL_POINT_SIZE_MIN_SGIS = 0x8126;
 enum uint GL_POINT_SIZE_MAX_SGIS = 0x8127;
 enum uint GL_POINT_FADE_THRESHOLD_SIZE_SGIS = 0x8128;
 enum uint GL_DISTANCE_ATTENUATION_SGIS = 0x8129;
-extern(System) alias fp_glPointParameterfSGIS = void function(GLenum, GLfloat) nothrow; __gshared fp_glPointParameterfSGIS glPointParameterfSGIS;
-extern(System) alias fp_glPointParameterfvSGIS = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glPointParameterfvSGIS glPointParameterfvSGIS;
-// GL_EXT_direct_state_access
+
 bool GL_EXT_direct_state_access;
 enum uint GL_PROGRAM_MATRIX_EXT = 0x8E2D;
 enum uint GL_TRANSPOSE_PROGRAM_MATRIX_EXT = 0x8E2E;
 enum uint GL_PROGRAM_MATRIX_STACK_DEPTH_EXT = 0x8E2F;
-extern(System) alias fp_glMatrixLoadfEXT = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMatrixLoadfEXT glMatrixLoadfEXT;
-extern(System) alias fp_glMatrixLoaddEXT = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMatrixLoaddEXT glMatrixLoaddEXT;
-extern(System) alias fp_glMatrixMultfEXT = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMatrixMultfEXT glMatrixMultfEXT;
-extern(System) alias fp_glMatrixMultdEXT = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMatrixMultdEXT glMatrixMultdEXT;
-extern(System) alias fp_glMatrixLoadIdentityEXT = void function(GLenum) nothrow; __gshared fp_glMatrixLoadIdentityEXT glMatrixLoadIdentityEXT;
-extern(System) alias fp_glMatrixRotatefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glMatrixRotatefEXT glMatrixRotatefEXT;
-extern(System) alias fp_glMatrixRotatedEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMatrixRotatedEXT glMatrixRotatedEXT;
-extern(System) alias fp_glMatrixScalefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glMatrixScalefEXT glMatrixScalefEXT;
-extern(System) alias fp_glMatrixScaledEXT = void function(GLenum, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMatrixScaledEXT glMatrixScaledEXT;
-extern(System) alias fp_glMatrixTranslatefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glMatrixTranslatefEXT glMatrixTranslatefEXT;
-extern(System) alias fp_glMatrixTranslatedEXT = void function(GLenum, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMatrixTranslatedEXT glMatrixTranslatedEXT;
-extern(System) alias fp_glMatrixFrustumEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMatrixFrustumEXT glMatrixFrustumEXT;
-extern(System) alias fp_glMatrixOrthoEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMatrixOrthoEXT glMatrixOrthoEXT;
-extern(System) alias fp_glMatrixPopEXT = void function(GLenum) nothrow; __gshared fp_glMatrixPopEXT glMatrixPopEXT;
-extern(System) alias fp_glMatrixPushEXT = void function(GLenum) nothrow; __gshared fp_glMatrixPushEXT glMatrixPushEXT;
-extern(System) alias fp_glClientAttribDefaultEXT = void function(GLbitfield) nothrow; __gshared fp_glClientAttribDefaultEXT glClientAttribDefaultEXT;
-extern(System) alias fp_glPushClientAttribDefaultEXT = void function(GLbitfield) nothrow; __gshared fp_glPushClientAttribDefaultEXT glPushClientAttribDefaultEXT;
-extern(System) alias fp_glTextureParameterfEXT = void function(GLuint, GLenum, GLenum, GLfloat) nothrow; __gshared fp_glTextureParameterfEXT glTextureParameterfEXT;
-extern(System) alias fp_glTextureParameterfvEXT = void function(GLuint, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glTextureParameterfvEXT glTextureParameterfvEXT;
-extern(System) alias fp_glTextureParameteriEXT = void function(GLuint, GLenum, GLenum, GLint) nothrow; __gshared fp_glTextureParameteriEXT glTextureParameteriEXT;
-extern(System) alias fp_glTextureParameterivEXT = void function(GLuint, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glTextureParameterivEXT glTextureParameterivEXT;
-extern(System) alias fp_glTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureImage1DEXT glTextureImage1DEXT;
-extern(System) alias fp_glTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureImage2DEXT glTextureImage2DEXT;
-extern(System) alias fp_glTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureSubImage1DEXT glTextureSubImage1DEXT;
-extern(System) alias fp_glTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureSubImage2DEXT glTextureSubImage2DEXT;
-extern(System) alias fp_glCopyTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint) nothrow; __gshared fp_glCopyTextureImage1DEXT glCopyTextureImage1DEXT;
-extern(System) alias fp_glCopyTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint) nothrow; __gshared fp_glCopyTextureImage2DEXT glCopyTextureImage2DEXT;
-extern(System) alias fp_glCopyTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyTextureSubImage1DEXT glCopyTextureSubImage1DEXT;
-extern(System) alias fp_glCopyTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyTextureSubImage2DEXT glCopyTextureSubImage2DEXT;
-extern(System) alias fp_glGetTextureImageEXT = void function(GLuint, GLenum, GLint, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetTextureImageEXT glGetTextureImageEXT;
-extern(System) alias fp_glGetTextureParameterfvEXT = void function(GLuint, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetTextureParameterfvEXT glGetTextureParameterfvEXT;
-extern(System) alias fp_glGetTextureParameterivEXT = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetTextureParameterivEXT glGetTextureParameterivEXT;
-extern(System) alias fp_glGetTextureLevelParameterfvEXT = void function(GLuint, GLenum, GLint, GLenum, GLfloat*) nothrow; __gshared fp_glGetTextureLevelParameterfvEXT glGetTextureLevelParameterfvEXT;
-extern(System) alias fp_glGetTextureLevelParameterivEXT = void function(GLuint, GLenum, GLint, GLenum, GLint*) nothrow; __gshared fp_glGetTextureLevelParameterivEXT glGetTextureLevelParameterivEXT;
-extern(System) alias fp_glTextureImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureImage3DEXT glTextureImage3DEXT;
-extern(System) alias fp_glTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTextureSubImage3DEXT glTextureSubImage3DEXT;
-extern(System) alias fp_glCopyTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyTextureSubImage3DEXT glCopyTextureSubImage3DEXT;
-extern(System) alias fp_glBindMultiTextureEXT = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glBindMultiTextureEXT glBindMultiTextureEXT;
-extern(System) alias fp_glMultiTexCoordPointerEXT = void function(GLenum, GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glMultiTexCoordPointerEXT glMultiTexCoordPointerEXT;
-extern(System) alias fp_glMultiTexEnvfEXT = void function(GLenum, GLenum, GLenum, GLfloat) nothrow; __gshared fp_glMultiTexEnvfEXT glMultiTexEnvfEXT;
-extern(System) alias fp_glMultiTexEnvfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexEnvfvEXT glMultiTexEnvfvEXT;
-extern(System) alias fp_glMultiTexEnviEXT = void function(GLenum, GLenum, GLenum, GLint) nothrow; __gshared fp_glMultiTexEnviEXT glMultiTexEnviEXT;
-extern(System) alias fp_glMultiTexEnvivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexEnvivEXT glMultiTexEnvivEXT;
-extern(System) alias fp_glMultiTexGendEXT = void function(GLenum, GLenum, GLenum, GLdouble) nothrow; __gshared fp_glMultiTexGendEXT glMultiTexGendEXT;
-extern(System) alias fp_glMultiTexGendvEXT = void function(GLenum, GLenum, GLenum, const(GLdouble)*) nothrow; __gshared fp_glMultiTexGendvEXT glMultiTexGendvEXT;
-extern(System) alias fp_glMultiTexGenfEXT = void function(GLenum, GLenum, GLenum, GLfloat) nothrow; __gshared fp_glMultiTexGenfEXT glMultiTexGenfEXT;
-extern(System) alias fp_glMultiTexGenfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexGenfvEXT glMultiTexGenfvEXT;
-extern(System) alias fp_glMultiTexGeniEXT = void function(GLenum, GLenum, GLenum, GLint) nothrow; __gshared fp_glMultiTexGeniEXT glMultiTexGeniEXT;
-extern(System) alias fp_glMultiTexGenivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexGenivEXT glMultiTexGenivEXT;
-extern(System) alias fp_glGetMultiTexEnvfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMultiTexEnvfvEXT glGetMultiTexEnvfvEXT;
-extern(System) alias fp_glGetMultiTexEnvivEXT = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMultiTexEnvivEXT glGetMultiTexEnvivEXT;
-extern(System) alias fp_glGetMultiTexGendvEXT = void function(GLenum, GLenum, GLenum, GLdouble*) nothrow; __gshared fp_glGetMultiTexGendvEXT glGetMultiTexGendvEXT;
-extern(System) alias fp_glGetMultiTexGenfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMultiTexGenfvEXT glGetMultiTexGenfvEXT;
-extern(System) alias fp_glGetMultiTexGenivEXT = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMultiTexGenivEXT glGetMultiTexGenivEXT;
-extern(System) alias fp_glMultiTexParameteriEXT = void function(GLenum, GLenum, GLenum, GLint) nothrow; __gshared fp_glMultiTexParameteriEXT glMultiTexParameteriEXT;
-extern(System) alias fp_glMultiTexParameterivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexParameterivEXT glMultiTexParameterivEXT;
-extern(System) alias fp_glMultiTexParameterfEXT = void function(GLenum, GLenum, GLenum, GLfloat) nothrow; __gshared fp_glMultiTexParameterfEXT glMultiTexParameterfEXT;
-extern(System) alias fp_glMultiTexParameterfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexParameterfvEXT glMultiTexParameterfvEXT;
-extern(System) alias fp_glMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexImage1DEXT glMultiTexImage1DEXT;
-extern(System) alias fp_glMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexImage2DEXT glMultiTexImage2DEXT;
-extern(System) alias fp_glMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexSubImage1DEXT glMultiTexSubImage1DEXT;
-extern(System) alias fp_glMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexSubImage2DEXT glMultiTexSubImage2DEXT;
-extern(System) alias fp_glCopyMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint) nothrow; __gshared fp_glCopyMultiTexImage1DEXT glCopyMultiTexImage1DEXT;
-extern(System) alias fp_glCopyMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint) nothrow; __gshared fp_glCopyMultiTexImage2DEXT glCopyMultiTexImage2DEXT;
-extern(System) alias fp_glCopyMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyMultiTexSubImage1DEXT glCopyMultiTexSubImage1DEXT;
-extern(System) alias fp_glCopyMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyMultiTexSubImage2DEXT glCopyMultiTexSubImage2DEXT;
-extern(System) alias fp_glGetMultiTexImageEXT = void function(GLenum, GLenum, GLint, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetMultiTexImageEXT glGetMultiTexImageEXT;
-extern(System) alias fp_glGetMultiTexParameterfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMultiTexParameterfvEXT glGetMultiTexParameterfvEXT;
-extern(System) alias fp_glGetMultiTexParameterivEXT = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMultiTexParameterivEXT glGetMultiTexParameterivEXT;
-extern(System) alias fp_glGetMultiTexLevelParameterfvEXT = void function(GLenum, GLenum, GLint, GLenum, GLfloat*) nothrow; __gshared fp_glGetMultiTexLevelParameterfvEXT glGetMultiTexLevelParameterfvEXT;
-extern(System) alias fp_glGetMultiTexLevelParameterivEXT = void function(GLenum, GLenum, GLint, GLenum, GLint*) nothrow; __gshared fp_glGetMultiTexLevelParameterivEXT glGetMultiTexLevelParameterivEXT;
-extern(System) alias fp_glMultiTexImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexImage3DEXT glMultiTexImage3DEXT;
-extern(System) alias fp_glMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glMultiTexSubImage3DEXT glMultiTexSubImage3DEXT;
-extern(System) alias fp_glCopyMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyMultiTexSubImage3DEXT glCopyMultiTexSubImage3DEXT;
-extern(System) alias fp_glEnableClientStateIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glEnableClientStateIndexedEXT glEnableClientStateIndexedEXT;
-extern(System) alias fp_glDisableClientStateIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glDisableClientStateIndexedEXT glDisableClientStateIndexedEXT;
-extern(System) alias fp_glGetFloatIndexedvEXT = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetFloatIndexedvEXT glGetFloatIndexedvEXT;
-extern(System) alias fp_glGetDoubleIndexedvEXT = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetDoubleIndexedvEXT glGetDoubleIndexedvEXT;
-extern(System) alias fp_glGetPointerIndexedvEXT = void function(GLenum, GLuint, GLvoid**) nothrow; __gshared fp_glGetPointerIndexedvEXT glGetPointerIndexedvEXT;
-// extern(System) alias fp_glEnableIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glEnableIndexedEXT glEnableIndexedEXT;
-// extern(System) alias fp_glDisableIndexedEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glDisableIndexedEXT glDisableIndexedEXT;
-// extern(System) alias fp_glIsEnabledIndexedEXT = GLboolean function(GLenum, GLuint) nothrow; __gshared fp_glIsEnabledIndexedEXT glIsEnabledIndexedEXT;
-// extern(System) alias fp_glGetIntegerIndexedvEXT = void function(GLenum, GLuint, GLint*) nothrow; __gshared fp_glGetIntegerIndexedvEXT glGetIntegerIndexedvEXT;
-// extern(System) alias fp_glGetBooleanIndexedvEXT = void function(GLenum, GLuint, GLboolean*) nothrow; __gshared fp_glGetBooleanIndexedvEXT glGetBooleanIndexedvEXT;
-extern(System) alias fp_glCompressedTextureImage3DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureImage3DEXT glCompressedTextureImage3DEXT;
-extern(System) alias fp_glCompressedTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureImage2DEXT glCompressedTextureImage2DEXT;
-extern(System) alias fp_glCompressedTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureImage1DEXT glCompressedTextureImage1DEXT;
-extern(System) alias fp_glCompressedTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureSubImage3DEXT glCompressedTextureSubImage3DEXT;
-extern(System) alias fp_glCompressedTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureSubImage2DEXT glCompressedTextureSubImage2DEXT;
-extern(System) alias fp_glCompressedTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTextureSubImage1DEXT glCompressedTextureSubImage1DEXT;
-extern(System) alias fp_glGetCompressedTextureImageEXT = void function(GLuint, GLenum, GLint, GLvoid*) nothrow; __gshared fp_glGetCompressedTextureImageEXT glGetCompressedTextureImageEXT;
-extern(System) alias fp_glCompressedMultiTexImage3DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexImage3DEXT glCompressedMultiTexImage3DEXT;
-extern(System) alias fp_glCompressedMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexImage2DEXT glCompressedMultiTexImage2DEXT;
-extern(System) alias fp_glCompressedMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexImage1DEXT glCompressedMultiTexImage1DEXT;
-extern(System) alias fp_glCompressedMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexSubImage3DEXT glCompressedMultiTexSubImage3DEXT;
-extern(System) alias fp_glCompressedMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexSubImage2DEXT glCompressedMultiTexSubImage2DEXT;
-extern(System) alias fp_glCompressedMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedMultiTexSubImage1DEXT glCompressedMultiTexSubImage1DEXT;
-extern(System) alias fp_glGetCompressedMultiTexImageEXT = void function(GLenum, GLenum, GLint, GLvoid*) nothrow; __gshared fp_glGetCompressedMultiTexImageEXT glGetCompressedMultiTexImageEXT;
-extern(System) alias fp_glMatrixLoadTransposefEXT = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMatrixLoadTransposefEXT glMatrixLoadTransposefEXT;
-extern(System) alias fp_glMatrixLoadTransposedEXT = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMatrixLoadTransposedEXT glMatrixLoadTransposedEXT;
-extern(System) alias fp_glMatrixMultTransposefEXT = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMatrixMultTransposefEXT glMatrixMultTransposefEXT;
-extern(System) alias fp_glMatrixMultTransposedEXT = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMatrixMultTransposedEXT glMatrixMultTransposedEXT;
-extern(System) alias fp_glNamedBufferDataEXT = void function(GLuint, GLsizeiptr, const(GLvoid)*, GLenum) nothrow; __gshared fp_glNamedBufferDataEXT glNamedBufferDataEXT;
-extern(System) alias fp_glNamedBufferSubDataEXT = void function(GLuint, GLintptr, GLsizeiptr, const(GLvoid)*) nothrow; __gshared fp_glNamedBufferSubDataEXT glNamedBufferSubDataEXT;
-extern(System) alias fp_glMapNamedBufferEXT = void* function(GLuint, GLenum) nothrow; __gshared fp_glMapNamedBufferEXT glMapNamedBufferEXT;
-extern(System) alias fp_glUnmapNamedBufferEXT = GLboolean function(GLuint) nothrow; __gshared fp_glUnmapNamedBufferEXT glUnmapNamedBufferEXT;
-extern(System) alias fp_glGetNamedBufferParameterivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetNamedBufferParameterivEXT glGetNamedBufferParameterivEXT;
-extern(System) alias fp_glGetNamedBufferPointervEXT = void function(GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetNamedBufferPointervEXT glGetNamedBufferPointervEXT;
-extern(System) alias fp_glGetNamedBufferSubDataEXT = void function(GLuint, GLintptr, GLsizeiptr, GLvoid*) nothrow; __gshared fp_glGetNamedBufferSubDataEXT glGetNamedBufferSubDataEXT;
-// extern(System) alias fp_glProgramUniform1fEXT = void function(GLuint, GLint, GLfloat) nothrow; __gshared fp_glProgramUniform1fEXT glProgramUniform1fEXT;
-// extern(System) alias fp_glProgramUniform2fEXT = void function(GLuint, GLint, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform2fEXT glProgramUniform2fEXT;
-// extern(System) alias fp_glProgramUniform3fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform3fEXT glProgramUniform3fEXT;
-// extern(System) alias fp_glProgramUniform4fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform4fEXT glProgramUniform4fEXT;
-// extern(System) alias fp_glProgramUniform1iEXT = void function(GLuint, GLint, GLint) nothrow; __gshared fp_glProgramUniform1iEXT glProgramUniform1iEXT;
-// extern(System) alias fp_glProgramUniform2iEXT = void function(GLuint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform2iEXT glProgramUniform2iEXT;
-// extern(System) alias fp_glProgramUniform3iEXT = void function(GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform3iEXT glProgramUniform3iEXT;
-// extern(System) alias fp_glProgramUniform4iEXT = void function(GLuint, GLint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform4iEXT glProgramUniform4iEXT;
-// extern(System) alias fp_glProgramUniform1fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform1fvEXT glProgramUniform1fvEXT;
-// extern(System) alias fp_glProgramUniform2fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform2fvEXT glProgramUniform2fvEXT;
-// extern(System) alias fp_glProgramUniform3fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform3fvEXT glProgramUniform3fvEXT;
-// extern(System) alias fp_glProgramUniform4fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform4fvEXT glProgramUniform4fvEXT;
-// extern(System) alias fp_glProgramUniform1ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform1ivEXT glProgramUniform1ivEXT;
-// extern(System) alias fp_glProgramUniform2ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform2ivEXT glProgramUniform2ivEXT;
-// extern(System) alias fp_glProgramUniform3ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform3ivEXT glProgramUniform3ivEXT;
-// extern(System) alias fp_glProgramUniform4ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform4ivEXT glProgramUniform4ivEXT;
-// extern(System) alias fp_glProgramUniformMatrix2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2fvEXT glProgramUniformMatrix2fvEXT;
-// extern(System) alias fp_glProgramUniformMatrix3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3fvEXT glProgramUniformMatrix3fvEXT;
-// extern(System) alias fp_glProgramUniformMatrix4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4fvEXT glProgramUniformMatrix4fvEXT;
-extern(System) alias fp_glProgramUniformMatrix2x3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2x3fvEXT glProgramUniformMatrix2x3fvEXT;
-extern(System) alias fp_glProgramUniformMatrix3x2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3x2fvEXT glProgramUniformMatrix3x2fvEXT;
-extern(System) alias fp_glProgramUniformMatrix2x4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2x4fvEXT glProgramUniformMatrix2x4fvEXT;
-extern(System) alias fp_glProgramUniformMatrix4x2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4x2fvEXT glProgramUniformMatrix4x2fvEXT;
-extern(System) alias fp_glProgramUniformMatrix3x4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3x4fvEXT glProgramUniformMatrix3x4fvEXT;
-extern(System) alias fp_glProgramUniformMatrix4x3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4x3fvEXT glProgramUniformMatrix4x3fvEXT;
-extern(System) alias fp_glTextureBufferEXT = void function(GLuint, GLenum, GLenum, GLuint) nothrow; __gshared fp_glTextureBufferEXT glTextureBufferEXT;
-extern(System) alias fp_glMultiTexBufferEXT = void function(GLenum, GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexBufferEXT glMultiTexBufferEXT;
-extern(System) alias fp_glTextureParameterIivEXT = void function(GLuint, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glTextureParameterIivEXT glTextureParameterIivEXT;
-extern(System) alias fp_glTextureParameterIuivEXT = void function(GLuint, GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glTextureParameterIuivEXT glTextureParameterIuivEXT;
-extern(System) alias fp_glGetTextureParameterIivEXT = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetTextureParameterIivEXT glGetTextureParameterIivEXT;
-extern(System) alias fp_glGetTextureParameterIuivEXT = void function(GLuint, GLenum, GLenum, GLuint*) nothrow; __gshared fp_glGetTextureParameterIuivEXT glGetTextureParameterIuivEXT;
-extern(System) alias fp_glMultiTexParameterIivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexParameterIivEXT glMultiTexParameterIivEXT;
-extern(System) alias fp_glMultiTexParameterIuivEXT = void function(GLenum, GLenum, GLenum, const(GLuint)*) nothrow; __gshared fp_glMultiTexParameterIuivEXT glMultiTexParameterIuivEXT;
-extern(System) alias fp_glGetMultiTexParameterIivEXT = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMultiTexParameterIivEXT glGetMultiTexParameterIivEXT;
-extern(System) alias fp_glGetMultiTexParameterIuivEXT = void function(GLenum, GLenum, GLenum, GLuint*) nothrow; __gshared fp_glGetMultiTexParameterIuivEXT glGetMultiTexParameterIuivEXT;
-extern(System) alias fp_glProgramUniform1uiEXT = void function(GLuint, GLint, GLuint) nothrow; __gshared fp_glProgramUniform1uiEXT glProgramUniform1uiEXT;
-extern(System) alias fp_glProgramUniform2uiEXT = void function(GLuint, GLint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform2uiEXT glProgramUniform2uiEXT;
-extern(System) alias fp_glProgramUniform3uiEXT = void function(GLuint, GLint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform3uiEXT glProgramUniform3uiEXT;
-extern(System) alias fp_glProgramUniform4uiEXT = void function(GLuint, GLint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform4uiEXT glProgramUniform4uiEXT;
-extern(System) alias fp_glProgramUniform1uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform1uivEXT glProgramUniform1uivEXT;
-extern(System) alias fp_glProgramUniform2uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform2uivEXT glProgramUniform2uivEXT;
-extern(System) alias fp_glProgramUniform3uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform3uivEXT glProgramUniform3uivEXT;
-extern(System) alias fp_glProgramUniform4uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform4uivEXT glProgramUniform4uivEXT;
-extern(System) alias fp_glNamedProgramLocalParameters4fvEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glNamedProgramLocalParameters4fvEXT glNamedProgramLocalParameters4fvEXT;
-extern(System) alias fp_glNamedProgramLocalParameterI4iEXT = void function(GLuint, GLenum, GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glNamedProgramLocalParameterI4iEXT glNamedProgramLocalParameterI4iEXT;
-extern(System) alias fp_glNamedProgramLocalParameterI4ivEXT = void function(GLuint, GLenum, GLuint, const(GLint)*) nothrow; __gshared fp_glNamedProgramLocalParameterI4ivEXT glNamedProgramLocalParameterI4ivEXT;
-extern(System) alias fp_glNamedProgramLocalParametersI4ivEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLint)*) nothrow; __gshared fp_glNamedProgramLocalParametersI4ivEXT glNamedProgramLocalParametersI4ivEXT;
-extern(System) alias fp_glNamedProgramLocalParameterI4uiEXT = void function(GLuint, GLenum, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glNamedProgramLocalParameterI4uiEXT glNamedProgramLocalParameterI4uiEXT;
-extern(System) alias fp_glNamedProgramLocalParameterI4uivEXT = void function(GLuint, GLenum, GLuint, const(GLuint)*) nothrow; __gshared fp_glNamedProgramLocalParameterI4uivEXT glNamedProgramLocalParameterI4uivEXT;
-extern(System) alias fp_glNamedProgramLocalParametersI4uivEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glNamedProgramLocalParametersI4uivEXT glNamedProgramLocalParametersI4uivEXT;
-extern(System) alias fp_glGetNamedProgramLocalParameterIivEXT = void function(GLuint, GLenum, GLuint, GLint*) nothrow; __gshared fp_glGetNamedProgramLocalParameterIivEXT glGetNamedProgramLocalParameterIivEXT;
-extern(System) alias fp_glGetNamedProgramLocalParameterIuivEXT = void function(GLuint, GLenum, GLuint, GLuint*) nothrow; __gshared fp_glGetNamedProgramLocalParameterIuivEXT glGetNamedProgramLocalParameterIuivEXT;
-extern(System) alias fp_glEnableClientStateiEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glEnableClientStateiEXT glEnableClientStateiEXT;
-extern(System) alias fp_glDisableClientStateiEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glDisableClientStateiEXT glDisableClientStateiEXT;
-extern(System) alias fp_glGetFloati_vEXT = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetFloati_vEXT glGetFloati_vEXT;
-extern(System) alias fp_glGetDoublei_vEXT = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetDoublei_vEXT glGetDoublei_vEXT;
-extern(System) alias fp_glGetPointeri_vEXT = void function(GLenum, GLuint, GLvoid**) nothrow; __gshared fp_glGetPointeri_vEXT glGetPointeri_vEXT;
-extern(System) alias fp_glNamedProgramStringEXT = void function(GLuint, GLenum, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glNamedProgramStringEXT glNamedProgramStringEXT;
-extern(System) alias fp_glNamedProgramLocalParameter4dEXT = void function(GLuint, GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glNamedProgramLocalParameter4dEXT glNamedProgramLocalParameter4dEXT;
-extern(System) alias fp_glNamedProgramLocalParameter4dvEXT = void function(GLuint, GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glNamedProgramLocalParameter4dvEXT glNamedProgramLocalParameter4dvEXT;
-extern(System) alias fp_glNamedProgramLocalParameter4fEXT = void function(GLuint, GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glNamedProgramLocalParameter4fEXT glNamedProgramLocalParameter4fEXT;
-extern(System) alias fp_glNamedProgramLocalParameter4fvEXT = void function(GLuint, GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glNamedProgramLocalParameter4fvEXT glNamedProgramLocalParameter4fvEXT;
-extern(System) alias fp_glGetNamedProgramLocalParameterdvEXT = void function(GLuint, GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetNamedProgramLocalParameterdvEXT glGetNamedProgramLocalParameterdvEXT;
-extern(System) alias fp_glGetNamedProgramLocalParameterfvEXT = void function(GLuint, GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetNamedProgramLocalParameterfvEXT glGetNamedProgramLocalParameterfvEXT;
-extern(System) alias fp_glGetNamedProgramivEXT = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetNamedProgramivEXT glGetNamedProgramivEXT;
-extern(System) alias fp_glGetNamedProgramStringEXT = void function(GLuint, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetNamedProgramStringEXT glGetNamedProgramStringEXT;
-extern(System) alias fp_glNamedRenderbufferStorageEXT = void function(GLuint, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glNamedRenderbufferStorageEXT glNamedRenderbufferStorageEXT;
-extern(System) alias fp_glGetNamedRenderbufferParameterivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetNamedRenderbufferParameterivEXT glGetNamedRenderbufferParameterivEXT;
-extern(System) alias fp_glNamedRenderbufferStorageMultisampleEXT = void function(GLuint, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glNamedRenderbufferStorageMultisampleEXT glNamedRenderbufferStorageMultisampleEXT;
-extern(System) alias fp_glNamedRenderbufferStorageMultisampleCoverageEXT = void function(GLuint, GLsizei, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glNamedRenderbufferStorageMultisampleCoverageEXT glNamedRenderbufferStorageMultisampleCoverageEXT;
-extern(System) alias fp_glCheckNamedFramebufferStatusEXT = GLenum function(GLuint, GLenum) nothrow; __gshared fp_glCheckNamedFramebufferStatusEXT glCheckNamedFramebufferStatusEXT;
-extern(System) alias fp_glNamedFramebufferTexture1DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glNamedFramebufferTexture1DEXT glNamedFramebufferTexture1DEXT;
-extern(System) alias fp_glNamedFramebufferTexture2DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glNamedFramebufferTexture2DEXT glNamedFramebufferTexture2DEXT;
-extern(System) alias fp_glNamedFramebufferTexture3DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glNamedFramebufferTexture3DEXT glNamedFramebufferTexture3DEXT;
-extern(System) alias fp_glNamedFramebufferRenderbufferEXT = void function(GLuint, GLenum, GLenum, GLuint) nothrow; __gshared fp_glNamedFramebufferRenderbufferEXT glNamedFramebufferRenderbufferEXT;
-extern(System) alias fp_glGetNamedFramebufferAttachmentParameterivEXT = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetNamedFramebufferAttachmentParameterivEXT glGetNamedFramebufferAttachmentParameterivEXT;
-extern(System) alias fp_glGenerateTextureMipmapEXT = void function(GLuint, GLenum) nothrow; __gshared fp_glGenerateTextureMipmapEXT glGenerateTextureMipmapEXT;
-extern(System) alias fp_glGenerateMultiTexMipmapEXT = void function(GLenum, GLenum) nothrow; __gshared fp_glGenerateMultiTexMipmapEXT glGenerateMultiTexMipmapEXT;
-extern(System) alias fp_glFramebufferDrawBufferEXT = void function(GLuint, GLenum) nothrow; __gshared fp_glFramebufferDrawBufferEXT glFramebufferDrawBufferEXT;
-extern(System) alias fp_glFramebufferDrawBuffersEXT = void function(GLuint, GLsizei, const(GLenum)*) nothrow; __gshared fp_glFramebufferDrawBuffersEXT glFramebufferDrawBuffersEXT;
-extern(System) alias fp_glFramebufferReadBufferEXT = void function(GLuint, GLenum) nothrow; __gshared fp_glFramebufferReadBufferEXT glFramebufferReadBufferEXT;
-extern(System) alias fp_glGetFramebufferParameterivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetFramebufferParameterivEXT glGetFramebufferParameterivEXT;
-extern(System) alias fp_glNamedCopyBufferSubDataEXT = void function(GLuint, GLuint, GLintptr, GLintptr, GLsizeiptr) nothrow; __gshared fp_glNamedCopyBufferSubDataEXT glNamedCopyBufferSubDataEXT;
-extern(System) alias fp_glNamedFramebufferTextureEXT = void function(GLuint, GLenum, GLuint, GLint) nothrow; __gshared fp_glNamedFramebufferTextureEXT glNamedFramebufferTextureEXT;
-extern(System) alias fp_glNamedFramebufferTextureLayerEXT = void function(GLuint, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glNamedFramebufferTextureLayerEXT glNamedFramebufferTextureLayerEXT;
-extern(System) alias fp_glNamedFramebufferTextureFaceEXT = void function(GLuint, GLenum, GLuint, GLint, GLenum) nothrow; __gshared fp_glNamedFramebufferTextureFaceEXT glNamedFramebufferTextureFaceEXT;
-extern(System) alias fp_glTextureRenderbufferEXT = void function(GLuint, GLenum, GLuint) nothrow; __gshared fp_glTextureRenderbufferEXT glTextureRenderbufferEXT;
-extern(System) alias fp_glMultiTexRenderbufferEXT = void function(GLenum, GLenum, GLuint) nothrow; __gshared fp_glMultiTexRenderbufferEXT glMultiTexRenderbufferEXT;
-extern(System) alias fp_glVertexArrayVertexOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayVertexOffsetEXT glVertexArrayVertexOffsetEXT;
-extern(System) alias fp_glVertexArrayColorOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayColorOffsetEXT glVertexArrayColorOffsetEXT;
-extern(System) alias fp_glVertexArrayEdgeFlagOffsetEXT = void function(GLuint, GLuint, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayEdgeFlagOffsetEXT glVertexArrayEdgeFlagOffsetEXT;
-extern(System) alias fp_glVertexArrayIndexOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayIndexOffsetEXT glVertexArrayIndexOffsetEXT;
-extern(System) alias fp_glVertexArrayNormalOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayNormalOffsetEXT glVertexArrayNormalOffsetEXT;
-extern(System) alias fp_glVertexArrayTexCoordOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayTexCoordOffsetEXT glVertexArrayTexCoordOffsetEXT;
-extern(System) alias fp_glVertexArrayMultiTexCoordOffsetEXT = void function(GLuint, GLuint, GLenum, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayMultiTexCoordOffsetEXT glVertexArrayMultiTexCoordOffsetEXT;
-extern(System) alias fp_glVertexArrayFogCoordOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayFogCoordOffsetEXT glVertexArrayFogCoordOffsetEXT;
-extern(System) alias fp_glVertexArraySecondaryColorOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArraySecondaryColorOffsetEXT glVertexArraySecondaryColorOffsetEXT;
-extern(System) alias fp_glVertexArrayVertexAttribOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLboolean, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayVertexAttribOffsetEXT glVertexArrayVertexAttribOffsetEXT;
-extern(System) alias fp_glVertexArrayVertexAttribIOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayVertexAttribIOffsetEXT glVertexArrayVertexAttribIOffsetEXT;
-extern(System) alias fp_glEnableVertexArrayEXT = void function(GLuint, GLenum) nothrow; __gshared fp_glEnableVertexArrayEXT glEnableVertexArrayEXT;
-extern(System) alias fp_glDisableVertexArrayEXT = void function(GLuint, GLenum) nothrow; __gshared fp_glDisableVertexArrayEXT glDisableVertexArrayEXT;
-extern(System) alias fp_glEnableVertexArrayAttribEXT = void function(GLuint, GLuint) nothrow; __gshared fp_glEnableVertexArrayAttribEXT glEnableVertexArrayAttribEXT;
-extern(System) alias fp_glDisableVertexArrayAttribEXT = void function(GLuint, GLuint) nothrow; __gshared fp_glDisableVertexArrayAttribEXT glDisableVertexArrayAttribEXT;
-extern(System) alias fp_glGetVertexArrayIntegervEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexArrayIntegervEXT glGetVertexArrayIntegervEXT;
-extern(System) alias fp_glGetVertexArrayPointervEXT = void function(GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetVertexArrayPointervEXT glGetVertexArrayPointervEXT;
-extern(System) alias fp_glGetVertexArrayIntegeri_vEXT = void function(GLuint, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexArrayIntegeri_vEXT glGetVertexArrayIntegeri_vEXT;
-extern(System) alias fp_glGetVertexArrayPointeri_vEXT = void function(GLuint, GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetVertexArrayPointeri_vEXT glGetVertexArrayPointeri_vEXT;
-extern(System) alias fp_glMapNamedBufferRangeEXT = void* function(GLuint, GLintptr, GLsizeiptr, GLbitfield) nothrow; __gshared fp_glMapNamedBufferRangeEXT glMapNamedBufferRangeEXT;
-extern(System) alias fp_glFlushMappedNamedBufferRangeEXT = void function(GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glFlushMappedNamedBufferRangeEXT glFlushMappedNamedBufferRangeEXT;
-extern(System) alias fp_glClearNamedBufferDataEXT = void function(GLuint, GLenum, GLenum, GLenum, const(void)*) nothrow; __gshared fp_glClearNamedBufferDataEXT glClearNamedBufferDataEXT;
-extern(System) alias fp_glClearNamedBufferSubDataEXT = void function(GLuint, GLenum, GLenum, GLenum, GLsizeiptr, GLsizeiptr, const(void)*) nothrow; __gshared fp_glClearNamedBufferSubDataEXT glClearNamedBufferSubDataEXT;
-extern(System) alias fp_glNamedFramebufferParameteriEXT = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glNamedFramebufferParameteriEXT glNamedFramebufferParameteriEXT;
-extern(System) alias fp_glGetNamedFramebufferParameterivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetNamedFramebufferParameterivEXT glGetNamedFramebufferParameterivEXT;
-extern(System) alias fp_glProgramUniform1dEXT = void function(GLuint, GLint, GLdouble) nothrow; __gshared fp_glProgramUniform1dEXT glProgramUniform1dEXT;
-extern(System) alias fp_glProgramUniform2dEXT = void function(GLuint, GLint, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform2dEXT glProgramUniform2dEXT;
-extern(System) alias fp_glProgramUniform3dEXT = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform3dEXT glProgramUniform3dEXT;
-extern(System) alias fp_glProgramUniform4dEXT = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform4dEXT glProgramUniform4dEXT;
-extern(System) alias fp_glProgramUniform1dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform1dvEXT glProgramUniform1dvEXT;
-extern(System) alias fp_glProgramUniform2dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform2dvEXT glProgramUniform2dvEXT;
-extern(System) alias fp_glProgramUniform3dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform3dvEXT glProgramUniform3dvEXT;
-extern(System) alias fp_glProgramUniform4dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform4dvEXT glProgramUniform4dvEXT;
-extern(System) alias fp_glProgramUniformMatrix2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2dvEXT glProgramUniformMatrix2dvEXT;
-extern(System) alias fp_glProgramUniformMatrix3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3dvEXT glProgramUniformMatrix3dvEXT;
-extern(System) alias fp_glProgramUniformMatrix4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4dvEXT glProgramUniformMatrix4dvEXT;
-extern(System) alias fp_glProgramUniformMatrix2x3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2x3dvEXT glProgramUniformMatrix2x3dvEXT;
-extern(System) alias fp_glProgramUniformMatrix2x4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2x4dvEXT glProgramUniformMatrix2x4dvEXT;
-extern(System) alias fp_glProgramUniformMatrix3x2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3x2dvEXT glProgramUniformMatrix3x2dvEXT;
-extern(System) alias fp_glProgramUniformMatrix3x4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3x4dvEXT glProgramUniformMatrix3x4dvEXT;
-extern(System) alias fp_glProgramUniformMatrix4x2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4x2dvEXT glProgramUniformMatrix4x2dvEXT;
-extern(System) alias fp_glProgramUniformMatrix4x3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4x3dvEXT glProgramUniformMatrix4x3dvEXT;
-extern(System) alias fp_glTextureBufferRangeEXT = void function(GLuint, GLenum, GLenum, GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glTextureBufferRangeEXT glTextureBufferRangeEXT;
-extern(System) alias fp_glTextureStorage1DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei) nothrow; __gshared fp_glTextureStorage1DEXT glTextureStorage1DEXT;
-extern(System) alias fp_glTextureStorage2DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glTextureStorage2DEXT glTextureStorage2DEXT;
-extern(System) alias fp_glTextureStorage3DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei) nothrow; __gshared fp_glTextureStorage3DEXT glTextureStorage3DEXT;
-extern(System) alias fp_glTextureStorage2DMultisampleEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureStorage2DMultisampleEXT glTextureStorage2DMultisampleEXT;
-extern(System) alias fp_glTextureStorage3DMultisampleEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTextureStorage3DMultisampleEXT glTextureStorage3DMultisampleEXT;
-extern(System) alias fp_glVertexArrayBindVertexBufferEXT = void function(GLuint, GLuint, GLuint, GLintptr, GLsizei) nothrow; __gshared fp_glVertexArrayBindVertexBufferEXT glVertexArrayBindVertexBufferEXT;
-extern(System) alias fp_glVertexArrayVertexAttribFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLboolean, GLuint) nothrow; __gshared fp_glVertexArrayVertexAttribFormatEXT glVertexArrayVertexAttribFormatEXT;
-extern(System) alias fp_glVertexArrayVertexAttribIFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLuint) nothrow; __gshared fp_glVertexArrayVertexAttribIFormatEXT glVertexArrayVertexAttribIFormatEXT;
-extern(System) alias fp_glVertexArrayVertexAttribLFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLuint) nothrow; __gshared fp_glVertexArrayVertexAttribLFormatEXT glVertexArrayVertexAttribLFormatEXT;
-extern(System) alias fp_glVertexArrayVertexAttribBindingEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glVertexArrayVertexAttribBindingEXT glVertexArrayVertexAttribBindingEXT;
-extern(System) alias fp_glVertexArrayVertexBindingDivisorEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glVertexArrayVertexBindingDivisorEXT glVertexArrayVertexBindingDivisorEXT;
-extern(System) alias fp_glVertexArrayVertexAttribLOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr) nothrow; __gshared fp_glVertexArrayVertexAttribLOffsetEXT glVertexArrayVertexAttribLOffsetEXT;
-extern(System) alias fp_glTexturePageCommitmentEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexturePageCommitmentEXT glTexturePageCommitmentEXT;
-// GL_AMD_sample_positions
+
 bool GL_AMD_sample_positions;
 enum uint GL_SUBSAMPLE_DISTANCE_AMD = 0x883F;
-extern(System) alias fp_glSetMultisamplefvAMD = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glSetMultisamplefvAMD glSetMultisamplefvAMD;
-// GL_NV_vertex_program
+
 bool GL_NV_vertex_program;
 enum uint GL_VERTEX_PROGRAM_NV = 0x8620;
 enum uint GL_VERTEX_STATE_PROGRAM_NV = 0x8621;
@@ -3359,75 +1860,9 @@ enum uint GL_MAP2_VERTEX_ATTRIB12_4_NV = 0x867C;
 enum uint GL_MAP2_VERTEX_ATTRIB13_4_NV = 0x867D;
 enum uint GL_MAP2_VERTEX_ATTRIB14_4_NV = 0x867E;
 enum uint GL_MAP2_VERTEX_ATTRIB15_4_NV = 0x867F;
-extern(System) alias fp_glAreProgramsResidentNV = GLboolean function(GLsizei, const(GLuint)*, GLboolean*) nothrow; __gshared fp_glAreProgramsResidentNV glAreProgramsResidentNV;
-extern(System) alias fp_glBindProgramNV = void function(GLenum, GLuint) nothrow; __gshared fp_glBindProgramNV glBindProgramNV;
-extern(System) alias fp_glDeleteProgramsNV = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteProgramsNV glDeleteProgramsNV;
-extern(System) alias fp_glExecuteProgramNV = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glExecuteProgramNV glExecuteProgramNV;
-extern(System) alias fp_glGenProgramsNV = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenProgramsNV glGenProgramsNV;
-extern(System) alias fp_glGetProgramParameterdvNV = void function(GLenum, GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetProgramParameterdvNV glGetProgramParameterdvNV;
-extern(System) alias fp_glGetProgramParameterfvNV = void function(GLenum, GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetProgramParameterfvNV glGetProgramParameterfvNV;
-extern(System) alias fp_glGetProgramivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetProgramivNV glGetProgramivNV;
-extern(System) alias fp_glGetProgramStringNV = void function(GLuint, GLenum, GLubyte*) nothrow; __gshared fp_glGetProgramStringNV glGetProgramStringNV;
-extern(System) alias fp_glGetTrackMatrixivNV = void function(GLenum, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetTrackMatrixivNV glGetTrackMatrixivNV;
-extern(System) alias fp_glGetVertexAttribdvNV = void function(GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetVertexAttribdvNV glGetVertexAttribdvNV;
-extern(System) alias fp_glGetVertexAttribfvNV = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVertexAttribfvNV glGetVertexAttribfvNV;
-extern(System) alias fp_glGetVertexAttribivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexAttribivNV glGetVertexAttribivNV;
-extern(System) alias fp_glGetVertexAttribPointervNV = void function(GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetVertexAttribPointervNV glGetVertexAttribPointervNV;
-extern(System) alias fp_glIsProgramNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsProgramNV glIsProgramNV;
-extern(System) alias fp_glLoadProgramNV = void function(GLenum, GLuint, GLsizei, const(GLubyte)*) nothrow; __gshared fp_glLoadProgramNV glLoadProgramNV;
-extern(System) alias fp_glProgramParameter4dNV = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramParameter4dNV glProgramParameter4dNV;
-extern(System) alias fp_glProgramParameter4dvNV = void function(GLenum, GLuint, const(GLdouble)*) nothrow; __gshared fp_glProgramParameter4dvNV glProgramParameter4dvNV;
-extern(System) alias fp_glProgramParameter4fNV = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramParameter4fNV glProgramParameter4fNV;
-extern(System) alias fp_glProgramParameter4fvNV = void function(GLenum, GLuint, const(GLfloat)*) nothrow; __gshared fp_glProgramParameter4fvNV glProgramParameter4fvNV;
-extern(System) alias fp_glProgramParameters4dvNV = void function(GLenum, GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramParameters4dvNV glProgramParameters4dvNV;
-extern(System) alias fp_glProgramParameters4fvNV = void function(GLenum, GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramParameters4fvNV glProgramParameters4fvNV;
-extern(System) alias fp_glRequestResidentProgramsNV = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glRequestResidentProgramsNV glRequestResidentProgramsNV;
-extern(System) alias fp_glTrackMatrixNV = void function(GLenum, GLuint, GLenum, GLenum) nothrow; __gshared fp_glTrackMatrixNV glTrackMatrixNV;
-extern(System) alias fp_glVertexAttribPointerNV = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexAttribPointerNV glVertexAttribPointerNV;
-extern(System) alias fp_glVertexAttrib1dNV = void function(GLuint, GLdouble) nothrow; __gshared fp_glVertexAttrib1dNV glVertexAttrib1dNV;
-extern(System) alias fp_glVertexAttrib1dvNV = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib1dvNV glVertexAttrib1dvNV;
-extern(System) alias fp_glVertexAttrib1fNV = void function(GLuint, GLfloat) nothrow; __gshared fp_glVertexAttrib1fNV glVertexAttrib1fNV;
-extern(System) alias fp_glVertexAttrib1fvNV = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib1fvNV glVertexAttrib1fvNV;
-extern(System) alias fp_glVertexAttrib1sNV = void function(GLuint, GLshort) nothrow; __gshared fp_glVertexAttrib1sNV glVertexAttrib1sNV;
-extern(System) alias fp_glVertexAttrib1svNV = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib1svNV glVertexAttrib1svNV;
-extern(System) alias fp_glVertexAttrib2dNV = void function(GLuint, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib2dNV glVertexAttrib2dNV;
-extern(System) alias fp_glVertexAttrib2dvNV = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib2dvNV glVertexAttrib2dvNV;
-extern(System) alias fp_glVertexAttrib2fNV = void function(GLuint, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib2fNV glVertexAttrib2fNV;
-extern(System) alias fp_glVertexAttrib2fvNV = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib2fvNV glVertexAttrib2fvNV;
-extern(System) alias fp_glVertexAttrib2sNV = void function(GLuint, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib2sNV glVertexAttrib2sNV;
-extern(System) alias fp_glVertexAttrib2svNV = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib2svNV glVertexAttrib2svNV;
-extern(System) alias fp_glVertexAttrib3dNV = void function(GLuint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib3dNV glVertexAttrib3dNV;
-extern(System) alias fp_glVertexAttrib3dvNV = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib3dvNV glVertexAttrib3dvNV;
-extern(System) alias fp_glVertexAttrib3fNV = void function(GLuint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib3fNV glVertexAttrib3fNV;
-extern(System) alias fp_glVertexAttrib3fvNV = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib3fvNV glVertexAttrib3fvNV;
-extern(System) alias fp_glVertexAttrib3sNV = void function(GLuint, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib3sNV glVertexAttrib3sNV;
-extern(System) alias fp_glVertexAttrib3svNV = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib3svNV glVertexAttrib3svNV;
-extern(System) alias fp_glVertexAttrib4dNV = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttrib4dNV glVertexAttrib4dNV;
-extern(System) alias fp_glVertexAttrib4dvNV = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttrib4dvNV glVertexAttrib4dvNV;
-extern(System) alias fp_glVertexAttrib4fNV = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexAttrib4fNV glVertexAttrib4fNV;
-extern(System) alias fp_glVertexAttrib4fvNV = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVertexAttrib4fvNV glVertexAttrib4fvNV;
-extern(System) alias fp_glVertexAttrib4sNV = void function(GLuint, GLshort, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexAttrib4sNV glVertexAttrib4sNV;
-extern(System) alias fp_glVertexAttrib4svNV = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttrib4svNV glVertexAttrib4svNV;
-extern(System) alias fp_glVertexAttrib4ubNV = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte) nothrow; __gshared fp_glVertexAttrib4ubNV glVertexAttrib4ubNV;
-extern(System) alias fp_glVertexAttrib4ubvNV = void function(GLuint, const(GLubyte)*) nothrow; __gshared fp_glVertexAttrib4ubvNV glVertexAttrib4ubvNV;
-extern(System) alias fp_glVertexAttribs1dvNV = void function(GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribs1dvNV glVertexAttribs1dvNV;
-extern(System) alias fp_glVertexAttribs1fvNV = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glVertexAttribs1fvNV glVertexAttribs1fvNV;
-extern(System) alias fp_glVertexAttribs1svNV = void function(GLuint, GLsizei, const(GLshort)*) nothrow; __gshared fp_glVertexAttribs1svNV glVertexAttribs1svNV;
-extern(System) alias fp_glVertexAttribs2dvNV = void function(GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribs2dvNV glVertexAttribs2dvNV;
-extern(System) alias fp_glVertexAttribs2fvNV = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glVertexAttribs2fvNV glVertexAttribs2fvNV;
-extern(System) alias fp_glVertexAttribs2svNV = void function(GLuint, GLsizei, const(GLshort)*) nothrow; __gshared fp_glVertexAttribs2svNV glVertexAttribs2svNV;
-extern(System) alias fp_glVertexAttribs3dvNV = void function(GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribs3dvNV glVertexAttribs3dvNV;
-extern(System) alias fp_glVertexAttribs3fvNV = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glVertexAttribs3fvNV glVertexAttribs3fvNV;
-extern(System) alias fp_glVertexAttribs3svNV = void function(GLuint, GLsizei, const(GLshort)*) nothrow; __gshared fp_glVertexAttribs3svNV glVertexAttribs3svNV;
-extern(System) alias fp_glVertexAttribs4dvNV = void function(GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribs4dvNV glVertexAttribs4dvNV;
-extern(System) alias fp_glVertexAttribs4fvNV = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glVertexAttribs4fvNV glVertexAttribs4fvNV;
-extern(System) alias fp_glVertexAttribs4svNV = void function(GLuint, GLsizei, const(GLshort)*) nothrow; __gshared fp_glVertexAttribs4svNV glVertexAttribs4svNV;
-extern(System) alias fp_glVertexAttribs4ubvNV = void function(GLuint, GLsizei, const(GLubyte)*) nothrow; __gshared fp_glVertexAttribs4ubvNV glVertexAttribs4ubvNV;
-// GL_NVX_conditional_render
+
 bool GL_NVX_conditional_render;
-extern(System) alias fp_glBeginConditionalRenderNVX = void function(GLuint) nothrow; __gshared fp_glBeginConditionalRenderNVX glBeginConditionalRenderNVX;
-extern(System) alias fp_glEndConditionalRenderNVX = void function() nothrow; __gshared fp_glEndConditionalRenderNVX glEndConditionalRenderNVX;
-// GL_EXT_vertex_shader
+
 bool GL_EXT_vertex_shader;
 enum uint GL_VERTEX_SHADER_EXT = 0x8780;
 enum uint GL_VERTEX_SHADER_BINDING_EXT = 0x8781;
@@ -3539,124 +1974,36 @@ enum uint GL_INVARIANT_VALUE_EXT = 0x87EA;
 enum uint GL_INVARIANT_DATATYPE_EXT = 0x87EB;
 enum uint GL_LOCAL_CONSTANT_VALUE_EXT = 0x87EC;
 enum uint GL_LOCAL_CONSTANT_DATATYPE_EXT = 0x87ED;
-extern(System) alias fp_glBeginVertexShaderEXT = void function() nothrow; __gshared fp_glBeginVertexShaderEXT glBeginVertexShaderEXT;
-extern(System) alias fp_glEndVertexShaderEXT = void function() nothrow; __gshared fp_glEndVertexShaderEXT glEndVertexShaderEXT;
-extern(System) alias fp_glBindVertexShaderEXT = void function(GLuint) nothrow; __gshared fp_glBindVertexShaderEXT glBindVertexShaderEXT;
-extern(System) alias fp_glGenVertexShadersEXT = GLuint function(GLuint) nothrow; __gshared fp_glGenVertexShadersEXT glGenVertexShadersEXT;
-extern(System) alias fp_glDeleteVertexShaderEXT = void function(GLuint) nothrow; __gshared fp_glDeleteVertexShaderEXT glDeleteVertexShaderEXT;
-extern(System) alias fp_glShaderOp1EXT = void function(GLenum, GLuint, GLuint) nothrow; __gshared fp_glShaderOp1EXT glShaderOp1EXT;
-extern(System) alias fp_glShaderOp2EXT = void function(GLenum, GLuint, GLuint, GLuint) nothrow; __gshared fp_glShaderOp2EXT glShaderOp2EXT;
-extern(System) alias fp_glShaderOp3EXT = void function(GLenum, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glShaderOp3EXT glShaderOp3EXT;
-extern(System) alias fp_glSwizzleEXT = void function(GLuint, GLuint, GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glSwizzleEXT glSwizzleEXT;
-extern(System) alias fp_glWriteMaskEXT = void function(GLuint, GLuint, GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glWriteMaskEXT glWriteMaskEXT;
-extern(System) alias fp_glInsertComponentEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glInsertComponentEXT glInsertComponentEXT;
-extern(System) alias fp_glExtractComponentEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glExtractComponentEXT glExtractComponentEXT;
-extern(System) alias fp_glGenSymbolsEXT = GLuint function(GLenum, GLenum, GLenum, GLuint) nothrow; __gshared fp_glGenSymbolsEXT glGenSymbolsEXT;
-extern(System) alias fp_glSetInvariantEXT = void function(GLuint, GLenum, const(GLvoid)*) nothrow; __gshared fp_glSetInvariantEXT glSetInvariantEXT;
-extern(System) alias fp_glSetLocalConstantEXT = void function(GLuint, GLenum, const(GLvoid)*) nothrow; __gshared fp_glSetLocalConstantEXT glSetLocalConstantEXT;
-extern(System) alias fp_glVariantbvEXT = void function(GLuint, const(GLbyte)*) nothrow; __gshared fp_glVariantbvEXT glVariantbvEXT;
-extern(System) alias fp_glVariantsvEXT = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVariantsvEXT glVariantsvEXT;
-extern(System) alias fp_glVariantivEXT = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVariantivEXT glVariantivEXT;
-extern(System) alias fp_glVariantfvEXT = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glVariantfvEXT glVariantfvEXT;
-extern(System) alias fp_glVariantdvEXT = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVariantdvEXT glVariantdvEXT;
-extern(System) alias fp_glVariantubvEXT = void function(GLuint, const(GLubyte)*) nothrow; __gshared fp_glVariantubvEXT glVariantubvEXT;
-extern(System) alias fp_glVariantusvEXT = void function(GLuint, const(GLushort)*) nothrow; __gshared fp_glVariantusvEXT glVariantusvEXT;
-extern(System) alias fp_glVariantuivEXT = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVariantuivEXT glVariantuivEXT;
-extern(System) alias fp_glVariantPointerEXT = void function(GLuint, GLenum, GLuint, const(GLvoid)*) nothrow; __gshared fp_glVariantPointerEXT glVariantPointerEXT;
-extern(System) alias fp_glEnableVariantClientStateEXT = void function(GLuint) nothrow; __gshared fp_glEnableVariantClientStateEXT glEnableVariantClientStateEXT;
-extern(System) alias fp_glDisableVariantClientStateEXT = void function(GLuint) nothrow; __gshared fp_glDisableVariantClientStateEXT glDisableVariantClientStateEXT;
-extern(System) alias fp_glBindLightParameterEXT = GLuint function(GLenum, GLenum) nothrow; __gshared fp_glBindLightParameterEXT glBindLightParameterEXT;
-extern(System) alias fp_glBindMaterialParameterEXT = GLuint function(GLenum, GLenum) nothrow; __gshared fp_glBindMaterialParameterEXT glBindMaterialParameterEXT;
-extern(System) alias fp_glBindTexGenParameterEXT = GLuint function(GLenum, GLenum, GLenum) nothrow; __gshared fp_glBindTexGenParameterEXT glBindTexGenParameterEXT;
-extern(System) alias fp_glBindTextureUnitParameterEXT = GLuint function(GLenum, GLenum) nothrow; __gshared fp_glBindTextureUnitParameterEXT glBindTextureUnitParameterEXT;
-extern(System) alias fp_glBindParameterEXT = GLuint function(GLenum) nothrow; __gshared fp_glBindParameterEXT glBindParameterEXT;
-extern(System) alias fp_glIsVariantEnabledEXT = GLboolean function(GLuint, GLenum) nothrow; __gshared fp_glIsVariantEnabledEXT glIsVariantEnabledEXT;
-extern(System) alias fp_glGetVariantBooleanvEXT = void function(GLuint, GLenum, GLboolean*) nothrow; __gshared fp_glGetVariantBooleanvEXT glGetVariantBooleanvEXT;
-extern(System) alias fp_glGetVariantIntegervEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVariantIntegervEXT glGetVariantIntegervEXT;
-extern(System) alias fp_glGetVariantFloatvEXT = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVariantFloatvEXT glGetVariantFloatvEXT;
-extern(System) alias fp_glGetVariantPointervEXT = void function(GLuint, GLenum, GLvoid**) nothrow; __gshared fp_glGetVariantPointervEXT glGetVariantPointervEXT;
-extern(System) alias fp_glGetInvariantBooleanvEXT = void function(GLuint, GLenum, GLboolean*) nothrow; __gshared fp_glGetInvariantBooleanvEXT glGetInvariantBooleanvEXT;
-extern(System) alias fp_glGetInvariantIntegervEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetInvariantIntegervEXT glGetInvariantIntegervEXT;
-extern(System) alias fp_glGetInvariantFloatvEXT = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetInvariantFloatvEXT glGetInvariantFloatvEXT;
-extern(System) alias fp_glGetLocalConstantBooleanvEXT = void function(GLuint, GLenum, GLboolean*) nothrow; __gshared fp_glGetLocalConstantBooleanvEXT glGetLocalConstantBooleanvEXT;
-extern(System) alias fp_glGetLocalConstantIntegervEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetLocalConstantIntegervEXT glGetLocalConstantIntegervEXT;
-extern(System) alias fp_glGetLocalConstantFloatvEXT = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetLocalConstantFloatvEXT glGetLocalConstantFloatvEXT;
-// GL_EXT_blend_func_separate
+
 bool GL_EXT_blend_func_separate;
 enum uint GL_BLEND_DST_RGB_EXT = 0x80C8;
 enum uint GL_BLEND_SRC_RGB_EXT = 0x80C9;
 enum uint GL_BLEND_DST_ALPHA_EXT = 0x80CA;
 enum uint GL_BLEND_SRC_ALPHA_EXT = 0x80CB;
-extern(System) alias fp_glBlendFuncSeparateEXT = void function(GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glBlendFuncSeparateEXT glBlendFuncSeparateEXT;
-// GL_APPLE_fence
+
 bool GL_APPLE_fence;
 enum uint GL_DRAW_PIXELS_APPLE = 0x8A0A;
 enum uint GL_FENCE_APPLE = 0x8A0B;
-extern(System) alias fp_glGenFencesAPPLE = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenFencesAPPLE glGenFencesAPPLE;
-extern(System) alias fp_glDeleteFencesAPPLE = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteFencesAPPLE glDeleteFencesAPPLE;
-extern(System) alias fp_glSetFenceAPPLE = void function(GLuint) nothrow; __gshared fp_glSetFenceAPPLE glSetFenceAPPLE;
-extern(System) alias fp_glIsFenceAPPLE = GLboolean function(GLuint) nothrow; __gshared fp_glIsFenceAPPLE glIsFenceAPPLE;
-extern(System) alias fp_glTestFenceAPPLE = GLboolean function(GLuint) nothrow; __gshared fp_glTestFenceAPPLE glTestFenceAPPLE;
-extern(System) alias fp_glFinishFenceAPPLE = void function(GLuint) nothrow; __gshared fp_glFinishFenceAPPLE glFinishFenceAPPLE;
-extern(System) alias fp_glTestObjectAPPLE = GLboolean function(GLenum, GLuint) nothrow; __gshared fp_glTestObjectAPPLE glTestObjectAPPLE;
-extern(System) alias fp_glFinishObjectAPPLE = void function(GLenum, GLint) nothrow; __gshared fp_glFinishObjectAPPLE glFinishObjectAPPLE;
-// GL_OES_byte_coordinates
+
 bool GL_OES_byte_coordinates;
-extern(System) alias fp_glMultiTexCoord1bOES = void function(GLenum, GLbyte) nothrow; __gshared fp_glMultiTexCoord1bOES glMultiTexCoord1bOES;
-extern(System) alias fp_glMultiTexCoord1bvOES = void function(GLenum, const(GLbyte)*) nothrow; __gshared fp_glMultiTexCoord1bvOES glMultiTexCoord1bvOES;
-extern(System) alias fp_glMultiTexCoord2bOES = void function(GLenum, GLbyte, GLbyte) nothrow; __gshared fp_glMultiTexCoord2bOES glMultiTexCoord2bOES;
-extern(System) alias fp_glMultiTexCoord2bvOES = void function(GLenum, const(GLbyte)*) nothrow; __gshared fp_glMultiTexCoord2bvOES glMultiTexCoord2bvOES;
-extern(System) alias fp_glMultiTexCoord3bOES = void function(GLenum, GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glMultiTexCoord3bOES glMultiTexCoord3bOES;
-extern(System) alias fp_glMultiTexCoord3bvOES = void function(GLenum, const(GLbyte)*) nothrow; __gshared fp_glMultiTexCoord3bvOES glMultiTexCoord3bvOES;
-extern(System) alias fp_glMultiTexCoord4bOES = void function(GLenum, GLbyte, GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glMultiTexCoord4bOES glMultiTexCoord4bOES;
-extern(System) alias fp_glMultiTexCoord4bvOES = void function(GLenum, const(GLbyte)*) nothrow; __gshared fp_glMultiTexCoord4bvOES glMultiTexCoord4bvOES;
-extern(System) alias fp_glTexCoord1bOES = void function(GLbyte) nothrow; __gshared fp_glTexCoord1bOES glTexCoord1bOES;
-extern(System) alias fp_glTexCoord1bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glTexCoord1bvOES glTexCoord1bvOES;
-extern(System) alias fp_glTexCoord2bOES = void function(GLbyte, GLbyte) nothrow; __gshared fp_glTexCoord2bOES glTexCoord2bOES;
-extern(System) alias fp_glTexCoord2bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glTexCoord2bvOES glTexCoord2bvOES;
-extern(System) alias fp_glTexCoord3bOES = void function(GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glTexCoord3bOES glTexCoord3bOES;
-extern(System) alias fp_glTexCoord3bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glTexCoord3bvOES glTexCoord3bvOES;
-extern(System) alias fp_glTexCoord4bOES = void function(GLbyte, GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glTexCoord4bOES glTexCoord4bOES;
-extern(System) alias fp_glTexCoord4bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glTexCoord4bvOES glTexCoord4bvOES;
-extern(System) alias fp_glVertex2bOES = void function(GLbyte) nothrow; __gshared fp_glVertex2bOES glVertex2bOES;
-extern(System) alias fp_glVertex2bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glVertex2bvOES glVertex2bvOES;
-extern(System) alias fp_glVertex3bOES = void function(GLbyte, GLbyte) nothrow; __gshared fp_glVertex3bOES glVertex3bOES;
-extern(System) alias fp_glVertex3bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glVertex3bvOES glVertex3bvOES;
-extern(System) alias fp_glVertex4bOES = void function(GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glVertex4bOES glVertex4bOES;
-extern(System) alias fp_glVertex4bvOES = void function(const(GLbyte)*) nothrow; __gshared fp_glVertex4bvOES glVertex4bvOES;
-// GL_ARB_transpose_matrix
+
 bool GL_ARB_transpose_matrix;
 enum uint GL_TRANSPOSE_MODELVIEW_MATRIX_ARB = 0x84E3;
 enum uint GL_TRANSPOSE_PROJECTION_MATRIX_ARB = 0x84E4;
 enum uint GL_TRANSPOSE_TEXTURE_MATRIX_ARB = 0x84E5;
 enum uint GL_TRANSPOSE_COLOR_MATRIX_ARB = 0x84E6;
-extern(System) alias fp_glLoadTransposeMatrixfARB = void function(const(GLfloat)*) nothrow; __gshared fp_glLoadTransposeMatrixfARB glLoadTransposeMatrixfARB;
-extern(System) alias fp_glLoadTransposeMatrixdARB = void function(const(GLdouble)*) nothrow; __gshared fp_glLoadTransposeMatrixdARB glLoadTransposeMatrixdARB;
-extern(System) alias fp_glMultTransposeMatrixfARB = void function(const(GLfloat)*) nothrow; __gshared fp_glMultTransposeMatrixfARB glMultTransposeMatrixfARB;
-extern(System) alias fp_glMultTransposeMatrixdARB = void function(const(GLdouble)*) nothrow; __gshared fp_glMultTransposeMatrixdARB glMultTransposeMatrixdARB;
-// GL_ARB_provoking_vertex
+
 bool GL_ARB_provoking_vertex;
-// enum uint GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION = 0x8E4C;
-// enum uint GL_FIRST_VERTEX_CONVENTION = 0x8E4D;
-// enum uint GL_LAST_VERTEX_CONVENTION = 0x8E4E;
-// enum uint GL_PROVOKING_VERTEX = 0x8E4F;
-// extern(System) alias fp_glProvokingVertex = void function(GLenum) nothrow; __gshared fp_glProvokingVertex glProvokingVertex;
-// GL_EXT_fog_coord
+
 bool GL_EXT_fog_coord;
 enum uint GL_FOG_COORDINATE_SOURCE_EXT = 0x8450;
 enum uint GL_FOG_COORDINATE_EXT = 0x8451;
-// enum uint GL_FRAGMENT_DEPTH_EXT = 0x8452;
 enum uint GL_CURRENT_FOG_COORDINATE_EXT = 0x8453;
 enum uint GL_FOG_COORDINATE_ARRAY_TYPE_EXT = 0x8454;
 enum uint GL_FOG_COORDINATE_ARRAY_STRIDE_EXT = 0x8455;
 enum uint GL_FOG_COORDINATE_ARRAY_POINTER_EXT = 0x8456;
 enum uint GL_FOG_COORDINATE_ARRAY_EXT = 0x8457;
-extern(System) alias fp_glFogCoordfEXT = void function(GLfloat) nothrow; __gshared fp_glFogCoordfEXT glFogCoordfEXT;
-extern(System) alias fp_glFogCoordfvEXT = void function(const(GLfloat)*) nothrow; __gshared fp_glFogCoordfvEXT glFogCoordfvEXT;
-extern(System) alias fp_glFogCoorddEXT = void function(GLdouble) nothrow; __gshared fp_glFogCoorddEXT glFogCoorddEXT;
-extern(System) alias fp_glFogCoorddvEXT = void function(const(GLdouble)*) nothrow; __gshared fp_glFogCoorddvEXT glFogCoorddvEXT;
-extern(System) alias fp_glFogCoordPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glFogCoordPointerEXT glFogCoordPointerEXT;
-// GL_EXT_vertex_array
+
 bool GL_EXT_vertex_array;
 enum uint GL_VERTEX_ARRAY_EXT = 0x8074;
 enum uint GL_NORMAL_ARRAY_EXT = 0x8075;
@@ -3690,70 +2037,39 @@ enum uint GL_COLOR_ARRAY_POINTER_EXT = 0x8090;
 enum uint GL_INDEX_ARRAY_POINTER_EXT = 0x8091;
 enum uint GL_TEXTURE_COORD_ARRAY_POINTER_EXT = 0x8092;
 enum uint GL_EDGE_FLAG_ARRAY_POINTER_EXT = 0x8093;
-extern(System) alias fp_glArrayElementEXT = void function(GLint) nothrow; __gshared fp_glArrayElementEXT glArrayElementEXT;
-extern(System) alias fp_glColorPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glColorPointerEXT glColorPointerEXT;
-extern(System) alias fp_glDrawArraysEXT = void function(GLenum, GLint, GLsizei) nothrow; __gshared fp_glDrawArraysEXT glDrawArraysEXT;
-extern(System) alias fp_glEdgeFlagPointerEXT = void function(GLsizei, GLsizei, const(GLboolean)*) nothrow; __gshared fp_glEdgeFlagPointerEXT glEdgeFlagPointerEXT;
-extern(System) alias fp_glGetPointervEXT = void function(GLenum, GLvoid**) nothrow; __gshared fp_glGetPointervEXT glGetPointervEXT;
-extern(System) alias fp_glIndexPointerEXT = void function(GLenum, GLsizei, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glIndexPointerEXT glIndexPointerEXT;
-extern(System) alias fp_glNormalPointerEXT = void function(GLenum, GLsizei, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glNormalPointerEXT glNormalPointerEXT;
-extern(System) alias fp_glTexCoordPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glTexCoordPointerEXT glTexCoordPointerEXT;
-extern(System) alias fp_glVertexPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexPointerEXT glVertexPointerEXT;
-// GL_ARB_half_float_vertex
+
 bool GL_ARB_half_float_vertex;
-// enum uint GL_HALF_FLOAT = 0x140B;
-// GL_EXT_blend_equation_separate
+
 bool GL_EXT_blend_equation_separate;
 enum uint GL_BLEND_EQUATION_RGB_EXT = 0x8009;
 enum uint GL_BLEND_EQUATION_ALPHA_EXT = 0x883D;
-extern(System) alias fp_glBlendEquationSeparateEXT = void function(GLenum, GLenum) nothrow; __gshared fp_glBlendEquationSeparateEXT glBlendEquationSeparateEXT;
-// GL_ARB_multi_draw_indirect
+
 bool GL_ARB_multi_draw_indirect;
-// extern(System) alias fp_glMultiDrawArraysIndirect = void function(GLenum, const(void)*, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawArraysIndirect glMultiDrawArraysIndirect;
-// extern(System) alias fp_glMultiDrawElementsIndirect = void function(GLenum, GLenum, const(void)*, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawElementsIndirect glMultiDrawElementsIndirect;
-// GL_NV_copy_image
+
 bool GL_NV_copy_image;
-extern(System) alias fp_glCopyImageSubDataNV = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei) nothrow; __gshared fp_glCopyImageSubDataNV glCopyImageSubDataNV;
-// GL_ARB_fragment_layer_viewport
+
 bool GL_ARB_fragment_layer_viewport;
-// GL_ARB_transform_feedback2
+
 bool GL_ARB_transform_feedback2;
-// enum uint GL_TRANSFORM_FEEDBACK = 0x8E22;
 enum uint GL_TRANSFORM_FEEDBACK_PAUSED = 0x8E23;
-// enum uint GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED = 0x8E23;
 enum uint GL_TRANSFORM_FEEDBACK_ACTIVE = 0x8E24;
-// enum uint GL_TRANSFORM_FEEDBACK_BUFFER_ACTIVE = 0x8E24;
-// enum uint GL_TRANSFORM_FEEDBACK_BINDING = 0x8E25;
-// extern(System) alias fp_glBindTransformFeedback = void function(GLenum, GLuint) nothrow; __gshared fp_glBindTransformFeedback glBindTransformFeedback;
-// extern(System) alias fp_glDeleteTransformFeedbacks = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteTransformFeedbacks glDeleteTransformFeedbacks;
-// extern(System) alias fp_glGenTransformFeedbacks = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenTransformFeedbacks glGenTransformFeedbacks;
-// extern(System) alias fp_glIsTransformFeedback = GLboolean function(GLuint) nothrow; __gshared fp_glIsTransformFeedback glIsTransformFeedback;
-// extern(System) alias fp_glPauseTransformFeedback = void function() nothrow; __gshared fp_glPauseTransformFeedback glPauseTransformFeedback;
-// extern(System) alias fp_glResumeTransformFeedback = void function() nothrow; __gshared fp_glResumeTransformFeedback glResumeTransformFeedback;
-// extern(System) alias fp_glDrawTransformFeedback = void function(GLenum, GLuint) nothrow; __gshared fp_glDrawTransformFeedback glDrawTransformFeedback;
-// GL_ARB_transform_feedback3
+
 bool GL_ARB_transform_feedback3;
-// enum uint GL_MAX_TRANSFORM_FEEDBACK_BUFFERS = 0x8E70;
-// enum uint GL_MAX_VERTEX_STREAMS = 0x8E71;
-// extern(System) alias fp_glDrawTransformFeedbackStream = void function(GLenum, GLuint, GLuint) nothrow; __gshared fp_glDrawTransformFeedbackStream glDrawTransformFeedbackStream;
-// extern(System) alias fp_glBeginQueryIndexed = void function(GLenum, GLuint, GLuint) nothrow; __gshared fp_glBeginQueryIndexed glBeginQueryIndexed;
-// extern(System) alias fp_glEndQueryIndexed = void function(GLenum, GLuint) nothrow; __gshared fp_glEndQueryIndexed glEndQueryIndexed;
-// extern(System) alias fp_glGetQueryIndexediv = void function(GLenum, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetQueryIndexediv glGetQueryIndexediv;
-// GL_SGIX_ycrcba
+
 bool GL_SGIX_ycrcba;
 enum uint GL_YCRCB_SGIX = 0x8318;
 enum uint GL_YCRCBA_SGIX = 0x8319;
-// GL_EXT_bgra
+
 bool GL_EXT_bgra;
 enum uint GL_BGR_EXT = 0x80E0;
 enum uint GL_BGRA_EXT = 0x80E1;
-// GL_EXT_texture_compression_s3tc
+
 bool GL_EXT_texture_compression_s3tc;
 enum uint GL_COMPRESSED_RGB_S3TC_DXT1_EXT = 0x83F0;
 enum uint GL_COMPRESSED_RGBA_S3TC_DXT1_EXT = 0x83F1;
 enum uint GL_COMPRESSED_RGBA_S3TC_DXT3_EXT = 0x83F2;
 enum uint GL_COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83F3;
-// GL_EXT_pixel_transform
+
 bool GL_EXT_pixel_transform;
 enum uint GL_PIXEL_TRANSFORM_2D_EXT = 0x8330;
 enum uint GL_PIXEL_MAG_FILTER_EXT = 0x8331;
@@ -3764,15 +2080,9 @@ enum uint GL_AVERAGE_EXT = 0x8335;
 enum uint GL_PIXEL_TRANSFORM_2D_STACK_DEPTH_EXT = 0x8336;
 enum uint GL_MAX_PIXEL_TRANSFORM_2D_STACK_DEPTH_EXT = 0x8337;
 enum uint GL_PIXEL_TRANSFORM_2D_MATRIX_EXT = 0x8338;
-extern(System) alias fp_glPixelTransformParameteriEXT = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glPixelTransformParameteriEXT glPixelTransformParameteriEXT;
-extern(System) alias fp_glPixelTransformParameterfEXT = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glPixelTransformParameterfEXT glPixelTransformParameterfEXT;
-extern(System) alias fp_glPixelTransformParameterivEXT = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glPixelTransformParameterivEXT glPixelTransformParameterivEXT;
-extern(System) alias fp_glPixelTransformParameterfvEXT = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glPixelTransformParameterfvEXT glPixelTransformParameterfvEXT;
-extern(System) alias fp_glGetPixelTransformParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetPixelTransformParameterivEXT glGetPixelTransformParameterivEXT;
-extern(System) alias fp_glGetPixelTransformParameterfvEXT = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetPixelTransformParameterfvEXT glGetPixelTransformParameterfvEXT;
-// GL_ARB_conservative_depth
+
 bool GL_ARB_conservative_depth;
-// GL_ATI_fragment_shader
+
 bool GL_ATI_fragment_shader;
 enum uint GL_FRAGMENT_SHADER_ATI = 0x8920;
 enum uint GL_REG_0_ATI = 0x8921;
@@ -3878,28 +2188,9 @@ enum uint GL_SATURATE_BIT_ATI = 0x00000040;
 enum uint GL_COMP_BIT_ATI = 0x00000002;
 enum uint GL_NEGATE_BIT_ATI = 0x00000004;
 enum uint GL_BIAS_BIT_ATI = 0x00000008;
-extern(System) alias fp_glGenFragmentShadersATI = GLuint function(GLuint) nothrow; __gshared fp_glGenFragmentShadersATI glGenFragmentShadersATI;
-extern(System) alias fp_glBindFragmentShaderATI = void function(GLuint) nothrow; __gshared fp_glBindFragmentShaderATI glBindFragmentShaderATI;
-extern(System) alias fp_glDeleteFragmentShaderATI = void function(GLuint) nothrow; __gshared fp_glDeleteFragmentShaderATI glDeleteFragmentShaderATI;
-extern(System) alias fp_glBeginFragmentShaderATI = void function() nothrow; __gshared fp_glBeginFragmentShaderATI glBeginFragmentShaderATI;
-extern(System) alias fp_glEndFragmentShaderATI = void function() nothrow; __gshared fp_glEndFragmentShaderATI glEndFragmentShaderATI;
-extern(System) alias fp_glPassTexCoordATI = void function(GLuint, GLuint, GLenum) nothrow; __gshared fp_glPassTexCoordATI glPassTexCoordATI;
-extern(System) alias fp_glSampleMapATI = void function(GLuint, GLuint, GLenum) nothrow; __gshared fp_glSampleMapATI glSampleMapATI;
-extern(System) alias fp_glColorFragmentOp1ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glColorFragmentOp1ATI glColorFragmentOp1ATI;
-extern(System) alias fp_glColorFragmentOp2ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glColorFragmentOp2ATI glColorFragmentOp2ATI;
-extern(System) alias fp_glColorFragmentOp3ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glColorFragmentOp3ATI glColorFragmentOp3ATI;
-extern(System) alias fp_glAlphaFragmentOp1ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glAlphaFragmentOp1ATI glAlphaFragmentOp1ATI;
-extern(System) alias fp_glAlphaFragmentOp2ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glAlphaFragmentOp2ATI glAlphaFragmentOp2ATI;
-extern(System) alias fp_glAlphaFragmentOp3ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glAlphaFragmentOp3ATI glAlphaFragmentOp3ATI;
-extern(System) alias fp_glSetFragmentShaderConstantATI = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glSetFragmentShaderConstantATI glSetFragmentShaderConstantATI;
-// GL_ARB_vertex_array_object
+
 bool GL_ARB_vertex_array_object;
-// enum uint GL_VERTEX_ARRAY_BINDING = 0x85B5;
-// extern(System) alias fp_glBindVertexArray = void function(GLuint) nothrow; __gshared fp_glBindVertexArray glBindVertexArray;
-// extern(System) alias fp_glDeleteVertexArrays = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteVertexArrays glDeleteVertexArrays;
-// extern(System) alias fp_glGenVertexArrays = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenVertexArrays glGenVertexArrays;
-// extern(System) alias fp_glIsVertexArray = GLboolean function(GLuint) nothrow; __gshared fp_glIsVertexArray glIsVertexArray;
-// GL_SUN_triangle_list
+
 bool GL_SUN_triangle_list;
 enum uint GL_RESTART_SUN = 0x0001;
 enum uint GL_REPLACE_MIDDLE_SUN = 0x0002;
@@ -3918,30 +2209,23 @@ enum uint GL_R1UI_C4F_N3F_V3F_SUN = 0x85C8;
 enum uint GL_R1UI_T2F_V3F_SUN = 0x85C9;
 enum uint GL_R1UI_T2F_N3F_V3F_SUN = 0x85CA;
 enum uint GL_R1UI_T2F_C4F_N3F_V3F_SUN = 0x85CB;
-extern(System) alias fp_glReplacementCodeuiSUN = void function(GLuint) nothrow; __gshared fp_glReplacementCodeuiSUN glReplacementCodeuiSUN;
-extern(System) alias fp_glReplacementCodeusSUN = void function(GLushort) nothrow; __gshared fp_glReplacementCodeusSUN glReplacementCodeusSUN;
-extern(System) alias fp_glReplacementCodeubSUN = void function(GLubyte) nothrow; __gshared fp_glReplacementCodeubSUN glReplacementCodeubSUN;
-extern(System) alias fp_glReplacementCodeuivSUN = void function(const(GLuint)*) nothrow; __gshared fp_glReplacementCodeuivSUN glReplacementCodeuivSUN;
-extern(System) alias fp_glReplacementCodeusvSUN = void function(const(GLushort)*) nothrow; __gshared fp_glReplacementCodeusvSUN glReplacementCodeusvSUN;
-extern(System) alias fp_glReplacementCodeubvSUN = void function(const(GLubyte)*) nothrow; __gshared fp_glReplacementCodeubvSUN glReplacementCodeubvSUN;
-extern(System) alias fp_glReplacementCodePointerSUN = void function(GLenum, GLsizei, const(GLvoid*)*) nothrow; __gshared fp_glReplacementCodePointerSUN glReplacementCodePointerSUN;
-// GL_EXT_texture_env_add
+
 bool GL_EXT_texture_env_add;
-// GL_EXT_packed_depth_stencil
+
 bool GL_EXT_packed_depth_stencil;
 enum uint GL_DEPTH_STENCIL_EXT = 0x84F9;
 enum uint GL_UNSIGNED_INT_24_8_EXT = 0x84FA;
 enum uint GL_DEPTH24_STENCIL8_EXT = 0x88F0;
 enum uint GL_TEXTURE_STENCIL_SIZE_EXT = 0x88F1;
-// GL_EXT_texture_mirror_clamp
+
 bool GL_EXT_texture_mirror_clamp;
 enum uint GL_MIRROR_CLAMP_EXT = 0x8742;
 enum uint GL_MIRROR_CLAMP_TO_EDGE_EXT = 0x8743;
 enum uint GL_MIRROR_CLAMP_TO_BORDER_EXT = 0x8912;
-// GL_NV_multisample_filter_hint
+
 bool GL_NV_multisample_filter_hint;
 enum uint GL_MULTISAMPLE_FILTER_HINT_NV = 0x8534;
-// GL_APPLE_float_pixels
+
 bool GL_APPLE_float_pixels;
 enum uint GL_HALF_APPLE = 0x140B;
 enum uint GL_RGBA_FLOAT32_APPLE = 0x8814;
@@ -3957,37 +2241,26 @@ enum uint GL_INTENSITY_FLOAT16_APPLE = 0x881D;
 enum uint GL_LUMINANCE_FLOAT16_APPLE = 0x881E;
 enum uint GL_LUMINANCE_ALPHA_FLOAT16_APPLE = 0x881F;
 enum uint GL_COLOR_FLOAT_APPLE = 0x8A0F;
-// GL_ARB_transform_feedback_instanced
+
 bool GL_ARB_transform_feedback_instanced;
-// extern(System) alias fp_glDrawTransformFeedbackInstanced = void function(GLenum, GLuint, GLsizei) nothrow; __gshared fp_glDrawTransformFeedbackInstanced glDrawTransformFeedbackInstanced;
-// extern(System) alias fp_glDrawTransformFeedbackStreamInstanced = void function(GLenum, GLuint, GLuint, GLsizei) nothrow; __gshared fp_glDrawTransformFeedbackStreamInstanced glDrawTransformFeedbackStreamInstanced;
-// GL_SGIX_async
+
 bool GL_SGIX_async;
 enum uint GL_ASYNC_MARKER_SGIX = 0x8329;
-extern(System) alias fp_glAsyncMarkerSGIX = void function(GLuint) nothrow; __gshared fp_glAsyncMarkerSGIX glAsyncMarkerSGIX;
-extern(System) alias fp_glFinishAsyncSGIX = GLint function(GLuint*) nothrow; __gshared fp_glFinishAsyncSGIX glFinishAsyncSGIX;
-extern(System) alias fp_glPollAsyncSGIX = GLint function(GLuint*) nothrow; __gshared fp_glPollAsyncSGIX glPollAsyncSGIX;
-extern(System) alias fp_glGenAsyncMarkersSGIX = GLuint function(GLsizei) nothrow; __gshared fp_glGenAsyncMarkersSGIX glGenAsyncMarkersSGIX;
-extern(System) alias fp_glDeleteAsyncMarkersSGIX = void function(GLuint, GLsizei) nothrow; __gshared fp_glDeleteAsyncMarkersSGIX glDeleteAsyncMarkersSGIX;
-extern(System) alias fp_glIsAsyncMarkerSGIX = GLboolean function(GLuint) nothrow; __gshared fp_glIsAsyncMarkerSGIX glIsAsyncMarkerSGIX;
-// GL_EXT_texture_compression_latc
+
 bool GL_EXT_texture_compression_latc;
 enum uint GL_COMPRESSED_LUMINANCE_LATC1_EXT = 0x8C70;
 enum uint GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT = 0x8C71;
 enum uint GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT = 0x8C72;
 enum uint GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT = 0x8C73;
-// GL_NV_shader_atomic_float
+
 bool GL_NV_shader_atomic_float;
-// GL_ARB_shading_language_100
+
 bool GL_ARB_shading_language_100;
 enum uint GL_SHADING_LANGUAGE_VERSION_ARB = 0x8B8C;
-// GL_ARB_texture_mirror_clamp_to_edge
+
 bool GL_ARB_texture_mirror_clamp_to_edge;
-enum uint GL_MIRROR_CLAMP_TO_EDGE = 0x8743;
-// GL_NV_gpu_shader5
+
 bool GL_NV_gpu_shader5;
-// enum uint GL_INT64_NV = 0x140E;
-// enum uint GL_UNSIGNED_INT64_NV = 0x140F;
 enum uint GL_INT8_NV = 0x8FE0;
 enum uint GL_INT8_VEC2_NV = 0x8FE1;
 enum uint GL_INT8_VEC3_NV = 0x8FE2;
@@ -4014,119 +2287,16 @@ enum uint GL_FLOAT16_NV = 0x8FF8;
 enum uint GL_FLOAT16_VEC2_NV = 0x8FF9;
 enum uint GL_FLOAT16_VEC3_NV = 0x8FFA;
 enum uint GL_FLOAT16_VEC4_NV = 0x8FFB;
-// enum uint GL_PATCHES = 0x000E;
-extern(System) alias fp_glUniform1i64NV = void function(GLint, GLint64EXT) nothrow; __gshared fp_glUniform1i64NV glUniform1i64NV;
-extern(System) alias fp_glUniform2i64NV = void function(GLint, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glUniform2i64NV glUniform2i64NV;
-extern(System) alias fp_glUniform3i64NV = void function(GLint, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glUniform3i64NV glUniform3i64NV;
-extern(System) alias fp_glUniform4i64NV = void function(GLint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glUniform4i64NV glUniform4i64NV;
-extern(System) alias fp_glUniform1i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glUniform1i64vNV glUniform1i64vNV;
-extern(System) alias fp_glUniform2i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glUniform2i64vNV glUniform2i64vNV;
-extern(System) alias fp_glUniform3i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glUniform3i64vNV glUniform3i64vNV;
-extern(System) alias fp_glUniform4i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glUniform4i64vNV glUniform4i64vNV;
-extern(System) alias fp_glUniform1ui64NV = void function(GLint, GLuint64EXT) nothrow; __gshared fp_glUniform1ui64NV glUniform1ui64NV;
-extern(System) alias fp_glUniform2ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glUniform2ui64NV glUniform2ui64NV;
-extern(System) alias fp_glUniform3ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glUniform3ui64NV glUniform3ui64NV;
-extern(System) alias fp_glUniform4ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glUniform4ui64NV glUniform4ui64NV;
-extern(System) alias fp_glUniform1ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glUniform1ui64vNV glUniform1ui64vNV;
-extern(System) alias fp_glUniform2ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glUniform2ui64vNV glUniform2ui64vNV;
-extern(System) alias fp_glUniform3ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glUniform3ui64vNV glUniform3ui64vNV;
-extern(System) alias fp_glUniform4ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glUniform4ui64vNV glUniform4ui64vNV;
-extern(System) alias fp_glGetUniformi64vNV = void function(GLuint, GLint, GLint64EXT*) nothrow; __gshared fp_glGetUniformi64vNV glGetUniformi64vNV;
-extern(System) alias fp_glProgramUniform1i64NV = void function(GLuint, GLint, GLint64EXT) nothrow; __gshared fp_glProgramUniform1i64NV glProgramUniform1i64NV;
-extern(System) alias fp_glProgramUniform2i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glProgramUniform2i64NV glProgramUniform2i64NV;
-extern(System) alias fp_glProgramUniform3i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glProgramUniform3i64NV glProgramUniform3i64NV;
-extern(System) alias fp_glProgramUniform4i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT) nothrow; __gshared fp_glProgramUniform4i64NV glProgramUniform4i64NV;
-extern(System) alias fp_glProgramUniform1i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glProgramUniform1i64vNV glProgramUniform1i64vNV;
-extern(System) alias fp_glProgramUniform2i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glProgramUniform2i64vNV glProgramUniform2i64vNV;
-extern(System) alias fp_glProgramUniform3i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glProgramUniform3i64vNV glProgramUniform3i64vNV;
-extern(System) alias fp_glProgramUniform4i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*) nothrow; __gshared fp_glProgramUniform4i64vNV glProgramUniform4i64vNV;
-extern(System) alias fp_glProgramUniform1ui64NV = void function(GLuint, GLint, GLuint64EXT) nothrow; __gshared fp_glProgramUniform1ui64NV glProgramUniform1ui64NV;
-extern(System) alias fp_glProgramUniform2ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glProgramUniform2ui64NV glProgramUniform2ui64NV;
-extern(System) alias fp_glProgramUniform3ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glProgramUniform3ui64NV glProgramUniform3ui64NV;
-extern(System) alias fp_glProgramUniform4ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT) nothrow; __gshared fp_glProgramUniform4ui64NV glProgramUniform4ui64NV;
-extern(System) alias fp_glProgramUniform1ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glProgramUniform1ui64vNV glProgramUniform1ui64vNV;
-extern(System) alias fp_glProgramUniform2ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glProgramUniform2ui64vNV glProgramUniform2ui64vNV;
-extern(System) alias fp_glProgramUniform3ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glProgramUniform3ui64vNV glProgramUniform3ui64vNV;
-extern(System) alias fp_glProgramUniform4ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*) nothrow; __gshared fp_glProgramUniform4ui64vNV glProgramUniform4ui64vNV;
-// GL_ARB_ES2_compatibility
+
 bool GL_ARB_ES2_compatibility;
-// enum uint GL_FIXED = 0x140C;
-// enum uint GL_IMPLEMENTATION_COLOR_READ_TYPE = 0x8B9A;
-// enum uint GL_IMPLEMENTATION_COLOR_READ_FORMAT = 0x8B9B;
-// enum uint GL_LOW_FLOAT = 0x8DF0;
-// enum uint GL_MEDIUM_FLOAT = 0x8DF1;
-// enum uint GL_HIGH_FLOAT = 0x8DF2;
-// enum uint GL_LOW_INT = 0x8DF3;
-// enum uint GL_MEDIUM_INT = 0x8DF4;
-// enum uint GL_HIGH_INT = 0x8DF5;
-// enum uint GL_SHADER_COMPILER = 0x8DFA;
-// enum uint GL_SHADER_BINARY_FORMATS = 0x8DF8;
-// enum uint GL_NUM_SHADER_BINARY_FORMATS = 0x8DF9;
-// enum uint GL_MAX_VERTEX_UNIFORM_VECTORS = 0x8DFB;
-// enum uint GL_MAX_VARYING_VECTORS = 0x8DFC;
-// enum uint GL_MAX_FRAGMENT_UNIFORM_VECTORS = 0x8DFD;
-// enum uint GL_RGB565 = 0x8D62;
-// extern(System) alias fp_glReleaseShaderCompiler = void function() nothrow; __gshared fp_glReleaseShaderCompiler glReleaseShaderCompiler;
-// extern(System) alias fp_glShaderBinary = void function(GLsizei, const(GLuint)*, GLenum, const(GLvoid)*, GLsizei) nothrow; __gshared fp_glShaderBinary glShaderBinary;
-// extern(System) alias fp_glGetShaderPrecisionFormat = void function(GLenum, GLenum, GLint*, GLint*) nothrow; __gshared fp_glGetShaderPrecisionFormat glGetShaderPrecisionFormat;
-// extern(System) alias fp_glDepthRangef = void function(GLfloat, GLfloat) nothrow; __gshared fp_glDepthRangef glDepthRangef;
-// extern(System) alias fp_glClearDepthf = void function(GLfloat) nothrow; __gshared fp_glClearDepthf glClearDepthf;
-// GL_ARB_indirect_parameters
+
 bool GL_ARB_indirect_parameters;
 enum uint GL_PARAMETER_BUFFER_ARB = 0x80EE;
 enum uint GL_PARAMETER_BUFFER_BINDING_ARB = 0x80EF;
-extern(System) alias fp_glMultiDrawArraysIndirectCountARB = void function(GLenum, GLintptr, GLintptr, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawArraysIndirectCountARB glMultiDrawArraysIndirectCountARB;
-extern(System) alias fp_glMultiDrawElementsIndirectCountARB = void function(GLenum, GLenum, GLintptr, GLintptr, GLsizei, GLsizei) nothrow; __gshared fp_glMultiDrawElementsIndirectCountARB glMultiDrawElementsIndirectCountARB;
-// GL_NV_half_float
+
 bool GL_NV_half_float;
 enum uint GL_HALF_FLOAT_NV = 0x140B;
-extern(System) alias fp_glVertex2hNV = void function(GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertex2hNV glVertex2hNV;
-extern(System) alias fp_glVertex2hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glVertex2hvNV glVertex2hvNV;
-extern(System) alias fp_glVertex3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertex3hNV glVertex3hNV;
-extern(System) alias fp_glVertex3hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glVertex3hvNV glVertex3hvNV;
-extern(System) alias fp_glVertex4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertex4hNV glVertex4hNV;
-extern(System) alias fp_glVertex4hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glVertex4hvNV glVertex4hvNV;
-extern(System) alias fp_glNormal3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glNormal3hNV glNormal3hNV;
-extern(System) alias fp_glNormal3hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glNormal3hvNV glNormal3hvNV;
-extern(System) alias fp_glColor3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glColor3hNV glColor3hNV;
-extern(System) alias fp_glColor3hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glColor3hvNV glColor3hvNV;
-extern(System) alias fp_glColor4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glColor4hNV glColor4hNV;
-extern(System) alias fp_glColor4hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glColor4hvNV glColor4hvNV;
-extern(System) alias fp_glTexCoord1hNV = void function(GLhalfNV) nothrow; __gshared fp_glTexCoord1hNV glTexCoord1hNV;
-extern(System) alias fp_glTexCoord1hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glTexCoord1hvNV glTexCoord1hvNV;
-extern(System) alias fp_glTexCoord2hNV = void function(GLhalfNV, GLhalfNV) nothrow; __gshared fp_glTexCoord2hNV glTexCoord2hNV;
-extern(System) alias fp_glTexCoord2hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glTexCoord2hvNV glTexCoord2hvNV;
-extern(System) alias fp_glTexCoord3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glTexCoord3hNV glTexCoord3hNV;
-extern(System) alias fp_glTexCoord3hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glTexCoord3hvNV glTexCoord3hvNV;
-extern(System) alias fp_glTexCoord4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glTexCoord4hNV glTexCoord4hNV;
-extern(System) alias fp_glTexCoord4hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glTexCoord4hvNV glTexCoord4hvNV;
-extern(System) alias fp_glMultiTexCoord1hNV = void function(GLenum, GLhalfNV) nothrow; __gshared fp_glMultiTexCoord1hNV glMultiTexCoord1hNV;
-extern(System) alias fp_glMultiTexCoord1hvNV = void function(GLenum, const(GLhalfNV)*) nothrow; __gshared fp_glMultiTexCoord1hvNV glMultiTexCoord1hvNV;
-extern(System) alias fp_glMultiTexCoord2hNV = void function(GLenum, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glMultiTexCoord2hNV glMultiTexCoord2hNV;
-extern(System) alias fp_glMultiTexCoord2hvNV = void function(GLenum, const(GLhalfNV)*) nothrow; __gshared fp_glMultiTexCoord2hvNV glMultiTexCoord2hvNV;
-extern(System) alias fp_glMultiTexCoord3hNV = void function(GLenum, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glMultiTexCoord3hNV glMultiTexCoord3hNV;
-extern(System) alias fp_glMultiTexCoord3hvNV = void function(GLenum, const(GLhalfNV)*) nothrow; __gshared fp_glMultiTexCoord3hvNV glMultiTexCoord3hvNV;
-extern(System) alias fp_glMultiTexCoord4hNV = void function(GLenum, GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glMultiTexCoord4hNV glMultiTexCoord4hNV;
-extern(System) alias fp_glMultiTexCoord4hvNV = void function(GLenum, const(GLhalfNV)*) nothrow; __gshared fp_glMultiTexCoord4hvNV glMultiTexCoord4hvNV;
-extern(System) alias fp_glFogCoordhNV = void function(GLhalfNV) nothrow; __gshared fp_glFogCoordhNV glFogCoordhNV;
-extern(System) alias fp_glFogCoordhvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glFogCoordhvNV glFogCoordhvNV;
-extern(System) alias fp_glSecondaryColor3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glSecondaryColor3hNV glSecondaryColor3hNV;
-extern(System) alias fp_glSecondaryColor3hvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glSecondaryColor3hvNV glSecondaryColor3hvNV;
-extern(System) alias fp_glVertexWeighthNV = void function(GLhalfNV) nothrow; __gshared fp_glVertexWeighthNV glVertexWeighthNV;
-extern(System) alias fp_glVertexWeighthvNV = void function(const(GLhalfNV)*) nothrow; __gshared fp_glVertexWeighthvNV glVertexWeighthvNV;
-extern(System) alias fp_glVertexAttrib1hNV = void function(GLuint, GLhalfNV) nothrow; __gshared fp_glVertexAttrib1hNV glVertexAttrib1hNV;
-extern(System) alias fp_glVertexAttrib1hvNV = void function(GLuint, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttrib1hvNV glVertexAttrib1hvNV;
-extern(System) alias fp_glVertexAttrib2hNV = void function(GLuint, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertexAttrib2hNV glVertexAttrib2hNV;
-extern(System) alias fp_glVertexAttrib2hvNV = void function(GLuint, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttrib2hvNV glVertexAttrib2hvNV;
-extern(System) alias fp_glVertexAttrib3hNV = void function(GLuint, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertexAttrib3hNV glVertexAttrib3hNV;
-extern(System) alias fp_glVertexAttrib3hvNV = void function(GLuint, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttrib3hvNV glVertexAttrib3hvNV;
-extern(System) alias fp_glVertexAttrib4hNV = void function(GLuint, GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV) nothrow; __gshared fp_glVertexAttrib4hNV glVertexAttrib4hNV;
-extern(System) alias fp_glVertexAttrib4hvNV = void function(GLuint, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttrib4hvNV glVertexAttrib4hvNV;
-extern(System) alias fp_glVertexAttribs1hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttribs1hvNV glVertexAttribs1hvNV;
-extern(System) alias fp_glVertexAttribs2hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttribs2hvNV glVertexAttribs2hvNV;
-extern(System) alias fp_glVertexAttribs3hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttribs3hvNV glVertexAttribs3hvNV;
-extern(System) alias fp_glVertexAttribs4hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*) nothrow; __gshared fp_glVertexAttribs4hvNV glVertexAttribs4hvNV;
-// GL_EXT_coordinate_frame
+
 bool GL_EXT_coordinate_frame;
 enum uint GL_TANGENT_ARRAY_EXT = 0x8439;
 enum uint GL_BINORMAL_ARRAY_EXT = 0x843A;
@@ -4142,99 +2312,54 @@ enum uint GL_MAP1_TANGENT_EXT = 0x8444;
 enum uint GL_MAP2_TANGENT_EXT = 0x8445;
 enum uint GL_MAP1_BINORMAL_EXT = 0x8446;
 enum uint GL_MAP2_BINORMAL_EXT = 0x8447;
-extern(System) alias fp_glTangent3bEXT = void function(GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glTangent3bEXT glTangent3bEXT;
-extern(System) alias fp_glTangent3bvEXT = void function(const(GLbyte)*) nothrow; __gshared fp_glTangent3bvEXT glTangent3bvEXT;
-extern(System) alias fp_glTangent3dEXT = void function(GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glTangent3dEXT glTangent3dEXT;
-extern(System) alias fp_glTangent3dvEXT = void function(const(GLdouble)*) nothrow; __gshared fp_glTangent3dvEXT glTangent3dvEXT;
-extern(System) alias fp_glTangent3fEXT = void function(GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTangent3fEXT glTangent3fEXT;
-extern(System) alias fp_glTangent3fvEXT = void function(const(GLfloat)*) nothrow; __gshared fp_glTangent3fvEXT glTangent3fvEXT;
-extern(System) alias fp_glTangent3iEXT = void function(GLint, GLint, GLint) nothrow; __gshared fp_glTangent3iEXT glTangent3iEXT;
-extern(System) alias fp_glTangent3ivEXT = void function(const(GLint)*) nothrow; __gshared fp_glTangent3ivEXT glTangent3ivEXT;
-extern(System) alias fp_glTangent3sEXT = void function(GLshort, GLshort, GLshort) nothrow; __gshared fp_glTangent3sEXT glTangent3sEXT;
-extern(System) alias fp_glTangent3svEXT = void function(const(GLshort)*) nothrow; __gshared fp_glTangent3svEXT glTangent3svEXT;
-extern(System) alias fp_glBinormal3bEXT = void function(GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glBinormal3bEXT glBinormal3bEXT;
-extern(System) alias fp_glBinormal3bvEXT = void function(const(GLbyte)*) nothrow; __gshared fp_glBinormal3bvEXT glBinormal3bvEXT;
-extern(System) alias fp_glBinormal3dEXT = void function(GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glBinormal3dEXT glBinormal3dEXT;
-extern(System) alias fp_glBinormal3dvEXT = void function(const(GLdouble)*) nothrow; __gshared fp_glBinormal3dvEXT glBinormal3dvEXT;
-extern(System) alias fp_glBinormal3fEXT = void function(GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glBinormal3fEXT glBinormal3fEXT;
-extern(System) alias fp_glBinormal3fvEXT = void function(const(GLfloat)*) nothrow; __gshared fp_glBinormal3fvEXT glBinormal3fvEXT;
-extern(System) alias fp_glBinormal3iEXT = void function(GLint, GLint, GLint) nothrow; __gshared fp_glBinormal3iEXT glBinormal3iEXT;
-extern(System) alias fp_glBinormal3ivEXT = void function(const(GLint)*) nothrow; __gshared fp_glBinormal3ivEXT glBinormal3ivEXT;
-extern(System) alias fp_glBinormal3sEXT = void function(GLshort, GLshort, GLshort) nothrow; __gshared fp_glBinormal3sEXT glBinormal3sEXT;
-extern(System) alias fp_glBinormal3svEXT = void function(const(GLshort)*) nothrow; __gshared fp_glBinormal3svEXT glBinormal3svEXT;
-extern(System) alias fp_glTangentPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glTangentPointerEXT glTangentPointerEXT;
-extern(System) alias fp_glBinormalPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glBinormalPointerEXT glBinormalPointerEXT;
-// GL_ATI_texture_mirror_once
+
 bool GL_ATI_texture_mirror_once;
 enum uint GL_MIRROR_CLAMP_ATI = 0x8742;
 enum uint GL_MIRROR_CLAMP_TO_EDGE_ATI = 0x8743;
-// GL_IBM_rasterpos_clip
+
 bool GL_IBM_rasterpos_clip;
 enum uint GL_RASTER_POSITION_UNCLIPPED_IBM = 0x19262;
-// GL_SGIX_shadow
+
 bool GL_SGIX_shadow;
 enum uint GL_TEXTURE_COMPARE_SGIX = 0x819A;
 enum uint GL_TEXTURE_COMPARE_OPERATOR_SGIX = 0x819B;
 enum uint GL_TEXTURE_LEQUAL_R_SGIX = 0x819C;
 enum uint GL_TEXTURE_GEQUAL_R_SGIX = 0x819D;
-// GL_NV_deep_texture3D
+
 bool GL_NV_deep_texture3D;
 enum uint GL_MAX_DEEP_3D_TEXTURE_WIDTH_HEIGHT_NV = 0x90D0;
 enum uint GL_MAX_DEEP_3D_TEXTURE_DEPTH_NV = 0x90D1;
-// GL_ARB_shader_draw_parameters
+
 bool GL_ARB_shader_draw_parameters;
-// GL_SGIX_calligraphic_fragment
+
 bool GL_SGIX_calligraphic_fragment;
 enum uint GL_CALLIGRAPHIC_FRAGMENT_SGIX = 0x8183;
-// GL_ARB_shader_bit_encoding
+
 bool GL_ARB_shader_bit_encoding;
-// GL_EXT_compiled_vertex_array
+
 bool GL_EXT_compiled_vertex_array;
 enum uint GL_ARRAY_ELEMENT_LOCK_FIRST_EXT = 0x81A8;
 enum uint GL_ARRAY_ELEMENT_LOCK_COUNT_EXT = 0x81A9;
-extern(System) alias fp_glLockArraysEXT = void function(GLint, GLsizei) nothrow; __gshared fp_glLockArraysEXT glLockArraysEXT;
-extern(System) alias fp_glUnlockArraysEXT = void function() nothrow; __gshared fp_glUnlockArraysEXT glUnlockArraysEXT;
-// GL_NV_depth_buffer_float
+
 bool GL_NV_depth_buffer_float;
 enum uint GL_DEPTH_COMPONENT32F_NV = 0x8DAB;
 enum uint GL_DEPTH32F_STENCIL8_NV = 0x8DAC;
 enum uint GL_FLOAT_32_UNSIGNED_INT_24_8_REV_NV = 0x8DAD;
 enum uint GL_DEPTH_BUFFER_FLOAT_MODE_NV = 0x8DAF;
-extern(System) alias fp_glDepthRangedNV = void function(GLdouble, GLdouble) nothrow; __gshared fp_glDepthRangedNV glDepthRangedNV;
-extern(System) alias fp_glClearDepthdNV = void function(GLdouble) nothrow; __gshared fp_glClearDepthdNV glClearDepthdNV;
-extern(System) alias fp_glDepthBoundsdNV = void function(GLdouble, GLdouble) nothrow; __gshared fp_glDepthBoundsdNV glDepthBoundsdNV;
-// GL_NV_occlusion_query
+
 bool GL_NV_occlusion_query;
 enum uint GL_PIXEL_COUNTER_BITS_NV = 0x8864;
 enum uint GL_CURRENT_OCCLUSION_QUERY_ID_NV = 0x8865;
 enum uint GL_PIXEL_COUNT_NV = 0x8866;
 enum uint GL_PIXEL_COUNT_AVAILABLE_NV = 0x8867;
-extern(System) alias fp_glGenOcclusionQueriesNV = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenOcclusionQueriesNV glGenOcclusionQueriesNV;
-extern(System) alias fp_glDeleteOcclusionQueriesNV = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteOcclusionQueriesNV glDeleteOcclusionQueriesNV;
-extern(System) alias fp_glIsOcclusionQueryNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsOcclusionQueryNV glIsOcclusionQueryNV;
-extern(System) alias fp_glBeginOcclusionQueryNV = void function(GLuint) nothrow; __gshared fp_glBeginOcclusionQueryNV glBeginOcclusionQueryNV;
-extern(System) alias fp_glEndOcclusionQueryNV = void function() nothrow; __gshared fp_glEndOcclusionQueryNV glEndOcclusionQueryNV;
-extern(System) alias fp_glGetOcclusionQueryivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetOcclusionQueryivNV glGetOcclusionQueryivNV;
-extern(System) alias fp_glGetOcclusionQueryuivNV = void function(GLuint, GLenum, GLuint*) nothrow; __gshared fp_glGetOcclusionQueryuivNV glGetOcclusionQueryuivNV;
-// GL_APPLE_flush_buffer_range
+
 bool GL_APPLE_flush_buffer_range;
 enum uint GL_BUFFER_SERIALIZED_MODIFY_APPLE = 0x8A12;
 enum uint GL_BUFFER_FLUSHING_UNMAP_APPLE = 0x8A13;
-extern(System) alias fp_glBufferParameteriAPPLE = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glBufferParameteriAPPLE glBufferParameteriAPPLE;
-extern(System) alias fp_glFlushMappedBufferRangeAPPLE = void function(GLenum, GLintptr, GLsizeiptr) nothrow; __gshared fp_glFlushMappedBufferRangeAPPLE glFlushMappedBufferRangeAPPLE;
-// GL_ARB_imaging
+
 bool GL_ARB_imaging;
-// enum uint GL_CONSTANT_COLOR = 0x8001;
-// enum uint GL_ONE_MINUS_CONSTANT_COLOR = 0x8002;
-// enum uint GL_CONSTANT_ALPHA = 0x8003;
-// enum uint GL_ONE_MINUS_CONSTANT_ALPHA = 0x8004;
 enum uint GL_BLEND_COLOR = 0x8005;
-// enum uint GL_FUNC_ADD = 0x8006;
-// enum uint GL_MIN = 0x8007;
-// enum uint GL_MAX = 0x8008;
 enum uint GL_BLEND_EQUATION = 0x8009;
-// enum uint GL_FUNC_SUBTRACT = 0x800A;
-// enum uint GL_FUNC_REVERSE_SUBTRACT = 0x800B;
 enum uint GL_CONVOLUTION_1D = 0x8010;
 enum uint GL_CONVOLUTION_2D = 0x8011;
 enum uint GL_SEPARABLE_2D = 0x8012;
@@ -4299,69 +2424,33 @@ enum uint GL_COLOR_TABLE_INTENSITY_SIZE = 0x80DF;
 enum uint GL_CONSTANT_BORDER = 0x8151;
 enum uint GL_REPLICATE_BORDER = 0x8153;
 enum uint GL_CONVOLUTION_BORDER_COLOR = 0x8154;
-extern(System) alias fp_glColorTable = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glColorTable glColorTable;
-extern(System) alias fp_glColorTableParameterfv = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glColorTableParameterfv glColorTableParameterfv;
-extern(System) alias fp_glColorTableParameteriv = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glColorTableParameteriv glColorTableParameteriv;
-extern(System) alias fp_glCopyColorTable = void function(GLenum, GLenum, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyColorTable glCopyColorTable;
-extern(System) alias fp_glGetColorTable = void function(GLenum, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetColorTable glGetColorTable;
-extern(System) alias fp_glGetColorTableParameterfv = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetColorTableParameterfv glGetColorTableParameterfv;
-extern(System) alias fp_glGetColorTableParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetColorTableParameteriv glGetColorTableParameteriv;
-extern(System) alias fp_glColorSubTable = void function(GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glColorSubTable glColorSubTable;
-extern(System) alias fp_glCopyColorSubTable = void function(GLenum, GLsizei, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyColorSubTable glCopyColorSubTable;
-extern(System) alias fp_glConvolutionFilter1D = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glConvolutionFilter1D glConvolutionFilter1D;
-extern(System) alias fp_glConvolutionFilter2D = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glConvolutionFilter2D glConvolutionFilter2D;
-extern(System) alias fp_glConvolutionParameterf = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glConvolutionParameterf glConvolutionParameterf;
-extern(System) alias fp_glConvolutionParameterfv = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glConvolutionParameterfv glConvolutionParameterfv;
-extern(System) alias fp_glConvolutionParameteri = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glConvolutionParameteri glConvolutionParameteri;
-extern(System) alias fp_glConvolutionParameteriv = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glConvolutionParameteriv glConvolutionParameteriv;
-extern(System) alias fp_glCopyConvolutionFilter1D = void function(GLenum, GLenum, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyConvolutionFilter1D glCopyConvolutionFilter1D;
-extern(System) alias fp_glCopyConvolutionFilter2D = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyConvolutionFilter2D glCopyConvolutionFilter2D;
-extern(System) alias fp_glGetConvolutionFilter = void function(GLenum, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetConvolutionFilter glGetConvolutionFilter;
-extern(System) alias fp_glGetConvolutionParameterfv = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetConvolutionParameterfv glGetConvolutionParameterfv;
-extern(System) alias fp_glGetConvolutionParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetConvolutionParameteriv glGetConvolutionParameteriv;
-extern(System) alias fp_glGetSeparableFilter = void function(GLenum, GLenum, GLenum, GLvoid*, GLvoid*, GLvoid*) nothrow; __gshared fp_glGetSeparableFilter glGetSeparableFilter;
-extern(System) alias fp_glSeparableFilter2D = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*, const(GLvoid)*) nothrow; __gshared fp_glSeparableFilter2D glSeparableFilter2D;
-extern(System) alias fp_glGetHistogram = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetHistogram glGetHistogram;
-extern(System) alias fp_glGetHistogramParameterfv = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetHistogramParameterfv glGetHistogramParameterfv;
-extern(System) alias fp_glGetHistogramParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetHistogramParameteriv glGetHistogramParameteriv;
-extern(System) alias fp_glGetMinmax = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetMinmax glGetMinmax;
-extern(System) alias fp_glGetMinmaxParameterfv = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetMinmaxParameterfv glGetMinmaxParameterfv;
-extern(System) alias fp_glGetMinmaxParameteriv = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetMinmaxParameteriv glGetMinmaxParameteriv;
-extern(System) alias fp_glHistogram = void function(GLenum, GLsizei, GLenum, GLboolean) nothrow; __gshared fp_glHistogram glHistogram;
-extern(System) alias fp_glMinmax = void function(GLenum, GLenum, GLboolean) nothrow; __gshared fp_glMinmax glMinmax;
-extern(System) alias fp_glResetHistogram = void function(GLenum) nothrow; __gshared fp_glResetHistogram glResetHistogram;
-extern(System) alias fp_glResetMinmax = void function(GLenum) nothrow; __gshared fp_glResetMinmax glResetMinmax;
-// GL_ARB_draw_buffers_blend
+
 bool GL_ARB_draw_buffers_blend;
-extern(System) alias fp_glBlendEquationiARB = void function(GLuint, GLenum) nothrow; __gshared fp_glBlendEquationiARB glBlendEquationiARB;
-extern(System) alias fp_glBlendEquationSeparateiARB = void function(GLuint, GLenum, GLenum) nothrow; __gshared fp_glBlendEquationSeparateiARB glBlendEquationSeparateiARB;
-extern(System) alias fp_glBlendFunciARB = void function(GLuint, GLenum, GLenum) nothrow; __gshared fp_glBlendFunciARB glBlendFunciARB;
-extern(System) alias fp_glBlendFuncSeparateiARB = void function(GLuint, GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glBlendFuncSeparateiARB glBlendFuncSeparateiARB;
-// GL_NV_blend_square
+
 bool GL_NV_blend_square;
-// GL_AMD_blend_minmax_factor
+
 bool GL_AMD_blend_minmax_factor;
 enum uint GL_FACTOR_MIN_AMD = 0x901C;
 enum uint GL_FACTOR_MAX_AMD = 0x901D;
-// GL_EXT_texture_sRGB_decode
+
 bool GL_EXT_texture_sRGB_decode;
 enum uint GL_TEXTURE_SRGB_DECODE_EXT = 0x8A48;
 enum uint GL_DECODE_EXT = 0x8A49;
 enum uint GL_SKIP_DECODE_EXT = 0x8A4A;
-// GL_ARB_shading_language_420pack
+
 bool GL_ARB_shading_language_420pack;
-// GL_ATI_meminfo
+
 bool GL_ATI_meminfo;
 enum uint GL_VBO_FREE_MEMORY_ATI = 0x87FB;
 enum uint GL_TEXTURE_FREE_MEMORY_ATI = 0x87FC;
 enum uint GL_RENDERBUFFER_FREE_MEMORY_ATI = 0x87FD;
-// GL_EXT_abgr
+
 bool GL_EXT_abgr;
 enum uint GL_ABGR_EXT = 0x8000;
-// GL_AMD_pinned_memory
+
 bool GL_AMD_pinned_memory;
 enum uint GL_EXTERNAL_VIRTUAL_MEMORY_BUFFER_AMD = 0x9160;
-// GL_EXT_texture_snorm
+
 bool GL_EXT_texture_snorm;
 enum uint GL_ALPHA_SNORM = 0x9010;
 enum uint GL_LUMINANCE_SNORM = 0x9011;
@@ -4379,86 +2468,50 @@ enum uint GL_RED_SNORM = 0x8F90;
 enum uint GL_RG_SNORM = 0x8F91;
 enum uint GL_RGB_SNORM = 0x8F92;
 enum uint GL_RGBA_SNORM = 0x8F93;
-// enum uint GL_R8_SNORM = 0x8F94;
-// enum uint GL_RG8_SNORM = 0x8F95;
-// enum uint GL_RGB8_SNORM = 0x8F96;
-// enum uint GL_RGBA8_SNORM = 0x8F97;
-// enum uint GL_R16_SNORM = 0x8F98;
-// enum uint GL_RG16_SNORM = 0x8F99;
-// enum uint GL_RGB16_SNORM = 0x8F9A;
-// enum uint GL_RGBA16_SNORM = 0x8F9B;
-// enum uint GL_SIGNED_NORMALIZED = 0x8F9C;
-// GL_SGIX_texture_coordinate_clamp
+
 bool GL_SGIX_texture_coordinate_clamp;
 enum uint GL_TEXTURE_MAX_CLAMP_S_SGIX = 0x8369;
 enum uint GL_TEXTURE_MAX_CLAMP_T_SGIX = 0x836A;
 enum uint GL_TEXTURE_MAX_CLAMP_R_SGIX = 0x836B;
-// GL_ARB_clear_buffer_object
+
 bool GL_ARB_clear_buffer_object;
-// extern(System) alias fp_glClearBufferData = void function(GLenum, GLenum, GLenum, GLenum, const(void)*) nothrow; __gshared fp_glClearBufferData glClearBufferData;
-// extern(System) alias fp_glClearBufferSubData = void function(GLenum, GLenum, GLintptr, GLsizeiptr, GLenum, GLenum, const(void)*) nothrow; __gshared fp_glClearBufferSubData glClearBufferSubData;
-// GL_ARB_multisample
+
 bool GL_ARB_multisample;
 enum uint GL_MULTISAMPLE_ARB = 0x809D;
 enum uint GL_SAMPLE_ALPHA_TO_COVERAGE_ARB = 0x809E;
 enum uint GL_SAMPLE_ALPHA_TO_ONE_ARB = 0x809F;
 enum uint GL_SAMPLE_COVERAGE_ARB = 0x80A0;
 enum uint GL_SAMPLE_BUFFERS_ARB = 0x80A8;
-// enum uint GL_SAMPLES_ARB = 0x80A9;
 enum uint GL_SAMPLE_COVERAGE_VALUE_ARB = 0x80AA;
 enum uint GL_SAMPLE_COVERAGE_INVERT_ARB = 0x80AB;
 enum uint GL_MULTISAMPLE_BIT_ARB = 0x20000000;
-extern(System) alias fp_glSampleCoverageARB = void function(GLfloat, GLboolean) nothrow; __gshared fp_glSampleCoverageARB glSampleCoverageARB;
-// GL_ARB_sample_shading
+
 bool GL_ARB_sample_shading;
 enum uint GL_SAMPLE_SHADING_ARB = 0x8C36;
 enum uint GL_MIN_SAMPLE_SHADING_VALUE_ARB = 0x8C37;
-extern(System) alias fp_glMinSampleShadingARB = void function(GLfloat) nothrow; __gshared fp_glMinSampleShadingARB glMinSampleShadingARB;
-// GL_INTEL_map_texture
+
 bool GL_INTEL_map_texture;
 enum uint GL_TEXTURE_MEMORY_LAYOUT_INTEL = 0x83FF;
 enum uint GL_LAYOUT_DEFAULT_INTEL = 0;
 enum uint GL_LAYOUT_LINEAR_INTEL = 1;
 enum uint GL_LAYOUT_LINEAR_CPU_CACHED_INTEL = 2;
-extern(System) alias fp_glSyncTextureINTEL = void function(GLuint) nothrow; __gshared fp_glSyncTextureINTEL glSyncTextureINTEL;
-extern(System) alias fp_glUnmapTexture2DINTEL = void function(GLuint, GLint) nothrow; __gshared fp_glUnmapTexture2DINTEL glUnmapTexture2DINTEL;
-extern(System) alias fp_glMapTexture2DINTEL = void* function(GLuint, GLint, GLbitfield, const(GLint)*, const(GLenum)*) nothrow; __gshared fp_glMapTexture2DINTEL glMapTexture2DINTEL;
-// GL_ARB_texture_env_crossbar
+
 bool GL_ARB_texture_env_crossbar;
-// GL_EXT_422_pixels
+
 bool GL_EXT_422_pixels;
 enum uint GL_422_EXT = 0x80CC;
 enum uint GL_422_REV_EXT = 0x80CD;
 enum uint GL_422_AVERAGE_EXT = 0x80CE;
 enum uint GL_422_REV_AVERAGE_EXT = 0x80CF;
-// GL_ARB_compute_shader
+
 bool GL_ARB_compute_shader;
-// enum uint GL_COMPUTE_SHADER = 0x91B9;
-// enum uint GL_MAX_COMPUTE_UNIFORM_BLOCKS = 0x91BB;
-// enum uint GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS = 0x91BC;
-// enum uint GL_MAX_COMPUTE_IMAGE_UNIFORMS = 0x91BD;
-// enum uint GL_MAX_COMPUTE_SHARED_MEMORY_SIZE = 0x8262;
-// enum uint GL_MAX_COMPUTE_UNIFORM_COMPONENTS = 0x8263;
-// enum uint GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS = 0x8264;
-// enum uint GL_MAX_COMPUTE_ATOMIC_COUNTERS = 0x8265;
-// enum uint GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS = 0x8266;
-// enum uint GL_MAX_COMPUTE_LOCAL_INVOCATIONS = 0x90EB;
-// enum uint GL_MAX_COMPUTE_WORK_GROUP_COUNT = 0x91BE;
-// enum uint GL_MAX_COMPUTE_WORK_GROUP_SIZE = 0x91BF;
-// enum uint GL_COMPUTE_LOCAL_WORK_SIZE = 0x8267;
-// enum uint GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER = 0x90EC;
-// enum uint GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_COMPUTE_SHADER = 0x90ED;
-// enum uint GL_DISPATCH_INDIRECT_BUFFER = 0x90EE;
-// enum uint GL_DISPATCH_INDIRECT_BUFFER_BINDING = 0x90EF;
 enum uint GL_COMPUTE_SHADER_BIT = 0x00000020;
-// extern(System) alias fp_glDispatchCompute = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glDispatchCompute glDispatchCompute;
-// extern(System) alias fp_glDispatchComputeIndirect = void function(GLintptr) nothrow; __gshared fp_glDispatchComputeIndirect glDispatchComputeIndirect;
-// GL_EXT_blend_logic_op
+
 bool GL_EXT_blend_logic_op;
-// GL_IBM_cull_vertex
+
 bool GL_IBM_cull_vertex;
 enum uint GL_CULL_VERTEX_IBM = 103050;
-// GL_IBM_vertex_array_lists
+
 bool GL_IBM_vertex_array_lists;
 enum uint GL_VERTEX_ARRAY_LIST_IBM = 103070;
 enum uint GL_NORMAL_ARRAY_LIST_IBM = 103071;
@@ -4476,72 +2529,29 @@ enum uint GL_TEXTURE_COORD_ARRAY_LIST_STRIDE_IBM = 103084;
 enum uint GL_EDGE_FLAG_ARRAY_LIST_STRIDE_IBM = 103085;
 enum uint GL_FOG_COORDINATE_ARRAY_LIST_STRIDE_IBM = 103086;
 enum uint GL_SECONDARY_COLOR_ARRAY_LIST_STRIDE_IBM = 103087;
-extern(System) alias fp_glColorPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glColorPointerListIBM glColorPointerListIBM;
-extern(System) alias fp_glSecondaryColorPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glSecondaryColorPointerListIBM glSecondaryColorPointerListIBM;
-extern(System) alias fp_glEdgeFlagPointerListIBM = void function(GLint, const(GLboolean*)*, GLint) nothrow; __gshared fp_glEdgeFlagPointerListIBM glEdgeFlagPointerListIBM;
-extern(System) alias fp_glFogCoordPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glFogCoordPointerListIBM glFogCoordPointerListIBM;
-extern(System) alias fp_glIndexPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glIndexPointerListIBM glIndexPointerListIBM;
-extern(System) alias fp_glNormalPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glNormalPointerListIBM glNormalPointerListIBM;
-extern(System) alias fp_glTexCoordPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glTexCoordPointerListIBM glTexCoordPointerListIBM;
-extern(System) alias fp_glVertexPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint) nothrow; __gshared fp_glVertexPointerListIBM glVertexPointerListIBM;
-// GL_ARB_color_buffer_float
+
 bool GL_ARB_color_buffer_float;
 enum uint GL_RGBA_FLOAT_MODE_ARB = 0x8820;
 enum uint GL_CLAMP_VERTEX_COLOR_ARB = 0x891A;
 enum uint GL_CLAMP_FRAGMENT_COLOR_ARB = 0x891B;
 enum uint GL_CLAMP_READ_COLOR_ARB = 0x891C;
 enum uint GL_FIXED_ONLY_ARB = 0x891D;
-extern(System) alias fp_glClampColorARB = void function(GLenum, GLenum) nothrow; __gshared fp_glClampColorARB glClampColorARB;
-// GL_ARB_bindless_texture
+
 bool GL_ARB_bindless_texture;
 enum uint GL_UNSIGNED_INT64_ARB = 0x140F;
-extern(System) alias fp_glGetTextureHandleARB = GLuint64 function(GLuint) nothrow; __gshared fp_glGetTextureHandleARB glGetTextureHandleARB;
-extern(System) alias fp_glGetTextureSamplerHandleARB = GLuint64 function(GLuint, GLuint) nothrow; __gshared fp_glGetTextureSamplerHandleARB glGetTextureSamplerHandleARB;
-extern(System) alias fp_glMakeTextureHandleResidentARB = void function(GLuint64) nothrow; __gshared fp_glMakeTextureHandleResidentARB glMakeTextureHandleResidentARB;
-extern(System) alias fp_glMakeTextureHandleNonResidentARB = void function(GLuint64) nothrow; __gshared fp_glMakeTextureHandleNonResidentARB glMakeTextureHandleNonResidentARB;
-extern(System) alias fp_glGetImageHandleARB = GLuint64 function(GLuint, GLint, GLboolean, GLint, GLenum) nothrow; __gshared fp_glGetImageHandleARB glGetImageHandleARB;
-extern(System) alias fp_glMakeImageHandleResidentARB = void function(GLuint64, GLenum) nothrow; __gshared fp_glMakeImageHandleResidentARB glMakeImageHandleResidentARB;
-extern(System) alias fp_glMakeImageHandleNonResidentARB = void function(GLuint64) nothrow; __gshared fp_glMakeImageHandleNonResidentARB glMakeImageHandleNonResidentARB;
-extern(System) alias fp_glUniformHandleui64ARB = void function(GLint, GLuint64) nothrow; __gshared fp_glUniformHandleui64ARB glUniformHandleui64ARB;
-extern(System) alias fp_glUniformHandleui64vARB = void function(GLint, GLsizei, const(GLuint64)*) nothrow; __gshared fp_glUniformHandleui64vARB glUniformHandleui64vARB;
-extern(System) alias fp_glProgramUniformHandleui64ARB = void function(GLuint, GLint, GLuint64) nothrow; __gshared fp_glProgramUniformHandleui64ARB glProgramUniformHandleui64ARB;
-extern(System) alias fp_glProgramUniformHandleui64vARB = void function(GLuint, GLint, GLsizei, const(GLuint64)*) nothrow; __gshared fp_glProgramUniformHandleui64vARB glProgramUniformHandleui64vARB;
-extern(System) alias fp_glIsTextureHandleResidentARB = GLboolean function(GLuint64) nothrow; __gshared fp_glIsTextureHandleResidentARB glIsTextureHandleResidentARB;
-extern(System) alias fp_glIsImageHandleResidentARB = GLboolean function(GLuint64) nothrow; __gshared fp_glIsImageHandleResidentARB glIsImageHandleResidentARB;
-extern(System) alias fp_glVertexAttribL1ui64ARB = void function(GLuint, GLuint64EXT) nothrow; __gshared fp_glVertexAttribL1ui64ARB glVertexAttribL1ui64ARB;
-extern(System) alias fp_glVertexAttribL1ui64vARB = void function(GLuint, const(GLuint64EXT)*) nothrow; __gshared fp_glVertexAttribL1ui64vARB glVertexAttribL1ui64vARB;
-extern(System) alias fp_glGetVertexAttribLui64vARB = void function(GLuint, GLenum, GLuint64EXT*) nothrow; __gshared fp_glGetVertexAttribLui64vARB glGetVertexAttribLui64vARB;
-// GL_ARB_window_pos
+
 bool GL_ARB_window_pos;
-extern(System) alias fp_glWindowPos2dARB = void function(GLdouble, GLdouble) nothrow; __gshared fp_glWindowPos2dARB glWindowPos2dARB;
-extern(System) alias fp_glWindowPos2dvARB = void function(const(GLdouble)*) nothrow; __gshared fp_glWindowPos2dvARB glWindowPos2dvARB;
-extern(System) alias fp_glWindowPos2fARB = void function(GLfloat, GLfloat) nothrow; __gshared fp_glWindowPos2fARB glWindowPos2fARB;
-extern(System) alias fp_glWindowPos2fvARB = void function(const(GLfloat)*) nothrow; __gshared fp_glWindowPos2fvARB glWindowPos2fvARB;
-extern(System) alias fp_glWindowPos2iARB = void function(GLint, GLint) nothrow; __gshared fp_glWindowPos2iARB glWindowPos2iARB;
-extern(System) alias fp_glWindowPos2ivARB = void function(const(GLint)*) nothrow; __gshared fp_glWindowPos2ivARB glWindowPos2ivARB;
-extern(System) alias fp_glWindowPos2sARB = void function(GLshort, GLshort) nothrow; __gshared fp_glWindowPos2sARB glWindowPos2sARB;
-extern(System) alias fp_glWindowPos2svARB = void function(const(GLshort)*) nothrow; __gshared fp_glWindowPos2svARB glWindowPos2svARB;
-extern(System) alias fp_glWindowPos3dARB = void function(GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glWindowPos3dARB glWindowPos3dARB;
-extern(System) alias fp_glWindowPos3dvARB = void function(const(GLdouble)*) nothrow; __gshared fp_glWindowPos3dvARB glWindowPos3dvARB;
-extern(System) alias fp_glWindowPos3fARB = void function(GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glWindowPos3fARB glWindowPos3fARB;
-extern(System) alias fp_glWindowPos3fvARB = void function(const(GLfloat)*) nothrow; __gshared fp_glWindowPos3fvARB glWindowPos3fvARB;
-extern(System) alias fp_glWindowPos3iARB = void function(GLint, GLint, GLint) nothrow; __gshared fp_glWindowPos3iARB glWindowPos3iARB;
-extern(System) alias fp_glWindowPos3ivARB = void function(const(GLint)*) nothrow; __gshared fp_glWindowPos3ivARB glWindowPos3ivARB;
-extern(System) alias fp_glWindowPos3sARB = void function(GLshort, GLshort, GLshort) nothrow; __gshared fp_glWindowPos3sARB glWindowPos3sARB;
-extern(System) alias fp_glWindowPos3svARB = void function(const(GLshort)*) nothrow; __gshared fp_glWindowPos3svARB glWindowPos3svARB;
-// GL_ARB_internalformat_query
+
 bool GL_ARB_internalformat_query;
-// enum uint GL_NUM_SAMPLE_COUNTS = 0x9380;
-extern(System) alias fp_glGetInternalformativ = void function(GLenum, GLenum, GLenum, GLsizei, GLint*) nothrow; __gshared fp_glGetInternalformativ glGetInternalformativ;
-// GL_ARB_shadow
+
 bool GL_ARB_shadow;
 enum uint GL_TEXTURE_COMPARE_MODE_ARB = 0x884C;
 enum uint GL_TEXTURE_COMPARE_FUNC_ARB = 0x884D;
 enum uint GL_COMPARE_R_TO_TEXTURE_ARB = 0x884E;
-// GL_ARB_texture_mirrored_repeat
+
 bool GL_ARB_texture_mirrored_repeat;
 enum uint GL_MIRRORED_REPEAT_ARB = 0x8370;
-// GL_EXT_shader_image_load_store
+
 bool GL_EXT_shader_image_load_store;
 enum uint GL_MAX_IMAGE_UNITS_EXT = 0x8F38;
 enum uint GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS_EXT = 0x8F39;
@@ -4598,141 +2608,36 @@ enum uint GL_FRAMEBUFFER_BARRIER_BIT_EXT = 0x00000400;
 enum uint GL_TRANSFORM_FEEDBACK_BARRIER_BIT_EXT = 0x00000800;
 enum uint GL_ATOMIC_COUNTER_BARRIER_BIT_EXT = 0x00001000;
 enum uint GL_ALL_BARRIER_BITS_EXT = 0xFFFFFFFF;
-extern(System) alias fp_glBindImageTextureEXT = void function(GLuint, GLuint, GLint, GLboolean, GLint, GLenum, GLint) nothrow; __gshared fp_glBindImageTextureEXT glBindImageTextureEXT;
-extern(System) alias fp_glMemoryBarrierEXT = void function(GLbitfield) nothrow; __gshared fp_glMemoryBarrierEXT glMemoryBarrierEXT;
-// GL_EXT_copy_texture
+
 bool GL_EXT_copy_texture;
-extern(System) alias fp_glCopyTexImage1DEXT = void function(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint) nothrow; __gshared fp_glCopyTexImage1DEXT glCopyTexImage1DEXT;
-extern(System) alias fp_glCopyTexImage2DEXT = void function(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint) nothrow; __gshared fp_glCopyTexImage2DEXT glCopyTexImage2DEXT;
-extern(System) alias fp_glCopyTexSubImage1DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyTexSubImage1DEXT glCopyTexSubImage1DEXT;
-extern(System) alias fp_glCopyTexSubImage2DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyTexSubImage2DEXT glCopyTexSubImage2DEXT;
-extern(System) alias fp_glCopyTexSubImage3DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glCopyTexSubImage3DEXT glCopyTexSubImage3DEXT;
-// GL_NV_register_combiners2
+
 bool GL_NV_register_combiners2;
 enum uint GL_PER_STAGE_CONSTANTS_NV = 0x8535;
-extern(System) alias fp_glCombinerStageParameterfvNV = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glCombinerStageParameterfvNV glCombinerStageParameterfvNV;
-extern(System) alias fp_glGetCombinerStageParameterfvNV = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetCombinerStageParameterfvNV glGetCombinerStageParameterfvNV;
-// GL_SGIX_ir_instrument1
+
 bool GL_SGIX_ir_instrument1;
 enum uint GL_IR_INSTRUMENT1_SGIX = 0x817F;
-// GL_NV_draw_texture
+
 bool GL_NV_draw_texture;
-extern(System) alias fp_glDrawTextureNV = void function(GLuint, GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glDrawTextureNV glDrawTextureNV;
-// GL_EXT_texture_shared_exponent
+
 bool GL_EXT_texture_shared_exponent;
 enum uint GL_RGB9_E5_EXT = 0x8C3D;
 enum uint GL_UNSIGNED_INT_5_9_9_9_REV_EXT = 0x8C3E;
 enum uint GL_TEXTURE_SHARED_SIZE_EXT = 0x8C3F;
-// GL_EXT_draw_instanced
+
 bool GL_EXT_draw_instanced;
-extern(System) alias fp_glDrawArraysInstancedEXT = void function(GLenum, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glDrawArraysInstancedEXT glDrawArraysInstancedEXT;
-extern(System) alias fp_glDrawElementsInstancedEXT = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLsizei) nothrow; __gshared fp_glDrawElementsInstancedEXT glDrawElementsInstancedEXT;
-// GL_NV_copy_depth_to_color
+
 bool GL_NV_copy_depth_to_color;
 enum uint GL_DEPTH_STENCIL_TO_RGBA_NV = 0x886E;
 enum uint GL_DEPTH_STENCIL_TO_BGRA_NV = 0x886F;
-// GL_ARB_viewport_array
+
 bool GL_ARB_viewport_array;
-// enum uint GL_SCISSOR_BOX = 0x0C10;
-// enum uint GL_VIEWPORT = 0x0BA2;
-// enum uint GL_DEPTH_RANGE = 0x0B70;
-// enum uint GL_SCISSOR_TEST = 0x0C11;
-// enum uint GL_MAX_VIEWPORTS = 0x825B;
-// enum uint GL_VIEWPORT_SUBPIXEL_BITS = 0x825C;
-// enum uint GL_VIEWPORT_BOUNDS_RANGE = 0x825D;
-// enum uint GL_LAYER_PROVOKING_VERTEX = 0x825E;
-// enum uint GL_VIEWPORT_INDEX_PROVOKING_VERTEX = 0x825F;
-// enum uint GL_UNDEFINED_VERTEX = 0x8260;
-// enum uint GL_FIRST_VERTEX_CONVENTION = 0x8E4D;
-// enum uint GL_LAST_VERTEX_CONVENTION = 0x8E4E;
-// enum uint GL_PROVOKING_VERTEX = 0x8E4F;
-// extern(System) alias fp_glViewportArrayv = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glViewportArrayv glViewportArrayv;
-// extern(System) alias fp_glViewportIndexedf = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glViewportIndexedf glViewportIndexedf;
-// extern(System) alias fp_glViewportIndexedfv = void function(GLuint, const(GLfloat)*) nothrow; __gshared fp_glViewportIndexedfv glViewportIndexedfv;
-// extern(System) alias fp_glScissorArrayv = void function(GLuint, GLsizei, const(GLint)*) nothrow; __gshared fp_glScissorArrayv glScissorArrayv;
-// extern(System) alias fp_glScissorIndexed = void function(GLuint, GLint, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glScissorIndexed glScissorIndexed;
-// extern(System) alias fp_glScissorIndexedv = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glScissorIndexedv glScissorIndexedv;
-// extern(System) alias fp_glDepthRangeArrayv = void function(GLuint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glDepthRangeArrayv glDepthRangeArrayv;
-// extern(System) alias fp_glDepthRangeIndexed = void function(GLuint, GLdouble, GLdouble) nothrow; __gshared fp_glDepthRangeIndexed glDepthRangeIndexed;
-// extern(System) alias fp_glGetFloati_v = void function(GLenum, GLuint, GLfloat*) nothrow; __gshared fp_glGetFloati_v glGetFloati_v;
-// extern(System) alias fp_glGetDoublei_v = void function(GLenum, GLuint, GLdouble*) nothrow; __gshared fp_glGetDoublei_v glGetDoublei_v;
-// GL_ARB_separate_shader_objects
+
 bool GL_ARB_separate_shader_objects;
-// enum uint GL_VERTEX_SHADER_BIT = 0x00000001;
-// enum uint GL_FRAGMENT_SHADER_BIT = 0x00000002;
-// enum uint GL_GEOMETRY_SHADER_BIT = 0x00000004;
-// enum uint GL_TESS_CONTROL_SHADER_BIT = 0x00000008;
-// enum uint GL_TESS_EVALUATION_SHADER_BIT = 0x00000010;
-// enum uint GL_ALL_SHADER_BITS = 0xFFFFFFFF;
-// enum uint GL_PROGRAM_SEPARABLE = 0x8258;
-// enum uint GL_ACTIVE_PROGRAM = 0x8259;
-// enum uint GL_PROGRAM_PIPELINE_BINDING = 0x825A;
-// extern(System) alias fp_glUseProgramStages = void function(GLuint, GLbitfield, GLuint) nothrow; __gshared fp_glUseProgramStages glUseProgramStages;
-// extern(System) alias fp_glActiveShaderProgram = void function(GLuint, GLuint) nothrow; __gshared fp_glActiveShaderProgram glActiveShaderProgram;
-// extern(System) alias fp_glCreateShaderProgramv = GLuint function(GLenum, GLsizei, const(GLchar*)*) nothrow; __gshared fp_glCreateShaderProgramv glCreateShaderProgramv;
-// extern(System) alias fp_glBindProgramPipeline = void function(GLuint) nothrow; __gshared fp_glBindProgramPipeline glBindProgramPipeline;
-// extern(System) alias fp_glDeleteProgramPipelines = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteProgramPipelines glDeleteProgramPipelines;
-// extern(System) alias fp_glGenProgramPipelines = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenProgramPipelines glGenProgramPipelines;
-// extern(System) alias fp_glIsProgramPipeline = GLboolean function(GLuint) nothrow; __gshared fp_glIsProgramPipeline glIsProgramPipeline;
-// extern(System) alias fp_glGetProgramPipelineiv = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetProgramPipelineiv glGetProgramPipelineiv;
-// extern(System) alias fp_glProgramUniform1i = void function(GLuint, GLint, GLint) nothrow; __gshared fp_glProgramUniform1i glProgramUniform1i;
-// extern(System) alias fp_glProgramUniform1iv = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform1iv glProgramUniform1iv;
-// extern(System) alias fp_glProgramUniform1f = void function(GLuint, GLint, GLfloat) nothrow; __gshared fp_glProgramUniform1f glProgramUniform1f;
-// extern(System) alias fp_glProgramUniform1fv = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform1fv glProgramUniform1fv;
-// extern(System) alias fp_glProgramUniform1d = void function(GLuint, GLint, GLdouble) nothrow; __gshared fp_glProgramUniform1d glProgramUniform1d;
-// extern(System) alias fp_glProgramUniform1dv = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform1dv glProgramUniform1dv;
-// extern(System) alias fp_glProgramUniform1ui = void function(GLuint, GLint, GLuint) nothrow; __gshared fp_glProgramUniform1ui glProgramUniform1ui;
-// extern(System) alias fp_glProgramUniform1uiv = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform1uiv glProgramUniform1uiv;
-// extern(System) alias fp_glProgramUniform2i = void function(GLuint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform2i glProgramUniform2i;
-// extern(System) alias fp_glProgramUniform2iv = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform2iv glProgramUniform2iv;
-// extern(System) alias fp_glProgramUniform2f = void function(GLuint, GLint, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform2f glProgramUniform2f;
-// extern(System) alias fp_glProgramUniform2fv = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform2fv glProgramUniform2fv;
-// extern(System) alias fp_glProgramUniform2d = void function(GLuint, GLint, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform2d glProgramUniform2d;
-// extern(System) alias fp_glProgramUniform2dv = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform2dv glProgramUniform2dv;
-// extern(System) alias fp_glProgramUniform2ui = void function(GLuint, GLint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform2ui glProgramUniform2ui;
-// extern(System) alias fp_glProgramUniform2uiv = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform2uiv glProgramUniform2uiv;
-// extern(System) alias fp_glProgramUniform3i = void function(GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform3i glProgramUniform3i;
-// extern(System) alias fp_glProgramUniform3iv = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform3iv glProgramUniform3iv;
-// extern(System) alias fp_glProgramUniform3f = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform3f glProgramUniform3f;
-// extern(System) alias fp_glProgramUniform3fv = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform3fv glProgramUniform3fv;
-// extern(System) alias fp_glProgramUniform3d = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform3d glProgramUniform3d;
-// extern(System) alias fp_glProgramUniform3dv = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform3dv glProgramUniform3dv;
-// extern(System) alias fp_glProgramUniform3ui = void function(GLuint, GLint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform3ui glProgramUniform3ui;
-// extern(System) alias fp_glProgramUniform3uiv = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform3uiv glProgramUniform3uiv;
-// extern(System) alias fp_glProgramUniform4i = void function(GLuint, GLint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramUniform4i glProgramUniform4i;
-// extern(System) alias fp_glProgramUniform4iv = void function(GLuint, GLint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramUniform4iv glProgramUniform4iv;
-// extern(System) alias fp_glProgramUniform4f = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glProgramUniform4f glProgramUniform4f;
-// extern(System) alias fp_glProgramUniform4fv = void function(GLuint, GLint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glProgramUniform4fv glProgramUniform4fv;
-// extern(System) alias fp_glProgramUniform4d = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glProgramUniform4d glProgramUniform4d;
-// extern(System) alias fp_glProgramUniform4dv = void function(GLuint, GLint, GLsizei, const(GLdouble)*) nothrow; __gshared fp_glProgramUniform4dv glProgramUniform4dv;
-// extern(System) alias fp_glProgramUniform4ui = void function(GLuint, GLint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramUniform4ui glProgramUniform4ui;
-// extern(System) alias fp_glProgramUniform4uiv = void function(GLuint, GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramUniform4uiv glProgramUniform4uiv;
-// extern(System) alias fp_glProgramUniformMatrix2fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2fv glProgramUniformMatrix2fv;
-// extern(System) alias fp_glProgramUniformMatrix3fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3fv glProgramUniformMatrix3fv;
-// extern(System) alias fp_glProgramUniformMatrix4fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4fv glProgramUniformMatrix4fv;
-// extern(System) alias fp_glProgramUniformMatrix2dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2dv glProgramUniformMatrix2dv;
-// extern(System) alias fp_glProgramUniformMatrix3dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3dv glProgramUniformMatrix3dv;
-// extern(System) alias fp_glProgramUniformMatrix4dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4dv glProgramUniformMatrix4dv;
-// extern(System) alias fp_glProgramUniformMatrix2x3fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2x3fv glProgramUniformMatrix2x3fv;
-// extern(System) alias fp_glProgramUniformMatrix3x2fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3x2fv glProgramUniformMatrix3x2fv;
-// extern(System) alias fp_glProgramUniformMatrix2x4fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix2x4fv glProgramUniformMatrix2x4fv;
-// extern(System) alias fp_glProgramUniformMatrix4x2fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4x2fv glProgramUniformMatrix4x2fv;
-// extern(System) alias fp_glProgramUniformMatrix3x4fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix3x4fv glProgramUniformMatrix3x4fv;
-// extern(System) alias fp_glProgramUniformMatrix4x3fv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*) nothrow; __gshared fp_glProgramUniformMatrix4x3fv glProgramUniformMatrix4x3fv;
-// extern(System) alias fp_glProgramUniformMatrix2x3dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2x3dv glProgramUniformMatrix2x3dv;
-// extern(System) alias fp_glProgramUniformMatrix3x2dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3x2dv glProgramUniformMatrix3x2dv;
-// extern(System) alias fp_glProgramUniformMatrix2x4dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix2x4dv glProgramUniformMatrix2x4dv;
-// extern(System) alias fp_glProgramUniformMatrix4x2dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4x2dv glProgramUniformMatrix4x2dv;
-// extern(System) alias fp_glProgramUniformMatrix3x4dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix3x4dv glProgramUniformMatrix3x4dv;
-// extern(System) alias fp_glProgramUniformMatrix4x3dv = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*) nothrow; __gshared fp_glProgramUniformMatrix4x3dv glProgramUniformMatrix4x3dv;
-// extern(System) alias fp_glValidateProgramPipeline = void function(GLuint) nothrow; __gshared fp_glValidateProgramPipeline glValidateProgramPipeline;
-// extern(System) alias fp_glGetProgramPipelineInfoLog = void function(GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetProgramPipelineInfoLog glGetProgramPipelineInfoLog;
-// GL_EXT_depth_bounds_test
+
 bool GL_EXT_depth_bounds_test;
 enum uint GL_DEPTH_BOUNDS_TEST_EXT = 0x8890;
 enum uint GL_DEPTH_BOUNDS_EXT = 0x8891;
-extern(System) alias fp_glDepthBoundsEXT = void function(GLclampd, GLclampd) nothrow; __gshared fp_glDepthBoundsEXT glDepthBoundsEXT;
-// GL_HP_image_transform
+
 bool GL_HP_image_transform;
 enum uint GL_IMAGE_SCALE_X_HP = 0x8155;
 enum uint GL_IMAGE_SCALE_Y_HP = 0x8156;
@@ -4749,15 +2654,9 @@ enum uint GL_AVERAGE_HP = 0x8160;
 enum uint GL_IMAGE_TRANSFORM_2D_HP = 0x8161;
 enum uint GL_POST_IMAGE_TRANSFORM_COLOR_TABLE_HP = 0x8162;
 enum uint GL_PROXY_POST_IMAGE_TRANSFORM_COLOR_TABLE_HP = 0x8163;
-extern(System) alias fp_glImageTransformParameteriHP = void function(GLenum, GLenum, GLint) nothrow; __gshared fp_glImageTransformParameteriHP glImageTransformParameteriHP;
-extern(System) alias fp_glImageTransformParameterfHP = void function(GLenum, GLenum, GLfloat) nothrow; __gshared fp_glImageTransformParameterfHP glImageTransformParameterfHP;
-extern(System) alias fp_glImageTransformParameterivHP = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glImageTransformParameterivHP glImageTransformParameterivHP;
-extern(System) alias fp_glImageTransformParameterfvHP = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glImageTransformParameterfvHP glImageTransformParameterfvHP;
-extern(System) alias fp_glGetImageTransformParameterivHP = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetImageTransformParameterivHP glGetImageTransformParameterivHP;
-extern(System) alias fp_glGetImageTransformParameterfvHP = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetImageTransformParameterfvHP glGetImageTransformParameterfvHP;
-// GL_ARB_texture_env_add
+
 bool GL_ARB_texture_env_add;
-// GL_NV_video_capture
+
 bool GL_NV_video_capture;
 enum uint GL_VIDEO_BUFFER_NV = 0x9020;
 enum uint GL_VIDEO_BUFFER_BINDING_NV = 0x9021;
@@ -4788,36 +2687,9 @@ enum uint GL_VIDEO_CAPTURE_FRAME_HEIGHT_NV = 0x9039;
 enum uint GL_VIDEO_CAPTURE_FIELD_UPPER_HEIGHT_NV = 0x903A;
 enum uint GL_VIDEO_CAPTURE_FIELD_LOWER_HEIGHT_NV = 0x903B;
 enum uint GL_VIDEO_CAPTURE_SURFACE_ORIGIN_NV = 0x903C;
-extern(System) alias fp_glBeginVideoCaptureNV = void function(GLuint) nothrow; __gshared fp_glBeginVideoCaptureNV glBeginVideoCaptureNV;
-extern(System) alias fp_glBindVideoCaptureStreamBufferNV = void function(GLuint, GLuint, GLenum, GLintptrARB) nothrow; __gshared fp_glBindVideoCaptureStreamBufferNV glBindVideoCaptureStreamBufferNV;
-extern(System) alias fp_glBindVideoCaptureStreamTextureNV = void function(GLuint, GLuint, GLenum, GLenum, GLuint) nothrow; __gshared fp_glBindVideoCaptureStreamTextureNV glBindVideoCaptureStreamTextureNV;
-extern(System) alias fp_glEndVideoCaptureNV = void function(GLuint) nothrow; __gshared fp_glEndVideoCaptureNV glEndVideoCaptureNV;
-extern(System) alias fp_glGetVideoCaptureivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVideoCaptureivNV glGetVideoCaptureivNV;
-extern(System) alias fp_glGetVideoCaptureStreamivNV = void function(GLuint, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVideoCaptureStreamivNV glGetVideoCaptureStreamivNV;
-extern(System) alias fp_glGetVideoCaptureStreamfvNV = void function(GLuint, GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVideoCaptureStreamfvNV glGetVideoCaptureStreamfvNV;
-extern(System) alias fp_glGetVideoCaptureStreamdvNV = void function(GLuint, GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetVideoCaptureStreamdvNV glGetVideoCaptureStreamdvNV;
-extern(System) alias fp_glVideoCaptureNV = GLenum function(GLuint, GLuint*, GLuint64EXT*) nothrow; __gshared fp_glVideoCaptureNV glVideoCaptureNV;
-extern(System) alias fp_glVideoCaptureStreamParameterivNV = void function(GLuint, GLuint, GLenum, const(GLint)*) nothrow; __gshared fp_glVideoCaptureStreamParameterivNV glVideoCaptureStreamParameterivNV;
-extern(System) alias fp_glVideoCaptureStreamParameterfvNV = void function(GLuint, GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glVideoCaptureStreamParameterfvNV glVideoCaptureStreamParameterfvNV;
-extern(System) alias fp_glVideoCaptureStreamParameterdvNV = void function(GLuint, GLuint, GLenum, const(GLdouble)*) nothrow; __gshared fp_glVideoCaptureStreamParameterdvNV glVideoCaptureStreamParameterdvNV;
-// GL_ARB_sampler_objects
+
 bool GL_ARB_sampler_objects;
-// enum uint GL_SAMPLER_BINDING = 0x8919;
-// extern(System) alias fp_glGenSamplers = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenSamplers glGenSamplers;
-// extern(System) alias fp_glDeleteSamplers = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteSamplers glDeleteSamplers;
-// extern(System) alias fp_glIsSampler = GLboolean function(GLuint) nothrow; __gshared fp_glIsSampler glIsSampler;
-// extern(System) alias fp_glBindSampler = void function(GLuint, GLuint) nothrow; __gshared fp_glBindSampler glBindSampler;
-// extern(System) alias fp_glSamplerParameteri = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glSamplerParameteri glSamplerParameteri;
-// extern(System) alias fp_glSamplerParameteriv = void function(GLuint, GLenum, const(GLint)*) nothrow; __gshared fp_glSamplerParameteriv glSamplerParameteriv;
-// extern(System) alias fp_glSamplerParameterf = void function(GLuint, GLenum, GLfloat) nothrow; __gshared fp_glSamplerParameterf glSamplerParameterf;
-// extern(System) alias fp_glSamplerParameterfv = void function(GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glSamplerParameterfv glSamplerParameterfv;
-// extern(System) alias fp_glSamplerParameterIiv = void function(GLuint, GLenum, const(GLint)*) nothrow; __gshared fp_glSamplerParameterIiv glSamplerParameterIiv;
-// extern(System) alias fp_glSamplerParameterIuiv = void function(GLuint, GLenum, const(GLuint)*) nothrow; __gshared fp_glSamplerParameterIuiv glSamplerParameterIuiv;
-// extern(System) alias fp_glGetSamplerParameteriv = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetSamplerParameteriv glGetSamplerParameteriv;
-// extern(System) alias fp_glGetSamplerParameterIiv = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetSamplerParameterIiv glGetSamplerParameterIiv;
-// extern(System) alias fp_glGetSamplerParameterfv = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetSamplerParameterfv glGetSamplerParameterfv;
-// extern(System) alias fp_glGetSamplerParameterIuiv = void function(GLuint, GLenum, GLuint*) nothrow; __gshared fp_glGetSamplerParameterIuiv glGetSamplerParameterIuiv;
-// GL_ARB_matrix_palette
+
 bool GL_ARB_matrix_palette;
 enum uint GL_MATRIX_PALETTE_ARB = 0x8840;
 enum uint GL_MAX_MATRIX_PALETTE_STACK_DEPTH_ARB = 0x8841;
@@ -4829,23 +2701,17 @@ enum uint GL_MATRIX_INDEX_ARRAY_SIZE_ARB = 0x8846;
 enum uint GL_MATRIX_INDEX_ARRAY_TYPE_ARB = 0x8847;
 enum uint GL_MATRIX_INDEX_ARRAY_STRIDE_ARB = 0x8848;
 enum uint GL_MATRIX_INDEX_ARRAY_POINTER_ARB = 0x8849;
-extern(System) alias fp_glCurrentPaletteMatrixARB = void function(GLint) nothrow; __gshared fp_glCurrentPaletteMatrixARB glCurrentPaletteMatrixARB;
-extern(System) alias fp_glMatrixIndexubvARB = void function(GLint, const(GLubyte)*) nothrow; __gshared fp_glMatrixIndexubvARB glMatrixIndexubvARB;
-extern(System) alias fp_glMatrixIndexusvARB = void function(GLint, const(GLushort)*) nothrow; __gshared fp_glMatrixIndexusvARB glMatrixIndexusvARB;
-extern(System) alias fp_glMatrixIndexuivARB = void function(GLint, const(GLuint)*) nothrow; __gshared fp_glMatrixIndexuivARB glMatrixIndexuivARB;
-extern(System) alias fp_glMatrixIndexPointerARB = void function(GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glMatrixIndexPointerARB glMatrixIndexPointerARB;
-// GL_SGIS_texture_color_mask
+
 bool GL_SGIS_texture_color_mask;
 enum uint GL_TEXTURE_COLOR_WRITEMASK_SGIS = 0x81EF;
-extern(System) alias fp_glTextureColorMaskSGIS = void function(GLboolean, GLboolean, GLboolean, GLboolean) nothrow; __gshared fp_glTextureColorMaskSGIS glTextureColorMaskSGIS;
-// GL_EXT_packed_pixels
+
 bool GL_EXT_packed_pixels;
 enum uint GL_UNSIGNED_BYTE_3_3_2_EXT = 0x8032;
 enum uint GL_UNSIGNED_SHORT_4_4_4_4_EXT = 0x8033;
 enum uint GL_UNSIGNED_SHORT_5_5_5_1_EXT = 0x8034;
 enum uint GL_UNSIGNED_INT_8_8_8_8_EXT = 0x8035;
 enum uint GL_UNSIGNED_INT_10_10_10_2_EXT = 0x8036;
-// GL_ARB_texture_compression
+
 bool GL_ARB_texture_compression;
 enum uint GL_COMPRESSED_ALPHA_ARB = 0x84E9;
 enum uint GL_COMPRESSED_LUMINANCE_ARB = 0x84EA;
@@ -4858,48 +2724,19 @@ enum uint GL_TEXTURE_COMPRESSED_IMAGE_SIZE_ARB = 0x86A0;
 enum uint GL_TEXTURE_COMPRESSED_ARB = 0x86A1;
 enum uint GL_NUM_COMPRESSED_TEXTURE_FORMATS_ARB = 0x86A2;
 enum uint GL_COMPRESSED_TEXTURE_FORMATS_ARB = 0x86A3;
-extern(System) alias fp_glCompressedTexImage3DARB = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexImage3DARB glCompressedTexImage3DARB;
-extern(System) alias fp_glCompressedTexImage2DARB = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexImage2DARB glCompressedTexImage2DARB;
-extern(System) alias fp_glCompressedTexImage1DARB = void function(GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexImage1DARB glCompressedTexImage1DARB;
-extern(System) alias fp_glCompressedTexSubImage3DARB = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexSubImage3DARB glCompressedTexSubImage3DARB;
-extern(System) alias fp_glCompressedTexSubImage2DARB = void function(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexSubImage2DARB glCompressedTexSubImage2DARB;
-extern(System) alias fp_glCompressedTexSubImage1DARB = void function(GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glCompressedTexSubImage1DARB glCompressedTexSubImage1DARB;
-extern(System) alias fp_glGetCompressedTexImageARB = void function(GLenum, GLint, GLvoid*) nothrow; __gshared fp_glGetCompressedTexImageARB glGetCompressedTexImageARB;
-// GL_APPLE_aux_depth_stencil
+
 bool GL_APPLE_aux_depth_stencil;
 enum uint GL_AUX_DEPTH_STENCIL_APPLE = 0x8A14;
-// GL_ARB_shader_subroutine
+
 bool GL_ARB_shader_subroutine;
-// enum uint GL_ACTIVE_SUBROUTINES = 0x8DE5;
-// enum uint GL_ACTIVE_SUBROUTINE_UNIFORMS = 0x8DE6;
-// enum uint GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS = 0x8E47;
-// enum uint GL_ACTIVE_SUBROUTINE_MAX_LENGTH = 0x8E48;
-// enum uint GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH = 0x8E49;
-// enum uint GL_MAX_SUBROUTINES = 0x8DE7;
-// enum uint GL_MAX_SUBROUTINE_UNIFORM_LOCATIONS = 0x8DE8;
-// enum uint GL_NUM_COMPATIBLE_SUBROUTINES = 0x8E4A;
-// enum uint GL_COMPATIBLE_SUBROUTINES = 0x8E4B;
-// enum uint GL_UNIFORM_SIZE = 0x8A38;
-// enum uint GL_UNIFORM_NAME_LENGTH = 0x8A39;
-// extern(System) alias fp_glGetSubroutineUniformLocation = GLint function(GLuint, GLenum, const(GLchar)*) nothrow; __gshared fp_glGetSubroutineUniformLocation glGetSubroutineUniformLocation;
-// extern(System) alias fp_glGetSubroutineIndex = GLuint function(GLuint, GLenum, const(GLchar)*) nothrow; __gshared fp_glGetSubroutineIndex glGetSubroutineIndex;
-// extern(System) alias fp_glGetActiveSubroutineUniformiv = void function(GLuint, GLenum, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetActiveSubroutineUniformiv glGetActiveSubroutineUniformiv;
-// extern(System) alias fp_glGetActiveSubroutineUniformName = void function(GLuint, GLenum, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetActiveSubroutineUniformName glGetActiveSubroutineUniformName;
-// extern(System) alias fp_glGetActiveSubroutineName = void function(GLuint, GLenum, GLuint, GLsizei, GLsizei*, GLchar*) nothrow; __gshared fp_glGetActiveSubroutineName glGetActiveSubroutineName;
-// extern(System) alias fp_glUniformSubroutinesuiv = void function(GLenum, GLsizei, const(GLuint)*) nothrow; __gshared fp_glUniformSubroutinesuiv glUniformSubroutinesuiv;
-// extern(System) alias fp_glGetUniformSubroutineuiv = void function(GLenum, GLint, GLuint*) nothrow; __gshared fp_glGetUniformSubroutineuiv glGetUniformSubroutineuiv;
-// extern(System) alias fp_glGetProgramStageiv = void function(GLuint, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetProgramStageiv glGetProgramStageiv;
-// GL_EXT_framebuffer_sRGB
+
 bool GL_EXT_framebuffer_sRGB;
 enum uint GL_FRAMEBUFFER_SRGB_EXT = 0x8DB9;
 enum uint GL_FRAMEBUFFER_SRGB_CAPABLE_EXT = 0x8DBA;
-// GL_ARB_texture_storage_multisample
+
 bool GL_ARB_texture_storage_multisample;
-// extern(System) alias fp_glTexStorage2DMultisample = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexStorage2DMultisample glTexStorage2DMultisample;
-// extern(System) alias fp_glTexStorage3DMultisample = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexStorage3DMultisample glTexStorage3DMultisample;
-// GL_EXT_vertex_attrib_64bit
+
 bool GL_EXT_vertex_attrib_64bit;
-// enum uint GL_DOUBLE = 0x140A;
 enum uint GL_DOUBLE_VEC2_EXT = 0x8FFC;
 enum uint GL_DOUBLE_VEC3_EXT = 0x8FFD;
 enum uint GL_DOUBLE_VEC4_EXT = 0x8FFE;
@@ -4912,32 +2749,19 @@ enum uint GL_DOUBLE_MAT3x2_EXT = 0x8F4B;
 enum uint GL_DOUBLE_MAT3x4_EXT = 0x8F4C;
 enum uint GL_DOUBLE_MAT4x2_EXT = 0x8F4D;
 enum uint GL_DOUBLE_MAT4x3_EXT = 0x8F4E;
-extern(System) alias fp_glVertexAttribL1dEXT = void function(GLuint, GLdouble) nothrow; __gshared fp_glVertexAttribL1dEXT glVertexAttribL1dEXT;
-extern(System) alias fp_glVertexAttribL2dEXT = void function(GLuint, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL2dEXT glVertexAttribL2dEXT;
-extern(System) alias fp_glVertexAttribL3dEXT = void function(GLuint, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL3dEXT glVertexAttribL3dEXT;
-extern(System) alias fp_glVertexAttribL4dEXT = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexAttribL4dEXT glVertexAttribL4dEXT;
-extern(System) alias fp_glVertexAttribL1dvEXT = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL1dvEXT glVertexAttribL1dvEXT;
-extern(System) alias fp_glVertexAttribL2dvEXT = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL2dvEXT glVertexAttribL2dvEXT;
-extern(System) alias fp_glVertexAttribL3dvEXT = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL3dvEXT glVertexAttribL3dvEXT;
-extern(System) alias fp_glVertexAttribL4dvEXT = void function(GLuint, const(GLdouble)*) nothrow; __gshared fp_glVertexAttribL4dvEXT glVertexAttribL4dvEXT;
-extern(System) alias fp_glVertexAttribLPointerEXT = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexAttribLPointerEXT glVertexAttribLPointerEXT;
-extern(System) alias fp_glGetVertexAttribLdvEXT = void function(GLuint, GLenum, GLdouble*) nothrow; __gshared fp_glGetVertexAttribLdvEXT glGetVertexAttribLdvEXT;
-// GL_ARB_depth_texture
+
 bool GL_ARB_depth_texture;
 enum uint GL_DEPTH_COMPONENT16_ARB = 0x81A5;
 enum uint GL_DEPTH_COMPONENT24_ARB = 0x81A6;
 enum uint GL_DEPTH_COMPONENT32_ARB = 0x81A7;
 enum uint GL_TEXTURE_DEPTH_SIZE_ARB = 0x884A;
 enum uint GL_DEPTH_TEXTURE_MODE_ARB = 0x884B;
-// GL_NV_shader_buffer_store
+
 bool GL_NV_shader_buffer_store;
 enum uint GL_SHADER_GLOBAL_ACCESS_BARRIER_BIT_NV = 0x00000010;
-// enum uint GL_READ_WRITE = 0x88BA;
-// enum uint GL_WRITE_ONLY = 0x88B9;
-// GL_OES_query_matrix
+
 bool GL_OES_query_matrix;
-extern(System) alias fp_glQueryMatrixxOES = GLbitfield function(GLfixed*, GLint*) nothrow; __gshared fp_glQueryMatrixxOES glQueryMatrixxOES;
-// GL_APPLE_texture_range
+
 bool GL_APPLE_texture_range;
 enum uint GL_TEXTURE_RANGE_LENGTH_APPLE = 0x85B7;
 enum uint GL_TEXTURE_RANGE_POINTER_APPLE = 0x85B8;
@@ -4945,24 +2769,19 @@ enum uint GL_TEXTURE_STORAGE_HINT_APPLE = 0x85BC;
 enum uint GL_STORAGE_PRIVATE_APPLE = 0x85BD;
 enum uint GL_STORAGE_CACHED_APPLE = 0x85BE;
 enum uint GL_STORAGE_SHARED_APPLE = 0x85BF;
-extern(System) alias fp_glTextureRangeAPPLE = void function(GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glTextureRangeAPPLE glTextureRangeAPPLE;
-extern(System) alias fp_glGetTexParameterPointervAPPLE = void function(GLenum, GLenum, GLvoid**) nothrow; __gshared fp_glGetTexParameterPointervAPPLE glGetTexParameterPointervAPPLE;
-// GL_NV_shader_storage_buffer_object
+
 bool GL_NV_shader_storage_buffer_object;
-// GL_ARB_texture_query_lod
+
 bool GL_ARB_texture_query_lod;
-// GL_ARB_copy_buffer
+
 bool GL_ARB_copy_buffer;
 enum uint GL_COPY_READ_BUFFER_BINDING = 0x8F36;
-// enum uint GL_COPY_READ_BUFFER = 0x8F36;
 enum uint GL_COPY_WRITE_BUFFER_BINDING = 0x8F37;
-// enum uint GL_COPY_WRITE_BUFFER = 0x8F37;
-// extern(System) alias fp_glCopyBufferSubData = void function(GLenum, GLenum, GLintptr, GLintptr, GLsizeiptr) nothrow; __gshared fp_glCopyBufferSubData glCopyBufferSubData;
-// GL_ARB_shader_image_size
+
 bool GL_ARB_shader_image_size;
-// GL_NV_shader_atomic_counters
+
 bool GL_NV_shader_atomic_counters;
-// GL_APPLE_object_purgeable
+
 bool GL_APPLE_object_purgeable;
 enum uint GL_BUFFER_OBJECT_APPLE = 0x85B3;
 enum uint GL_RELEASED_APPLE = 0x8A19;
@@ -4970,25 +2789,14 @@ enum uint GL_VOLATILE_APPLE = 0x8A1A;
 enum uint GL_RETAINED_APPLE = 0x8A1B;
 enum uint GL_UNDEFINED_APPLE = 0x8A1C;
 enum uint GL_PURGEABLE_APPLE = 0x8A1D;
-extern(System) alias fp_glObjectPurgeableAPPLE = GLenum function(GLenum, GLuint, GLenum) nothrow; __gshared fp_glObjectPurgeableAPPLE glObjectPurgeableAPPLE;
-extern(System) alias fp_glObjectUnpurgeableAPPLE = GLenum function(GLenum, GLuint, GLenum) nothrow; __gshared fp_glObjectUnpurgeableAPPLE glObjectUnpurgeableAPPLE;
-extern(System) alias fp_glGetObjectParameterivAPPLE = void function(GLenum, GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetObjectParameterivAPPLE glGetObjectParameterivAPPLE;
-// GL_ARB_occlusion_query
+
 bool GL_ARB_occlusion_query;
 enum uint GL_QUERY_COUNTER_BITS_ARB = 0x8864;
 enum uint GL_CURRENT_QUERY_ARB = 0x8865;
 enum uint GL_QUERY_RESULT_ARB = 0x8866;
 enum uint GL_QUERY_RESULT_AVAILABLE_ARB = 0x8867;
 enum uint GL_SAMPLES_PASSED_ARB = 0x8914;
-extern(System) alias fp_glGenQueriesARB = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenQueriesARB glGenQueriesARB;
-extern(System) alias fp_glDeleteQueriesARB = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteQueriesARB glDeleteQueriesARB;
-extern(System) alias fp_glIsQueryARB = GLboolean function(GLuint) nothrow; __gshared fp_glIsQueryARB glIsQueryARB;
-extern(System) alias fp_glBeginQueryARB = void function(GLenum, GLuint) nothrow; __gshared fp_glBeginQueryARB glBeginQueryARB;
-extern(System) alias fp_glEndQueryARB = void function(GLenum) nothrow; __gshared fp_glEndQueryARB glEndQueryARB;
-extern(System) alias fp_glGetQueryivARB = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetQueryivARB glGetQueryivARB;
-extern(System) alias fp_glGetQueryObjectivARB = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetQueryObjectivARB glGetQueryObjectivARB;
-extern(System) alias fp_glGetQueryObjectuivARB = void function(GLuint, GLenum, GLuint*) nothrow; __gshared fp_glGetQueryObjectuivARB glGetQueryObjectuivARB;
-// GL_INGR_color_clamp
+
 bool GL_INGR_color_clamp;
 enum uint GL_RED_MIN_CLAMP_INGR = 0x8560;
 enum uint GL_GREEN_MIN_CLAMP_INGR = 0x8561;
@@ -4998,7 +2806,7 @@ enum uint GL_RED_MAX_CLAMP_INGR = 0x8564;
 enum uint GL_GREEN_MAX_CLAMP_INGR = 0x8565;
 enum uint GL_BLUE_MAX_CLAMP_INGR = 0x8566;
 enum uint GL_ALPHA_MAX_CLAMP_INGR = 0x8567;
-// GL_SGI_color_table
+
 bool GL_SGI_color_table;
 enum uint GL_COLOR_TABLE_SGI = 0x80D0;
 enum uint GL_POST_CONVOLUTION_COLOR_TABLE_SGI = 0x80D1;
@@ -5016,16 +2824,9 @@ enum uint GL_COLOR_TABLE_BLUE_SIZE_SGI = 0x80DC;
 enum uint GL_COLOR_TABLE_ALPHA_SIZE_SGI = 0x80DD;
 enum uint GL_COLOR_TABLE_LUMINANCE_SIZE_SGI = 0x80DE;
 enum uint GL_COLOR_TABLE_INTENSITY_SIZE_SGI = 0x80DF;
-extern(System) alias fp_glColorTableSGI = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glColorTableSGI glColorTableSGI;
-extern(System) alias fp_glColorTableParameterfvSGI = void function(GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glColorTableParameterfvSGI glColorTableParameterfvSGI;
-extern(System) alias fp_glColorTableParameterivSGI = void function(GLenum, GLenum, const(GLint)*) nothrow; __gshared fp_glColorTableParameterivSGI glColorTableParameterivSGI;
-extern(System) alias fp_glCopyColorTableSGI = void function(GLenum, GLenum, GLint, GLint, GLsizei) nothrow; __gshared fp_glCopyColorTableSGI glCopyColorTableSGI;
-extern(System) alias fp_glGetColorTableSGI = void function(GLenum, GLenum, GLenum, GLvoid*) nothrow; __gshared fp_glGetColorTableSGI glGetColorTableSGI;
-extern(System) alias fp_glGetColorTableParameterfvSGI = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetColorTableParameterfvSGI glGetColorTableParameterfvSGI;
-extern(System) alias fp_glGetColorTableParameterivSGI = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetColorTableParameterivSGI glGetColorTableParameterivSGI;
-// GL_NV_gpu_program5_mem_extended
+
 bool GL_NV_gpu_program5_mem_extended;
-// GL_ARB_texture_cube_map_array
+
 bool GL_ARB_texture_cube_map_array;
 enum uint GL_TEXTURE_CUBE_MAP_ARRAY_ARB = 0x9009;
 enum uint GL_TEXTURE_BINDING_CUBE_MAP_ARRAY_ARB = 0x900A;
@@ -5034,10 +2835,10 @@ enum uint GL_SAMPLER_CUBE_MAP_ARRAY_ARB = 0x900C;
 enum uint GL_SAMPLER_CUBE_MAP_ARRAY_SHADOW_ARB = 0x900D;
 enum uint GL_INT_SAMPLER_CUBE_MAP_ARRAY_ARB = 0x900E;
 enum uint GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY_ARB = 0x900F;
-// GL_SGIX_scalebias_hint
+
 bool GL_SGIX_scalebias_hint;
 enum uint GL_SCALEBIAS_HINT_SGIX = 0x8322;
-// GL_EXT_gpu_shader4
+
 bool GL_EXT_gpu_shader4;
 enum uint GL_VERTEX_ATTRIB_ARRAY_INTEGER_EXT = 0x88FD;
 enum uint GL_SAMPLER_1D_ARRAY_EXT = 0x8DC0;
@@ -5067,44 +2868,16 @@ enum uint GL_UNSIGNED_INT_SAMPLER_2D_ARRAY_EXT = 0x8DD7;
 enum uint GL_UNSIGNED_INT_SAMPLER_BUFFER_EXT = 0x8DD8;
 enum uint GL_MIN_PROGRAM_TEXEL_OFFSET_EXT = 0x8904;
 enum uint GL_MAX_PROGRAM_TEXEL_OFFSET_EXT = 0x8905;
-extern(System) alias fp_glGetUniformuivEXT = void function(GLuint, GLint, GLuint*) nothrow; __gshared fp_glGetUniformuivEXT glGetUniformuivEXT;
-extern(System) alias fp_glBindFragDataLocationEXT = void function(GLuint, GLuint, const(GLchar)*) nothrow; __gshared fp_glBindFragDataLocationEXT glBindFragDataLocationEXT;
-extern(System) alias fp_glGetFragDataLocationEXT = GLint function(GLuint, const(GLchar)*) nothrow; __gshared fp_glGetFragDataLocationEXT glGetFragDataLocationEXT;
-extern(System) alias fp_glUniform1uiEXT = void function(GLint, GLuint) nothrow; __gshared fp_glUniform1uiEXT glUniform1uiEXT;
-extern(System) alias fp_glUniform2uiEXT = void function(GLint, GLuint, GLuint) nothrow; __gshared fp_glUniform2uiEXT glUniform2uiEXT;
-extern(System) alias fp_glUniform3uiEXT = void function(GLint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glUniform3uiEXT glUniform3uiEXT;
-extern(System) alias fp_glUniform4uiEXT = void function(GLint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glUniform4uiEXT glUniform4uiEXT;
-extern(System) alias fp_glUniform1uivEXT = void function(GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glUniform1uivEXT glUniform1uivEXT;
-extern(System) alias fp_glUniform2uivEXT = void function(GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glUniform2uivEXT glUniform2uivEXT;
-extern(System) alias fp_glUniform3uivEXT = void function(GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glUniform3uivEXT glUniform3uivEXT;
-extern(System) alias fp_glUniform4uivEXT = void function(GLint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glUniform4uivEXT glUniform4uivEXT;
-// GL_NV_geometry_program4
+
 bool GL_NV_geometry_program4;
-// enum uint GL_LINES_ADJACENCY_EXT = 0x000A;
-// enum uint GL_LINE_STRIP_ADJACENCY_EXT = 0x000B;
-// enum uint GL_TRIANGLES_ADJACENCY_EXT = 0x000C;
-// enum uint GL_TRIANGLE_STRIP_ADJACENCY_EXT = 0x000D;
 enum uint GL_GEOMETRY_PROGRAM_NV = 0x8C26;
 enum uint GL_MAX_PROGRAM_OUTPUT_VERTICES_NV = 0x8C27;
 enum uint GL_MAX_PROGRAM_TOTAL_OUTPUT_COMPONENTS_NV = 0x8C28;
-// enum uint GL_GEOMETRY_VERTICES_OUT_EXT = 0x8DDA;
-// enum uint GL_GEOMETRY_INPUT_TYPE_EXT = 0x8DDB;
-// enum uint GL_GEOMETRY_OUTPUT_TYPE_EXT = 0x8DDC;
-// enum uint GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS_EXT = 0x8C29;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_LAYERED_EXT = 0x8DA7;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT = 0x8DA8;
-// enum uint GL_FRAMEBUFFER_INCOMPLETE_LAYER_COUNT_EXT = 0x8DA9;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER_EXT = 0x8CD4;
-// enum uint GL_PROGRAM_POINT_SIZE_EXT = 0x8642;
-extern(System) alias fp_glProgramVertexLimitNV = void function(GLenum, GLint) nothrow; __gshared fp_glProgramVertexLimitNV glProgramVertexLimitNV;
-extern(System) alias fp_glFramebufferTextureEXT = void function(GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTextureEXT glFramebufferTextureEXT;
-extern(System) alias fp_glFramebufferTextureLayerEXT = void function(GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glFramebufferTextureLayerEXT glFramebufferTextureLayerEXT;
-extern(System) alias fp_glFramebufferTextureFaceEXT = void function(GLenum, GLenum, GLuint, GLint, GLenum) nothrow; __gshared fp_glFramebufferTextureFaceEXT glFramebufferTextureFaceEXT;
-// GL_EXT_framebuffer_multisample_blit_scaled
+
 bool GL_EXT_framebuffer_multisample_blit_scaled;
 enum uint GL_SCALED_RESOLVE_FASTEST_EXT = 0x90BA;
 enum uint GL_SCALED_RESOLVE_NICEST_EXT = 0x90BB;
-// GL_AMD_debug_output
+
 bool GL_AMD_debug_output;
 enum uint GL_MAX_DEBUG_MESSAGE_LENGTH_AMD = 0x9143;
 enum uint GL_MAX_DEBUG_LOGGED_MESSAGES_AMD = 0x9144;
@@ -5120,16 +2893,12 @@ enum uint GL_DEBUG_CATEGORY_PERFORMANCE_AMD = 0x914D;
 enum uint GL_DEBUG_CATEGORY_SHADER_COMPILER_AMD = 0x914E;
 enum uint GL_DEBUG_CATEGORY_APPLICATION_AMD = 0x914F;
 enum uint GL_DEBUG_CATEGORY_OTHER_AMD = 0x9150;
-extern(System) alias fp_glDebugMessageEnableAMD = void function(GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean) nothrow; __gshared fp_glDebugMessageEnableAMD glDebugMessageEnableAMD;
-extern(System) alias fp_glDebugMessageInsertAMD = void function(GLenum, GLenum, GLuint, GLsizei, const(GLchar)*) nothrow; __gshared fp_glDebugMessageInsertAMD glDebugMessageInsertAMD;
-extern(System) alias fp_glDebugMessageCallbackAMD = void function(GLDEBUGPROCAMD, void*) nothrow; __gshared fp_glDebugMessageCallbackAMD glDebugMessageCallbackAMD;
-extern(System) alias fp_glGetDebugMessageLogAMD = GLuint function(GLuint, GLsizei, GLenum*, GLuint*, GLuint*, GLsizei*, GLchar*) nothrow; __gshared fp_glGetDebugMessageLogAMD glGetDebugMessageLogAMD;
-// GL_ARB_texture_border_clamp
+
 bool GL_ARB_texture_border_clamp;
 enum uint GL_CLAMP_TO_BORDER_ARB = 0x812D;
-// GL_ARB_fragment_coord_conventions
+
 bool GL_ARB_fragment_coord_conventions;
-// GL_ARB_multitexture
+
 bool GL_ARB_multitexture;
 enum uint GL_TEXTURE0_ARB = 0x84C0;
 enum uint GL_TEXTURE1_ARB = 0x84C1;
@@ -5166,41 +2935,7 @@ enum uint GL_TEXTURE31_ARB = 0x84DF;
 enum uint GL_ACTIVE_TEXTURE_ARB = 0x84E0;
 enum uint GL_CLIENT_ACTIVE_TEXTURE_ARB = 0x84E1;
 enum uint GL_MAX_TEXTURE_UNITS_ARB = 0x84E2;
-extern(System) alias fp_glActiveTextureARB = void function(GLenum) nothrow; __gshared fp_glActiveTextureARB glActiveTextureARB;
-extern(System) alias fp_glClientActiveTextureARB = void function(GLenum) nothrow; __gshared fp_glClientActiveTextureARB glClientActiveTextureARB;
-extern(System) alias fp_glMultiTexCoord1dARB = void function(GLenum, GLdouble) nothrow; __gshared fp_glMultiTexCoord1dARB glMultiTexCoord1dARB;
-extern(System) alias fp_glMultiTexCoord1dvARB = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMultiTexCoord1dvARB glMultiTexCoord1dvARB;
-extern(System) alias fp_glMultiTexCoord1fARB = void function(GLenum, GLfloat) nothrow; __gshared fp_glMultiTexCoord1fARB glMultiTexCoord1fARB;
-extern(System) alias fp_glMultiTexCoord1fvARB = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexCoord1fvARB glMultiTexCoord1fvARB;
-extern(System) alias fp_glMultiTexCoord1iARB = void function(GLenum, GLint) nothrow; __gshared fp_glMultiTexCoord1iARB glMultiTexCoord1iARB;
-extern(System) alias fp_glMultiTexCoord1ivARB = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexCoord1ivARB glMultiTexCoord1ivARB;
-extern(System) alias fp_glMultiTexCoord1sARB = void function(GLenum, GLshort) nothrow; __gshared fp_glMultiTexCoord1sARB glMultiTexCoord1sARB;
-extern(System) alias fp_glMultiTexCoord1svARB = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glMultiTexCoord1svARB glMultiTexCoord1svARB;
-extern(System) alias fp_glMultiTexCoord2dARB = void function(GLenum, GLdouble, GLdouble) nothrow; __gshared fp_glMultiTexCoord2dARB glMultiTexCoord2dARB;
-extern(System) alias fp_glMultiTexCoord2dvARB = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMultiTexCoord2dvARB glMultiTexCoord2dvARB;
-extern(System) alias fp_glMultiTexCoord2fARB = void function(GLenum, GLfloat, GLfloat) nothrow; __gshared fp_glMultiTexCoord2fARB glMultiTexCoord2fARB;
-extern(System) alias fp_glMultiTexCoord2fvARB = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexCoord2fvARB glMultiTexCoord2fvARB;
-extern(System) alias fp_glMultiTexCoord2iARB = void function(GLenum, GLint, GLint) nothrow; __gshared fp_glMultiTexCoord2iARB glMultiTexCoord2iARB;
-extern(System) alias fp_glMultiTexCoord2ivARB = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexCoord2ivARB glMultiTexCoord2ivARB;
-extern(System) alias fp_glMultiTexCoord2sARB = void function(GLenum, GLshort, GLshort) nothrow; __gshared fp_glMultiTexCoord2sARB glMultiTexCoord2sARB;
-extern(System) alias fp_glMultiTexCoord2svARB = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glMultiTexCoord2svARB glMultiTexCoord2svARB;
-extern(System) alias fp_glMultiTexCoord3dARB = void function(GLenum, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMultiTexCoord3dARB glMultiTexCoord3dARB;
-extern(System) alias fp_glMultiTexCoord3dvARB = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMultiTexCoord3dvARB glMultiTexCoord3dvARB;
-extern(System) alias fp_glMultiTexCoord3fARB = void function(GLenum, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glMultiTexCoord3fARB glMultiTexCoord3fARB;
-extern(System) alias fp_glMultiTexCoord3fvARB = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexCoord3fvARB glMultiTexCoord3fvARB;
-extern(System) alias fp_glMultiTexCoord3iARB = void function(GLenum, GLint, GLint, GLint) nothrow; __gshared fp_glMultiTexCoord3iARB glMultiTexCoord3iARB;
-extern(System) alias fp_glMultiTexCoord3ivARB = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexCoord3ivARB glMultiTexCoord3ivARB;
-extern(System) alias fp_glMultiTexCoord3sARB = void function(GLenum, GLshort, GLshort, GLshort) nothrow; __gshared fp_glMultiTexCoord3sARB glMultiTexCoord3sARB;
-extern(System) alias fp_glMultiTexCoord3svARB = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glMultiTexCoord3svARB glMultiTexCoord3svARB;
-extern(System) alias fp_glMultiTexCoord4dARB = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glMultiTexCoord4dARB glMultiTexCoord4dARB;
-extern(System) alias fp_glMultiTexCoord4dvARB = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glMultiTexCoord4dvARB glMultiTexCoord4dvARB;
-extern(System) alias fp_glMultiTexCoord4fARB = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glMultiTexCoord4fARB glMultiTexCoord4fARB;
-extern(System) alias fp_glMultiTexCoord4fvARB = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glMultiTexCoord4fvARB glMultiTexCoord4fvARB;
-extern(System) alias fp_glMultiTexCoord4iARB = void function(GLenum, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glMultiTexCoord4iARB glMultiTexCoord4iARB;
-extern(System) alias fp_glMultiTexCoord4ivARB = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glMultiTexCoord4ivARB glMultiTexCoord4ivARB;
-extern(System) alias fp_glMultiTexCoord4sARB = void function(GLenum, GLshort, GLshort, GLshort, GLshort) nothrow; __gshared fp_glMultiTexCoord4sARB glMultiTexCoord4sARB;
-extern(System) alias fp_glMultiTexCoord4svARB = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glMultiTexCoord4svARB glMultiTexCoord4svARB;
-// GL_SGIX_polynomial_ffd
+
 bool GL_SGIX_polynomial_ffd;
 enum uint GL_TEXTURE_DEFORMATION_BIT_SGIX = 0x00000001;
 enum uint GL_GEOMETRY_DEFORMATION_BIT_SGIX = 0x00000002;
@@ -5208,131 +2943,39 @@ enum uint GL_GEOMETRY_DEFORMATION_SGIX = 0x8194;
 enum uint GL_TEXTURE_DEFORMATION_SGIX = 0x8195;
 enum uint GL_DEFORMATIONS_MASK_SGIX = 0x8196;
 enum uint GL_MAX_DEFORMATION_ORDER_SGIX = 0x8197;
-extern(System) alias fp_glDeformationMap3dSGIX = void function(GLenum, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*) nothrow; __gshared fp_glDeformationMap3dSGIX glDeformationMap3dSGIX;
-extern(System) alias fp_glDeformationMap3fSGIX = void function(GLenum, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*) nothrow; __gshared fp_glDeformationMap3fSGIX glDeformationMap3fSGIX;
-extern(System) alias fp_glDeformSGIX = void function(GLbitfield) nothrow; __gshared fp_glDeformSGIX glDeformSGIX;
-extern(System) alias fp_glLoadIdentityDeformationMapSGIX = void function(GLbitfield) nothrow; __gshared fp_glLoadIdentityDeformationMapSGIX glLoadIdentityDeformationMapSGIX;
-// GL_EXT_provoking_vertex
+
 bool GL_EXT_provoking_vertex;
 enum uint GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION_EXT = 0x8E4C;
 enum uint GL_FIRST_VERTEX_CONVENTION_EXT = 0x8E4D;
 enum uint GL_LAST_VERTEX_CONVENTION_EXT = 0x8E4E;
 enum uint GL_PROVOKING_VERTEX_EXT = 0x8E4F;
-extern(System) alias fp_glProvokingVertexEXT = void function(GLenum) nothrow; __gshared fp_glProvokingVertexEXT glProvokingVertexEXT;
-// GL_ARB_point_parameters
+
 bool GL_ARB_point_parameters;
 enum uint GL_POINT_SIZE_MIN_ARB = 0x8126;
 enum uint GL_POINT_SIZE_MAX_ARB = 0x8127;
 enum uint GL_POINT_FADE_THRESHOLD_SIZE_ARB = 0x8128;
 enum uint GL_POINT_DISTANCE_ATTENUATION_ARB = 0x8129;
-extern(System) alias fp_glPointParameterfARB = void function(GLenum, GLfloat) nothrow; __gshared fp_glPointParameterfARB glPointParameterfARB;
-extern(System) alias fp_glPointParameterfvARB = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glPointParameterfvARB glPointParameterfvARB;
-// GL_ARB_shader_image_load_store
+
 bool GL_ARB_shader_image_load_store;
-// enum uint GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT = 0x00000001;
-// enum uint GL_ELEMENT_ARRAY_BARRIER_BIT = 0x00000002;
-// enum uint GL_UNIFORM_BARRIER_BIT = 0x00000004;
-// enum uint GL_TEXTURE_FETCH_BARRIER_BIT = 0x00000008;
-// enum uint GL_SHADER_IMAGE_ACCESS_BARRIER_BIT = 0x00000020;
-// enum uint GL_COMMAND_BARRIER_BIT = 0x00000040;
-// enum uint GL_PIXEL_BUFFER_BARRIER_BIT = 0x00000080;
-// enum uint GL_TEXTURE_UPDATE_BARRIER_BIT = 0x00000100;
-// enum uint GL_BUFFER_UPDATE_BARRIER_BIT = 0x00000200;
-// enum uint GL_FRAMEBUFFER_BARRIER_BIT = 0x00000400;
-// enum uint GL_TRANSFORM_FEEDBACK_BARRIER_BIT = 0x00000800;
-// enum uint GL_ATOMIC_COUNTER_BARRIER_BIT = 0x00001000;
-// enum uint GL_ALL_BARRIER_BITS = 0xFFFFFFFF;
-// enum uint GL_MAX_IMAGE_UNITS = 0x8F38;
-// enum uint GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS = 0x8F39;
-// enum uint GL_IMAGE_BINDING_NAME = 0x8F3A;
-// enum uint GL_IMAGE_BINDING_LEVEL = 0x8F3B;
-// enum uint GL_IMAGE_BINDING_LAYERED = 0x8F3C;
-// enum uint GL_IMAGE_BINDING_LAYER = 0x8F3D;
-// enum uint GL_IMAGE_BINDING_ACCESS = 0x8F3E;
-// enum uint GL_IMAGE_1D = 0x904C;
-// enum uint GL_IMAGE_2D = 0x904D;
-// enum uint GL_IMAGE_3D = 0x904E;
-// enum uint GL_IMAGE_2D_RECT = 0x904F;
-// enum uint GL_IMAGE_CUBE = 0x9050;
-// enum uint GL_IMAGE_BUFFER = 0x9051;
-// enum uint GL_IMAGE_1D_ARRAY = 0x9052;
-// enum uint GL_IMAGE_2D_ARRAY = 0x9053;
-// enum uint GL_IMAGE_CUBE_MAP_ARRAY = 0x9054;
-// enum uint GL_IMAGE_2D_MULTISAMPLE = 0x9055;
-// enum uint GL_IMAGE_2D_MULTISAMPLE_ARRAY = 0x9056;
-// enum uint GL_INT_IMAGE_1D = 0x9057;
-// enum uint GL_INT_IMAGE_2D = 0x9058;
-// enum uint GL_INT_IMAGE_3D = 0x9059;
-// enum uint GL_INT_IMAGE_2D_RECT = 0x905A;
-// enum uint GL_INT_IMAGE_CUBE = 0x905B;
-// enum uint GL_INT_IMAGE_BUFFER = 0x905C;
-// enum uint GL_INT_IMAGE_1D_ARRAY = 0x905D;
-// enum uint GL_INT_IMAGE_2D_ARRAY = 0x905E;
-// enum uint GL_INT_IMAGE_CUBE_MAP_ARRAY = 0x905F;
-// enum uint GL_INT_IMAGE_2D_MULTISAMPLE = 0x9060;
-// enum uint GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY = 0x9061;
-// enum uint GL_UNSIGNED_INT_IMAGE_1D = 0x9062;
-// enum uint GL_UNSIGNED_INT_IMAGE_2D = 0x9063;
-// enum uint GL_UNSIGNED_INT_IMAGE_3D = 0x9064;
-// enum uint GL_UNSIGNED_INT_IMAGE_2D_RECT = 0x9065;
-// enum uint GL_UNSIGNED_INT_IMAGE_CUBE = 0x9066;
-// enum uint GL_UNSIGNED_INT_IMAGE_BUFFER = 0x9067;
-// enum uint GL_UNSIGNED_INT_IMAGE_1D_ARRAY = 0x9068;
-// enum uint GL_UNSIGNED_INT_IMAGE_2D_ARRAY = 0x9069;
-// enum uint GL_UNSIGNED_INT_IMAGE_CUBE_MAP_ARRAY = 0x906A;
-// enum uint GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE = 0x906B;
-// enum uint GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY = 0x906C;
-// enum uint GL_MAX_IMAGE_SAMPLES = 0x906D;
-// enum uint GL_IMAGE_BINDING_FORMAT = 0x906E;
-// enum uint GL_IMAGE_FORMAT_COMPATIBILITY_TYPE = 0x90C7;
-// enum uint GL_IMAGE_FORMAT_COMPATIBILITY_BY_SIZE = 0x90C8;
-// enum uint GL_IMAGE_FORMAT_COMPATIBILITY_BY_CLASS = 0x90C9;
-// enum uint GL_MAX_VERTEX_IMAGE_UNIFORMS = 0x90CA;
-// enum uint GL_MAX_TESS_CONTROL_IMAGE_UNIFORMS = 0x90CB;
-// enum uint GL_MAX_TESS_EVALUATION_IMAGE_UNIFORMS = 0x90CC;
-// enum uint GL_MAX_GEOMETRY_IMAGE_UNIFORMS = 0x90CD;
-// enum uint GL_MAX_FRAGMENT_IMAGE_UNIFORMS = 0x90CE;
-// enum uint GL_MAX_COMBINED_IMAGE_UNIFORMS = 0x90CF;
-// extern(System) alias fp_glBindImageTexture = void function(GLuint, GLuint, GLint, GLboolean, GLint, GLenum, GLenum) nothrow; __gshared fp_glBindImageTexture glBindImageTexture;
-// extern(System) alias fp_glMemoryBarrier = void function(GLbitfield) nothrow; __gshared fp_glMemoryBarrier glMemoryBarrier;
-// GL_HP_occlusion_test
+
 bool GL_HP_occlusion_test;
 enum uint GL_OCCLUSION_TEST_HP = 0x8165;
 enum uint GL_OCCLUSION_TEST_RESULT_HP = 0x8166;
-// GL_ARB_ES3_compatibility
+
 bool GL_ARB_ES3_compatibility;
-// enum uint GL_COMPRESSED_RGB8_ETC2 = 0x9274;
-// enum uint GL_COMPRESSED_SRGB8_ETC2 = 0x9275;
-// enum uint GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2 = 0x9276;
-// enum uint GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 = 0x9277;
-// enum uint GL_COMPRESSED_RGBA8_ETC2_EAC = 0x9278;
-// enum uint GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC = 0x9279;
-// enum uint GL_COMPRESSED_R11_EAC = 0x9270;
-// enum uint GL_COMPRESSED_SIGNED_R11_EAC = 0x9271;
-// enum uint GL_COMPRESSED_RG11_EAC = 0x9272;
-// enum uint GL_COMPRESSED_SIGNED_RG11_EAC = 0x9273;
-// enum uint GL_PRIMITIVE_RESTART_FIXED_INDEX = 0x8D69;
-// enum uint GL_ANY_SAMPLES_PASSED_CONSERVATIVE = 0x8D6A;
-// enum uint GL_MAX_ELEMENT_INDEX = 0x8D6B;
-// GL_SGIX_framezoom
+
 bool GL_SGIX_framezoom;
 enum uint GL_FRAMEZOOM_SGIX = 0x818B;
 enum uint GL_FRAMEZOOM_FACTOR_SGIX = 0x818C;
 enum uint GL_MAX_FRAMEZOOM_FACTOR_SGIX = 0x818D;
-extern(System) alias fp_glFrameZoomSGIX = void function(GLint) nothrow; __gshared fp_glFrameZoomSGIX glFrameZoomSGIX;
-// GL_ARB_texture_buffer_object_rgb32
+
 bool GL_ARB_texture_buffer_object_rgb32;
-// enum uint GL_RGB32F = 0x8815;
-// enum uint GL_RGB32UI = 0x8D71;
-// enum uint GL_RGB32I = 0x8D83;
-// GL_NV_bindless_multi_draw_indirect
+
 bool GL_NV_bindless_multi_draw_indirect;
-extern(System) alias fp_glMultiDrawArraysIndirectBindlessNV = void function(GLenum, const(GLvoid)*, GLsizei, GLsizei, GLint) nothrow; __gshared fp_glMultiDrawArraysIndirectBindlessNV glMultiDrawArraysIndirectBindlessNV;
-extern(System) alias fp_glMultiDrawElementsIndirectBindlessNV = void function(GLenum, GLenum, const(GLvoid)*, GLsizei, GLsizei, GLint) nothrow; __gshared fp_glMultiDrawElementsIndirectBindlessNV glMultiDrawElementsIndirectBindlessNV;
-// GL_SGIX_texture_multi_buffer
+
 bool GL_SGIX_texture_multi_buffer;
 enum uint GL_TEXTURE_MULTI_BUFFER_HINT_SGIX = 0x812E;
-// GL_EXT_transform_feedback
+
 bool GL_EXT_transform_feedback;
 enum uint GL_TRANSFORM_FEEDBACK_BUFFER_EXT = 0x8C8E;
 enum uint GL_TRANSFORM_FEEDBACK_BUFFER_START_EXT = 0x8C84;
@@ -5349,14 +2992,7 @@ enum uint GL_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS_EXT = 0x8C80;
 enum uint GL_TRANSFORM_FEEDBACK_VARYINGS_EXT = 0x8C83;
 enum uint GL_TRANSFORM_FEEDBACK_BUFFER_MODE_EXT = 0x8C7F;
 enum uint GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH_EXT = 0x8C76;
-extern(System) alias fp_glBeginTransformFeedbackEXT = void function(GLenum) nothrow; __gshared fp_glBeginTransformFeedbackEXT glBeginTransformFeedbackEXT;
-extern(System) alias fp_glEndTransformFeedbackEXT = void function() nothrow; __gshared fp_glEndTransformFeedbackEXT glEndTransformFeedbackEXT;
-extern(System) alias fp_glBindBufferRangeEXT = void function(GLenum, GLuint, GLuint, GLintptr, GLsizeiptr) nothrow; __gshared fp_glBindBufferRangeEXT glBindBufferRangeEXT;
-extern(System) alias fp_glBindBufferOffsetEXT = void function(GLenum, GLuint, GLuint, GLintptr) nothrow; __gshared fp_glBindBufferOffsetEXT glBindBufferOffsetEXT;
-extern(System) alias fp_glBindBufferBaseEXT = void function(GLenum, GLuint, GLuint) nothrow; __gshared fp_glBindBufferBaseEXT glBindBufferBaseEXT;
-extern(System) alias fp_glTransformFeedbackVaryingsEXT = void function(GLuint, GLsizei, const(GLchar*)*, GLenum) nothrow; __gshared fp_glTransformFeedbackVaryingsEXT glTransformFeedbackVaryingsEXT;
-extern(System) alias fp_glGetTransformFeedbackVaryingEXT = void function(GLuint, GLuint, GLsizei, GLsizei*, GLsizei*, GLenum*, GLchar*) nothrow; __gshared fp_glGetTransformFeedbackVaryingEXT glGetTransformFeedbackVaryingEXT;
-// GL_KHR_texture_compression_astc_ldr
+
 bool GL_KHR_texture_compression_astc_ldr;
 enum uint GL_COMPRESSED_RGBA_ASTC_4x4_KHR = 0x93B0;
 enum uint GL_COMPRESSED_RGBA_ASTC_5x4_KHR = 0x93B1;
@@ -5386,17 +3022,17 @@ enum uint GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR = 0x93DA;
 enum uint GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR = 0x93DB;
 enum uint GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR = 0x93DC;
 enum uint GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR = 0x93DD;
-// GL_3DFX_multisample
+
 bool GL_3DFX_multisample;
 enum uint GL_MULTISAMPLE_3DFX = 0x86B2;
 enum uint GL_SAMPLE_BUFFERS_3DFX = 0x86B3;
 enum uint GL_SAMPLES_3DFX = 0x86B4;
 enum uint GL_MULTISAMPLE_BIT_3DFX = 0x20000000;
-// GL_ARB_texture_env_dot3
+
 bool GL_ARB_texture_env_dot3;
 enum uint GL_DOT3_RGB_ARB = 0x86AE;
 enum uint GL_DOT3_RGBA_ARB = 0x86AF;
-// GL_NV_gpu_program4
+
 bool GL_NV_gpu_program4;
 enum uint GL_MIN_PROGRAM_TEXEL_OFFSET_NV = 0x8904;
 enum uint GL_MAX_PROGRAM_TEXEL_OFFSET_NV = 0x8905;
@@ -5406,23 +3042,7 @@ enum uint GL_MAX_PROGRAM_ATTRIB_COMPONENTS_NV = 0x8908;
 enum uint GL_MAX_PROGRAM_RESULT_COMPONENTS_NV = 0x8909;
 enum uint GL_MAX_PROGRAM_GENERIC_ATTRIBS_NV = 0x8DA5;
 enum uint GL_MAX_PROGRAM_GENERIC_RESULTS_NV = 0x8DA6;
-extern(System) alias fp_glProgramLocalParameterI4iNV = void function(GLenum, GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramLocalParameterI4iNV glProgramLocalParameterI4iNV;
-extern(System) alias fp_glProgramLocalParameterI4ivNV = void function(GLenum, GLuint, const(GLint)*) nothrow; __gshared fp_glProgramLocalParameterI4ivNV glProgramLocalParameterI4ivNV;
-extern(System) alias fp_glProgramLocalParametersI4ivNV = void function(GLenum, GLuint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramLocalParametersI4ivNV glProgramLocalParametersI4ivNV;
-extern(System) alias fp_glProgramLocalParameterI4uiNV = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramLocalParameterI4uiNV glProgramLocalParameterI4uiNV;
-extern(System) alias fp_glProgramLocalParameterI4uivNV = void function(GLenum, GLuint, const(GLuint)*) nothrow; __gshared fp_glProgramLocalParameterI4uivNV glProgramLocalParameterI4uivNV;
-extern(System) alias fp_glProgramLocalParametersI4uivNV = void function(GLenum, GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramLocalParametersI4uivNV glProgramLocalParametersI4uivNV;
-extern(System) alias fp_glProgramEnvParameterI4iNV = void function(GLenum, GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glProgramEnvParameterI4iNV glProgramEnvParameterI4iNV;
-extern(System) alias fp_glProgramEnvParameterI4ivNV = void function(GLenum, GLuint, const(GLint)*) nothrow; __gshared fp_glProgramEnvParameterI4ivNV glProgramEnvParameterI4ivNV;
-extern(System) alias fp_glProgramEnvParametersI4ivNV = void function(GLenum, GLuint, GLsizei, const(GLint)*) nothrow; __gshared fp_glProgramEnvParametersI4ivNV glProgramEnvParametersI4ivNV;
-extern(System) alias fp_glProgramEnvParameterI4uiNV = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glProgramEnvParameterI4uiNV glProgramEnvParameterI4uiNV;
-extern(System) alias fp_glProgramEnvParameterI4uivNV = void function(GLenum, GLuint, const(GLuint)*) nothrow; __gshared fp_glProgramEnvParameterI4uivNV glProgramEnvParameterI4uivNV;
-extern(System) alias fp_glProgramEnvParametersI4uivNV = void function(GLenum, GLuint, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramEnvParametersI4uivNV glProgramEnvParametersI4uivNV;
-extern(System) alias fp_glGetProgramLocalParameterIivNV = void function(GLenum, GLuint, GLint*) nothrow; __gshared fp_glGetProgramLocalParameterIivNV glGetProgramLocalParameterIivNV;
-extern(System) alias fp_glGetProgramLocalParameterIuivNV = void function(GLenum, GLuint, GLuint*) nothrow; __gshared fp_glGetProgramLocalParameterIuivNV glGetProgramLocalParameterIuivNV;
-extern(System) alias fp_glGetProgramEnvParameterIivNV = void function(GLenum, GLuint, GLint*) nothrow; __gshared fp_glGetProgramEnvParameterIivNV glGetProgramEnvParameterIivNV;
-extern(System) alias fp_glGetProgramEnvParameterIuivNV = void function(GLenum, GLuint, GLuint*) nothrow; __gshared fp_glGetProgramEnvParameterIuivNV glGetProgramEnvParameterIuivNV;
-// GL_NV_gpu_program5
+
 bool GL_NV_gpu_program5;
 enum uint GL_MAX_GEOMETRY_PROGRAM_INVOCATIONS_NV = 0x8E5A;
 enum uint GL_MIN_FRAGMENT_INTERPOLATION_OFFSET_NV = 0x8E5B;
@@ -5432,9 +3052,7 @@ enum uint GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET_NV = 0x8E5E;
 enum uint GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET_NV = 0x8E5F;
 enum uint GL_MAX_PROGRAM_SUBROUTINE_PARAMETERS_NV = 0x8F44;
 enum uint GL_MAX_PROGRAM_SUBROUTINE_NUM_NV = 0x8F45;
-extern(System) alias fp_glProgramSubroutineParametersuivNV = void function(GLenum, GLsizei, const(GLuint)*) nothrow; __gshared fp_glProgramSubroutineParametersuivNV glProgramSubroutineParametersuivNV;
-extern(System) alias fp_glGetProgramSubroutineParameteruivNV = void function(GLenum, GLuint, GLuint*) nothrow; __gshared fp_glGetProgramSubroutineParameteruivNV glGetProgramSubroutineParameteruivNV;
-// GL_NV_float_buffer
+
 bool GL_NV_float_buffer;
 enum uint GL_FLOAT_R_NV = 0x8880;
 enum uint GL_FLOAT_RG_NV = 0x8881;
@@ -5451,18 +3069,17 @@ enum uint GL_FLOAT_RGBA32_NV = 0x888B;
 enum uint GL_TEXTURE_FLOAT_COMPONENTS_NV = 0x888C;
 enum uint GL_FLOAT_CLEAR_COLOR_VALUE_NV = 0x888D;
 enum uint GL_FLOAT_RGBA_MODE_NV = 0x888E;
-// GL_SGIS_texture_edge_clamp
+
 bool GL_SGIS_texture_edge_clamp;
 enum uint GL_CLAMP_TO_EDGE_SGIS = 0x812F;
-// GL_ARB_framebuffer_sRGB
+
 bool GL_ARB_framebuffer_sRGB;
-// enum uint GL_FRAMEBUFFER_SRGB = 0x8DB9;
-// GL_SUN_slice_accum
+
 bool GL_SUN_slice_accum;
 enum uint GL_SLICE_ACCUM_SUN = 0x85CC;
-// GL_EXT_index_texture
+
 bool GL_EXT_index_texture;
-// GL_ARB_geometry_shader4
+
 bool GL_ARB_geometry_shader4;
 enum uint GL_LINES_ADJACENCY_ARB = 0x000A;
 enum uint GL_LINE_STRIP_ADJACENCY_ARB = 0x000B;
@@ -5482,25 +3099,19 @@ enum uint GL_MAX_VERTEX_VARYING_COMPONENTS_ARB = 0x8DDE;
 enum uint GL_MAX_GEOMETRY_UNIFORM_COMPONENTS_ARB = 0x8DDF;
 enum uint GL_MAX_GEOMETRY_OUTPUT_VERTICES_ARB = 0x8DE0;
 enum uint GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS_ARB = 0x8DE1;
-// enum uint GL_MAX_VARYING_COMPONENTS = 0x8B4B;
-// enum uint GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER = 0x8CD4;
-extern(System) alias fp_glProgramParameteriARB = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glProgramParameteriARB glProgramParameteriARB;
-extern(System) alias fp_glFramebufferTextureARB = void function(GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTextureARB glFramebufferTextureARB;
-extern(System) alias fp_glFramebufferTextureLayerARB = void function(GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glFramebufferTextureLayerARB glFramebufferTextureLayerARB;
-extern(System) alias fp_glFramebufferTextureFaceARB = void function(GLenum, GLenum, GLuint, GLint, GLenum) nothrow; __gshared fp_glFramebufferTextureFaceARB glFramebufferTextureFaceARB;
-// GL_EXT_separate_specular_color
+
 bool GL_EXT_separate_specular_color;
 enum uint GL_LIGHT_MODEL_COLOR_CONTROL_EXT = 0x81F8;
 enum uint GL_SINGLE_COLOR_EXT = 0x81F9;
 enum uint GL_SEPARATE_SPECULAR_COLOR_EXT = 0x81FA;
-// GL_AMD_depth_clamp_separate
+
 bool GL_AMD_depth_clamp_separate;
 enum uint GL_DEPTH_CLAMP_NEAR_AMD = 0x901E;
 enum uint GL_DEPTH_CLAMP_FAR_AMD = 0x901F;
-// GL_SUN_convolution_border_modes
+
 bool GL_SUN_convolution_border_modes;
 enum uint GL_WRAP_BORDER_SUN = 0x81D4;
-// GL_SGIX_sprite
+
 bool GL_SGIX_sprite;
 enum uint GL_SPRITE_SGIX = 0x8148;
 enum uint GL_SPRITE_MODE_SGIX = 0x8149;
@@ -5509,20 +3120,9 @@ enum uint GL_SPRITE_TRANSLATION_SGIX = 0x814B;
 enum uint GL_SPRITE_AXIAL_SGIX = 0x814C;
 enum uint GL_SPRITE_OBJECT_ALIGNED_SGIX = 0x814D;
 enum uint GL_SPRITE_EYE_ALIGNED_SGIX = 0x814E;
-extern(System) alias fp_glSpriteParameterfSGIX = void function(GLenum, GLfloat) nothrow; __gshared fp_glSpriteParameterfSGIX glSpriteParameterfSGIX;
-extern(System) alias fp_glSpriteParameterfvSGIX = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glSpriteParameterfvSGIX glSpriteParameterfvSGIX;
-extern(System) alias fp_glSpriteParameteriSGIX = void function(GLenum, GLint) nothrow; __gshared fp_glSpriteParameteriSGIX glSpriteParameteriSGIX;
-extern(System) alias fp_glSpriteParameterivSGIX = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glSpriteParameterivSGIX glSpriteParameterivSGIX;
-// GL_ARB_get_program_binary
+
 bool GL_ARB_get_program_binary;
-// enum uint GL_PROGRAM_BINARY_RETRIEVABLE_HINT = 0x8257;
-// enum uint GL_PROGRAM_BINARY_LENGTH = 0x8741;
-// enum uint GL_NUM_PROGRAM_BINARY_FORMATS = 0x87FE;
-// enum uint GL_PROGRAM_BINARY_FORMATS = 0x87FF;
-// extern(System) alias fp_glGetProgramBinary = void function(GLuint, GLsizei, GLsizei*, GLenum*, GLvoid*) nothrow; __gshared fp_glGetProgramBinary glGetProgramBinary;
-// extern(System) alias fp_glProgramBinary = void function(GLuint, GLenum, const(GLvoid)*, GLsizei) nothrow; __gshared fp_glProgramBinary glProgramBinary;
-// extern(System) alias fp_glProgramParameteri = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glProgramParameteri glProgramParameteri;
-// GL_SGIS_multisample
+
 bool GL_SGIS_multisample;
 enum uint GL_MULTISAMPLE_SGIS = 0x809D;
 enum uint GL_SAMPLE_ALPHA_TO_MASK_SGIS = 0x809E;
@@ -5540,9 +3140,7 @@ enum uint GL_SAMPLES_SGIS = 0x80A9;
 enum uint GL_SAMPLE_MASK_VALUE_SGIS = 0x80AA;
 enum uint GL_SAMPLE_MASK_INVERT_SGIS = 0x80AB;
 enum uint GL_SAMPLE_PATTERN_SGIS = 0x80AC;
-extern(System) alias fp_glSampleMaskSGIS = void function(GLclampf, GLboolean) nothrow; __gshared fp_glSampleMaskSGIS glSampleMaskSGIS;
-extern(System) alias fp_glSamplePatternSGIS = void function(GLenum) nothrow; __gshared fp_glSamplePatternSGIS glSamplePatternSGIS;
-// GL_EXT_framebuffer_object
+
 bool GL_EXT_framebuffer_object;
 enum uint GL_INVALID_FRAMEBUFFER_OPERATION_EXT = 0x0506;
 enum uint GL_MAX_RENDERBUFFER_SIZE_EXT = 0x84E8;
@@ -5595,46 +3193,23 @@ enum uint GL_RENDERBUFFER_BLUE_SIZE_EXT = 0x8D52;
 enum uint GL_RENDERBUFFER_ALPHA_SIZE_EXT = 0x8D53;
 enum uint GL_RENDERBUFFER_DEPTH_SIZE_EXT = 0x8D54;
 enum uint GL_RENDERBUFFER_STENCIL_SIZE_EXT = 0x8D55;
-extern(System) alias fp_glIsRenderbufferEXT = GLboolean function(GLuint) nothrow; __gshared fp_glIsRenderbufferEXT glIsRenderbufferEXT;
-extern(System) alias fp_glBindRenderbufferEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glBindRenderbufferEXT glBindRenderbufferEXT;
-extern(System) alias fp_glDeleteRenderbuffersEXT = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteRenderbuffersEXT glDeleteRenderbuffersEXT;
-extern(System) alias fp_glGenRenderbuffersEXT = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenRenderbuffersEXT glGenRenderbuffersEXT;
-extern(System) alias fp_glRenderbufferStorageEXT = void function(GLenum, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glRenderbufferStorageEXT glRenderbufferStorageEXT;
-extern(System) alias fp_glGetRenderbufferParameterivEXT = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetRenderbufferParameterivEXT glGetRenderbufferParameterivEXT;
-extern(System) alias fp_glIsFramebufferEXT = GLboolean function(GLuint) nothrow; __gshared fp_glIsFramebufferEXT glIsFramebufferEXT;
-extern(System) alias fp_glBindFramebufferEXT = void function(GLenum, GLuint) nothrow; __gshared fp_glBindFramebufferEXT glBindFramebufferEXT;
-extern(System) alias fp_glDeleteFramebuffersEXT = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteFramebuffersEXT glDeleteFramebuffersEXT;
-extern(System) alias fp_glGenFramebuffersEXT = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenFramebuffersEXT glGenFramebuffersEXT;
-extern(System) alias fp_glCheckFramebufferStatusEXT = GLenum function(GLenum) nothrow; __gshared fp_glCheckFramebufferStatusEXT glCheckFramebufferStatusEXT;
-extern(System) alias fp_glFramebufferTexture1DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTexture1DEXT glFramebufferTexture1DEXT;
-extern(System) alias fp_glFramebufferTexture2DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint) nothrow; __gshared fp_glFramebufferTexture2DEXT glFramebufferTexture2DEXT;
-extern(System) alias fp_glFramebufferTexture3DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint, GLint) nothrow; __gshared fp_glFramebufferTexture3DEXT glFramebufferTexture3DEXT;
-extern(System) alias fp_glFramebufferRenderbufferEXT = void function(GLenum, GLenum, GLenum, GLuint) nothrow; __gshared fp_glFramebufferRenderbufferEXT glFramebufferRenderbufferEXT;
-extern(System) alias fp_glGetFramebufferAttachmentParameterivEXT = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFramebufferAttachmentParameterivEXT glGetFramebufferAttachmentParameterivEXT;
-extern(System) alias fp_glGenerateMipmapEXT = void function(GLenum) nothrow; __gshared fp_glGenerateMipmapEXT glGenerateMipmapEXT;
-// GL_ARB_robustness_isolation
+
 bool GL_ARB_robustness_isolation;
-// GL_ARB_vertex_array_bgra
+
 bool GL_ARB_vertex_array_bgra;
-// enum uint GL_BGRA = 0x80E1;
-// GL_APPLE_vertex_array_range
+
 bool GL_APPLE_vertex_array_range;
 enum uint GL_VERTEX_ARRAY_RANGE_APPLE = 0x851D;
 enum uint GL_VERTEX_ARRAY_RANGE_LENGTH_APPLE = 0x851E;
 enum uint GL_VERTEX_ARRAY_STORAGE_HINT_APPLE = 0x851F;
 enum uint GL_VERTEX_ARRAY_RANGE_POINTER_APPLE = 0x8521;
 enum uint GL_STORAGE_CLIENT_APPLE = 0x85B4;
-// enum uint GL_STORAGE_CACHED_APPLE = 0x85BE;
-// enum uint GL_STORAGE_SHARED_APPLE = 0x85BF;
-extern(System) alias fp_glVertexArrayRangeAPPLE = void function(GLsizei, GLvoid*) nothrow; __gshared fp_glVertexArrayRangeAPPLE glVertexArrayRangeAPPLE;
-extern(System) alias fp_glFlushVertexArrayRangeAPPLE = void function(GLsizei, GLvoid*) nothrow; __gshared fp_glFlushVertexArrayRangeAPPLE glFlushVertexArrayRangeAPPLE;
-extern(System) alias fp_glVertexArrayParameteriAPPLE = void function(GLenum, GLint) nothrow; __gshared fp_glVertexArrayParameteriAPPLE glVertexArrayParameteriAPPLE;
-// GL_AMD_query_buffer_object
+
 bool GL_AMD_query_buffer_object;
 enum uint GL_QUERY_BUFFER_AMD = 0x9192;
 enum uint GL_QUERY_BUFFER_BINDING_AMD = 0x9193;
 enum uint GL_QUERY_RESULT_NO_WAIT_AMD = 0x9194;
-// GL_NV_register_combiners
+
 bool GL_NV_register_combiners;
 enum uint GL_REGISTER_COMBINERS_NV = 0x8522;
 enum uint GL_VARIABLE_A_NV = 0x8523;
@@ -5687,25 +3262,7 @@ enum uint GL_COMBINER4_NV = 0x8554;
 enum uint GL_COMBINER5_NV = 0x8555;
 enum uint GL_COMBINER6_NV = 0x8556;
 enum uint GL_COMBINER7_NV = 0x8557;
-// enum uint GL_TEXTURE0_ARB = 0x84C0;
-// enum uint GL_TEXTURE1_ARB = 0x84C1;
-// enum uint GL_ZERO = 0;
-// enum uint GL_NONE = 0;
-enum uint GL_FOG = 0x0B60;
-extern(System) alias fp_glCombinerParameterfvNV = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glCombinerParameterfvNV glCombinerParameterfvNV;
-extern(System) alias fp_glCombinerParameterfNV = void function(GLenum, GLfloat) nothrow; __gshared fp_glCombinerParameterfNV glCombinerParameterfNV;
-extern(System) alias fp_glCombinerParameterivNV = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glCombinerParameterivNV glCombinerParameterivNV;
-extern(System) alias fp_glCombinerParameteriNV = void function(GLenum, GLint) nothrow; __gshared fp_glCombinerParameteriNV glCombinerParameteriNV;
-extern(System) alias fp_glCombinerInputNV = void function(GLenum, GLenum, GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glCombinerInputNV glCombinerInputNV;
-extern(System) alias fp_glCombinerOutputNV = void function(GLenum, GLenum, GLenum, GLenum, GLenum, GLenum, GLenum, GLboolean, GLboolean, GLboolean) nothrow; __gshared fp_glCombinerOutputNV glCombinerOutputNV;
-extern(System) alias fp_glFinalCombinerInputNV = void function(GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glFinalCombinerInputNV glFinalCombinerInputNV;
-extern(System) alias fp_glGetCombinerInputParameterfvNV = void function(GLenum, GLenum, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetCombinerInputParameterfvNV glGetCombinerInputParameterfvNV;
-extern(System) alias fp_glGetCombinerInputParameterivNV = void function(GLenum, GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetCombinerInputParameterivNV glGetCombinerInputParameterivNV;
-extern(System) alias fp_glGetCombinerOutputParameterfvNV = void function(GLenum, GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetCombinerOutputParameterfvNV glGetCombinerOutputParameterfvNV;
-extern(System) alias fp_glGetCombinerOutputParameterivNV = void function(GLenum, GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetCombinerOutputParameterivNV glGetCombinerOutputParameterivNV;
-extern(System) alias fp_glGetFinalCombinerInputParameterfvNV = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetFinalCombinerInputParameterfvNV glGetFinalCombinerInputParameterfvNV;
-extern(System) alias fp_glGetFinalCombinerInputParameterivNV = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetFinalCombinerInputParameterivNV glGetFinalCombinerInputParameterivNV;
-// GL_ARB_draw_buffers
+
 bool GL_ARB_draw_buffers;
 enum uint GL_MAX_DRAW_BUFFERS_ARB = 0x8824;
 enum uint GL_DRAW_BUFFER0_ARB = 0x8825;
@@ -5724,13 +3281,9 @@ enum uint GL_DRAW_BUFFER12_ARB = 0x8831;
 enum uint GL_DRAW_BUFFER13_ARB = 0x8832;
 enum uint GL_DRAW_BUFFER14_ARB = 0x8833;
 enum uint GL_DRAW_BUFFER15_ARB = 0x8834;
-extern(System) alias fp_glDrawBuffersARB = void function(GLsizei, const(GLenum)*) nothrow; __gshared fp_glDrawBuffersARB glDrawBuffersARB;
-// GL_ARB_clear_texture
+
 bool GL_ARB_clear_texture;
-enum uint GL_CLEAR_TEXTURE = 0x9365;
-extern(System) alias fp_glClearTexImage = void function(GLuint, GLint, GLenum, GLenum, const(void)*) nothrow; __gshared fp_glClearTexImage glClearTexImage;
-extern(System) alias fp_glClearTexSubImage = void function(GLuint, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(void)*) nothrow; __gshared fp_glClearTexSubImage glClearTexSubImage;
-// GL_ARB_debug_output
+
 bool GL_ARB_debug_output;
 enum uint GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB = 0x8242;
 enum uint GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_ARB = 0x8243;
@@ -5754,11 +3307,7 @@ enum uint GL_DEBUG_LOGGED_MESSAGES_ARB = 0x9145;
 enum uint GL_DEBUG_SEVERITY_HIGH_ARB = 0x9146;
 enum uint GL_DEBUG_SEVERITY_MEDIUM_ARB = 0x9147;
 enum uint GL_DEBUG_SEVERITY_LOW_ARB = 0x9148;
-extern(System) alias fp_glDebugMessageControlARB = void function(GLenum, GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean) nothrow; __gshared fp_glDebugMessageControlARB glDebugMessageControlARB;
-extern(System) alias fp_glDebugMessageInsertARB = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, const(GLchar)*) nothrow; __gshared fp_glDebugMessageInsertARB glDebugMessageInsertARB;
-extern(System) alias fp_glDebugMessageCallbackARB = void function(GLDEBUGPROCARB, const(void)*) nothrow; __gshared fp_glDebugMessageCallbackARB glDebugMessageCallbackARB;
-extern(System) alias fp_glGetDebugMessageLogARB = GLuint function(GLuint, GLsizei, GLenum*, GLenum*, GLuint*, GLenum*, GLsizei*, GLchar*) nothrow; __gshared fp_glGetDebugMessageLogARB glGetDebugMessageLogARB;
-// GL_SGI_color_matrix
+
 bool GL_SGI_color_matrix;
 enum uint GL_COLOR_MATRIX_SGI = 0x80B1;
 enum uint GL_COLOR_MATRIX_STACK_DEPTH_SGI = 0x80B2;
@@ -5771,14 +3320,12 @@ enum uint GL_POST_COLOR_MATRIX_RED_BIAS_SGI = 0x80B8;
 enum uint GL_POST_COLOR_MATRIX_GREEN_BIAS_SGI = 0x80B9;
 enum uint GL_POST_COLOR_MATRIX_BLUE_BIAS_SGI = 0x80BA;
 enum uint GL_POST_COLOR_MATRIX_ALPHA_BIAS_SGI = 0x80BB;
-// GL_EXT_cull_vertex
+
 bool GL_EXT_cull_vertex;
 enum uint GL_CULL_VERTEX_EXT = 0x81AA;
 enum uint GL_CULL_VERTEX_EYE_POSITION_EXT = 0x81AB;
 enum uint GL_CULL_VERTEX_OBJECT_POSITION_EXT = 0x81AC;
-extern(System) alias fp_glCullParameterdvEXT = void function(GLenum, GLdouble*) nothrow; __gshared fp_glCullParameterdvEXT glCullParameterdvEXT;
-extern(System) alias fp_glCullParameterfvEXT = void function(GLenum, GLfloat*) nothrow; __gshared fp_glCullParameterfvEXT glCullParameterfvEXT;
-// GL_EXT_texture_sRGB
+
 bool GL_EXT_texture_sRGB;
 enum uint GL_SRGB_EXT = 0x8C40;
 enum uint GL_SRGB8_EXT = 0x8C41;
@@ -5796,36 +3343,30 @@ enum uint GL_COMPRESSED_SRGB_S3TC_DXT1_EXT = 0x8C4C;
 enum uint GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT = 0x8C4D;
 enum uint GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT = 0x8C4E;
 enum uint GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT = 0x8C4F;
-// GL_APPLE_row_bytes
+
 bool GL_APPLE_row_bytes;
 enum uint GL_PACK_ROW_BYTES_APPLE = 0x8A15;
 enum uint GL_UNPACK_ROW_BYTES_APPLE = 0x8A16;
-// GL_NV_texgen_reflection
+
 bool GL_NV_texgen_reflection;
 enum uint GL_NORMAL_MAP_NV = 0x8511;
 enum uint GL_REFLECTION_MAP_NV = 0x8512;
-// GL_IBM_multimode_draw_arrays
+
 bool GL_IBM_multimode_draw_arrays;
-extern(System) alias fp_glMultiModeDrawArraysIBM = void function(const(GLenum)*, const(GLint)*, const(GLsizei)*, GLsizei, GLint) nothrow; __gshared fp_glMultiModeDrawArraysIBM glMultiModeDrawArraysIBM;
-extern(System) alias fp_glMultiModeDrawElementsIBM = void function(const(GLenum)*, const(GLsizei)*, GLenum, const(GLvoid*)*, GLsizei, GLint) nothrow; __gshared fp_glMultiModeDrawElementsIBM glMultiModeDrawElementsIBM;
-// GL_APPLE_vertex_array_object
+
 bool GL_APPLE_vertex_array_object;
 enum uint GL_VERTEX_ARRAY_BINDING_APPLE = 0x85B5;
-extern(System) alias fp_glBindVertexArrayAPPLE = void function(GLuint) nothrow; __gshared fp_glBindVertexArrayAPPLE glBindVertexArrayAPPLE;
-extern(System) alias fp_glDeleteVertexArraysAPPLE = void function(GLsizei, const(GLuint)*) nothrow; __gshared fp_glDeleteVertexArraysAPPLE glDeleteVertexArraysAPPLE;
-extern(System) alias fp_glGenVertexArraysAPPLE = void function(GLsizei, GLuint*) nothrow; __gshared fp_glGenVertexArraysAPPLE glGenVertexArraysAPPLE;
-extern(System) alias fp_glIsVertexArrayAPPLE = GLboolean function(GLuint) nothrow; __gshared fp_glIsVertexArrayAPPLE glIsVertexArrayAPPLE;
-// GL_3DFX_texture_compression_FXT1
+
 bool GL_3DFX_texture_compression_FXT1;
 enum uint GL_COMPRESSED_RGB_FXT1_3DFX = 0x86B0;
 enum uint GL_COMPRESSED_RGBA_FXT1_3DFX = 0x86B1;
-// GL_SGIX_ycrcb
+
 bool GL_SGIX_ycrcb;
 enum uint GL_YCRCB_422_SGIX = 0x81BB;
 enum uint GL_YCRCB_444_SGIX = 0x81BC;
-// GL_AMD_conservative_depth
+
 bool GL_AMD_conservative_depth;
-// GL_ARB_texture_float
+
 bool GL_ARB_texture_float;
 enum uint GL_TEXTURE_RED_TYPE_ARB = 0x8C10;
 enum uint GL_TEXTURE_GREEN_TYPE_ARB = 0x8C11;
@@ -5847,17 +3388,9 @@ enum uint GL_ALPHA16F_ARB = 0x881C;
 enum uint GL_INTENSITY16F_ARB = 0x881D;
 enum uint GL_LUMINANCE16F_ARB = 0x881E;
 enum uint GL_LUMINANCE_ALPHA16F_ARB = 0x881F;
-// GL_ARB_compressed_texture_pixel_storage
+
 bool GL_ARB_compressed_texture_pixel_storage;
-// enum uint GL_UNPACK_COMPRESSED_BLOCK_WIDTH = 0x9127;
-// enum uint GL_UNPACK_COMPRESSED_BLOCK_HEIGHT = 0x9128;
-// enum uint GL_UNPACK_COMPRESSED_BLOCK_DEPTH = 0x9129;
-// enum uint GL_UNPACK_COMPRESSED_BLOCK_SIZE = 0x912A;
-// enum uint GL_PACK_COMPRESSED_BLOCK_WIDTH = 0x912B;
-// enum uint GL_PACK_COMPRESSED_BLOCK_HEIGHT = 0x912C;
-// enum uint GL_PACK_COMPRESSED_BLOCK_DEPTH = 0x912D;
-// enum uint GL_PACK_COMPRESSED_BLOCK_SIZE = 0x912E;
-// GL_SGIS_detail_texture
+
 bool GL_SGIS_detail_texture;
 enum uint GL_DETAIL_TEXTURE_2D_SGIS = 0x8095;
 enum uint GL_DETAIL_TEXTURE_2D_BINDING_SGIS = 0x8096;
@@ -5867,17 +3400,13 @@ enum uint GL_LINEAR_DETAIL_COLOR_SGIS = 0x8099;
 enum uint GL_DETAIL_TEXTURE_LEVEL_SGIS = 0x809A;
 enum uint GL_DETAIL_TEXTURE_MODE_SGIS = 0x809B;
 enum uint GL_DETAIL_TEXTURE_FUNC_POINTS_SGIS = 0x809C;
-extern(System) alias fp_glDetailTexFuncSGIS = void function(GLenum, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glDetailTexFuncSGIS glDetailTexFuncSGIS;
-extern(System) alias fp_glGetDetailTexFuncSGIS = void function(GLenum, GLfloat*) nothrow; __gshared fp_glGetDetailTexFuncSGIS glGetDetailTexFuncSGIS;
-// GL_ARB_draw_instanced
+
 bool GL_ARB_draw_instanced;
-extern(System) alias fp_glDrawArraysInstancedARB = void function(GLenum, GLint, GLsizei, GLsizei) nothrow; __gshared fp_glDrawArraysInstancedARB glDrawArraysInstancedARB;
-extern(System) alias fp_glDrawElementsInstancedARB = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLsizei) nothrow; __gshared fp_glDrawElementsInstancedARB glDrawElementsInstancedARB;
-// GL_OES_read_format
+
 bool GL_OES_read_format;
 enum uint GL_IMPLEMENTATION_COLOR_READ_TYPE_OES = 0x8B9A;
 enum uint GL_IMPLEMENTATION_COLOR_READ_FORMAT_OES = 0x8B9B;
-// GL_ATI_texture_float
+
 bool GL_ATI_texture_float;
 enum uint GL_RGBA_FLOAT32_ATI = 0x8814;
 enum uint GL_RGB_FLOAT32_ATI = 0x8815;
@@ -5891,35 +3420,28 @@ enum uint GL_ALPHA_FLOAT16_ATI = 0x881C;
 enum uint GL_INTENSITY_FLOAT16_ATI = 0x881D;
 enum uint GL_LUMINANCE_FLOAT16_ATI = 0x881E;
 enum uint GL_LUMINANCE_ALPHA_FLOAT16_ATI = 0x881F;
-// GL_ARB_texture_gather
+
 bool GL_ARB_texture_gather;
 enum uint GL_MIN_PROGRAM_TEXTURE_GATHER_OFFSET_ARB = 0x8E5E;
 enum uint GL_MAX_PROGRAM_TEXTURE_GATHER_OFFSET_ARB = 0x8E5F;
 enum uint GL_MAX_PROGRAM_TEXTURE_GATHER_COMPONENTS_ARB = 0x8F9F;
-// GL_AMD_vertex_shader_layer
+
 bool GL_AMD_vertex_shader_layer;
-// GL_ARB_shading_language_include
+
 bool GL_ARB_shading_language_include;
 enum uint GL_SHADER_INCLUDE_ARB = 0x8DAE;
 enum uint GL_NAMED_STRING_LENGTH_ARB = 0x8DE9;
 enum uint GL_NAMED_STRING_TYPE_ARB = 0x8DEA;
-extern(System) alias fp_glNamedStringARB = void function(GLenum, GLint, const(GLchar)*, GLint, const(GLchar)*) nothrow; __gshared fp_glNamedStringARB glNamedStringARB;
-extern(System) alias fp_glDeleteNamedStringARB = void function(GLint, const(GLchar)*) nothrow; __gshared fp_glDeleteNamedStringARB glDeleteNamedStringARB;
-extern(System) alias fp_glCompileShaderIncludeARB = void function(GLuint, GLsizei, const(GLchar*)*, const(GLint)*) nothrow; __gshared fp_glCompileShaderIncludeARB glCompileShaderIncludeARB;
-extern(System) alias fp_glIsNamedStringARB = GLboolean function(GLint, const(GLchar)*) nothrow; __gshared fp_glIsNamedStringARB glIsNamedStringARB;
-extern(System) alias fp_glGetNamedStringARB = void function(GLint, const(GLchar)*, GLsizei, GLint*, GLchar*) nothrow; __gshared fp_glGetNamedStringARB glGetNamedStringARB;
-extern(System) alias fp_glGetNamedStringivARB = void function(GLint, const(GLchar)*, GLenum, GLint*) nothrow; __gshared fp_glGetNamedStringivARB glGetNamedStringivARB;
-// GL_APPLE_client_storage
+
 bool GL_APPLE_client_storage;
 enum uint GL_UNPACK_CLIENT_STORAGE_APPLE = 0x85B2;
-// GL_WIN_phong_shading
+
 bool GL_WIN_phong_shading;
 enum uint GL_PHONG_WIN = 0x80EA;
 enum uint GL_PHONG_HINT_WIN = 0x80EB;
-// GL_INGR_blend_func_separate
+
 bool GL_INGR_blend_func_separate;
-extern(System) alias fp_glBlendFuncSeparateINGR = void function(GLenum, GLenum, GLenum, GLenum) nothrow; __gshared fp_glBlendFuncSeparateINGR glBlendFuncSeparateINGR;
-// GL_NV_path_rendering
+
 bool GL_NV_path_rendering;
 enum uint GL_PATH_FORMAT_SVG_NV = 0x9070;
 enum uint GL_PATH_FORMAT_PS_NV = 0x9071;
@@ -6048,59 +3570,7 @@ enum uint GL_FONT_MAX_ADVANCE_HEIGHT_BIT_NV = 0x02000000;
 enum uint GL_FONT_UNDERLINE_POSITION_BIT_NV = 0x04000000;
 enum uint GL_FONT_UNDERLINE_THICKNESS_BIT_NV = 0x08000000;
 enum uint GL_FONT_HAS_KERNING_BIT_NV = 0x10000000;
-enum uint GL_PRIMARY_COLOR = 0x8577;
-// enum uint GL_PRIMARY_COLOR_NV = 0x852C;
-// enum uint GL_SECONDARY_COLOR_NV = 0x852D;
-extern(System) alias fp_glGenPathsNV = GLuint function(GLsizei) nothrow; __gshared fp_glGenPathsNV glGenPathsNV;
-extern(System) alias fp_glDeletePathsNV = void function(GLuint, GLsizei) nothrow; __gshared fp_glDeletePathsNV glDeletePathsNV;
-extern(System) alias fp_glIsPathNV = GLboolean function(GLuint) nothrow; __gshared fp_glIsPathNV glIsPathNV;
-extern(System) alias fp_glPathCommandsNV = void function(GLuint, GLsizei, const(GLubyte)*, GLsizei, GLenum, const(GLvoid)*) nothrow; __gshared fp_glPathCommandsNV glPathCommandsNV;
-extern(System) alias fp_glPathCoordsNV = void function(GLuint, GLsizei, GLenum, const(GLvoid)*) nothrow; __gshared fp_glPathCoordsNV glPathCoordsNV;
-extern(System) alias fp_glPathSubCommandsNV = void function(GLuint, GLsizei, GLsizei, GLsizei, const(GLubyte)*, GLsizei, GLenum, const(GLvoid)*) nothrow; __gshared fp_glPathSubCommandsNV glPathSubCommandsNV;
-extern(System) alias fp_glPathSubCoordsNV = void function(GLuint, GLsizei, GLsizei, GLenum, const(GLvoid)*) nothrow; __gshared fp_glPathSubCoordsNV glPathSubCoordsNV;
-extern(System) alias fp_glPathStringNV = void function(GLuint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glPathStringNV glPathStringNV;
-extern(System) alias fp_glPathGlyphsNV = void function(GLuint, GLenum, const(GLvoid)*, GLbitfield, GLsizei, GLenum, const(GLvoid)*, GLenum, GLuint, GLfloat) nothrow; __gshared fp_glPathGlyphsNV glPathGlyphsNV;
-extern(System) alias fp_glPathGlyphRangeNV = void function(GLuint, GLenum, const(GLvoid)*, GLbitfield, GLuint, GLsizei, GLenum, GLuint, GLfloat) nothrow; __gshared fp_glPathGlyphRangeNV glPathGlyphRangeNV;
-extern(System) alias fp_glWeightPathsNV = void function(GLuint, GLsizei, const(GLuint)*, const(GLfloat)*) nothrow; __gshared fp_glWeightPathsNV glWeightPathsNV;
-extern(System) alias fp_glCopyPathNV = void function(GLuint, GLuint) nothrow; __gshared fp_glCopyPathNV glCopyPathNV;
-extern(System) alias fp_glInterpolatePathsNV = void function(GLuint, GLuint, GLuint, GLfloat) nothrow; __gshared fp_glInterpolatePathsNV glInterpolatePathsNV;
-extern(System) alias fp_glTransformPathNV = void function(GLuint, GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glTransformPathNV glTransformPathNV;
-extern(System) alias fp_glPathParameterivNV = void function(GLuint, GLenum, const(GLint)*) nothrow; __gshared fp_glPathParameterivNV glPathParameterivNV;
-extern(System) alias fp_glPathParameteriNV = void function(GLuint, GLenum, GLint) nothrow; __gshared fp_glPathParameteriNV glPathParameteriNV;
-extern(System) alias fp_glPathParameterfvNV = void function(GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glPathParameterfvNV glPathParameterfvNV;
-extern(System) alias fp_glPathParameterfNV = void function(GLuint, GLenum, GLfloat) nothrow; __gshared fp_glPathParameterfNV glPathParameterfNV;
-extern(System) alias fp_glPathDashArrayNV = void function(GLuint, GLsizei, const(GLfloat)*) nothrow; __gshared fp_glPathDashArrayNV glPathDashArrayNV;
-extern(System) alias fp_glPathStencilFuncNV = void function(GLenum, GLint, GLuint) nothrow; __gshared fp_glPathStencilFuncNV glPathStencilFuncNV;
-extern(System) alias fp_glPathStencilDepthOffsetNV = void function(GLfloat, GLfloat) nothrow; __gshared fp_glPathStencilDepthOffsetNV glPathStencilDepthOffsetNV;
-extern(System) alias fp_glStencilFillPathNV = void function(GLuint, GLenum, GLuint) nothrow; __gshared fp_glStencilFillPathNV glStencilFillPathNV;
-extern(System) alias fp_glStencilStrokePathNV = void function(GLuint, GLint, GLuint) nothrow; __gshared fp_glStencilStrokePathNV glStencilStrokePathNV;
-extern(System) alias fp_glStencilFillPathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glStencilFillPathInstancedNV glStencilFillPathInstancedNV;
-extern(System) alias fp_glStencilStrokePathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLint, GLuint, GLenum, const(GLfloat)*) nothrow; __gshared fp_glStencilStrokePathInstancedNV glStencilStrokePathInstancedNV;
-extern(System) alias fp_glPathCoverDepthFuncNV = void function(GLenum) nothrow; __gshared fp_glPathCoverDepthFuncNV glPathCoverDepthFuncNV;
-extern(System) alias fp_glPathColorGenNV = void function(GLenum, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glPathColorGenNV glPathColorGenNV;
-extern(System) alias fp_glPathTexGenNV = void function(GLenum, GLenum, GLint, const(GLfloat)*) nothrow; __gshared fp_glPathTexGenNV glPathTexGenNV;
-extern(System) alias fp_glPathFogGenNV = void function(GLenum) nothrow; __gshared fp_glPathFogGenNV glPathFogGenNV;
-extern(System) alias fp_glCoverFillPathNV = void function(GLuint, GLenum) nothrow; __gshared fp_glCoverFillPathNV glCoverFillPathNV;
-extern(System) alias fp_glCoverStrokePathNV = void function(GLuint, GLenum) nothrow; __gshared fp_glCoverStrokePathNV glCoverStrokePathNV;
-extern(System) alias fp_glCoverFillPathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glCoverFillPathInstancedNV glCoverFillPathInstancedNV;
-extern(System) alias fp_glCoverStrokePathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLenum, const(GLfloat)*) nothrow; __gshared fp_glCoverStrokePathInstancedNV glCoverStrokePathInstancedNV;
-extern(System) alias fp_glGetPathParameterivNV = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetPathParameterivNV glGetPathParameterivNV;
-extern(System) alias fp_glGetPathParameterfvNV = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetPathParameterfvNV glGetPathParameterfvNV;
-extern(System) alias fp_glGetPathCommandsNV = void function(GLuint, GLubyte*) nothrow; __gshared fp_glGetPathCommandsNV glGetPathCommandsNV;
-extern(System) alias fp_glGetPathCoordsNV = void function(GLuint, GLfloat*) nothrow; __gshared fp_glGetPathCoordsNV glGetPathCoordsNV;
-extern(System) alias fp_glGetPathDashArrayNV = void function(GLuint, GLfloat*) nothrow; __gshared fp_glGetPathDashArrayNV glGetPathDashArrayNV;
-extern(System) alias fp_glGetPathMetricsNV = void function(GLbitfield, GLsizei, GLenum, const(GLvoid)*, GLuint, GLsizei, GLfloat*) nothrow; __gshared fp_glGetPathMetricsNV glGetPathMetricsNV;
-extern(System) alias fp_glGetPathMetricRangeNV = void function(GLbitfield, GLuint, GLsizei, GLsizei, GLfloat*) nothrow; __gshared fp_glGetPathMetricRangeNV glGetPathMetricRangeNV;
-extern(System) alias fp_glGetPathSpacingNV = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLuint, GLfloat, GLfloat, GLenum, GLfloat*) nothrow; __gshared fp_glGetPathSpacingNV glGetPathSpacingNV;
-extern(System) alias fp_glGetPathColorGenivNV = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetPathColorGenivNV glGetPathColorGenivNV;
-extern(System) alias fp_glGetPathColorGenfvNV = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetPathColorGenfvNV glGetPathColorGenfvNV;
-extern(System) alias fp_glGetPathTexGenivNV = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetPathTexGenivNV glGetPathTexGenivNV;
-extern(System) alias fp_glGetPathTexGenfvNV = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetPathTexGenfvNV glGetPathTexGenfvNV;
-extern(System) alias fp_glIsPointInFillPathNV = GLboolean function(GLuint, GLuint, GLfloat, GLfloat) nothrow; __gshared fp_glIsPointInFillPathNV glIsPointInFillPathNV;
-extern(System) alias fp_glIsPointInStrokePathNV = GLboolean function(GLuint, GLfloat, GLfloat) nothrow; __gshared fp_glIsPointInStrokePathNV glIsPointInStrokePathNV;
-extern(System) alias fp_glGetPathLengthNV = GLfloat function(GLuint, GLsizei, GLsizei) nothrow; __gshared fp_glGetPathLengthNV glGetPathLengthNV;
-extern(System) alias fp_glPointAlongPathNV = GLboolean function(GLuint, GLsizei, GLsizei, GLfloat, GLfloat*, GLfloat*, GLfloat*, GLfloat*) nothrow; __gshared fp_glPointAlongPathNV glPointAlongPathNV;
-// GL_ATI_vertex_streams
+
 bool GL_ATI_vertex_streams;
 enum uint GL_MAX_VERTEX_STREAMS_ATI = 0x876B;
 enum uint GL_VERTEX_STREAM0_ATI = 0x876C;
@@ -6112,465 +3582,81 @@ enum uint GL_VERTEX_STREAM5_ATI = 0x8771;
 enum uint GL_VERTEX_STREAM6_ATI = 0x8772;
 enum uint GL_VERTEX_STREAM7_ATI = 0x8773;
 enum uint GL_VERTEX_SOURCE_ATI = 0x8774;
-extern(System) alias fp_glVertexStream1sATI = void function(GLenum, GLshort) nothrow; __gshared fp_glVertexStream1sATI glVertexStream1sATI;
-extern(System) alias fp_glVertexStream1svATI = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glVertexStream1svATI glVertexStream1svATI;
-extern(System) alias fp_glVertexStream1iATI = void function(GLenum, GLint) nothrow; __gshared fp_glVertexStream1iATI glVertexStream1iATI;
-extern(System) alias fp_glVertexStream1ivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glVertexStream1ivATI glVertexStream1ivATI;
-extern(System) alias fp_glVertexStream1fATI = void function(GLenum, GLfloat) nothrow; __gshared fp_glVertexStream1fATI glVertexStream1fATI;
-extern(System) alias fp_glVertexStream1fvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glVertexStream1fvATI glVertexStream1fvATI;
-extern(System) alias fp_glVertexStream1dATI = void function(GLenum, GLdouble) nothrow; __gshared fp_glVertexStream1dATI glVertexStream1dATI;
-extern(System) alias fp_glVertexStream1dvATI = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glVertexStream1dvATI glVertexStream1dvATI;
-extern(System) alias fp_glVertexStream2sATI = void function(GLenum, GLshort, GLshort) nothrow; __gshared fp_glVertexStream2sATI glVertexStream2sATI;
-extern(System) alias fp_glVertexStream2svATI = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glVertexStream2svATI glVertexStream2svATI;
-extern(System) alias fp_glVertexStream2iATI = void function(GLenum, GLint, GLint) nothrow; __gshared fp_glVertexStream2iATI glVertexStream2iATI;
-extern(System) alias fp_glVertexStream2ivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glVertexStream2ivATI glVertexStream2ivATI;
-extern(System) alias fp_glVertexStream2fATI = void function(GLenum, GLfloat, GLfloat) nothrow; __gshared fp_glVertexStream2fATI glVertexStream2fATI;
-extern(System) alias fp_glVertexStream2fvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glVertexStream2fvATI glVertexStream2fvATI;
-extern(System) alias fp_glVertexStream2dATI = void function(GLenum, GLdouble, GLdouble) nothrow; __gshared fp_glVertexStream2dATI glVertexStream2dATI;
-extern(System) alias fp_glVertexStream2dvATI = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glVertexStream2dvATI glVertexStream2dvATI;
-extern(System) alias fp_glVertexStream3sATI = void function(GLenum, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexStream3sATI glVertexStream3sATI;
-extern(System) alias fp_glVertexStream3svATI = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glVertexStream3svATI glVertexStream3svATI;
-extern(System) alias fp_glVertexStream3iATI = void function(GLenum, GLint, GLint, GLint) nothrow; __gshared fp_glVertexStream3iATI glVertexStream3iATI;
-extern(System) alias fp_glVertexStream3ivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glVertexStream3ivATI glVertexStream3ivATI;
-extern(System) alias fp_glVertexStream3fATI = void function(GLenum, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexStream3fATI glVertexStream3fATI;
-extern(System) alias fp_glVertexStream3fvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glVertexStream3fvATI glVertexStream3fvATI;
-extern(System) alias fp_glVertexStream3dATI = void function(GLenum, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexStream3dATI glVertexStream3dATI;
-extern(System) alias fp_glVertexStream3dvATI = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glVertexStream3dvATI glVertexStream3dvATI;
-extern(System) alias fp_glVertexStream4sATI = void function(GLenum, GLshort, GLshort, GLshort, GLshort) nothrow; __gshared fp_glVertexStream4sATI glVertexStream4sATI;
-extern(System) alias fp_glVertexStream4svATI = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glVertexStream4svATI glVertexStream4svATI;
-extern(System) alias fp_glVertexStream4iATI = void function(GLenum, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glVertexStream4iATI glVertexStream4iATI;
-extern(System) alias fp_glVertexStream4ivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glVertexStream4ivATI glVertexStream4ivATI;
-extern(System) alias fp_glVertexStream4fATI = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glVertexStream4fATI glVertexStream4fATI;
-extern(System) alias fp_glVertexStream4fvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glVertexStream4fvATI glVertexStream4fvATI;
-extern(System) alias fp_glVertexStream4dATI = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glVertexStream4dATI glVertexStream4dATI;
-extern(System) alias fp_glVertexStream4dvATI = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glVertexStream4dvATI glVertexStream4dvATI;
-extern(System) alias fp_glNormalStream3bATI = void function(GLenum, GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glNormalStream3bATI glNormalStream3bATI;
-extern(System) alias fp_glNormalStream3bvATI = void function(GLenum, const(GLbyte)*) nothrow; __gshared fp_glNormalStream3bvATI glNormalStream3bvATI;
-extern(System) alias fp_glNormalStream3sATI = void function(GLenum, GLshort, GLshort, GLshort) nothrow; __gshared fp_glNormalStream3sATI glNormalStream3sATI;
-extern(System) alias fp_glNormalStream3svATI = void function(GLenum, const(GLshort)*) nothrow; __gshared fp_glNormalStream3svATI glNormalStream3svATI;
-extern(System) alias fp_glNormalStream3iATI = void function(GLenum, GLint, GLint, GLint) nothrow; __gshared fp_glNormalStream3iATI glNormalStream3iATI;
-extern(System) alias fp_glNormalStream3ivATI = void function(GLenum, const(GLint)*) nothrow; __gshared fp_glNormalStream3ivATI glNormalStream3ivATI;
-extern(System) alias fp_glNormalStream3fATI = void function(GLenum, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glNormalStream3fATI glNormalStream3fATI;
-extern(System) alias fp_glNormalStream3fvATI = void function(GLenum, const(GLfloat)*) nothrow; __gshared fp_glNormalStream3fvATI glNormalStream3fvATI;
-extern(System) alias fp_glNormalStream3dATI = void function(GLenum, GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glNormalStream3dATI glNormalStream3dATI;
-extern(System) alias fp_glNormalStream3dvATI = void function(GLenum, const(GLdouble)*) nothrow; __gshared fp_glNormalStream3dvATI glNormalStream3dvATI;
-extern(System) alias fp_glClientActiveVertexStreamATI = void function(GLenum) nothrow; __gshared fp_glClientActiveVertexStreamATI glClientActiveVertexStreamATI;
-extern(System) alias fp_glVertexBlendEnviATI = void function(GLenum, GLint) nothrow; __gshared fp_glVertexBlendEnviATI glVertexBlendEnviATI;
-extern(System) alias fp_glVertexBlendEnvfATI = void function(GLenum, GLfloat) nothrow; __gshared fp_glVertexBlendEnvfATI glVertexBlendEnvfATI;
-// GL_ARB_texture_non_power_of_two
+
 bool GL_ARB_texture_non_power_of_two;
-// GL_APPLE_rgb_422
+
 bool GL_APPLE_rgb_422;
 enum uint GL_RGB_422_APPLE = 0x8A1F;
-// enum uint GL_UNSIGNED_SHORT_8_8_APPLE = 0x85BA;
-// enum uint GL_UNSIGNED_SHORT_8_8_REV_APPLE = 0x85BB;
-// GL_EXT_texture_lod_bias
+
 bool GL_EXT_texture_lod_bias;
 enum uint GL_MAX_TEXTURE_LOD_BIAS_EXT = 0x84FD;
 enum uint GL_TEXTURE_FILTER_CONTROL_EXT = 0x8500;
 enum uint GL_TEXTURE_LOD_BIAS_EXT = 0x8501;
-// GL_ARB_seamless_cube_map
+
 bool GL_ARB_seamless_cube_map;
-// enum uint GL_TEXTURE_CUBE_MAP_SEAMLESS = 0x884F;
-// GL_ARB_shader_group_vote
+
 bool GL_ARB_shader_group_vote;
-// GL_NV_vdpau_interop
+
 bool GL_NV_vdpau_interop;
 enum uint GL_SURFACE_STATE_NV = 0x86EB;
 enum uint GL_SURFACE_REGISTERED_NV = 0x86FD;
 enum uint GL_SURFACE_MAPPED_NV = 0x8700;
 enum uint GL_WRITE_DISCARD_NV = 0x88BE;
-extern(System) alias fp_glVDPAUInitNV = void function(const(GLvoid)*, const(GLvoid)*) nothrow; __gshared fp_glVDPAUInitNV glVDPAUInitNV;
-extern(System) alias fp_glVDPAUFiniNV = void function() nothrow; __gshared fp_glVDPAUFiniNV glVDPAUFiniNV;
-extern(System) alias fp_glVDPAURegisterVideoSurfaceNV = GLvdpauSurfaceNV function(const(GLvoid)*, GLenum, GLsizei, const(GLuint)*) nothrow; __gshared fp_glVDPAURegisterVideoSurfaceNV glVDPAURegisterVideoSurfaceNV;
-extern(System) alias fp_glVDPAURegisterOutputSurfaceNV = GLvdpauSurfaceNV function(const(GLvoid)*, GLenum, GLsizei, const(GLuint)*) nothrow; __gshared fp_glVDPAURegisterOutputSurfaceNV glVDPAURegisterOutputSurfaceNV;
-extern(System) alias fp_glVDPAUIsSurfaceNV = void function(GLvdpauSurfaceNV) nothrow; __gshared fp_glVDPAUIsSurfaceNV glVDPAUIsSurfaceNV;
-extern(System) alias fp_glVDPAUUnregisterSurfaceNV = void function(GLvdpauSurfaceNV) nothrow; __gshared fp_glVDPAUUnregisterSurfaceNV glVDPAUUnregisterSurfaceNV;
-extern(System) alias fp_glVDPAUGetSurfaceivNV = void function(GLvdpauSurfaceNV, GLenum, GLsizei, GLsizei*, GLint*) nothrow; __gshared fp_glVDPAUGetSurfaceivNV glVDPAUGetSurfaceivNV;
-extern(System) alias fp_glVDPAUSurfaceAccessNV = void function(GLvdpauSurfaceNV, GLenum) nothrow; __gshared fp_glVDPAUSurfaceAccessNV glVDPAUSurfaceAccessNV;
-extern(System) alias fp_glVDPAUMapSurfacesNV = void function(GLsizei, const(GLvdpauSurfaceNV)*) nothrow; __gshared fp_glVDPAUMapSurfacesNV glVDPAUMapSurfacesNV;
-extern(System) alias fp_glVDPAUUnmapSurfacesNV = void function(GLsizei, const(GLvdpauSurfaceNV)*) nothrow; __gshared fp_glVDPAUUnmapSurfacesNV glVDPAUUnmapSurfacesNV;
-// GL_ARB_occlusion_query2
+
 bool GL_ARB_occlusion_query2;
-// enum uint GL_ANY_SAMPLES_PASSED = 0x8C2F;
-// GL_ARB_internalformat_query2
+
 bool GL_ARB_internalformat_query2;
-// enum uint GL_IMAGE_FORMAT_COMPATIBILITY_TYPE = 0x90C7;
-// enum uint GL_NUM_SAMPLE_COUNTS = 0x9380;
-// enum uint GL_RENDERBUFFER = 0x8D41;
-// enum uint GL_SAMPLES = 0x80A9;
-// enum uint GL_TEXTURE_1D = 0x0DE0;
-// enum uint GL_TEXTURE_1D_ARRAY = 0x8C18;
-// enum uint GL_TEXTURE_2D = 0x0DE1;
-// enum uint GL_TEXTURE_2D_ARRAY = 0x8C1A;
-// enum uint GL_TEXTURE_3D = 0x806F;
-// enum uint GL_TEXTURE_CUBE_MAP = 0x8513;
-// enum uint GL_TEXTURE_CUBE_MAP_ARRAY = 0x9009;
-// enum uint GL_TEXTURE_RECTANGLE = 0x84F5;
-// enum uint GL_TEXTURE_BUFFER = 0x8C2A;
-// enum uint GL_TEXTURE_2D_MULTISAMPLE = 0x9100;
-// enum uint GL_TEXTURE_2D_MULTISAMPLE_ARRAY = 0x9102;
-// enum uint GL_TEXTURE_COMPRESSED = 0x86A1;
-// enum uint GL_INTERNALFORMAT_SUPPORTED = 0x826F;
-// enum uint GL_INTERNALFORMAT_PREFERRED = 0x8270;
-// enum uint GL_INTERNALFORMAT_RED_SIZE = 0x8271;
-// enum uint GL_INTERNALFORMAT_GREEN_SIZE = 0x8272;
-// enum uint GL_INTERNALFORMAT_BLUE_SIZE = 0x8273;
-// enum uint GL_INTERNALFORMAT_ALPHA_SIZE = 0x8274;
-// enum uint GL_INTERNALFORMAT_DEPTH_SIZE = 0x8275;
-// enum uint GL_INTERNALFORMAT_STENCIL_SIZE = 0x8276;
-// enum uint GL_INTERNALFORMAT_SHARED_SIZE = 0x8277;
-// enum uint GL_INTERNALFORMAT_RED_TYPE = 0x8278;
-// enum uint GL_INTERNALFORMAT_GREEN_TYPE = 0x8279;
-// enum uint GL_INTERNALFORMAT_BLUE_TYPE = 0x827A;
-// enum uint GL_INTERNALFORMAT_ALPHA_TYPE = 0x827B;
-// enum uint GL_INTERNALFORMAT_DEPTH_TYPE = 0x827C;
-// enum uint GL_INTERNALFORMAT_STENCIL_TYPE = 0x827D;
-// enum uint GL_MAX_WIDTH = 0x827E;
-// enum uint GL_MAX_HEIGHT = 0x827F;
-// enum uint GL_MAX_DEPTH = 0x8280;
-// enum uint GL_MAX_LAYERS = 0x8281;
-// enum uint GL_MAX_COMBINED_DIMENSIONS = 0x8282;
-// enum uint GL_COLOR_COMPONENTS = 0x8283;
-// enum uint GL_DEPTH_COMPONENTS = 0x8284;
-// enum uint GL_STENCIL_COMPONENTS = 0x8285;
-// enum uint GL_COLOR_RENDERABLE = 0x8286;
-// enum uint GL_DEPTH_RENDERABLE = 0x8287;
-// enum uint GL_STENCIL_RENDERABLE = 0x8288;
-// enum uint GL_FRAMEBUFFER_RENDERABLE = 0x8289;
-// enum uint GL_FRAMEBUFFER_RENDERABLE_LAYERED = 0x828A;
-// enum uint GL_FRAMEBUFFER_BLEND = 0x828B;
-// enum uint GL_READ_PIXELS = 0x828C;
-// enum uint GL_READ_PIXELS_FORMAT = 0x828D;
-// enum uint GL_READ_PIXELS_TYPE = 0x828E;
-// enum uint GL_TEXTURE_IMAGE_FORMAT = 0x828F;
-// enum uint GL_TEXTURE_IMAGE_TYPE = 0x8290;
-// enum uint GL_GET_TEXTURE_IMAGE_FORMAT = 0x8291;
-// enum uint GL_GET_TEXTURE_IMAGE_TYPE = 0x8292;
-// enum uint GL_MIPMAP = 0x8293;
-// enum uint GL_MANUAL_GENERATE_MIPMAP = 0x8294;
-// enum uint GL_AUTO_GENERATE_MIPMAP = 0x8295;
-// enum uint GL_COLOR_ENCODING = 0x8296;
-// enum uint GL_SRGB_READ = 0x8297;
-// enum uint GL_SRGB_WRITE = 0x8298;
 enum uint GL_SRGB_DECODE_ARB = 0x8299;
-// enum uint GL_FILTER = 0x829A;
-// enum uint GL_VERTEX_TEXTURE = 0x829B;
-// enum uint GL_TESS_CONTROL_TEXTURE = 0x829C;
-// enum uint GL_TESS_EVALUATION_TEXTURE = 0x829D;
-// enum uint GL_GEOMETRY_TEXTURE = 0x829E;
-// enum uint GL_FRAGMENT_TEXTURE = 0x829F;
-// enum uint GL_COMPUTE_TEXTURE = 0x82A0;
-// enum uint GL_TEXTURE_SHADOW = 0x82A1;
-// enum uint GL_TEXTURE_GATHER = 0x82A2;
-// enum uint GL_TEXTURE_GATHER_SHADOW = 0x82A3;
-// enum uint GL_SHADER_IMAGE_LOAD = 0x82A4;
-// enum uint GL_SHADER_IMAGE_STORE = 0x82A5;
-// enum uint GL_SHADER_IMAGE_ATOMIC = 0x82A6;
-// enum uint GL_IMAGE_TEXEL_SIZE = 0x82A7;
-// enum uint GL_IMAGE_COMPATIBILITY_CLASS = 0x82A8;
-// enum uint GL_IMAGE_PIXEL_FORMAT = 0x82A9;
-// enum uint GL_IMAGE_PIXEL_TYPE = 0x82AA;
-// enum uint GL_SIMULTANEOUS_TEXTURE_AND_DEPTH_TEST = 0x82AC;
-// enum uint GL_SIMULTANEOUS_TEXTURE_AND_STENCIL_TEST = 0x82AD;
-// enum uint GL_SIMULTANEOUS_TEXTURE_AND_DEPTH_WRITE = 0x82AE;
-// enum uint GL_SIMULTANEOUS_TEXTURE_AND_STENCIL_WRITE = 0x82AF;
-// enum uint GL_TEXTURE_COMPRESSED_BLOCK_WIDTH = 0x82B1;
-// enum uint GL_TEXTURE_COMPRESSED_BLOCK_HEIGHT = 0x82B2;
-// enum uint GL_TEXTURE_COMPRESSED_BLOCK_SIZE = 0x82B3;
-// enum uint GL_CLEAR_BUFFER = 0x82B4;
-// enum uint GL_TEXTURE_VIEW = 0x82B5;
-// enum uint GL_VIEW_COMPATIBILITY_CLASS = 0x82B6;
-// enum uint GL_FULL_SUPPORT = 0x82B7;
-// enum uint GL_CAVEAT_SUPPORT = 0x82B8;
-// enum uint GL_IMAGE_CLASS_4_X_32 = 0x82B9;
-// enum uint GL_IMAGE_CLASS_2_X_32 = 0x82BA;
-// enum uint GL_IMAGE_CLASS_1_X_32 = 0x82BB;
-// enum uint GL_IMAGE_CLASS_4_X_16 = 0x82BC;
-// enum uint GL_IMAGE_CLASS_2_X_16 = 0x82BD;
-// enum uint GL_IMAGE_CLASS_1_X_16 = 0x82BE;
-// enum uint GL_IMAGE_CLASS_4_X_8 = 0x82BF;
-// enum uint GL_IMAGE_CLASS_2_X_8 = 0x82C0;
-// enum uint GL_IMAGE_CLASS_1_X_8 = 0x82C1;
-// enum uint GL_IMAGE_CLASS_11_11_10 = 0x82C2;
-// enum uint GL_IMAGE_CLASS_10_10_10_2 = 0x82C3;
-// enum uint GL_VIEW_CLASS_128_BITS = 0x82C4;
-// enum uint GL_VIEW_CLASS_96_BITS = 0x82C5;
-// enum uint GL_VIEW_CLASS_64_BITS = 0x82C6;
-// enum uint GL_VIEW_CLASS_48_BITS = 0x82C7;
-// enum uint GL_VIEW_CLASS_32_BITS = 0x82C8;
-// enum uint GL_VIEW_CLASS_24_BITS = 0x82C9;
-// enum uint GL_VIEW_CLASS_16_BITS = 0x82CA;
-// enum uint GL_VIEW_CLASS_8_BITS = 0x82CB;
-// enum uint GL_VIEW_CLASS_S3TC_DXT1_RGB = 0x82CC;
-// enum uint GL_VIEW_CLASS_S3TC_DXT1_RGBA = 0x82CD;
-// enum uint GL_VIEW_CLASS_S3TC_DXT3_RGBA = 0x82CE;
-// enum uint GL_VIEW_CLASS_S3TC_DXT5_RGBA = 0x82CF;
-// enum uint GL_VIEW_CLASS_RGTC1_RED = 0x82D0;
-// enum uint GL_VIEW_CLASS_RGTC2_RG = 0x82D1;
-// enum uint GL_VIEW_CLASS_BPTC_UNORM = 0x82D2;
-// enum uint GL_VIEW_CLASS_BPTC_FLOAT = 0x82D3;
-// extern(System) alias fp_glGetInternalformati64v = void function(GLenum, GLenum, GLenum, GLsizei, GLint64*) nothrow; __gshared fp_glGetInternalformati64v glGetInternalformati64v;
-// GL_EXT_texture_filter_anisotropic
+
 bool GL_EXT_texture_filter_anisotropic;
 enum uint GL_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
 enum uint GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
-// GL_SUN_vertex
+
 bool GL_SUN_vertex;
-extern(System) alias fp_glColor4ubVertex2fSUN = void function(GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat) nothrow; __gshared fp_glColor4ubVertex2fSUN glColor4ubVertex2fSUN;
-extern(System) alias fp_glColor4ubVertex2fvSUN = void function(const(GLubyte)*, const(GLfloat)*) nothrow; __gshared fp_glColor4ubVertex2fvSUN glColor4ubVertex2fvSUN;
-extern(System) alias fp_glColor4ubVertex3fSUN = void function(GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glColor4ubVertex3fSUN glColor4ubVertex3fSUN;
-extern(System) alias fp_glColor4ubVertex3fvSUN = void function(const(GLubyte)*, const(GLfloat)*) nothrow; __gshared fp_glColor4ubVertex3fvSUN glColor4ubVertex3fvSUN;
-extern(System) alias fp_glColor3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glColor3fVertex3fSUN glColor3fVertex3fSUN;
-extern(System) alias fp_glColor3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glColor3fVertex3fvSUN glColor3fVertex3fvSUN;
-extern(System) alias fp_glNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glNormal3fVertex3fSUN glNormal3fVertex3fSUN;
-extern(System) alias fp_glNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glNormal3fVertex3fvSUN glNormal3fVertex3fvSUN;
-extern(System) alias fp_glColor4fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glColor4fNormal3fVertex3fSUN glColor4fNormal3fVertex3fSUN;
-extern(System) alias fp_glColor4fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glColor4fNormal3fVertex3fvSUN glColor4fNormal3fVertex3fvSUN;
-extern(System) alias fp_glTexCoord2fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord2fVertex3fSUN glTexCoord2fVertex3fSUN;
-extern(System) alias fp_glTexCoord2fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord2fVertex3fvSUN glTexCoord2fVertex3fvSUN;
-extern(System) alias fp_glTexCoord4fVertex4fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord4fVertex4fSUN glTexCoord4fVertex4fSUN;
-extern(System) alias fp_glTexCoord4fVertex4fvSUN = void function(const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord4fVertex4fvSUN glTexCoord4fVertex4fvSUN;
-extern(System) alias fp_glTexCoord2fColor4ubVertex3fSUN = void function(GLfloat, GLfloat, GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord2fColor4ubVertex3fSUN glTexCoord2fColor4ubVertex3fSUN;
-extern(System) alias fp_glTexCoord2fColor4ubVertex3fvSUN = void function(const(GLfloat)*, const(GLubyte)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord2fColor4ubVertex3fvSUN glTexCoord2fColor4ubVertex3fvSUN;
-extern(System) alias fp_glTexCoord2fColor3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord2fColor3fVertex3fSUN glTexCoord2fColor3fVertex3fSUN;
-extern(System) alias fp_glTexCoord2fColor3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord2fColor3fVertex3fvSUN glTexCoord2fColor3fVertex3fvSUN;
-extern(System) alias fp_glTexCoord2fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord2fNormal3fVertex3fSUN glTexCoord2fNormal3fVertex3fSUN;
-extern(System) alias fp_glTexCoord2fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord2fNormal3fVertex3fvSUN glTexCoord2fNormal3fVertex3fvSUN;
-extern(System) alias fp_glTexCoord2fColor4fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord2fColor4fNormal3fVertex3fSUN glTexCoord2fColor4fNormal3fVertex3fSUN;
-extern(System) alias fp_glTexCoord2fColor4fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord2fColor4fNormal3fVertex3fvSUN glTexCoord2fColor4fNormal3fVertex3fvSUN;
-extern(System) alias fp_glTexCoord4fColor4fNormal3fVertex4fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glTexCoord4fColor4fNormal3fVertex4fSUN glTexCoord4fColor4fNormal3fVertex4fSUN;
-extern(System) alias fp_glTexCoord4fColor4fNormal3fVertex4fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glTexCoord4fColor4fNormal3fVertex4fvSUN glTexCoord4fColor4fNormal3fVertex4fvSUN;
-extern(System) alias fp_glReplacementCodeuiVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiVertex3fSUN glReplacementCodeuiVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiVertex3fvSUN glReplacementCodeuiVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiColor4ubVertex3fSUN = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiColor4ubVertex3fSUN glReplacementCodeuiColor4ubVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiColor4ubVertex3fvSUN = void function(const(GLuint)*, const(GLubyte)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiColor4ubVertex3fvSUN glReplacementCodeuiColor4ubVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiColor3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiColor3fVertex3fSUN glReplacementCodeuiColor3fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiColor3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiColor3fVertex3fvSUN glReplacementCodeuiColor3fVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiNormal3fVertex3fSUN glReplacementCodeuiNormal3fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiNormal3fVertex3fvSUN glReplacementCodeuiNormal3fVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiColor4fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiColor4fNormal3fVertex3fSUN glReplacementCodeuiColor4fNormal3fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiColor4fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiColor4fNormal3fVertex3fvSUN glReplacementCodeuiColor4fNormal3fVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fVertex3fSUN glReplacementCodeuiTexCoord2fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fVertex3fvSUN glReplacementCodeuiTexCoord2fVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN;
-extern(System) alias fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*) nothrow; __gshared fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN;
-// GL_SGIX_igloo_interface
+
 bool GL_SGIX_igloo_interface;
-extern(System) alias fp_glIglooInterfaceSGIX = void function(GLenum, const(GLvoid)*) nothrow; __gshared fp_glIglooInterfaceSGIX glIglooInterfaceSGIX;
-// GL_SGIS_texture_lod
+
 bool GL_SGIS_texture_lod;
 enum uint GL_TEXTURE_MIN_LOD_SGIS = 0x813A;
 enum uint GL_TEXTURE_MAX_LOD_SGIS = 0x813B;
 enum uint GL_TEXTURE_BASE_LEVEL_SGIS = 0x813C;
 enum uint GL_TEXTURE_MAX_LEVEL_SGIS = 0x813D;
-// GL_NV_vertex_program3
+
 bool GL_NV_vertex_program3;
-// enum uint GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB = 0x8B4C;
-// GL_ARB_draw_indirect
+
 bool GL_ARB_draw_indirect;
-// enum uint GL_DRAW_INDIRECT_BUFFER = 0x8F3F;
-// enum uint GL_DRAW_INDIRECT_BUFFER_BINDING = 0x8F43;
-// extern(System) alias fp_glDrawArraysIndirect = void function(GLenum, const(GLvoid)*) nothrow; __gshared fp_glDrawArraysIndirect glDrawArraysIndirect;
-// extern(System) alias fp_glDrawElementsIndirect = void function(GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glDrawElementsIndirect glDrawElementsIndirect;
-// GL_NV_vertex_program4
+
 bool GL_NV_vertex_program4;
 enum uint GL_VERTEX_ATTRIB_ARRAY_INTEGER_NV = 0x88FD;
-extern(System) alias fp_glVertexAttribI1iEXT = void function(GLuint, GLint) nothrow; __gshared fp_glVertexAttribI1iEXT glVertexAttribI1iEXT;
-extern(System) alias fp_glVertexAttribI2iEXT = void function(GLuint, GLint, GLint) nothrow; __gshared fp_glVertexAttribI2iEXT glVertexAttribI2iEXT;
-extern(System) alias fp_glVertexAttribI3iEXT = void function(GLuint, GLint, GLint, GLint) nothrow; __gshared fp_glVertexAttribI3iEXT glVertexAttribI3iEXT;
-extern(System) alias fp_glVertexAttribI4iEXT = void function(GLuint, GLint, GLint, GLint, GLint) nothrow; __gshared fp_glVertexAttribI4iEXT glVertexAttribI4iEXT;
-extern(System) alias fp_glVertexAttribI1uiEXT = void function(GLuint, GLuint) nothrow; __gshared fp_glVertexAttribI1uiEXT glVertexAttribI1uiEXT;
-extern(System) alias fp_glVertexAttribI2uiEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glVertexAttribI2uiEXT glVertexAttribI2uiEXT;
-extern(System) alias fp_glVertexAttribI3uiEXT = void function(GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glVertexAttribI3uiEXT glVertexAttribI3uiEXT;
-extern(System) alias fp_glVertexAttribI4uiEXT = void function(GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glVertexAttribI4uiEXT glVertexAttribI4uiEXT;
-extern(System) alias fp_glVertexAttribI1ivEXT = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttribI1ivEXT glVertexAttribI1ivEXT;
-extern(System) alias fp_glVertexAttribI2ivEXT = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttribI2ivEXT glVertexAttribI2ivEXT;
-extern(System) alias fp_glVertexAttribI3ivEXT = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttribI3ivEXT glVertexAttribI3ivEXT;
-extern(System) alias fp_glVertexAttribI4ivEXT = void function(GLuint, const(GLint)*) nothrow; __gshared fp_glVertexAttribI4ivEXT glVertexAttribI4ivEXT;
-extern(System) alias fp_glVertexAttribI1uivEXT = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttribI1uivEXT glVertexAttribI1uivEXT;
-extern(System) alias fp_glVertexAttribI2uivEXT = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttribI2uivEXT glVertexAttribI2uivEXT;
-extern(System) alias fp_glVertexAttribI3uivEXT = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttribI3uivEXT glVertexAttribI3uivEXT;
-extern(System) alias fp_glVertexAttribI4uivEXT = void function(GLuint, const(GLuint)*) nothrow; __gshared fp_glVertexAttribI4uivEXT glVertexAttribI4uivEXT;
-extern(System) alias fp_glVertexAttribI4bvEXT = void function(GLuint, const(GLbyte)*) nothrow; __gshared fp_glVertexAttribI4bvEXT glVertexAttribI4bvEXT;
-extern(System) alias fp_glVertexAttribI4svEXT = void function(GLuint, const(GLshort)*) nothrow; __gshared fp_glVertexAttribI4svEXT glVertexAttribI4svEXT;
-extern(System) alias fp_glVertexAttribI4ubvEXT = void function(GLuint, const(GLubyte)*) nothrow; __gshared fp_glVertexAttribI4ubvEXT glVertexAttribI4ubvEXT;
-extern(System) alias fp_glVertexAttribI4usvEXT = void function(GLuint, const(GLushort)*) nothrow; __gshared fp_glVertexAttribI4usvEXT glVertexAttribI4usvEXT;
-extern(System) alias fp_glVertexAttribIPointerEXT = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glVertexAttribIPointerEXT glVertexAttribIPointerEXT;
-extern(System) alias fp_glGetVertexAttribIivEXT = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVertexAttribIivEXT glGetVertexAttribIivEXT;
-extern(System) alias fp_glGetVertexAttribIuivEXT = void function(GLuint, GLenum, GLuint*) nothrow; __gshared fp_glGetVertexAttribIuivEXT glGetVertexAttribIuivEXT;
-// GL_AMD_transform_feedback3_lines_triangles
+
 bool GL_AMD_transform_feedback3_lines_triangles;
-// GL_SGIS_fog_function
+
 bool GL_SGIS_fog_function;
 enum uint GL_FOG_FUNC_SGIS = 0x812A;
 enum uint GL_FOG_FUNC_POINTS_SGIS = 0x812B;
 enum uint GL_MAX_FOG_FUNC_POINTS_SGIS = 0x812C;
-extern(System) alias fp_glFogFuncSGIS = void function(GLsizei, const(GLfloat)*) nothrow; __gshared fp_glFogFuncSGIS glFogFuncSGIS;
-extern(System) alias fp_glGetFogFuncSGIS = void function(GLfloat*) nothrow; __gshared fp_glGetFogFuncSGIS glGetFogFuncSGIS;
-// GL_EXT_x11_sync_object
+
 bool GL_EXT_x11_sync_object;
 enum uint GL_SYNC_X11_FENCE_EXT = 0x90E1;
-extern(System) alias fp_glImportSyncEXT = GLsync function(GLenum, GLintptr, GLbitfield) nothrow; __gshared fp_glImportSyncEXT glImportSyncEXT;
-// GL_ARB_sync
+
 bool GL_ARB_sync;
-// enum uint GL_MAX_SERVER_WAIT_TIMEOUT = 0x9111;
-// enum uint GL_OBJECT_TYPE = 0x9112;
-// enum uint GL_SYNC_CONDITION = 0x9113;
-// enum uint GL_SYNC_STATUS = 0x9114;
-// enum uint GL_SYNC_FLAGS = 0x9115;
-// enum uint GL_SYNC_FENCE = 0x9116;
-// enum uint GL_SYNC_GPU_COMMANDS_COMPLETE = 0x9117;
-// enum uint GL_UNSIGNALED = 0x9118;
-// enum uint GL_SIGNALED = 0x9119;
-// enum uint GL_ALREADY_SIGNALED = 0x911A;
-// enum uint GL_TIMEOUT_EXPIRED = 0x911B;
-// enum uint GL_CONDITION_SATISFIED = 0x911C;
-// enum uint GL_WAIT_FAILED = 0x911D;
-// enum uint GL_SYNC_FLUSH_COMMANDS_BIT = 0x00000001;
-// enum uint GL_TIMEOUT_IGNORED = 0xFFFFFFFFFFFFFFFF;
-// extern(System) alias fp_glFenceSync = GLsync function(GLenum, GLbitfield) nothrow; __gshared fp_glFenceSync glFenceSync;
-// extern(System) alias fp_glIsSync = GLboolean function(GLsync) nothrow; __gshared fp_glIsSync glIsSync;
-// extern(System) alias fp_glDeleteSync = void function(GLsync) nothrow; __gshared fp_glDeleteSync glDeleteSync;
-// extern(System) alias fp_glClientWaitSync = GLenum function(GLsync, GLbitfield, GLuint64) nothrow; __gshared fp_glClientWaitSync glClientWaitSync;
-// extern(System) alias fp_glWaitSync = void function(GLsync, GLbitfield, GLuint64) nothrow; __gshared fp_glWaitSync glWaitSync;
-// extern(System) alias fp_glGetInteger64v = void function(GLenum, GLint64*) nothrow; __gshared fp_glGetInteger64v glGetInteger64v;
-// extern(System) alias fp_glGetSynciv = void function(GLsync, GLenum, GLsizei, GLsizei*, GLint*) nothrow; __gshared fp_glGetSynciv glGetSynciv;
-// GL_ARB_compute_variable_group_size
+
 bool GL_ARB_compute_variable_group_size;
 enum uint GL_MAX_COMPUTE_VARIABLE_GROUP_INVOCATIONS_ARB = 0x9344;
 enum uint GL_MAX_COMPUTE_FIXED_GROUP_INVOCATIONS_ARB = 0x90EB;
 enum uint GL_MAX_COMPUTE_VARIABLE_GROUP_SIZE_ARB = 0x9345;
 enum uint GL_MAX_COMPUTE_FIXED_GROUP_SIZE_ARB = 0x91BF;
-extern(System) alias fp_glDispatchComputeGroupSizeARB = void function(GLuint, GLuint, GLuint, GLuint, GLuint, GLuint) nothrow; __gshared fp_glDispatchComputeGroupSizeARB glDispatchComputeGroupSizeARB;
-// GL_OES_fixed_point
+
 bool GL_OES_fixed_point;
 enum uint GL_FIXED_OES = 0x140C;
-extern(System) alias fp_glAlphaFuncxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glAlphaFuncxOES glAlphaFuncxOES;
-extern(System) alias fp_glClearColorxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glClearColorxOES glClearColorxOES;
-extern(System) alias fp_glClearDepthxOES = void function(GLfixed) nothrow; __gshared fp_glClearDepthxOES glClearDepthxOES;
-extern(System) alias fp_glClipPlanexOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glClipPlanexOES glClipPlanexOES;
-extern(System) alias fp_glColor4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glColor4xOES glColor4xOES;
-extern(System) alias fp_glDepthRangexOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glDepthRangexOES glDepthRangexOES;
-extern(System) alias fp_glFogxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glFogxOES glFogxOES;
-extern(System) alias fp_glFogxvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glFogxvOES glFogxvOES;
-extern(System) alias fp_glFrustumxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glFrustumxOES glFrustumxOES;
-extern(System) alias fp_glGetClipPlanexOES = void function(GLenum, GLfixed*) nothrow; __gshared fp_glGetClipPlanexOES glGetClipPlanexOES;
-extern(System) alias fp_glGetFixedvOES = void function(GLenum, GLfixed*) nothrow; __gshared fp_glGetFixedvOES glGetFixedvOES;
-extern(System) alias fp_glGetTexEnvxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetTexEnvxvOES glGetTexEnvxvOES;
-extern(System) alias fp_glGetTexParameterxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetTexParameterxvOES glGetTexParameterxvOES;
-extern(System) alias fp_glLightModelxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glLightModelxOES glLightModelxOES;
-extern(System) alias fp_glLightModelxvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glLightModelxvOES glLightModelxvOES;
-extern(System) alias fp_glLightxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glLightxOES glLightxOES;
-extern(System) alias fp_glLightxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glLightxvOES glLightxvOES;
-extern(System) alias fp_glLineWidthxOES = void function(GLfixed) nothrow; __gshared fp_glLineWidthxOES glLineWidthxOES;
-extern(System) alias fp_glLoadMatrixxOES = void function(const(GLfixed)*) nothrow; __gshared fp_glLoadMatrixxOES glLoadMatrixxOES;
-extern(System) alias fp_glMaterialxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glMaterialxOES glMaterialxOES;
-extern(System) alias fp_glMaterialxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glMaterialxvOES glMaterialxvOES;
-extern(System) alias fp_glMultMatrixxOES = void function(const(GLfixed)*) nothrow; __gshared fp_glMultMatrixxOES glMultMatrixxOES;
-extern(System) alias fp_glMultiTexCoord4xOES = void function(GLenum, GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glMultiTexCoord4xOES glMultiTexCoord4xOES;
-extern(System) alias fp_glNormal3xOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glNormal3xOES glNormal3xOES;
-extern(System) alias fp_glOrthoxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glOrthoxOES glOrthoxOES;
-extern(System) alias fp_glPointParameterxvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glPointParameterxvOES glPointParameterxvOES;
-extern(System) alias fp_glPointSizexOES = void function(GLfixed) nothrow; __gshared fp_glPointSizexOES glPointSizexOES;
-extern(System) alias fp_glPolygonOffsetxOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glPolygonOffsetxOES glPolygonOffsetxOES;
-extern(System) alias fp_glRotatexOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glRotatexOES glRotatexOES;
-extern(System) alias fp_glSampleCoverageOES = void function(GLfixed, GLboolean) nothrow; __gshared fp_glSampleCoverageOES glSampleCoverageOES;
-extern(System) alias fp_glScalexOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glScalexOES glScalexOES;
-extern(System) alias fp_glTexEnvxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glTexEnvxOES glTexEnvxOES;
-extern(System) alias fp_glTexEnvxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glTexEnvxvOES glTexEnvxvOES;
-extern(System) alias fp_glTexParameterxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glTexParameterxOES glTexParameterxOES;
-extern(System) alias fp_glTexParameterxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glTexParameterxvOES glTexParameterxvOES;
-extern(System) alias fp_glTranslatexOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glTranslatexOES glTranslatexOES;
-extern(System) alias fp_glGetLightxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetLightxvOES glGetLightxvOES;
-extern(System) alias fp_glGetMaterialxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetMaterialxvOES glGetMaterialxvOES;
-extern(System) alias fp_glPointParameterxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glPointParameterxOES glPointParameterxOES;
-extern(System) alias fp_glSampleCoveragexOES = void function(GLclampx, GLboolean) nothrow; __gshared fp_glSampleCoveragexOES glSampleCoveragexOES;
-extern(System) alias fp_glAccumxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glAccumxOES glAccumxOES;
-extern(System) alias fp_glBitmapxOES = void function(GLsizei, GLsizei, GLfixed, GLfixed, GLfixed, GLfixed, const(GLubyte)*) nothrow; __gshared fp_glBitmapxOES glBitmapxOES;
-extern(System) alias fp_glBlendColorxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glBlendColorxOES glBlendColorxOES;
-extern(System) alias fp_glClearAccumxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glClearAccumxOES glClearAccumxOES;
-extern(System) alias fp_glColor3xOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glColor3xOES glColor3xOES;
-extern(System) alias fp_glColor3xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glColor3xvOES glColor3xvOES;
-extern(System) alias fp_glColor4xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glColor4xvOES glColor4xvOES;
-extern(System) alias fp_glConvolutionParameterxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glConvolutionParameterxOES glConvolutionParameterxOES;
-extern(System) alias fp_glConvolutionParameterxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glConvolutionParameterxvOES glConvolutionParameterxvOES;
-extern(System) alias fp_glEvalCoord1xOES = void function(GLfixed) nothrow; __gshared fp_glEvalCoord1xOES glEvalCoord1xOES;
-extern(System) alias fp_glEvalCoord1xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glEvalCoord1xvOES glEvalCoord1xvOES;
-extern(System) alias fp_glEvalCoord2xOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glEvalCoord2xOES glEvalCoord2xOES;
-extern(System) alias fp_glEvalCoord2xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glEvalCoord2xvOES glEvalCoord2xvOES;
-extern(System) alias fp_glFeedbackBufferxOES = void function(GLsizei, GLenum, const(GLfixed)*) nothrow; __gshared fp_glFeedbackBufferxOES glFeedbackBufferxOES;
-extern(System) alias fp_glGetConvolutionParameterxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetConvolutionParameterxvOES glGetConvolutionParameterxvOES;
-extern(System) alias fp_glGetHistogramParameterxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetHistogramParameterxvOES glGetHistogramParameterxvOES;
-extern(System) alias fp_glGetLightxOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetLightxOES glGetLightxOES;
-extern(System) alias fp_glGetMapxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetMapxvOES glGetMapxvOES;
-extern(System) alias fp_glGetMaterialxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glGetMaterialxOES glGetMaterialxOES;
-extern(System) alias fp_glGetPixelMapxv = void function(GLenum, GLint, GLfixed*) nothrow; __gshared fp_glGetPixelMapxv glGetPixelMapxv;
-extern(System) alias fp_glGetTexGenxvOES = void function(GLenum, GLenum, GLfixed*) nothrow; __gshared fp_glGetTexGenxvOES glGetTexGenxvOES;
-extern(System) alias fp_glGetTexLevelParameterxvOES = void function(GLenum, GLint, GLenum, GLfixed*) nothrow; __gshared fp_glGetTexLevelParameterxvOES glGetTexLevelParameterxvOES;
-extern(System) alias fp_glIndexxOES = void function(GLfixed) nothrow; __gshared fp_glIndexxOES glIndexxOES;
-extern(System) alias fp_glIndexxvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glIndexxvOES glIndexxvOES;
-extern(System) alias fp_glLoadTransposeMatrixxOES = void function(const(GLfixed)*) nothrow; __gshared fp_glLoadTransposeMatrixxOES glLoadTransposeMatrixxOES;
-extern(System) alias fp_glMap1xOES = void function(GLenum, GLfixed, GLfixed, GLint, GLint, GLfixed) nothrow; __gshared fp_glMap1xOES glMap1xOES;
-extern(System) alias fp_glMap2xOES = void function(GLenum, GLfixed, GLfixed, GLint, GLint, GLfixed, GLfixed, GLint, GLint, GLfixed) nothrow; __gshared fp_glMap2xOES glMap2xOES;
-extern(System) alias fp_glMapGrid1xOES = void function(GLint, GLfixed, GLfixed) nothrow; __gshared fp_glMapGrid1xOES glMapGrid1xOES;
-extern(System) alias fp_glMapGrid2xOES = void function(GLint, GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glMapGrid2xOES glMapGrid2xOES;
-extern(System) alias fp_glMultTransposeMatrixxOES = void function(const(GLfixed)*) nothrow; __gshared fp_glMultTransposeMatrixxOES glMultTransposeMatrixxOES;
-extern(System) alias fp_glMultiTexCoord1xOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glMultiTexCoord1xOES glMultiTexCoord1xOES;
-extern(System) alias fp_glMultiTexCoord1xvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glMultiTexCoord1xvOES glMultiTexCoord1xvOES;
-extern(System) alias fp_glMultiTexCoord2xOES = void function(GLenum, GLfixed, GLfixed) nothrow; __gshared fp_glMultiTexCoord2xOES glMultiTexCoord2xOES;
-extern(System) alias fp_glMultiTexCoord2xvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glMultiTexCoord2xvOES glMultiTexCoord2xvOES;
-extern(System) alias fp_glMultiTexCoord3xOES = void function(GLenum, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glMultiTexCoord3xOES glMultiTexCoord3xOES;
-extern(System) alias fp_glMultiTexCoord3xvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glMultiTexCoord3xvOES glMultiTexCoord3xvOES;
-extern(System) alias fp_glMultiTexCoord4xvOES = void function(GLenum, const(GLfixed)*) nothrow; __gshared fp_glMultiTexCoord4xvOES glMultiTexCoord4xvOES;
-extern(System) alias fp_glNormal3xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glNormal3xvOES glNormal3xvOES;
-extern(System) alias fp_glPassThroughxOES = void function(GLfixed) nothrow; __gshared fp_glPassThroughxOES glPassThroughxOES;
-extern(System) alias fp_glPixelMapx = void function(GLenum, GLint, const(GLfixed)*) nothrow; __gshared fp_glPixelMapx glPixelMapx;
-extern(System) alias fp_glPixelStorex = void function(GLenum, GLfixed) nothrow; __gshared fp_glPixelStorex glPixelStorex;
-extern(System) alias fp_glPixelTransferxOES = void function(GLenum, GLfixed) nothrow; __gshared fp_glPixelTransferxOES glPixelTransferxOES;
-extern(System) alias fp_glPixelZoomxOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glPixelZoomxOES glPixelZoomxOES;
-extern(System) alias fp_glPrioritizeTexturesxOES = void function(GLsizei, const(GLuint)*, const(GLfixed)*) nothrow; __gshared fp_glPrioritizeTexturesxOES glPrioritizeTexturesxOES;
-extern(System) alias fp_glRasterPos2xOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glRasterPos2xOES glRasterPos2xOES;
-extern(System) alias fp_glRasterPos2xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glRasterPos2xvOES glRasterPos2xvOES;
-extern(System) alias fp_glRasterPos3xOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glRasterPos3xOES glRasterPos3xOES;
-extern(System) alias fp_glRasterPos3xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glRasterPos3xvOES glRasterPos3xvOES;
-extern(System) alias fp_glRasterPos4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glRasterPos4xOES glRasterPos4xOES;
-extern(System) alias fp_glRasterPos4xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glRasterPos4xvOES glRasterPos4xvOES;
-extern(System) alias fp_glRectxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glRectxOES glRectxOES;
-extern(System) alias fp_glRectxvOES = void function(const(GLfixed)*, const(GLfixed)*) nothrow; __gshared fp_glRectxvOES glRectxvOES;
-extern(System) alias fp_glTexCoord1xOES = void function(GLfixed) nothrow; __gshared fp_glTexCoord1xOES glTexCoord1xOES;
-extern(System) alias fp_glTexCoord1xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glTexCoord1xvOES glTexCoord1xvOES;
-extern(System) alias fp_glTexCoord2xOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glTexCoord2xOES glTexCoord2xOES;
-extern(System) alias fp_glTexCoord2xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glTexCoord2xvOES glTexCoord2xvOES;
-extern(System) alias fp_glTexCoord3xOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glTexCoord3xOES glTexCoord3xOES;
-extern(System) alias fp_glTexCoord3xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glTexCoord3xvOES glTexCoord3xvOES;
-extern(System) alias fp_glTexCoord4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glTexCoord4xOES glTexCoord4xOES;
-extern(System) alias fp_glTexCoord4xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glTexCoord4xvOES glTexCoord4xvOES;
-extern(System) alias fp_glTexGenxOES = void function(GLenum, GLenum, GLfixed) nothrow; __gshared fp_glTexGenxOES glTexGenxOES;
-extern(System) alias fp_glTexGenxvOES = void function(GLenum, GLenum, const(GLfixed)*) nothrow; __gshared fp_glTexGenxvOES glTexGenxvOES;
-extern(System) alias fp_glVertex2xOES = void function(GLfixed) nothrow; __gshared fp_glVertex2xOES glVertex2xOES;
-extern(System) alias fp_glVertex2xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glVertex2xvOES glVertex2xvOES;
-extern(System) alias fp_glVertex3xOES = void function(GLfixed, GLfixed) nothrow; __gshared fp_glVertex3xOES glVertex3xOES;
-extern(System) alias fp_glVertex3xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glVertex3xvOES glVertex3xvOES;
-extern(System) alias fp_glVertex4xOES = void function(GLfixed, GLfixed, GLfixed) nothrow; __gshared fp_glVertex4xOES glVertex4xOES;
-extern(System) alias fp_glVertex4xvOES = void function(const(GLfixed)*) nothrow; __gshared fp_glVertex4xvOES glVertex4xvOES;
-// GL_EXT_framebuffer_multisample
+
 bool GL_EXT_framebuffer_multisample;
 enum uint GL_RENDERBUFFER_SAMPLES_EXT = 0x8CAB;
 enum uint GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT = 0x8D56;
 enum uint GL_MAX_SAMPLES_EXT = 0x8D57;
-extern(System) alias fp_glRenderbufferStorageMultisampleEXT = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei) nothrow; __gshared fp_glRenderbufferStorageMultisampleEXT glRenderbufferStorageMultisampleEXT;
-// GL_ARB_gpu_shader5
+
 bool GL_ARB_gpu_shader5;
-// enum uint GL_GEOMETRY_SHADER_INVOCATIONS = 0x887F;
-// enum uint GL_MAX_GEOMETRY_SHADER_INVOCATIONS = 0x8E5A;
-// enum uint GL_MIN_FRAGMENT_INTERPOLATION_OFFSET = 0x8E5B;
-// enum uint GL_MAX_FRAGMENT_INTERPOLATION_OFFSET = 0x8E5C;
-// enum uint GL_FRAGMENT_INTERPOLATION_OFFSET_BITS = 0x8E5D;
-// enum uint GL_MAX_VERTEX_STREAMS = 0x8E71;
-// GL_SGIS_texture4D
+
 bool GL_SGIS_texture4D;
 enum uint GL_PACK_SKIP_VOLUMES_SGIS = 0x8130;
 enum uint GL_PACK_IMAGE_DEPTH_SGIS = 0x8131;
@@ -6582,9 +3668,7 @@ enum uint GL_TEXTURE_4DSIZE_SGIS = 0x8136;
 enum uint GL_TEXTURE_WRAP_Q_SGIS = 0x8137;
 enum uint GL_MAX_4D_TEXTURE_SIZE_SGIS = 0x8138;
 enum uint GL_TEXTURE_4D_BINDING_SGIS = 0x814F;
-extern(System) alias fp_glTexImage4DSGIS = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexImage4DSGIS glTexImage4DSGIS;
-extern(System) alias fp_glTexSubImage4DSGIS = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexSubImage4DSGIS glTexSubImage4DSGIS;
-// GL_EXT_texture3D
+
 bool GL_EXT_texture3D;
 enum uint GL_PACK_SKIP_IMAGES_EXT = 0x806B;
 enum uint GL_PACK_IMAGE_HEIGHT_EXT = 0x806C;
@@ -6595,9 +3679,7 @@ enum uint GL_PROXY_TEXTURE_3D_EXT = 0x8070;
 enum uint GL_TEXTURE_DEPTH_EXT = 0x8071;
 enum uint GL_TEXTURE_WRAP_R_EXT = 0x8072;
 enum uint GL_MAX_3D_TEXTURE_SIZE_EXT = 0x8073;
-extern(System) alias fp_glTexImage3DEXT = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexImage3DEXT glTexImage3DEXT;
-extern(System) alias fp_glTexSubImage3DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*) nothrow; __gshared fp_glTexSubImage3DEXT glTexSubImage3DEXT;
-// GL_EXT_multisample
+
 bool GL_EXT_multisample;
 enum uint GL_MULTISAMPLE_EXT = 0x809D;
 enum uint GL_SAMPLE_ALPHA_TO_MASK_EXT = 0x809E;
@@ -6616,9 +3698,7 @@ enum uint GL_SAMPLE_MASK_VALUE_EXT = 0x80AA;
 enum uint GL_SAMPLE_MASK_INVERT_EXT = 0x80AB;
 enum uint GL_SAMPLE_PATTERN_EXT = 0x80AC;
 enum uint GL_MULTISAMPLE_BIT_EXT = 0x20000000;
-extern(System) alias fp_glSampleMaskEXT = void function(GLclampf, GLboolean) nothrow; __gshared fp_glSampleMaskEXT glSampleMaskEXT;
-extern(System) alias fp_glSamplePatternEXT = void function(GLenum) nothrow; __gshared fp_glSamplePatternEXT glSamplePatternEXT;
-// GL_EXT_secondary_color
+
 bool GL_EXT_secondary_color;
 enum uint GL_COLOR_SUM_EXT = 0x8458;
 enum uint GL_CURRENT_SECONDARY_COLOR_EXT = 0x8459;
@@ -6627,26 +3707,9 @@ enum uint GL_SECONDARY_COLOR_ARRAY_TYPE_EXT = 0x845B;
 enum uint GL_SECONDARY_COLOR_ARRAY_STRIDE_EXT = 0x845C;
 enum uint GL_SECONDARY_COLOR_ARRAY_POINTER_EXT = 0x845D;
 enum uint GL_SECONDARY_COLOR_ARRAY_EXT = 0x845E;
-extern(System) alias fp_glSecondaryColor3bEXT = void function(GLbyte, GLbyte, GLbyte) nothrow; __gshared fp_glSecondaryColor3bEXT glSecondaryColor3bEXT;
-extern(System) alias fp_glSecondaryColor3bvEXT = void function(const(GLbyte)*) nothrow; __gshared fp_glSecondaryColor3bvEXT glSecondaryColor3bvEXT;
-extern(System) alias fp_glSecondaryColor3dEXT = void function(GLdouble, GLdouble, GLdouble) nothrow; __gshared fp_glSecondaryColor3dEXT glSecondaryColor3dEXT;
-extern(System) alias fp_glSecondaryColor3dvEXT = void function(const(GLdouble)*) nothrow; __gshared fp_glSecondaryColor3dvEXT glSecondaryColor3dvEXT;
-extern(System) alias fp_glSecondaryColor3fEXT = void function(GLfloat, GLfloat, GLfloat) nothrow; __gshared fp_glSecondaryColor3fEXT glSecondaryColor3fEXT;
-extern(System) alias fp_glSecondaryColor3fvEXT = void function(const(GLfloat)*) nothrow; __gshared fp_glSecondaryColor3fvEXT glSecondaryColor3fvEXT;
-extern(System) alias fp_glSecondaryColor3iEXT = void function(GLint, GLint, GLint) nothrow; __gshared fp_glSecondaryColor3iEXT glSecondaryColor3iEXT;
-extern(System) alias fp_glSecondaryColor3ivEXT = void function(const(GLint)*) nothrow; __gshared fp_glSecondaryColor3ivEXT glSecondaryColor3ivEXT;
-extern(System) alias fp_glSecondaryColor3sEXT = void function(GLshort, GLshort, GLshort) nothrow; __gshared fp_glSecondaryColor3sEXT glSecondaryColor3sEXT;
-extern(System) alias fp_glSecondaryColor3svEXT = void function(const(GLshort)*) nothrow; __gshared fp_glSecondaryColor3svEXT glSecondaryColor3svEXT;
-extern(System) alias fp_glSecondaryColor3ubEXT = void function(GLubyte, GLubyte, GLubyte) nothrow; __gshared fp_glSecondaryColor3ubEXT glSecondaryColor3ubEXT;
-extern(System) alias fp_glSecondaryColor3ubvEXT = void function(const(GLubyte)*) nothrow; __gshared fp_glSecondaryColor3ubvEXT glSecondaryColor3ubvEXT;
-extern(System) alias fp_glSecondaryColor3uiEXT = void function(GLuint, GLuint, GLuint) nothrow; __gshared fp_glSecondaryColor3uiEXT glSecondaryColor3uiEXT;
-extern(System) alias fp_glSecondaryColor3uivEXT = void function(const(GLuint)*) nothrow; __gshared fp_glSecondaryColor3uivEXT glSecondaryColor3uivEXT;
-extern(System) alias fp_glSecondaryColor3usEXT = void function(GLushort, GLushort, GLushort) nothrow; __gshared fp_glSecondaryColor3usEXT glSecondaryColor3usEXT;
-extern(System) alias fp_glSecondaryColor3usvEXT = void function(const(GLushort)*) nothrow; __gshared fp_glSecondaryColor3usvEXT glSecondaryColor3usvEXT;
-extern(System) alias fp_glSecondaryColorPointerEXT = void function(GLint, GLenum, GLsizei, const(GLvoid)*) nothrow; __gshared fp_glSecondaryColorPointerEXT glSecondaryColorPointerEXT;
-// GL_NV_parameter_buffer_object2
+
 bool GL_NV_parameter_buffer_object2;
-// GL_ATI_vertex_array_object
+
 bool GL_ATI_vertex_array_object;
 enum uint GL_STATIC_ATI = 0x8760;
 enum uint GL_DYNAMIC_ATI = 0x8761;
@@ -6656,19 +3719,7 @@ enum uint GL_OBJECT_BUFFER_SIZE_ATI = 0x8764;
 enum uint GL_OBJECT_BUFFER_USAGE_ATI = 0x8765;
 enum uint GL_ARRAY_OBJECT_BUFFER_ATI = 0x8766;
 enum uint GL_ARRAY_OBJECT_OFFSET_ATI = 0x8767;
-extern(System) alias fp_glNewObjectBufferATI = GLuint function(GLsizei, const(GLvoid)*, GLenum) nothrow; __gshared fp_glNewObjectBufferATI glNewObjectBufferATI;
-extern(System) alias fp_glIsObjectBufferATI = GLboolean function(GLuint) nothrow; __gshared fp_glIsObjectBufferATI glIsObjectBufferATI;
-extern(System) alias fp_glUpdateObjectBufferATI = void function(GLuint, GLuint, GLsizei, const(GLvoid)*, GLenum) nothrow; __gshared fp_glUpdateObjectBufferATI glUpdateObjectBufferATI;
-extern(System) alias fp_glGetObjectBufferfvATI = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetObjectBufferfvATI glGetObjectBufferfvATI;
-extern(System) alias fp_glGetObjectBufferivATI = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetObjectBufferivATI glGetObjectBufferivATI;
-extern(System) alias fp_glFreeObjectBufferATI = void function(GLuint) nothrow; __gshared fp_glFreeObjectBufferATI glFreeObjectBufferATI;
-extern(System) alias fp_glArrayObjectATI = void function(GLenum, GLint, GLenum, GLsizei, GLuint, GLuint) nothrow; __gshared fp_glArrayObjectATI glArrayObjectATI;
-extern(System) alias fp_glGetArrayObjectfvATI = void function(GLenum, GLenum, GLfloat*) nothrow; __gshared fp_glGetArrayObjectfvATI glGetArrayObjectfvATI;
-extern(System) alias fp_glGetArrayObjectivATI = void function(GLenum, GLenum, GLint*) nothrow; __gshared fp_glGetArrayObjectivATI glGetArrayObjectivATI;
-extern(System) alias fp_glVariantArrayObjectATI = void function(GLuint, GLenum, GLsizei, GLuint, GLuint) nothrow; __gshared fp_glVariantArrayObjectATI glVariantArrayObjectATI;
-extern(System) alias fp_glGetVariantArrayObjectfvATI = void function(GLuint, GLenum, GLfloat*) nothrow; __gshared fp_glGetVariantArrayObjectfvATI glGetVariantArrayObjectfvATI;
-extern(System) alias fp_glGetVariantArrayObjectivATI = void function(GLuint, GLenum, GLint*) nothrow; __gshared fp_glGetVariantArrayObjectivATI glGetVariantArrayObjectivATI;
-// GL_ARB_sparse_texture
+
 bool GL_ARB_sparse_texture;
 enum uint GL_TEXTURE_SPARSE_ARB = 0x91A6;
 enum uint GL_VIRTUAL_PAGE_SIZE_INDEX_ARB = 0x91A7;
@@ -6681,8 +3732,7 @@ enum uint GL_MAX_SPARSE_TEXTURE_SIZE_ARB = 0x9198;
 enum uint GL_MAX_SPARSE_3D_TEXTURE_SIZE_ARB = 0x9199;
 enum uint GL_MAX_SPARSE_ARRAY_TEXTURE_LAYERS_ARB = 0x919A;
 enum uint GL_SPARSE_TEXTURE_FULL_ARRAY_CUBE_MIPMAPS_ARB = 0x91A9;
-extern(System) alias fp_glTexPageCommitmentARB = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLboolean) nothrow; __gshared fp_glTexPageCommitmentARB glTexPageCommitmentARB;
-// GL_SGIS_point_line_texgen
+
 bool GL_SGIS_point_line_texgen;
 enum uint GL_EYE_DISTANCE_TO_POINT_SGIS = 0x81F0;
 enum uint GL_OBJECT_DISTANCE_TO_POINT_SGIS = 0x81F1;
@@ -6692,12 +3742,3456 @@ enum uint GL_EYE_POINT_SGIS = 0x81F4;
 enum uint GL_OBJECT_POINT_SGIS = 0x81F5;
 enum uint GL_EYE_LINE_SGIS = 0x81F6;
 enum uint GL_OBJECT_LINE_SGIS = 0x81F7;
-// GL_EXT_draw_range_elements
+
 bool GL_EXT_draw_range_elements;
 enum uint GL_MAX_ELEMENTS_VERTICES_EXT = 0x80E8;
 enum uint GL_MAX_ELEMENTS_INDICES_EXT = 0x80E9;
-extern(System) alias fp_glDrawRangeElementsEXT = void function(GLenum, GLuint, GLuint, GLsizei, GLenum, const(GLvoid)*) nothrow; __gshared fp_glDrawRangeElementsEXT glDrawRangeElementsEXT;
-// GL_SGIX_blend_alpha_minmax
+
 bool GL_SGIX_blend_alpha_minmax;
 enum uint GL_ALPHA_MIN_SGIX = 0x8320;
 enum uint GL_ALPHA_MAX_SGIX = 0x8321;
+
+nothrow extern(System) {
+alias fp_glPointParameteriNV = void function(GLenum, GLint);
+alias fp_glPointParameterivNV = void function(GLenum, const(GLint)*);
+alias fp_glElementPointerAPPLE = void function(GLenum, const(GLvoid)*);
+alias fp_glDrawElementArrayAPPLE = void function(GLenum, GLint, GLsizei);
+alias fp_glDrawRangeElementArrayAPPLE = void function(GLenum, GLuint, GLuint, GLint, GLsizei);
+alias fp_glMultiDrawElementArrayAPPLE = void function(GLenum, const(GLint)*, const(GLsizei)*, GLsizei);
+alias fp_glMultiDrawRangeElementArrayAPPLE = void function(GLenum, GLuint, GLuint, const(GLint)*, const(GLsizei)*, GLsizei);
+alias fp_glMultiDrawArraysIndirectAMD = void function(GLenum, const(GLvoid)*, GLsizei, GLsizei);
+alias fp_glMultiDrawElementsIndirectAMD = void function(GLenum, GLenum, const(GLvoid)*, GLsizei, GLsizei);
+alias fp_glTagSampleBufferSGIX = void function();
+alias fp_glStencilOpSeparateATI = void function(GLenum, GLenum, GLenum, GLenum);
+alias fp_glStencilFuncSeparateATI = void function(GLenum, GLenum, GLint, GLuint);
+alias fp_glTexBufferEXT = void function(GLenum, GLenum, GLuint);
+alias fp_glWeightbvARB = void function(GLint, const(GLbyte)*);
+alias fp_glWeightsvARB = void function(GLint, const(GLshort)*);
+alias fp_glWeightivARB = void function(GLint, const(GLint)*);
+alias fp_glWeightfvARB = void function(GLint, const(GLfloat)*);
+alias fp_glWeightdvARB = void function(GLint, const(GLdouble)*);
+alias fp_glWeightubvARB = void function(GLint, const(GLubyte)*);
+alias fp_glWeightusvARB = void function(GLint, const(GLushort)*);
+alias fp_glWeightuivARB = void function(GLint, const(GLuint)*);
+alias fp_glWeightPointerARB = void function(GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glVertexBlendARB = void function(GLint);
+alias fp_glIndexFuncEXT = void function(GLenum, GLclampf);
+alias fp_glMakeBufferResidentNV = void function(GLenum, GLenum);
+alias fp_glMakeBufferNonResidentNV = void function(GLenum);
+alias fp_glIsBufferResidentNV = GLboolean function(GLenum);
+alias fp_glMakeNamedBufferResidentNV = void function(GLuint, GLenum);
+alias fp_glMakeNamedBufferNonResidentNV = void function(GLuint);
+alias fp_glIsNamedBufferResidentNV = GLboolean function(GLuint);
+alias fp_glGetBufferParameterui64vNV = void function(GLenum, GLenum, GLuint64EXT*);
+alias fp_glGetNamedBufferParameterui64vNV = void function(GLuint, GLenum, GLuint64EXT*);
+alias fp_glGetIntegerui64vNV = void function(GLenum, GLuint64EXT*);
+alias fp_glUniformui64NV = void function(GLint, GLuint64EXT);
+alias fp_glUniformui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glGetUniformui64vNV = void function(GLuint, GLint, GLuint64EXT*);
+alias fp_glProgramUniformui64NV = void function(GLuint, GLint, GLuint64EXT);
+alias fp_glProgramUniformui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glColorSubTableEXT = void function(GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyColorSubTableEXT = void function(GLenum, GLsizei, GLint, GLint, GLsizei);
+alias fp_glFinishTextureSUNX = void function();
+alias fp_glMultiDrawArraysEXT = void function(GLenum, const(GLint)*, const(GLsizei)*, GLsizei);
+alias fp_glMultiDrawElementsEXT = void function(GLenum, const(GLsizei)*, GLenum, const(GLvoid*)*, GLsizei);
+alias fp_glBeginConditionalRenderNV = void function(GLuint, GLenum);
+alias fp_glEndConditionalRenderNV = void function();
+alias fp_glResizeBuffersMESA = void function();
+alias fp_glConvolutionFilter1DEXT = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glConvolutionFilter2DEXT = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glConvolutionParameterfEXT = void function(GLenum, GLenum, GLfloat);
+alias fp_glConvolutionParameterfvEXT = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glConvolutionParameteriEXT = void function(GLenum, GLenum, GLint);
+alias fp_glConvolutionParameterivEXT = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glCopyConvolutionFilter1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei);
+alias fp_glCopyConvolutionFilter2DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei);
+alias fp_glGetConvolutionFilterEXT = void function(GLenum, GLenum, GLenum, GLvoid*);
+alias fp_glGetConvolutionParameterfvEXT = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetConvolutionParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glGetSeparableFilterEXT = void function(GLenum, GLenum, GLenum, GLvoid*, GLvoid*, GLvoid*);
+alias fp_glSeparableFilter2DEXT = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*, const(GLvoid)*);
+alias fp_glVertexAttribL1i64NV = void function(GLuint, GLint64EXT);
+alias fp_glVertexAttribL2i64NV = void function(GLuint, GLint64EXT, GLint64EXT);
+alias fp_glVertexAttribL3i64NV = void function(GLuint, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glVertexAttribL4i64NV = void function(GLuint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glVertexAttribL1i64vNV = void function(GLuint, const(GLint64EXT)*);
+alias fp_glVertexAttribL2i64vNV = void function(GLuint, const(GLint64EXT)*);
+alias fp_glVertexAttribL3i64vNV = void function(GLuint, const(GLint64EXT)*);
+alias fp_glVertexAttribL4i64vNV = void function(GLuint, const(GLint64EXT)*);
+alias fp_glVertexAttribL1ui64NV = void function(GLuint, GLuint64EXT);
+alias fp_glVertexAttribL2ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT);
+alias fp_glVertexAttribL3ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glVertexAttribL4ui64NV = void function(GLuint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glVertexAttribL1ui64vNV = void function(GLuint, const(GLuint64EXT)*);
+alias fp_glVertexAttribL2ui64vNV = void function(GLuint, const(GLuint64EXT)*);
+alias fp_glVertexAttribL3ui64vNV = void function(GLuint, const(GLuint64EXT)*);
+alias fp_glVertexAttribL4ui64vNV = void function(GLuint, const(GLuint64EXT)*);
+alias fp_glGetVertexAttribLi64vNV = void function(GLuint, GLenum, GLint64EXT*);
+alias fp_glGetVertexAttribLui64vNV = void function(GLuint, GLenum, GLuint64EXT*);
+alias fp_glVertexAttribLFormatNV = void function(GLuint, GLint, GLenum, GLsizei);
+alias fp_glColorTableEXT = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glGetColorTableEXT = void function(GLenum, GLenum, GLenum, GLvoid*);
+alias fp_glGetColorTableParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glGetColorTableParameterfvEXT = void function(GLenum, GLenum, GLfloat*);
+alias fp_glTexBufferARB = void function(GLenum, GLenum, GLuint);
+alias fp_glPNTrianglesiATI = void function(GLenum, GLint);
+alias fp_glPNTrianglesfATI = void function(GLenum, GLfloat);
+alias fp_glFlushRasterSGIX = void function();
+alias fp_glApplyTextureEXT = void function(GLenum);
+alias fp_glTextureLightEXT = void function(GLenum);
+alias fp_glTextureMaterialEXT = void function(GLenum, GLenum);
+alias fp_glBlendFuncIndexedAMD = void function(GLuint, GLenum, GLenum);
+alias fp_glBlendFuncSeparateIndexedAMD = void function(GLuint, GLenum, GLenum, GLenum, GLenum);
+alias fp_glBlendEquationIndexedAMD = void function(GLuint, GLenum);
+alias fp_glBlendEquationSeparateIndexedAMD = void function(GLuint, GLenum, GLenum);
+alias fp_glWindowPos2dMESA = void function(GLdouble, GLdouble);
+alias fp_glWindowPos2dvMESA = void function(const(GLdouble)*);
+alias fp_glWindowPos2fMESA = void function(GLfloat, GLfloat);
+alias fp_glWindowPos2fvMESA = void function(const(GLfloat)*);
+alias fp_glWindowPos2iMESA = void function(GLint, GLint);
+alias fp_glWindowPos2ivMESA = void function(const(GLint)*);
+alias fp_glWindowPos2sMESA = void function(GLshort, GLshort);
+alias fp_glWindowPos2svMESA = void function(const(GLshort)*);
+alias fp_glWindowPos3dMESA = void function(GLdouble, GLdouble, GLdouble);
+alias fp_glWindowPos3dvMESA = void function(const(GLdouble)*);
+alias fp_glWindowPos3fMESA = void function(GLfloat, GLfloat, GLfloat);
+alias fp_glWindowPos3fvMESA = void function(const(GLfloat)*);
+alias fp_glWindowPos3iMESA = void function(GLint, GLint, GLint);
+alias fp_glWindowPos3ivMESA = void function(const(GLint)*);
+alias fp_glWindowPos3sMESA = void function(GLshort, GLshort, GLshort);
+alias fp_glWindowPos3svMESA = void function(const(GLshort)*);
+alias fp_glWindowPos4dMESA = void function(GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glWindowPos4dvMESA = void function(const(GLdouble)*);
+alias fp_glWindowPos4fMESA = void function(GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glWindowPos4fvMESA = void function(const(GLfloat)*);
+alias fp_glWindowPos4iMESA = void function(GLint, GLint, GLint, GLint);
+alias fp_glWindowPos4ivMESA = void function(const(GLint)*);
+alias fp_glWindowPos4sMESA = void function(GLshort, GLshort, GLshort, GLshort);
+alias fp_glWindowPos4svMESA = void function(const(GLshort)*);
+alias fp_glTextureBarrierNV = void function();
+alias fp_glTbufferMask3DFX = void function(GLuint);
+alias fp_glFrameTerminatorGREMEDY = void function();
+alias fp_glUseShaderProgramEXT = void function(GLenum, GLuint);
+alias fp_glActiveProgramEXT = void function(GLuint);
+alias fp_glCreateShaderProgramEXT = GLuint function(GLenum, const(GLchar)*);
+alias fp_glActiveShaderProgramEXT = void function(GLuint, GLuint);
+alias fp_glBindProgramPipelineEXT = void function(GLuint);
+alias fp_glCreateShaderProgramvEXT = GLuint function(GLenum, GLsizei, const(GLchar*)*);
+alias fp_glDeleteProgramPipelinesEXT = void function(GLsizei, const(GLuint)*);
+alias fp_glGenProgramPipelinesEXT = void function(GLsizei, GLuint*);
+alias fp_glGetProgramPipelineInfoLogEXT = void function(GLuint, GLsizei, GLsizei*, GLchar*);
+alias fp_glGetProgramPipelineivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glIsProgramPipelineEXT = GLboolean function(GLuint);
+alias fp_glProgramParameteriEXT = void function(GLuint, GLenum, GLint);
+alias fp_glProgramUniform1fEXT = void function(GLuint, GLint, GLfloat);
+alias fp_glProgramUniform1fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*);
+alias fp_glProgramUniform1iEXT = void function(GLuint, GLint, GLint);
+alias fp_glProgramUniform1ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*);
+alias fp_glProgramUniform2fEXT = void function(GLuint, GLint, GLfloat, GLfloat);
+alias fp_glProgramUniform2fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*);
+alias fp_glProgramUniform2iEXT = void function(GLuint, GLint, GLint, GLint);
+alias fp_glProgramUniform2ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*);
+alias fp_glProgramUniform3fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramUniform3fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*);
+alias fp_glProgramUniform3iEXT = void function(GLuint, GLint, GLint, GLint, GLint);
+alias fp_glProgramUniform3ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*);
+alias fp_glProgramUniform4fEXT = void function(GLuint, GLint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramUniform4fvEXT = void function(GLuint, GLint, GLsizei, const(GLfloat)*);
+alias fp_glProgramUniform4iEXT = void function(GLuint, GLint, GLint, GLint, GLint, GLint);
+alias fp_glProgramUniform4ivEXT = void function(GLuint, GLint, GLsizei, const(GLint)*);
+alias fp_glProgramUniformMatrix2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glUseProgramStagesEXT = void function(GLuint, GLbitfield, GLuint);
+alias fp_glValidateProgramPipelineEXT = void function(GLuint);
+alias fp_glTexImage2DMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLboolean);
+alias fp_glTexImage3DMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glTextureImage2DMultisampleNV = void function(GLuint, GLenum, GLsizei, GLint, GLsizei, GLsizei, GLboolean);
+alias fp_glTextureImage3DMultisampleNV = void function(GLuint, GLenum, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glTextureImage2DMultisampleCoverageNV = void function(GLuint, GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLboolean);
+alias fp_glTextureImage3DMultisampleCoverageNV = void function(GLuint, GLenum, GLsizei, GLsizei, GLint, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glDeleteObjectARB = void function(GLhandleARB);
+alias fp_glGetHandleARB = GLhandleARB function(GLenum);
+alias fp_glDetachObjectARB = void function(GLhandleARB, GLhandleARB);
+alias fp_glCreateShaderObjectARB = GLhandleARB function(GLenum);
+alias fp_glShaderSourceARB = void function(GLhandleARB, GLsizei, const(GLcharARB*)*, const(GLint)*);
+alias fp_glCompileShaderARB = void function(GLhandleARB);
+alias fp_glCreateProgramObjectARB = GLhandleARB function();
+alias fp_glAttachObjectARB = void function(GLhandleARB, GLhandleARB);
+alias fp_glLinkProgramARB = void function(GLhandleARB);
+alias fp_glUseProgramObjectARB = void function(GLhandleARB);
+alias fp_glValidateProgramARB = void function(GLhandleARB);
+alias fp_glUniform1fARB = void function(GLint, GLfloat);
+alias fp_glUniform2fARB = void function(GLint, GLfloat, GLfloat);
+alias fp_glUniform3fARB = void function(GLint, GLfloat, GLfloat, GLfloat);
+alias fp_glUniform4fARB = void function(GLint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glUniform1iARB = void function(GLint, GLint);
+alias fp_glUniform2iARB = void function(GLint, GLint, GLint);
+alias fp_glUniform3iARB = void function(GLint, GLint, GLint, GLint);
+alias fp_glUniform4iARB = void function(GLint, GLint, GLint, GLint, GLint);
+alias fp_glUniform1fvARB = void function(GLint, GLsizei, const(GLfloat)*);
+alias fp_glUniform2fvARB = void function(GLint, GLsizei, const(GLfloat)*);
+alias fp_glUniform3fvARB = void function(GLint, GLsizei, const(GLfloat)*);
+alias fp_glUniform4fvARB = void function(GLint, GLsizei, const(GLfloat)*);
+alias fp_glUniform1ivARB = void function(GLint, GLsizei, const(GLint)*);
+alias fp_glUniform2ivARB = void function(GLint, GLsizei, const(GLint)*);
+alias fp_glUniform3ivARB = void function(GLint, GLsizei, const(GLint)*);
+alias fp_glUniform4ivARB = void function(GLint, GLsizei, const(GLint)*);
+alias fp_glUniformMatrix2fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glUniformMatrix3fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glUniformMatrix4fvARB = void function(GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glGetObjectParameterfvARB = void function(GLhandleARB, GLenum, GLfloat*);
+alias fp_glGetObjectParameterivARB = void function(GLhandleARB, GLenum, GLint*);
+alias fp_glGetInfoLogARB = void function(GLhandleARB, GLsizei, GLsizei*, GLcharARB*);
+alias fp_glGetAttachedObjectsARB = void function(GLhandleARB, GLsizei, GLsizei*, GLhandleARB*);
+alias fp_glGetUniformLocationARB = GLint function(GLhandleARB, const(GLcharARB)*);
+alias fp_glGetActiveUniformARB = void function(GLhandleARB, GLuint, GLsizei, GLsizei*, GLint*, GLenum*, GLcharARB*);
+alias fp_glGetUniformfvARB = void function(GLhandleARB, GLint, GLfloat*);
+alias fp_glGetUniformivARB = void function(GLhandleARB, GLint, GLint*);
+alias fp_glGetShaderSourceARB = void function(GLhandleARB, GLsizei, GLsizei*, GLcharARB*);
+alias fp_glTexBumpParameterivATI = void function(GLenum, const(GLint)*);
+alias fp_glTexBumpParameterfvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glGetTexBumpParameterivATI = void function(GLenum, GLint*);
+alias fp_glGetTexBumpParameterfvATI = void function(GLenum, GLfloat*);
+alias fp_glMapObjectBufferATI = void* function(GLuint);
+alias fp_glUnmapObjectBufferATI = void function(GLuint);
+alias fp_glGetGraphicsResetStatusARB = GLenum function();
+alias fp_glGetnTexImageARB = void function(GLenum, GLint, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glReadnPixelsARB = void function(GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glGetnCompressedTexImageARB = void function(GLenum, GLint, GLsizei, GLvoid*);
+alias fp_glGetnUniformfvARB = void function(GLuint, GLint, GLsizei, GLfloat*);
+alias fp_glGetnUniformivARB = void function(GLuint, GLint, GLsizei, GLint*);
+alias fp_glGetnUniformuivARB = void function(GLuint, GLint, GLsizei, GLuint*);
+alias fp_glGetnUniformdvARB = void function(GLuint, GLint, GLsizei, GLdouble*);
+alias fp_glGetnMapdvARB = void function(GLenum, GLenum, GLsizei, GLdouble*);
+alias fp_glGetnMapfvARB = void function(GLenum, GLenum, GLsizei, GLfloat*);
+alias fp_glGetnMapivARB = void function(GLenum, GLenum, GLsizei, GLint*);
+alias fp_glGetnPixelMapfvARB = void function(GLenum, GLsizei, GLfloat*);
+alias fp_glGetnPixelMapuivARB = void function(GLenum, GLsizei, GLuint*);
+alias fp_glGetnPixelMapusvARB = void function(GLenum, GLsizei, GLushort*);
+alias fp_glGetnPolygonStippleARB = void function(GLsizei, GLubyte*);
+alias fp_glGetnColorTableARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glGetnConvolutionFilterARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glGetnSeparableFilterARB = void function(GLenum, GLenum, GLenum, GLsizei, GLvoid*, GLsizei, GLvoid*, GLvoid*);
+alias fp_glGetnHistogramARB = void function(GLenum, GLboolean, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glGetnMinmaxARB = void function(GLenum, GLboolean, GLenum, GLenum, GLsizei, GLvoid*);
+alias fp_glPixelDataRangeNV = void function(GLenum, GLsizei, const(GLvoid)*);
+alias fp_glFlushPixelDataRangeNV = void function(GLenum);
+alias fp_glBlitFramebufferEXT = void function(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLbitfield, GLenum);
+alias fp_glVertexWeightfEXT = void function(GLfloat);
+alias fp_glVertexWeightfvEXT = void function(const(GLfloat)*);
+alias fp_glVertexWeightPointerEXT = void function(GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glStringMarkerGREMEDY = void function(GLsizei, const(GLvoid)*);
+alias fp_glTexSubImage1DEXT = void function(GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTexSubImage2DEXT = void function(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glMapControlPointsNV = void function(GLenum, GLuint, GLenum, GLsizei, GLsizei, GLint, GLint, GLboolean, const(GLvoid)*);
+alias fp_glMapParameterivNV = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glMapParameterfvNV = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glGetMapControlPointsNV = void function(GLenum, GLuint, GLenum, GLsizei, GLsizei, GLboolean, GLvoid*);
+alias fp_glGetMapParameterivNV = void function(GLenum, GLenum, GLint*);
+alias fp_glGetMapParameterfvNV = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetMapAttribParameterivNV = void function(GLenum, GLuint, GLenum, GLint*);
+alias fp_glGetMapAttribParameterfvNV = void function(GLenum, GLuint, GLenum, GLfloat*);
+alias fp_glEvalMapsNV = void function(GLenum, GLenum);
+alias fp_glGetTexFilterFuncSGIS = void function(GLenum, GLenum, GLfloat*);
+alias fp_glTexFilterFuncSGIS = void function(GLenum, GLenum, GLsizei, const(GLfloat)*);
+alias fp_glGetPerfMonitorGroupsAMD = void function(GLint*, GLsizei, GLuint*);
+alias fp_glGetPerfMonitorCountersAMD = void function(GLuint, GLint*, GLint*, GLsizei, GLuint*);
+alias fp_glGetPerfMonitorGroupStringAMD = void function(GLuint, GLsizei, GLsizei*, GLchar*);
+alias fp_glGetPerfMonitorCounterStringAMD = void function(GLuint, GLuint, GLsizei, GLsizei*, GLchar*);
+alias fp_glGetPerfMonitorCounterInfoAMD = void function(GLuint, GLuint, GLenum, GLvoid*);
+alias fp_glGenPerfMonitorsAMD = void function(GLsizei, GLuint*);
+alias fp_glDeletePerfMonitorsAMD = void function(GLsizei, GLuint*);
+alias fp_glSelectPerfMonitorCountersAMD = void function(GLuint, GLboolean, GLuint, GLint, GLuint*);
+alias fp_glBeginPerfMonitorAMD = void function(GLuint);
+alias fp_glEndPerfMonitorAMD = void function(GLuint);
+alias fp_glGetPerfMonitorCounterDataAMD = void function(GLuint, GLenum, GLsizei, GLuint*, GLint*);
+alias fp_glStencilClearTagEXT = void function(GLsizei, GLuint);
+alias fp_glPresentFrameKeyedNV = void function(GLuint, GLuint64EXT, GLuint, GLuint, GLenum, GLenum, GLuint, GLuint, GLenum, GLuint, GLuint);
+alias fp_glPresentFrameDualFillNV = void function(GLuint, GLuint64EXT, GLuint, GLuint, GLenum, GLenum, GLuint, GLenum, GLuint, GLenum, GLuint, GLenum, GLuint);
+alias fp_glGetVideoivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVideouivNV = void function(GLuint, GLenum, GLuint*);
+alias fp_glGetVideoi64vNV = void function(GLuint, GLenum, GLint64EXT*);
+alias fp_glGetVideoui64vNV = void function(GLuint, GLenum, GLuint64EXT*);
+alias fp_glProgramEnvParameters4fvEXT = void function(GLenum, GLuint, GLsizei, const(GLfloat)*);
+alias fp_glProgramLocalParameters4fvEXT = void function(GLenum, GLuint, GLsizei, const(GLfloat)*);
+alias fp_glGetListParameterfvSGIX = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetListParameterivSGIX = void function(GLuint, GLenum, GLint*);
+alias fp_glListParameterfSGIX = void function(GLuint, GLenum, GLfloat);
+alias fp_glListParameterfvSGIX = void function(GLuint, GLenum, const(GLfloat)*);
+alias fp_glListParameteriSGIX = void function(GLuint, GLenum, GLint);
+alias fp_glListParameterivSGIX = void function(GLuint, GLenum, const(GLint)*);
+alias fp_glBeginTransformFeedbackNV = void function(GLenum);
+alias fp_glEndTransformFeedbackNV = void function();
+alias fp_glTransformFeedbackAttribsNV = void function(GLuint, const(GLint)*, GLenum);
+alias fp_glBindBufferRangeNV = void function(GLenum, GLuint, GLuint, GLintptr, GLsizeiptr);
+alias fp_glBindBufferOffsetNV = void function(GLenum, GLuint, GLuint, GLintptr);
+alias fp_glBindBufferBaseNV = void function(GLenum, GLuint, GLuint);
+alias fp_glTransformFeedbackVaryingsNV = void function(GLuint, GLsizei, const(GLint)*, GLenum);
+alias fp_glActiveVaryingNV = void function(GLuint, const(GLchar)*);
+alias fp_glGetVaryingLocationNV = GLint function(GLuint, const(GLchar)*);
+alias fp_glGetActiveVaryingNV = void function(GLuint, GLuint, GLsizei, GLsizei*, GLsizei*, GLenum*, GLchar*);
+alias fp_glGetTransformFeedbackVaryingNV = void function(GLuint, GLuint, GLint*);
+alias fp_glTransformFeedbackStreamAttribsNV = void function(GLsizei, const(GLint)*, GLsizei, const(GLint)*, GLenum);
+alias fp_glProgramNamedParameter4fNV = void function(GLuint, GLsizei, const(GLubyte)*, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramNamedParameter4fvNV = void function(GLuint, GLsizei, const(GLubyte)*, const(GLfloat)*);
+alias fp_glProgramNamedParameter4dNV = void function(GLuint, GLsizei, const(GLubyte)*, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramNamedParameter4dvNV = void function(GLuint, GLsizei, const(GLubyte)*, const(GLdouble)*);
+alias fp_glGetProgramNamedParameterfvNV = void function(GLuint, GLsizei, const(GLubyte)*, GLfloat*);
+alias fp_glGetProgramNamedParameterdvNV = void function(GLuint, GLsizei, const(GLubyte)*, GLdouble*);
+alias fp_glStencilOpValueAMD = void function(GLenum, GLuint);
+alias fp_glVertexAttribDivisorARB = void function(GLuint, GLuint);
+alias fp_glPolygonOffsetEXT = void function(GLfloat, GLfloat);
+alias fp_glTexStorageSparseAMD = void function(GLenum, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLbitfield);
+alias fp_glTextureStorageSparseAMD = void function(GLuint, GLenum, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLbitfield);
+alias fp_glDeleteFencesNV = void function(GLsizei, const(GLuint)*);
+alias fp_glGenFencesNV = void function(GLsizei, GLuint*);
+alias fp_glIsFenceNV = GLboolean function(GLuint);
+alias fp_glTestFenceNV = GLboolean function(GLuint);
+alias fp_glGetFenceivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glFinishFenceNV = void function(GLuint);
+alias fp_glSetFenceNV = void function(GLuint, GLenum);
+alias fp_glDrawMeshArraysSUN = void function(GLenum, GLint, GLsizei, GLsizei);
+alias fp_glCreateSyncFromCLeventARB = GLsync function(_cl_context*, _cl_event*, GLbitfield);
+alias fp_glClearDepthfOES = void function(GLclampf);
+alias fp_glClipPlanefOES = void function(GLenum, const(GLfloat)*);
+alias fp_glDepthRangefOES = void function(GLclampf, GLclampf);
+alias fp_glFrustumfOES = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glGetClipPlanefOES = void function(GLenum, GLfloat*);
+alias fp_glOrthofOES = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glPrimitiveRestartNV = void function();
+alias fp_glPrimitiveRestartIndexNV = void function(GLuint);
+alias fp_glGlobalAlphaFactorbSUN = void function(GLbyte);
+alias fp_glGlobalAlphaFactorsSUN = void function(GLshort);
+alias fp_glGlobalAlphaFactoriSUN = void function(GLint);
+alias fp_glGlobalAlphaFactorfSUN = void function(GLfloat);
+alias fp_glGlobalAlphaFactordSUN = void function(GLdouble);
+alias fp_glGlobalAlphaFactorubSUN = void function(GLubyte);
+alias fp_glGlobalAlphaFactorusSUN = void function(GLushort);
+alias fp_glGlobalAlphaFactoruiSUN = void function(GLuint);
+alias fp_glAreTexturesResidentEXT = GLboolean function(GLsizei, const(GLuint)*, GLboolean*);
+alias fp_glBindTextureEXT = void function(GLenum, GLuint);
+alias fp_glDeleteTexturesEXT = void function(GLsizei, const(GLuint)*);
+alias fp_glGenTexturesEXT = void function(GLsizei, GLuint*);
+alias fp_glIsTextureEXT = GLboolean function(GLuint);
+alias fp_glPrioritizeTexturesEXT = void function(GLsizei, const(GLuint)*, const(GLclampf)*);
+alias fp_glGenNamesAMD = void function(GLenum, GLuint, GLuint*);
+alias fp_glDeleteNamesAMD = void function(GLenum, GLuint, const(GLuint)*);
+alias fp_glIsNameAMD = GLboolean function(GLenum, GLuint);
+alias fp_glEnableVertexAttribAPPLE = void function(GLuint, GLenum);
+alias fp_glDisableVertexAttribAPPLE = void function(GLuint, GLenum);
+alias fp_glIsVertexAttribEnabledAPPLE = GLboolean function(GLuint, GLenum);
+alias fp_glMapVertexAttrib1dAPPLE = void function(GLuint, GLuint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*);
+alias fp_glMapVertexAttrib1fAPPLE = void function(GLuint, GLuint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*);
+alias fp_glMapVertexAttrib2dAPPLE = void function(GLuint, GLuint, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*);
+alias fp_glMapVertexAttrib2fAPPLE = void function(GLuint, GLuint, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*);
+alias fp_glBufferAddressRangeNV = void function(GLenum, GLuint, GLuint64EXT, GLsizeiptr);
+alias fp_glVertexFormatNV = void function(GLint, GLenum, GLsizei);
+alias fp_glNormalFormatNV = void function(GLenum, GLsizei);
+alias fp_glColorFormatNV = void function(GLint, GLenum, GLsizei);
+alias fp_glIndexFormatNV = void function(GLenum, GLsizei);
+alias fp_glTexCoordFormatNV = void function(GLint, GLenum, GLsizei);
+alias fp_glEdgeFlagFormatNV = void function(GLsizei);
+alias fp_glSecondaryColorFormatNV = void function(GLint, GLenum, GLsizei);
+alias fp_glFogCoordFormatNV = void function(GLenum, GLsizei);
+alias fp_glVertexAttribFormatNV = void function(GLuint, GLint, GLenum, GLboolean, GLsizei);
+alias fp_glVertexAttribIFormatNV = void function(GLuint, GLint, GLenum, GLsizei);
+alias fp_glGetIntegerui64i_vNV = void function(GLenum, GLuint, GLuint64EXT*);
+alias fp_glBlendParameteriNV = void function(GLenum, GLint);
+alias fp_glBlendBarrierNV = void function();
+alias fp_glSharpenTexFuncSGIS = void function(GLenum, GLsizei, const(GLfloat)*);
+alias fp_glGetSharpenTexFuncSGIS = void function(GLenum, GLfloat*);
+alias fp_glVertexAttrib1dARB = void function(GLuint, GLdouble);
+alias fp_glVertexAttrib1dvARB = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib1fARB = void function(GLuint, GLfloat);
+alias fp_glVertexAttrib1fvARB = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib1sARB = void function(GLuint, GLshort);
+alias fp_glVertexAttrib1svARB = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib2dARB = void function(GLuint, GLdouble, GLdouble);
+alias fp_glVertexAttrib2dvARB = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib2fARB = void function(GLuint, GLfloat, GLfloat);
+alias fp_glVertexAttrib2fvARB = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib2sARB = void function(GLuint, GLshort, GLshort);
+alias fp_glVertexAttrib2svARB = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib3dARB = void function(GLuint, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttrib3dvARB = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib3fARB = void function(GLuint, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexAttrib3fvARB = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib3sARB = void function(GLuint, GLshort, GLshort, GLshort);
+alias fp_glVertexAttrib3svARB = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib4NbvARB = void function(GLuint, const(GLbyte)*);
+alias fp_glVertexAttrib4NivARB = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttrib4NsvARB = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib4NubARB = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte);
+alias fp_glVertexAttrib4NubvARB = void function(GLuint, const(GLubyte)*);
+alias fp_glVertexAttrib4NuivARB = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttrib4NusvARB = void function(GLuint, const(GLushort)*);
+alias fp_glVertexAttrib4bvARB = void function(GLuint, const(GLbyte)*);
+alias fp_glVertexAttrib4dARB = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttrib4dvARB = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib4fARB = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexAttrib4fvARB = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib4ivARB = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttrib4sARB = void function(GLuint, GLshort, GLshort, GLshort, GLshort);
+alias fp_glVertexAttrib4svARB = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib4ubvARB = void function(GLuint, const(GLubyte)*);
+alias fp_glVertexAttrib4uivARB = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttrib4usvARB = void function(GLuint, const(GLushort)*);
+alias fp_glVertexAttribPointerARB = void function(GLuint, GLint, GLenum, GLboolean, GLsizei, const(GLvoid)*);
+alias fp_glEnableVertexAttribArrayARB = void function(GLuint);
+alias fp_glDisableVertexAttribArrayARB = void function(GLuint);
+alias fp_glProgramStringARB = void function(GLenum, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glBindProgramARB = void function(GLenum, GLuint);
+alias fp_glDeleteProgramsARB = void function(GLsizei, const(GLuint)*);
+alias fp_glGenProgramsARB = void function(GLsizei, GLuint*);
+alias fp_glProgramEnvParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramEnvParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*);
+alias fp_glProgramEnvParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramEnvParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*);
+alias fp_glProgramLocalParameter4dARB = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramLocalParameter4dvARB = void function(GLenum, GLuint, const(GLdouble)*);
+alias fp_glProgramLocalParameter4fARB = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramLocalParameter4fvARB = void function(GLenum, GLuint, const(GLfloat)*);
+alias fp_glGetProgramEnvParameterdvARB = void function(GLenum, GLuint, GLdouble*);
+alias fp_glGetProgramEnvParameterfvARB = void function(GLenum, GLuint, GLfloat*);
+alias fp_glGetProgramLocalParameterdvARB = void function(GLenum, GLuint, GLdouble*);
+alias fp_glGetProgramLocalParameterfvARB = void function(GLenum, GLuint, GLfloat*);
+alias fp_glGetProgramivARB = void function(GLenum, GLenum, GLint*);
+alias fp_glGetProgramStringARB = void function(GLenum, GLenum, GLvoid*);
+alias fp_glGetVertexAttribdvARB = void function(GLuint, GLenum, GLdouble*);
+alias fp_glGetVertexAttribfvARB = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetVertexAttribivARB = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVertexAttribPointervARB = void function(GLuint, GLenum, GLvoid**);
+alias fp_glIsProgramARB = GLboolean function(GLuint);
+alias fp_glBindBufferARB = void function(GLenum, GLuint);
+alias fp_glDeleteBuffersARB = void function(GLsizei, const(GLuint)*);
+alias fp_glGenBuffersARB = void function(GLsizei, GLuint*);
+alias fp_glIsBufferARB = GLboolean function(GLuint);
+alias fp_glBufferDataARB = void function(GLenum, GLsizeiptrARB, const(GLvoid)*, GLenum);
+alias fp_glBufferSubDataARB = void function(GLenum, GLintptrARB, GLsizeiptrARB, const(GLvoid)*);
+alias fp_glGetBufferSubDataARB = void function(GLenum, GLintptrARB, GLsizeiptrARB, GLvoid*);
+alias fp_glMapBufferARB = void* function(GLenum, GLenum);
+alias fp_glUnmapBufferARB = GLboolean function(GLenum);
+alias fp_glGetBufferParameterivARB = void function(GLenum, GLenum, GLint*);
+alias fp_glGetBufferPointervARB = void function(GLenum, GLenum, GLvoid**);
+alias fp_glFlushVertexArrayRangeNV = void function();
+alias fp_glVertexArrayRangeNV = void function(GLsizei, const(GLvoid)*);
+alias fp_glFragmentColorMaterialSGIX = void function(GLenum, GLenum);
+alias fp_glFragmentLightfSGIX = void function(GLenum, GLenum, GLfloat);
+alias fp_glFragmentLightfvSGIX = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glFragmentLightiSGIX = void function(GLenum, GLenum, GLint);
+alias fp_glFragmentLightivSGIX = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glFragmentLightModelfSGIX = void function(GLenum, GLfloat);
+alias fp_glFragmentLightModelfvSGIX = void function(GLenum, const(GLfloat)*);
+alias fp_glFragmentLightModeliSGIX = void function(GLenum, GLint);
+alias fp_glFragmentLightModelivSGIX = void function(GLenum, const(GLint)*);
+alias fp_glFragmentMaterialfSGIX = void function(GLenum, GLenum, GLfloat);
+alias fp_glFragmentMaterialfvSGIX = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glFragmentMaterialiSGIX = void function(GLenum, GLenum, GLint);
+alias fp_glFragmentMaterialivSGIX = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glGetFragmentLightfvSGIX = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetFragmentLightivSGIX = void function(GLenum, GLenum, GLint*);
+alias fp_glGetFragmentMaterialfvSGIX = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetFragmentMaterialivSGIX = void function(GLenum, GLenum, GLint*);
+alias fp_glLightEnviSGIX = void function(GLenum, GLint);
+alias fp_glRenderbufferStorageMultisampleCoverageNV = void function(GLenum, GLsizei, GLsizei, GLenum, GLsizei, GLsizei);
+alias fp_glGetQueryObjecti64vEXT = void function(GLuint, GLenum, GLint64*);
+alias fp_glGetQueryObjectui64vEXT = void function(GLuint, GLenum, GLuint64*);
+alias fp_glGetTextureHandleNV = GLuint64 function(GLuint);
+alias fp_glGetTextureSamplerHandleNV = GLuint64 function(GLuint, GLuint);
+alias fp_glMakeTextureHandleResidentNV = void function(GLuint64);
+alias fp_glMakeTextureHandleNonResidentNV = void function(GLuint64);
+alias fp_glGetImageHandleNV = GLuint64 function(GLuint, GLint, GLboolean, GLint, GLenum);
+alias fp_glMakeImageHandleResidentNV = void function(GLuint64, GLenum);
+alias fp_glMakeImageHandleNonResidentNV = void function(GLuint64);
+alias fp_glUniformHandleui64NV = void function(GLint, GLuint64);
+alias fp_glUniformHandleui64vNV = void function(GLint, GLsizei, const(GLuint64)*);
+alias fp_glProgramUniformHandleui64NV = void function(GLuint, GLint, GLuint64);
+alias fp_glProgramUniformHandleui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64)*);
+alias fp_glIsTextureHandleResidentNV = GLboolean function(GLuint64);
+alias fp_glIsImageHandleResidentNV = GLboolean function(GLuint64);
+alias fp_glDebugMessageControlKHR = void function(GLenum, GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean);
+alias fp_glDebugMessageInsertKHR = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, const(GLchar)*);
+alias fp_glDebugMessageCallbackKHR = void function(GLDEBUGPROCKHR, const(void)*);
+alias fp_glGetDebugMessageLogKHR = GLuint function(GLuint, GLsizei, GLenum*, GLenum*, GLuint*, GLenum*, GLsizei*, GLchar*);
+alias fp_glPushDebugGroupKHR = void function(GLenum, GLuint, GLsizei, const(GLchar)*);
+alias fp_glPopDebugGroupKHR = void function();
+alias fp_glObjectLabelKHR = void function(GLenum, GLuint, GLsizei, const(GLchar)*);
+alias fp_glGetObjectLabelKHR = void function(GLenum, GLuint, GLsizei, GLsizei*, GLchar*);
+alias fp_glObjectPtrLabelKHR = void function(const(void)*, GLsizei, const(GLchar)*);
+alias fp_glGetObjectPtrLabelKHR = void function(const(void)*, GLsizei, GLsizei*, GLchar*);
+alias fp_glGetPointervKHR = void function(GLenum, GLvoid**);
+alias fp_glVertexAttribArrayObjectATI = void function(GLuint, GLint, GLenum, GLboolean, GLsizei, GLuint, GLuint);
+alias fp_glGetVertexAttribArrayObjectfvATI = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetVertexAttribArrayObjectivATI = void function(GLuint, GLenum, GLint*);
+alias fp_glUniformBufferEXT = void function(GLuint, GLint, GLuint);
+alias fp_glGetUniformBufferSizeEXT = GLint function(GLuint, GLint);
+alias fp_glGetUniformOffsetEXT = GLintptr function(GLuint, GLint);
+alias fp_glElementPointerATI = void function(GLenum, const(GLvoid)*);
+alias fp_glDrawElementArrayATI = void function(GLenum, GLsizei);
+alias fp_glDrawRangeElementArrayATI = void function(GLenum, GLuint, GLuint, GLsizei);
+alias fp_glReferencePlaneSGIX = void function(const(GLdouble)*);
+alias fp_glActiveStencilFaceEXT = void function(GLenum);
+alias fp_glGetMultisamplefvNV = void function(GLenum, GLuint, GLfloat*);
+alias fp_glSampleMaskIndexedNV = void function(GLuint, GLbitfield);
+alias fp_glTexRenderbufferNV = void function(GLenum, GLuint);
+alias fp_glFlushStaticDataIBM = void function(GLenum);
+alias fp_glTextureNormalEXT = void function(GLenum);
+alias fp_glPointParameterfEXT = void function(GLenum, GLfloat);
+alias fp_glPointParameterfvEXT = void function(GLenum, const(GLfloat)*);
+alias fp_glHintPGI = void function(GLenum, GLint);
+alias fp_glBindAttribLocationARB = void function(GLhandleARB, GLuint, const(GLcharARB)*);
+alias fp_glGetActiveAttribARB = void function(GLhandleARB, GLuint, GLsizei, GLsizei*, GLint*, GLenum*, GLcharARB*);
+alias fp_glGetAttribLocationARB = GLint function(GLhandleARB, const(GLcharARB)*);
+alias fp_glColorMaskIndexedEXT = void function(GLuint, GLboolean, GLboolean, GLboolean, GLboolean);
+alias fp_glGetBooleanIndexedvEXT = void function(GLenum, GLuint, GLboolean*);
+alias fp_glGetIntegerIndexedvEXT = void function(GLenum, GLuint, GLint*);
+alias fp_glEnableIndexedEXT = void function(GLenum, GLuint);
+alias fp_glDisableIndexedEXT = void function(GLenum, GLuint);
+alias fp_glIsEnabledIndexedEXT = GLboolean function(GLenum, GLuint);
+alias fp_glVertexAttribParameteriAMD = void function(GLuint, GLenum, GLint);
+alias fp_glPixelTexGenParameteriSGIS = void function(GLenum, GLint);
+alias fp_glPixelTexGenParameterivSGIS = void function(GLenum, const(GLint)*);
+alias fp_glPixelTexGenParameterfSGIS = void function(GLenum, GLfloat);
+alias fp_glPixelTexGenParameterfvSGIS = void function(GLenum, const(GLfloat)*);
+alias fp_glGetPixelTexGenParameterivSGIS = void function(GLenum, GLint*);
+alias fp_glGetPixelTexGenParameterfvSGIS = void function(GLenum, GLfloat*);
+alias fp_glGetInstrumentsSGIX = GLint function();
+alias fp_glInstrumentsBufferSGIX = void function(GLsizei, GLint*);
+alias fp_glPollInstrumentsSGIX = GLint function(GLint*);
+alias fp_glReadInstrumentsSGIX = void function(GLint);
+alias fp_glStartInstrumentsSGIX = void function();
+alias fp_glStopInstrumentsSGIX = void function(GLint);
+alias fp_glBlendEquationEXT = void function(GLenum);
+alias fp_glTexParameterIivEXT = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glTexParameterIuivEXT = void function(GLenum, GLenum, const(GLuint)*);
+alias fp_glGetTexParameterIivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glGetTexParameterIuivEXT = void function(GLenum, GLenum, GLuint*);
+alias fp_glClearColorIiEXT = void function(GLint, GLint, GLint, GLint);
+alias fp_glClearColorIuiEXT = void function(GLuint, GLuint, GLuint, GLuint);
+alias fp_glTessellationFactorAMD = void function(GLfloat);
+alias fp_glTessellationModeAMD = void function(GLenum);
+alias fp_glIndexMaterialEXT = void function(GLenum, GLenum);
+alias fp_glVertexPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*);
+alias fp_glNormalPointervINTEL = void function(GLenum, const(GLvoid*)*);
+alias fp_glColorPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*);
+alias fp_glTexCoordPointervINTEL = void function(GLint, GLenum, const(GLvoid*)*);
+alias fp_glDrawBuffersATI = void function(GLsizei, const(GLenum)*);
+alias fp_glPixelTexGenSGIX = void function(GLenum);
+alias fp_glProgramBufferParametersfvNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLfloat)*);
+alias fp_glProgramBufferParametersIivNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLint)*);
+alias fp_glProgramBufferParametersIuivNV = void function(GLenum, GLuint, GLuint, GLsizei, const(GLuint)*);
+alias fp_glBindTransformFeedbackNV = void function(GLenum, GLuint);
+alias fp_glDeleteTransformFeedbacksNV = void function(GLsizei, const(GLuint)*);
+alias fp_glGenTransformFeedbacksNV = void function(GLsizei, GLuint*);
+alias fp_glIsTransformFeedbackNV = GLboolean function(GLuint);
+alias fp_glPauseTransformFeedbackNV = void function();
+alias fp_glResumeTransformFeedbackNV = void function();
+alias fp_glDrawTransformFeedbackNV = void function(GLenum, GLuint);
+alias fp_glBlendColorEXT = void function(GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glGetHistogramEXT = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*);
+alias fp_glGetHistogramParameterfvEXT = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetHistogramParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glGetMinmaxEXT = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*);
+alias fp_glGetMinmaxParameterfvEXT = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetMinmaxParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glHistogramEXT = void function(GLenum, GLsizei, GLenum, GLboolean);
+alias fp_glMinmaxEXT = void function(GLenum, GLenum, GLboolean);
+alias fp_glResetHistogramEXT = void function(GLenum);
+alias fp_glResetMinmaxEXT = void function(GLenum);
+alias fp_glPointParameterfSGIS = void function(GLenum, GLfloat);
+alias fp_glPointParameterfvSGIS = void function(GLenum, const(GLfloat)*);
+alias fp_glMatrixLoadfEXT = void function(GLenum, const(GLfloat)*);
+alias fp_glMatrixLoaddEXT = void function(GLenum, const(GLdouble)*);
+alias fp_glMatrixMultfEXT = void function(GLenum, const(GLfloat)*);
+alias fp_glMatrixMultdEXT = void function(GLenum, const(GLdouble)*);
+alias fp_glMatrixLoadIdentityEXT = void function(GLenum);
+alias fp_glMatrixRotatefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glMatrixRotatedEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glMatrixScalefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat);
+alias fp_glMatrixScaledEXT = void function(GLenum, GLdouble, GLdouble, GLdouble);
+alias fp_glMatrixTranslatefEXT = void function(GLenum, GLfloat, GLfloat, GLfloat);
+alias fp_glMatrixTranslatedEXT = void function(GLenum, GLdouble, GLdouble, GLdouble);
+alias fp_glMatrixFrustumEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glMatrixOrthoEXT = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glMatrixPopEXT = void function(GLenum);
+alias fp_glMatrixPushEXT = void function(GLenum);
+alias fp_glClientAttribDefaultEXT = void function(GLbitfield);
+alias fp_glPushClientAttribDefaultEXT = void function(GLbitfield);
+alias fp_glTextureParameterfEXT = void function(GLuint, GLenum, GLenum, GLfloat);
+alias fp_glTextureParameterfvEXT = void function(GLuint, GLenum, GLenum, const(GLfloat)*);
+alias fp_glTextureParameteriEXT = void function(GLuint, GLenum, GLenum, GLint);
+alias fp_glTextureParameterivEXT = void function(GLuint, GLenum, GLenum, const(GLint)*);
+alias fp_glTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint);
+alias fp_glCopyTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint);
+alias fp_glCopyTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei);
+alias fp_glCopyTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glGetTextureImageEXT = void function(GLuint, GLenum, GLint, GLenum, GLenum, GLvoid*);
+alias fp_glGetTextureParameterfvEXT = void function(GLuint, GLenum, GLenum, GLfloat*);
+alias fp_glGetTextureParameterivEXT = void function(GLuint, GLenum, GLenum, GLint*);
+alias fp_glGetTextureLevelParameterfvEXT = void function(GLuint, GLenum, GLint, GLenum, GLfloat*);
+alias fp_glGetTextureLevelParameterivEXT = void function(GLuint, GLenum, GLint, GLenum, GLint*);
+alias fp_glTextureImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glBindMultiTextureEXT = void function(GLenum, GLenum, GLuint);
+alias fp_glMultiTexCoordPointerEXT = void function(GLenum, GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glMultiTexEnvfEXT = void function(GLenum, GLenum, GLenum, GLfloat);
+alias fp_glMultiTexEnvfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*);
+alias fp_glMultiTexEnviEXT = void function(GLenum, GLenum, GLenum, GLint);
+alias fp_glMultiTexEnvivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*);
+alias fp_glMultiTexGendEXT = void function(GLenum, GLenum, GLenum, GLdouble);
+alias fp_glMultiTexGendvEXT = void function(GLenum, GLenum, GLenum, const(GLdouble)*);
+alias fp_glMultiTexGenfEXT = void function(GLenum, GLenum, GLenum, GLfloat);
+alias fp_glMultiTexGenfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*);
+alias fp_glMultiTexGeniEXT = void function(GLenum, GLenum, GLenum, GLint);
+alias fp_glMultiTexGenivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*);
+alias fp_glGetMultiTexEnvfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*);
+alias fp_glGetMultiTexEnvivEXT = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glGetMultiTexGendvEXT = void function(GLenum, GLenum, GLenum, GLdouble*);
+alias fp_glGetMultiTexGenfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*);
+alias fp_glGetMultiTexGenivEXT = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glMultiTexParameteriEXT = void function(GLenum, GLenum, GLenum, GLint);
+alias fp_glMultiTexParameterivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*);
+alias fp_glMultiTexParameterfEXT = void function(GLenum, GLenum, GLenum, GLfloat);
+alias fp_glMultiTexParameterfvEXT = void function(GLenum, GLenum, GLenum, const(GLfloat)*);
+alias fp_glMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint);
+alias fp_glCopyMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint);
+alias fp_glCopyMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei);
+alias fp_glCopyMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glGetMultiTexImageEXT = void function(GLenum, GLenum, GLint, GLenum, GLenum, GLvoid*);
+alias fp_glGetMultiTexParameterfvEXT = void function(GLenum, GLenum, GLenum, GLfloat*);
+alias fp_glGetMultiTexParameterivEXT = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glGetMultiTexLevelParameterfvEXT = void function(GLenum, GLenum, GLint, GLenum, GLfloat*);
+alias fp_glGetMultiTexLevelParameterivEXT = void function(GLenum, GLenum, GLint, GLenum, GLint*);
+alias fp_glMultiTexImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glEnableClientStateIndexedEXT = void function(GLenum, GLuint);
+alias fp_glDisableClientStateIndexedEXT = void function(GLenum, GLuint);
+alias fp_glGetFloatIndexedvEXT = void function(GLenum, GLuint, GLfloat*);
+alias fp_glGetDoubleIndexedvEXT = void function(GLenum, GLuint, GLdouble*);
+alias fp_glGetPointerIndexedvEXT = void function(GLenum, GLuint, GLvoid**);
+alias fp_glCompressedTextureImage3DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTextureImage2DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTextureImage1DEXT = void function(GLuint, GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTextureSubImage3DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTextureSubImage2DEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTextureSubImage1DEXT = void function(GLuint, GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetCompressedTextureImageEXT = void function(GLuint, GLenum, GLint, GLvoid*);
+alias fp_glCompressedMultiTexImage3DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedMultiTexImage2DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedMultiTexImage1DEXT = void function(GLenum, GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedMultiTexSubImage3DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedMultiTexSubImage2DEXT = void function(GLenum, GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedMultiTexSubImage1DEXT = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetCompressedMultiTexImageEXT = void function(GLenum, GLenum, GLint, GLvoid*);
+alias fp_glMatrixLoadTransposefEXT = void function(GLenum, const(GLfloat)*);
+alias fp_glMatrixLoadTransposedEXT = void function(GLenum, const(GLdouble)*);
+alias fp_glMatrixMultTransposefEXT = void function(GLenum, const(GLfloat)*);
+alias fp_glMatrixMultTransposedEXT = void function(GLenum, const(GLdouble)*);
+alias fp_glNamedBufferDataEXT = void function(GLuint, GLsizeiptr, const(GLvoid)*, GLenum);
+alias fp_glNamedBufferSubDataEXT = void function(GLuint, GLintptr, GLsizeiptr, const(GLvoid)*);
+alias fp_glMapNamedBufferEXT = void* function(GLuint, GLenum);
+alias fp_glUnmapNamedBufferEXT = GLboolean function(GLuint);
+alias fp_glGetNamedBufferParameterivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetNamedBufferPointervEXT = void function(GLuint, GLenum, GLvoid**);
+alias fp_glGetNamedBufferSubDataEXT = void function(GLuint, GLintptr, GLsizeiptr, GLvoid*);
+alias fp_glProgramUniformMatrix2x3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix3x2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix2x4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix4x2fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix3x4fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glProgramUniformMatrix4x3fvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLfloat)*);
+alias fp_glTextureBufferEXT = void function(GLuint, GLenum, GLenum, GLuint);
+alias fp_glMultiTexBufferEXT = void function(GLenum, GLenum, GLenum, GLuint);
+alias fp_glTextureParameterIivEXT = void function(GLuint, GLenum, GLenum, const(GLint)*);
+alias fp_glTextureParameterIuivEXT = void function(GLuint, GLenum, GLenum, const(GLuint)*);
+alias fp_glGetTextureParameterIivEXT = void function(GLuint, GLenum, GLenum, GLint*);
+alias fp_glGetTextureParameterIuivEXT = void function(GLuint, GLenum, GLenum, GLuint*);
+alias fp_glMultiTexParameterIivEXT = void function(GLenum, GLenum, GLenum, const(GLint)*);
+alias fp_glMultiTexParameterIuivEXT = void function(GLenum, GLenum, GLenum, const(GLuint)*);
+alias fp_glGetMultiTexParameterIivEXT = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glGetMultiTexParameterIuivEXT = void function(GLenum, GLenum, GLenum, GLuint*);
+alias fp_glProgramUniform1uiEXT = void function(GLuint, GLint, GLuint);
+alias fp_glProgramUniform2uiEXT = void function(GLuint, GLint, GLuint, GLuint);
+alias fp_glProgramUniform3uiEXT = void function(GLuint, GLint, GLuint, GLuint, GLuint);
+alias fp_glProgramUniform4uiEXT = void function(GLuint, GLint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glProgramUniform1uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*);
+alias fp_glProgramUniform2uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*);
+alias fp_glProgramUniform3uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*);
+alias fp_glProgramUniform4uivEXT = void function(GLuint, GLint, GLsizei, const(GLuint)*);
+alias fp_glNamedProgramLocalParameters4fvEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLfloat)*);
+alias fp_glNamedProgramLocalParameterI4iEXT = void function(GLuint, GLenum, GLuint, GLint, GLint, GLint, GLint);
+alias fp_glNamedProgramLocalParameterI4ivEXT = void function(GLuint, GLenum, GLuint, const(GLint)*);
+alias fp_glNamedProgramLocalParametersI4ivEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLint)*);
+alias fp_glNamedProgramLocalParameterI4uiEXT = void function(GLuint, GLenum, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glNamedProgramLocalParameterI4uivEXT = void function(GLuint, GLenum, GLuint, const(GLuint)*);
+alias fp_glNamedProgramLocalParametersI4uivEXT = void function(GLuint, GLenum, GLuint, GLsizei, const(GLuint)*);
+alias fp_glGetNamedProgramLocalParameterIivEXT = void function(GLuint, GLenum, GLuint, GLint*);
+alias fp_glGetNamedProgramLocalParameterIuivEXT = void function(GLuint, GLenum, GLuint, GLuint*);
+alias fp_glEnableClientStateiEXT = void function(GLenum, GLuint);
+alias fp_glDisableClientStateiEXT = void function(GLenum, GLuint);
+alias fp_glGetFloati_vEXT = void function(GLenum, GLuint, GLfloat*);
+alias fp_glGetDoublei_vEXT = void function(GLenum, GLuint, GLdouble*);
+alias fp_glGetPointeri_vEXT = void function(GLenum, GLuint, GLvoid**);
+alias fp_glNamedProgramStringEXT = void function(GLuint, GLenum, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glNamedProgramLocalParameter4dEXT = void function(GLuint, GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glNamedProgramLocalParameter4dvEXT = void function(GLuint, GLenum, GLuint, const(GLdouble)*);
+alias fp_glNamedProgramLocalParameter4fEXT = void function(GLuint, GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glNamedProgramLocalParameter4fvEXT = void function(GLuint, GLenum, GLuint, const(GLfloat)*);
+alias fp_glGetNamedProgramLocalParameterdvEXT = void function(GLuint, GLenum, GLuint, GLdouble*);
+alias fp_glGetNamedProgramLocalParameterfvEXT = void function(GLuint, GLenum, GLuint, GLfloat*);
+alias fp_glGetNamedProgramivEXT = void function(GLuint, GLenum, GLenum, GLint*);
+alias fp_glGetNamedProgramStringEXT = void function(GLuint, GLenum, GLenum, GLvoid*);
+alias fp_glNamedRenderbufferStorageEXT = void function(GLuint, GLenum, GLsizei, GLsizei);
+alias fp_glGetNamedRenderbufferParameterivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glNamedRenderbufferStorageMultisampleEXT = void function(GLuint, GLsizei, GLenum, GLsizei, GLsizei);
+alias fp_glNamedRenderbufferStorageMultisampleCoverageEXT = void function(GLuint, GLsizei, GLsizei, GLenum, GLsizei, GLsizei);
+alias fp_glCheckNamedFramebufferStatusEXT = GLenum function(GLuint, GLenum);
+alias fp_glNamedFramebufferTexture1DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint);
+alias fp_glNamedFramebufferTexture2DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint);
+alias fp_glNamedFramebufferTexture3DEXT = void function(GLuint, GLenum, GLenum, GLuint, GLint, GLint);
+alias fp_glNamedFramebufferRenderbufferEXT = void function(GLuint, GLenum, GLenum, GLuint);
+alias fp_glGetNamedFramebufferAttachmentParameterivEXT = void function(GLuint, GLenum, GLenum, GLint*);
+alias fp_glGenerateTextureMipmapEXT = void function(GLuint, GLenum);
+alias fp_glGenerateMultiTexMipmapEXT = void function(GLenum, GLenum);
+alias fp_glFramebufferDrawBufferEXT = void function(GLuint, GLenum);
+alias fp_glFramebufferDrawBuffersEXT = void function(GLuint, GLsizei, const(GLenum)*);
+alias fp_glFramebufferReadBufferEXT = void function(GLuint, GLenum);
+alias fp_glGetFramebufferParameterivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glNamedCopyBufferSubDataEXT = void function(GLuint, GLuint, GLintptr, GLintptr, GLsizeiptr);
+alias fp_glNamedFramebufferTextureEXT = void function(GLuint, GLenum, GLuint, GLint);
+alias fp_glNamedFramebufferTextureLayerEXT = void function(GLuint, GLenum, GLuint, GLint, GLint);
+alias fp_glNamedFramebufferTextureFaceEXT = void function(GLuint, GLenum, GLuint, GLint, GLenum);
+alias fp_glTextureRenderbufferEXT = void function(GLuint, GLenum, GLuint);
+alias fp_glMultiTexRenderbufferEXT = void function(GLenum, GLenum, GLuint);
+alias fp_glVertexArrayVertexOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayColorOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayEdgeFlagOffsetEXT = void function(GLuint, GLuint, GLsizei, GLintptr);
+alias fp_glVertexArrayIndexOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayNormalOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayTexCoordOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayMultiTexCoordOffsetEXT = void function(GLuint, GLuint, GLenum, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayFogCoordOffsetEXT = void function(GLuint, GLuint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArraySecondaryColorOffsetEXT = void function(GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glVertexArrayVertexAttribOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLboolean, GLsizei, GLintptr);
+alias fp_glVertexArrayVertexAttribIOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glEnableVertexArrayEXT = void function(GLuint, GLenum);
+alias fp_glDisableVertexArrayEXT = void function(GLuint, GLenum);
+alias fp_glEnableVertexArrayAttribEXT = void function(GLuint, GLuint);
+alias fp_glDisableVertexArrayAttribEXT = void function(GLuint, GLuint);
+alias fp_glGetVertexArrayIntegervEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVertexArrayPointervEXT = void function(GLuint, GLenum, GLvoid**);
+alias fp_glGetVertexArrayIntegeri_vEXT = void function(GLuint, GLuint, GLenum, GLint*);
+alias fp_glGetVertexArrayPointeri_vEXT = void function(GLuint, GLuint, GLenum, GLvoid**);
+alias fp_glMapNamedBufferRangeEXT = void* function(GLuint, GLintptr, GLsizeiptr, GLbitfield);
+alias fp_glFlushMappedNamedBufferRangeEXT = void function(GLuint, GLintptr, GLsizeiptr);
+alias fp_glClearNamedBufferDataEXT = void function(GLuint, GLenum, GLenum, GLenum, const(void)*);
+alias fp_glClearNamedBufferSubDataEXT = void function(GLuint, GLenum, GLenum, GLenum, GLsizeiptr, GLsizeiptr, const(void)*);
+alias fp_glNamedFramebufferParameteriEXT = void function(GLuint, GLenum, GLint);
+alias fp_glGetNamedFramebufferParameterivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glProgramUniform1dEXT = void function(GLuint, GLint, GLdouble);
+alias fp_glProgramUniform2dEXT = void function(GLuint, GLint, GLdouble, GLdouble);
+alias fp_glProgramUniform3dEXT = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramUniform4dEXT = void function(GLuint, GLint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramUniform1dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*);
+alias fp_glProgramUniform2dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*);
+alias fp_glProgramUniform3dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*);
+alias fp_glProgramUniform4dvEXT = void function(GLuint, GLint, GLsizei, const(GLdouble)*);
+alias fp_glProgramUniformMatrix2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix2x3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix2x4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix3x2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix3x4dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix4x2dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glProgramUniformMatrix4x3dvEXT = void function(GLuint, GLint, GLsizei, GLboolean, const(GLdouble)*);
+alias fp_glTextureBufferRangeEXT = void function(GLuint, GLenum, GLenum, GLuint, GLintptr, GLsizeiptr);
+alias fp_glTextureStorage1DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei);
+alias fp_glTextureStorage2DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei);
+alias fp_glTextureStorage3DEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei);
+alias fp_glTextureStorage2DMultisampleEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLboolean);
+alias fp_glTextureStorage3DMultisampleEXT = void function(GLuint, GLenum, GLsizei, GLenum, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glVertexArrayBindVertexBufferEXT = void function(GLuint, GLuint, GLuint, GLintptr, GLsizei);
+alias fp_glVertexArrayVertexAttribFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLboolean, GLuint);
+alias fp_glVertexArrayVertexAttribIFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLuint);
+alias fp_glVertexArrayVertexAttribLFormatEXT = void function(GLuint, GLuint, GLint, GLenum, GLuint);
+alias fp_glVertexArrayVertexAttribBindingEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glVertexArrayVertexBindingDivisorEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glVertexArrayVertexAttribLOffsetEXT = void function(GLuint, GLuint, GLuint, GLint, GLenum, GLsizei, GLintptr);
+alias fp_glTexturePageCommitmentEXT = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glSetMultisamplefvAMD = void function(GLenum, GLuint, const(GLfloat)*);
+alias fp_glAreProgramsResidentNV = GLboolean function(GLsizei, const(GLuint)*, GLboolean*);
+alias fp_glBindProgramNV = void function(GLenum, GLuint);
+alias fp_glDeleteProgramsNV = void function(GLsizei, const(GLuint)*);
+alias fp_glExecuteProgramNV = void function(GLenum, GLuint, const(GLfloat)*);
+alias fp_glGenProgramsNV = void function(GLsizei, GLuint*);
+alias fp_glGetProgramParameterdvNV = void function(GLenum, GLuint, GLenum, GLdouble*);
+alias fp_glGetProgramParameterfvNV = void function(GLenum, GLuint, GLenum, GLfloat*);
+alias fp_glGetProgramivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetProgramStringNV = void function(GLuint, GLenum, GLubyte*);
+alias fp_glGetTrackMatrixivNV = void function(GLenum, GLuint, GLenum, GLint*);
+alias fp_glGetVertexAttribdvNV = void function(GLuint, GLenum, GLdouble*);
+alias fp_glGetVertexAttribfvNV = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetVertexAttribivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVertexAttribPointervNV = void function(GLuint, GLenum, GLvoid**);
+alias fp_glIsProgramNV = GLboolean function(GLuint);
+alias fp_glLoadProgramNV = void function(GLenum, GLuint, GLsizei, const(GLubyte)*);
+alias fp_glProgramParameter4dNV = void function(GLenum, GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glProgramParameter4dvNV = void function(GLenum, GLuint, const(GLdouble)*);
+alias fp_glProgramParameter4fNV = void function(GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glProgramParameter4fvNV = void function(GLenum, GLuint, const(GLfloat)*);
+alias fp_glProgramParameters4dvNV = void function(GLenum, GLuint, GLsizei, const(GLdouble)*);
+alias fp_glProgramParameters4fvNV = void function(GLenum, GLuint, GLsizei, const(GLfloat)*);
+alias fp_glRequestResidentProgramsNV = void function(GLsizei, const(GLuint)*);
+alias fp_glTrackMatrixNV = void function(GLenum, GLuint, GLenum, GLenum);
+alias fp_glVertexAttribPointerNV = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glVertexAttrib1dNV = void function(GLuint, GLdouble);
+alias fp_glVertexAttrib1dvNV = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib1fNV = void function(GLuint, GLfloat);
+alias fp_glVertexAttrib1fvNV = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib1sNV = void function(GLuint, GLshort);
+alias fp_glVertexAttrib1svNV = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib2dNV = void function(GLuint, GLdouble, GLdouble);
+alias fp_glVertexAttrib2dvNV = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib2fNV = void function(GLuint, GLfloat, GLfloat);
+alias fp_glVertexAttrib2fvNV = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib2sNV = void function(GLuint, GLshort, GLshort);
+alias fp_glVertexAttrib2svNV = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib3dNV = void function(GLuint, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttrib3dvNV = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib3fNV = void function(GLuint, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexAttrib3fvNV = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib3sNV = void function(GLuint, GLshort, GLshort, GLshort);
+alias fp_glVertexAttrib3svNV = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib4dNV = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttrib4dvNV = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttrib4fNV = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexAttrib4fvNV = void function(GLuint, const(GLfloat)*);
+alias fp_glVertexAttrib4sNV = void function(GLuint, GLshort, GLshort, GLshort, GLshort);
+alias fp_glVertexAttrib4svNV = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttrib4ubNV = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte);
+alias fp_glVertexAttrib4ubvNV = void function(GLuint, const(GLubyte)*);
+alias fp_glVertexAttribs1dvNV = void function(GLuint, GLsizei, const(GLdouble)*);
+alias fp_glVertexAttribs1fvNV = void function(GLuint, GLsizei, const(GLfloat)*);
+alias fp_glVertexAttribs1svNV = void function(GLuint, GLsizei, const(GLshort)*);
+alias fp_glVertexAttribs2dvNV = void function(GLuint, GLsizei, const(GLdouble)*);
+alias fp_glVertexAttribs2fvNV = void function(GLuint, GLsizei, const(GLfloat)*);
+alias fp_glVertexAttribs2svNV = void function(GLuint, GLsizei, const(GLshort)*);
+alias fp_glVertexAttribs3dvNV = void function(GLuint, GLsizei, const(GLdouble)*);
+alias fp_glVertexAttribs3fvNV = void function(GLuint, GLsizei, const(GLfloat)*);
+alias fp_glVertexAttribs3svNV = void function(GLuint, GLsizei, const(GLshort)*);
+alias fp_glVertexAttribs4dvNV = void function(GLuint, GLsizei, const(GLdouble)*);
+alias fp_glVertexAttribs4fvNV = void function(GLuint, GLsizei, const(GLfloat)*);
+alias fp_glVertexAttribs4svNV = void function(GLuint, GLsizei, const(GLshort)*);
+alias fp_glVertexAttribs4ubvNV = void function(GLuint, GLsizei, const(GLubyte)*);
+alias fp_glBeginConditionalRenderNVX = void function(GLuint);
+alias fp_glEndConditionalRenderNVX = void function();
+alias fp_glBeginVertexShaderEXT = void function();
+alias fp_glEndVertexShaderEXT = void function();
+alias fp_glBindVertexShaderEXT = void function(GLuint);
+alias fp_glGenVertexShadersEXT = GLuint function(GLuint);
+alias fp_glDeleteVertexShaderEXT = void function(GLuint);
+alias fp_glShaderOp1EXT = void function(GLenum, GLuint, GLuint);
+alias fp_glShaderOp2EXT = void function(GLenum, GLuint, GLuint, GLuint);
+alias fp_glShaderOp3EXT = void function(GLenum, GLuint, GLuint, GLuint, GLuint);
+alias fp_glSwizzleEXT = void function(GLuint, GLuint, GLenum, GLenum, GLenum, GLenum);
+alias fp_glWriteMaskEXT = void function(GLuint, GLuint, GLenum, GLenum, GLenum, GLenum);
+alias fp_glInsertComponentEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glExtractComponentEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glGenSymbolsEXT = GLuint function(GLenum, GLenum, GLenum, GLuint);
+alias fp_glSetInvariantEXT = void function(GLuint, GLenum, const(GLvoid)*);
+alias fp_glSetLocalConstantEXT = void function(GLuint, GLenum, const(GLvoid)*);
+alias fp_glVariantbvEXT = void function(GLuint, const(GLbyte)*);
+alias fp_glVariantsvEXT = void function(GLuint, const(GLshort)*);
+alias fp_glVariantivEXT = void function(GLuint, const(GLint)*);
+alias fp_glVariantfvEXT = void function(GLuint, const(GLfloat)*);
+alias fp_glVariantdvEXT = void function(GLuint, const(GLdouble)*);
+alias fp_glVariantubvEXT = void function(GLuint, const(GLubyte)*);
+alias fp_glVariantusvEXT = void function(GLuint, const(GLushort)*);
+alias fp_glVariantuivEXT = void function(GLuint, const(GLuint)*);
+alias fp_glVariantPointerEXT = void function(GLuint, GLenum, GLuint, const(GLvoid)*);
+alias fp_glEnableVariantClientStateEXT = void function(GLuint);
+alias fp_glDisableVariantClientStateEXT = void function(GLuint);
+alias fp_glBindLightParameterEXT = GLuint function(GLenum, GLenum);
+alias fp_glBindMaterialParameterEXT = GLuint function(GLenum, GLenum);
+alias fp_glBindTexGenParameterEXT = GLuint function(GLenum, GLenum, GLenum);
+alias fp_glBindTextureUnitParameterEXT = GLuint function(GLenum, GLenum);
+alias fp_glBindParameterEXT = GLuint function(GLenum);
+alias fp_glIsVariantEnabledEXT = GLboolean function(GLuint, GLenum);
+alias fp_glGetVariantBooleanvEXT = void function(GLuint, GLenum, GLboolean*);
+alias fp_glGetVariantIntegervEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVariantFloatvEXT = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetVariantPointervEXT = void function(GLuint, GLenum, GLvoid**);
+alias fp_glGetInvariantBooleanvEXT = void function(GLuint, GLenum, GLboolean*);
+alias fp_glGetInvariantIntegervEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetInvariantFloatvEXT = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetLocalConstantBooleanvEXT = void function(GLuint, GLenum, GLboolean*);
+alias fp_glGetLocalConstantIntegervEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetLocalConstantFloatvEXT = void function(GLuint, GLenum, GLfloat*);
+alias fp_glBlendFuncSeparateEXT = void function(GLenum, GLenum, GLenum, GLenum);
+alias fp_glGenFencesAPPLE = void function(GLsizei, GLuint*);
+alias fp_glDeleteFencesAPPLE = void function(GLsizei, const(GLuint)*);
+alias fp_glSetFenceAPPLE = void function(GLuint);
+alias fp_glIsFenceAPPLE = GLboolean function(GLuint);
+alias fp_glTestFenceAPPLE = GLboolean function(GLuint);
+alias fp_glFinishFenceAPPLE = void function(GLuint);
+alias fp_glTestObjectAPPLE = GLboolean function(GLenum, GLuint);
+alias fp_glFinishObjectAPPLE = void function(GLenum, GLint);
+alias fp_glMultiTexCoord1bOES = void function(GLenum, GLbyte);
+alias fp_glMultiTexCoord1bvOES = void function(GLenum, const(GLbyte)*);
+alias fp_glMultiTexCoord2bOES = void function(GLenum, GLbyte, GLbyte);
+alias fp_glMultiTexCoord2bvOES = void function(GLenum, const(GLbyte)*);
+alias fp_glMultiTexCoord3bOES = void function(GLenum, GLbyte, GLbyte, GLbyte);
+alias fp_glMultiTexCoord3bvOES = void function(GLenum, const(GLbyte)*);
+alias fp_glMultiTexCoord4bOES = void function(GLenum, GLbyte, GLbyte, GLbyte, GLbyte);
+alias fp_glMultiTexCoord4bvOES = void function(GLenum, const(GLbyte)*);
+alias fp_glTexCoord1bOES = void function(GLbyte);
+alias fp_glTexCoord1bvOES = void function(const(GLbyte)*);
+alias fp_glTexCoord2bOES = void function(GLbyte, GLbyte);
+alias fp_glTexCoord2bvOES = void function(const(GLbyte)*);
+alias fp_glTexCoord3bOES = void function(GLbyte, GLbyte, GLbyte);
+alias fp_glTexCoord3bvOES = void function(const(GLbyte)*);
+alias fp_glTexCoord4bOES = void function(GLbyte, GLbyte, GLbyte, GLbyte);
+alias fp_glTexCoord4bvOES = void function(const(GLbyte)*);
+alias fp_glVertex2bOES = void function(GLbyte);
+alias fp_glVertex2bvOES = void function(const(GLbyte)*);
+alias fp_glVertex3bOES = void function(GLbyte, GLbyte);
+alias fp_glVertex3bvOES = void function(const(GLbyte)*);
+alias fp_glVertex4bOES = void function(GLbyte, GLbyte, GLbyte);
+alias fp_glVertex4bvOES = void function(const(GLbyte)*);
+alias fp_glLoadTransposeMatrixfARB = void function(const(GLfloat)*);
+alias fp_glLoadTransposeMatrixdARB = void function(const(GLdouble)*);
+alias fp_glMultTransposeMatrixfARB = void function(const(GLfloat)*);
+alias fp_glMultTransposeMatrixdARB = void function(const(GLdouble)*);
+alias fp_glFogCoordfEXT = void function(GLfloat);
+alias fp_glFogCoordfvEXT = void function(const(GLfloat)*);
+alias fp_glFogCoorddEXT = void function(GLdouble);
+alias fp_glFogCoorddvEXT = void function(const(GLdouble)*);
+alias fp_glFogCoordPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*);
+alias fp_glArrayElementEXT = void function(GLint);
+alias fp_glColorPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*);
+alias fp_glDrawArraysEXT = void function(GLenum, GLint, GLsizei);
+alias fp_glEdgeFlagPointerEXT = void function(GLsizei, GLsizei, const(GLboolean)*);
+alias fp_glGetPointervEXT = void function(GLenum, GLvoid**);
+alias fp_glIndexPointerEXT = void function(GLenum, GLsizei, GLsizei, const(GLvoid)*);
+alias fp_glNormalPointerEXT = void function(GLenum, GLsizei, GLsizei, const(GLvoid)*);
+alias fp_glTexCoordPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*);
+alias fp_glVertexPointerEXT = void function(GLint, GLenum, GLsizei, GLsizei, const(GLvoid)*);
+alias fp_glBlendEquationSeparateEXT = void function(GLenum, GLenum);
+alias fp_glCopyImageSubDataNV = void function(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei);
+alias fp_glPixelTransformParameteriEXT = void function(GLenum, GLenum, GLint);
+alias fp_glPixelTransformParameterfEXT = void function(GLenum, GLenum, GLfloat);
+alias fp_glPixelTransformParameterivEXT = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glPixelTransformParameterfvEXT = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glGetPixelTransformParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glGetPixelTransformParameterfvEXT = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGenFragmentShadersATI = GLuint function(GLuint);
+alias fp_glBindFragmentShaderATI = void function(GLuint);
+alias fp_glDeleteFragmentShaderATI = void function(GLuint);
+alias fp_glBeginFragmentShaderATI = void function();
+alias fp_glEndFragmentShaderATI = void function();
+alias fp_glPassTexCoordATI = void function(GLuint, GLuint, GLenum);
+alias fp_glSampleMapATI = void function(GLuint, GLuint, GLenum);
+alias fp_glColorFragmentOp1ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glColorFragmentOp2ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glColorFragmentOp3ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glAlphaFragmentOp1ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glAlphaFragmentOp2ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glAlphaFragmentOp3ATI = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glSetFragmentShaderConstantATI = void function(GLuint, const(GLfloat)*);
+alias fp_glReplacementCodeuiSUN = void function(GLuint);
+alias fp_glReplacementCodeusSUN = void function(GLushort);
+alias fp_glReplacementCodeubSUN = void function(GLubyte);
+alias fp_glReplacementCodeuivSUN = void function(const(GLuint)*);
+alias fp_glReplacementCodeusvSUN = void function(const(GLushort)*);
+alias fp_glReplacementCodeubvSUN = void function(const(GLubyte)*);
+alias fp_glReplacementCodePointerSUN = void function(GLenum, GLsizei, const(GLvoid*)*);
+alias fp_glAsyncMarkerSGIX = void function(GLuint);
+alias fp_glFinishAsyncSGIX = GLint function(GLuint*);
+alias fp_glPollAsyncSGIX = GLint function(GLuint*);
+alias fp_glGenAsyncMarkersSGIX = GLuint function(GLsizei);
+alias fp_glDeleteAsyncMarkersSGIX = void function(GLuint, GLsizei);
+alias fp_glIsAsyncMarkerSGIX = GLboolean function(GLuint);
+alias fp_glUniform1i64NV = void function(GLint, GLint64EXT);
+alias fp_glUniform2i64NV = void function(GLint, GLint64EXT, GLint64EXT);
+alias fp_glUniform3i64NV = void function(GLint, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glUniform4i64NV = void function(GLint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glUniform1i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glUniform2i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glUniform3i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glUniform4i64vNV = void function(GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glUniform1ui64NV = void function(GLint, GLuint64EXT);
+alias fp_glUniform2ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT);
+alias fp_glUniform3ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glUniform4ui64NV = void function(GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glUniform1ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glUniform2ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glUniform3ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glUniform4ui64vNV = void function(GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glGetUniformi64vNV = void function(GLuint, GLint, GLint64EXT*);
+alias fp_glProgramUniform1i64NV = void function(GLuint, GLint, GLint64EXT);
+alias fp_glProgramUniform2i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT);
+alias fp_glProgramUniform3i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glProgramUniform4i64NV = void function(GLuint, GLint, GLint64EXT, GLint64EXT, GLint64EXT, GLint64EXT);
+alias fp_glProgramUniform1i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glProgramUniform2i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glProgramUniform3i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glProgramUniform4i64vNV = void function(GLuint, GLint, GLsizei, const(GLint64EXT)*);
+alias fp_glProgramUniform1ui64NV = void function(GLuint, GLint, GLuint64EXT);
+alias fp_glProgramUniform2ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT);
+alias fp_glProgramUniform3ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glProgramUniform4ui64NV = void function(GLuint, GLint, GLuint64EXT, GLuint64EXT, GLuint64EXT, GLuint64EXT);
+alias fp_glProgramUniform1ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glProgramUniform2ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glProgramUniform3ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glProgramUniform4ui64vNV = void function(GLuint, GLint, GLsizei, const(GLuint64EXT)*);
+alias fp_glMultiDrawArraysIndirectCountARB = void function(GLenum, GLintptr, GLintptr, GLsizei, GLsizei);
+alias fp_glMultiDrawElementsIndirectCountARB = void function(GLenum, GLenum, GLintptr, GLintptr, GLsizei, GLsizei);
+alias fp_glVertex2hNV = void function(GLhalfNV, GLhalfNV);
+alias fp_glVertex2hvNV = void function(const(GLhalfNV)*);
+alias fp_glVertex3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glVertex3hvNV = void function(const(GLhalfNV)*);
+alias fp_glVertex4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glVertex4hvNV = void function(const(GLhalfNV)*);
+alias fp_glNormal3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glNormal3hvNV = void function(const(GLhalfNV)*);
+alias fp_glColor3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glColor3hvNV = void function(const(GLhalfNV)*);
+alias fp_glColor4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glColor4hvNV = void function(const(GLhalfNV)*);
+alias fp_glTexCoord1hNV = void function(GLhalfNV);
+alias fp_glTexCoord1hvNV = void function(const(GLhalfNV)*);
+alias fp_glTexCoord2hNV = void function(GLhalfNV, GLhalfNV);
+alias fp_glTexCoord2hvNV = void function(const(GLhalfNV)*);
+alias fp_glTexCoord3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glTexCoord3hvNV = void function(const(GLhalfNV)*);
+alias fp_glTexCoord4hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glTexCoord4hvNV = void function(const(GLhalfNV)*);
+alias fp_glMultiTexCoord1hNV = void function(GLenum, GLhalfNV);
+alias fp_glMultiTexCoord1hvNV = void function(GLenum, const(GLhalfNV)*);
+alias fp_glMultiTexCoord2hNV = void function(GLenum, GLhalfNV, GLhalfNV);
+alias fp_glMultiTexCoord2hvNV = void function(GLenum, const(GLhalfNV)*);
+alias fp_glMultiTexCoord3hNV = void function(GLenum, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glMultiTexCoord3hvNV = void function(GLenum, const(GLhalfNV)*);
+alias fp_glMultiTexCoord4hNV = void function(GLenum, GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glMultiTexCoord4hvNV = void function(GLenum, const(GLhalfNV)*);
+alias fp_glFogCoordhNV = void function(GLhalfNV);
+alias fp_glFogCoordhvNV = void function(const(GLhalfNV)*);
+alias fp_glSecondaryColor3hNV = void function(GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glSecondaryColor3hvNV = void function(const(GLhalfNV)*);
+alias fp_glVertexWeighthNV = void function(GLhalfNV);
+alias fp_glVertexWeighthvNV = void function(const(GLhalfNV)*);
+alias fp_glVertexAttrib1hNV = void function(GLuint, GLhalfNV);
+alias fp_glVertexAttrib1hvNV = void function(GLuint, const(GLhalfNV)*);
+alias fp_glVertexAttrib2hNV = void function(GLuint, GLhalfNV, GLhalfNV);
+alias fp_glVertexAttrib2hvNV = void function(GLuint, const(GLhalfNV)*);
+alias fp_glVertexAttrib3hNV = void function(GLuint, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glVertexAttrib3hvNV = void function(GLuint, const(GLhalfNV)*);
+alias fp_glVertexAttrib4hNV = void function(GLuint, GLhalfNV, GLhalfNV, GLhalfNV, GLhalfNV);
+alias fp_glVertexAttrib4hvNV = void function(GLuint, const(GLhalfNV)*);
+alias fp_glVertexAttribs1hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*);
+alias fp_glVertexAttribs2hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*);
+alias fp_glVertexAttribs3hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*);
+alias fp_glVertexAttribs4hvNV = void function(GLuint, GLsizei, const(GLhalfNV)*);
+alias fp_glTangent3bEXT = void function(GLbyte, GLbyte, GLbyte);
+alias fp_glTangent3bvEXT = void function(const(GLbyte)*);
+alias fp_glTangent3dEXT = void function(GLdouble, GLdouble, GLdouble);
+alias fp_glTangent3dvEXT = void function(const(GLdouble)*);
+alias fp_glTangent3fEXT = void function(GLfloat, GLfloat, GLfloat);
+alias fp_glTangent3fvEXT = void function(const(GLfloat)*);
+alias fp_glTangent3iEXT = void function(GLint, GLint, GLint);
+alias fp_glTangent3ivEXT = void function(const(GLint)*);
+alias fp_glTangent3sEXT = void function(GLshort, GLshort, GLshort);
+alias fp_glTangent3svEXT = void function(const(GLshort)*);
+alias fp_glBinormal3bEXT = void function(GLbyte, GLbyte, GLbyte);
+alias fp_glBinormal3bvEXT = void function(const(GLbyte)*);
+alias fp_glBinormal3dEXT = void function(GLdouble, GLdouble, GLdouble);
+alias fp_glBinormal3dvEXT = void function(const(GLdouble)*);
+alias fp_glBinormal3fEXT = void function(GLfloat, GLfloat, GLfloat);
+alias fp_glBinormal3fvEXT = void function(const(GLfloat)*);
+alias fp_glBinormal3iEXT = void function(GLint, GLint, GLint);
+alias fp_glBinormal3ivEXT = void function(const(GLint)*);
+alias fp_glBinormal3sEXT = void function(GLshort, GLshort, GLshort);
+alias fp_glBinormal3svEXT = void function(const(GLshort)*);
+alias fp_glTangentPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*);
+alias fp_glBinormalPointerEXT = void function(GLenum, GLsizei, const(GLvoid)*);
+alias fp_glLockArraysEXT = void function(GLint, GLsizei);
+alias fp_glUnlockArraysEXT = void function();
+alias fp_glDepthRangedNV = void function(GLdouble, GLdouble);
+alias fp_glClearDepthdNV = void function(GLdouble);
+alias fp_glDepthBoundsdNV = void function(GLdouble, GLdouble);
+alias fp_glGenOcclusionQueriesNV = void function(GLsizei, GLuint*);
+alias fp_glDeleteOcclusionQueriesNV = void function(GLsizei, const(GLuint)*);
+alias fp_glIsOcclusionQueryNV = GLboolean function(GLuint);
+alias fp_glBeginOcclusionQueryNV = void function(GLuint);
+alias fp_glEndOcclusionQueryNV = void function();
+alias fp_glGetOcclusionQueryivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetOcclusionQueryuivNV = void function(GLuint, GLenum, GLuint*);
+alias fp_glBufferParameteriAPPLE = void function(GLenum, GLenum, GLint);
+alias fp_glFlushMappedBufferRangeAPPLE = void function(GLenum, GLintptr, GLsizeiptr);
+alias fp_glColorTable = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glColorTableParameterfv = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glColorTableParameteriv = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glCopyColorTable = void function(GLenum, GLenum, GLint, GLint, GLsizei);
+alias fp_glGetColorTable = void function(GLenum, GLenum, GLenum, GLvoid*);
+alias fp_glGetColorTableParameterfv = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetColorTableParameteriv = void function(GLenum, GLenum, GLint*);
+alias fp_glColorSubTable = void function(GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glCopyColorSubTable = void function(GLenum, GLsizei, GLint, GLint, GLsizei);
+alias fp_glConvolutionFilter1D = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glConvolutionFilter2D = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glConvolutionParameterf = void function(GLenum, GLenum, GLfloat);
+alias fp_glConvolutionParameterfv = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glConvolutionParameteri = void function(GLenum, GLenum, GLint);
+alias fp_glConvolutionParameteriv = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glCopyConvolutionFilter1D = void function(GLenum, GLenum, GLint, GLint, GLsizei);
+alias fp_glCopyConvolutionFilter2D = void function(GLenum, GLenum, GLint, GLint, GLsizei, GLsizei);
+alias fp_glGetConvolutionFilter = void function(GLenum, GLenum, GLenum, GLvoid*);
+alias fp_glGetConvolutionParameterfv = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetConvolutionParameteriv = void function(GLenum, GLenum, GLint*);
+alias fp_glGetSeparableFilter = void function(GLenum, GLenum, GLenum, GLvoid*, GLvoid*, GLvoid*);
+alias fp_glSeparableFilter2D = void function(GLenum, GLenum, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*, const(GLvoid)*);
+alias fp_glGetHistogram = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*);
+alias fp_glGetHistogramParameterfv = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetHistogramParameteriv = void function(GLenum, GLenum, GLint*);
+alias fp_glGetMinmax = void function(GLenum, GLboolean, GLenum, GLenum, GLvoid*);
+alias fp_glGetMinmaxParameterfv = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetMinmaxParameteriv = void function(GLenum, GLenum, GLint*);
+alias fp_glHistogram = void function(GLenum, GLsizei, GLenum, GLboolean);
+alias fp_glMinmax = void function(GLenum, GLenum, GLboolean);
+alias fp_glResetHistogram = void function(GLenum);
+alias fp_glResetMinmax = void function(GLenum);
+alias fp_glBlendEquationiARB = void function(GLuint, GLenum);
+alias fp_glBlendEquationSeparateiARB = void function(GLuint, GLenum, GLenum);
+alias fp_glBlendFunciARB = void function(GLuint, GLenum, GLenum);
+alias fp_glBlendFuncSeparateiARB = void function(GLuint, GLenum, GLenum, GLenum, GLenum);
+alias fp_glSampleCoverageARB = void function(GLfloat, GLboolean);
+alias fp_glMinSampleShadingARB = void function(GLfloat);
+alias fp_glSyncTextureINTEL = void function(GLuint);
+alias fp_glUnmapTexture2DINTEL = void function(GLuint, GLint);
+alias fp_glMapTexture2DINTEL = void* function(GLuint, GLint, GLbitfield, const(GLint)*, const(GLenum)*);
+alias fp_glColorPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glSecondaryColorPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glEdgeFlagPointerListIBM = void function(GLint, const(GLboolean*)*, GLint);
+alias fp_glFogCoordPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glIndexPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glNormalPointerListIBM = void function(GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glTexCoordPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glVertexPointerListIBM = void function(GLint, GLenum, GLint, const(GLvoid*)*, GLint);
+alias fp_glClampColorARB = void function(GLenum, GLenum);
+alias fp_glGetTextureHandleARB = GLuint64 function(GLuint);
+alias fp_glGetTextureSamplerHandleARB = GLuint64 function(GLuint, GLuint);
+alias fp_glMakeTextureHandleResidentARB = void function(GLuint64);
+alias fp_glMakeTextureHandleNonResidentARB = void function(GLuint64);
+alias fp_glGetImageHandleARB = GLuint64 function(GLuint, GLint, GLboolean, GLint, GLenum);
+alias fp_glMakeImageHandleResidentARB = void function(GLuint64, GLenum);
+alias fp_glMakeImageHandleNonResidentARB = void function(GLuint64);
+alias fp_glUniformHandleui64ARB = void function(GLint, GLuint64);
+alias fp_glUniformHandleui64vARB = void function(GLint, GLsizei, const(GLuint64)*);
+alias fp_glProgramUniformHandleui64ARB = void function(GLuint, GLint, GLuint64);
+alias fp_glProgramUniformHandleui64vARB = void function(GLuint, GLint, GLsizei, const(GLuint64)*);
+alias fp_glIsTextureHandleResidentARB = GLboolean function(GLuint64);
+alias fp_glIsImageHandleResidentARB = GLboolean function(GLuint64);
+alias fp_glVertexAttribL1ui64ARB = void function(GLuint, GLuint64EXT);
+alias fp_glVertexAttribL1ui64vARB = void function(GLuint, const(GLuint64EXT)*);
+alias fp_glGetVertexAttribLui64vARB = void function(GLuint, GLenum, GLuint64EXT*);
+alias fp_glWindowPos2dARB = void function(GLdouble, GLdouble);
+alias fp_glWindowPos2dvARB = void function(const(GLdouble)*);
+alias fp_glWindowPos2fARB = void function(GLfloat, GLfloat);
+alias fp_glWindowPos2fvARB = void function(const(GLfloat)*);
+alias fp_glWindowPos2iARB = void function(GLint, GLint);
+alias fp_glWindowPos2ivARB = void function(const(GLint)*);
+alias fp_glWindowPos2sARB = void function(GLshort, GLshort);
+alias fp_glWindowPos2svARB = void function(const(GLshort)*);
+alias fp_glWindowPos3dARB = void function(GLdouble, GLdouble, GLdouble);
+alias fp_glWindowPos3dvARB = void function(const(GLdouble)*);
+alias fp_glWindowPos3fARB = void function(GLfloat, GLfloat, GLfloat);
+alias fp_glWindowPos3fvARB = void function(const(GLfloat)*);
+alias fp_glWindowPos3iARB = void function(GLint, GLint, GLint);
+alias fp_glWindowPos3ivARB = void function(const(GLint)*);
+alias fp_glWindowPos3sARB = void function(GLshort, GLshort, GLshort);
+alias fp_glWindowPos3svARB = void function(const(GLshort)*);
+alias fp_glGetInternalformativ = void function(GLenum, GLenum, GLenum, GLsizei, GLint*);
+alias fp_glBindImageTextureEXT = void function(GLuint, GLuint, GLint, GLboolean, GLint, GLenum, GLint);
+alias fp_glMemoryBarrierEXT = void function(GLbitfield);
+alias fp_glCopyTexImage1DEXT = void function(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint);
+alias fp_glCopyTexImage2DEXT = void function(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint);
+alias fp_glCopyTexSubImage1DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei);
+alias fp_glCopyTexSubImage2DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glCopyTexSubImage3DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
+alias fp_glCombinerStageParameterfvNV = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glGetCombinerStageParameterfvNV = void function(GLenum, GLenum, GLfloat*);
+alias fp_glDrawTextureNV = void function(GLuint, GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glDrawArraysInstancedEXT = void function(GLenum, GLint, GLsizei, GLsizei);
+alias fp_glDrawElementsInstancedEXT = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLsizei);
+alias fp_glDepthBoundsEXT = void function(GLclampd, GLclampd);
+alias fp_glImageTransformParameteriHP = void function(GLenum, GLenum, GLint);
+alias fp_glImageTransformParameterfHP = void function(GLenum, GLenum, GLfloat);
+alias fp_glImageTransformParameterivHP = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glImageTransformParameterfvHP = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glGetImageTransformParameterivHP = void function(GLenum, GLenum, GLint*);
+alias fp_glGetImageTransformParameterfvHP = void function(GLenum, GLenum, GLfloat*);
+alias fp_glBeginVideoCaptureNV = void function(GLuint);
+alias fp_glBindVideoCaptureStreamBufferNV = void function(GLuint, GLuint, GLenum, GLintptrARB);
+alias fp_glBindVideoCaptureStreamTextureNV = void function(GLuint, GLuint, GLenum, GLenum, GLuint);
+alias fp_glEndVideoCaptureNV = void function(GLuint);
+alias fp_glGetVideoCaptureivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVideoCaptureStreamivNV = void function(GLuint, GLuint, GLenum, GLint*);
+alias fp_glGetVideoCaptureStreamfvNV = void function(GLuint, GLuint, GLenum, GLfloat*);
+alias fp_glGetVideoCaptureStreamdvNV = void function(GLuint, GLuint, GLenum, GLdouble*);
+alias fp_glVideoCaptureNV = GLenum function(GLuint, GLuint*, GLuint64EXT*);
+alias fp_glVideoCaptureStreamParameterivNV = void function(GLuint, GLuint, GLenum, const(GLint)*);
+alias fp_glVideoCaptureStreamParameterfvNV = void function(GLuint, GLuint, GLenum, const(GLfloat)*);
+alias fp_glVideoCaptureStreamParameterdvNV = void function(GLuint, GLuint, GLenum, const(GLdouble)*);
+alias fp_glCurrentPaletteMatrixARB = void function(GLint);
+alias fp_glMatrixIndexubvARB = void function(GLint, const(GLubyte)*);
+alias fp_glMatrixIndexusvARB = void function(GLint, const(GLushort)*);
+alias fp_glMatrixIndexuivARB = void function(GLint, const(GLuint)*);
+alias fp_glMatrixIndexPointerARB = void function(GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glTextureColorMaskSGIS = void function(GLboolean, GLboolean, GLboolean, GLboolean);
+alias fp_glCompressedTexImage3DARB = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTexImage2DARB = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTexImage1DARB = void function(GLenum, GLint, GLenum, GLsizei, GLint, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTexSubImage3DARB = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTexSubImage2DARB = void function(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glCompressedTexSubImage1DARB = void function(GLenum, GLint, GLint, GLsizei, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetCompressedTexImageARB = void function(GLenum, GLint, GLvoid*);
+alias fp_glVertexAttribL1dEXT = void function(GLuint, GLdouble);
+alias fp_glVertexAttribL2dEXT = void function(GLuint, GLdouble, GLdouble);
+alias fp_glVertexAttribL3dEXT = void function(GLuint, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttribL4dEXT = void function(GLuint, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexAttribL1dvEXT = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttribL2dvEXT = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttribL3dvEXT = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttribL4dvEXT = void function(GLuint, const(GLdouble)*);
+alias fp_glVertexAttribLPointerEXT = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetVertexAttribLdvEXT = void function(GLuint, GLenum, GLdouble*);
+alias fp_glQueryMatrixxOES = GLbitfield function(GLfixed*, GLint*);
+alias fp_glTextureRangeAPPLE = void function(GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetTexParameterPointervAPPLE = void function(GLenum, GLenum, GLvoid**);
+alias fp_glObjectPurgeableAPPLE = GLenum function(GLenum, GLuint, GLenum);
+alias fp_glObjectUnpurgeableAPPLE = GLenum function(GLenum, GLuint, GLenum);
+alias fp_glGetObjectParameterivAPPLE = void function(GLenum, GLuint, GLenum, GLint*);
+alias fp_glGenQueriesARB = void function(GLsizei, GLuint*);
+alias fp_glDeleteQueriesARB = void function(GLsizei, const(GLuint)*);
+alias fp_glIsQueryARB = GLboolean function(GLuint);
+alias fp_glBeginQueryARB = void function(GLenum, GLuint);
+alias fp_glEndQueryARB = void function(GLenum);
+alias fp_glGetQueryivARB = void function(GLenum, GLenum, GLint*);
+alias fp_glGetQueryObjectivARB = void function(GLuint, GLenum, GLint*);
+alias fp_glGetQueryObjectuivARB = void function(GLuint, GLenum, GLuint*);
+alias fp_glColorTableSGI = void function(GLenum, GLenum, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glColorTableParameterfvSGI = void function(GLenum, GLenum, const(GLfloat)*);
+alias fp_glColorTableParameterivSGI = void function(GLenum, GLenum, const(GLint)*);
+alias fp_glCopyColorTableSGI = void function(GLenum, GLenum, GLint, GLint, GLsizei);
+alias fp_glGetColorTableSGI = void function(GLenum, GLenum, GLenum, GLvoid*);
+alias fp_glGetColorTableParameterfvSGI = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetColorTableParameterivSGI = void function(GLenum, GLenum, GLint*);
+alias fp_glGetUniformuivEXT = void function(GLuint, GLint, GLuint*);
+alias fp_glBindFragDataLocationEXT = void function(GLuint, GLuint, const(GLchar)*);
+alias fp_glGetFragDataLocationEXT = GLint function(GLuint, const(GLchar)*);
+alias fp_glUniform1uiEXT = void function(GLint, GLuint);
+alias fp_glUniform2uiEXT = void function(GLint, GLuint, GLuint);
+alias fp_glUniform3uiEXT = void function(GLint, GLuint, GLuint, GLuint);
+alias fp_glUniform4uiEXT = void function(GLint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glUniform1uivEXT = void function(GLint, GLsizei, const(GLuint)*);
+alias fp_glUniform2uivEXT = void function(GLint, GLsizei, const(GLuint)*);
+alias fp_glUniform3uivEXT = void function(GLint, GLsizei, const(GLuint)*);
+alias fp_glUniform4uivEXT = void function(GLint, GLsizei, const(GLuint)*);
+alias fp_glProgramVertexLimitNV = void function(GLenum, GLint);
+alias fp_glFramebufferTextureEXT = void function(GLenum, GLenum, GLuint, GLint);
+alias fp_glFramebufferTextureLayerEXT = void function(GLenum, GLenum, GLuint, GLint, GLint);
+alias fp_glFramebufferTextureFaceEXT = void function(GLenum, GLenum, GLuint, GLint, GLenum);
+alias fp_glDebugMessageEnableAMD = void function(GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean);
+alias fp_glDebugMessageInsertAMD = void function(GLenum, GLenum, GLuint, GLsizei, const(GLchar)*);
+alias fp_glDebugMessageCallbackAMD = void function(GLDEBUGPROCAMD, void*);
+alias fp_glGetDebugMessageLogAMD = GLuint function(GLuint, GLsizei, GLenum*, GLuint*, GLuint*, GLsizei*, GLchar*);
+alias fp_glActiveTextureARB = void function(GLenum);
+alias fp_glClientActiveTextureARB = void function(GLenum);
+alias fp_glMultiTexCoord1dARB = void function(GLenum, GLdouble);
+alias fp_glMultiTexCoord1dvARB = void function(GLenum, const(GLdouble)*);
+alias fp_glMultiTexCoord1fARB = void function(GLenum, GLfloat);
+alias fp_glMultiTexCoord1fvARB = void function(GLenum, const(GLfloat)*);
+alias fp_glMultiTexCoord1iARB = void function(GLenum, GLint);
+alias fp_glMultiTexCoord1ivARB = void function(GLenum, const(GLint)*);
+alias fp_glMultiTexCoord1sARB = void function(GLenum, GLshort);
+alias fp_glMultiTexCoord1svARB = void function(GLenum, const(GLshort)*);
+alias fp_glMultiTexCoord2dARB = void function(GLenum, GLdouble, GLdouble);
+alias fp_glMultiTexCoord2dvARB = void function(GLenum, const(GLdouble)*);
+alias fp_glMultiTexCoord2fARB = void function(GLenum, GLfloat, GLfloat);
+alias fp_glMultiTexCoord2fvARB = void function(GLenum, const(GLfloat)*);
+alias fp_glMultiTexCoord2iARB = void function(GLenum, GLint, GLint);
+alias fp_glMultiTexCoord2ivARB = void function(GLenum, const(GLint)*);
+alias fp_glMultiTexCoord2sARB = void function(GLenum, GLshort, GLshort);
+alias fp_glMultiTexCoord2svARB = void function(GLenum, const(GLshort)*);
+alias fp_glMultiTexCoord3dARB = void function(GLenum, GLdouble, GLdouble, GLdouble);
+alias fp_glMultiTexCoord3dvARB = void function(GLenum, const(GLdouble)*);
+alias fp_glMultiTexCoord3fARB = void function(GLenum, GLfloat, GLfloat, GLfloat);
+alias fp_glMultiTexCoord3fvARB = void function(GLenum, const(GLfloat)*);
+alias fp_glMultiTexCoord3iARB = void function(GLenum, GLint, GLint, GLint);
+alias fp_glMultiTexCoord3ivARB = void function(GLenum, const(GLint)*);
+alias fp_glMultiTexCoord3sARB = void function(GLenum, GLshort, GLshort, GLshort);
+alias fp_glMultiTexCoord3svARB = void function(GLenum, const(GLshort)*);
+alias fp_glMultiTexCoord4dARB = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glMultiTexCoord4dvARB = void function(GLenum, const(GLdouble)*);
+alias fp_glMultiTexCoord4fARB = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glMultiTexCoord4fvARB = void function(GLenum, const(GLfloat)*);
+alias fp_glMultiTexCoord4iARB = void function(GLenum, GLint, GLint, GLint, GLint);
+alias fp_glMultiTexCoord4ivARB = void function(GLenum, const(GLint)*);
+alias fp_glMultiTexCoord4sARB = void function(GLenum, GLshort, GLshort, GLshort, GLshort);
+alias fp_glMultiTexCoord4svARB = void function(GLenum, const(GLshort)*);
+alias fp_glDeformationMap3dSGIX = void function(GLenum, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, GLdouble, GLdouble, GLint, GLint, const(GLdouble)*);
+alias fp_glDeformationMap3fSGIX = void function(GLenum, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, GLfloat, GLfloat, GLint, GLint, const(GLfloat)*);
+alias fp_glDeformSGIX = void function(GLbitfield);
+alias fp_glLoadIdentityDeformationMapSGIX = void function(GLbitfield);
+alias fp_glProvokingVertexEXT = void function(GLenum);
+alias fp_glPointParameterfARB = void function(GLenum, GLfloat);
+alias fp_glPointParameterfvARB = void function(GLenum, const(GLfloat)*);
+alias fp_glFrameZoomSGIX = void function(GLint);
+alias fp_glMultiDrawArraysIndirectBindlessNV = void function(GLenum, const(GLvoid)*, GLsizei, GLsizei, GLint);
+alias fp_glMultiDrawElementsIndirectBindlessNV = void function(GLenum, GLenum, const(GLvoid)*, GLsizei, GLsizei, GLint);
+alias fp_glBeginTransformFeedbackEXT = void function(GLenum);
+alias fp_glEndTransformFeedbackEXT = void function();
+alias fp_glBindBufferRangeEXT = void function(GLenum, GLuint, GLuint, GLintptr, GLsizeiptr);
+alias fp_glBindBufferOffsetEXT = void function(GLenum, GLuint, GLuint, GLintptr);
+alias fp_glBindBufferBaseEXT = void function(GLenum, GLuint, GLuint);
+alias fp_glTransformFeedbackVaryingsEXT = void function(GLuint, GLsizei, const(GLchar*)*, GLenum);
+alias fp_glGetTransformFeedbackVaryingEXT = void function(GLuint, GLuint, GLsizei, GLsizei*, GLsizei*, GLenum*, GLchar*);
+alias fp_glProgramLocalParameterI4iNV = void function(GLenum, GLuint, GLint, GLint, GLint, GLint);
+alias fp_glProgramLocalParameterI4ivNV = void function(GLenum, GLuint, const(GLint)*);
+alias fp_glProgramLocalParametersI4ivNV = void function(GLenum, GLuint, GLsizei, const(GLint)*);
+alias fp_glProgramLocalParameterI4uiNV = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glProgramLocalParameterI4uivNV = void function(GLenum, GLuint, const(GLuint)*);
+alias fp_glProgramLocalParametersI4uivNV = void function(GLenum, GLuint, GLsizei, const(GLuint)*);
+alias fp_glProgramEnvParameterI4iNV = void function(GLenum, GLuint, GLint, GLint, GLint, GLint);
+alias fp_glProgramEnvParameterI4ivNV = void function(GLenum, GLuint, const(GLint)*);
+alias fp_glProgramEnvParametersI4ivNV = void function(GLenum, GLuint, GLsizei, const(GLint)*);
+alias fp_glProgramEnvParameterI4uiNV = void function(GLenum, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glProgramEnvParameterI4uivNV = void function(GLenum, GLuint, const(GLuint)*);
+alias fp_glProgramEnvParametersI4uivNV = void function(GLenum, GLuint, GLsizei, const(GLuint)*);
+alias fp_glGetProgramLocalParameterIivNV = void function(GLenum, GLuint, GLint*);
+alias fp_glGetProgramLocalParameterIuivNV = void function(GLenum, GLuint, GLuint*);
+alias fp_glGetProgramEnvParameterIivNV = void function(GLenum, GLuint, GLint*);
+alias fp_glGetProgramEnvParameterIuivNV = void function(GLenum, GLuint, GLuint*);
+alias fp_glProgramSubroutineParametersuivNV = void function(GLenum, GLsizei, const(GLuint)*);
+alias fp_glGetProgramSubroutineParameteruivNV = void function(GLenum, GLuint, GLuint*);
+alias fp_glProgramParameteriARB = void function(GLuint, GLenum, GLint);
+alias fp_glFramebufferTextureARB = void function(GLenum, GLenum, GLuint, GLint);
+alias fp_glFramebufferTextureLayerARB = void function(GLenum, GLenum, GLuint, GLint, GLint);
+alias fp_glFramebufferTextureFaceARB = void function(GLenum, GLenum, GLuint, GLint, GLenum);
+alias fp_glSpriteParameterfSGIX = void function(GLenum, GLfloat);
+alias fp_glSpriteParameterfvSGIX = void function(GLenum, const(GLfloat)*);
+alias fp_glSpriteParameteriSGIX = void function(GLenum, GLint);
+alias fp_glSpriteParameterivSGIX = void function(GLenum, const(GLint)*);
+alias fp_glSampleMaskSGIS = void function(GLclampf, GLboolean);
+alias fp_glSamplePatternSGIS = void function(GLenum);
+alias fp_glIsRenderbufferEXT = GLboolean function(GLuint);
+alias fp_glBindRenderbufferEXT = void function(GLenum, GLuint);
+alias fp_glDeleteRenderbuffersEXT = void function(GLsizei, const(GLuint)*);
+alias fp_glGenRenderbuffersEXT = void function(GLsizei, GLuint*);
+alias fp_glRenderbufferStorageEXT = void function(GLenum, GLenum, GLsizei, GLsizei);
+alias fp_glGetRenderbufferParameterivEXT = void function(GLenum, GLenum, GLint*);
+alias fp_glIsFramebufferEXT = GLboolean function(GLuint);
+alias fp_glBindFramebufferEXT = void function(GLenum, GLuint);
+alias fp_glDeleteFramebuffersEXT = void function(GLsizei, const(GLuint)*);
+alias fp_glGenFramebuffersEXT = void function(GLsizei, GLuint*);
+alias fp_glCheckFramebufferStatusEXT = GLenum function(GLenum);
+alias fp_glFramebufferTexture1DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint);
+alias fp_glFramebufferTexture2DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint);
+alias fp_glFramebufferTexture3DEXT = void function(GLenum, GLenum, GLenum, GLuint, GLint, GLint);
+alias fp_glFramebufferRenderbufferEXT = void function(GLenum, GLenum, GLenum, GLuint);
+alias fp_glGetFramebufferAttachmentParameterivEXT = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glGenerateMipmapEXT = void function(GLenum);
+alias fp_glVertexArrayRangeAPPLE = void function(GLsizei, GLvoid*);
+alias fp_glFlushVertexArrayRangeAPPLE = void function(GLsizei, GLvoid*);
+alias fp_glVertexArrayParameteriAPPLE = void function(GLenum, GLint);
+alias fp_glCombinerParameterfvNV = void function(GLenum, const(GLfloat)*);
+alias fp_glCombinerParameterfNV = void function(GLenum, GLfloat);
+alias fp_glCombinerParameterivNV = void function(GLenum, const(GLint)*);
+alias fp_glCombinerParameteriNV = void function(GLenum, GLint);
+alias fp_glCombinerInputNV = void function(GLenum, GLenum, GLenum, GLenum, GLenum, GLenum);
+alias fp_glCombinerOutputNV = void function(GLenum, GLenum, GLenum, GLenum, GLenum, GLenum, GLenum, GLboolean, GLboolean, GLboolean);
+alias fp_glFinalCombinerInputNV = void function(GLenum, GLenum, GLenum, GLenum);
+alias fp_glGetCombinerInputParameterfvNV = void function(GLenum, GLenum, GLenum, GLenum, GLfloat*);
+alias fp_glGetCombinerInputParameterivNV = void function(GLenum, GLenum, GLenum, GLenum, GLint*);
+alias fp_glGetCombinerOutputParameterfvNV = void function(GLenum, GLenum, GLenum, GLfloat*);
+alias fp_glGetCombinerOutputParameterivNV = void function(GLenum, GLenum, GLenum, GLint*);
+alias fp_glGetFinalCombinerInputParameterfvNV = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetFinalCombinerInputParameterivNV = void function(GLenum, GLenum, GLint*);
+alias fp_glDrawBuffersARB = void function(GLsizei, const(GLenum)*);
+alias fp_glDebugMessageControlARB = void function(GLenum, GLenum, GLenum, GLsizei, const(GLuint)*, GLboolean);
+alias fp_glDebugMessageInsertARB = void function(GLenum, GLenum, GLuint, GLenum, GLsizei, const(GLchar)*);
+alias fp_glDebugMessageCallbackARB = void function(GLDEBUGPROCARB, const(void)*);
+alias fp_glGetDebugMessageLogARB = GLuint function(GLuint, GLsizei, GLenum*, GLenum*, GLuint*, GLenum*, GLsizei*, GLchar*);
+alias fp_glCullParameterdvEXT = void function(GLenum, GLdouble*);
+alias fp_glCullParameterfvEXT = void function(GLenum, GLfloat*);
+alias fp_glMultiModeDrawArraysIBM = void function(const(GLenum)*, const(GLint)*, const(GLsizei)*, GLsizei, GLint);
+alias fp_glMultiModeDrawElementsIBM = void function(const(GLenum)*, const(GLsizei)*, GLenum, const(GLvoid*)*, GLsizei, GLint);
+alias fp_glBindVertexArrayAPPLE = void function(GLuint);
+alias fp_glDeleteVertexArraysAPPLE = void function(GLsizei, const(GLuint)*);
+alias fp_glGenVertexArraysAPPLE = void function(GLsizei, GLuint*);
+alias fp_glIsVertexArrayAPPLE = GLboolean function(GLuint);
+alias fp_glDetailTexFuncSGIS = void function(GLenum, GLsizei, const(GLfloat)*);
+alias fp_glGetDetailTexFuncSGIS = void function(GLenum, GLfloat*);
+alias fp_glDrawArraysInstancedARB = void function(GLenum, GLint, GLsizei, GLsizei);
+alias fp_glDrawElementsInstancedARB = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLsizei);
+alias fp_glNamedStringARB = void function(GLenum, GLint, const(GLchar)*, GLint, const(GLchar)*);
+alias fp_glDeleteNamedStringARB = void function(GLint, const(GLchar)*);
+alias fp_glCompileShaderIncludeARB = void function(GLuint, GLsizei, const(GLchar*)*, const(GLint)*);
+alias fp_glIsNamedStringARB = GLboolean function(GLint, const(GLchar)*);
+alias fp_glGetNamedStringARB = void function(GLint, const(GLchar)*, GLsizei, GLint*, GLchar*);
+alias fp_glGetNamedStringivARB = void function(GLint, const(GLchar)*, GLenum, GLint*);
+alias fp_glBlendFuncSeparateINGR = void function(GLenum, GLenum, GLenum, GLenum);
+alias fp_glGenPathsNV = GLuint function(GLsizei);
+alias fp_glDeletePathsNV = void function(GLuint, GLsizei);
+alias fp_glIsPathNV = GLboolean function(GLuint);
+alias fp_glPathCommandsNV = void function(GLuint, GLsizei, const(GLubyte)*, GLsizei, GLenum, const(GLvoid)*);
+alias fp_glPathCoordsNV = void function(GLuint, GLsizei, GLenum, const(GLvoid)*);
+alias fp_glPathSubCommandsNV = void function(GLuint, GLsizei, GLsizei, GLsizei, const(GLubyte)*, GLsizei, GLenum, const(GLvoid)*);
+alias fp_glPathSubCoordsNV = void function(GLuint, GLsizei, GLsizei, GLenum, const(GLvoid)*);
+alias fp_glPathStringNV = void function(GLuint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glPathGlyphsNV = void function(GLuint, GLenum, const(GLvoid)*, GLbitfield, GLsizei, GLenum, const(GLvoid)*, GLenum, GLuint, GLfloat);
+alias fp_glPathGlyphRangeNV = void function(GLuint, GLenum, const(GLvoid)*, GLbitfield, GLuint, GLsizei, GLenum, GLuint, GLfloat);
+alias fp_glWeightPathsNV = void function(GLuint, GLsizei, const(GLuint)*, const(GLfloat)*);
+alias fp_glCopyPathNV = void function(GLuint, GLuint);
+alias fp_glInterpolatePathsNV = void function(GLuint, GLuint, GLuint, GLfloat);
+alias fp_glTransformPathNV = void function(GLuint, GLuint, GLenum, const(GLfloat)*);
+alias fp_glPathParameterivNV = void function(GLuint, GLenum, const(GLint)*);
+alias fp_glPathParameteriNV = void function(GLuint, GLenum, GLint);
+alias fp_glPathParameterfvNV = void function(GLuint, GLenum, const(GLfloat)*);
+alias fp_glPathParameterfNV = void function(GLuint, GLenum, GLfloat);
+alias fp_glPathDashArrayNV = void function(GLuint, GLsizei, const(GLfloat)*);
+alias fp_glPathStencilFuncNV = void function(GLenum, GLint, GLuint);
+alias fp_glPathStencilDepthOffsetNV = void function(GLfloat, GLfloat);
+alias fp_glStencilFillPathNV = void function(GLuint, GLenum, GLuint);
+alias fp_glStencilStrokePathNV = void function(GLuint, GLint, GLuint);
+alias fp_glStencilFillPathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLuint, GLenum, const(GLfloat)*);
+alias fp_glStencilStrokePathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLint, GLuint, GLenum, const(GLfloat)*);
+alias fp_glPathCoverDepthFuncNV = void function(GLenum);
+alias fp_glPathColorGenNV = void function(GLenum, GLenum, GLenum, const(GLfloat)*);
+alias fp_glPathTexGenNV = void function(GLenum, GLenum, GLint, const(GLfloat)*);
+alias fp_glPathFogGenNV = void function(GLenum);
+alias fp_glCoverFillPathNV = void function(GLuint, GLenum);
+alias fp_glCoverStrokePathNV = void function(GLuint, GLenum);
+alias fp_glCoverFillPathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLenum, const(GLfloat)*);
+alias fp_glCoverStrokePathInstancedNV = void function(GLsizei, GLenum, const(GLvoid)*, GLuint, GLenum, GLenum, const(GLfloat)*);
+alias fp_glGetPathParameterivNV = void function(GLuint, GLenum, GLint*);
+alias fp_glGetPathParameterfvNV = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetPathCommandsNV = void function(GLuint, GLubyte*);
+alias fp_glGetPathCoordsNV = void function(GLuint, GLfloat*);
+alias fp_glGetPathDashArrayNV = void function(GLuint, GLfloat*);
+alias fp_glGetPathMetricsNV = void function(GLbitfield, GLsizei, GLenum, const(GLvoid)*, GLuint, GLsizei, GLfloat*);
+alias fp_glGetPathMetricRangeNV = void function(GLbitfield, GLuint, GLsizei, GLsizei, GLfloat*);
+alias fp_glGetPathSpacingNV = void function(GLenum, GLsizei, GLenum, const(GLvoid)*, GLuint, GLfloat, GLfloat, GLenum, GLfloat*);
+alias fp_glGetPathColorGenivNV = void function(GLenum, GLenum, GLint*);
+alias fp_glGetPathColorGenfvNV = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetPathTexGenivNV = void function(GLenum, GLenum, GLint*);
+alias fp_glGetPathTexGenfvNV = void function(GLenum, GLenum, GLfloat*);
+alias fp_glIsPointInFillPathNV = GLboolean function(GLuint, GLuint, GLfloat, GLfloat);
+alias fp_glIsPointInStrokePathNV = GLboolean function(GLuint, GLfloat, GLfloat);
+alias fp_glGetPathLengthNV = GLfloat function(GLuint, GLsizei, GLsizei);
+alias fp_glPointAlongPathNV = GLboolean function(GLuint, GLsizei, GLsizei, GLfloat, GLfloat*, GLfloat*, GLfloat*, GLfloat*);
+alias fp_glVertexStream1sATI = void function(GLenum, GLshort);
+alias fp_glVertexStream1svATI = void function(GLenum, const(GLshort)*);
+alias fp_glVertexStream1iATI = void function(GLenum, GLint);
+alias fp_glVertexStream1ivATI = void function(GLenum, const(GLint)*);
+alias fp_glVertexStream1fATI = void function(GLenum, GLfloat);
+alias fp_glVertexStream1fvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glVertexStream1dATI = void function(GLenum, GLdouble);
+alias fp_glVertexStream1dvATI = void function(GLenum, const(GLdouble)*);
+alias fp_glVertexStream2sATI = void function(GLenum, GLshort, GLshort);
+alias fp_glVertexStream2svATI = void function(GLenum, const(GLshort)*);
+alias fp_glVertexStream2iATI = void function(GLenum, GLint, GLint);
+alias fp_glVertexStream2ivATI = void function(GLenum, const(GLint)*);
+alias fp_glVertexStream2fATI = void function(GLenum, GLfloat, GLfloat);
+alias fp_glVertexStream2fvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glVertexStream2dATI = void function(GLenum, GLdouble, GLdouble);
+alias fp_glVertexStream2dvATI = void function(GLenum, const(GLdouble)*);
+alias fp_glVertexStream3sATI = void function(GLenum, GLshort, GLshort, GLshort);
+alias fp_glVertexStream3svATI = void function(GLenum, const(GLshort)*);
+alias fp_glVertexStream3iATI = void function(GLenum, GLint, GLint, GLint);
+alias fp_glVertexStream3ivATI = void function(GLenum, const(GLint)*);
+alias fp_glVertexStream3fATI = void function(GLenum, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexStream3fvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glVertexStream3dATI = void function(GLenum, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexStream3dvATI = void function(GLenum, const(GLdouble)*);
+alias fp_glVertexStream4sATI = void function(GLenum, GLshort, GLshort, GLshort, GLshort);
+alias fp_glVertexStream4svATI = void function(GLenum, const(GLshort)*);
+alias fp_glVertexStream4iATI = void function(GLenum, GLint, GLint, GLint, GLint);
+alias fp_glVertexStream4ivATI = void function(GLenum, const(GLint)*);
+alias fp_glVertexStream4fATI = void function(GLenum, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glVertexStream4fvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glVertexStream4dATI = void function(GLenum, GLdouble, GLdouble, GLdouble, GLdouble);
+alias fp_glVertexStream4dvATI = void function(GLenum, const(GLdouble)*);
+alias fp_glNormalStream3bATI = void function(GLenum, GLbyte, GLbyte, GLbyte);
+alias fp_glNormalStream3bvATI = void function(GLenum, const(GLbyte)*);
+alias fp_glNormalStream3sATI = void function(GLenum, GLshort, GLshort, GLshort);
+alias fp_glNormalStream3svATI = void function(GLenum, const(GLshort)*);
+alias fp_glNormalStream3iATI = void function(GLenum, GLint, GLint, GLint);
+alias fp_glNormalStream3ivATI = void function(GLenum, const(GLint)*);
+alias fp_glNormalStream3fATI = void function(GLenum, GLfloat, GLfloat, GLfloat);
+alias fp_glNormalStream3fvATI = void function(GLenum, const(GLfloat)*);
+alias fp_glNormalStream3dATI = void function(GLenum, GLdouble, GLdouble, GLdouble);
+alias fp_glNormalStream3dvATI = void function(GLenum, const(GLdouble)*);
+alias fp_glClientActiveVertexStreamATI = void function(GLenum);
+alias fp_glVertexBlendEnviATI = void function(GLenum, GLint);
+alias fp_glVertexBlendEnvfATI = void function(GLenum, GLfloat);
+alias fp_glVDPAUInitNV = void function(const(GLvoid)*, const(GLvoid)*);
+alias fp_glVDPAUFiniNV = void function();
+alias fp_glVDPAURegisterVideoSurfaceNV = GLvdpauSurfaceNV function(const(GLvoid)*, GLenum, GLsizei, const(GLuint)*);
+alias fp_glVDPAURegisterOutputSurfaceNV = GLvdpauSurfaceNV function(const(GLvoid)*, GLenum, GLsizei, const(GLuint)*);
+alias fp_glVDPAUIsSurfaceNV = void function(GLvdpauSurfaceNV);
+alias fp_glVDPAUUnregisterSurfaceNV = void function(GLvdpauSurfaceNV);
+alias fp_glVDPAUGetSurfaceivNV = void function(GLvdpauSurfaceNV, GLenum, GLsizei, GLsizei*, GLint*);
+alias fp_glVDPAUSurfaceAccessNV = void function(GLvdpauSurfaceNV, GLenum);
+alias fp_glVDPAUMapSurfacesNV = void function(GLsizei, const(GLvdpauSurfaceNV)*);
+alias fp_glVDPAUUnmapSurfacesNV = void function(GLsizei, const(GLvdpauSurfaceNV)*);
+alias fp_glColor4ubVertex2fSUN = void function(GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat);
+alias fp_glColor4ubVertex2fvSUN = void function(const(GLubyte)*, const(GLfloat)*);
+alias fp_glColor4ubVertex3fSUN = void function(GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat);
+alias fp_glColor4ubVertex3fvSUN = void function(const(GLubyte)*, const(GLfloat)*);
+alias fp_glColor3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glColor3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*);
+alias fp_glNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*);
+alias fp_glColor4fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glColor4fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord2fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord2fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord4fVertex4fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord4fVertex4fvSUN = void function(const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord2fColor4ubVertex3fSUN = void function(GLfloat, GLfloat, GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord2fColor4ubVertex3fvSUN = void function(const(GLfloat)*, const(GLubyte)*, const(GLfloat)*);
+alias fp_glTexCoord2fColor3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord2fColor3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord2fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord2fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord2fColor4fNormal3fVertex3fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord2fColor4fNormal3fVertex3fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glTexCoord4fColor4fNormal3fVertex4fSUN = void function(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glTexCoord4fColor4fNormal3fVertex4fvSUN = void function(const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiColor4ubVertex3fSUN = void function(GLuint, GLubyte, GLubyte, GLubyte, GLubyte, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiColor4ubVertex3fvSUN = void function(const(GLuint)*, const(GLubyte)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiColor3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiColor3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiColor4fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiColor4fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiTexCoord2fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiTexCoord2fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN = void function(GLuint, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+alias fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN = void function(const(GLuint)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*, const(GLfloat)*);
+alias fp_glIglooInterfaceSGIX = void function(GLenum, const(GLvoid)*);
+alias fp_glVertexAttribI1iEXT = void function(GLuint, GLint);
+alias fp_glVertexAttribI2iEXT = void function(GLuint, GLint, GLint);
+alias fp_glVertexAttribI3iEXT = void function(GLuint, GLint, GLint, GLint);
+alias fp_glVertexAttribI4iEXT = void function(GLuint, GLint, GLint, GLint, GLint);
+alias fp_glVertexAttribI1uiEXT = void function(GLuint, GLuint);
+alias fp_glVertexAttribI2uiEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glVertexAttribI3uiEXT = void function(GLuint, GLuint, GLuint, GLuint);
+alias fp_glVertexAttribI4uiEXT = void function(GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glVertexAttribI1ivEXT = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttribI2ivEXT = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttribI3ivEXT = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttribI4ivEXT = void function(GLuint, const(GLint)*);
+alias fp_glVertexAttribI1uivEXT = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttribI2uivEXT = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttribI3uivEXT = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttribI4uivEXT = void function(GLuint, const(GLuint)*);
+alias fp_glVertexAttribI4bvEXT = void function(GLuint, const(GLbyte)*);
+alias fp_glVertexAttribI4svEXT = void function(GLuint, const(GLshort)*);
+alias fp_glVertexAttribI4ubvEXT = void function(GLuint, const(GLubyte)*);
+alias fp_glVertexAttribI4usvEXT = void function(GLuint, const(GLushort)*);
+alias fp_glVertexAttribIPointerEXT = void function(GLuint, GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glGetVertexAttribIivEXT = void function(GLuint, GLenum, GLint*);
+alias fp_glGetVertexAttribIuivEXT = void function(GLuint, GLenum, GLuint*);
+alias fp_glFogFuncSGIS = void function(GLsizei, const(GLfloat)*);
+alias fp_glGetFogFuncSGIS = void function(GLfloat*);
+alias fp_glImportSyncEXT = GLsync function(GLenum, GLintptr, GLbitfield);
+alias fp_glDispatchComputeGroupSizeARB = void function(GLuint, GLuint, GLuint, GLuint, GLuint, GLuint);
+alias fp_glAlphaFuncxOES = void function(GLenum, GLfixed);
+alias fp_glClearColorxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glClearDepthxOES = void function(GLfixed);
+alias fp_glClipPlanexOES = void function(GLenum, const(GLfixed)*);
+alias fp_glColor4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glDepthRangexOES = void function(GLfixed, GLfixed);
+alias fp_glFogxOES = void function(GLenum, GLfixed);
+alias fp_glFogxvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glFrustumxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glGetClipPlanexOES = void function(GLenum, GLfixed*);
+alias fp_glGetFixedvOES = void function(GLenum, GLfixed*);
+alias fp_glGetTexEnvxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetTexParameterxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glLightModelxOES = void function(GLenum, GLfixed);
+alias fp_glLightModelxvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glLightxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glLightxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glLineWidthxOES = void function(GLfixed);
+alias fp_glLoadMatrixxOES = void function(const(GLfixed)*);
+alias fp_glMaterialxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glMaterialxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glMultMatrixxOES = void function(const(GLfixed)*);
+alias fp_glMultiTexCoord4xOES = void function(GLenum, GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glNormal3xOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glOrthoxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glPointParameterxvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glPointSizexOES = void function(GLfixed);
+alias fp_glPolygonOffsetxOES = void function(GLfixed, GLfixed);
+alias fp_glRotatexOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glSampleCoverageOES = void function(GLfixed, GLboolean);
+alias fp_glScalexOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glTexEnvxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glTexEnvxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glTexParameterxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glTexParameterxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glTranslatexOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glGetLightxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetMaterialxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glPointParameterxOES = void function(GLenum, GLfixed);
+alias fp_glSampleCoveragexOES = void function(GLclampx, GLboolean);
+alias fp_glAccumxOES = void function(GLenum, GLfixed);
+alias fp_glBitmapxOES = void function(GLsizei, GLsizei, GLfixed, GLfixed, GLfixed, GLfixed, const(GLubyte)*);
+alias fp_glBlendColorxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glClearAccumxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glColor3xOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glColor3xvOES = void function(const(GLfixed)*);
+alias fp_glColor4xvOES = void function(const(GLfixed)*);
+alias fp_glConvolutionParameterxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glConvolutionParameterxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glEvalCoord1xOES = void function(GLfixed);
+alias fp_glEvalCoord1xvOES = void function(const(GLfixed)*);
+alias fp_glEvalCoord2xOES = void function(GLfixed, GLfixed);
+alias fp_glEvalCoord2xvOES = void function(const(GLfixed)*);
+alias fp_glFeedbackBufferxOES = void function(GLsizei, GLenum, const(GLfixed)*);
+alias fp_glGetConvolutionParameterxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetHistogramParameterxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetLightxOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetMapxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetMaterialxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glGetPixelMapxv = void function(GLenum, GLint, GLfixed*);
+alias fp_glGetTexGenxvOES = void function(GLenum, GLenum, GLfixed*);
+alias fp_glGetTexLevelParameterxvOES = void function(GLenum, GLint, GLenum, GLfixed*);
+alias fp_glIndexxOES = void function(GLfixed);
+alias fp_glIndexxvOES = void function(const(GLfixed)*);
+alias fp_glLoadTransposeMatrixxOES = void function(const(GLfixed)*);
+alias fp_glMap1xOES = void function(GLenum, GLfixed, GLfixed, GLint, GLint, GLfixed);
+alias fp_glMap2xOES = void function(GLenum, GLfixed, GLfixed, GLint, GLint, GLfixed, GLfixed, GLint, GLint, GLfixed);
+alias fp_glMapGrid1xOES = void function(GLint, GLfixed, GLfixed);
+alias fp_glMapGrid2xOES = void function(GLint, GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glMultTransposeMatrixxOES = void function(const(GLfixed)*);
+alias fp_glMultiTexCoord1xOES = void function(GLenum, GLfixed);
+alias fp_glMultiTexCoord1xvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glMultiTexCoord2xOES = void function(GLenum, GLfixed, GLfixed);
+alias fp_glMultiTexCoord2xvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glMultiTexCoord3xOES = void function(GLenum, GLfixed, GLfixed, GLfixed);
+alias fp_glMultiTexCoord3xvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glMultiTexCoord4xvOES = void function(GLenum, const(GLfixed)*);
+alias fp_glNormal3xvOES = void function(const(GLfixed)*);
+alias fp_glPassThroughxOES = void function(GLfixed);
+alias fp_glPixelMapx = void function(GLenum, GLint, const(GLfixed)*);
+alias fp_glPixelStorex = void function(GLenum, GLfixed);
+alias fp_glPixelTransferxOES = void function(GLenum, GLfixed);
+alias fp_glPixelZoomxOES = void function(GLfixed, GLfixed);
+alias fp_glPrioritizeTexturesxOES = void function(GLsizei, const(GLuint)*, const(GLfixed)*);
+alias fp_glRasterPos2xOES = void function(GLfixed, GLfixed);
+alias fp_glRasterPos2xvOES = void function(const(GLfixed)*);
+alias fp_glRasterPos3xOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glRasterPos3xvOES = void function(const(GLfixed)*);
+alias fp_glRasterPos4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glRasterPos4xvOES = void function(const(GLfixed)*);
+alias fp_glRectxOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glRectxvOES = void function(const(GLfixed)*, const(GLfixed)*);
+alias fp_glTexCoord1xOES = void function(GLfixed);
+alias fp_glTexCoord1xvOES = void function(const(GLfixed)*);
+alias fp_glTexCoord2xOES = void function(GLfixed, GLfixed);
+alias fp_glTexCoord2xvOES = void function(const(GLfixed)*);
+alias fp_glTexCoord3xOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glTexCoord3xvOES = void function(const(GLfixed)*);
+alias fp_glTexCoord4xOES = void function(GLfixed, GLfixed, GLfixed, GLfixed);
+alias fp_glTexCoord4xvOES = void function(const(GLfixed)*);
+alias fp_glTexGenxOES = void function(GLenum, GLenum, GLfixed);
+alias fp_glTexGenxvOES = void function(GLenum, GLenum, const(GLfixed)*);
+alias fp_glVertex2xOES = void function(GLfixed);
+alias fp_glVertex2xvOES = void function(const(GLfixed)*);
+alias fp_glVertex3xOES = void function(GLfixed, GLfixed);
+alias fp_glVertex3xvOES = void function(const(GLfixed)*);
+alias fp_glVertex4xOES = void function(GLfixed, GLfixed, GLfixed);
+alias fp_glVertex4xvOES = void function(const(GLfixed)*);
+alias fp_glRenderbufferStorageMultisampleEXT = void function(GLenum, GLsizei, GLenum, GLsizei, GLsizei);
+alias fp_glTexImage4DSGIS = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTexSubImage4DSGIS = void function(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTexImage3DEXT = void function(GLenum, GLint, GLenum, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const(GLvoid)*);
+alias fp_glTexSubImage3DEXT = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const(GLvoid)*);
+alias fp_glSampleMaskEXT = void function(GLclampf, GLboolean);
+alias fp_glSamplePatternEXT = void function(GLenum);
+alias fp_glSecondaryColor3bEXT = void function(GLbyte, GLbyte, GLbyte);
+alias fp_glSecondaryColor3bvEXT = void function(const(GLbyte)*);
+alias fp_glSecondaryColor3dEXT = void function(GLdouble, GLdouble, GLdouble);
+alias fp_glSecondaryColor3dvEXT = void function(const(GLdouble)*);
+alias fp_glSecondaryColor3fEXT = void function(GLfloat, GLfloat, GLfloat);
+alias fp_glSecondaryColor3fvEXT = void function(const(GLfloat)*);
+alias fp_glSecondaryColor3iEXT = void function(GLint, GLint, GLint);
+alias fp_glSecondaryColor3ivEXT = void function(const(GLint)*);
+alias fp_glSecondaryColor3sEXT = void function(GLshort, GLshort, GLshort);
+alias fp_glSecondaryColor3svEXT = void function(const(GLshort)*);
+alias fp_glSecondaryColor3ubEXT = void function(GLubyte, GLubyte, GLubyte);
+alias fp_glSecondaryColor3ubvEXT = void function(const(GLubyte)*);
+alias fp_glSecondaryColor3uiEXT = void function(GLuint, GLuint, GLuint);
+alias fp_glSecondaryColor3uivEXT = void function(const(GLuint)*);
+alias fp_glSecondaryColor3usEXT = void function(GLushort, GLushort, GLushort);
+alias fp_glSecondaryColor3usvEXT = void function(const(GLushort)*);
+alias fp_glSecondaryColorPointerEXT = void function(GLint, GLenum, GLsizei, const(GLvoid)*);
+alias fp_glNewObjectBufferATI = GLuint function(GLsizei, const(GLvoid)*, GLenum);
+alias fp_glIsObjectBufferATI = GLboolean function(GLuint);
+alias fp_glUpdateObjectBufferATI = void function(GLuint, GLuint, GLsizei, const(GLvoid)*, GLenum);
+alias fp_glGetObjectBufferfvATI = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetObjectBufferivATI = void function(GLuint, GLenum, GLint*);
+alias fp_glFreeObjectBufferATI = void function(GLuint);
+alias fp_glArrayObjectATI = void function(GLenum, GLint, GLenum, GLsizei, GLuint, GLuint);
+alias fp_glGetArrayObjectfvATI = void function(GLenum, GLenum, GLfloat*);
+alias fp_glGetArrayObjectivATI = void function(GLenum, GLenum, GLint*);
+alias fp_glVariantArrayObjectATI = void function(GLuint, GLenum, GLsizei, GLuint, GLuint);
+alias fp_glGetVariantArrayObjectfvATI = void function(GLuint, GLenum, GLfloat*);
+alias fp_glGetVariantArrayObjectivATI = void function(GLuint, GLenum, GLint*);
+alias fp_glTexPageCommitmentARB = void function(GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLboolean);
+alias fp_glDrawRangeElementsEXT = void function(GLenum, GLuint, GLuint, GLsizei, GLenum, const(GLvoid)*);
+}
+__gshared {
+fp_glGetListParameterivSGIX glGetListParameterivSGIX;
+fp_glHintPGI glHintPGI;
+fp_glGetFramebufferAttachmentParameterivEXT glGetFramebufferAttachmentParameterivEXT;
+fp_glGetIntegerIndexedvEXT glGetIntegerIndexedvEXT;
+fp_glUniform2ui64NV glUniform2ui64NV;
+fp_glTexRenderbufferNV glTexRenderbufferNV;
+fp_glVertexAttrib3hvNV glVertexAttrib3hvNV;
+fp_glInstrumentsBufferSGIX glInstrumentsBufferSGIX;
+fp_glMultiTexCoord2sARB glMultiTexCoord2sARB;
+fp_glProgramEnvParameter4fARB glProgramEnvParameter4fARB;
+fp_glSecondaryColor3hvNV glSecondaryColor3hvNV;
+fp_glTextureStorage3DEXT glTextureStorage3DEXT;
+fp_glUniform4uiEXT glUniform4uiEXT;
+fp_glVertexArrayBindVertexBufferEXT glVertexArrayBindVertexBufferEXT;
+fp_glUniform3uiEXT glUniform3uiEXT;
+fp_glColor4ubVertex2fSUN glColor4ubVertex2fSUN;
+fp_glMultiTexParameteriEXT glMultiTexParameteriEXT;
+fp_glGetProgramPipelineivEXT glGetProgramPipelineivEXT;
+fp_glPathGlyphsNV glPathGlyphsNV;
+fp_glGetCombinerInputParameterivNV glGetCombinerInputParameterivNV;
+fp_glEndPerfMonitorAMD glEndPerfMonitorAMD;
+fp_glVertex2xOES glVertex2xOES;
+fp_glMultTransposeMatrixdARB glMultTransposeMatrixdARB;
+fp_glVertexAttribL4dEXT glVertexAttribL4dEXT;
+fp_glGetTextureParameterivEXT glGetTextureParameterivEXT;
+fp_glCoverStrokePathInstancedNV glCoverStrokePathInstancedNV;
+fp_glDeformSGIX glDeformSGIX;
+fp_glCopyPathNV glCopyPathNV;
+fp_glEndFragmentShaderATI glEndFragmentShaderATI;
+fp_glCompressedMultiTexSubImage3DEXT glCompressedMultiTexSubImage3DEXT;
+fp_glVDPAURegisterOutputSurfaceNV glVDPAURegisterOutputSurfaceNV;
+fp_glProgramUniform4fEXT glProgramUniform4fEXT;
+fp_glCoverStrokePathNV glCoverStrokePathNV;
+fp_glTextureImage2DMultisampleNV glTextureImage2DMultisampleNV;
+fp_glVertex3bOES glVertex3bOES;
+fp_glTessellationFactorAMD glTessellationFactorAMD;
+fp_glFrustumxOES glFrustumxOES;
+fp_glClearColorxOES glClearColorxOES;
+fp_glIsObjectBufferATI glIsObjectBufferATI;
+fp_glProgramUniform4iEXT glProgramUniform4iEXT;
+fp_glVertexAttrib2svARB glVertexAttrib2svARB;
+fp_glMinSampleShadingARB glMinSampleShadingARB;
+fp_glSpriteParameteriSGIX glSpriteParameteriSGIX;
+fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN glReplacementCodeuiTexCoord2fNormal3fVertex3fSUN;
+fp_glVDPAUGetSurfaceivNV glVDPAUGetSurfaceivNV;
+fp_glVertexAttrib4NubvARB glVertexAttrib4NubvARB;
+fp_glMultiTexCoord3hvNV glMultiTexCoord3hvNV;
+fp_glMatrixPushEXT glMatrixPushEXT;
+fp_glProgramUniform2fEXT glProgramUniform2fEXT;
+fp_glMultiDrawElementsIndirectBindlessNV glMultiDrawElementsIndirectBindlessNV;
+fp_glObjectPtrLabelKHR glObjectPtrLabelKHR;
+fp_glGetFragmentMaterialfvSGIX glGetFragmentMaterialfvSGIX;
+fp_glGetProgramLocalParameterIuivNV glGetProgramLocalParameterIuivNV;
+fp_glGetTexEnvxvOES glGetTexEnvxvOES;
+fp_glGetVertexAttribLdvEXT glGetVertexAttribLdvEXT;
+fp_glDeformationMap3dSGIX glDeformationMap3dSGIX;
+fp_glTessellationModeAMD glTessellationModeAMD;
+fp_glGetPerfMonitorCounterDataAMD glGetPerfMonitorCounterDataAMD;
+fp_glGetMultiTexParameterivEXT glGetMultiTexParameterivEXT;
+fp_glProgramUniformMatrix3x4fvEXT glProgramUniformMatrix3x4fvEXT;
+fp_glLoadProgramNV glLoadProgramNV;
+fp_glWriteMaskEXT glWriteMaskEXT;
+fp_glVertexArrayRangeAPPLE glVertexArrayRangeAPPLE;
+fp_glBindBufferOffsetEXT glBindBufferOffsetEXT;
+fp_glGetFragmentLightfvSGIX glGetFragmentLightfvSGIX;
+fp_glListParameterfSGIX glListParameterfSGIX;
+fp_glNamedFramebufferRenderbufferEXT glNamedFramebufferRenderbufferEXT;
+fp_glFragmentLightModelfSGIX glFragmentLightModelfSGIX;
+fp_glIndexPointerEXT glIndexPointerEXT;
+fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fSUN;
+fp_glReplacementCodeubvSUN glReplacementCodeubvSUN;
+fp_glGetDoubleIndexedvEXT glGetDoubleIndexedvEXT;
+fp_glDrawTextureNV glDrawTextureNV;
+fp_glGetPixelTexGenParameterfvSGIS glGetPixelTexGenParameterfvSGIS;
+fp_glReplacementCodeuiNormal3fVertex3fSUN glReplacementCodeuiNormal3fVertex3fSUN;
+fp_glGetDebugMessageLogAMD glGetDebugMessageLogAMD;
+fp_glVertexStream4sATI glVertexStream4sATI;
+fp_glVertexAttribs4dvNV glVertexAttribs4dvNV;
+fp_glGetnMapdvARB glGetnMapdvARB;
+fp_glOrthofOES glOrthofOES;
+fp_glDrawElementArrayATI glDrawElementArrayATI;
+fp_glGetPathColorGenfvNV glGetPathColorGenfvNV;
+fp_glWindowPos3iMESA glWindowPos3iMESA;
+fp_glVertexAttribI3uivEXT glVertexAttribI3uivEXT;
+fp_glVertexAttrib2fvNV glVertexAttrib2fvNV;
+fp_glGetNamedBufferSubDataEXT glGetNamedBufferSubDataEXT;
+fp_glConvolutionFilter2D glConvolutionFilter2D;
+fp_glGenVertexArraysAPPLE glGenVertexArraysAPPLE;
+fp_glTexCoord2fNormal3fVertex3fSUN glTexCoord2fNormal3fVertex3fSUN;
+fp_glMatrixRotatedEXT glMatrixRotatedEXT;
+fp_glIsProgramNV glIsProgramNV;
+fp_glDepthBoundsEXT glDepthBoundsEXT;
+fp_glVertexAttrib4hvNV glVertexAttrib4hvNV;
+fp_glColorFragmentOp1ATI glColorFragmentOp1ATI;
+fp_glGetProgramStringNV glGetProgramStringNV;
+fp_glWindowPos3ivMESA glWindowPos3ivMESA;
+fp_glGetnUniformfvARB glGetnUniformfvARB;
+fp_glVertexAttribL1ui64vNV glVertexAttribL1ui64vNV;
+fp_glCombinerParameteriNV glCombinerParameteriNV;
+fp_glProgramUniform1dvEXT glProgramUniform1dvEXT;
+fp_glVertexStream4svATI glVertexStream4svATI;
+fp_glMultiTexCoord4iARB glMultiTexCoord4iARB;
+fp_glVariantfvEXT glVariantfvEXT;
+fp_glMatrixLoadfEXT glMatrixLoadfEXT;
+fp_glLoadIdentityDeformationMapSGIX glLoadIdentityDeformationMapSGIX;
+fp_glReferencePlaneSGIX glReferencePlaneSGIX;
+fp_glFogCoordPointerListIBM glFogCoordPointerListIBM;
+fp_glGetVertexAttribIivEXT glGetVertexAttribIivEXT;
+fp_glFramebufferDrawBuffersEXT glFramebufferDrawBuffersEXT;
+fp_glVertexAttribs4fvNV glVertexAttribs4fvNV;
+fp_glPauseTransformFeedbackNV glPauseTransformFeedbackNV;
+fp_glGetQueryObjecti64vEXT glGetQueryObjecti64vEXT;
+fp_glProgramUniform4uiEXT glProgramUniform4uiEXT;
+fp_glTexPageCommitmentARB glTexPageCommitmentARB;
+fp_glWindowPos3dvARB glWindowPos3dvARB;
+fp_glStencilStrokePathInstancedNV glStencilStrokePathInstancedNV;
+fp_glColor3hvNV glColor3hvNV;
+fp_glProgramUniform2i64NV glProgramUniform2i64NV;
+fp_glVertexStream1ivATI glVertexStream1ivATI;
+fp_glProgramEnvParameterI4iNV glProgramEnvParameterI4iNV;
+fp_glDeleteVertexArraysAPPLE glDeleteVertexArraysAPPLE;
+fp_glGetNamedBufferParameterui64vNV glGetNamedBufferParameterui64vNV;
+fp_glQueryMatrixxOES glQueryMatrixxOES;
+fp_glTranslatexOES glTranslatexOES;
+fp_glMakeNamedBufferNonResidentNV glMakeNamedBufferNonResidentNV;
+fp_glTexCoord2fColor4fNormal3fVertex3fvSUN glTexCoord2fColor4fNormal3fVertex3fvSUN;
+fp_glVDPAURegisterVideoSurfaceNV glVDPAURegisterVideoSurfaceNV;
+fp_glVertexStream2iATI glVertexStream2iATI;
+fp_glFragmentLightModeliSGIX glFragmentLightModeliSGIX;
+fp_glListParameteriSGIX glListParameteriSGIX;
+fp_glBlendColorxOES glBlendColorxOES;
+fp_glUniformui64vNV glUniformui64vNV;
+fp_glFramebufferTextureLayerEXT glFramebufferTextureLayerEXT;
+fp_glMultiTexCoord1fARB glMultiTexCoord1fARB;
+fp_glStopInstrumentsSGIX glStopInstrumentsSGIX;
+fp_glCopyColorSubTable glCopyColorSubTable;
+fp_glFragmentMaterialfvSGIX glFragmentMaterialfvSGIX;
+fp_glDeleteNamesAMD glDeleteNamesAMD;
+fp_glDrawRangeElementsEXT glDrawRangeElementsEXT;
+fp_glColor4xOES glColor4xOES;
+fp_glGetVertexAttribArrayObjectivATI glGetVertexAttribArrayObjectivATI;
+fp_glDeleteBuffersARB glDeleteBuffersARB;
+fp_glUnmapBufferARB glUnmapBufferARB;
+fp_glMaterialxOES glMaterialxOES;
+fp_glProgramUniformMatrix2x4fvEXT glProgramUniformMatrix2x4fvEXT;
+fp_glTestObjectAPPLE glTestObjectAPPLE;
+fp_glRenderbufferStorageEXT glRenderbufferStorageEXT;
+fp_glVertexAttribL1ui64ARB glVertexAttribL1ui64ARB;
+fp_glPathParameterivNV glPathParameterivNV;
+fp_glFrameZoomSGIX glFrameZoomSGIX;
+fp_glSecondaryColor3fEXT glSecondaryColor3fEXT;
+fp_glNormalStream3svATI glNormalStream3svATI;
+fp_glPathStencilFuncNV glPathStencilFuncNV;
+fp_glSetInvariantEXT glSetInvariantEXT;
+fp_glGetTexBumpParameterivATI glGetTexBumpParameterivATI;
+fp_glIsNamedStringARB glIsNamedStringARB;
+fp_glEndOcclusionQueryNV glEndOcclusionQueryNV;
+fp_glMapTexture2DINTEL glMapTexture2DINTEL;
+fp_glPixelTransferxOES glPixelTransferxOES;
+fp_glGetVertexAttribArrayObjectfvATI glGetVertexAttribArrayObjectfvATI;
+fp_glTexCoord4fColor4fNormal3fVertex4fSUN glTexCoord4fColor4fNormal3fVertex4fSUN;
+fp_glProgramUniformMatrix4dvEXT glProgramUniformMatrix4dvEXT;
+fp_glVertexAttribL2dvEXT glVertexAttribL2dvEXT;
+fp_glGetCombinerStageParameterfvNV glGetCombinerStageParameterfvNV;
+fp_glElementPointerAPPLE glElementPointerAPPLE;
+fp_glVertexStream1fATI glVertexStream1fATI;
+fp_glGetProgramParameterfvNV glGetProgramParameterfvNV;
+fp_glVertexArrayVertexAttribLOffsetEXT glVertexArrayVertexAttribLOffsetEXT;
+fp_glIsImageHandleResidentNV glIsImageHandleResidentNV;
+fp_glVertexAttribL3i64vNV glVertexAttribL3i64vNV;
+fp_glConvolutionFilter1DEXT glConvolutionFilter1DEXT;
+fp_glVertexAttrib1dvARB glVertexAttrib1dvARB;
+fp_glTextureSubImage2DEXT glTextureSubImage2DEXT;
+fp_glIsVertexArrayAPPLE glIsVertexArrayAPPLE;
+fp_glMultiTexCoord4fvARB glMultiTexCoord4fvARB;
+fp_glProgramEnvParametersI4uivNV glProgramEnvParametersI4uivNV;
+fp_glVertexArrayVertexAttribLFormatEXT glVertexArrayVertexAttribLFormatEXT;
+fp_glUniform3fvARB glUniform3fvARB;
+fp_glProgramUniformMatrix3x2fvEXT glProgramUniformMatrix3x2fvEXT;
+fp_glMultiTexCoord2bvOES glMultiTexCoord2bvOES;
+fp_glDeleteObjectARB glDeleteObjectARB;
+fp_glTextureLightEXT glTextureLightEXT;
+fp_glMultiTexCoord3dARB glMultiTexCoord3dARB;
+fp_glNamedFramebufferTextureEXT glNamedFramebufferTextureEXT;
+fp_glEvalCoord2xvOES glEvalCoord2xvOES;
+fp_glBindFragDataLocationEXT glBindFragDataLocationEXT;
+fp_glTexImage2DMultisampleCoverageNV glTexImage2DMultisampleCoverageNV;
+fp_glGetAttribLocationARB glGetAttribLocationARB;
+fp_glVertexAttrib1fARB glVertexAttrib1fARB;
+fp_glTexCoord2fColor4ubVertex3fSUN glTexCoord2fColor4ubVertex3fSUN;
+fp_glTexCoord4fVertex4fSUN glTexCoord4fVertex4fSUN;
+fp_glMapParameterfvNV glMapParameterfvNV;
+fp_glTransformFeedbackAttribsNV glTransformFeedbackAttribsNV;
+fp_glGetVideoi64vNV glGetVideoi64vNV;
+fp_glWindowPos3sARB glWindowPos3sARB;
+fp_glGetConvolutionParameterfv glGetConvolutionParameterfv;
+fp_glTexCoord2xOES glTexCoord2xOES;
+fp_glGetProgramivARB glGetProgramivARB;
+fp_glPathGlyphRangeNV glPathGlyphRangeNV;
+fp_glGetHistogramParameteriv glGetHistogramParameteriv;
+fp_glVertexAttrib4dvNV glVertexAttrib4dvNV;
+fp_glVertexAttrib1dvNV glVertexAttrib1dvNV;
+fp_glTextureBufferEXT glTextureBufferEXT;
+fp_glGetMultiTexImageEXT glGetMultiTexImageEXT;
+fp_glGetPathCoordsNV glGetPathCoordsNV;
+fp_glIsNameAMD glIsNameAMD;
+fp_glBufferParameteriAPPLE glBufferParameteriAPPLE;
+fp_glTexStorageSparseAMD glTexStorageSparseAMD;
+fp_glVertexPointerEXT glVertexPointerEXT;
+fp_glAlphaFragmentOp3ATI glAlphaFragmentOp3ATI;
+fp_glGetPathParameterfvNV glGetPathParameterfvNV;
+fp_glLightxvOES glLightxvOES;
+fp_glVertexAttribI4ivEXT glVertexAttribI4ivEXT;
+fp_glPrioritizeTexturesxOES glPrioritizeTexturesxOES;
+fp_glTexCoord3hNV glTexCoord3hNV;
+fp_glMultiModeDrawElementsIBM glMultiModeDrawElementsIBM;
+fp_glUniform2iARB glUniform2iARB;
+fp_glColorPointervINTEL glColorPointervINTEL;
+fp_glGetMinmaxParameterfvEXT glGetMinmaxParameterfvEXT;
+fp_glWindowPos3sMESA glWindowPos3sMESA;
+fp_glTexCoord2fVertex3fvSUN glTexCoord2fVertex3fvSUN;
+fp_glReplacementCodeusSUN glReplacementCodeusSUN;
+fp_glVertexStream1fvATI glVertexStream1fvATI;
+fp_glGetArrayObjectfvATI glGetArrayObjectfvATI;
+fp_glConvolutionFilter1D glConvolutionFilter1D;
+fp_glMultiTexCoord3fARB glMultiTexCoord3fARB;
+fp_glGetQueryObjectuivARB glGetQueryObjectuivARB;
+fp_glScalexOES glScalexOES;
+fp_glGetVertexAttribivNV glGetVertexAttribivNV;
+fp_glShaderOp1EXT glShaderOp1EXT;
+fp_glBeginVideoCaptureNV glBeginVideoCaptureNV;
+fp_glClearColorIiEXT glClearColorIiEXT;
+fp_glSetFenceNV glSetFenceNV;
+fp_glColorTableParameterivSGI glColorTableParameterivSGI;
+fp_glDeleteFencesAPPLE glDeleteFencesAPPLE;
+fp_glUniformHandleui64ARB glUniformHandleui64ARB;
+fp_glTexCoord1xOES glTexCoord1xOES;
+fp_glMultiModeDrawArraysIBM glMultiModeDrawArraysIBM;
+fp_glPointAlongPathNV glPointAlongPathNV;
+fp_glEndQueryARB glEndQueryARB;
+fp_glVertexAttrib2hNV glVertexAttrib2hNV;
+fp_glVertexAttrib4uivARB glVertexAttrib4uivARB;
+fp_glResumeTransformFeedbackNV glResumeTransformFeedbackNV;
+fp_glTexCoord2fColor4ubVertex3fvSUN glTexCoord2fColor4ubVertex3fvSUN;
+fp_glGetColorTable glGetColorTable;
+fp_glGetFogFuncSGIS glGetFogFuncSGIS;
+fp_glTexCoord4bvOES glTexCoord4bvOES;
+fp_glVertexAttrib3fARB glVertexAttrib3fARB;
+fp_glRasterPos2xOES glRasterPos2xOES;
+fp_glColor4ubVertex2fvSUN glColor4ubVertex2fvSUN;
+fp_glMultiTexCoord4ivARB glMultiTexCoord4ivARB;
+fp_glSpriteParameterfSGIX glSpriteParameterfSGIX;
+fp_glBindVideoCaptureStreamTextureNV glBindVideoCaptureStreamTextureNV;
+fp_glFlushPixelDataRangeNV glFlushPixelDataRangeNV;
+fp_glVertexAttribLFormatNV glVertexAttribLFormatNV;
+fp_glMap2xOES glMap2xOES;
+fp_glGetColorTableSGI glGetColorTableSGI;
+fp_glGetCompressedTexImageARB glGetCompressedTexImageARB;
+fp_glConvolutionParameteri glConvolutionParameteri;
+fp_glVertexWeighthNV glVertexWeighthNV;
+fp_glConvolutionParameterf glConvolutionParameterf;
+fp_glVertexAttribI4ubvEXT glVertexAttribI4ubvEXT;
+fp_glVertexAttrib1dNV glVertexAttrib1dNV;
+fp_glUnmapObjectBufferATI glUnmapObjectBufferATI;
+fp_glNamedProgramLocalParameterI4uiEXT glNamedProgramLocalParameterI4uiEXT;
+fp_glProgramUniform1iEXT glProgramUniform1iEXT;
+fp_glDeleteQueriesARB glDeleteQueriesARB;
+fp_glWindowPos3svARB glWindowPos3svARB;
+fp_glGenPathsNV glGenPathsNV;
+fp_glStringMarkerGREMEDY glStringMarkerGREMEDY;
+fp_glProgramUniformMatrix2x3dvEXT glProgramUniformMatrix2x3dvEXT;
+fp_glVertexAttrib4sNV glVertexAttrib4sNV;
+fp_glProgramLocalParameter4dvARB glProgramLocalParameter4dvARB;
+fp_glReplacementCodeubSUN glReplacementCodeubSUN;
+fp_glGetnMapfvARB glGetnMapfvARB;
+fp_glVertexWeightPointerEXT glVertexWeightPointerEXT;
+fp_glTangent3sEXT glTangent3sEXT;
+fp_glGetNamedStringARB glGetNamedStringARB;
+fp_glGetVertexAttribdvNV glGetVertexAttribdvNV;
+fp_glTexGenxOES glTexGenxOES;
+fp_glBitmapxOES glBitmapxOES;
+fp_glVertexStream2ivATI glVertexStream2ivATI;
+fp_glGetColorTableEXT glGetColorTableEXT;
+fp_glGetOcclusionQueryuivNV glGetOcclusionQueryuivNV;
+fp_glVertexAttribL1i64NV glVertexAttribL1i64NV;
+fp_glVDPAUInitNV glVDPAUInitNV;
+fp_glVertexAttrib1hvNV glVertexAttrib1hvNV;
+fp_glGetIntegerui64i_vNV glGetIntegerui64i_vNV;
+fp_glSampleCoverageOES glSampleCoverageOES;
+fp_glUniformHandleui64NV glUniformHandleui64NV;
+fp_glDebugMessageInsertAMD glDebugMessageInsertAMD;
+fp_glDrawElementsInstancedARB glDrawElementsInstancedARB;
+fp_glSamplePatternSGIS glSamplePatternSGIS;
+fp_glVertex3hNV glVertex3hNV;
+fp_glRasterPos3xvOES glRasterPos3xvOES;
+fp_glCompressedTextureImage1DEXT glCompressedTextureImage1DEXT;
+fp_glMaterialxvOES glMaterialxvOES;
+fp_glNamedProgramLocalParameter4fEXT glNamedProgramLocalParameter4fEXT;
+fp_glVertexAttribL1dEXT glVertexAttribL1dEXT;
+fp_glGetnUniformdvARB glGetnUniformdvARB;
+fp_glSecondaryColor3bEXT glSecondaryColor3bEXT;
+fp_glProgramUniform1uivEXT glProgramUniform1uivEXT;
+fp_glImageTransformParameterivHP glImageTransformParameterivHP;
+fp_glCopyTextureSubImage3DEXT glCopyTextureSubImage3DEXT;
+fp_glWindowPos4fvMESA glWindowPos4fvMESA;
+fp_glVertexAttribIPointerEXT glVertexAttribIPointerEXT;
+fp_glProgramBufferParametersfvNV glProgramBufferParametersfvNV;
+fp_glAlphaFuncxOES glAlphaFuncxOES;
+fp_glMultiDrawArraysIndirectAMD glMultiDrawArraysIndirectAMD;
+fp_glTextureImage3DMultisampleNV glTextureImage3DMultisampleNV;
+fp_glProgramUniform4uivEXT glProgramUniform4uivEXT;
+fp_glReplacementCodeusvSUN glReplacementCodeusvSUN;
+fp_glPollInstrumentsSGIX glPollInstrumentsSGIX;
+fp_glCompileShaderIncludeARB glCompileShaderIncludeARB;
+fp_glGetTexParameterxvOES glGetTexParameterxvOES;
+fp_glMapControlPointsNV glMapControlPointsNV;
+fp_glMultiTexCoord1hNV glMultiTexCoord1hNV;
+fp_glUniformMatrix2fvARB glUniformMatrix2fvARB;
+fp_glUniformHandleui64vNV glUniformHandleui64vNV;
+fp_glFogCoordFormatNV glFogCoordFormatNV;
+fp_glGetMultiTexGenfvEXT glGetMultiTexGenfvEXT;
+fp_glGetMinmaxEXT glGetMinmaxEXT;
+fp_glMatrixFrustumEXT glMatrixFrustumEXT;
+fp_glMultiTexCoord4bOES glMultiTexCoord4bOES;
+fp_glProgramEnvParameter4dARB glProgramEnvParameter4dARB;
+fp_glGetUniformi64vNV glGetUniformi64vNV;
+fp_glGetMultiTexLevelParameterfvEXT glGetMultiTexLevelParameterfvEXT;
+fp_glFinalCombinerInputNV glFinalCombinerInputNV;
+fp_glCullParameterdvEXT glCullParameterdvEXT;
+fp_glMapVertexAttrib1fAPPLE glMapVertexAttrib1fAPPLE;
+fp_glTangent3fvEXT glTangent3fvEXT;
+fp_glProgramUniform3fvEXT glProgramUniform3fvEXT;
+fp_glMultiTexCoord1iARB glMultiTexCoord1iARB;
+fp_glGetVertexArrayPointervEXT glGetVertexArrayPointervEXT;
+fp_glGlobalAlphaFactorubSUN glGlobalAlphaFactorubSUN;
+fp_glVertexAttribL1ui64NV glVertexAttribL1ui64NV;
+fp_glPointParameterfSGIS glPointParameterfSGIS;
+fp_glGetImageTransformParameterivHP glGetImageTransformParameterivHP;
+fp_glColorSubTableEXT glColorSubTableEXT;
+fp_glVertexAttribs1fvNV glVertexAttribs1fvNV;
+fp_glVertexAttrib4NusvARB glVertexAttrib4NusvARB;
+fp_glVariantPointerEXT glVariantPointerEXT;
+fp_glBlendFunciARB glBlendFunciARB;
+fp_glProgramEnvParametersI4ivNV glProgramEnvParametersI4ivNV;
+fp_glTexCoord2bOES glTexCoord2bOES;
+fp_glBeginVertexShaderEXT glBeginVertexShaderEXT;
+fp_glIsVariantEnabledEXT glIsVariantEnabledEXT;
+fp_glBindMaterialParameterEXT glBindMaterialParameterEXT;
+fp_glMultiTexGenivEXT glMultiTexGenivEXT;
+fp_glNamedFramebufferTexture2DEXT glNamedFramebufferTexture2DEXT;
+fp_glDrawElementArrayAPPLE glDrawElementArrayAPPLE;
+fp_glFragmentLightivSGIX glFragmentLightivSGIX;
+fp_glMultiTexCoordPointerEXT glMultiTexCoordPointerEXT;
+fp_glSyncTextureINTEL glSyncTextureINTEL;
+fp_glCombinerParameterfNV glCombinerParameterfNV;
+fp_glGetArrayObjectivATI glGetArrayObjectivATI;
+fp_glVertexStream3fvATI glVertexStream3fvATI;
+fp_glSampleMapATI glSampleMapATI;
+fp_glVertexAttrib4bvARB glVertexAttrib4bvARB;
+fp_glBinormal3ivEXT glBinormal3ivEXT;
+fp_glMultiDrawArraysIndirectCountARB glMultiDrawArraysIndirectCountARB;
+fp_glUniformBufferEXT glUniformBufferEXT;
+fp_glWindowPos2ivMESA glWindowPos2ivMESA;
+fp_glMultiTexSubImage1DEXT glMultiTexSubImage1DEXT;
+fp_glProgramUniformMatrix2x3fvEXT glProgramUniformMatrix2x3fvEXT;
+fp_glBufferDataARB glBufferDataARB;
+fp_glNormalStream3dvATI glNormalStream3dvATI;
+fp_glUniform3i64vNV glUniform3i64vNV;
+fp_glPathTexGenNV glPathTexGenNV;
+fp_glUniform2uivEXT glUniform2uivEXT;
+fp_glGetProgramPipelineInfoLogEXT glGetProgramPipelineInfoLogEXT;
+fp_glMakeImageHandleResidentNV glMakeImageHandleResidentNV;
+fp_glGetMultiTexParameterfvEXT glGetMultiTexParameterfvEXT;
+fp_glGetMapParameterfvNV glGetMapParameterfvNV;
+fp_glColorMaskIndexedEXT glColorMaskIndexedEXT;
+fp_glMatrixScalefEXT glMatrixScalefEXT;
+fp_glBindTextureUnitParameterEXT glBindTextureUnitParameterEXT;
+fp_glReplacementCodeuiNormal3fVertex3fvSUN glReplacementCodeuiNormal3fVertex3fvSUN;
+fp_glActiveVaryingNV glActiveVaryingNV;
+fp_glGetActiveUniformARB glGetActiveUniformARB;
+fp_glVertexAttribI3ivEXT glVertexAttribI3ivEXT;
+fp_glNamedCopyBufferSubDataEXT glNamedCopyBufferSubDataEXT;
+fp_glVertexAttribI1ivEXT glVertexAttribI1ivEXT;
+fp_glBufferSubDataARB glBufferSubDataARB;
+fp_glVertexAttrib3svNV glVertexAttrib3svNV;
+fp_glVertexAttribI1uiEXT glVertexAttribI1uiEXT;
+fp_glGenRenderbuffersEXT glGenRenderbuffersEXT;
+fp_glLightxOES glLightxOES;
+fp_glVertexStream3sATI glVertexStream3sATI;
+fp_glVertexAttrib3fvARB glVertexAttrib3fvARB;
+fp_glProgramUniformHandleui64ARB glProgramUniformHandleui64ARB;
+fp_glUniform3iARB glUniform3iARB;
+fp_glCreateProgramObjectARB glCreateProgramObjectARB;
+fp_glMultiTexCoord1dvARB glMultiTexCoord1dvARB;
+fp_glProgramUniform3dvEXT glProgramUniform3dvEXT;
+fp_glMultiTexImage2DEXT glMultiTexImage2DEXT;
+fp_glProgramUniform1i64NV glProgramUniform1i64NV;
+fp_glGetObjectBufferivATI glGetObjectBufferivATI;
+fp_glMultiTexCoord1fvARB glMultiTexCoord1fvARB;
+fp_glReplacementCodeuiColor4ubVertex3fvSUN glReplacementCodeuiColor4ubVertex3fvSUN;
+fp_glBlendFuncSeparateINGR glBlendFuncSeparateINGR;
+fp_glGetVideoCaptureStreamfvNV glGetVideoCaptureStreamfvNV;
+fp_glVertexAttrib2fARB glVertexAttrib2fARB;
+fp_glCopyImageSubDataNV glCopyImageSubDataNV;
+fp_glVertexStream1iATI glVertexStream1iATI;
+fp_glIsFramebufferEXT glIsFramebufferEXT;
+fp_glGetPixelTexGenParameterivSGIS glGetPixelTexGenParameterivSGIS;
+fp_glTextureSubImage3DEXT glTextureSubImage3DEXT;
+fp_glUniform2i64NV glUniform2i64NV;
+fp_glVertexAttrib3sNV glVertexAttrib3sNV;
+fp_glSampleMaskSGIS glSampleMaskSGIS;
+fp_glVertexAttrib4NivARB glVertexAttrib4NivARB;
+fp_glGlobalAlphaFactorfSUN glGlobalAlphaFactorfSUN;
+fp_glBlendEquationSeparateIndexedAMD glBlendEquationSeparateIndexedAMD;
+fp_glDeleteProgramsNV glDeleteProgramsNV;
+fp_glPixelZoomxOES glPixelZoomxOES;
+fp_glGetCombinerOutputParameterivNV glGetCombinerOutputParameterivNV;
+fp_glRasterPos2xvOES glRasterPos2xvOES;
+fp_glUniform1ui64NV glUniform1ui64NV;
+fp_glPassThroughxOES glPassThroughxOES;
+fp_glNormal3xOES glNormal3xOES;
+fp_glVertexStream2dvATI glVertexStream2dvATI;
+fp_glPathStencilDepthOffsetNV glPathStencilDepthOffsetNV;
+fp_glArrayObjectATI glArrayObjectATI;
+fp_glDebugMessageCallbackKHR glDebugMessageCallbackKHR;
+fp_glGetIntegerui64vNV glGetIntegerui64vNV;
+fp_glGetImageTransformParameterfvHP glGetImageTransformParameterfvHP;
+fp_glVertex3xOES glVertex3xOES;
+fp_glFogFuncSGIS glFogFuncSGIS;
+fp_glWeightPointerARB glWeightPointerARB;
+fp_glFinishFenceNV glFinishFenceNV;
+fp_glProgramUniformMatrix3x2dvEXT glProgramUniformMatrix3x2dvEXT;
+fp_glEnableVertexArrayAttribEXT glEnableVertexArrayAttribEXT;
+fp_glProgramUniform2uivEXT glProgramUniform2uivEXT;
+fp_glPixelMapx glPixelMapx;
+fp_glWindowPos2fMESA glWindowPos2fMESA;
+fp_glGetVaryingLocationNV glGetVaryingLocationNV;
+fp_glBindFramebufferEXT glBindFramebufferEXT;
+fp_glGetColorTableParameterfvEXT glGetColorTableParameterfvEXT;
+fp_glVertexAttrib4ubvARB glVertexAttrib4ubvARB;
+fp_glTexSubImage3DEXT glTexSubImage3DEXT;
+fp_glVertexAttribs1svNV glVertexAttribs1svNV;
+fp_glGetCombinerInputParameterfvNV glGetCombinerInputParameterfvNV;
+fp_glPointParameterfARB glPointParameterfARB;
+fp_glUniform1fvARB glUniform1fvARB;
+fp_glGetVariantFloatvEXT glGetVariantFloatvEXT;
+fp_glVertexAttribL2ui64NV glVertexAttribL2ui64NV;
+fp_glWindowPos2dMESA glWindowPos2dMESA;
+fp_glGetTexGenxvOES glGetTexGenxvOES;
+fp_glCompressedTexSubImage1DARB glCompressedTexSubImage1DARB;
+fp_glVertexStream2svATI glVertexStream2svATI;
+fp_glProgramEnvParameterI4uiNV glProgramEnvParameterI4uiNV;
+fp_glGetUniformfvARB glGetUniformfvARB;
+fp_glVertexAttrib2hvNV glVertexAttrib2hvNV;
+fp_glTextureParameterivEXT glTextureParameterivEXT;
+fp_glActiveProgramEXT glActiveProgramEXT;
+fp_glTextureParameterfEXT glTextureParameterfEXT;
+fp_glValidateProgramPipelineEXT glValidateProgramPipelineEXT;
+fp_glSetFragmentShaderConstantATI glSetFragmentShaderConstantATI;
+fp_glNamedFramebufferTextureLayerEXT glNamedFramebufferTextureLayerEXT;
+fp_glVertexAttrib4sARB glVertexAttrib4sARB;
+fp_glWeightusvARB glWeightusvARB;
+fp_glMultiTexCoord2xOES glMultiTexCoord2xOES;
+fp_glTexCoord2fVertex3fSUN glTexCoord2fVertex3fSUN;
+fp_glPolygonOffsetEXT glPolygonOffsetEXT;
+fp_glWeightPathsNV glWeightPathsNV;
+fp_glCombinerStageParameterfvNV glCombinerStageParameterfvNV;
+fp_glPointParameterfEXT glPointParameterfEXT;
+fp_glCopyTexImage1DEXT glCopyTexImage1DEXT;
+fp_glMatrixMultfEXT glMatrixMultfEXT;
+fp_glCompressedTextureSubImage3DEXT glCompressedTextureSubImage3DEXT;
+fp_glGetTexLevelParameterxvOES glGetTexLevelParameterxvOES;
+fp_glVertexAttribL3dvEXT glVertexAttribL3dvEXT;
+fp_glGetPerfMonitorCounterStringAMD glGetPerfMonitorCounterStringAMD;
+fp_glGetTextureLevelParameterivEXT glGetTextureLevelParameterivEXT;
+fp_glAlphaFragmentOp2ATI glAlphaFragmentOp2ATI;
+fp_glGetnTexImageARB glGetnTexImageARB;
+fp_glVertexArrayParameteriAPPLE glVertexArrayParameteriAPPLE;
+fp_glMultiTexCoord2dvARB glMultiTexCoord2dvARB;
+fp_glWindowPos2iARB glWindowPos2iARB;
+fp_glSecondaryColor3hNV glSecondaryColor3hNV;
+fp_glProgramUniform3iEXT glProgramUniform3iEXT;
+fp_glTexCoord4hNV glTexCoord4hNV;
+fp_glDeletePerfMonitorsAMD glDeletePerfMonitorsAMD;
+fp_glIsRenderbufferEXT glIsRenderbufferEXT;
+fp_glUniform3ivARB glUniform3ivARB;
+fp_glGetInvariantFloatvEXT glGetInvariantFloatvEXT;
+fp_glMatrixMultTransposedEXT glMatrixMultTransposedEXT;
+fp_glRequestResidentProgramsNV glRequestResidentProgramsNV;
+fp_glUniform4iARB glUniform4iARB;
+fp_glPathSubCommandsNV glPathSubCommandsNV;
+fp_glGetFinalCombinerInputParameterivNV glGetFinalCombinerInputParameterivNV;
+fp_glFrustumfOES glFrustumfOES;
+fp_glMultiTexCoord2svARB glMultiTexCoord2svARB;
+fp_glWindowPos3ivARB glWindowPos3ivARB;
+fp_glTexCoordFormatNV glTexCoordFormatNV;
+fp_glMultiTexGenfEXT glMultiTexGenfEXT;
+fp_glReplacementCodeuiColor4fNormal3fVertex3fSUN glReplacementCodeuiColor4fNormal3fVertex3fSUN;
+fp_glCheckNamedFramebufferStatusEXT glCheckNamedFramebufferStatusEXT;
+fp_glVertexArrayVertexAttribFormatEXT glVertexArrayVertexAttribFormatEXT;
+fp_glVertex2hNV glVertex2hNV;
+fp_glDeleteVertexShaderEXT glDeleteVertexShaderEXT;
+fp_glTexImage3DEXT glTexImage3DEXT;
+fp_glProgramLocalParameterI4ivNV glProgramLocalParameterI4ivNV;
+fp_glGlobalAlphaFactoriSUN glGlobalAlphaFactoriSUN;
+fp_glPathCommandsNV glPathCommandsNV;
+fp_glBinormal3sEXT glBinormal3sEXT;
+fp_glSharpenTexFuncSGIS glSharpenTexFuncSGIS;
+fp_glTexCoordPointerEXT glTexCoordPointerEXT;
+fp_glMultiTexGeniEXT glMultiTexGeniEXT;
+fp_glVertexAttrib2fNV glVertexAttrib2fNV;
+fp_glNamedProgramStringEXT glNamedProgramStringEXT;
+fp_glGetMinmaxParameteriv glGetMinmaxParameteriv;
+fp_glEndConditionalRenderNVX glEndConditionalRenderNVX;
+fp_glBinormal3fEXT glBinormal3fEXT;
+fp_glNormalStream3iATI glNormalStream3iATI;
+fp_glProgramBufferParametersIivNV glProgramBufferParametersIivNV;
+fp_glMapGrid1xOES glMapGrid1xOES;
+fp_glFlushMappedNamedBufferRangeEXT glFlushMappedNamedBufferRangeEXT;
+fp_glUniformui64NV glUniformui64NV;
+fp_glSecondaryColor3ubvEXT glSecondaryColor3ubvEXT;
+fp_glProgramParameters4fvNV glProgramParameters4fvNV;
+fp_glGetTexFilterFuncSGIS glGetTexFilterFuncSGIS;
+fp_glVertexArrayVertexBindingDivisorEXT glVertexArrayVertexBindingDivisorEXT;
+fp_glMultiTexCoord3svARB glMultiTexCoord3svARB;
+fp_glBindProgramNV glBindProgramNV;
+fp_glGetConvolutionParameteriv glGetConvolutionParameteriv;
+fp_glGetProgramLocalParameterfvARB glGetProgramLocalParameterfvARB;
+fp_glGenFragmentShadersATI glGenFragmentShadersATI;
+fp_glTexBumpParameterivATI glTexBumpParameterivATI;
+fp_glNormal3xvOES glNormal3xvOES;
+fp_glGetHistogramParameterfvEXT glGetHistogramParameterfvEXT;
+fp_glFramebufferTextureFaceARB glFramebufferTextureFaceARB;
+fp_glVertexAttrib4hNV glVertexAttrib4hNV;
+fp_glVertexArrayFogCoordOffsetEXT glVertexArrayFogCoordOffsetEXT;
+fp_glTexEnvxvOES glTexEnvxvOES;
+fp_glDeleteNamedStringARB glDeleteNamedStringARB;
+fp_glGenOcclusionQueriesNV glGenOcclusionQueriesNV;
+fp_glClientAttribDefaultEXT glClientAttribDefaultEXT;
+fp_glVertexAttribIFormatNV glVertexAttribIFormatNV;
+fp_glGetVertexAttribfvARB glGetVertexAttribfvARB;
+fp_glVertexAttrib2dNV glVertexAttrib2dNV;
+fp_glProgramUniform2iEXT glProgramUniform2iEXT;
+fp_glClientActiveVertexStreamATI glClientActiveVertexStreamATI;
+fp_glRasterPos3xOES glRasterPos3xOES;
+fp_glClearDepthxOES glClearDepthxOES;
+fp_glTexCoord2fNormal3fVertex3fvSUN glTexCoord2fNormal3fVertex3fvSUN;
+fp_glUnmapNamedBufferEXT glUnmapNamedBufferEXT;
+fp_glUniform4fvARB glUniform4fvARB;
+fp_glRenderbufferStorageMultisampleCoverageNV glRenderbufferStorageMultisampleCoverageNV;
+fp_glGetFloati_vEXT glGetFloati_vEXT;
+fp_glBindAttribLocationARB glBindAttribLocationARB;
+fp_glBufferAddressRangeNV glBufferAddressRangeNV;
+fp_glGenProgramsARB glGenProgramsARB;
+fp_glMultiTexEnvivEXT glMultiTexEnvivEXT;
+fp_glSecondaryColor3uiEXT glSecondaryColor3uiEXT;
+fp_glCompressedTextureImage2DEXT glCompressedTextureImage2DEXT;
+fp_glCopyTexImage2DEXT glCopyTexImage2DEXT;
+fp_glProgramUniformui64vNV glProgramUniformui64vNV;
+fp_glFramebufferTextureFaceEXT glFramebufferTextureFaceEXT;
+fp_glMultiTexCoord4bvOES glMultiTexCoord4bvOES;
+fp_glGetVertexArrayPointeri_vEXT glGetVertexArrayPointeri_vEXT;
+fp_glGetInstrumentsSGIX glGetInstrumentsSGIX;
+fp_glBinormal3bEXT glBinormal3bEXT;
+fp_glConvolutionFilter2DEXT glConvolutionFilter2DEXT;
+fp_glColor3fVertex3fSUN glColor3fVertex3fSUN;
+fp_glNormal3fVertex3fvSUN glNormal3fVertex3fvSUN;
+fp_glCopyMultiTexSubImage3DEXT glCopyMultiTexSubImage3DEXT;
+fp_glDrawArraysEXT glDrawArraysEXT;
+fp_glBlendEquationEXT glBlendEquationEXT;
+fp_glCopyTextureSubImage2DEXT glCopyTextureSubImage2DEXT;
+fp_glVertexAttrib2dvNV glVertexAttrib2dvNV;
+fp_glGenPerfMonitorsAMD glGenPerfMonitorsAMD;
+fp_glGetHistogramParameterfv glGetHistogramParameterfv;
+fp_glVertexFormatNV glVertexFormatNV;
+fp_glBlendFuncIndexedAMD glBlendFuncIndexedAMD;
+fp_glVertexAttribL2ui64vNV glVertexAttribL2ui64vNV;
+fp_glVertexAttribL4i64NV glVertexAttribL4i64NV;
+fp_glMatrixTranslatedEXT glMatrixTranslatedEXT;
+fp_glMakeTextureHandleResidentARB glMakeTextureHandleResidentARB;
+fp_glBinormal3dvEXT glBinormal3dvEXT;
+fp_glImportSyncEXT glImportSyncEXT;
+fp_glGetListParameterfvSGIX glGetListParameterfvSGIX;
+fp_glPNTrianglesiATI glPNTrianglesiATI;
+fp_glBindVertexArrayAPPLE glBindVertexArrayAPPLE;
+fp_glTrackMatrixNV glTrackMatrixNV;
+fp_glTangent3ivEXT glTangent3ivEXT;
+fp_glMakeTextureHandleNonResidentNV glMakeTextureHandleNonResidentNV;
+fp_glVertexAttribs4ubvNV glVertexAttribs4ubvNV;
+fp_glBindBufferBaseNV glBindBufferBaseNV;
+fp_glFogCoordhvNV glFogCoordhvNV;
+fp_glGetnPolygonStippleARB glGetnPolygonStippleARB;
+fp_glUniform2i64vNV glUniform2i64vNV;
+fp_glGetFinalCombinerInputParameterfvNV glGetFinalCombinerInputParameterfvNV;
+fp_glMultiTexSubImage2DEXT glMultiTexSubImage2DEXT;
+fp_glReplacementCodeuiColor3fVertex3fSUN glReplacementCodeuiColor3fVertex3fSUN;
+fp_glTangent3dvEXT glTangent3dvEXT;
+fp_glVertexWeighthvNV glVertexWeighthvNV;
+fp_glFramebufferTextureLayerARB glFramebufferTextureLayerARB;
+fp_glMultiTexCoord1xvOES glMultiTexCoord1xvOES;
+fp_glTransformPathNV glTransformPathNV;
+fp_glProgramNamedParameter4dNV glProgramNamedParameter4dNV;
+fp_glProgramUniform1dEXT glProgramUniform1dEXT;
+fp_glNormal3hvNV glNormal3hvNV;
+fp_glGetPointervKHR glGetPointervKHR;
+fp_glGetCombinerOutputParameterfvNV glGetCombinerOutputParameterfvNV;
+fp_glCreateShaderObjectARB glCreateShaderObjectARB;
+fp_glGetColorTableParameterfv glGetColorTableParameterfv;
+fp_glGetNamedBufferPointervEXT glGetNamedBufferPointervEXT;
+fp_glTextureBarrierNV glTextureBarrierNV;
+fp_glPopDebugGroupKHR glPopDebugGroupKHR;
+fp_glColor4ubVertex3fvSUN glColor4ubVertex3fvSUN;
+fp_glPointParameterxOES glPointParameterxOES;
+fp_glGetPerfMonitorCounterInfoAMD glGetPerfMonitorCounterInfoAMD;
+fp_glVertexAttrib1svARB glVertexAttrib1svARB;
+fp_glNormalStream3ivATI glNormalStream3ivATI;
+fp_glMatrixMultTransposefEXT glMatrixMultTransposefEXT;
+fp_glDetailTexFuncSGIS glDetailTexFuncSGIS;
+fp_glIndexPointerListIBM glIndexPointerListIBM;
+fp_glVertexAttribI4iEXT glVertexAttribI4iEXT;
+fp_glColorFragmentOp3ATI glColorFragmentOp3ATI;
+fp_glResizeBuffersMESA glResizeBuffersMESA;
+fp_glGetMinmaxParameterfv glGetMinmaxParameterfv;
+fp_glClientActiveTextureARB glClientActiveTextureARB;
+fp_glEdgeFlagFormatNV glEdgeFlagFormatNV;
+fp_glGetMultiTexParameterIivEXT glGetMultiTexParameterIivEXT;
+fp_glObjectUnpurgeableAPPLE glObjectUnpurgeableAPPLE;
+fp_glVertexAttribs2dvNV glVertexAttribs2dvNV;
+fp_glReplacementCodeuiTexCoord2fVertex3fSUN glReplacementCodeuiTexCoord2fVertex3fSUN;
+fp_glProgramUniform4ivEXT glProgramUniform4ivEXT;
+fp_glProgramUniform3ui64vNV glProgramUniform3ui64vNV;
+fp_glTexFilterFuncSGIS glTexFilterFuncSGIS;
+fp_glCopyMultiTexImage1DEXT glCopyMultiTexImage1DEXT;
+fp_glGetVertexAttribIuivEXT glGetVertexAttribIuivEXT;
+fp_glColor3hNV glColor3hNV;
+fp_glProgramNamedParameter4fNV glProgramNamedParameter4fNV;
+fp_glGetInvariantBooleanvEXT glGetInvariantBooleanvEXT;
+fp_glPixelStorex glPixelStorex;
+fp_glVertexAttribL1dvEXT glVertexAttribL1dvEXT;
+fp_glCompressedTexSubImage2DARB glCompressedTexSubImage2DARB;
+fp_glIsProgramPipelineEXT glIsProgramPipelineEXT;
+fp_glVertex2hvNV glVertex2hvNV;
+fp_glWindowPos3dARB glWindowPos3dARB;
+fp_glProgramUniform1uiEXT glProgramUniform1uiEXT;
+fp_glVertexAttribs2fvNV glVertexAttribs2fvNV;
+fp_glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN glReplacementCodeuiTexCoord2fColor4fNormal3fVertex3fvSUN;
+fp_glTexCoord1bOES glTexCoord1bOES;
+fp_glNormalStream3bvATI glNormalStream3bvATI;
+fp_glWindowPos2dARB glWindowPos2dARB;
+fp_glGetProgramParameterdvNV glGetProgramParameterdvNV;
+fp_glMap1xOES glMap1xOES;
+fp_glTexCoord4fVertex4fvSUN glTexCoord4fVertex4fvSUN;
+fp_glVertexAttrib3fvNV glVertexAttrib3fvNV;
+fp_glGetMultiTexGendvEXT glGetMultiTexGendvEXT;
+fp_glClearNamedBufferSubDataEXT glClearNamedBufferSubDataEXT;
+fp_glGetTextureSamplerHandleARB glGetTextureSamplerHandleARB;
+fp_glGetActiveAttribARB glGetActiveAttribARB;
+fp_glHistogramEXT glHistogramEXT;
+fp_glPixelTransformParameteriEXT glPixelTransformParameteriEXT;
+fp_glFinishTextureSUNX glFinishTextureSUNX;
+fp_glVertexAttrib4fARB glVertexAttrib4fARB;
+fp_glGetPathColorGenivNV glGetPathColorGenivNV;
+fp_glMatrixLoadTransposefEXT glMatrixLoadTransposefEXT;
+fp_glVertexArrayVertexAttribOffsetEXT glVertexArrayVertexAttribOffsetEXT;
+fp_glIndexFormatNV glIndexFormatNV;
+fp_glReplacementCodeuiVertex3fvSUN glReplacementCodeuiVertex3fvSUN;
+fp_glGetVertexAttribPointervARB glGetVertexAttribPointervARB;
+fp_glMatrixIndexuivARB glMatrixIndexuivARB;
+fp_glVertexAttrib1hNV glVertexAttrib1hNV;
+fp_glWindowPos3svMESA glWindowPos3svMESA;
+fp_glStencilOpSeparateATI glStencilOpSeparateATI;
+fp_glBlendEquationSeparateiARB glBlendEquationSeparateiARB;
+fp_glVertexAttrib1fNV glVertexAttrib1fNV;
+fp_glMapVertexAttrib2fAPPLE glMapVertexAttrib2fAPPLE;
+fp_glVertexAttribI3iEXT glVertexAttribI3iEXT;
+fp_glMakeTextureHandleNonResidentARB glMakeTextureHandleNonResidentARB;
+fp_glGetnColorTableARB glGetnColorTableARB;
+fp_glProgramUniformMatrix2dvEXT glProgramUniformMatrix2dvEXT;
+fp_glVertexAttribs2hvNV glVertexAttribs2hvNV;
+fp_glClipPlanefOES glClipPlanefOES;
+fp_glDisableVertexArrayAttribEXT glDisableVertexArrayAttribEXT;
+fp_glValidateProgramARB glValidateProgramARB;
+fp_glVertexAttribPointerARB glVertexAttribPointerARB;
+fp_glDeleteFramebuffersEXT glDeleteFramebuffersEXT;
+fp_glDeleteProgramPipelinesEXT glDeleteProgramPipelinesEXT;
+fp_glVertexAttrib1fvNV glVertexAttrib1fvNV;
+fp_glIsQueryARB glIsQueryARB;
+fp_glEnableVariantClientStateEXT glEnableVariantClientStateEXT;
+fp_glTexBumpParameterfvATI glTexBumpParameterfvATI;
+fp_glGetInvariantIntegervEXT glGetInvariantIntegervEXT;
+fp_glConvolutionParameterxvOES glConvolutionParameterxvOES;
+fp_glGenFramebuffersEXT glGenFramebuffersEXT;
+fp_glVertexArrayColorOffsetEXT glVertexArrayColorOffsetEXT;
+fp_glMultiTexCoord3ivARB glMultiTexCoord3ivARB;
+fp_glVertexWeightfEXT glVertexWeightfEXT;
+fp_glIsTextureHandleResidentARB glIsTextureHandleResidentARB;
+fp_glWindowPos4ivMESA glWindowPos4ivMESA;
+fp_glMapNamedBufferRangeEXT glMapNamedBufferRangeEXT;
+fp_glPNTrianglesfATI glPNTrianglesfATI;
+fp_glGlobalAlphaFactorusSUN glGlobalAlphaFactorusSUN;
+fp_glVertexAttrib3dvNV glVertexAttrib3dvNV;
+fp_glMultiTexCoord3sARB glMultiTexCoord3sARB;
+fp_glGetnConvolutionFilterARB glGetnConvolutionFilterARB;
+fp_glNamedRenderbufferStorageMultisampleEXT glNamedRenderbufferStorageMultisampleEXT;
+fp_glTextureRangeAPPLE glTextureRangeAPPLE;
+fp_glBlendEquationIndexedAMD glBlendEquationIndexedAMD;
+fp_glVDPAUSurfaceAccessNV glVDPAUSurfaceAccessNV;
+fp_glSampleMaskEXT glSampleMaskEXT;
+fp_glProgramUniform2fvEXT glProgramUniform2fvEXT;
+fp_glTexCoord1xvOES glTexCoord1xvOES;
+fp_glVertexAttrib1sARB glVertexAttrib1sARB;
+fp_glProgramParameter4dvNV glProgramParameter4dvNV;
+fp_glTextureParameterIuivEXT glTextureParameterIuivEXT;
+fp_glGetColorTableParameterfvSGI glGetColorTableParameterfvSGI;
+fp_glDeleteRenderbuffersEXT glDeleteRenderbuffersEXT;
+fp_glVertexAttrib1svNV glVertexAttrib1svNV;
+fp_glNamedFramebufferTextureFaceEXT glNamedFramebufferTextureFaceEXT;
+fp_glProgramUniform2ui64vNV glProgramUniform2ui64vNV;
+fp_glTexCoord3bvOES glTexCoord3bvOES;
+fp_glIsVertexAttribEnabledAPPLE glIsVertexAttribEnabledAPPLE;
+fp_glSetFenceAPPLE glSetFenceAPPLE;
+fp_glWeightsvARB glWeightsvARB;
+fp_glGetHistogramParameterivEXT glGetHistogramParameterivEXT;
+fp_glGetDoublei_vEXT glGetDoublei_vEXT;
+fp_glFogCoordfEXT glFogCoordfEXT;
+fp_glVertexAttrib2dARB glVertexAttrib2dARB;
+fp_glMultiTexCoord4dARB glMultiTexCoord4dARB;
+fp_glReadnPixelsARB glReadnPixelsARB;
+fp_glMultiTexBufferEXT glMultiTexBufferEXT;
+fp_glWindowPos4dvMESA glWindowPos4dvMESA;
+fp_glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN glReplacementCodeuiTexCoord2fNormal3fVertex3fvSUN;
+fp_glColor3xOES glColor3xOES;
+fp_glProgramUniform2dEXT glProgramUniform2dEXT;
+fp_glBlendEquationiARB glBlendEquationiARB;
+fp_glGetMapAttribParameterfvNV glGetMapAttribParameterfvNV;
+fp_glGetUniformui64vNV glGetUniformui64vNV;
+fp_glNamedRenderbufferStorageEXT glNamedRenderbufferStorageEXT;
+fp_glVertexAttrib3dNV glVertexAttrib3dNV;
+fp_glTextureStorage1DEXT glTextureStorage1DEXT;
+fp_glPixelTexGenParameteriSGIS glPixelTexGenParameteriSGIS;
+fp_glColorTableEXT glColorTableEXT;
+fp_glMultiTexCoord3xvOES glMultiTexCoord3xvOES;
+fp_glExecuteProgramNV glExecuteProgramNV;
+fp_glVariantArrayObjectATI glVariantArrayObjectATI;
+fp_glColor3xvOES glColor3xvOES;
+fp_glNormalFormatNV glNormalFormatNV;
+fp_glVertexAttrib3fNV glVertexAttrib3fNV;
+fp_glHistogram glHistogram;
+fp_glGetObjectParameterfvARB glGetObjectParameterfvARB;
+fp_glGetLightxvOES glGetLightxvOES;
+fp_glDrawRangeElementArrayAPPLE glDrawRangeElementArrayAPPLE;
+fp_glGetTexParameterPointervAPPLE glGetTexParameterPointervAPPLE;
+fp_glMatrixPopEXT glMatrixPopEXT;
+fp_glActiveShaderProgramEXT glActiveShaderProgramEXT;
+fp_glVariantdvEXT glVariantdvEXT;
+fp_glVertexStream1sATI glVertexStream1sATI;
+fp_glGetnPixelMapuivARB glGetnPixelMapuivARB;
+fp_glMultiTexEnviEXT glMultiTexEnviEXT;
+fp_glVertexAttribI2iEXT glVertexAttribI2iEXT;
+fp_glProgramParameter4fvNV glProgramParameter4fvNV;
+fp_glRectxvOES glRectxvOES;
+fp_glGetVariantIntegervEXT glGetVariantIntegervEXT;
+fp_glGetPerfMonitorGroupsAMD glGetPerfMonitorGroupsAMD;
+fp_glMultTransposeMatrixfARB glMultTransposeMatrixfARB;
+fp_glVertexAttribI2ivEXT glVertexAttribI2ivEXT;
+fp_glReplacementCodeuiColor4fNormal3fVertex3fvSUN glReplacementCodeuiColor4fNormal3fVertex3fvSUN;
+fp_glEdgeFlagPointerEXT glEdgeFlagPointerEXT;
+fp_glVideoCaptureStreamParameterivNV glVideoCaptureStreamParameterivNV;
+fp_glVertexStream4iATI glVertexStream4iATI;
+fp_glVDPAUFiniNV glVDPAUFiniNV;
+fp_glMakeBufferNonResidentNV glMakeBufferNonResidentNV;
+fp_glMultiTexCoord2fvARB glMultiTexCoord2fvARB;
+fp_glStencilStrokePathNV glStencilStrokePathNV;
+fp_glVariantuivEXT glVariantuivEXT;
+fp_glSecondaryColorPointerListIBM glSecondaryColorPointerListIBM;
+fp_glMultiTexCoord1sARB glMultiTexCoord1sARB;
+fp_glGetDebugMessageLogKHR glGetDebugMessageLogKHR;
+fp_glConvolutionParameterfv glConvolutionParameterfv;
+fp_glMultMatrixxOES glMultMatrixxOES;
+fp_glTextureNormalEXT glTextureNormalEXT;
+fp_glGetQueryivARB glGetQueryivARB;
+fp_glCompressedMultiTexImage3DEXT glCompressedMultiTexImage3DEXT;
+fp_glNamedProgramLocalParameter4dEXT glNamedProgramLocalParameter4dEXT;
+fp_glProgramUniformMatrix4x3fvEXT glProgramUniformMatrix4x3fvEXT;
+fp_glProgramUniform3dEXT glProgramUniform3dEXT;
+fp_glVertexBlendEnvfATI glVertexBlendEnvfATI;
+fp_glGetConvolutionFilterEXT glGetConvolutionFilterEXT;
+fp_glMultiTexCoord2ivARB glMultiTexCoord2ivARB;
+fp_glCurrentPaletteMatrixARB glCurrentPaletteMatrixARB;
+fp_glFogCoordPointerEXT glFogCoordPointerEXT;
+fp_glCombinerInputNV glCombinerInputNV;
+fp_glVertexAttribI4bvEXT glVertexAttribI4bvEXT;
+fp_glEnableClientStateIndexedEXT glEnableClientStateIndexedEXT;
+fp_glMatrixLoadIdentityEXT glMatrixLoadIdentityEXT;
+fp_glTextureColorMaskSGIS glTextureColorMaskSGIS;
+fp_glCreateShaderProgramEXT glCreateShaderProgramEXT;
+fp_glRenderbufferStorageMultisampleEXT glRenderbufferStorageMultisampleEXT;
+fp_glBindVertexShaderEXT glBindVertexShaderEXT;
+fp_glVertexStream1svATI glVertexStream1svATI;
+fp_glVertexStream3fATI glVertexStream3fATI;
+fp_glUniform2ui64vNV glUniform2ui64vNV;
+fp_glTexCoordPointervINTEL glTexCoordPointervINTEL;
+fp_glNormalPointerEXT glNormalPointerEXT;
+fp_glAsyncMarkerSGIX glAsyncMarkerSGIX;
+fp_glTextureStorageSparseAMD glTextureStorageSparseAMD;
+fp_glGetConvolutionParameterivEXT glGetConvolutionParameterivEXT;
+fp_glPrioritizeTexturesEXT glPrioritizeTexturesEXT;
+fp_glResetHistogram glResetHistogram;
+fp_glGetOcclusionQueryivNV glGetOcclusionQueryivNV;
+fp_glUniform1uiEXT glUniform1uiEXT;
+fp_glTexSubImage2DEXT glTexSubImage2DEXT;
+fp_glMultiTexCoord2iARB glMultiTexCoord2iARB;
+fp_glGenerateMultiTexMipmapEXT glGenerateMultiTexMipmapEXT;
+fp_glWindowPos3dvMESA glWindowPos3dvMESA;
+fp_glMultiTexEnvfEXT glMultiTexEnvfEXT;
+fp_glVertex4xOES glVertex4xOES;
+fp_glVertexAttribI2uivEXT glVertexAttribI2uivEXT;
+fp_glNamedProgramLocalParameter4fvEXT glNamedProgramLocalParameter4fvEXT;
+fp_glPointParameterfvSGIS glPointParameterfvSGIS;
+fp_glGetPixelTransformParameterfvEXT glGetPixelTransformParameterfvEXT;
+fp_glAreProgramsResidentNV glAreProgramsResidentNV;
+fp_glColorTable glColorTable;
+fp_glGetImageHandleNV glGetImageHandleNV;
+fp_glGetMultiTexEnvfvEXT glGetMultiTexEnvfvEXT;
+fp_glFlushMappedBufferRangeAPPLE glFlushMappedBufferRangeAPPLE;
+fp_glVertexAttribs1dvNV glVertexAttribs1dvNV;
+fp_glVertexStream2sATI glVertexStream2sATI;
+fp_glGetnSeparableFilterARB glGetnSeparableFilterARB;
+fp_glActiveStencilFaceEXT glActiveStencilFaceEXT;
+fp_glProgramUniform4dEXT glProgramUniform4dEXT;
+fp_glPointSizexOES glPointSizexOES;
+fp_glBindParameterEXT glBindParameterEXT;
+fp_glBlendParameteriNV glBlendParameteriNV;
+fp_glNamedProgramLocalParameter4dvEXT glNamedProgramLocalParameter4dvEXT;
+fp_glGetTextureParameterfvEXT glGetTextureParameterfvEXT;
+fp_glGetPathMetricsNV glGetPathMetricsNV;
+fp_glMultiTexCoord2fARB glMultiTexCoord2fARB;
+fp_glWeightdvARB glWeightdvARB;
+fp_glIsTransformFeedbackNV glIsTransformFeedbackNV;
+fp_glGetUniformOffsetEXT glGetUniformOffsetEXT;
+fp_glGetnCompressedTexImageARB glGetnCompressedTexImageARB;
+fp_glMatrixLoaddEXT glMatrixLoaddEXT;
+fp_glGetPathLengthNV glGetPathLengthNV;
+fp_glUniform4i64NV glUniform4i64NV;
+fp_glGetHistogramEXT glGetHistogramEXT;
+fp_glVertexAttrib4NuivARB glVertexAttrib4NuivARB;
+fp_glMapGrid2xOES glMapGrid2xOES;
+fp_glWindowPos2fvARB glWindowPos2fvARB;
+fp_glEnableIndexedEXT glEnableIndexedEXT;
+fp_glTexCoord1bvOES glTexCoord1bvOES;
+fp_glUniform2uiEXT glUniform2uiEXT;
+fp_glReplacementCodePointerSUN glReplacementCodePointerSUN;
+fp_glLoadTransposeMatrixdARB glLoadTransposeMatrixdARB;
+fp_glVertexArrayVertexAttribIOffsetEXT glVertexArrayVertexAttribIOffsetEXT;
+fp_glProgramUniform3fEXT glProgramUniform3fEXT;
+fp_glWindowPos3dMESA glWindowPos3dMESA;
+fp_glVertexAttribs1hvNV glVertexAttribs1hvNV;
+fp_glVertexStream4dATI glVertexStream4dATI;
+fp_glTextureRenderbufferEXT glTextureRenderbufferEXT;
+fp_glTransformFeedbackStreamAttribsNV glTransformFeedbackStreamAttribsNV;
+fp_glGetPointervEXT glGetPointervEXT;
+fp_glProgramUniformMatrix3dvEXT glProgramUniformMatrix3dvEXT;
+fp_glSeparableFilter2D glSeparableFilter2D;
+fp_glVertex3xvOES glVertex3xvOES;
+fp_glVertexAttribL4dvEXT glVertexAttribL4dvEXT;
+fp_glMakeNamedBufferResidentNV glMakeNamedBufferResidentNV;
+fp_glEnableVertexAttribAPPLE glEnableVertexAttribAPPLE;
+fp_glProgramEnvParameterI4ivNV glProgramEnvParameterI4ivNV;
+fp_glMultiTexParameterfEXT glMultiTexParameterfEXT;
+fp_glGetVertexArrayIntegervEXT glGetVertexArrayIntegervEXT;
+fp_glVertexAttrib3dARB glVertexAttrib3dARB;
+fp_glVDPAUIsSurfaceNV glVDPAUIsSurfaceNV;
+fp_glIsAsyncMarkerSGIX glIsAsyncMarkerSGIX;
+fp_glConvolutionParameteriEXT glConvolutionParameteriEXT;
+fp_glTexParameterIuivEXT glTexParameterIuivEXT;
+fp_glVertexAttribL3dEXT glVertexAttribL3dEXT;
+fp_glGetUniformLocationARB glGetUniformLocationARB;
+fp_glPathParameterfvNV glPathParameterfvNV;
+fp_glImageTransformParameterfvHP glImageTransformParameterfvHP;
+fp_glColor4hNV glColor4hNV;
+fp_glWeightfvARB glWeightfvARB;
+fp_glVDPAUMapSurfacesNV glVDPAUMapSurfacesNV;
+fp_glProgramLocalParameter4fvARB glProgramLocalParameter4fvARB;
+fp_glGetTransformFeedbackVaryingNV glGetTransformFeedbackVaryingNV;
+fp_glColorFragmentOp2ATI glColorFragmentOp2ATI;
+fp_glGetTextureHandleNV glGetTextureHandleNV;
+fp_glGetFragmentMaterialivSGIX glGetFragmentMaterialivSGIX;
+fp_glVideoCaptureStreamParameterfvNV glVideoCaptureStreamParameterfvNV;
+fp_glDeleteProgramsARB glDeleteProgramsARB;
+fp_glWindowPos3fvARB glWindowPos3fvARB;
+fp_glFeedbackBufferxOES glFeedbackBufferxOES;
+fp_glGetTexBumpParameterfvATI glGetTexBumpParameterfvATI;
+fp_glBindProgramARB glBindProgramARB;
+fp_glProgramLocalParameterI4uiNV glProgramLocalParameterI4uiNV;
+fp_glMultiTexCoord2hvNV glMultiTexCoord2hvNV;
+fp_glSampleCoverageARB glSampleCoverageARB;
+fp_glPixelDataRangeNV glPixelDataRangeNV;
+fp_glVertexStream3svATI glVertexStream3svATI;
+fp_glTexCoord3hvNV glTexCoord3hvNV;
+fp_glIndexFuncEXT glIndexFuncEXT;
+fp_glPointParameteriNV glPointParameteriNV;
+fp_glGetFramebufferParameterivEXT glGetFramebufferParameterivEXT;
+fp_glGetInternalformativ glGetInternalformativ;
+fp_glNamedFramebufferTexture3DEXT glNamedFramebufferTexture3DEXT;
+fp_glTexImage4DSGIS glTexImage4DSGIS;
+fp_glProgramUniformMatrix3fvEXT glProgramUniformMatrix3fvEXT;
+fp_glEnableVertexArrayEXT glEnableVertexArrayEXT;
+fp_glColorTableParameterfvSGI glColorTableParameterfvSGI;
+fp_glSpriteParameterivSGIX glSpriteParameterivSGIX;
+fp_glMultiTexRenderbufferEXT glMultiTexRenderbufferEXT;
+fp_glVertexAttribL3ui64vNV glVertexAttribL3ui64vNV;
+fp_glDeletePathsNV glDeletePathsNV;
+fp_glPrimitiveRestartIndexNV glPrimitiveRestartIndexNV;
+fp_glFragmentLightfvSGIX glFragmentLightfvSGIX;
+fp_glTexCoordPointerListIBM glTexCoordPointerListIBM;
+fp_glRectxOES glRectxOES;
+fp_glGenProgramsNV glGenProgramsNV;
+fp_glFragmentLightfSGIX glFragmentLightfSGIX;
+fp_glNamedBufferDataEXT glNamedBufferDataEXT;
+fp_glMultiTexCoord3fvARB glMultiTexCoord3fvARB;
+fp_glVertexAttrib4NsvARB glVertexAttrib4NsvARB;
+fp_glIsImageHandleResidentARB glIsImageHandleResidentARB;
+fp_glConvolutionParameterfEXT glConvolutionParameterfEXT;
+fp_glFogCoordfvEXT glFogCoordfvEXT;
+fp_glVertexAttribL3i64NV glVertexAttribL3i64NV;
+fp_glStencilClearTagEXT glStencilClearTagEXT;
+fp_glTangentPointerEXT glTangentPointerEXT;
+fp_glUniform4ui64vNV glUniform4ui64vNV;
+fp_glDebugMessageEnableAMD glDebugMessageEnableAMD;
+fp_glCopyTexSubImage2DEXT glCopyTexSubImage2DEXT;
+fp_glResetHistogramEXT glResetHistogramEXT;
+fp_glNamedProgramLocalParameterI4ivEXT glNamedProgramLocalParameterI4ivEXT;
+fp_glGetMultiTexParameterIuivEXT glGetMultiTexParameterIuivEXT;
+fp_glUniform4ivARB glUniform4ivARB;
+fp_glMatrixOrthoEXT glMatrixOrthoEXT;
+fp_glProgramLocalParametersI4ivNV glProgramLocalParametersI4ivNV;
+fp_glProgramUniform4ui64vNV glProgramUniform4ui64vNV;
+fp_glGetNamedStringivARB glGetNamedStringivARB;
+fp_glVertexAttribL1i64vNV glVertexAttribL1i64vNV;
+fp_glPointParameterivNV glPointParameterivNV;
+fp_glGetDetailTexFuncSGIS glGetDetailTexFuncSGIS;
+fp_glReplacementCodeuiColor3fVertex3fvSUN glReplacementCodeuiColor3fVertex3fvSUN;
+fp_glProgramLocalParameter4fARB glProgramLocalParameter4fARB;
+fp_glColorSubTable glColorSubTable;
+fp_glMultiTexGenfvEXT glMultiTexGenfvEXT;
+fp_glStencilFuncSeparateATI glStencilFuncSeparateATI;
+fp_glListParameterivSGIX glListParameterivSGIX;
+fp_glFragmentLightModelivSGIX glFragmentLightModelivSGIX;
+fp_glProgramUniform3i64NV glProgramUniform3i64NV;
+fp_glGetTextureHandleARB glGetTextureHandleARB;
+fp_glAlphaFragmentOp1ATI glAlphaFragmentOp1ATI;
+fp_glColorTableParameteriv glColorTableParameteriv;
+fp_glDebugMessageControlKHR glDebugMessageControlKHR;
+fp_glMultiTexImage3DEXT glMultiTexImage3DEXT;
+fp_glMultiTexCoord4svARB glMultiTexCoord4svARB;
+fp_glProgramUniformMatrix3x4dvEXT glProgramUniformMatrix3x4dvEXT;
+fp_glProgramUniformMatrix4x3dvEXT glProgramUniformMatrix4x3dvEXT;
+fp_glGetActiveVaryingNV glGetActiveVaryingNV;
+fp_glProgramUniform1ui64vNV glProgramUniform1ui64vNV;
+fp_glTextureMaterialEXT glTextureMaterialEXT;
+fp_glInterpolatePathsNV glInterpolatePathsNV;
+fp_glProgramLocalParameterI4iNV glProgramLocalParameterI4iNV;
+fp_glVertexAttribL2dEXT glVertexAttribL2dEXT;
+fp_glGetPixelTransformParameterivEXT glGetPixelTransformParameterivEXT;
+fp_glTexCoord4xvOES glTexCoord4xvOES;
+fp_glGetVariantBooleanvEXT glGetVariantBooleanvEXT;
+fp_glGetVertexAttribdvARB glGetVertexAttribdvARB;
+fp_glProgramUniform4i64vNV glProgramUniform4i64vNV;
+fp_glDrawArraysInstancedEXT glDrawArraysInstancedEXT;
+fp_glDisableClientStateIndexedEXT glDisableClientStateIndexedEXT;
+fp_glMultiDrawArraysIndirectBindlessNV glMultiDrawArraysIndirectBindlessNV;
+fp_glSpriteParameterfvSGIX glSpriteParameterfvSGIX;
+fp_glShaderSourceARB glShaderSourceARB;
+fp_glShaderOp3EXT glShaderOp3EXT;
+fp_glWindowPos2dvMESA glWindowPos2dvMESA;
+fp_glProvokingVertexEXT glProvokingVertexEXT;
+fp_glVariantubvEXT glVariantubvEXT;
+fp_glGetColorTableParameterivEXT glGetColorTableParameterivEXT;
+fp_glPresentFrameDualFillNV glPresentFrameDualFillNV;
+fp_glGenVertexShadersEXT glGenVertexShadersEXT;
+fp_glProgramUniformHandleui64vARB glProgramUniformHandleui64vARB;
+fp_glGetVariantPointervEXT glGetVariantPointervEXT;
+fp_glStencilFillPathNV glStencilFillPathNV;
+fp_glWindowPos3iARB glWindowPos3iARB;
+fp_glWindowPos3fvMESA glWindowPos3fvMESA;
+fp_glDepthRangexOES glDepthRangexOES;
+fp_glVertex4xvOES glVertex4xvOES;
+fp_glWindowPos2sARB glWindowPos2sARB;
+fp_glStencilOpValueAMD glStencilOpValueAMD;
+fp_glProgramVertexLimitNV glProgramVertexLimitNV;
+fp_glUniform3i64NV glUniform3i64NV;
+fp_glProgramUniform3uivEXT glProgramUniform3uivEXT;
+fp_glVertexAttribs3svNV glVertexAttribs3svNV;
+fp_glMakeTextureHandleResidentNV glMakeTextureHandleResidentNV;
+fp_glMultiTexCoord2hNV glMultiTexCoord2hNV;
+fp_glIsFenceAPPLE glIsFenceAPPLE;
+fp_glGetBufferParameterui64vNV glGetBufferParameterui64vNV;
+fp_glWindowPos4fMESA glWindowPos4fMESA;
+fp_glMapVertexAttrib2dAPPLE glMapVertexAttrib2dAPPLE;
+fp_glCopyTextureImage2DEXT glCopyTextureImage2DEXT;
+fp_glSecondaryColor3bvEXT glSecondaryColor3bvEXT;
+fp_glMultiTexCoord4fARB glMultiTexCoord4fARB;
+fp_glTangent3bvEXT glTangent3bvEXT;
+fp_glMatrixIndexubvARB glMatrixIndexubvARB;
+fp_glGetVertexAttribLui64vNV glGetVertexAttribLui64vNV;
+fp_glGetProgramStringARB glGetProgramStringARB;
+fp_glVertexAttribI3uiEXT glVertexAttribI3uiEXT;
+fp_glLineWidthxOES glLineWidthxOES;
+fp_glProgramUniformMatrix2fvEXT glProgramUniformMatrix2fvEXT;
+fp_glGetTextureParameterIuivEXT glGetTextureParameterIuivEXT;
+fp_glGetMultiTexEnvivEXT glGetMultiTexEnvivEXT;
+fp_glPixelTexGenParameterivSGIS glPixelTexGenParameterivSGIS;
+fp_glCompressedTextureSubImage1DEXT glCompressedTextureSubImage1DEXT;
+fp_glBlendColorEXT glBlendColorEXT;
+fp_glGetNamedProgramivEXT glGetNamedProgramivEXT;
+fp_glResetMinmax glResetMinmax;
+fp_glGetnUniformivARB glGetnUniformivARB;
+fp_glVertexBlendARB glVertexBlendARB;
+fp_glCopyConvolutionFilter1DEXT glCopyConvolutionFilter1DEXT;
+fp_glGetMapAttribParameterivNV glGetMapAttribParameterivNV;
+fp_glGetLightxOES glGetLightxOES;
+fp_glPointParameterfvARB glPointParameterfvARB;
+fp_glVertexArrayNormalOffsetEXT glVertexArrayNormalOffsetEXT;
+fp_glGetBufferParameterivARB glGetBufferParameterivARB;
+fp_glDrawMeshArraysSUN glDrawMeshArraysSUN;
+fp_glVertexAttrib4dNV glVertexAttrib4dNV;
+fp_glGetMultisamplefvNV glGetMultisamplefvNV;
+fp_glMapObjectBufferATI glMapObjectBufferATI;
+fp_glGetPathCommandsNV glGetPathCommandsNV;
+fp_glVertexArrayTexCoordOffsetEXT glVertexArrayTexCoordOffsetEXT;
+fp_glGetHistogram glGetHistogram;
+fp_glColorFormatNV glColorFormatNV;
+fp_glProgramUniformui64NV glProgramUniformui64NV;
+fp_glProgramUniformMatrix4x2fvEXT glProgramUniformMatrix4x2fvEXT;
+fp_glLoadMatrixxOES glLoadMatrixxOES;
+fp_glVariantbvEXT glVariantbvEXT;
+fp_glVertexAttribL2i64NV glVertexAttribL2i64NV;
+fp_glMatrixRotatefEXT glMatrixRotatefEXT;
+fp_glGetClipPlanexOES glGetClipPlanexOES;
+fp_glSecondaryColor3uivEXT glSecondaryColor3uivEXT;
+fp_glUniform2fARB glUniform2fARB;
+fp_glBindBufferRangeEXT glBindBufferRangeEXT;
+fp_glVertexStream2dATI glVertexStream2dATI;
+fp_glMapBufferARB glMapBufferARB;
+fp_glGetPathSpacingNV glGetPathSpacingNV;
+fp_glGlobalAlphaFactordSUN glGlobalAlphaFactordSUN;
+fp_glGetShaderSourceARB glGetShaderSourceARB;
+fp_glVertexAttrib3dvARB glVertexAttrib3dvARB;
+fp_glTexCoord3xvOES glTexCoord3xvOES;
+fp_glGenTexturesEXT glGenTexturesEXT;
+fp_glTangent3iEXT glTangent3iEXT;
+fp_glBinormal3bvEXT glBinormal3bvEXT;
+fp_glGetnPixelMapusvARB glGetnPixelMapusvARB;
+fp_glClearNamedBufferDataEXT glClearNamedBufferDataEXT;
+fp_glDisableIndexedEXT glDisableIndexedEXT;
+fp_glWindowPos3fMESA glWindowPos3fMESA;
+fp_glGetTextureLevelParameterfvEXT glGetTextureLevelParameterfvEXT;
+fp_glGetHistogramParameterxvOES glGetHistogramParameterxvOES;
+fp_glTexSubImage1DEXT glTexSubImage1DEXT;
+fp_glNormalStream3dATI glNormalStream3dATI;
+fp_glVertexAttribL4i64vNV glVertexAttribL4i64vNV;
+fp_glCopyTextureSubImage1DEXT glCopyTextureSubImage1DEXT;
+fp_glVertexAttribI1uivEXT glVertexAttribI1uivEXT;
+fp_glBeginQueryARB glBeginQueryARB;
+fp_glMultiTexCoord4dvARB glMultiTexCoord4dvARB;
+fp_glVertex4bvOES glVertex4bvOES;
+fp_glTestFenceNV glTestFenceNV;
+fp_glCopyMultiTexSubImage1DEXT glCopyMultiTexSubImage1DEXT;
+fp_glClipPlanexOES glClipPlanexOES;
+fp_glUseProgramStagesEXT glUseProgramStagesEXT;
+fp_glTexCoord1hNV glTexCoord1hNV;
+fp_glGenFencesNV glGenFencesNV;
+fp_glMultiTexCoord1hvNV glMultiTexCoord1hvNV;
+fp_glWeightbvARB glWeightbvARB;
+fp_glBeginConditionalRenderNVX glBeginConditionalRenderNVX;
+fp_glColorTableParameterfv glColorTableParameterfv;
+fp_glVertexArrayVertexOffsetEXT glVertexArrayVertexOffsetEXT;
+fp_glFinishObjectAPPLE glFinishObjectAPPLE;
+fp_glReplacementCodeuiTexCoord2fVertex3fvSUN glReplacementCodeuiTexCoord2fVertex3fvSUN;
+fp_glSecondaryColor3ivEXT glSecondaryColor3ivEXT;
+fp_glVertexStream1dATI glVertexStream1dATI;
+fp_glDeformationMap3fSGIX glDeformationMap3fSGIX;
+fp_glVertexWeightfvEXT glVertexWeightfvEXT;
+fp_glGetProgramLocalParameterIivNV glGetProgramLocalParameterIivNV;
+fp_glCompressedTexImage3DARB glCompressedTexImage3DARB;
+fp_glProgramParameter4fNV glProgramParameter4fNV;
+fp_glConvolutionParameterxOES glConvolutionParameterxOES;
+fp_glInsertComponentEXT glInsertComponentEXT;
+fp_glMultiTexCoord2xvOES glMultiTexCoord2xvOES;
+fp_glTexGenxvOES glTexGenxvOES;
+fp_glBeginTransformFeedbackEXT glBeginTransformFeedbackEXT;
+fp_glTexCoord2fColor3fVertex3fSUN glTexCoord2fColor3fVertex3fSUN;
+fp_glFreeObjectBufferATI glFreeObjectBufferATI;
+fp_glBlendBarrierNV glBlendBarrierNV;
+fp_glUniform4i64vNV glUniform4i64vNV;
+fp_glGetnUniformuivARB glGetnUniformuivARB;
+fp_glProgramEnvParameters4fvEXT glProgramEnvParameters4fvEXT;
+fp_glBlendFuncSeparateEXT glBlendFuncSeparateEXT;
+fp_glConvolutionParameterivEXT glConvolutionParameterivEXT;
+fp_glPixelTexGenSGIX glPixelTexGenSGIX;
+fp_glGetVideoCaptureStreamivNV glGetVideoCaptureStreamivNV;
+fp_glMakeImageHandleNonResidentARB glMakeImageHandleNonResidentARB;
+fp_glSecondaryColor3dEXT glSecondaryColor3dEXT;
+fp_glBinormal3fvEXT glBinormal3fvEXT;
+fp_glArrayElementEXT glArrayElementEXT;
+fp_glIndexxOES glIndexxOES;
+fp_glUniform3uivEXT glUniform3uivEXT;
+fp_glSetLocalConstantEXT glSetLocalConstantEXT;
+fp_glProgramUniform1ui64NV glProgramUniform1ui64NV;
+fp_glColor4hvNV glColor4hvNV;
+fp_glFramebufferDrawBufferEXT glFramebufferDrawBufferEXT;
+fp_glFragmentColorMaterialSGIX glFragmentColorMaterialSGIX;
+fp_glWindowPos4iMESA glWindowPos4iMESA;
+fp_glPollAsyncSGIX glPollAsyncSGIX;
+fp_glMultiTexCoord1xOES glMultiTexCoord1xOES;
+fp_glFramebufferTexture1DEXT glFramebufferTexture1DEXT;
+fp_glVertexPointervINTEL glVertexPointervINTEL;
+fp_glVertexAttribs4hvNV glVertexAttribs4hvNV;
+fp_glGetSeparableFilterEXT glGetSeparableFilterEXT;
+fp_glMultiTexCoord3iARB glMultiTexCoord3iARB;
+fp_glRasterPos4xvOES glRasterPos4xvOES;
+fp_glVertex3hvNV glVertex3hvNV;
+fp_glVertexArrayMultiTexCoordOffsetEXT glVertexArrayMultiTexCoordOffsetEXT;
+fp_glAccumxOES glAccumxOES;
+fp_glGetMultiTexGenivEXT glGetMultiTexGenivEXT;
+fp_glSwizzleEXT glSwizzleEXT;
+fp_glClearDepthdNV glClearDepthdNV;
+fp_glClearColorIuiEXT glClearColorIuiEXT;
+fp_glBindMultiTextureEXT glBindMultiTextureEXT;
+fp_glDisableVertexArrayEXT glDisableVertexArrayEXT;
+fp_glProgramUniform3ui64NV glProgramUniform3ui64NV;
+fp_glDeleteAsyncMarkersSGIX glDeleteAsyncMarkersSGIX;
+fp_glBindLightParameterEXT glBindLightParameterEXT;
+fp_glVertexAttrib2sNV glVertexAttrib2sNV;
+fp_glTexBufferEXT glTexBufferEXT;
+fp_glVertexStream2fATI glVertexStream2fATI;
+fp_glDebugMessageCallbackAMD glDebugMessageCallbackAMD;
+fp_glMultiTexCoord2dARB glMultiTexCoord2dARB;
+fp_glNormalStream3sATI glNormalStream3sATI;
+fp_glProgramParameteriARB glProgramParameteriARB;
+fp_glTexEnvxOES glTexEnvxOES;
+fp_glDisableVertexAttribAPPLE glDisableVertexAttribAPPLE;
+fp_glMultiTexSubImage3DEXT glMultiTexSubImage3DEXT;
+fp_glDebugMessageInsertKHR glDebugMessageInsertKHR;
+fp_glMultiDrawElementsIndirectAMD glMultiDrawElementsIndirectAMD;
+fp_glGetLocalConstantBooleanvEXT glGetLocalConstantBooleanvEXT;
+fp_glVertexAttrib4ubNV glVertexAttrib4ubNV;
+fp_glVideoCaptureNV glVideoCaptureNV;
+fp_glTexCoord3xOES glTexCoord3xOES;
+fp_glLoadTransposeMatrixfARB glLoadTransposeMatrixfARB;
+fp_glImageTransformParameteriHP glImageTransformParameteriHP;
+fp_glMultiTexCoord4xOES glMultiTexCoord4xOES;
+fp_glVertexAttribs3fvNV glVertexAttribs3fvNV;
+fp_glUniform3ui64NV glUniform3ui64NV;
+fp_glCombinerParameterfvNV glCombinerParameterfvNV;
+fp_glFragmentMaterialiSGIX glFragmentMaterialiSGIX;
+fp_glBeginConditionalRenderNV glBeginConditionalRenderNV;
+fp_glPathFogGenNV glPathFogGenNV;
+fp_glVertexArrayIndexOffsetEXT glVertexArrayIndexOffsetEXT;
+fp_glProgramBufferParametersIuivNV glProgramBufferParametersIuivNV;
+fp_glPixelTransformParameterivEXT glPixelTransformParameterivEXT;
+fp_glDisableClientStateiEXT glDisableClientStateiEXT;
+fp_glTexBufferARB glTexBufferARB;
+fp_glGetLocalConstantIntegervEXT glGetLocalConstantIntegervEXT;
+fp_glGetBufferPointervARB glGetBufferPointervARB;
+fp_glMultiTexParameterIuivEXT glMultiTexParameterIuivEXT;
+fp_glColorPointerListIBM glColorPointerListIBM;
+fp_glMapVertexAttrib1dAPPLE glMapVertexAttrib1dAPPLE;
+fp_glGetUniformivARB glGetUniformivARB;
+fp_glProgramLocalParameters4fvEXT glProgramLocalParameters4fvEXT;
+fp_glEndConditionalRenderNV glEndConditionalRenderNV;
+fp_glMultiTexImage1DEXT glMultiTexImage1DEXT;
+fp_glProgramUniform2uiEXT glProgramUniform2uiEXT;
+fp_glProgramNamedParameter4dvNV glProgramNamedParameter4dvNV;
+fp_glGetRenderbufferParameterivEXT glGetRenderbufferParameterivEXT;
+fp_glIsBufferResidentNV glIsBufferResidentNV;
+fp_glGetNamedRenderbufferParameterivEXT glGetNamedRenderbufferParameterivEXT;
+fp_glProgramUniform1fEXT glProgramUniform1fEXT;
+fp_glMultiTexGendvEXT glMultiTexGendvEXT;
+fp_glVertexArrayRangeNV glVertexArrayRangeNV;
+fp_glIsTextureHandleResidentNV glIsTextureHandleResidentNV;
+fp_glGetProgramEnvParameterdvARB glGetProgramEnvParameterdvARB;
+fp_glBlendEquationSeparateEXT glBlendEquationSeparateEXT;
+fp_glSecondaryColorFormatNV glSecondaryColorFormatNV;
+fp_glVertexAttrib4ubvNV glVertexAttrib4ubvNV;
+fp_glTagSampleBufferSGIX glTagSampleBufferSGIX;
+fp_glVDPAUUnregisterSurfaceNV glVDPAUUnregisterSurfaceNV;
+fp_glColor4ubVertex3fSUN glColor4ubVertex3fSUN;
+fp_glVertex2bOES glVertex2bOES;
+fp_glGetProgramEnvParameterfvARB glGetProgramEnvParameterfvARB;
+fp_glVertexAttrib4usvARB glVertexAttrib4usvARB;
+fp_glGetFloatIndexedvEXT glGetFloatIndexedvEXT;
+fp_glTestFenceAPPLE glTestFenceAPPLE;
+fp_glVertexAttribL2i64vNV glVertexAttribL2i64vNV;
+fp_glBindVideoCaptureStreamBufferNV glBindVideoCaptureStreamBufferNV;
+fp_glNamedStringARB glNamedStringARB;
+fp_glResetMinmaxEXT glResetMinmaxEXT;
+fp_glGetNamedProgramStringEXT glGetNamedProgramStringEXT;
+fp_glGetnHistogramARB glGetnHistogramARB;
+fp_glLightEnviSGIX glLightEnviSGIX;
+fp_glVertexAttribLPointerEXT glVertexAttribLPointerEXT;
+fp_glFogxvOES glFogxvOES;
+fp_glVertexAttribs2svNV glVertexAttribs2svNV;
+fp_glTextureImage3DEXT glTextureImage3DEXT;
+fp_glIsEnabledIndexedEXT glIsEnabledIndexedEXT;
+fp_glVertexPointerListIBM glVertexPointerListIBM;
+fp_glIsFenceNV glIsFenceNV;
+fp_glBeginPerfMonitorAMD glBeginPerfMonitorAMD;
+fp_glGetNamedProgramLocalParameterIuivEXT glGetNamedProgramLocalParameterIuivEXT;
+fp_glVertexAttribL3ui64NV glVertexAttribL3ui64NV;
+fp_glProgramUniform4fvEXT glProgramUniform4fvEXT;
+fp_glVertexAttrib2sARB glVertexAttrib2sARB;
+fp_glCompressedTexImage2DARB glCompressedTexImage2DARB;
+fp_glCheckFramebufferStatusEXT glCheckFramebufferStatusEXT;
+fp_glGetnMapivARB glGetnMapivARB;
+fp_glMultiTexCoord1ivARB glMultiTexCoord1ivARB;
+fp_glDisableVertexAttribArrayARB glDisableVertexAttribArrayARB;
+fp_glGetPathDashArrayNV glGetPathDashArrayNV;
+fp_glDeleteOcclusionQueriesNV glDeleteOcclusionQueriesNV;
+fp_glVertex4hvNV glVertex4hvNV;
+fp_glProgramLocalParameter4dARB glProgramLocalParameter4dARB;
+fp_glUnlockArraysEXT glUnlockArraysEXT;
+fp_glGetQueryObjectui64vEXT glGetQueryObjectui64vEXT;
+fp_glVertexAttribI4uivEXT glVertexAttribI4uivEXT;
+fp_glVertexStream4ivATI glVertexStream4ivATI;
+fp_glGetProgramivNV glGetProgramivNV;
+fp_glGetMinmaxParameterivEXT glGetMinmaxParameterivEXT;
+fp_glTextureStorage3DMultisampleEXT glTextureStorage3DMultisampleEXT;
+fp_glIndexxvOES glIndexxvOES;
+fp_glCompressedMultiTexImage1DEXT glCompressedMultiTexImage1DEXT;
+fp_glProgramUniform2ivEXT glProgramUniform2ivEXT;
+fp_glMultTransposeMatrixxOES glMultTransposeMatrixxOES;
+fp_glGetPixelMapxv glGetPixelMapxv;
+fp_glGetBooleanIndexedvEXT glGetBooleanIndexedvEXT;
+fp_glGetProgramSubroutineParameteruivNV glGetProgramSubroutineParameteruivNV;
+fp_glSelectPerfMonitorCountersAMD glSelectPerfMonitorCountersAMD;
+fp_glGetVertexAttribLi64vNV glGetVertexAttribLi64vNV;
+fp_glBlendFuncSeparateiARB glBlendFuncSeparateiARB;
+fp_glWeightuivARB glWeightuivARB;
+fp_glGetVideoCaptureStreamdvNV glGetVideoCaptureStreamdvNV;
+fp_glGetProgramLocalParameterdvARB glGetProgramLocalParameterdvARB;
+fp_glVertexStream4fvATI glVertexStream4fvATI;
+fp_glMakeImageHandleResidentARB glMakeImageHandleResidentARB;
+fp_glGetProgramNamedParameterfvNV glGetProgramNamedParameterfvNV;
+fp_glProgramLocalParametersI4uivNV glProgramLocalParametersI4uivNV;
+fp_glBeginTransformFeedbackNV glBeginTransformFeedbackNV;
+fp_glBinormal3iEXT glBinormal3iEXT;
+fp_glWindowPos2sMESA glWindowPos2sMESA;
+fp_glGlobalAlphaFactorbSUN glGlobalAlphaFactorbSUN;
+fp_glTexturePageCommitmentEXT glTexturePageCommitmentEXT;
+fp_glTransformFeedbackVaryingsNV glTransformFeedbackVaryingsNV;
+fp_glConvolutionParameterfvEXT glConvolutionParameterfvEXT;
+fp_glBlitFramebufferEXT glBlitFramebufferEXT;
+fp_glUniformMatrix4fvARB glUniformMatrix4fvARB;
+fp_glProgramEnvParameter4dvARB glProgramEnvParameter4dvARB;
+fp_glGetMultiTexLevelParameterivEXT glGetMultiTexLevelParameterivEXT;
+fp_glGetMaterialxvOES glGetMaterialxvOES;
+fp_glIsOcclusionQueryNV glIsOcclusionQueryNV;
+fp_glGetProgramEnvParameterIuivNV glGetProgramEnvParameterIuivNV;
+fp_glVertexAttrib4fvARB glVertexAttrib4fvARB;
+fp_glGetNamedProgramLocalParameterIivEXT glGetNamedProgramLocalParameterIivEXT;
+fp_glProgramUniform3uiEXT glProgramUniform3uiEXT;
+fp_glProgramUniformMatrix4x2dvEXT glProgramUniformMatrix4x2dvEXT;
+fp_glTexCoord1hvNV glTexCoord1hvNV;
+fp_glPixelTexGenParameterfvSGIS glPixelTexGenParameterfvSGIS;
+fp_glCullParameterfvEXT glCullParameterfvEXT;
+fp_glIsBufferARB glIsBufferARB;
+fp_glMultiTexCoord1bOES glMultiTexCoord1bOES;
+fp_glFogCoordhNV glFogCoordhNV;
+fp_glGenSymbolsEXT glGenSymbolsEXT;
+fp_glGetConvolutionFilter glGetConvolutionFilter;
+fp_glProgramUniform1fvEXT glProgramUniform1fvEXT;
+fp_glCompressedTexImage1DARB glCompressedTexImage1DARB;
+fp_glGetProgramEnvParameterIivNV glGetProgramEnvParameterIivNV;
+fp_glVertexAttribL4ui64vNV glVertexAttribL4ui64vNV;
+fp_glGetVideoivNV glGetVideoivNV;
+fp_glBeginFragmentShaderATI glBeginFragmentShaderATI;
+fp_glMultiDrawArraysEXT glMultiDrawArraysEXT;
+fp_glGenNamesAMD glGenNamesAMD;
+fp_glPathParameteriNV glPathParameteriNV;
+fp_glCopyColorSubTableEXT glCopyColorSubTableEXT;
+fp_glVariantsvEXT glVariantsvEXT;
+fp_glVertexArrayEdgeFlagOffsetEXT glVertexArrayEdgeFlagOffsetEXT;
+fp_glSecondaryColor3iEXT glSecondaryColor3iEXT;
+fp_glUniform4uivEXT glUniform4uivEXT;
+fp_glOrthoxOES glOrthoxOES;
+fp_glDebugMessageCallbackARB glDebugMessageCallbackARB;
+fp_glTexCoord2fColor3fVertex3fvSUN glTexCoord2fColor3fVertex3fvSUN;
+fp_glProgramUniform1i64vNV glProgramUniform1i64vNV;
+fp_glVertexAttribI4uiEXT glVertexAttribI4uiEXT;
+fp_glSecondaryColor3ubEXT glSecondaryColor3ubEXT;
+fp_glCompressedMultiTexSubImage1DEXT glCompressedMultiTexSubImage1DEXT;
+fp_glMultiTexGendEXT glMultiTexGendEXT;
+fp_glTexCoord2hNV glTexCoord2hNV;
+fp_glUniform1uivEXT glUniform1uivEXT;
+fp_glMatrixTranslatefEXT glMatrixTranslatefEXT;
+fp_glGetUniformuivEXT glGetUniformuivEXT;
+fp_glGetnPixelMapfvARB glGetnPixelMapfvARB;
+fp_glFramebufferTextureEXT glFramebufferTextureEXT;
+fp_glDepthRangefOES glDepthRangefOES;
+fp_glGetNamedProgramLocalParameterfvEXT glGetNamedProgramLocalParameterfvEXT;
+fp_glColor4fNormal3fVertex3fvSUN glColor4fNormal3fVertex3fvSUN;
+fp_glSeparableFilter2DEXT glSeparableFilter2DEXT;
+fp_glTexParameterxOES glTexParameterxOES;
+fp_glClearAccumxOES glClearAccumxOES;
+fp_glWeightubvARB glWeightubvARB;
+fp_glMakeImageHandleNonResidentNV glMakeImageHandleNonResidentNV;
+fp_glEndVertexShaderEXT glEndVertexShaderEXT;
+fp_glUniform1iARB glUniform1iARB;
+fp_glUniform1ui64vNV glUniform1ui64vNV;
+fp_glGetClipPlanefOES glGetClipPlanefOES;
+fp_glProgramUniform3ivEXT glProgramUniform3ivEXT;
+fp_glWeightivARB glWeightivARB;
+fp_glMultiTexCoord4hvNV glMultiTexCoord4hvNV;
+fp_glNormal3hNV glNormal3hNV;
+fp_glGetSeparableFilter glGetSeparableFilter;
+fp_glGetPathTexGenivNV glGetPathTexGenivNV;
+fp_glTexCoord4bOES glTexCoord4bOES;
+fp_glProgramParameter4dNV glProgramParameter4dNV;
+fp_glGetnMinmaxARB glGetnMinmaxARB;
+fp_glMultiTexCoord4hNV glMultiTexCoord4hNV;
+fp_glReplacementCodeuivSUN glReplacementCodeuivSUN;
+fp_glMultiTexParameterIivEXT glMultiTexParameterIivEXT;
+fp_glTexCoord2bvOES glTexCoord2bvOES;
+fp_glEvalCoord2xOES glEvalCoord2xOES;
+fp_glGetSharpenTexFuncSGIS glGetSharpenTexFuncSGIS;
+fp_glProgramUniformHandleui64vNV glProgramUniformHandleui64vNV;
+fp_glIglooInterfaceSGIX glIglooInterfaceSGIX;
+fp_glWindowPos2dvARB glWindowPos2dvARB;
+fp_glVertexStream4fATI glVertexStream4fATI;
+fp_glMultiDrawRangeElementArrayAPPLE glMultiDrawRangeElementArrayAPPLE;
+fp_glVertexAttribFormatNV glVertexAttribFormatNV;
+fp_glAreTexturesResidentEXT glAreTexturesResidentEXT;
+fp_glGetHandleARB glGetHandleARB;
+fp_glVideoCaptureStreamParameterdvNV glVideoCaptureStreamParameterdvNV;
+fp_glMapParameterivNV glMapParameterivNV;
+fp_glSecondaryColor3sEXT glSecondaryColor3sEXT;
+fp_glGetTexParameterIivEXT glGetTexParameterIivEXT;
+fp_glFrameTerminatorGREMEDY glFrameTerminatorGREMEDY;
+fp_glVertexAttrib4NubARB glVertexAttrib4NubARB;
+fp_glPrimitiveRestartNV glPrimitiveRestartNV;
+fp_glVertexAttribL1ui64vARB glVertexAttribL1ui64vARB;
+fp_glUniform1i64vNV glUniform1i64vNV;
+fp_glVertexAttribs4svNV glVertexAttribs4svNV;
+fp_glVertexAttrib2fvARB glVertexAttrib2fvARB;
+fp_glVertexAttribI4svEXT glVertexAttribI4svEXT;
+fp_glTextureImage3DMultisampleCoverageNV glTextureImage3DMultisampleCoverageNV;
+fp_glGetVariantArrayObjectfvATI glGetVariantArrayObjectfvATI;
+fp_glTexCoord4fColor4fNormal3fVertex4fvSUN glTexCoord4fColor4fNormal3fVertex4fvSUN;
+fp_glIsProgramARB glIsProgramARB;
+fp_glBindImageTextureEXT glBindImageTextureEXT;
+fp_glSampleCoveragexOES glSampleCoveragexOES;
+fp_glMultiTexCoord1svARB glMultiTexCoord1svARB;
+fp_glGetMapxvOES glGetMapxvOES;
+fp_glTextureStorage2DMultisampleEXT glTextureStorage2DMultisampleEXT;
+fp_glVertexAttrib4NbvARB glVertexAttrib4NbvARB;
+fp_glColorPointerEXT glColorPointerEXT;
+fp_glEnableClientStateiEXT glEnableClientStateiEXT;
+fp_glEvalCoord1xvOES glEvalCoord1xvOES;
+fp_glDetachObjectARB glDetachObjectARB;
+fp_glVariantusvEXT glVariantusvEXT;
+fp_glCompressedTextureImage3DEXT glCompressedTextureImage3DEXT;
+fp_glMultiTexCoord1dARB glMultiTexCoord1dARB;
+fp_glGetVertexArrayIntegeri_vEXT glGetVertexArrayIntegeri_vEXT;
+fp_glPixelTexGenParameterfSGIS glPixelTexGenParameterfSGIS;
+fp_glUniform3fARB glUniform3fARB;
+fp_glConvolutionParameteriv glConvolutionParameteriv;
+fp_glCopyMultiTexSubImage2DEXT glCopyMultiTexSubImage2DEXT;
+fp_glEnableVertexAttribArrayARB glEnableVertexAttribArrayARB;
+fp_glGetVertexAttribivARB glGetVertexAttribivARB;
+fp_glTexCoord4hvNV glTexCoord4hvNV;
+fp_glUseProgramObjectARB glUseProgramObjectARB;
+fp_glUniform3ui64vNV glUniform3ui64vNV;
+fp_glShaderOp2EXT glShaderOp2EXT;
+fp_glGetVideouivNV glGetVideouivNV;
+fp_glNamedProgramLocalParametersI4uivEXT glNamedProgramLocalParametersI4uivEXT;
+fp_glVertexAttrib3svARB glVertexAttrib3svARB;
+fp_glGetNamedBufferParameterivEXT glGetNamedBufferParameterivEXT;
+fp_glGenProgramPipelinesEXT glGenProgramPipelinesEXT;
+fp_glMatrixScaledEXT glMatrixScaledEXT;
+fp_glGetFragmentLightivSGIX glGetFragmentLightivSGIX;
+fp_glWindowPos2svARB glWindowPos2svARB;
+fp_glVertexAttrib2svNV glVertexAttrib2svNV;
+fp_glWindowPos2ivARB glWindowPos2ivARB;
+fp_glGetVertexAttribPointervNV glGetVertexAttribPointervNV;
+fp_glEdgeFlagPointerListIBM glEdgeFlagPointerListIBM;
+fp_glGenerateMipmapEXT glGenerateMipmapEXT;
+fp_glProgramUniformMatrix2x4dvEXT glProgramUniformMatrix2x4dvEXT;
+fp_glPathCoordsNV glPathCoordsNV;
+fp_glProgramParameteriEXT glProgramParameteriEXT;
+fp_glCompressedMultiTexImage2DEXT glCompressedMultiTexImage2DEXT;
+fp_glMultiTexCoord4xvOES glMultiTexCoord4xvOES;
+fp_glFramebufferReadBufferEXT glFramebufferReadBufferEXT;
+fp_glExtractComponentEXT glExtractComponentEXT;
+fp_glMinmax glMinmax;
+fp_glGenBuffersARB glGenBuffersARB;
+fp_glFogCoorddEXT glFogCoorddEXT;
+fp_glVertexAttrib4fvNV glVertexAttrib4fvNV;
+fp_glFragmentLightiSGIX glFragmentLightiSGIX;
+fp_glMultiTexCoord1bvOES glMultiTexCoord1bvOES;
+fp_glSecondaryColorPointerEXT glSecondaryColorPointerEXT;
+fp_glGetBufferSubDataARB glGetBufferSubDataARB;
+fp_glGetPathParameterivNV glGetPathParameterivNV;
+fp_glFlushRasterSGIX glFlushRasterSGIX;
+fp_glElementPointerATI glElementPointerATI;
+fp_glGetAttachedObjectsARB glGetAttachedObjectsARB;
+fp_glFogxOES glFogxOES;
+fp_glMatrixIndexPointerARB glMatrixIndexPointerARB;
+fp_glGetPerfMonitorGroupStringAMD glGetPerfMonitorGroupStringAMD;
+fp_glVertex4hNV glVertex4hNV;
+fp_glSecondaryColor3dvEXT glSecondaryColor3dvEXT;
+fp_glPathSubCoordsNV glPathSubCoordsNV;
+fp_glBlendFuncSeparateIndexedAMD glBlendFuncSeparateIndexedAMD;
+fp_glMakeBufferResidentNV glMakeBufferResidentNV;
+fp_glMatrixIndexusvARB glMatrixIndexusvARB;
+fp_glActiveTextureARB glActiveTextureARB;
+fp_glTexParameterIivEXT glTexParameterIivEXT;
+fp_glVertexAttrib4dvARB glVertexAttrib4dvARB;
+fp_glTextureSubImage1DEXT glTextureSubImage1DEXT;
+fp_glDispatchComputeGroupSizeARB glDispatchComputeGroupSizeARB;
+fp_glPathParameterfNV glPathParameterfNV;
+fp_glVertexAttrib2dvARB glVertexAttrib2dvARB;
+fp_glDepthBoundsdNV glDepthBoundsdNV;
+fp_glDeleteTexturesEXT glDeleteTexturesEXT;
+fp_glDrawBuffersATI glDrawBuffersATI;
+fp_glLightModelxvOES glLightModelxvOES;
+fp_glApplyTextureEXT glApplyTextureEXT;
+fp_glVertexStream1dvATI glVertexStream1dvATI;
+fp_glGetMinmax glGetMinmax;
+fp_glGetFixedvOES glGetFixedvOES;
+fp_glSamplePatternEXT glSamplePatternEXT;
+fp_glColor4fNormal3fVertex3fSUN glColor4fNormal3fVertex3fSUN;
+fp_glFogCoorddvEXT glFogCoorddvEXT;
+fp_glCopyTextureImage1DEXT glCopyTextureImage1DEXT;
+fp_glDeleteFencesNV glDeleteFencesNV;
+fp_glProgramUniform1ivEXT glProgramUniform1ivEXT;
+fp_glFlushStaticDataIBM glFlushStaticDataIBM;
+fp_glProgramUniform4ui64NV glProgramUniform4ui64NV;
+fp_glRasterPos4xOES glRasterPos4xOES;
+fp_glProgramUniform4dvEXT glProgramUniform4dvEXT;
+fp_glEndTransformFeedbackEXT glEndTransformFeedbackEXT;
+fp_glBinormal3dEXT glBinormal3dEXT;
+fp_glFinishAsyncSGIX glFinishAsyncSGIX;
+fp_glTexCoord2xvOES glTexCoord2xvOES;
+fp_glProgramUniform2i64vNV glProgramUniform2i64vNV;
+fp_glFlushVertexArrayRangeAPPLE glFlushVertexArrayRangeAPPLE;
+fp_glMultiTexCoord3dvARB glMultiTexCoord3dvARB;
+fp_glDebugMessageInsertARB glDebugMessageInsertARB;
+fp_glMatrixLoadTransposedEXT glMatrixLoadTransposedEXT;
+fp_glGetPointeri_vEXT glGetPointeri_vEXT;
+fp_glGetPerfMonitorCountersAMD glGetPerfMonitorCountersAMD;
+fp_glGenQueriesARB glGenQueriesARB;
+fp_glProgramUniform2ui64NV glProgramUniform2ui64NV;
+fp_glMultiTexCoord3bOES glMultiTexCoord3bOES;
+fp_glSecondaryColor3usvEXT glSecondaryColor3usvEXT;
+fp_glProgramEnvParameterI4uivNV glProgramEnvParameterI4uivNV;
+fp_glWindowPos4dMESA glWindowPos4dMESA;
+fp_glDebugMessageControlARB glDebugMessageControlARB;
+fp_glIsTextureEXT glIsTextureEXT;
+fp_glFragmentMaterialivSGIX glFragmentMaterialivSGIX;
+fp_glLinkProgramARB glLinkProgramARB;
+fp_glFinishFenceAPPLE glFinishFenceAPPLE;
+fp_glVertexArrayVertexAttribBindingEXT glVertexArrayVertexAttribBindingEXT;
+fp_glTextureParameteriEXT glTextureParameteriEXT;
+fp_glVariantivEXT glVariantivEXT;
+fp_glUnmapTexture2DINTEL glUnmapTexture2DINTEL;
+fp_glGetPointerIndexedvEXT glGetPointerIndexedvEXT;
+fp_glColor4xvOES glColor4xvOES;
+fp_glClampColorARB glClampColorARB;
+fp_glVertex4bOES glVertex4bOES;
+fp_glTransformFeedbackVaryingsEXT glTransformFeedbackVaryingsEXT;
+fp_glCombinerOutputNV glCombinerOutputNV;
+fp_glWindowPos4sMESA glWindowPos4sMESA;
+fp_glVertexAttrib4svARB glVertexAttrib4svARB;
+fp_glGetFenceivNV glGetFenceivNV;
+fp_glGetInfoLogARB glGetInfoLogARB;
+fp_glVertexAttribs3dvNV glVertexAttribs3dvNV;
+fp_glGlobalAlphaFactorsSUN glGlobalAlphaFactorsSUN;
+fp_glGetTrackMatrixivNV glGetTrackMatrixivNV;
+fp_glTextureParameterfvEXT glTextureParameterfvEXT;
+fp_glIsNamedBufferResidentNV glIsNamedBufferResidentNV;
+fp_glMatrixMultdEXT glMatrixMultdEXT;
+fp_glTbufferMask3DFX glTbufferMask3DFX;
+fp_glCoverFillPathNV glCoverFillPathNV;
+fp_glObjectLabelKHR glObjectLabelKHR;
+fp_glVertexAttrib1fvARB glVertexAttrib1fvARB;
+fp_glNamedProgramLocalParameterI4uivEXT glNamedProgramLocalParameterI4uivEXT;
+fp_glProgramSubroutineParametersuivNV glProgramSubroutineParametersuivNV;
+fp_glSampleMaskIndexedNV glSampleMaskIndexedNV;
+fp_glMemoryBarrierEXT glMemoryBarrierEXT;
+fp_glVertexStream3iATI glVertexStream3iATI;
+fp_glCopyConvolutionFilter1D glCopyConvolutionFilter1D;
+fp_glTexParameterxvOES glTexParameterxvOES;
+fp_glNamedFramebufferParameteriEXT glNamedFramebufferParameteriEXT;
+fp_glVertexAttribI4usvEXT glVertexAttribI4usvEXT;
+fp_glTextureBufferRangeEXT glTextureBufferRangeEXT;
+fp_glIsPathNV glIsPathNV;
+fp_glCompressedMultiTexSubImage2DEXT glCompressedMultiTexSubImage2DEXT;
+fp_glTangent3svEXT glTangent3svEXT;
+fp_glVertexAttribParameteriAMD glVertexAttribParameteriAMD;
+fp_glCreateSyncFromCLeventARB glCreateSyncFromCLeventARB;
+fp_glGetVertexAttribLui64vARB glGetVertexAttribLui64vARB;
+fp_glVertexAttribL4ui64NV glVertexAttribL4ui64NV;
+fp_glReplacementCodeuiColor4ubVertex3fSUN glReplacementCodeuiColor4ubVertex3fSUN;
+fp_glImageTransformParameterfHP glImageTransformParameterfHP;
+fp_glCreateShaderProgramvEXT glCreateShaderProgramvEXT;
+fp_glVertex2bvOES glVertex2bvOES;
+fp_glGetMapControlPointsNV glGetMapControlPointsNV;
+fp_glNamedProgramLocalParametersI4ivEXT glNamedProgramLocalParametersI4ivEXT;
+fp_glBindBufferRangeNV glBindBufferRangeNV;
+fp_glVertexStream3dvATI glVertexStream3dvATI;
+fp_glNormalPointerListIBM glNormalPointerListIBM;
+fp_glProgramUniform2dvEXT glProgramUniform2dvEXT;
+fp_glVertexStream3ivATI glVertexStream3ivATI;
+fp_glGetNamedFramebufferAttachmentParameterivEXT glGetNamedFramebufferAttachmentParameterivEXT;
+fp_glVertexArrayVertexAttribIFormatEXT glVertexArrayVertexAttribIFormatEXT;
+fp_glGetTextureImageEXT glGetTextureImageEXT;
+fp_glReplacementCodeuiSUN glReplacementCodeuiSUN;
+fp_glFramebufferTextureARB glFramebufferTextureARB;
+fp_glPushClientAttribDefaultEXT glPushClientAttribDefaultEXT;
+fp_glVertexAttrib4svNV glVertexAttrib4svNV;
+fp_glGetConvolutionParameterxvOES glGetConvolutionParameterxvOES;
+fp_glCopyColorTable glCopyColorTable;
+fp_glCoverFillPathInstancedNV glCoverFillPathInstancedNV;
+fp_glMultiTexParameterivEXT glMultiTexParameterivEXT;
+fp_glVertexAttrib4fNV glVertexAttrib4fNV;
+fp_glGetColorTableParameterivSGI glGetColorTableParameterivSGI;
+fp_glProgramParameters4dvNV glProgramParameters4dvNV;
+fp_glVertexStream3dATI glVertexStream3dATI;
+fp_glGetMapParameterivNV glGetMapParameterivNV;
+fp_glProgramUniform3i64vNV glProgramUniform3i64vNV;
+fp_glTangent3fEXT glTangent3fEXT;
+fp_glGetPathMetricRangeNV glGetPathMetricRangeNV;
+fp_glWindowPos2iMESA glWindowPos2iMESA;
+fp_glVertex2xvOES glVertex2xvOES;
+fp_glReplacementCodeuiVertex3fSUN glReplacementCodeuiVertex3fSUN;
+fp_glWindowPos3fARB glWindowPos3fARB;
+fp_glMapNamedBufferEXT glMapNamedBufferEXT;
+fp_glIsPointInFillPathNV glIsPointInFillPathNV;
+fp_glVertexAttribI2uiEXT glVertexAttribI2uiEXT;
+fp_glGetConvolutionParameterfvEXT glGetConvolutionParameterfvEXT;
+fp_glFramebufferRenderbufferEXT glFramebufferRenderbufferEXT;
+fp_glBinormal3svEXT glBinormal3svEXT;
+fp_glBindBufferOffsetNV glBindBufferOffsetNV;
+fp_glBinormalPointerEXT glBinormalPointerEXT;
+fp_glUniform2ivARB glUniform2ivARB;
+fp_glPassTexCoordATI glPassTexCoordATI;
+fp_glGetTextureSamplerHandleNV glGetTextureSamplerHandleNV;
+fp_glGetColorTableParameteriv glGetColorTableParameteriv;
+fp_glObjectPurgeableAPPLE glObjectPurgeableAPPLE;
+fp_glColorTableSGI glColorTableSGI;
+fp_glWindowPos2fvMESA glWindowPos2fvMESA;
+fp_glPolygonOffsetxOES glPolygonOffsetxOES;
+fp_glVertexAttrib4dARB glVertexAttrib4dARB;
+fp_glUniformHandleui64vARB glUniformHandleui64vARB;
+fp_glFragmentLightModelfvSGIX glFragmentLightModelfvSGIX;
+fp_glPointParameterxvOES glPointParameterxvOES;
+fp_glBindFragmentShaderATI glBindFragmentShaderATI;
+fp_glVertexAttribs3hvNV glVertexAttribs3hvNV;
+fp_glListParameterfvSGIX glListParameterfvSGIX;
+fp_glTextureStorage2DEXT glTextureStorage2DEXT;
+fp_glVertexAttribI1iEXT glVertexAttribI1iEXT;
+fp_glLightModelxOES glLightModelxOES;
+fp_glVertexBlendEnviATI glVertexBlendEnviATI;
+fp_glMultiDrawElementArrayAPPLE glMultiDrawElementArrayAPPLE;
+fp_glStencilFillPathInstancedNV glStencilFillPathInstancedNV;
+fp_glVDPAUUnmapSurfacesNV glVDPAUUnmapSurfacesNV;
+fp_glProgramUniform4i64NV glProgramUniform4i64NV;
+fp_glVertexStream4dvATI glVertexStream4dvATI;
+fp_glProgramUniformMatrix4fvEXT glProgramUniformMatrix4fvEXT;
+fp_glVertexAttrib3hNV glVertexAttrib3hNV;
+fp_glBindTransformFeedbackNV glBindTransformFeedbackNV;
+fp_glCopyTexSubImage3DEXT glCopyTexSubImage3DEXT;
+fp_glGetObjectBufferfvATI glGetObjectBufferfvATI;
+fp_glDrawElementsInstancedEXT glDrawElementsInstancedEXT;
+fp_glNamedProgramLocalParameterI4iEXT glNamedProgramLocalParameterI4iEXT;
+fp_glGetMaterialxOES glGetMaterialxOES;
+fp_glGetVideoui64vNV glGetVideoui64vNV;
+fp_glTangent3bEXT glTangent3bEXT;
+fp_glGetGraphicsResetStatusARB glGetGraphicsResetStatusARB;
+fp_glProgramUniformHandleui64NV glProgramUniformHandleui64NV;
+fp_glPixelTransformParameterfvEXT glPixelTransformParameterfvEXT;
+fp_glDrawTransformFeedbackNV glDrawTransformFeedbackNV;
+fp_glTextureImage2DMultisampleCoverageNV glTextureImage2DMultisampleCoverageNV;
+fp_glNamedRenderbufferStorageMultisampleCoverageEXT glNamedRenderbufferStorageMultisampleCoverageEXT;
+fp_glWindowPos2svMESA glWindowPos2svMESA;
+fp_glGenerateTextureMipmapEXT glGenerateTextureMipmapEXT;
+fp_glVertexAttribArrayObjectATI glVertexAttribArrayObjectATI;
+fp_glTexCoord3bOES glTexCoord3bOES;
+fp_glUniform2fvARB glUniform2fvARB;
+fp_glProgramLocalParameterI4uivNV glProgramLocalParameterI4uivNV;
+fp_glFlushVertexArrayRangeNV glFlushVertexArrayRangeNV;
+fp_glSecondaryColor3svEXT glSecondaryColor3svEXT;
+fp_glFramebufferTexture3DEXT glFramebufferTexture3DEXT;
+fp_glLoadTransposeMatrixxOES glLoadTransposeMatrixxOES;
+fp_glDeleteTransformFeedbacksNV glDeleteTransformFeedbacksNV;
+fp_glGetCompressedTextureImageEXT glGetCompressedTextureImageEXT;
+fp_glIndexMaterialEXT glIndexMaterialEXT;
+fp_glTexCoord2hvNV glTexCoord2hvNV;
+fp_glFramebufferTexture2DEXT glFramebufferTexture2DEXT;
+fp_glEndTransformFeedbackNV glEndTransformFeedbackNV;
+fp_glGlobalAlphaFactoruiSUN glGlobalAlphaFactoruiSUN;
+fp_glCompileShaderARB glCompileShaderARB;
+fp_glNamedBufferSubDataEXT glNamedBufferSubDataEXT;
+fp_glGetObjectLabelKHR glGetObjectLabelKHR;
+fp_glNormalStream3fATI glNormalStream3fATI;
+fp_glNormalStream3fvATI glNormalStream3fvATI;
+fp_glWindowPos4svMESA glWindowPos4svMESA;
+fp_glDeleteFragmentShaderATI glDeleteFragmentShaderATI;
+fp_glUniform1i64NV glUniform1i64NV;
+fp_glPathStringNV glPathStringNV;
+fp_glGetNamedFramebufferParameterivEXT glGetNamedFramebufferParameterivEXT;
+fp_glGetProgramNamedParameterdvNV glGetProgramNamedParameterdvNV;
+fp_glPathDashArrayNV glPathDashArrayNV;
+fp_glColor3fVertex3fvSUN glColor3fVertex3fvSUN;
+fp_glGetImageHandleARB glGetImageHandleARB;
+fp_glTangent3dEXT glTangent3dEXT;
+fp_glGetQueryObjectivARB glGetQueryObjectivARB;
+fp_glGetLocalConstantFloatvEXT glGetLocalConstantFloatvEXT;
+fp_glUseShaderProgramEXT glUseShaderProgramEXT;
+fp_glBindRenderbufferEXT glBindRenderbufferEXT;
+fp_glClearDepthfOES glClearDepthfOES;
+fp_glGetNamedProgramLocalParameterdvEXT glGetNamedProgramLocalParameterdvEXT;
+fp_glMultiTexCoord3xOES glMultiTexCoord3xOES;
+fp_glFragmentMaterialfSGIX glFragmentMaterialfSGIX;
+fp_glGetVariantArrayObjectivATI glGetVariantArrayObjectivATI;
+fp_glVertexAttrib1dARB glVertexAttrib1dARB;
+fp_glLockArraysEXT glLockArraysEXT;
+fp_glVertexAttribPointerNV glVertexAttribPointerNV;
+fp_glBindBufferBaseEXT glBindBufferBaseEXT;
+fp_glGenAsyncMarkersSGIX glGenAsyncMarkersSGIX;
+fp_glSetMultisamplefvAMD glSetMultisamplefvAMD;
+fp_glPathColorGenNV glPathColorGenNV;
+fp_glUniform1ivARB glUniform1ivARB;
+fp_glVertexAttrib4ivARB glVertexAttrib4ivARB;
+fp_glPixelTransformParameterfEXT glPixelTransformParameterfEXT;
+fp_glGetTexParameterIuivEXT glGetTexParameterIuivEXT;
+fp_glGetObjectParameterivARB glGetObjectParameterivARB;
+fp_glVertexArraySecondaryColorOffsetEXT glVertexArraySecondaryColorOffsetEXT;
+fp_glWindowPos2fARB glWindowPos2fARB;
+fp_glCompressedTexSubImage3DARB glCompressedTexSubImage3DARB;
+fp_glPresentFrameKeyedNV glPresentFrameKeyedNV;
+fp_glPathCoverDepthFuncNV glPathCoverDepthFuncNV;
+fp_glSecondaryColor3usEXT glSecondaryColor3usEXT;
+fp_glCopyColorTableSGI glCopyColorTableSGI;
+fp_glProgramEnvParameter4fvARB glProgramEnvParameter4fvARB;
+fp_glGetObjectPtrLabelKHR glGetObjectPtrLabelKHR;
+fp_glMultiTexCoord4sARB glMultiTexCoord4sARB;
+fp_glVertexStream2fvATI glVertexStream2fvATI;
+fp_glUniform4ui64NV glUniform4ui64NV;
+fp_glBindTextureEXT glBindTextureEXT;
+fp_glProgramStringARB glProgramStringARB;
+fp_glMultiTexCoord3bvOES glMultiTexCoord3bvOES;
+fp_glBindTexGenParameterEXT glBindTexGenParameterEXT;
+fp_glNormalStream3bATI glNormalStream3bATI;
+fp_glTextureImage2DEXT glTextureImage2DEXT;
+fp_glTexCoord4xOES glTexCoord4xOES;
+fp_glSecondaryColor3fvEXT glSecondaryColor3fvEXT;
+fp_glDepthRangedNV glDepthRangedNV;
+fp_glStartInstrumentsSGIX glStartInstrumentsSGIX;
+fp_glProgramNamedParameter4fvNV glProgramNamedParameter4fvNV;
+fp_glEndVideoCaptureNV glEndVideoCaptureNV;
+fp_glUniform1fARB glUniform1fARB;
+fp_glNamedFramebufferTexture1DEXT glNamedFramebufferTexture1DEXT;
+fp_glMultiDrawElementsIndirectCountARB glMultiDrawElementsIndirectCountARB;
+fp_glGetTextureParameterIivEXT glGetTextureParameterIivEXT;
+fp_glMultiTexCoord3hNV glMultiTexCoord3hNV;
+fp_glGetVideoCaptureivNV glGetVideoCaptureivNV;
+fp_glTexCoord2fColor4fNormal3fVertex3fSUN glTexCoord2fColor4fNormal3fVertex3fSUN;
+fp_glGenTransformFeedbacksNV glGenTransformFeedbacksNV;
+fp_glCombinerParameterivNV glCombinerParameterivNV;
+fp_glCopyMultiTexImage2DEXT glCopyMultiTexImage2DEXT;
+fp_glVertex3bvOES glVertex3bvOES;
+fp_glTexImage3DMultisampleCoverageNV glTexImage3DMultisampleCoverageNV;
+fp_glTexSubImage4DSGIS glTexSubImage4DSGIS;
+fp_glEvalMapsNV glEvalMapsNV;
+fp_glGetFragDataLocationEXT glGetFragDataLocationEXT;
+fp_glGetCompressedMultiTexImageEXT glGetCompressedMultiTexImageEXT;
+fp_glDrawBuffersARB glDrawBuffersARB;
+fp_glGetVertexAttribfvNV glGetVertexAttribfvNV;
+fp_glVertexAttribDivisorARB glVertexAttribDivisorARB;
+fp_glTextureParameterIivEXT glTextureParameterIivEXT;
+fp_glMultiTexParameterfvEXT glMultiTexParameterfvEXT;
+fp_glNewObjectBufferATI glNewObjectBufferATI;
+fp_glRotatexOES glRotatexOES;
+fp_glTextureImage1DEXT glTextureImage1DEXT;
+fp_glAttachObjectARB glAttachObjectARB;
+fp_glCopyTexSubImage1DEXT glCopyTexSubImage1DEXT;
+fp_glUniformMatrix3fvARB glUniformMatrix3fvARB;
+fp_glPointParameterfvEXT glPointParameterfvEXT;
+fp_glUniform4fARB glUniform4fARB;
+fp_glMultiTexEnvfvEXT glMultiTexEnvfvEXT;
+fp_glDrawRangeElementArrayATI glDrawRangeElementArrayATI;
+fp_glDrawArraysInstancedARB glDrawArraysInstancedARB;
+fp_glGetDebugMessageLogARB glGetDebugMessageLogARB;
+fp_glGetPathTexGenfvNV glGetPathTexGenfvNV;
+fp_glNamedProgramLocalParameters4fvEXT glNamedProgramLocalParameters4fvEXT;
+fp_glCopyConvolutionFilter2DEXT glCopyConvolutionFilter2DEXT;
+fp_glCompressedTextureSubImage2DEXT glCompressedTextureSubImage2DEXT;
+fp_glCopyConvolutionFilter2D glCopyConvolutionFilter2D;
+fp_glReadInstrumentsSGIX glReadInstrumentsSGIX;
+fp_glBindBufferARB glBindBufferARB;
+fp_glVertexAttrib1sNV glVertexAttrib1sNV;
+fp_glBeginOcclusionQueryNV glBeginOcclusionQueryNV;
+fp_glGenFencesAPPLE glGenFencesAPPLE;
+fp_glDisableVariantClientStateEXT glDisableVariantClientStateEXT;
+fp_glMinmaxEXT glMinmaxEXT;
+fp_glNormalPointervINTEL glNormalPointervINTEL;
+fp_glGetObjectParameterivAPPLE glGetObjectParameterivAPPLE;
+fp_glVertexAttrib3sARB glVertexAttrib3sARB;
+fp_glUpdateObjectBufferATI glUpdateObjectBufferATI;
+fp_glGetUniformBufferSizeEXT glGetUniformBufferSizeEXT;
+fp_glBindProgramPipelineEXT glBindProgramPipelineEXT;
+fp_glNormal3fVertex3fSUN glNormal3fVertex3fSUN;
+fp_glMultiDrawElementsEXT glMultiDrawElementsEXT;
+fp_glGetTransformFeedbackVaryingEXT glGetTransformFeedbackVaryingEXT;
+fp_glPushDebugGroupKHR glPushDebugGroupKHR;
+fp_glMultiTexCoord2bOES glMultiTexCoord2bOES;
+fp_glEvalCoord1xOES glEvalCoord1xOES;
+fp_glIsPointInStrokePathNV glIsPointInStrokePathNV;
+}
