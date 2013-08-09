@@ -16,10 +16,8 @@ Currently BraLa tries to load the texture pack from your currently installed min
 
 ## Features ##
 
-BraLa is at this state just a minecraft (S)MP viewer, it is able to connect to 1.6.2 servers
-and display the world.
-BraLa also doesn't have any kind of physics (to use BraLa you must set the client into
-creative mod or allow to fly).
+BraLa is at this state just a minecraft (S)MP viewer with very basic physics,
+it is able to connect to 1.6.2 servers and display the world.
 
 What BraLa *can* do:
 * Connect to 1.6.2 servers
