@@ -7,7 +7,7 @@ private {
     import glwtf.glfw;
     import glwtf.window : Window;
     import glwtf.input : register_glfw_error_callback;
-    import glad.loader;
+    import glad.gl.loader;
 
     import std.conv : to;
     import std.path : buildPath, dirName, absolutePath;
@@ -184,9 +184,6 @@ final class BraLa {
 
 
 int main(string[] args) {
-    enforceEx!InitError(gladInit(), "gladInit failed!");
-    scope(exit) gladTerminate();
-
     version(DynamicGLFW) { DerelictGLFW3.load(); }
     enforceEx!InitError(glfwInit(), "glfwInit failed!");
     scope(exit) glfwTerminate();

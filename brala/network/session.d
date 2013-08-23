@@ -148,9 +148,12 @@ class Snooper {
     @property static auto snoop_args()
         in { assert(thread_isMainThread(), "snoop_args not called from main thread!"); }
         body {
-            return tuple("BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
-                        "D Compiler: " ~ to!string(__VERSION__),
-                        to!string(glGetString(GL_VERSION)), to!string(glGetString(GL_VENDOR)));
+            return tuple(
+                "BraLa", os.to!string(), "undetectable", isX86_64 ? "64 bit":"32 bit", "-1", "-1",
+                "D Compiler: " ~ to!string(__VERSION__),
+                to!string(cast(const(char)*)glGetString(GL_VERSION)),
+                to!string(cast(const(char)*)glGetString(GL_VENDOR))
+            );
         }
 }
 
