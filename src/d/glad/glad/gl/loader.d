@@ -26,7 +26,7 @@ bool open_gl() {
         libGL = LoadLibraryA("opengl32.dll");
         if(libGL !is null) {
             gladGetProcAddressPtr = cast(typeof(gladGetProcAddressPtr))GetProcAddress(
-                libGL, "gladGetProcAddressPtr");
+                libGL, "wglGetProcAddress");
             return gladGetProcAddressPtr !is null;
         }
 
@@ -79,9 +79,7 @@ void* get_proc(const(char)* namez) {
     if(libGL is null) return null;
     void* result;
 
-    if(gladGetProcAddressPtr is null) return null;
-
-    version(OSX) {} else {
+	if(gladGetProcAddressPtr !is null) {
         result = gladGetProcAddressPtr(namez);
     }
     if(result is null) {
