@@ -59,7 +59,7 @@ class Connection {
 
     protected ubyte[] shared_secret;
     
-    immutable byte protocol_version = 74;
+    static immutable byte protocol_version = 74;
     
     this(Session session) {
         this.session = session;        

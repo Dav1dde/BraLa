@@ -112,12 +112,12 @@ final class World {
     static const default_tessellation_buffer_size = width*height*depth*Vertex.sizeof*6;
     static const default_light_buffer_size = 12*4*500;
     
-    const int width = 16;
-    const int height = 256;
-    const int depth = 16;
-    const int ystep = width*depth;
-    const int min_height = 0;
-    const int max_height = height;    
+    static const int width = 16;
+    static const int height = 256;
+    static const int depth = 16;
+    static const int ystep = width*depth;
+    static const int min_height = 0;
+    static const int max_height = height;
 
     Chunk[vec3i] chunks;
     vec3i spawn;

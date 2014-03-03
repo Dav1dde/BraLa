@@ -300,7 +300,7 @@ class Config {
         static if(__traits(hasMember, T, "length")) {
             bool s = cast(bool)value.length;
         } else {
-            bool s = cast(bool)value;
+            bool s = !!value;
         }
 
         if(s) {

@@ -33,7 +33,7 @@ private void write_impl(T : bool)(Stream s, T data) {
 
 private void write_impl(T : string)(Stream s, T data) {
     s.write(cast(ushort)data.length);
-    s.writeStringW(toUTF16(data));
+    s.writeStringW(to!string(data).toUTF16());
 }
 
 private void write_impl(T)(Stream s, T data) if(!(is(T : bool) || is(T : bool))) {  

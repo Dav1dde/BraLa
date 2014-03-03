@@ -56,18 +56,18 @@ struct Block {
 // => dont do opengl stuff in the ctor
 final class Chunk {
     // width, height, depth must be a power of two
-    const int width = 16;
-    const int height = 256;
-    const int depth = 16;
+    static const int width = 16;
+    static const int height = 256;
+    static const int depth = 16;
 
-    const int ystep = width*depth;
-    const int log2width = log2_ub(width);
-    const int log2height = log2_ub(height);
-    const int log2depth = log2_ub(depth);
-    const int log2depthwidth = log2_ub(depth*width);
+    static const int ystep = width*depth;
+    static const int log2width = log2_ub(width);
+    static const int log2height = log2_ub(height);
+    static const int log2depth = log2_ub(depth);
+    static const int log2depthwidth = log2_ub(depth*width);
     
-    const int block_count = width*height*depth;
-    const int data_size = block_count*Block.sizeof;
+    static const int block_count = width*height*depth;
+    static const int data_size = block_count*Block.sizeof;
     
     static Block* empty_blocks;
     

@@ -36,7 +36,7 @@ class Image {
         }
     }
     
-    const int dest_type = GL_UNSIGNED_BYTE;
+    static const int dest_type = GL_UNSIGNED_BYTE;
 
     this(ubyte[] data, int width, int height, int comp) {
         this.data = data;

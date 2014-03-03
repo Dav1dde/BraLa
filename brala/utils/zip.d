@@ -11,16 +11,13 @@ private {
 alias ArchiveMember = zip.ArchiveMember;
 
 
-class ZipArchive : zip.ZipArchive {
-    this() {}
+class ZipArchive {
+    zip.ZipArchive _internal;
+    alias _internal this;
 
-    this(void[] data) {
-        super(data);
-    }
-
-    this(string path) {
-        super(file.read(path));
-    }
+    this() { _internal = new zip.ZipArchive(); }
+    this(void[] data) { _internal = new zip.ZipArchive(data); }
+    this(string path) { _internal = new zip.ZipArchive(file.read(path)); }
 
     string[] list_dir(string path, bool deep=true) {
         auto app = appender!(string[])();

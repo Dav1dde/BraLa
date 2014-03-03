@@ -5,6 +5,7 @@ private import glad.gl.funcs;
 private import glad.gl.ext;
 private import glad.gl.enums;
 private import glad.gl.types;
+alias Loader = void* delegate(const(char)*);
 
 version(Windows) {
     private import std.c.windows.windows;
@@ -14,11 +15,11 @@ version(Windows) {
 
 version(Windows) {
     private __gshared HMODULE libGL;
-    extern(System) private __gshared void* function(const(char)*) gladGetProcAddressPtr;
 } else {
     private __gshared void* libGL;
-    extern(System) private __gshared void* function(const(char)*) gladGetProcAddressPtr;
 }
+extern(System) private alias gladGetProcAddressPtrType = void* function(const(char)*);
+private __gshared gladGetProcAddressPtrType gladGetProcAddressPtr;
 
 private
 bool open_gl() {
@@ -61,6 +62,25 @@ bool open_gl() {
 }
 
 private
+void* get_proc(const(char)* namez) {
+    if(libGL is null) return null;
+    void* result;
+
+    if(gladGetProcAddressPtr !is null) {
+        result = gladGetProcAddressPtr(namez);
+    }
+    if(result is null) {
+        version(Windows) {
+            result = GetProcAddress(libGL, namez);
+        } else {
+            result = dlsym(libGL, namez);
+        }
+    }
+
+    return result;
+}
+
+private
 void close_gl() {
     version(Windows) {
         if(libGL !is null) {
@@ -75,27 +95,9 @@ void close_gl() {
     }
 }
 
-void* get_proc(const(char)* namez) {
-    if(libGL is null) return null;
-    void* result;
-
-	if(gladGetProcAddressPtr !is null) {
-        result = gladGetProcAddressPtr(namez);
-    }
-    if(result is null) {
-        version(Windows) {
-            result = GetProcAddress(libGL, namez);
-        } else {
-            result = dlsym(libGL, namez);
-        }
-    }
-
-    return result;
-}
-
 bool gladLoadGL() {
     if(open_gl()) {
-        gladLoadGL(&get_proc);
+        gladLoadGL(x => get_proc(x));
         close_gl();
         return true;
     }
@@ -113,19 +115,19 @@ private bool has_ext(const(char)* ext) {
         const(char)* terminator;
 
         if(extensions is null || ext is null) {
-            return 0;
+            return false;
         }
 
         while(1) {
             loc = strstr(extensions, ext);
             if(loc is null) {
-                return 0;
+                return false;
             }
 
             terminator = loc + strlen(ext);
             if((loc is extensions || *(loc - 1) == ' ') &&
                 (*terminator == ' ' || *terminator == '\0')) {
-                return 1;
+                return true;
             }
             extensions = terminator;
         }
@@ -142,11 +144,11 @@ private bool has_ext(const(char)* ext) {
 
     return false;
 }
-void gladLoadGL(void* function(const(char)* name) load) {
+void gladLoadGL(Loader load) {
 	glGetString = cast(typeof(glGetString))load("glGetString");
 	if(glGetString is null) { return; }
 
-	find_core();
+	find_coreGL();
 	load_GL_VERSION_1_0(load);
 	load_GL_VERSION_1_1(load);
 	load_GL_VERSION_1_2(load);
@@ -165,14 +167,14 @@ void gladLoadGL(void* function(const(char)* name) load) {
 	load_GL_VERSION_4_3(load);
 	load_GL_VERSION_4_4(load);
 
-	find_extensions();
+	find_extensionsGL();
 
 	return;
 }
 
 private:
 
-void find_core() {
+void find_coreGL() {
 	const(char)* v = cast(const(char)*)glGetString(GL_VERSION);
 	int major = v[0] - '0';
 	int minor = v[2] - '0';
@@ -197,12 +199,12 @@ void find_core() {
 	return;
 }
 
-void find_extensions() {
+void find_extensionsGL() {
 	GL_EXT_texture_filter_anisotropic = has_ext("GL_EXT_texture_filter_anisotropic");
 	return;
 }
 
-void load_GL_VERSION_1_0(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_0(Loader load) {
 	if(!GL_VERSION_1_0) return;
 	glCullFace = cast(typeof(glCullFace))load("glCullFace");
 	glFrontFace = cast(typeof(glFrontFace))load("glFrontFace");
@@ -513,7 +515,7 @@ void load_GL_VERSION_1_0(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_1_1(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_1(Loader load) {
 	if(!GL_VERSION_1_1) return;
 	glDrawArrays = cast(typeof(glDrawArrays))load("glDrawArrays");
 	glDrawElements = cast(typeof(glDrawElements))load("glDrawElements");
@@ -548,7 +550,7 @@ void load_GL_VERSION_1_1(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_1_2(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_2(Loader load) {
 	if(!GL_VERSION_1_2) return;
 	glBlendColor = cast(typeof(glBlendColor))load("glBlendColor");
 	glBlendEquation = cast(typeof(glBlendEquation))load("glBlendEquation");
@@ -559,7 +561,7 @@ void load_GL_VERSION_1_2(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_1_3(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_3(Loader load) {
 	if(!GL_VERSION_1_3) return;
 	glActiveTexture = cast(typeof(glActiveTexture))load("glActiveTexture");
 	glSampleCoverage = cast(typeof(glSampleCoverage))load("glSampleCoverage");
@@ -610,7 +612,7 @@ void load_GL_VERSION_1_3(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_1_4(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_4(Loader load) {
 	if(!GL_VERSION_1_4) return;
 	glBlendFuncSeparate = cast(typeof(glBlendFuncSeparate))load("glBlendFuncSeparate");
 	glMultiDrawArrays = cast(typeof(glMultiDrawArrays))load("glMultiDrawArrays");
@@ -662,7 +664,7 @@ void load_GL_VERSION_1_4(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_1_5(void* function(const(char)* name) load) {
+void load_GL_VERSION_1_5(Loader load) {
 	if(!GL_VERSION_1_5) return;
 	glGenQueries = cast(typeof(glGenQueries))load("glGenQueries");
 	glDeleteQueries = cast(typeof(glDeleteQueries))load("glDeleteQueries");
@@ -686,7 +688,7 @@ void load_GL_VERSION_1_5(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_2_0(void* function(const(char)* name) load) {
+void load_GL_VERSION_2_0(Loader load) {
 	if(!GL_VERSION_2_0) return;
 	glBlendEquationSeparate = cast(typeof(glBlendEquationSeparate))load("glBlendEquationSeparate");
 	glDrawBuffers = cast(typeof(glDrawBuffers))load("glDrawBuffers");
@@ -784,7 +786,7 @@ void load_GL_VERSION_2_0(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_2_1(void* function(const(char)* name) load) {
+void load_GL_VERSION_2_1(Loader load) {
 	if(!GL_VERSION_2_1) return;
 	glUniformMatrix2x3fv = cast(typeof(glUniformMatrix2x3fv))load("glUniformMatrix2x3fv");
 	glUniformMatrix3x2fv = cast(typeof(glUniformMatrix3x2fv))load("glUniformMatrix3x2fv");
@@ -795,7 +797,7 @@ void load_GL_VERSION_2_1(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_3_0(void* function(const(char)* name) load) {
+void load_GL_VERSION_3_0(Loader load) {
 	if(!GL_VERSION_3_0) return;
 	glColorMaski = cast(typeof(glColorMaski))load("glColorMaski");
 	glGetBooleani_v = cast(typeof(glGetBooleani_v))load("glGetBooleani_v");
@@ -884,7 +886,7 @@ void load_GL_VERSION_3_0(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_3_1(void* function(const(char)* name) load) {
+void load_GL_VERSION_3_1(Loader load) {
 	if(!GL_VERSION_3_1) return;
 	glDrawArraysInstanced = cast(typeof(glDrawArraysInstanced))load("glDrawArraysInstanced");
 	glDrawElementsInstanced = cast(typeof(glDrawElementsInstanced))load("glDrawElementsInstanced");
@@ -901,7 +903,7 @@ void load_GL_VERSION_3_1(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_3_2(void* function(const(char)* name) load) {
+void load_GL_VERSION_3_2(Loader load) {
 	if(!GL_VERSION_3_2) return;
 	glDrawElementsBaseVertex = cast(typeof(glDrawElementsBaseVertex))load("glDrawElementsBaseVertex");
 	glDrawRangeElementsBaseVertex = cast(typeof(glDrawRangeElementsBaseVertex))load("glDrawRangeElementsBaseVertex");
@@ -925,7 +927,7 @@ void load_GL_VERSION_3_2(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_3_3(void* function(const(char)* name) load) {
+void load_GL_VERSION_3_3(Loader load) {
 	if(!GL_VERSION_3_3) return;
 	glBindFragDataLocationIndexed = cast(typeof(glBindFragDataLocationIndexed))load("glBindFragDataLocationIndexed");
 	glGetFragDataIndex = cast(typeof(glGetFragDataIndex))load("glGetFragDataIndex");
@@ -988,7 +990,7 @@ void load_GL_VERSION_3_3(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_4_0(void* function(const(char)* name) load) {
+void load_GL_VERSION_4_0(Loader load) {
 	if(!GL_VERSION_4_0) return;
 	glMinSampleShading = cast(typeof(glMinSampleShading))load("glMinSampleShading");
 	glBlendEquationi = cast(typeof(glBlendEquationi))load("glBlendEquationi");
@@ -1039,7 +1041,7 @@ void load_GL_VERSION_4_0(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_4_1(void* function(const(char)* name) load) {
+void load_GL_VERSION_4_1(Loader load) {
 	if(!GL_VERSION_4_1) return;
 	glReleaseShaderCompiler = cast(typeof(glReleaseShaderCompiler))load("glReleaseShaderCompiler");
 	glShaderBinary = cast(typeof(glShaderBinary))load("glShaderBinary");
@@ -1132,7 +1134,7 @@ void load_GL_VERSION_4_1(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_4_2(void* function(const(char)* name) load) {
+void load_GL_VERSION_4_2(Loader load) {
 	if(!GL_VERSION_4_2) return;
 	glDrawArraysInstancedBaseInstance = cast(typeof(glDrawArraysInstancedBaseInstance))load("glDrawArraysInstancedBaseInstance");
 	glDrawElementsInstancedBaseInstance = cast(typeof(glDrawElementsInstancedBaseInstance))load("glDrawElementsInstancedBaseInstance");
@@ -1149,7 +1151,7 @@ void load_GL_VERSION_4_2(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_4_3(void* function(const(char)* name) load) {
+void load_GL_VERSION_4_3(Loader load) {
 	if(!GL_VERSION_4_3) return;
 	glClearBufferData = cast(typeof(glClearBufferData))load("glClearBufferData");
 	glClearBufferSubData = cast(typeof(glClearBufferSubData))load("glClearBufferSubData");
@@ -1199,7 +1201,7 @@ void load_GL_VERSION_4_3(void* function(const(char)* name) load) {
 	return;
 }
 
-void load_GL_VERSION_4_4(void* function(const(char)* name) load) {
+void load_GL_VERSION_4_4(Loader load) {
 	if(!GL_VERSION_4_4) return;
 	glBufferStorage = cast(typeof(glBufferStorage))load("glBufferStorage");
 	glClearTexImage = cast(typeof(glClearTexImage))load("glClearTexImage");

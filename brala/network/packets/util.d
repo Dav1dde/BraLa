@@ -132,7 +132,7 @@ mixin template Packet(ubyte id_, Vars...) {
     }
 
     /// actual packet-code
-    const ubyte id = id_;
+    static const ubyte id = id_;
     
     mixin(inject_data());
 }
